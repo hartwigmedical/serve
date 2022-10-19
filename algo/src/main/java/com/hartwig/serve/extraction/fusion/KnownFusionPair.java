@@ -1,5 +1,6 @@
 package com.hartwig.serve.extraction.fusion;
 
+import com.hartwig.serve.datamodel.fusion.FusionPair;
 import com.hartwig.serve.extraction.KnownEvent;
 
 import org.immutables.value.Value;

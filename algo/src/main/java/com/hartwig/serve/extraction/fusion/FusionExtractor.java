@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.common.fusion.KnownFusionCache;
+import com.hartwig.serve.datamodel.fusion.ExonicDelDupType;
 import com.hartwig.serve.extraction.util.DriverInconsistencyMode;
 import com.hartwig.serve.extraction.util.GeneChecker;
 

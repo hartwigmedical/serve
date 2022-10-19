@@ -10,8 +10,8 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import com.hartwig.serve.actionability.util.ActionableFileFunctions;
 import com.hartwig.serve.common.genome.refgenome.RefGenomeVersion;
-import com.hartwig.serve.extraction.characteristic.TumorCharacteristicAnnotation;
-import com.hartwig.serve.extraction.characteristic.TumorCharacteristicsComparator;
+import com.hartwig.serve.datamodel.characteristic.TumorCharacteristicAnnotation;
+import com.hartwig.serve.datamodel.characteristic.TumorCharacteristicsComparator;
 
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;

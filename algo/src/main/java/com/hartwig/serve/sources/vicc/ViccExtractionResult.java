@@ -5,13 +5,13 @@ import java.util.Map;
 import java.util.Set;
 
 import com.hartwig.serve.common.variant.hotspot.VariantHotspot;
-import com.hartwig.serve.extraction.characteristic.TumorCharacteristic;
+import com.hartwig.serve.datamodel.characteristic.TumorCharacteristic;
+import com.hartwig.serve.datamodel.gene.GeneLevelAnnotation;
 import com.hartwig.serve.extraction.codon.CodonAnnotation;
 import com.hartwig.serve.extraction.copynumber.KnownCopyNumber;
 import com.hartwig.serve.extraction.events.EventInterpretation;
 import com.hartwig.serve.extraction.exon.ExonAnnotation;
 import com.hartwig.serve.extraction.fusion.KnownFusionPair;
-import com.hartwig.serve.extraction.gene.GeneLevelAnnotation;
 import com.hartwig.serve.extraction.immuno.ImmunoHLA;
 import com.hartwig.serve.vicc.datamodel.Feature;
 

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.hartwig.serve.common.drivercatalog.DriverCategory;
 import com.hartwig.serve.common.drivercatalog.panel.DriverGene;
+import com.hartwig.serve.datamodel.MutationTypeFilter;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

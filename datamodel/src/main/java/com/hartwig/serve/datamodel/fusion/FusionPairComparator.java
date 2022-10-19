@@ -1,4 +1,4 @@
-package com.hartwig.serve.extraction.fusion;
+package com.hartwig.serve.datamodel.fusion;
 
 import java.util.Comparator;
 

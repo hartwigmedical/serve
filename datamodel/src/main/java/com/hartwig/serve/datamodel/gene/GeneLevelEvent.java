@@ -1,4 +1,4 @@
-package com.hartwig.serve.extraction.gene;
+package com.hartwig.serve.datamodel.gene;
 
 public enum GeneLevelEvent {
     AMPLIFICATION,

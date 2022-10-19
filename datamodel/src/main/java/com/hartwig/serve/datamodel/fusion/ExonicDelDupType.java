@@ -1,4 +1,4 @@
-package com.hartwig.serve.extraction.fusion;
+package com.hartwig.serve.datamodel.fusion;
 
 public enum ExonicDelDupType {
     PARTIAL_EXONIC_DELETION,

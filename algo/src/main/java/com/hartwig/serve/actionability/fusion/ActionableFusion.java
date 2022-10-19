@@ -1,7 +1,7 @@
 package com.hartwig.serve.actionability.fusion;
 
 import com.hartwig.serve.actionability.ActionableEvent;
-import com.hartwig.serve.extraction.fusion.FusionPair;
+import com.hartwig.serve.datamodel.fusion.FusionPair;
 
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;

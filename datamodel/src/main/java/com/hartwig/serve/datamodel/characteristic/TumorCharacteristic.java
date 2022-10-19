@@ -1,4 +1,4 @@
-package com.hartwig.serve.extraction.characteristic;
+package com.hartwig.serve.datamodel.characteristic;
 
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;

@@ -1,8 +1,8 @@
 package com.hartwig.serve.actionability.characteristic;
 
 import com.hartwig.serve.actionability.ActionableEvent;
-import com.hartwig.serve.extraction.characteristic.TumorCharacteristicAnnotation;
-import com.hartwig.serve.extraction.characteristic.TumorCharacteristicsComparator;
+import com.hartwig.serve.datamodel.characteristic.TumorCharacteristicAnnotation;
+import com.hartwig.serve.datamodel.characteristic.TumorCharacteristicsComparator;
 
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;

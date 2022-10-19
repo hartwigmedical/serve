@@ -3,6 +3,10 @@ package com.hartwig.serve.extraction.characteristic;
 import java.util.Set;
 
 import com.hartwig.serve.common.classification.EventType;
+import com.hartwig.serve.datamodel.characteristic.ImmutableTumorCharacteristic;
+import com.hartwig.serve.datamodel.characteristic.TumorCharacteristic;
+import com.hartwig.serve.datamodel.characteristic.TumorCharacteristicAnnotation;
+import com.hartwig.serve.datamodel.characteristic.TumorCharacteristicsComparator;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

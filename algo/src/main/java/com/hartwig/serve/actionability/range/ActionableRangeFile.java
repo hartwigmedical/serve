@@ -10,7 +10,7 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import com.hartwig.serve.actionability.util.ActionableFileFunctions;
 import com.hartwig.serve.common.genome.refgenome.RefGenomeVersion;
-import com.hartwig.serve.extraction.util.MutationTypeFilter;
+import com.hartwig.serve.datamodel.MutationTypeFilter;
 
 import org.jetbrains.annotations.NotNull;
 

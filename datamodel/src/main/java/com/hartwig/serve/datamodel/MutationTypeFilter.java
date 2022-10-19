@@ -1,4 +1,4 @@
-package com.hartwig.serve.extraction.util;
+package com.hartwig.serve.datamodel;
 
 public enum MutationTypeFilter {
     NONSENSE_OR_FRAMESHIFT,

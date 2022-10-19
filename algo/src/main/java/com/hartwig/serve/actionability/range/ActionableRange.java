@@ -1,7 +1,7 @@
 package com.hartwig.serve.actionability.range;
 
 import com.hartwig.serve.actionability.ActionableEvent;
-import com.hartwig.serve.extraction.range.RangeAnnotation;
+import com.hartwig.serve.datamodel.range.RangeAnnotation;
 
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;

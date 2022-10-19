@@ -8,12 +8,12 @@ import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.common.drivercatalog.panel.DriverGene;
 import com.hartwig.serve.common.ensemblcache.EnsemblDataCache;
 import com.hartwig.serve.common.genome.region.GenomeRegion;
+import com.hartwig.serve.datamodel.MutationTypeFilter;
 import com.hartwig.serve.extraction.util.DriverInconsistencyMode;
 import com.hartwig.serve.extraction.util.EnsemblFunctions;
 import com.hartwig.serve.extraction.util.GeneChecker;
 import com.hartwig.serve.extraction.util.HmfTranscriptRegion;
 import com.hartwig.serve.extraction.util.HmfTranscriptRegionUtils;
-import com.hartwig.serve.extraction.util.MutationTypeFilter;
 import com.hartwig.serve.extraction.util.MutationTypeFilterAlgo;
 
 import org.apache.logging.log4j.LogManager;

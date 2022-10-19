@@ -1,4 +1,4 @@
-package com.hartwig.serve.extraction.characteristic;
+package com.hartwig.serve.datamodel.characteristic;
 
 public enum TumorCharacteristicAnnotation {
     MICROSATELLITE_UNSTABLE,

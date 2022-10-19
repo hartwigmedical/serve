@@ -4,8 +4,8 @@ import java.util.Comparator;
 
 import com.hartwig.serve.actionability.ActionableEvent;
 import com.hartwig.serve.actionability.ActionableEventComparator;
-import com.hartwig.serve.extraction.fusion.FusionPair;
-import com.hartwig.serve.extraction.fusion.FusionPairComparator;
+import com.hartwig.serve.datamodel.fusion.FusionPair;
+import com.hartwig.serve.datamodel.fusion.FusionPairComparator;
 
 import org.jetbrains.annotations.NotNull;
 

@@ -12,9 +12,9 @@ import com.hartwig.serve.DriverGenesTestFactory;
 import com.hartwig.serve.EnsemblDataCacheTestFactory;
 import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.common.drivercatalog.panel.DriverGene;
+import com.hartwig.serve.datamodel.MutationTypeFilter;
 import com.hartwig.serve.extraction.util.DriverInconsistencyMode;
 import com.hartwig.serve.extraction.util.GeneChecker;
-import com.hartwig.serve.extraction.util.MutationTypeFilter;
 import com.hartwig.serve.extraction.util.MutationTypeFilterAlgo;
 
 import org.jetbrains.annotations.NotNull;

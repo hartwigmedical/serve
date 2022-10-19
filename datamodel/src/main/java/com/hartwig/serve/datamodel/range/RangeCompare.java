@@ -1,4 +1,4 @@
-package com.hartwig.serve.extraction.range;
+package com.hartwig.serve.datamodel.range;
 
 import org.jetbrains.annotations.NotNull;
 

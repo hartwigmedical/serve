@@ -6,9 +6,10 @@ SERVE (Search External Resources for Variant Evidence) harmonizes various source
 
 In addition, this repo provides a number of utility applications to ingest and analyze various SERVE input sources.
 
-| Module                                 | Description                     |
-|----------------------------------------|---------------------------------|
-| [Algo](algo)                           | The actual SERVE algorithm.     |
-| [CKB-Importer](ckb-importer)           | Importer of CKB FLEX datamodel. |
-| [iClusion-Importer](iclusion-importer) | Importer of iClusion datamodel. |
-| [VICC-Importer](algo)                  | Importer of VICC datamodel.     |
+| Module                                 | Description                               |
+|----------------------------------------|-------------------------------------------|
+| [Datamodel](datamodel)                 | The datamodel that other tools can reuse. |
+| [Algo](algo)                           | The actual SERVE algorithm.               |
+| [CKB-Importer](ckb-importer)           | Importer of CKB FLEX datamodel.           |
+| [iClusion-Importer](iclusion-importer) | Importer of iClusion datamodel.           |
+| [VICC-Importer](algo)                  | Importer of VICC datamodel.               |

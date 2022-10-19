@@ -10,8 +10,8 @@ import java.util.StringJoiner;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
-import com.hartwig.serve.common.serve.Knowledgebase;
 import com.hartwig.serve.common.serve.classification.EventType;
+import com.hartwig.serve.datamodel.Knowledgebase;
 
 import org.jetbrains.annotations.NotNull;
 

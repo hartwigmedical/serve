@@ -12,7 +12,7 @@ import com.hartwig.serve.actionability.hotspot.ImmutableActionableHotspot;
 import com.hartwig.serve.actionability.range.ActionableRange;
 import com.hartwig.serve.actionability.range.ImmutableActionableRange;
 import com.hartwig.serve.common.genome.refgenome.RefGenomeVersion;
-import com.hartwig.serve.common.serve.Knowledgebase;
+import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.extraction.codon.ImmutableCodonAnnotation;
 import com.hartwig.serve.extraction.codon.ImmutableKnownCodon;
 import com.hartwig.serve.extraction.codon.KnownCodon;

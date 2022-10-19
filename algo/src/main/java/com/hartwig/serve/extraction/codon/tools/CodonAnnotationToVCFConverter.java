@@ -10,7 +10,7 @@ import com.google.common.collect.Sets;
 import com.hartwig.serve.ServeConfig;
 import com.hartwig.serve.ServeLocalConfigProvider;
 import com.hartwig.serve.common.genome.refgenome.RefGenomeVersion;
-import com.hartwig.serve.common.serve.Knowledgebase;
+import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.extraction.KnownEvent;
 import com.hartwig.serve.extraction.codon.KnownCodon;
 import com.hartwig.serve.extraction.codon.KnownCodonFile;

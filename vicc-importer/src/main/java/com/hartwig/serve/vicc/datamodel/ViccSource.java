@@ -1,6 +1,6 @@
 package com.hartwig.serve.vicc.datamodel;
 
-import com.hartwig.serve.common.serve.Knowledgebase;
+import com.hartwig.serve.datamodel.Knowledgebase;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

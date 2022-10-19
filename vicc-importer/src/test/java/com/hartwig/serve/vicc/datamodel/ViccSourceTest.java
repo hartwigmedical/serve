@@ -2,7 +2,7 @@ package com.hartwig.serve.vicc.datamodel;
 
 import static org.junit.Assert.assertEquals;
 
-import com.hartwig.serve.common.serve.Knowledgebase;
+import com.hartwig.serve.datamodel.Knowledgebase;
 
 import org.junit.Test;
 

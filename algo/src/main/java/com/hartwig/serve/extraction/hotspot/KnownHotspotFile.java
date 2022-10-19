@@ -9,9 +9,9 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.common.genome.refgenome.RefGenomeVersion;
-import com.hartwig.serve.common.serve.Knowledgebase;
 import com.hartwig.serve.common.variant.hotspot.VariantHotspot;
 import com.hartwig.serve.common.variant.hotspot.VariantHotspotComparator;
+import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.extraction.util.KeyFormatter;
 import com.hartwig.serve.extraction.util.VCFWriterFactory;
 
@@ -46,7 +46,7 @@ public final class KnownHotspotFile {
         final List<KnownHotspot> result = Lists.newArrayList();
         try (final AbstractFeatureReader<VariantContext, LineIterator> reader = AbstractFeatureReader.getFeatureReader(vcfFile,
                 new VCFCodec(),
-                false);) {
+                false)) {
             for (VariantContext hotspot : reader.iterator()) {
 
                 String[] inputParts = hotspot.getAttributeAsString(VCFWriterFactory.INPUT_FIELD, Strings.EMPTY).split("\\|");

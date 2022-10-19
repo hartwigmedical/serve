@@ -3,10 +3,10 @@ package com.hartwig.serve.actionability;
 import java.util.Set;
 
 import com.hartwig.serve.cancertype.CancerType;
-import com.hartwig.serve.common.serve.Knowledgebase;
 import com.hartwig.serve.common.serve.actionability.EvidenceDirection;
 import com.hartwig.serve.common.serve.actionability.EvidenceLevel;
 import com.hartwig.serve.common.serve.actionability.Treatment;
+import com.hartwig.serve.datamodel.Knowledgebase;
 
 import org.jetbrains.annotations.NotNull;
 

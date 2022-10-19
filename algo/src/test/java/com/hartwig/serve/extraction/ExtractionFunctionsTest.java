@@ -5,7 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.google.common.collect.Lists;
 import com.hartwig.serve.ServeTestFactory;
-import com.hartwig.serve.common.serve.Knowledgebase;
+import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.extraction.codon.KnownCodon;
 import com.hartwig.serve.extraction.copynumber.KnownCopyNumber;
 import com.hartwig.serve.extraction.exon.KnownExon;

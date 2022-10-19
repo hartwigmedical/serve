@@ -1,4 +1,4 @@
-package com.hartwig.serve.common.serve;
+package com.hartwig.serve.datamodel;
 
 import static org.junit.Assert.assertEquals;
 

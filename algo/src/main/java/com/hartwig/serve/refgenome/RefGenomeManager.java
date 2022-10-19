@@ -6,7 +6,7 @@ import java.util.Set;
 
 import com.google.common.collect.Maps;
 import com.hartwig.serve.common.genome.refgenome.RefGenomeVersion;
-import com.hartwig.serve.common.serve.Knowledgebase;
+import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.ImmutableExtractionResult;
 import com.hartwig.serve.refgenome.liftover.LiftOverAlgo;

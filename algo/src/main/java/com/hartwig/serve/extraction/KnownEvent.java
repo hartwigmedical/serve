@@ -2,7 +2,7 @@ package com.hartwig.serve.extraction;
 
 import java.util.Set;
 
-import com.hartwig.serve.common.serve.Knowledgebase;
+import com.hartwig.serve.datamodel.Knowledgebase;
 
 import org.jetbrains.annotations.NotNull;
 

@@ -15,18 +15,17 @@ import com.hartwig.serve.ckb.datamodel.drug.DrugClass;
 import com.hartwig.serve.ckb.datamodel.evidence.Evidence;
 import com.hartwig.serve.ckb.datamodel.reference.Reference;
 import com.hartwig.serve.ckb.datamodel.treatmentapproaches.RelevantTreatmentApproaches;
-import com.hartwig.serve.common.serve.Knowledgebase;
 import com.hartwig.serve.common.serve.actionability.EvidenceDirection;
 import com.hartwig.serve.common.serve.actionability.EvidenceLevel;
 import com.hartwig.serve.common.serve.actionability.ImmutableTreatment;
 import com.hartwig.serve.common.serve.classification.EventType;
+import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.sources.ckb.treatementapproach.ImmutableRelevantTreatmentApprochCurationEntryKey;
 import com.hartwig.serve.sources.ckb.treatementapproach.RelevantTreatmentApprochCurationEntryKey;
 import com.hartwig.serve.sources.ckb.treatementapproach.RelevantTreatmentAproachCuration;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -126,10 +125,10 @@ class ActionableEntryFactory {
                 }
 
                 String treatmentApproachString = String.join(",", sourceRelevantTreatmentApproaches);
-                String treatmentApproachInterpret = Strings.EMPTY;
+                String treatmentApproachInterpret;
                 if (sourceRelevantTreatmentApproaches.isEmpty()) {
                     treatmentApproachInterpret = null;
-                } else if (treatmentApproachString.substring(treatmentApproachString.length() - 1).equals(",")) {
+                } else if (treatmentApproachString.endsWith(",")) {
                     treatmentApproachInterpret = treatmentApproachString.substring(0, treatmentApproachString.length() - 1);
                 } else {
                     treatmentApproachInterpret = treatmentApproachString;

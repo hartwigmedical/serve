@@ -10,10 +10,10 @@ import com.hartwig.serve.actionability.fusion.ActionableFusion;
 import com.hartwig.serve.actionability.fusion.ActionableFusionUrlConsolidator;
 import com.hartwig.serve.actionability.fusion.ImmutableActionableFusion;
 import com.hartwig.serve.cancertype.ImmutableCancerType;
-import com.hartwig.serve.common.serve.Knowledgebase;
 import com.hartwig.serve.common.serve.actionability.EvidenceDirection;
 import com.hartwig.serve.common.serve.actionability.EvidenceLevel;
 import com.hartwig.serve.common.serve.actionability.ImmutableTreatment;
+import com.hartwig.serve.datamodel.Knowledgebase;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;

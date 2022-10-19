@@ -33,7 +33,7 @@ public class KnownEventsLoader {
 
         String knownHotspotTsv = KnownHotspotFile.knownHotspotVcfPath(actionabilityDir, refGenomeVersion);
         List<KnownHotspot> hotspots = KnownHotspotFile.read(knownHotspotTsv);
-        LOGGER.info(" Loaded {} knonw hotspots from {}", hotspots.size(), knownHotspotTsv);
+        LOGGER.info(" Loaded {} known hotspots from {}", hotspots.size(), knownHotspotTsv);
 
         String knownCodonTsv = KnownCodonFile.knownCodonTsvPath(actionabilityDir, refGenomeVersion);
         List<KnownCodon> knownCodons = KnownCodonFile.read(knownCodonTsv);

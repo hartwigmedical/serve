@@ -5,8 +5,8 @@ import static org.junit.Assert.assertEquals;
 import java.io.IOException;
 import java.util.List;
 
-import com.hartwig.serve.actionability.ActionabilityTestUtil;
 import com.hartwig.serve.common.genome.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.actionability.ActionabilityTestUtil;
 
 import org.junit.Test;
 

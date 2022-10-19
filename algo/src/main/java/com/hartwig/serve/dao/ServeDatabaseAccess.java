@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
 
-import com.hartwig.serve.actionability.ActionableEvents;
+import com.hartwig.serve.datamodel.actionability.ActionableEvents;
 import com.hartwig.serve.extraction.KnownEvents;
 import com.hartwig.serve.extraction.events.EventInterpretation;
 

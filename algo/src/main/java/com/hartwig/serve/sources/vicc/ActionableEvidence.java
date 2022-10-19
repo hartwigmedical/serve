@@ -1,6 +1,6 @@
 package com.hartwig.serve.sources.vicc;
 
-import com.hartwig.serve.actionability.ActionableEvent;
+import com.hartwig.serve.datamodel.actionability.ActionableEvent;
 
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;

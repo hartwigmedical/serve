@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import com.google.common.collect.Lists;
-import com.hartwig.serve.ServeTestFactory;
+import com.hartwig.serve.ServeAlgoTestFactory;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.extraction.codon.KnownCodon;
 import com.hartwig.serve.extraction.copynumber.KnownCopyNumber;
@@ -20,8 +20,8 @@ public class ExtractionFunctionsTest {
     public void canMergeExtractionResults() {
         Knowledgebase source1 = Knowledgebase.VICC_CIVIC;
         Knowledgebase source2 = Knowledgebase.VICC_CGI;
-        ExtractionResult result1 = ServeTestFactory.createResultForSource(source1);
-        ExtractionResult result2 = ServeTestFactory.createResultForSource(source2);
+        ExtractionResult result1 = ServeAlgoTestFactory.createResultForSource(source1);
+        ExtractionResult result2 = ServeAlgoTestFactory.createResultForSource(source2);
 
         ExtractionResult merged = ExtractionFunctions.merge(Lists.newArrayList(result1, result2));
 

@@ -6,13 +6,14 @@ import static org.junit.Assert.assertTrue;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
-import com.hartwig.serve.ServeTestFactory;
-import com.hartwig.serve.actionability.hotspot.ActionableHotspot;
-import com.hartwig.serve.actionability.hotspot.ImmutableActionableHotspot;
-import com.hartwig.serve.actionability.range.ActionableRange;
-import com.hartwig.serve.actionability.range.ImmutableActionableRange;
+import com.hartwig.serve.ServeAlgoTestFactory;
 import com.hartwig.serve.common.genome.refgenome.RefGenomeVersion;
 import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.datamodel.ServeTestFactory;
+import com.hartwig.serve.datamodel.actionability.hotspot.ActionableHotspot;
+import com.hartwig.serve.datamodel.actionability.hotspot.ImmutableActionableHotspot;
+import com.hartwig.serve.datamodel.actionability.range.ActionableRange;
+import com.hartwig.serve.datamodel.actionability.range.ImmutableActionableRange;
 import com.hartwig.serve.extraction.codon.ImmutableCodonAnnotation;
 import com.hartwig.serve.extraction.codon.ImmutableKnownCodon;
 import com.hartwig.serve.extraction.codon.KnownCodon;
@@ -40,7 +41,7 @@ public class RefGenomeConverterTest {
     @Test
     public void canConvertKnownHotspots() {
         KnownHotspot hotspot = ImmutableKnownHotspot.builder()
-                .from(ServeTestFactory.createTestKnownHotspot())
+                .from(ServeAlgoTestFactory.createTestKnownHotspot())
                 .gene(TEST_GENE)
                 .chromosome(TEST_CHROMOSOME)
                 .position(1)
@@ -58,9 +59,9 @@ public class RefGenomeConverterTest {
     @Test
     public void canConvertKnownCodons() {
         KnownCodon codon = ImmutableKnownCodon.builder()
-                .from(ServeTestFactory.createTestKnownCodon())
+                .from(ServeAlgoTestFactory.createTestKnownCodon())
                 .annotation(ImmutableCodonAnnotation.builder()
-                        .from(ServeTestFactory.createTestCodonAnnotation())
+                        .from(ServeAlgoTestFactory.createTestCodonAnnotation())
                         .gene(TEST_GENE)
                         .chromosome(TEST_CHROMOSOME)
                         .start(1)
@@ -78,9 +79,9 @@ public class RefGenomeConverterTest {
     @Test
     public void canConvertKnownExons() {
         KnownExon exon = ImmutableKnownExon.builder()
-                .from(ServeTestFactory.createTestKnownExon())
+                .from(ServeAlgoTestFactory.createTestKnownExon())
                 .annotation(ImmutableExonAnnotation.builder()
-                        .from(ServeTestFactory.createTestExonAnnotation())
+                        .from(ServeAlgoTestFactory.createTestExonAnnotation())
                         .gene(TEST_GENE)
                         .chromosome(TEST_CHROMOSOME)
                         .start(1)

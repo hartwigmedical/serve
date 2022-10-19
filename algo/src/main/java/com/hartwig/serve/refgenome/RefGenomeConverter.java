@@ -3,14 +3,14 @@ package com.hartwig.serve.refgenome;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
-import com.hartwig.serve.actionability.hotspot.ActionableHotspot;
-import com.hartwig.serve.actionability.hotspot.ImmutableActionableHotspot;
-import com.hartwig.serve.actionability.range.ActionableRange;
-import com.hartwig.serve.actionability.range.ImmutableActionableRange;
 import com.hartwig.serve.common.genome.refgenome.RefGenomeVersion;
 import com.hartwig.serve.common.variant.hotspot.ImmutableVariantHotspotImpl;
 import com.hartwig.serve.common.variant.hotspot.VariantHotspot;
 import com.hartwig.serve.datamodel.MutationTypeFilter;
+import com.hartwig.serve.datamodel.actionability.hotspot.ActionableHotspot;
+import com.hartwig.serve.datamodel.actionability.hotspot.ImmutableActionableHotspot;
+import com.hartwig.serve.datamodel.actionability.range.ActionableRange;
+import com.hartwig.serve.datamodel.actionability.range.ImmutableActionableRange;
 import com.hartwig.serve.datamodel.range.RangeAnnotation;
 import com.hartwig.serve.extraction.codon.ImmutableCodonAnnotation;
 import com.hartwig.serve.extraction.codon.ImmutableKnownCodon;

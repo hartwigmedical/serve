@@ -1,5 +1,8 @@
 package com.hartwig.serve.cancertype;
 
+import com.hartwig.serve.datamodel.cancertype.CancerType;
+import com.hartwig.serve.datamodel.cancertype.ImmutableCancerType;
+
 public class CancerTypeConstants {
 
     public static final String CANCER_DOID = "162";

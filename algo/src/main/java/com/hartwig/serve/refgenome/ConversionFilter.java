@@ -3,10 +3,10 @@ package com.hartwig.serve.refgenome;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
-import com.hartwig.serve.actionability.fusion.ActionableFusion;
-import com.hartwig.serve.actionability.gene.ActionableGene;
-import com.hartwig.serve.actionability.hotspot.ActionableHotspot;
-import com.hartwig.serve.actionability.range.ActionableRange;
+import com.hartwig.serve.datamodel.actionability.fusion.ActionableFusion;
+import com.hartwig.serve.datamodel.actionability.gene.ActionableGene;
+import com.hartwig.serve.datamodel.actionability.hotspot.ActionableHotspot;
+import com.hartwig.serve.datamodel.actionability.range.ActionableRange;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.ImmutableExtractionResult;
 import com.hartwig.serve.extraction.codon.KnownCodon;

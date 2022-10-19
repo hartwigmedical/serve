@@ -1,6 +1,6 @@
 package com.hartwig.serve.extraction.codon;
 
-import static com.hartwig.serve.actionability.util.ActionableFileFunctions.FIELD_DELIMITER;
+import static com.hartwig.serve.datamodel.actionability.util.ActionableFileFunctions.FIELD_DELIMITER;
 
 import java.io.File;
 import java.io.IOException;

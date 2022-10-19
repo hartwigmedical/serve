@@ -2,13 +2,13 @@ package com.hartwig.serve.extraction;
 
 import java.io.IOException;
 
-import com.hartwig.serve.actionability.characteristic.ActionableCharacteristicFile;
-import com.hartwig.serve.actionability.fusion.ActionableFusionFile;
-import com.hartwig.serve.actionability.gene.ActionableGeneFile;
-import com.hartwig.serve.actionability.hotspot.ActionableHotspotFile;
-import com.hartwig.serve.actionability.immuno.ActionableHLAFile;
-import com.hartwig.serve.actionability.range.ActionableRangeFile;
 import com.hartwig.serve.common.genome.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.actionability.characteristic.ActionableCharacteristicFile;
+import com.hartwig.serve.datamodel.actionability.fusion.ActionableFusionFile;
+import com.hartwig.serve.datamodel.actionability.gene.ActionableGeneFile;
+import com.hartwig.serve.datamodel.actionability.hotspot.ActionableHotspotFile;
+import com.hartwig.serve.datamodel.actionability.immuno.ActionableHLAFile;
+import com.hartwig.serve.datamodel.actionability.range.ActionableRangeFile;
 import com.hartwig.serve.extraction.codon.KnownCodonFile;
 import com.hartwig.serve.extraction.copynumber.KnownCopyNumberFile;
 import com.hartwig.serve.extraction.events.EventInterpretationFile;

@@ -2,7 +2,7 @@ package com.hartwig.serve.vicc.annotation;
 
 import static org.junit.Assert.assertEquals;
 
-import com.hartwig.serve.common.serve.classification.EventType;
+import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.vicc.datamodel.Feature;
 import com.hartwig.serve.vicc.datamodel.ImmutableFeature;
 

@@ -6,7 +6,7 @@ import com.google.common.collect.Lists;
 import com.hartwig.serve.ckb.CkbTestFactory;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.ckb.datamodel.variant.Variant;
-import com.hartwig.serve.common.serve.classification.EventType;
+import com.hartwig.serve.common.classification.EventType;
 
 import org.junit.Test;
 

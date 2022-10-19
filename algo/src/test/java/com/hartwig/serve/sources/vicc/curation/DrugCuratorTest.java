@@ -6,7 +6,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 
 import com.google.common.collect.Lists;
-import com.hartwig.serve.common.serve.actionability.EvidenceLevel;
+import com.hartwig.serve.datamodel.actionability.EvidenceLevel;
 import com.hartwig.serve.vicc.datamodel.ViccSource;
 
 import org.junit.Test;

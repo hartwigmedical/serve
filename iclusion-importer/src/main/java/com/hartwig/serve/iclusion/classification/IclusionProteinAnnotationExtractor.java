@@ -3,7 +3,7 @@ package com.hartwig.serve.iclusion.classification;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
-import com.hartwig.serve.common.serve.classification.EventPreprocessor;
+import com.hartwig.serve.common.classification.EventPreprocessor;
 
 import org.jetbrains.annotations.NotNull;
 

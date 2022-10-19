@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
-import com.hartwig.serve.common.serve.classification.EventClassifierConfig;
+import com.hartwig.serve.common.classification.EventClassifierConfig;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.refgenome.RefGenomeResourceTestFactory;
 import com.hartwig.serve.sources.actin.classification.ActinClassificationConfig;

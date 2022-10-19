@@ -5,10 +5,10 @@ import java.util.Set;
 
 import com.google.common.io.Resources;
 import com.hartwig.serve.cancertype.CancerType;
-import com.hartwig.serve.common.serve.actionability.EvidenceDirection;
-import com.hartwig.serve.common.serve.actionability.EvidenceLevel;
-import com.hartwig.serve.common.serve.actionability.Treatment;
 import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.datamodel.actionability.EvidenceDirection;
+import com.hartwig.serve.datamodel.actionability.EvidenceLevel;
+import com.hartwig.serve.datamodel.actionability.Treatment;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -21,8 +21,8 @@ public final class ActionabilityTestUtil {
 
     @NotNull
     public static ActionableEvent create(@NotNull Knowledgebase source, @NotNull String sourceEvent, @NotNull Set<String> sourceUrls,
-            @NotNull Treatment treatment, @NotNull CancerType applicableCancerType, @NotNull Set<CancerType> blacklistCancerTypes, @NotNull EvidenceLevel level, @NotNull EvidenceDirection direction,
-            @NotNull Set<String> evidenceUrls) {
+            @NotNull Treatment treatment, @NotNull CancerType applicableCancerType, @NotNull Set<CancerType> blacklistCancerTypes,
+            @NotNull EvidenceLevel level, @NotNull EvidenceDirection direction, @NotNull Set<String> evidenceUrls) {
         return new ActionableEventImpl(source,
                 sourceEvent,
                 sourceUrls,
@@ -56,8 +56,8 @@ public final class ActionabilityTestUtil {
         private final Set<String> evidenceUrls;
 
         public ActionableEventImpl(@NotNull Knowledgebase source, @NotNull String sourceEvent, @NotNull Set<String> sourceUrls,
-                @NotNull Treatment treatment, @NotNull CancerType applicableCancerType, @NotNull Set<CancerType> blacklistCancerTypes, @NotNull EvidenceLevel level, @NotNull EvidenceDirection direction,
-                @NotNull Set<String> evidenceUrls) {
+                @NotNull Treatment treatment, @NotNull CancerType applicableCancerType, @NotNull Set<CancerType> blacklistCancerTypes,
+                @NotNull EvidenceLevel level, @NotNull EvidenceDirection direction, @NotNull Set<String> evidenceUrls) {
             this.source = source;
             this.sourceEvent = sourceEvent;
             this.sourceUrls = sourceUrls;

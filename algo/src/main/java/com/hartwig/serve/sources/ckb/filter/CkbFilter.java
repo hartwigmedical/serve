@@ -9,7 +9,7 @@ import com.hartwig.serve.ckb.classification.CkbEventAndGeneExtractor;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.ckb.datamodel.ImmutableCkbEntry;
 import com.hartwig.serve.ckb.datamodel.variant.Variant;
-import com.hartwig.serve.common.serve.classification.EventType;
+import com.hartwig.serve.common.classification.EventType;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

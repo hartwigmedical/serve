@@ -7,7 +7,7 @@ import com.hartwig.serve.ckb.classification.CkbEventTypeExtractor;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.ClinicalTrial;
 import com.hartwig.serve.ckb.datamodel.evidence.Evidence;
 import com.hartwig.serve.ckb.datamodel.variant.Variant;
-import com.hartwig.serve.common.serve.classification.EventType;
+import com.hartwig.serve.common.classification.EventType;
 
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;

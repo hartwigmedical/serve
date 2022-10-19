@@ -3,7 +3,7 @@ package com.hartwig.serve.sources.vicc.curation;
 import java.util.Objects;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.hartwig.serve.common.serve.actionability.EvidenceLevel;
+import com.hartwig.serve.datamodel.actionability.EvidenceLevel;
 import com.hartwig.serve.vicc.datamodel.ViccSource;
 
 import org.jetbrains.annotations.NotNull;

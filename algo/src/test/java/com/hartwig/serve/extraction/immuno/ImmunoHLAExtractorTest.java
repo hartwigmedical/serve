@@ -2,7 +2,7 @@ package com.hartwig.serve.extraction.immuno;
 
 import static org.junit.Assert.assertEquals;
 
-import com.hartwig.serve.common.serve.classification.EventType;
+import com.hartwig.serve.common.classification.EventType;
 
 import org.junit.Test;
 

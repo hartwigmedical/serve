@@ -5,7 +5,7 @@ import static org.junit.Assert.assertNull;
 
 import com.google.common.collect.Sets;
 import com.hartwig.serve.DriverGenesTestFactory;
-import com.hartwig.serve.common.serve.classification.EventType;
+import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.extraction.util.DriverInconsistencyMode;
 import com.hartwig.serve.extraction.util.GeneChecker;
 

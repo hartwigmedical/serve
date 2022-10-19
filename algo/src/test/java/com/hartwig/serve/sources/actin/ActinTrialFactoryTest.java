@@ -1,6 +1,6 @@
 package com.hartwig.serve.sources.actin;
 
-import com.hartwig.serve.common.serve.actionability.EvidenceDirection;
+import com.hartwig.serve.datamodel.actionability.EvidenceDirection;
 import com.hartwig.serve.sources.actin.reader.ActinEntry;
 
 import org.junit.Assert;

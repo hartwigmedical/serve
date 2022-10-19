@@ -4,12 +4,12 @@ import java.util.List;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
+import com.hartwig.serve.common.classification.EventClassifierConfig;
 import com.hartwig.serve.common.ensemblcache.EnsemblDataCache;
 import com.hartwig.serve.common.fusion.KnownFusionCache;
 import com.hartwig.serve.common.fusion.KnownFusionData;
 import com.hartwig.serve.common.fusion.KnownFusionType;
 import com.hartwig.serve.common.gene.GeneData;
-import com.hartwig.serve.common.serve.classification.EventClassifierConfig;
 import com.hartwig.serve.extraction.characteristic.TumorCharacteristicExtractor;
 import com.hartwig.serve.extraction.codon.CodonExtractor;
 import com.hartwig.serve.extraction.copynumber.CopyNumberExtractor;

@@ -1,8 +1,8 @@
 package com.hartwig.serve.sources.actin.classification;
 
-import com.hartwig.serve.common.serve.classification.EventClassifier;
-import com.hartwig.serve.common.serve.classification.EventClassifierFactory;
-import com.hartwig.serve.common.serve.classification.EventType;
+import com.hartwig.serve.common.classification.EventClassifier;
+import com.hartwig.serve.common.classification.EventClassifierFactory;
+import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.sources.actin.reader.ActinEntry;
 
 import org.jetbrains.annotations.NotNull;

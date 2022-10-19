@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.List;
 
 import com.google.common.collect.Lists;
-import com.hartwig.serve.common.serve.classification.EventClassifierConfig;
+import com.hartwig.serve.common.classification.EventClassifierConfig;
 import com.hartwig.serve.curation.DoidLookupTestFactory;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.iclusion.classification.IclusionClassificationConfig;

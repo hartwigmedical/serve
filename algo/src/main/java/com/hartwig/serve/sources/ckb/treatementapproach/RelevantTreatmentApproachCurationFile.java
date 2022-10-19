@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.Maps;
-import com.hartwig.serve.common.serve.actionability.EvidenceDirection;
+import com.hartwig.serve.datamodel.actionability.EvidenceDirection;
 
 import org.jetbrains.annotations.NotNull;
 

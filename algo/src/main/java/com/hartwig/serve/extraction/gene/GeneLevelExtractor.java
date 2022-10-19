@@ -4,10 +4,10 @@ import java.util.List;
 import java.util.Set;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.common.drivercatalog.DriverCategory;
 import com.hartwig.serve.common.drivercatalog.panel.DriverGene;
 import com.hartwig.serve.common.fusion.KnownFusionCache;
-import com.hartwig.serve.common.serve.classification.EventType;
 import com.hartwig.serve.extraction.util.DriverInconsistencyMode;
 import com.hartwig.serve.extraction.util.GeneChecker;
 
@@ -111,16 +111,19 @@ public class GeneLevelExtractor {
         for (String keyPhrase : genericKeyPhrases) {
             if (event.contains(keyPhrase)) {
                 result = GeneLevelEvent.ANY_MUTATION;
+                break;
             }
         }
         for (String keyPhrase : activationKeyPhrases) {
             if (event.contains(keyPhrase)) {
                 result = GeneLevelEvent.ACTIVATION;
+                break;
             }
         }
         for (String keyPhrase : inactivationKeyPhrases) {
             if (event.contains(keyPhrase)) {
                 result = GeneLevelEvent.INACTIVATION;
+                break;
             }
         }
 

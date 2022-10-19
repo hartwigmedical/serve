@@ -3,10 +3,10 @@ package com.hartwig.serve.extraction.hotspot;
 import java.util.List;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.hartwig.serve.common.classification.EventPreprocessor;
+import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.common.drivercatalog.DriverCategory;
 import com.hartwig.serve.common.drivercatalog.panel.DriverGene;
-import com.hartwig.serve.common.serve.classification.EventPreprocessor;
-import com.hartwig.serve.common.serve.classification.EventType;
 import com.hartwig.serve.common.variant.hotspot.VariantHotspot;
 import com.hartwig.serve.extraction.util.DriverInconsistencyMode;
 import com.hartwig.serve.extraction.util.GeneChecker;

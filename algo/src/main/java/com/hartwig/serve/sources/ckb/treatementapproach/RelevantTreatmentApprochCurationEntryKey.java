@@ -1,6 +1,6 @@
 package com.hartwig.serve.sources.ckb.treatementapproach;
 
-import com.hartwig.serve.common.serve.actionability.EvidenceDirection;
+import com.hartwig.serve.datamodel.actionability.EvidenceDirection;
 
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;

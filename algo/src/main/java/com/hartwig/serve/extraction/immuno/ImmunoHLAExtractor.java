@@ -1,6 +1,6 @@
 package com.hartwig.serve.extraction.immuno;
 
-import com.hartwig.serve.common.serve.classification.EventType;
+import com.hartwig.serve.common.classification.EventType;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

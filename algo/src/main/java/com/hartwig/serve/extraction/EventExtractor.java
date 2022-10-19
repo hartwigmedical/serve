@@ -1,6 +1,6 @@
 package com.hartwig.serve.extraction;
 
-import com.hartwig.serve.common.serve.classification.EventType;
+import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.extraction.characteristic.TumorCharacteristicExtractor;
 import com.hartwig.serve.extraction.codon.CodonExtractor;
 import com.hartwig.serve.extraction.copynumber.CopyNumberExtractor;

@@ -6,10 +6,10 @@ import com.google.common.collect.Sets;
 import com.hartwig.serve.actionability.ActionabilityTestUtil;
 import com.hartwig.serve.actionability.ActionableEvent;
 import com.hartwig.serve.cancertype.ImmutableCancerType;
-import com.hartwig.serve.common.serve.actionability.EvidenceDirection;
-import com.hartwig.serve.common.serve.actionability.EvidenceLevel;
-import com.hartwig.serve.common.serve.actionability.ImmutableTreatment;
 import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.datamodel.actionability.EvidenceDirection;
+import com.hartwig.serve.datamodel.actionability.EvidenceLevel;
+import com.hartwig.serve.datamodel.actionability.ImmutableTreatment;
 
 import org.junit.Assert;
 import org.junit.Test;

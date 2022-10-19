@@ -3,8 +3,8 @@ package com.hartwig.serve.sources.vicc.curation;
 import static org.junit.Assert.assertEquals;
 
 import com.google.common.collect.Lists;
-import com.hartwig.serve.common.serve.actionability.EvidenceDirection;
-import com.hartwig.serve.common.serve.actionability.EvidenceLevel;
+import com.hartwig.serve.datamodel.actionability.EvidenceDirection;
+import com.hartwig.serve.datamodel.actionability.EvidenceLevel;
 import com.hartwig.serve.vicc.datamodel.ViccSource;
 
 import org.junit.Test;

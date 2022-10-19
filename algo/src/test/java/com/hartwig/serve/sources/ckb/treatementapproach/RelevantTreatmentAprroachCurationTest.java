@@ -5,8 +5,8 @@ import static org.junit.Assert.assertEquals;
 import java.util.Map;
 
 import com.google.common.collect.Maps;
-import com.hartwig.serve.common.serve.actionability.EvidenceDirection;
-import com.hartwig.serve.common.serve.actionability.EvidenceLevel;
+import com.hartwig.serve.datamodel.actionability.EvidenceDirection;
+import com.hartwig.serve.datamodel.actionability.EvidenceLevel;
 
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;

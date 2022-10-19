@@ -1,6 +1,6 @@
 package com.hartwig.serve.sources.iclusion;
 
-import com.hartwig.serve.common.serve.classification.EventClassifierConfig;
+import com.hartwig.serve.common.classification.EventClassifierConfig;
 import com.hartwig.serve.curation.DoidLookup;
 import com.hartwig.serve.extraction.EventExtractorFactory;
 import com.hartwig.serve.extraction.util.DriverInconsistencyMode;

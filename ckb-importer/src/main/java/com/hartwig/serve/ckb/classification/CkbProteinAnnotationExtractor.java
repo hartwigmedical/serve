@@ -1,6 +1,6 @@
 package com.hartwig.serve.ckb.classification;
 
-import com.hartwig.serve.common.serve.classification.EventPreprocessor;
+import com.hartwig.serve.common.classification.EventPreprocessor;
 
 import org.jetbrains.annotations.NotNull;
 

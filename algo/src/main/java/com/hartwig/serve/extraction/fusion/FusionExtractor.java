@@ -3,8 +3,8 @@ package com.hartwig.serve.extraction.fusion;
 import java.util.List;
 import java.util.Set;
 
+import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.common.fusion.KnownFusionCache;
-import com.hartwig.serve.common.serve.classification.EventType;
 import com.hartwig.serve.extraction.util.DriverInconsistencyMode;
 import com.hartwig.serve.extraction.util.GeneChecker;
 

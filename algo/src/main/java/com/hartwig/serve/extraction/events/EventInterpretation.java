@@ -1,6 +1,6 @@
 package com.hartwig.serve.extraction.events;
 
-import com.hartwig.serve.common.serve.classification.EventType;
+import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.datamodel.Knowledgebase;
 
 import org.immutables.value.Value;

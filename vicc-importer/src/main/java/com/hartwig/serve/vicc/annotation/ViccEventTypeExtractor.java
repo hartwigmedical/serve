@@ -1,8 +1,8 @@
 package com.hartwig.serve.vicc.annotation;
 
-import com.hartwig.serve.common.serve.classification.EventClassifier;
-import com.hartwig.serve.common.serve.classification.EventClassifierFactory;
-import com.hartwig.serve.common.serve.classification.EventType;
+import com.hartwig.serve.common.classification.EventClassifier;
+import com.hartwig.serve.common.classification.EventClassifierFactory;
+import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.vicc.datamodel.Feature;
 
 import org.apache.logging.log4j.LogManager;

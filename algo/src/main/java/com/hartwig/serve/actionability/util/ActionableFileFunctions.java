@@ -8,11 +8,11 @@ import com.hartwig.serve.actionability.ActionableEvent;
 import com.hartwig.serve.cancertype.CancerType;
 import com.hartwig.serve.cancertype.CancerTypeFactory;
 import com.hartwig.serve.cancertype.ImmutableCancerType;
-import com.hartwig.serve.common.serve.actionability.EvidenceDirection;
-import com.hartwig.serve.common.serve.actionability.EvidenceLevel;
-import com.hartwig.serve.common.serve.actionability.ImmutableTreatment;
-import com.hartwig.serve.common.serve.actionability.Treatment;
 import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.datamodel.actionability.EvidenceDirection;
+import com.hartwig.serve.datamodel.actionability.EvidenceLevel;
+import com.hartwig.serve.datamodel.actionability.ImmutableTreatment;
+import com.hartwig.serve.datamodel.actionability.Treatment;
 
 import org.jetbrains.annotations.NotNull;
 

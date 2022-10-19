@@ -2,7 +2,7 @@ package com.hartwig.serve.vicc.datamodel;
 
 import java.util.List;
 
-import com.hartwig.serve.common.serve.classification.EventType;
+import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.vicc.annotation.ViccEventTypeExtractor;
 
 import org.immutables.value.Value;

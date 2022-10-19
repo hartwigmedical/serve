@@ -1,6 +1,6 @@
 package com.hartwig.serve.iclusion.datamodel;
 
-import com.hartwig.serve.common.serve.classification.EventType;
+import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.iclusion.classification.IclusionEventTypeExtractor;
 
 import org.immutables.value.Value;

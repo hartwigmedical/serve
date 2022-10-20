@@ -3,8 +3,8 @@ package com.hartwig.serve.datamodel.util;
 import static org.junit.Assert.assertEquals;
 
 import com.google.common.collect.Sets;
-import com.hartwig.serve.datamodel.ActionabilityTestUtil;
 import com.hartwig.serve.datamodel.ActionableEvent;
+import com.hartwig.serve.datamodel.DatamodelTestFactory;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.ImmutableTreatment;
@@ -18,7 +18,7 @@ public class ActionableFileFunctionsTest {
 
     @Test
     public void canConvertActionableEvents() {
-        ActionableEvent event = ActionabilityTestUtil.create(Knowledgebase.VICC_CGI,
+        ActionableEvent event = DatamodelTestFactory.create(Knowledgebase.VICC_CGI,
                 "source event",
                 Sets.newHashSet(),
                 ImmutableTreatment.builder()

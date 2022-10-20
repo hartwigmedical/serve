@@ -49,16 +49,19 @@ public enum Knowledgebase {
         return refGenomeVersion;
     }
 
+    @SuppressWarnings("unused")
     @NotNull
     public String display() {
         return display;
     }
 
+    @SuppressWarnings("unused")
     @NotNull
     public EvidenceLevel maxCertainEvidenceReportingLevel() {
         return maxCertainEvidenceReportingLevel;
     }
 
+    @SuppressWarnings("unused")
     @NotNull
     public EvidenceLevel maxPredictedEvidenceReportingLevel() {
         return maxPredictedEvidenceReportingLevel;

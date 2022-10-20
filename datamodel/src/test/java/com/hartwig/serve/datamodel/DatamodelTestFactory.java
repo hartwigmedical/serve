@@ -8,11 +8,11 @@ import com.hartwig.serve.datamodel.cancertype.CancerType;
 
 import org.jetbrains.annotations.NotNull;
 
-public final class ActionabilityTestUtil {
+public final class DatamodelTestFactory {
 
-    public static final String TEST_SERVE_OUTPUT_DIR = Resources.getResource("serve").getPath();
+    public static final String TEST_SERVE_DIR = Resources.getResource("serve").getPath();
 
-    private ActionabilityTestUtil() {
+    private DatamodelTestFactory() {
     }
 
     @NotNull

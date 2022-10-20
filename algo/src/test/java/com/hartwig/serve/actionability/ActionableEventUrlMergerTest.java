@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
-import com.hartwig.serve.datamodel.ActionabilityTestUtil;
+import com.hartwig.serve.datamodel.DatamodelTestFactory;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.ImmutableTreatment;
@@ -39,7 +39,7 @@ public class ActionableEventUrlMergerTest {
     @NotNull
     private static ActionableFusion createFusion(@NotNull String gene, @NotNull String url) {
         return ImmutableActionableFusion.builder()
-                .from(ActionabilityTestUtil.create(Knowledgebase.VICC_CGI,
+                .from(DatamodelTestFactory.create(Knowledgebase.VICC_CGI,
                         "source event",
                         Sets.newHashSet(),
                         ImmutableTreatment.builder()

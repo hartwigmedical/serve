@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.List;
 
 import com.hartwig.serve.common.genome.refgenome.RefGenomeVersion;
-import com.hartwig.serve.datamodel.ActionabilityTestUtil;
+import com.hartwig.serve.datamodel.DatamodelTestFactory;
 
 import org.junit.Test;
 
@@ -15,7 +15,7 @@ public class ActionableGeneFileTest {
     @Test
     public void canReadFromFileAndConvert() throws IOException {
         String actionableGeneTsv =
-                ActionableGeneFile.actionableGeneTsvPath(ActionabilityTestUtil.TEST_SERVE_OUTPUT_DIR, RefGenomeVersion.V37);
+                ActionableGeneFile.actionableGeneTsvPath(DatamodelTestFactory.TEST_SERVE_DIR, RefGenomeVersion.V37);
         List<ActionableGene> actionableGenes = ActionableGeneFile.read(actionableGeneTsv);
 
         assertEquals(7, actionableGenes.size());

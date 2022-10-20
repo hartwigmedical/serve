@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.List;
 
 import com.hartwig.serve.common.genome.refgenome.RefGenomeVersion;
-import com.hartwig.serve.datamodel.ActionabilityTestUtil;
+import com.hartwig.serve.datamodel.DatamodelTestFactory;
 
 import org.junit.Test;
 
@@ -15,7 +15,7 @@ public class ActionableCharacteristicFileTest {
     @Test
     public void canReadFromFileAndConvert() throws IOException {
         String actionableCharacteristicTsv =
-                ActionableCharacteristicFile.actionableCharacteristicTsvPath(ActionabilityTestUtil.TEST_SERVE_OUTPUT_DIR,
+                ActionableCharacteristicFile.actionableCharacteristicTsvPath(DatamodelTestFactory.TEST_SERVE_DIR,
                         RefGenomeVersion.V37);
         List<ActionableCharacteristic> actionableCharacteristics = ActionableCharacteristicFile.read(actionableCharacteristicTsv);
 

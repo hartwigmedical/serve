@@ -5,16 +5,18 @@ import static org.junit.Assert.assertEquals;
 import java.io.IOException;
 import java.util.List;
 
+import com.google.common.io.Resources;
 import com.hartwig.serve.common.genome.refgenome.RefGenomeVersion;
-import com.hartwig.serve.datamodel.ActionabilityTestUtil;
 
 import org.junit.Test;
 
 public class KnownCodonFileTest {
 
+    private static final String TEST_KNOWN_CODON_DIR = Resources.getResource("known_codons").getPath();
+
     @Test
     public void canReadFromFileAndConvert() throws IOException {
-        String knownCodonTsv = KnownCodonFile.knownCodonTsvPath(ActionabilityTestUtil.TEST_SERVE_OUTPUT_DIR, RefGenomeVersion.V37);
+        String knownCodonTsv = KnownCodonFile.knownCodonTsvPath(TEST_KNOWN_CODON_DIR, RefGenomeVersion.V37);
         List<KnownCodon> knownCodons = KnownCodonFile.read(knownCodonTsv);
 
         assertEquals(2, knownCodons.size());

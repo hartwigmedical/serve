@@ -4,7 +4,6 @@ import static org.junit.Assert.assertTrue;
 
 import com.hartwig.serve.ServeAlgoTestFactory;
 import com.hartwig.serve.common.genome.refgenome.RefGenomeVersion;
-import com.hartwig.serve.datamodel.ServeTestFactory;
 import com.hartwig.serve.datamodel.fusion.ImmutableActionableFusion;
 import com.hartwig.serve.datamodel.gene.ImmutableActionableGene;
 import com.hartwig.serve.extraction.ExtractionResult;
@@ -71,13 +70,13 @@ public class ConversionFilterTest {
                         .from(ServeAlgoTestFactory.createTestKnownFusionPair())
                         .geneDown(gene)
                         .build())
-                .addActionableGenes(ImmutableActionableGene.builder().from(ServeTestFactory.createTestActionableGene()).gene(gene).build())
+                .addActionableGenes(ImmutableActionableGene.builder().from(ServeAlgoTestFactory.createTestActionableGene()).gene(gene).build())
                 .addActionableFusions(ImmutableActionableFusion.builder()
-                        .from(ServeTestFactory.createTestActionableFusion())
+                        .from(ServeAlgoTestFactory.createTestActionableFusion())
                         .geneUp(gene)
                         .build())
                 .addActionableFusions(ImmutableActionableFusion.builder()
-                        .from(ServeTestFactory.createTestActionableFusion())
+                        .from(ServeAlgoTestFactory.createTestActionableFusion())
                         .geneDown(gene)
                         .build())
                 .build();

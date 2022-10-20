@@ -5,16 +5,18 @@ import static org.junit.Assert.assertEquals;
 import java.io.IOException;
 import java.util.List;
 
+import com.google.common.io.Resources;
 import com.hartwig.serve.common.genome.refgenome.RefGenomeVersion;
-import com.hartwig.serve.datamodel.ActionabilityTestUtil;
 
 import org.junit.Test;
 
 public class KnownExonFileTest {
 
+    private static final String TEST_KNOWN_EXONS_DIR = Resources.getResource("known_exons").getPath();
+
     @Test
     public void canReadFromFileAndConvert() throws IOException {
-        String knownExonTsv = KnownExonFile.knownExonTsvPath(ActionabilityTestUtil.TEST_SERVE_OUTPUT_DIR, RefGenomeVersion.V37);
+        String knownExonTsv = KnownExonFile.knownExonTsvPath(TEST_KNOWN_EXONS_DIR, RefGenomeVersion.V37);
         List<KnownExon> knownExons = KnownExonFile.read(knownExonTsv);
 
         assertEquals(2, knownExons.size());

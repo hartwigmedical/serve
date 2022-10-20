@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.List;
 
 import com.hartwig.serve.common.genome.refgenome.RefGenomeVersion;
-import com.hartwig.serve.datamodel.ActionabilityTestUtil;
+import com.hartwig.serve.datamodel.DatamodelTestFactory;
 
 import org.junit.Test;
 
@@ -14,7 +14,7 @@ public class ActionableHLAFileTest {
 
     @Test
     public void canReadFromFileAndConvert() throws IOException {
-        String actionableHlATsv = ActionableHLAFile.actionableHLATsvPath(ActionabilityTestUtil.TEST_SERVE_OUTPUT_DIR, RefGenomeVersion.V37);
+        String actionableHlATsv = ActionableHLAFile.actionableHLATsvPath(DatamodelTestFactory.TEST_SERVE_DIR, RefGenomeVersion.V37);
         List<ActionableHLA> actionableHLAs = ActionableHLAFile.read(actionableHlATsv);
 
         assertEquals(1, actionableHLAs.size());

@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.List;
 
 import com.hartwig.serve.common.genome.refgenome.RefGenomeVersion;
-import com.hartwig.serve.datamodel.ActionabilityTestUtil;
+import com.hartwig.serve.datamodel.DatamodelTestFactory;
 
 import org.junit.Test;
 
@@ -15,7 +15,7 @@ public class ActionableFusionFileTest {
     @Test
     public void canReadFromFileAndConvert() throws IOException {
         String actionableFusionTsv =
-                ActionableFusionFile.actionableFusionTsvPath(ActionabilityTestUtil.TEST_SERVE_OUTPUT_DIR, RefGenomeVersion.V37);
+                ActionableFusionFile.actionableFusionTsvPath(DatamodelTestFactory.TEST_SERVE_DIR, RefGenomeVersion.V37);
         List<ActionableFusion> actionableFusions = ActionableFusionFile.read(actionableFusionTsv);
 
         assertEquals(3, actionableFusions.size());

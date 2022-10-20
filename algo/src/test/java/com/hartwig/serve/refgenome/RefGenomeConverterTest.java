@@ -9,7 +9,6 @@ import com.google.common.collect.Sets;
 import com.hartwig.serve.ServeAlgoTestFactory;
 import com.hartwig.serve.common.genome.refgenome.RefGenomeVersion;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.datamodel.ServeTestFactory;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
 import com.hartwig.serve.datamodel.hotspot.ImmutableActionableHotspot;
 import com.hartwig.serve.datamodel.range.ActionableRange;
@@ -99,7 +98,7 @@ public class RefGenomeConverterTest {
     @Test
     public void canConvertActionableHotspots() {
         ActionableHotspot actionableHotspot = ImmutableActionableHotspot.builder()
-                .from(ServeTestFactory.createTestActionableHotspotForSource(Knowledgebase.HARTWIG_CURATED))
+                .from(ServeAlgoTestFactory.createTestActionableHotspotForSource(Knowledgebase.HARTWIG_CURATED))
                 .chromosome(TEST_CHROMOSOME)
                 .position(1)
                 .ref("G")
@@ -113,7 +112,7 @@ public class RefGenomeConverterTest {
     @Test
     public void canConvertActionableRanges() {
         ActionableRange actionableRange = ImmutableActionableRange.builder()
-                .from(ServeTestFactory.createTestActionableRangeForSource(Knowledgebase.HARTWIG_CURATED))
+                .from(ServeAlgoTestFactory.createTestActionableRangeForSource(Knowledgebase.HARTWIG_CURATED))
                 .gene(TEST_GENE)
                 .chromosome(TEST_CHROMOSOME)
                 .start(3)

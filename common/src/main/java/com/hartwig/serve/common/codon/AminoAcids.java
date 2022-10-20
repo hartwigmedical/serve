@@ -11,7 +11,6 @@ import static com.hartwig.serve.common.codon.Codons.isStopCodon;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -106,11 +105,5 @@ public final class AminoAcids {
             convertedProteinAnnotation = convertedProteinAnnotation.replaceAll(mapping.getKey(), mapping.getValue());
         }
         return convertedProteinAnnotation;
-    }
-
-    @NotNull
-    @VisibleForTesting
-    static Map<String, List<String>> aminoAcidToTrinucleotidesMap() {
-        return AMINO_ACID_TO_CODON_MAP;
     }
 }

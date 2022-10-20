@@ -5,8 +5,8 @@ import java.util.List;
 import com.google.common.collect.Lists;
 import com.hartwig.serve.common.genome.region.Strand;
 
-public class TranscriptData
-{
+public class TranscriptData {
+
     public final int TransId;
     public final String TransName;
     public final String GeneId;
@@ -21,8 +21,7 @@ public class TranscriptData
     private List<ExonData> mExons;
 
     public TranscriptData(final int transId, final String transName, final String geneId, final boolean isCanonical, final byte strand,
-            int transStart, int transEnd, Integer codingStart, Integer codingEnd, String bioType)
-    {
+            int transStart, int transEnd, Integer codingStart, Integer codingEnd, String bioType) {
         TransId = transId;
         TransName = transName;
         GeneId = geneId;
@@ -36,19 +35,34 @@ public class TranscriptData
         mExons = Lists.newArrayList();
     }
 
-    public void setExons(final List<ExonData> exons) { mExons = exons; }
-    public List<ExonData> exons() { return mExons; }
+    public void setExons(final List<ExonData> exons) {
+        mExons = exons;
+    }
 
-    public int length() { return TransEnd - TransStart; }
-    public boolean posStrand() { return Strand == com.hartwig.serve.common.genome.region.Strand.POS_STRAND; }
-    public Strand strand() { return Strand == com.hartwig.serve.common.genome.region.Strand.POS_STRAND ? com.hartwig.serve.common.genome.region.Strand.FORWARD : com.hartwig.serve.common.genome.region.Strand.REVERSE;  }
+    public List<ExonData> exons() {
+        return mExons;
+    }
 
-    public boolean nonCoding() { return CodingStart == null; }
+    public int length() {
+        return TransEnd - TransStart;
+    }
 
-    public String toString()
-    {
+    public Strand strand() {
+        return Strand == com.hartwig.serve.common.genome.region.Strand.POS_STRAND
+                ? com.hartwig.serve.common.genome.region.Strand.FORWARD
+                : com.hartwig.serve.common.genome.region.Strand.REVERSE;
+    }
+
+    public String toString() {
         return String.format("%d:%s pos(%d-%d) exons(%d) coding(%d-%d) strand(%s) %s",
-            TransId, TransName, TransStart, TransEnd, mExons.size(),
-            CodingStart != null ? CodingStart : 0, CodingEnd != null ? CodingEnd : 0, strand(), IsCanonical ? "canonical" : "");
+                TransId,
+                TransName,
+                TransStart,
+                TransEnd,
+                mExons.size(),
+                CodingStart != null ? CodingStart : 0,
+                CodingEnd != null ? CodingEnd : 0,
+                strand(),
+                IsCanonical ? "canonical" : "");
     }
 }

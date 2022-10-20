@@ -1,7 +1,6 @@
 package com.hartwig.serve.common.drivercatalog;
 
-public enum DriverCategory
-{
+public enum DriverCategory {
     ONCO,
     TSG
 }

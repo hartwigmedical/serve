@@ -44,22 +44,14 @@
         <apache.commons.csv.version>1.9.0</apache.commons.csv.version>
         <apache.commons.dbcp2.version>2.1.1</apache.commons.dbcp2.version>
         <apache.log4j.version>2.17.1</apache.log4j.version>
-        <apache.lucene.version>7.1.0</apache.lucene.version>
         <jooq.version>3.15.5</jooq.version>
         <mysqlconnector.version>8.0.16</mysqlconnector.version>
         <rxjava2.version>2.1.2</rxjava2.version>
         <retrofit.version>2.4.0</retrofit.version>
         <moshi.version>1.6.0</moshi.version>
         <okhttp.version>3.9.0</okhttp.version>
-        <bouncycastle.jdk15.version>1.53</bouncycastle.jdk15.version>
-        <selenium.version>3.14.0</selenium.version>
-        <itext.version>7.1.5</itext.version>
-        <tablesaw.version>0.42.0</tablesaw.version>
-        <jcommander.version>1.81</jcommander.version>
-        <jackson-dataformat-xml.version>2.11.1</jackson-dataformat-xml.version>
 
         <junit.version>4.13.1</junit.version>
-        <mockito.version>2.23.4</mockito.version>
 
     </properties>
 
@@ -198,6 +190,7 @@
                 <artifactId>mysql-connector-java</artifactId>
                 <version>${mysqlconnector.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>org.immutables</groupId>
                 <artifactId>value</artifactId>
@@ -210,6 +203,7 @@
                 <version>${immutables.version}</version>
                 <scope>provided</scope>
             </dependency>
+
             <dependency>
                 <groupId>io.reactivex.rxjava2</groupId>
                 <artifactId>rxjava</artifactId>
@@ -245,107 +239,14 @@
                 <artifactId>moshi</artifactId>
                 <version>${moshi.version}</version>
             </dependency>
-            <dependency>
-                <groupId>com.squareup.moshi</groupId>
-                <artifactId>moshi-kotlin</artifactId>
-                <version>${moshi.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.lucene</groupId>
-                <artifactId>lucene-core</artifactId>
-                <version>${apache.lucene.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.lucene</groupId>
-                <artifactId>lucene-analyzers-common</artifactId>
-                <version>${apache.lucene.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.lucene</groupId>
-                <artifactId>lucene-queryparser</artifactId>
-                <version>${apache.lucene.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.lucene</groupId>
-                <artifactId>lucene-suggest</artifactId>
-                <version>${apache.lucene.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.lucene</groupId>
-                <artifactId>lucene-highlighter</artifactId>
-                <version>${apache.lucene.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.bouncycastle</groupId>
-                <artifactId>bcprov-jdk15on</artifactId>
-                <version>${bouncycastle.jdk15.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jetbrains.kotlin</groupId>
-                <artifactId>kotlin-stdlib-jdk8</artifactId>
-                <version>${kotlin.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jetbrains.kotlin</groupId>
-                <artifactId>kotlin-reflect</artifactId>
-                <version>${kotlin.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jetbrains.kotlinx</groupId>
-                <artifactId>kotlinx-coroutines-core</artifactId>
-                <version>${kotlin.coroutines.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.seleniumhq.selenium</groupId>
-                <artifactId>selenium-java</artifactId>
-                <version>${selenium.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.itextpdf</groupId>
-                <artifactId>kernel</artifactId>
-                <version>${itext.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.itextpdf</groupId>
-                <artifactId>layout</artifactId>
-                <version>${itext.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.itextpdf</groupId>
-                <artifactId>io</artifactId>
-                <version>${itext.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>tech.tablesaw</groupId>
-                <artifactId>tablesaw-core</artifactId>
-                <version>${tablesaw.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.beust</groupId>
-                <artifactId>jcommander</artifactId>
-                <version>${jcommander.version}</version>
-            </dependency>
 
             <!-- Test dependencies -->
-            <dependency>
-                <groupId>com.hartwig.serve</groupId>
-                <artifactId>common</artifactId>
-                <version>local-SNAPSHOT</version>
-                <scope>test</scope>
-                <type>test-jar</type>
-            </dependency>
             <dependency>
                 <groupId>com.hartwig.serve</groupId>
                 <artifactId>datamodel</artifactId>
                 <version>${serve.version}</version>
                 <scope>test</scope>
                 <type>test-jar</type>
-            </dependency>
-            <dependency>
-                <groupId>org.mockito</groupId>
-                <artifactId>mockito-core</artifactId>
-                <version>${mockito.version}</version>
-                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>junit</groupId>

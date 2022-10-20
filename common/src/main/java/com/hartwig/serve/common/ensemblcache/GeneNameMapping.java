@@ -58,25 +58,8 @@ public class GeneNameMapping {
         }
     }
 
-    public boolean hasOldGene(final String geneNameOld) {
-        return mUnchangedGenes.contains(geneNameOld) || mGeneNameOldToNewMap.containsKey(geneNameOld);
-    }
-
-    public boolean isUnchanged(final String geneName) {
-        return mUnchangedGenes.contains(geneName);
-    }
-
     public boolean hasNewGene(final String geneNameNew) {
         return mUnchangedGenes.contains(geneNameNew) || mGeneNameNewToOldMap.containsKey(geneNameNew);
-    }
-
-    public String getNewName(final String geneNameOld) {
-        if (mUnchangedGenes.contains(geneNameOld)) {
-            return geneNameOld;
-        }
-
-        GeneMappingData data = mGeneNameOldToNewMap.get(geneNameOld);
-        return data != null ? data.GeneNameNew : null;
     }
 
     public String getOldName(final String geneNameNew) {
@@ -87,21 +70,4 @@ public class GeneNameMapping {
         GeneMappingData data = mGeneNameNewToOldMap.get(geneNameNew);
         return data != null ? data.GeneNameOld : null;
     }
-
-    public GeneMappingData getMappingDataByOld(final String geneNameOld) {
-        if (mUnchangedGenes.contains(geneNameOld)) {
-            return null;
-        }
-
-        return mGeneNameOldToNewMap.get(geneNameOld);
-    }
-
-    public GeneMappingData getMappingDataByNew(final String geneNameNew) {
-        if (mUnchangedGenes.contains(geneNameNew)) {
-            return null;
-        }
-
-        return mGeneNameNewToOldMap.get(geneNameNew);
-    }
-
 }

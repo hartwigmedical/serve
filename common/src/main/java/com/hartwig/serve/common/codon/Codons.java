@@ -15,10 +15,6 @@ public final class Codons {
                     'S', 'S', 'S', 'X', 'C', 'C', 'W', 'Q', 'H', 'H', 'Q', 'L', 'L', 'L', 'L', 'P', 'P', 'P', 'P', 'R', 'R', 'R', 'R', 'E',
                     'D', 'D', 'E', 'V', 'V', 'V', 'V', 'A', 'A', 'A', 'A', 'G', 'G', 'G', 'G' };
 
-    public static boolean isCodonMultiple(int bases) {
-        return (bases % 3) == 0;
-    }
-
     public static boolean isStopCodon(final String codon) {
         return codon.equals(STOP_CODON_1) || codon.equals(STOP_CODON_2) || codon.equals(STOP_CODON_3);
     }

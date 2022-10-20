@@ -68,7 +68,7 @@ public class GlobalTherapyApprovalStatusReader extends CkbJsonDirectoryReader<Js
         return ImmutableTherapyInfo.builder()
                 .id(Json.integer(jsonObject, "id"))
                 .therapyName(Json.string(jsonObject, "therapyName"))
-                .synonyms(Json.optionalStringList(jsonObject, "synonyms"))
+                .synonyms(Json.nullableStringList(jsonObject, "synonyms"))
                 .build();
     }
 

@@ -55,7 +55,7 @@ public class VariantReader extends CkbJsonDirectoryReader<JsonVariant> {
                 .variant(Json.string(object, "variant"))
                 .createDate(DateConverter.toDate(Json.string(object, "createDate")))
                 .updateDate(DateConverter.toDate(Json.string(object, "updateDate")))
-                .referenceTranscriptCoordinate(extractReferenceTranscriptCoordinate(Json.optionalObject(object,
+                .referenceTranscriptCoordinate(extractReferenceTranscriptCoordinate(Json.nullableObject(object,
                         "referenceTranscriptCoordinates")))
                 .partnerGenes(extractPartnerGenes(object.getAsJsonArray("partnerGenes")))
                 .categoryVariantPaths(extractCategoryVariantPaths(object.getAsJsonArray("categoryVariantPaths")))

@@ -27,13 +27,10 @@ import com.hartwig.serve.ckb.util.DateConverter;
 import com.hartwig.serve.common.json.Json;
 import com.hartwig.serve.common.json.JsonDatamodelChecker;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class MolecularProfileReader extends CkbJsonDirectoryReader<JsonMolecularProfile> {
-    private static final Logger LOGGER = LogManager.getLogger(MolecularProfileReader.class);
 
     public MolecularProfileReader(@Nullable final Integer maxFilesToRead) {
         super(maxFilesToRead);
@@ -261,17 +258,10 @@ public class MolecularProfileReader extends CkbJsonDirectoryReader<JsonMolecular
             JsonObject variantAssociatedClinicalTrialJsonObject = variantAssociatedClinicalTrial.getAsJsonObject();
             variantAssociatedClinicalTrialChecker.check(variantAssociatedClinicalTrialJsonObject);
 
-            String nctId = Json.string(variantAssociatedClinicalTrialJsonObject, "nctId");
-            String phase = Json.nullableString(variantAssociatedClinicalTrialJsonObject, "phase");
-
-            if (phase == null) {
-                LOGGER.warn("phase of study '{}' is null in MolecularProfileReader", nctId);
-            }
-
             variantAssociatedClinicalTrials.add(ImmutableClinicalTrialInfo.builder()
-                    .nctId(nctId)
+                    .nctId(Json.string(variantAssociatedClinicalTrialJsonObject, "nctId"))
                     .title(Json.string(variantAssociatedClinicalTrialJsonObject, "title"))
-                    .phase(phase)
+                    .phase(Json.nullableString(variantAssociatedClinicalTrialJsonObject, "phase"))
                     .recruitment(Json.string(variantAssociatedClinicalTrialJsonObject, "recruitment"))
                     .therapies(extractTherapyList(variantAssociatedClinicalTrialJsonObject.getAsJsonArray("therapies")))
                     .build());

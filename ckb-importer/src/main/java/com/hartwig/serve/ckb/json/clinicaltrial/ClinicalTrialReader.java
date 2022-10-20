@@ -17,13 +17,10 @@ import com.hartwig.serve.ckb.util.DateConverter;
 import com.hartwig.serve.common.json.Json;
 import com.hartwig.serve.common.json.JsonDatamodelChecker;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class ClinicalTrialReader extends CkbJsonDirectoryReader<JsonClinicalTrial> {
-    private static final Logger LOGGER = LogManager.getLogger(ClinicalTrialReader.class);
 
     public ClinicalTrialReader(@Nullable final Integer maxFilesToRead) {
         super(maxFilesToRead);
@@ -35,17 +32,10 @@ public class ClinicalTrialReader extends CkbJsonDirectoryReader<JsonClinicalTria
         JsonDatamodelChecker clinicalTrialChecker = ClinicalTrialDatamodelChecker.clinicalTrialObjectChecker();
         clinicalTrialChecker.check(object);
 
-        String nctId = Json.string(object, "nctId");
-        String phase = Json.nullableString(object, "phase");
-
-        if (phase == null) {
-            LOGGER.warn("phase of study '{}' is null in ClinicalTrialReader", nctId);
-        }
-
         return ImmutableJsonClinicalTrial.builder()
-                .nctId(nctId)
+                .nctId(Json.string(object, "nctId"))
                 .title(Json.string(object, "title"))
-                .phase(phase)
+                .phase(Json.nullableString(object, "phase"))
                 .recruitment(Json.string(object, "recruitment"))
                 .therapies(extractTherapies(object.getAsJsonArray("therapies")))
                 .ageGroups(Json.stringList(object, "ageGroups"))

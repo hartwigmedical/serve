@@ -29,13 +29,10 @@ import com.hartwig.serve.ckb.util.DateConverter;
 import com.hartwig.serve.common.json.Json;
 import com.hartwig.serve.common.json.JsonDatamodelChecker;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class TherapyReader extends CkbJsonDirectoryReader<JsonTherapy> {
-    private static final Logger LOGGER = LogManager.getLogger(TherapyReader.class);
 
     public TherapyReader(@Nullable final Integer maxFilesToRead) {
         super(maxFilesToRead);
@@ -167,17 +164,10 @@ public class TherapyReader extends CkbJsonDirectoryReader<JsonTherapy> {
             JsonObject clinicalTrialJsonObject = clinicalTrial.getAsJsonObject();
             clinicalTrialChecker.check(clinicalTrialJsonObject);
 
-            String nctId = Json.string(clinicalTrialJsonObject, "nctId");
-            String phase = Json.nullableString(clinicalTrialJsonObject, "phase");
-
-            if (phase == null) {
-                LOGGER.warn("phase of study '{}' is null in TherapyReader", nctId);
-            }
-
             clinicalTrials.add(ImmutableClinicalTrialInfo.builder()
-                    .nctId(nctId)
+                    .nctId(Json.string(clinicalTrialJsonObject, "nctId"))
                     .title(Json.string(clinicalTrialJsonObject, "title"))
-                    .phase(phase)
+                    .phase(Json.nullableString(clinicalTrialJsonObject, "phase"))
                     .recruitment(Json.string(clinicalTrialJsonObject, "recruitment"))
                     .therapies(extractTherapyList(clinicalTrialJsonObject.getAsJsonArray("therapies")))
                     .build());

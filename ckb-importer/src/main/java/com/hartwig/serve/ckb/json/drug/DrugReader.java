@@ -29,13 +29,10 @@ import com.hartwig.serve.ckb.util.DateConverter;
 import com.hartwig.serve.common.json.Json;
 import com.hartwig.serve.common.json.JsonDatamodelChecker;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class DrugReader extends CkbJsonDirectoryReader<JsonDrug> {
-    private static final Logger LOGGER = LogManager.getLogger(DrugReader.class);
 
     public DrugReader(@Nullable final Integer maxFilesToRead) {
         super(maxFilesToRead);
@@ -133,17 +130,10 @@ public class DrugReader extends CkbJsonDirectoryReader<JsonDrug> {
             JsonObject clinicalTrialObject = clinicalTrial.getAsJsonObject();
             clinicalTrialChecker.check(clinicalTrialObject);
 
-            String nctId = Json.string(clinicalTrialObject, "nctId");
-            String phase = Json.nullableString(clinicalTrialObject, "phase");
-
-            if (phase == null) {
-                LOGGER.warn("phase of study '{}' is null in DrugReader", nctId);
-            }
-
             clinicalTrials.add(ImmutableClinicalTrialInfo.builder()
-                    .nctId(nctId)
+                    .nctId(Json.string(clinicalTrialObject, "nctId"))
                     .title(Json.string(clinicalTrialObject, "title"))
-                    .phase(phase)
+                    .phase(Json.nullableString(clinicalTrialObject, "phase"))
                     .recruitment(Json.string(clinicalTrialObject, "recruitment"))
                     .therapies(extractClinicalTrialTherapies(clinicalTrialObject.getAsJsonArray("therapies")))
                     .build());
@@ -163,7 +153,7 @@ public class DrugReader extends CkbJsonDirectoryReader<JsonDrug> {
             therapies.add(ImmutableTherapyInfo.builder()
                     .id(Json.integer(therapyObject, "id"))
                     .therapyName(Json.string(therapyObject, "therapyName"))
-                    .synonyms(Json.optionalStringList(therapyObject, "synonyms"))
+                    .synonyms(Json.nullableStringList(therapyObject, "synonyms"))
                     .build());
         }
         return therapies;
@@ -214,7 +204,7 @@ public class DrugReader extends CkbJsonDirectoryReader<JsonDrug> {
         return ImmutableTherapyInfo.builder()
                 .id(Json.integer(jsonObject, "id"))
                 .therapyName(Json.string(jsonObject, "therapyName"))
-                .synonyms(Json.optionalStringList(jsonObject, "synonyms"))
+                .synonyms(Json.nullableStringList(jsonObject, "synonyms"))
                 .build();
     }
 
@@ -261,7 +251,7 @@ public class DrugReader extends CkbJsonDirectoryReader<JsonDrug> {
             therapies.add(ImmutableTherapyInfo.builder()
                     .id(Json.integer(therapyObject, "id"))
                     .therapyName(Json.string(therapyObject, "therapyName"))
-                    .synonyms(Json.optionalStringList(therapyObject, "synonyms"))
+                    .synonyms(Json.nullableStringList(therapyObject, "synonyms"))
                     .build());
         }
         return therapies;
@@ -296,7 +286,7 @@ public class DrugReader extends CkbJsonDirectoryReader<JsonDrug> {
         return ImmutableTherapyInfo.builder()
                 .id(Json.integer(jsonObject, "id"))
                 .therapyName(Json.string(jsonObject, "therapyName"))
-                .synonyms(Json.optionalStringList(jsonObject, "synonyms"))
+                .synonyms(Json.nullableStringList(jsonObject, "synonyms"))
                 .build();
     }
 

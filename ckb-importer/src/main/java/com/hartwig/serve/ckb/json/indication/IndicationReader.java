@@ -23,13 +23,10 @@ import com.hartwig.serve.ckb.util.DateConverter;
 import com.hartwig.serve.common.json.Json;
 import com.hartwig.serve.common.json.JsonDatamodelChecker;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class IndicationReader extends CkbJsonDirectoryReader<JsonIndication> {
-    private static final Logger LOGGER = LogManager.getLogger(IndicationReader.class);
 
     public IndicationReader(@Nullable final Integer maxFilesToRead) {
         super(maxFilesToRead);
@@ -100,7 +97,7 @@ public class IndicationReader extends CkbJsonDirectoryReader<JsonIndication> {
         return ImmutableTherapyInfo.builder()
                 .id(Json.integer(jsonObject, "id"))
                 .therapyName(Json.string(jsonObject, "therapyName"))
-                .synonyms(Json.optionalStringList(jsonObject, "synonyms"))
+                .synonyms(Json.nullableStringList(jsonObject, "synonyms"))
                 .build();
     }
 
@@ -144,17 +141,10 @@ public class IndicationReader extends CkbJsonDirectoryReader<JsonIndication> {
             JsonObject clinicalTrialJsonObject = clinicalTrial.getAsJsonObject();
             clinicalTrialChecker.check(clinicalTrialJsonObject);
 
-            String nctId = Json.string(clinicalTrialJsonObject, "nctId");
-            String phase = Json.nullableString(clinicalTrialJsonObject, "phase");
-
-            if (phase == null) {
-                LOGGER.warn("phase of study '{}' is null in IndicationReader", nctId);
-            }
-
             clinicalTrials.add(ImmutableClinicalTrialInfo.builder()
-                    .nctId(nctId)
+                    .nctId(Json.string(clinicalTrialJsonObject, "nctId"))
                     .title(Json.string(clinicalTrialJsonObject, "title"))
-                    .phase(phase)
+                    .phase(Json.nullableString(clinicalTrialJsonObject, "phase"))
                     .recruitment(Json.string(clinicalTrialJsonObject, "recruitment"))
                     .therapies(extractTherapies(clinicalTrialJsonObject.getAsJsonArray("therapies")))
                     .build());

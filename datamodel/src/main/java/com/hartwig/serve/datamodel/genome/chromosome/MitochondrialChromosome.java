@@ -16,7 +16,7 @@ public enum MitochondrialChromosome implements Chromosome {
     }
 
     @NotNull
-    public static MitochondrialChromosome fromString(@NotNull final String contig) {
+    public static MitochondrialChromosome fromString(@NotNull String contig) {
         if (!contains(contig)) {
             throw new IllegalArgumentException("Invalid mitochondrial contig " + contig);
         }
@@ -24,7 +24,7 @@ public enum MitochondrialChromosome implements Chromosome {
         return MT;
     }
 
-    public static boolean contains(@NotNull final String contig) {
+    public static boolean contains(@NotNull String contig) {
         return contig.equals("chrM") || contig.equals("MT");
     }
 }

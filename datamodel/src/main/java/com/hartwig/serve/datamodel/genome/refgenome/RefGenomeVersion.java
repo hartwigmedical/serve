@@ -3,17 +3,12 @@ package com.hartwig.serve.datamodel.genome.refgenome;
 import org.jetbrains.annotations.NotNull;
 
 public enum RefGenomeVersion {
-
     V37("37", true),
     V38("38", false);
 
     @NotNull
-    private final String mIdentifier;
-    private final boolean mIs37;
-
-    // config option
-    public static final String REF_GENOME_VERSION = "ref_genome_version";
-    public static final String REF_GENOME_VERSION_CFG_DESC = "Ref genome version, 37 or 38";
+    private final String identifier;
+    private final boolean is37;
 
     private static final String GZIP_EXTENSION = ".gz";
 
@@ -29,23 +24,20 @@ public enum RefGenomeVersion {
     }
 
     RefGenomeVersion(@NotNull final String identifier, final boolean is37) {
-        mIdentifier = identifier;
-        mIs37 = is37;
+        this.identifier = identifier;
+        this.is37 = is37;
     }
 
     public boolean is37() {
-        return mIs37;
+        return is37;
     }
 
     public boolean is38() {
-        return !mIs37;
+        return !is37;
     }
 
-    public String identifier() {
-        return mIdentifier;
-    }
-
-    public String addVersionToFilePath(final String filePath) {
+    @NotNull
+    public String addVersionToFilePath(@NotNull String filePath) {
         String modifiedFilePath = filePath;
         if (filePath.endsWith(GZIP_EXTENSION)) {
             modifiedFilePath = filePath.substring(0, filePath.indexOf(GZIP_EXTENSION));
@@ -57,7 +49,7 @@ public enum RefGenomeVersion {
 
         int extensionStart = modifiedFilePath.lastIndexOf(".");
         String versionedFilePath =
-                modifiedFilePath.substring(0, extensionStart) + "." + this.mIdentifier + modifiedFilePath.substring(extensionStart);
+                modifiedFilePath.substring(0, extensionStart) + "." + this.identifier + modifiedFilePath.substring(extensionStart);
 
         if (filePath.endsWith(GZIP_EXTENSION)) {
             versionedFilePath = versionedFilePath + GZIP_EXTENSION;

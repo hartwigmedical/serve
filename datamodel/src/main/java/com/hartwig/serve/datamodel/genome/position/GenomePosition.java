@@ -20,7 +20,7 @@ public interface GenomePosition extends Comparable<GenomePosition> {
     // extends GenomePosition but may have their own compareTo function.
     // i.e.
     // new TreeMap(GenomePosition::compare);
-    static int compare(final GenomePosition gp1, final GenomePosition gp2) {
+    static int compare(@NotNull GenomePosition gp1, @NotNull GenomePosition gp2) {
         int chromosomeCompare = new ContigComparator().compare(gp1.chromosome(), gp2.chromosome());
         if (chromosomeCompare == 0) {
             return Integer.compare(gp1.position(), gp2.position());

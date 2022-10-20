@@ -1,14 +1,11 @@
 package com.hartwig.serve.datamodel.genome.chromosome;
 
 import com.hartwig.serve.datamodel.genome.Gender;
-import com.hartwig.serve.datamodel.genome.position.GenomePosition;
 import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeFunctions;
-import com.hartwig.serve.datamodel.genome.region.GenomeRegion;
 
 import org.jetbrains.annotations.NotNull;
 
-public enum HumanChromosome implements Chromosome
-{
+public enum HumanChromosome implements Chromosome {
     _1(true, false),
     _2(true, false),
     _3(true, false),
@@ -38,53 +35,34 @@ public enum HumanChromosome implements Chromosome
     private final boolean isAllosome;
     private final String name;
 
-    HumanChromosome(final boolean isAutosome, boolean isAllosome)
-    {
+    HumanChromosome(final boolean isAutosome, boolean isAllosome) {
         this.isAutosome = isAutosome;
         this.isAllosome = isAllosome;
-        name = name().substring(1).intern();
+        this.name = name().substring(1).intern();
     }
 
     @Override
-    public boolean isAutosome()
-    {
+    public boolean isAutosome() {
         return isAutosome;
     }
 
     @Override
-    public boolean isAllosome()
-    {
+    public boolean isAllosome() {
         return isAllosome;
     }
 
     @NotNull
-    public static Chromosome valueOf(@NotNull final GenomePosition position)
-    {
-        return fromString(position.chromosome());
-    }
-
-    @NotNull
-    public static Chromosome valueOf(@NotNull final GenomeRegion region)
-    {
-        return fromString(region.chromosome());
-    }
-
-    @NotNull
-    public static HumanChromosome fromString(@NotNull final String chromosome)
-    {
-        if(chromosome.toLowerCase().startsWith("chr"))
-        {
+    public static HumanChromosome fromString(@NotNull String chromosome) {
+        if (chromosome.toLowerCase().startsWith("chr")) {
             return HumanChromosome.valueOf("_" + chromosome.substring(3));
         }
 
         return HumanChromosome.valueOf("_" + chromosome);
     }
 
-    public static boolean contains(@NotNull final String chromosome)
-    {
+    public static boolean contains(@NotNull String chromosome) {
         final String trimmedContig = RefGenomeFunctions.stripChrPrefix(chromosome);
-        if(isNumeric(trimmedContig))
-        {
+        if (isNumeric(trimmedContig)) {
             final int integerContig = Integer.parseInt(trimmedContig);
             return integerContig >= 1 && integerContig <= 22;
         }
@@ -92,59 +70,35 @@ public enum HumanChromosome implements Chromosome
         return trimmedContig.equals("X") || trimmedContig.equals("Y");
     }
 
-    public int intValue()
-    {
-        return this.ordinal() + 1;
-    }
-
-    public boolean isDiploid(@NotNull Gender gender)
-    {
+    public boolean isDiploid(@NotNull Gender gender) {
         return isAutosome() || (gender != Gender.MALE && this.equals(_X));
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return name;
     }
 
-    private static boolean isNumeric(String str)
-    {
-        for(int i = 0; i < str.length(); i++)
-        {
-            if(!Character.isDigit(str.charAt(i)))
-            {
+    private static boolean isNumeric(@NotNull String str) {
+        for (int i = 0; i < str.length(); i++) {
+            if (!Character.isDigit(str.charAt(i))) {
                 return false;
             }
         }
         return true;
     }
 
-    public static boolean lowerChromosome(final String chr, final String otherChr)
-    {
-        return chromosomeRank(chr) < chromosomeRank(otherChr);
-    }
-
-    public static int chromosomeRank(final String chromosome)
-    {
+    public static int chromosomeRank(@NotNull String chromosome) {
         String chrTrimmed = RefGenomeFunctions.stripChrPrefix(chromosome);
 
-        if(chrTrimmed.equalsIgnoreCase("X"))
-        {
+        if (chrTrimmed.equalsIgnoreCase("X")) {
             return 23;
-        }
-        else if(chrTrimmed.equalsIgnoreCase("Y"))
-        {
+        } else if (chrTrimmed.equalsIgnoreCase("Y")) {
             return 24;
-        }
-        else if(chrTrimmed.equalsIgnoreCase("MT") || chrTrimmed.equalsIgnoreCase("M"))
-        {
+        } else if (chrTrimmed.equalsIgnoreCase("MT") || chrTrimmed.equalsIgnoreCase("M")) {
             return 25;
-        }
-        else
-        {
+        } else {
             return Integer.parseInt(chrTrimmed);
         }
     }
-
 }

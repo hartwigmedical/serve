@@ -26,6 +26,8 @@ public class LoadServeDatabase {
 
     private static final Logger LOGGER = LogManager.getLogger(LoadServeDatabase.class);
 
+    private static final String REF_GENOME_VERSION = "ref_genome_version";
+
     private static final String SERVE_ACTIONABILITY_DIRECTORY = "serve_actionability_dir";
 
     public static void main(@NotNull String[] args) throws ParseException, SQLException, IOException {
@@ -33,7 +35,7 @@ public class LoadServeDatabase {
         CommandLine cmd = new DefaultParser().parse(options, args);
 
         String serveActionabilityDir = nonOptionalDir(cmd, SERVE_ACTIONABILITY_DIRECTORY);
-        RefGenomeVersion refGenomeVersion = (RefGenomeVersion.from(nonOptionalValue(cmd, RefGenomeVersion.REF_GENOME_VERSION)));
+        RefGenomeVersion refGenomeVersion = (RefGenomeVersion.from(nonOptionalValue(cmd, REF_GENOME_VERSION)));
         ActionableEvents actionableEvents = ActionableEventsLoader.readFromDir(serveActionabilityDir, refGenomeVersion);
         KnownEvents knownEvents = KnownEventsLoader.readFromDir(serveActionabilityDir, refGenomeVersion);
         List<EventInterpretation> eventInterpretation =
@@ -53,7 +55,7 @@ public class LoadServeDatabase {
     private static Options createOptions() {
         Options options = new Options();
         options.addOption(SERVE_ACTIONABILITY_DIRECTORY, true, "Path towards the SERVE actionability directory.");
-        options.addOption(RefGenomeVersion.REF_GENOME_VERSION, true, "Ref genome version to use (either '37' or '38')");
+        options.addOption(REF_GENOME_VERSION, true, "Ref genome version to use (either '37' or '38')");
 
         ServeDatabaseAccess.addDatabaseCmdLineArgs(options);
         return options;

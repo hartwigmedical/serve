@@ -16,5 +16,4 @@ public abstract class ActionableGene implements ActionableEvent {
 
     @NotNull
     public abstract GeneLevelEvent event();
-
 }

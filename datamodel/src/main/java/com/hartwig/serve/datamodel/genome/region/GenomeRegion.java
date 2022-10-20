@@ -1,7 +1,6 @@
 package com.hartwig.serve.datamodel.genome.region;
 
 import com.hartwig.serve.datamodel.genome.chromosome.ContigComparator;
-import com.hartwig.serve.datamodel.genome.position.GenomePosition;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -11,11 +10,8 @@ public interface GenomeRegion extends Comparable<GenomeRegion> {
     String chromosome();
 
     int start();
-    int end();
 
-    default int bases() {
-        return 1 + end() - start();
-    }
+    int end();
 
     @Override
     default int compareTo(@NotNull final GenomeRegion other) {
@@ -29,23 +25,5 @@ public interface GenomeRegion extends Comparable<GenomeRegion> {
         }
 
         return new ContigComparator().compare(chromosome(), other.chromosome());
-    }
-
-    default boolean contains(@NotNull final GenomePosition position) {
-        return chromosome().equals(position.chromosome()) && start() <= position.position() && end() >= position.position();
-    }
-
-    default boolean overlaps(@NotNull final GenomeRegion other) {
-        return other.chromosome().equals(chromosome()) && other.end() > start() && other.start() < end();
-    }
-
-    default int overlappingBases(@NotNull final GenomeRegion other) {
-        if (!chromosome().equals(other.chromosome())) {
-            return 0;
-        }
-
-        int minEnd = Math.min(end(), other.end());
-        int maxStart = Math.max(start(), other.start());
-        return Math.max(0, 1 + minEnd - maxStart);
     }
 }

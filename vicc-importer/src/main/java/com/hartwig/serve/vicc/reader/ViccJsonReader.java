@@ -1,13 +1,13 @@
 package com.hartwig.serve.vicc.reader;
 
-import static com.hartwig.serve.common.utils.json.JsonFunctions.nullableString;
-import static com.hartwig.serve.common.utils.json.JsonFunctions.optionalJsonArray;
-import static com.hartwig.serve.common.utils.json.JsonFunctions.optionalJsonObject;
-import static com.hartwig.serve.common.utils.json.JsonFunctions.optionalNullableString;
-import static com.hartwig.serve.common.utils.json.JsonFunctions.optionalString;
-import static com.hartwig.serve.common.utils.json.JsonFunctions.optionalStringList;
-import static com.hartwig.serve.common.utils.json.JsonFunctions.string;
-import static com.hartwig.serve.common.utils.json.JsonFunctions.stringList;
+import static com.hartwig.serve.common.json.JsonFunctions.nullableString;
+import static com.hartwig.serve.common.json.JsonFunctions.optionalJsonArray;
+import static com.hartwig.serve.common.json.JsonFunctions.optionalJsonObject;
+import static com.hartwig.serve.common.json.JsonFunctions.optionalNullableString;
+import static com.hartwig.serve.common.json.JsonFunctions.optionalString;
+import static com.hartwig.serve.common.json.JsonFunctions.optionalStringList;
+import static com.hartwig.serve.common.json.JsonFunctions.string;
+import static com.hartwig.serve.common.json.JsonFunctions.stringList;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -22,7 +22,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
-import com.hartwig.serve.common.utils.json.JsonDatamodelChecker;
+import com.hartwig.serve.common.json.JsonDatamodelChecker;
 import com.hartwig.serve.vicc.annotation.TranscriptExtractor;
 import com.hartwig.serve.vicc.datamodel.Association;
 import com.hartwig.serve.vicc.datamodel.EnvironmentalContext;

@@ -2,7 +2,7 @@ package com.hartwig.serve.extraction.codon.tools;
 
 import java.io.IOException;
 
-import com.hartwig.serve.common.codon.AminoAcids;
+import com.hartwig.serve.common.genome.AminoAcids;
 import com.hartwig.serve.common.variant.impact.VariantImpact;
 import com.hartwig.serve.common.variant.impact.VariantImpactSerialiser;
 import com.hartwig.serve.extraction.util.VCFWriterFactory;

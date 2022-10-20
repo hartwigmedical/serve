@@ -3,9 +3,9 @@ package com.hartwig.serve.refgenome;
 import java.util.List;
 import java.util.Map;
 
-import com.hartwig.serve.common.drivercatalog.panel.DriverGene;
+import com.hartwig.serve.common.drivergene.DriverGene;
 import com.hartwig.serve.common.ensemblcache.EnsemblDataCache;
-import com.hartwig.serve.common.fusion.KnownFusionCache;
+import com.hartwig.serve.common.knownfusion.KnownFusionCache;
 import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeVersion;
 import com.hartwig.serve.extraction.hotspot.ProteinResolver;
 

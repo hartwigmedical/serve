@@ -1,7 +1,7 @@
 package com.hartwig.serve.vicc.reader;
 
-import static com.hartwig.serve.common.utils.json.JsonFunctions.string;
-import static com.hartwig.serve.common.utils.json.JsonFunctions.stringList;
+import static com.hartwig.serve.common.json.JsonFunctions.string;
+import static com.hartwig.serve.common.json.JsonFunctions.stringList;
 
 import com.google.gson.JsonObject;
 import com.hartwig.serve.vicc.datamodel.cgi.Cgi;

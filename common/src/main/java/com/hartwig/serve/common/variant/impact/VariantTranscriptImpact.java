@@ -46,7 +46,7 @@ public class VariantTranscriptImpact {
 
         header.addMetaDataLine(new VCFInfoHeaderLine(
                 VAR_TRANS_IMPACT_ANNOATATION, VCFHeaderLineCount.UNBOUNDED, VCFHeaderLineType.String,
-                String.format("Transcript impact [%s]", fields.toString())));
+                String.format("Transcript impact [%s]", fields)));
     }
 
     public static void writeVcfData(final VariantContext context, final List<VariantTranscriptImpact> transImpacts) {

@@ -5,9 +5,9 @@ import java.util.Set;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.hartwig.serve.common.classification.EventType;
-import com.hartwig.serve.common.drivercatalog.DriverCategory;
-import com.hartwig.serve.common.drivercatalog.panel.DriverGene;
-import com.hartwig.serve.common.fusion.KnownFusionCache;
+import com.hartwig.serve.common.drivergene.DriverCategory;
+import com.hartwig.serve.common.drivergene.DriverGene;
+import com.hartwig.serve.common.knownfusion.KnownFusionCache;
 import com.hartwig.serve.datamodel.gene.GeneLevelAnnotation;
 import com.hartwig.serve.datamodel.gene.GeneLevelEvent;
 import com.hartwig.serve.datamodel.gene.ImmutableGeneLevelAnnotation;

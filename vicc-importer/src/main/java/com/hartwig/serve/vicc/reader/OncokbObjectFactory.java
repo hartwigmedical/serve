@@ -1,8 +1,8 @@
 package com.hartwig.serve.vicc.reader;
 
-import static com.hartwig.serve.common.utils.json.JsonFunctions.nullableString;
-import static com.hartwig.serve.common.utils.json.JsonFunctions.string;
-import static com.hartwig.serve.common.utils.json.JsonFunctions.stringList;
+import static com.hartwig.serve.common.json.JsonFunctions.nullableString;
+import static com.hartwig.serve.common.json.JsonFunctions.string;
+import static com.hartwig.serve.common.json.JsonFunctions.stringList;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.hartwig.serve.common.utils.json.JsonDatamodelChecker;
+import com.hartwig.serve.common.json.JsonDatamodelChecker;
 import com.hartwig.serve.vicc.datamodel.oncokb.ImmutableOncoKb;
 import com.hartwig.serve.vicc.datamodel.oncokb.ImmutableOncoKbBiological;
 import com.hartwig.serve.vicc.datamodel.oncokb.ImmutableOncoKbClinical;

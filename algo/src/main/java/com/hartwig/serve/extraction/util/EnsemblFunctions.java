@@ -1,8 +1,8 @@
 package com.hartwig.serve.extraction.util;
 
 import com.hartwig.serve.common.ensemblcache.EnsemblDataCache;
-import com.hartwig.serve.common.gene.GeneData;
-import com.hartwig.serve.common.gene.TranscriptData;
+import com.hartwig.serve.common.genome.GeneData;
+import com.hartwig.serve.common.genome.TranscriptData;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

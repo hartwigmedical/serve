@@ -3,10 +3,10 @@ package com.hartwig.serve;
 import java.util.List;
 
 import com.google.common.collect.Lists;
-import com.hartwig.serve.common.drivercatalog.DriverCategory;
-import com.hartwig.serve.common.drivercatalog.panel.DriverGene;
-import com.hartwig.serve.common.drivercatalog.panel.DriverGeneGermlineReporting;
-import com.hartwig.serve.common.drivercatalog.panel.ImmutableDriverGene;
+import com.hartwig.serve.common.drivergene.DriverCategory;
+import com.hartwig.serve.common.drivergene.DriverGene;
+import com.hartwig.serve.common.drivergene.DriverGeneGermlineReporting;
+import com.hartwig.serve.common.drivergene.ImmutableDriverGene;
 
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;

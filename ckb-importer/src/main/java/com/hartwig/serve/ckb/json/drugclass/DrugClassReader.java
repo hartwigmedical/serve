@@ -12,8 +12,8 @@ import com.hartwig.serve.ckb.json.common.ImmutableDrugInfo;
 import com.hartwig.serve.ckb.json.common.ImmutableTreatmentApproachInfo;
 import com.hartwig.serve.ckb.json.common.TreatmentApproachInfo;
 import com.hartwig.serve.ckb.util.DateConverter;
-import com.hartwig.serve.common.utils.json.JsonDatamodelChecker;
-import com.hartwig.serve.common.utils.json.JsonFunctions;
+import com.hartwig.serve.common.json.JsonDatamodelChecker;
+import com.hartwig.serve.common.json.JsonFunctions;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

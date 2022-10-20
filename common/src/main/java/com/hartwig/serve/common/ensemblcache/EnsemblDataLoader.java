@@ -1,6 +1,6 @@
 package com.hartwig.serve.common.ensemblcache;
 
-import static com.hartwig.serve.common.utils.FileReaderUtils.createFieldsIndexMap;
+import static com.hartwig.serve.common.FileReaderUtils.createFields;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -13,11 +13,11 @@ import java.util.Set;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.hartwig.serve.common.gene.ExonData;
-import com.hartwig.serve.common.gene.GeneData;
-import com.hartwig.serve.common.gene.TranscriptAminoAcids;
-import com.hartwig.serve.common.gene.TranscriptData;
-import com.hartwig.serve.common.gene.TranscriptProteinData;
+import com.hartwig.serve.common.genome.ExonData;
+import com.hartwig.serve.common.genome.GeneData;
+import com.hartwig.serve.common.genome.TranscriptAminoAcids;
+import com.hartwig.serve.common.genome.TranscriptData;
+import com.hartwig.serve.common.genome.TranscriptProteinData;
 import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeFunctions;
 import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeVersion;
 
@@ -56,7 +56,7 @@ public final class EnsemblDataLoader {
 
             String line = fileReader.readLine();
 
-            final Map<String, Integer> fieldsIndexMap = createFieldsIndexMap(line, ENSEMBL_DELIM);
+            final Map<String, Integer> fieldsIndexMap = createFields(line, ENSEMBL_DELIM);
 
             if (line == null) {
                 LOGGER.error("empty Ensembl gene data file({})", filename);
@@ -143,7 +143,7 @@ public final class EnsemblDataLoader {
 
             String line = fileReader.readLine();
 
-            final Map<String, Integer> fieldsIndexMap = createFieldsIndexMap(line, ENSEMBL_DELIM);
+            final Map<String, Integer> fieldsIndexMap = createFields(line, ENSEMBL_DELIM);
 
             if (line == null) {
                 LOGGER.error("empty Ensembl gene-exon data file({})", filename);
@@ -269,7 +269,7 @@ public final class EnsemblDataLoader {
 
             String line = fileReader.readLine();
 
-            final Map<String, Integer> fieldsIndexMap = createFieldsIndexMap(line, ENSEMBL_DELIM);
+            final Map<String, Integer> fieldsIndexMap = createFields(line, ENSEMBL_DELIM);
 
             if (line == null) {
                 LOGGER.error("empty Ensembl protein feature data file({})", filename);
@@ -345,7 +345,7 @@ public final class EnsemblDataLoader {
 
             String line = fileReader.readLine();
 
-            final Map<String, Integer> fieldsIndexMap = createFieldsIndexMap(line, ENSEMBL_DELIM);
+            final Map<String, Integer> fieldsIndexMap = createFields(line, ENSEMBL_DELIM);
 
             if (line == null) {
                 LOGGER.error("empty Ensembl trans splice acceptor data file({})", filename);
@@ -397,7 +397,7 @@ public final class EnsemblDataLoader {
 
             String line = fileReader.readLine();
 
-            final Map<String, Integer> fieldsIndexMap = createFieldsIndexMap(line, ENSEMBL_DELIM);
+            final Map<String, Integer> fieldsIndexMap = createFields(line, ENSEMBL_DELIM);
 
             if (line == null) {
                 LOGGER.error("empty Ensembl trans splice acceptor data file({})", filename);

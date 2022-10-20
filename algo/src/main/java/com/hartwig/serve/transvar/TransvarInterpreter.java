@@ -1,7 +1,7 @@
 package com.hartwig.serve.transvar;
 
-import static com.hartwig.serve.common.codon.AminoAcids.findAminoAcidForCodon;
-import static com.hartwig.serve.common.codon.Nucleotides.reverseStrandBases;
+import static com.hartwig.serve.common.genome.AminoAcids.findAminoAcidForCodon;
+import static com.hartwig.serve.common.genome.Nucleotides.reverseStrandBases;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -9,9 +9,9 @@ import java.util.List;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
-import com.hartwig.serve.common.codon.AminoAcids;
-import com.hartwig.serve.common.codon.Nucleotides;
-import com.hartwig.serve.common.genome.region.Strand;
+import com.hartwig.serve.common.genome.AminoAcids;
+import com.hartwig.serve.common.genome.Nucleotides;
+import com.hartwig.serve.common.genome.Strand;
 import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeFunctions;
 import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeVersion;
 import com.hartwig.serve.datamodel.hotspot.ImmutableVariantHotspotImpl;

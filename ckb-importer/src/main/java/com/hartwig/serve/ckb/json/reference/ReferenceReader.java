@@ -25,8 +25,8 @@ import com.hartwig.serve.ckb.json.common.ReferenceInfo;
 import com.hartwig.serve.ckb.json.common.TherapyInfo;
 import com.hartwig.serve.ckb.json.common.TreatmentApproachInfo;
 import com.hartwig.serve.ckb.json.common.VariantInfo;
-import com.hartwig.serve.common.utils.json.JsonDatamodelChecker;
-import com.hartwig.serve.common.utils.json.JsonFunctions;
+import com.hartwig.serve.common.json.JsonDatamodelChecker;
+import com.hartwig.serve.common.json.JsonFunctions;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

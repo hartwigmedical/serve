@@ -4,16 +4,19 @@ import java.util.Collections;
 import java.util.List;
 
 import com.google.common.collect.Lists;
-import com.hartwig.serve.common.gene.ExonData;
-import com.hartwig.serve.common.gene.GeneData;
-import com.hartwig.serve.common.gene.TranscriptData;
-import com.hartwig.serve.common.genome.region.Strand;
+import com.hartwig.serve.common.genome.ExonData;
+import com.hartwig.serve.common.genome.GeneData;
+import com.hartwig.serve.common.genome.Strand;
+import com.hartwig.serve.common.genome.TranscriptData;
 import com.hartwig.serve.datamodel.genome.region.GenomeRegion;
 import com.hartwig.serve.datamodel.genome.region.ImmutableGenomeRegionImpl;
 
 import org.jetbrains.annotations.Nullable;
 
-public class HmfTranscriptRegionUtils {
+public final class HmfTranscriptRegionUtils {
+
+    private HmfTranscriptRegionUtils() {
+    }
 
     public static HmfTranscriptRegion fromTranscript(final GeneData geneData, final TranscriptData transData) {
         List<HmfExonRegion> exons = Lists.newArrayList();

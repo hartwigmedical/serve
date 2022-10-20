@@ -1,7 +1,7 @@
 package com.hartwig.serve.sources.actin.classification;
 
 import com.hartwig.serve.common.classification.EventPreprocessor;
-import com.hartwig.serve.common.codon.AminoAcids;
+import com.hartwig.serve.common.genome.AminoAcids;
 
 import org.jetbrains.annotations.NotNull;
 

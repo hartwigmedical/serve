@@ -7,11 +7,11 @@ import java.util.Map;
 
 import com.google.common.collect.Maps;
 import com.hartwig.serve.ServeConfig;
-import com.hartwig.serve.common.drivercatalog.panel.DriverGene;
-import com.hartwig.serve.common.drivercatalog.panel.DriverGeneFile;
+import com.hartwig.serve.common.drivergene.DriverGene;
+import com.hartwig.serve.common.drivergene.DriverGeneFile;
 import com.hartwig.serve.common.ensemblcache.EnsemblDataCache;
-import com.hartwig.serve.common.fusion.KnownFusionCache;
-import com.hartwig.serve.common.gene.GeneData;
+import com.hartwig.serve.common.genome.GeneData;
+import com.hartwig.serve.common.knownfusion.KnownFusionCache;
 import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeVersion;
 import com.hartwig.serve.extraction.hotspot.ProteinResolver;
 import com.hartwig.serve.extraction.hotspot.ProteinResolverFactory;

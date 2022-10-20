@@ -1,6 +1,6 @@
 package com.hartwig.serve.common.ensemblcache;
 
-import static com.hartwig.serve.common.utils.FileReaderUtils.createFieldsIndexMap;
+import static com.hartwig.serve.common.FileReaderUtils.createFields;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -33,7 +33,7 @@ public class GeneNameMapping {
         final InputStream inputStream = GeneNameMapping.class.getResourceAsStream("/ensembl/gene_name_mapping.csv");
         List<String> lines = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.toList());
 
-        Map<String, Integer> fieldsNameIndex = createFieldsIndexMap(lines.get(0), DELIM);
+        Map<String, Integer> fieldsNameIndex = createFields(lines.get(0), DELIM);
         lines.remove(0);
 
         int geneIdIndex = fieldsNameIndex.get("GeneId");

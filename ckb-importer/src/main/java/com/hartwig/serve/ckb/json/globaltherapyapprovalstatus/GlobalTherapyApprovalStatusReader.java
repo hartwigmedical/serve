@@ -15,8 +15,8 @@ import com.hartwig.serve.ckb.json.common.ImmutableTherapyInfo;
 import com.hartwig.serve.ckb.json.common.IndicationInfo;
 import com.hartwig.serve.ckb.json.common.MolecularProfileInfo;
 import com.hartwig.serve.ckb.json.common.TherapyInfo;
-import com.hartwig.serve.common.utils.json.JsonDatamodelChecker;
-import com.hartwig.serve.common.utils.json.JsonFunctions;
+import com.hartwig.serve.common.json.JsonDatamodelChecker;
+import com.hartwig.serve.common.json.JsonFunctions;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

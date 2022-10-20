@@ -1,6 +1,6 @@
 package com.hartwig.serve.sources.actin.filter;
 
-import static com.hartwig.serve.common.utils.FileReaderUtils.createFieldsIndexMap;
+import static com.hartwig.serve.common.FileReaderUtils.createFields;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,7 +22,7 @@ public final class ActinFilterFile {
     public static List<ActinFilterEntry> read(@NotNull String actinFilterTsv) throws IOException {
         List<String> lines = Files.readAllLines(new File(actinFilterTsv).toPath());
 
-        Map<String, Integer> fields = createFieldsIndexMap(lines.get(0), FIELD_DELIMITER);
+        Map<String, Integer> fields = createFields(lines.get(0), FIELD_DELIMITER);
         List<ActinFilterEntry> filterEntries = Lists.newArrayList();
         for (String line : lines.subList(1, lines.size())) {
             filterEntries.add(fromLine(fields, line));

@@ -3,7 +3,7 @@ package com.hartwig.serve.refgenome;
 import java.io.IOException;
 
 import com.google.common.io.Resources;
-import com.hartwig.serve.common.fusion.KnownFusionCache;
+import com.hartwig.serve.common.knownfusion.KnownFusionCache;
 
 import org.jetbrains.annotations.NotNull;
 

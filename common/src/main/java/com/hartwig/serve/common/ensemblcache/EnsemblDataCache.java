@@ -3,17 +3,17 @@ package com.hartwig.serve.common.ensemblcache;
 import static com.hartwig.serve.common.ensemblcache.EnsemblDataLoader.loadEnsemblGeneData;
 import static com.hartwig.serve.common.ensemblcache.EnsemblDataLoader.loadTranscriptProteinData;
 import static com.hartwig.serve.common.ensemblcache.EnsemblDataLoader.loadTranscriptSpliceAcceptorData;
-import static com.hartwig.serve.common.utils.FileWriterUtils.checkAddDirSeparator;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.hartwig.serve.common.gene.GeneData;
-import com.hartwig.serve.common.gene.TranscriptData;
-import com.hartwig.serve.common.gene.TranscriptProteinData;
+import com.hartwig.serve.common.genome.GeneData;
+import com.hartwig.serve.common.genome.TranscriptData;
+import com.hartwig.serve.common.genome.TranscriptProteinData;
 import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeVersion;
 
 import org.jetbrains.annotations.NotNull;
@@ -159,5 +159,14 @@ public class EnsemblDataCache {
         }
 
         return transGeneMap;
+    }
+
+    @NotNull
+    private static String checkAddDirSeparator(@NotNull String outputDir) {
+        if (outputDir.endsWith(File.separator)) {
+            return outputDir;
+        }
+
+        return outputDir + File.separator;
     }
 }

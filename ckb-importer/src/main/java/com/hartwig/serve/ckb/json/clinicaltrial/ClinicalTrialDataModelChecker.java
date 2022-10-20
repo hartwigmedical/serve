@@ -3,7 +3,7 @@ package com.hartwig.serve.ckb.json.clinicaltrial;
 import java.util.Map;
 
 import com.google.common.collect.Maps;
-import com.hartwig.serve.common.utils.json.JsonDatamodelChecker;
+import com.hartwig.serve.common.json.JsonDatamodelChecker;
 
 import org.jetbrains.annotations.NotNull;
 

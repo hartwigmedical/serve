@@ -1,12 +1,12 @@
 package com.hartwig.serve.vicc.reader;
 
-import static com.hartwig.serve.common.utils.json.JsonFunctions.nullableString;
-import static com.hartwig.serve.common.utils.json.JsonFunctions.optionalJsonObject;
-import static com.hartwig.serve.common.utils.json.JsonFunctions.optionalNullableString;
-import static com.hartwig.serve.common.utils.json.JsonFunctions.optionalString;
-import static com.hartwig.serve.common.utils.json.JsonFunctions.optionalStringList;
-import static com.hartwig.serve.common.utils.json.JsonFunctions.string;
-import static com.hartwig.serve.common.utils.json.JsonFunctions.stringList;
+import static com.hartwig.serve.common.json.JsonFunctions.nullableString;
+import static com.hartwig.serve.common.json.JsonFunctions.optionalJsonObject;
+import static com.hartwig.serve.common.json.JsonFunctions.optionalNullableString;
+import static com.hartwig.serve.common.json.JsonFunctions.optionalString;
+import static com.hartwig.serve.common.json.JsonFunctions.optionalStringList;
+import static com.hartwig.serve.common.json.JsonFunctions.string;
+import static com.hartwig.serve.common.json.JsonFunctions.stringList;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.hartwig.serve.common.utils.json.JsonDatamodelChecker;
+import com.hartwig.serve.common.json.JsonDatamodelChecker;
 import com.hartwig.serve.vicc.datamodel.molecularmatchtrials.ImmutableMolecularMatchTrials;
 import com.hartwig.serve.vicc.datamodel.molecularmatchtrials.ImmutableMolecularMatchTrialsContact;
 import com.hartwig.serve.vicc.datamodel.molecularmatchtrials.ImmutableMolecularMatchTrialsGeo;

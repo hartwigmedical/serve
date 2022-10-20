@@ -14,8 +14,8 @@ import com.hartwig.serve.ckb.json.common.IndicationInfo;
 import com.hartwig.serve.ckb.json.common.MolecularProfileInfo;
 import com.hartwig.serve.ckb.json.common.TherapyInfo;
 import com.hartwig.serve.ckb.util.DateConverter;
-import com.hartwig.serve.common.utils.json.JsonDatamodelChecker;
-import com.hartwig.serve.common.utils.json.JsonFunctions;
+import com.hartwig.serve.common.json.JsonDatamodelChecker;
+import com.hartwig.serve.common.json.JsonFunctions;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

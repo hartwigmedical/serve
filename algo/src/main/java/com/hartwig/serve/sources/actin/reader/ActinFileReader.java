@@ -1,6 +1,6 @@
 package com.hartwig.serve.sources.actin.reader;
 
-import static com.hartwig.serve.common.utils.FileReaderUtils.createFieldsIndexMap;
+import static com.hartwig.serve.common.FileReaderUtils.createFields;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,7 +29,7 @@ public final class ActinFileReader {
     private static List<ActinEntry> fromLines(@NotNull List<String> lines) {
         List<ActinEntry> trials = Lists.newArrayList();
 
-        Map<String, Integer> fields = createFieldsIndexMap(lines.get(0), MAIN_FIELD_DELIMITER);
+        Map<String, Integer> fields = createFields(lines.get(0), MAIN_FIELD_DELIMITER);
         for (String line : lines.subList(1, lines.size())) {
             trials.add(fromString(fields, line));
         }

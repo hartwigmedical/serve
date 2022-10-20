@@ -2,8 +2,8 @@ package com.hartwig.serve.extraction.util;
 
 import java.util.List;
 
-import com.hartwig.serve.common.drivercatalog.DriverCategory;
-import com.hartwig.serve.common.drivercatalog.panel.DriverGene;
+import com.hartwig.serve.common.drivergene.DriverCategory;
+import com.hartwig.serve.common.drivergene.DriverGene;
 import com.hartwig.serve.datamodel.MutationTypeFilter;
 
 import org.jetbrains.annotations.NotNull;

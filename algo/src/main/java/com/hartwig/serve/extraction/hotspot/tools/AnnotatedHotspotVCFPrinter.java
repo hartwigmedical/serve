@@ -9,8 +9,8 @@ import java.util.Optional;
 import java.util.StringJoiner;
 
 import com.google.common.collect.Sets;
-import com.hartwig.serve.common.codon.AminoAcids;
 import com.hartwig.serve.common.ensemblcache.EnsemblDataCache;
+import com.hartwig.serve.common.genome.AminoAcids;
 import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeVersion;
 import com.hartwig.serve.extraction.snpeff.CanonicalAnnotation;
 import com.hartwig.serve.extraction.snpeff.SnpEffAnnotation;

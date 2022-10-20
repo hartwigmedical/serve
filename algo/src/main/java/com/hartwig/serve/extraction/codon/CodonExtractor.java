@@ -5,7 +5,7 @@ import java.util.List;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import com.hartwig.serve.common.classification.EventType;
-import com.hartwig.serve.common.drivercatalog.panel.DriverGene;
+import com.hartwig.serve.common.drivergene.DriverGene;
 import com.hartwig.serve.common.ensemblcache.EnsemblDataCache;
 import com.hartwig.serve.datamodel.MutationTypeFilter;
 import com.hartwig.serve.datamodel.genome.region.GenomeRegion;

@@ -4,7 +4,6 @@ import com.hartwig.serve.ckb.datamodel.variant.Variant;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 
 public final class CkbEventAndGeneExtractor {
@@ -16,7 +15,7 @@ public final class CkbEventAndGeneExtractor {
 
     @NotNull
     public static String extractGene(@NotNull Variant variant) {
-        String primaryGene = Strings.EMPTY;
+        String primaryGene;
 
         if (variant.impact() != null && variant.impact().equals("fusion")) {
             if (variant.variant().contains(" - ")) {

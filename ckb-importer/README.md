@@ -13,18 +13,18 @@
   * Create the database using generate_ckb_db.sql script from the ckb-importer resources.
   * Run CkbImporterApplication (default class in the ckb-importer jar) with the following arguments:
   
- Argument  | Description
- ---|---
- ckb_dir  | Required: Path to the directory holding the JSON data.
- db_url | Required: The URL of the database in which to ingest the data.
- db_user | Required: The DB user which has access to the the URL specified
- db_pass | Required: The password needed for the DB user to authenticate on the URL.
- 
- Resources for v1.0 can be found on https://github.com/hartwigmedical/hmftools/releases/tag/ckb-importer-v1.0
+| Argument | Description                                                               |
+|----------|---------------------------------------------------------------------------|
+| ckb_dir  | Required: Path to the directory holding the JSON data.                    |
+| db_url   | Required: The URL of the database in which to ingest the data.            |
+| db_user  | Required: The DB user which has access to the the URL specified           |
+| db_pass  | Required: The password needed for the DB user to authenticate on the URL. |
+
+Resources for v1.0 can be found on https://github.com/hartwigmedical/hmftools/releases/tag/ckb-importer-v1.0
 
 ## Version History and Download Links
 - [1.3](https://github.com/hartwigmedical/hmftools/releases/tag/ckb-importer-v1.3)
-  - Implemention treatment approches of the evidence into the datamodel
+  - Implementation of treatment approaches into the datamodel
   - Study phase could be nullable 
 - [1.2](https://github.com/hartwigmedical/hmftools/releases/tag/ckb-importer-v1.2)
   - Support for java11

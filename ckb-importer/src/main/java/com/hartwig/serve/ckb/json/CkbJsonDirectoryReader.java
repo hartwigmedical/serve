@@ -36,12 +36,11 @@ public abstract class CkbJsonDirectoryReader<T extends CkbJsonObject> {
 
         int currentFileIndex = 0;
         while (currentFileIndex < files.length && (maxFilesToRead == null || currentFileIndex < maxFilesToRead)) {
-            JsonParser parser = new JsonParser();
             JsonReader reader = new JsonReader(new FileReader(files[currentFileIndex]));
             reader.setLenient(true);
 
             while (reader.peek() != JsonToken.END_DOCUMENT) {
-                entries.add(read(parser.parse(reader).getAsJsonObject()));
+                entries.add(read(JsonParser.parseReader(reader).getAsJsonObject()));
             }
             reader.close();
             currentFileIndex++;

@@ -51,7 +51,7 @@ public class DrugClassReader extends CkbJsonDirectoryReader<JsonDrugClass> {
             drugs.add(ImmutableDrugInfo.builder()
                     .id(Json.integer(drugObject, "id"))
                     .drugName(Json.string(drugObject, "drugName"))
-                    .terms(Json.optionalStringList(drugObject, "terms"))
+                    .terms(Json.nullableStringList(drugObject, "terms"))
                     .build());
         }
         return drugs;

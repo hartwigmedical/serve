@@ -1,4 +1,4 @@
-package com.hartwig.serve.datamodel.genome.region;
+package com.hartwig.serve.datamodel.genome;
 
 import com.hartwig.serve.datamodel.genome.chromosome.ContigComparator;
 

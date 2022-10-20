@@ -1,6 +1,6 @@
 package com.hartwig.serve.common.genome;
 
-import com.hartwig.serve.datamodel.genome.region.GenomeRegion;
+import com.hartwig.serve.datamodel.genome.GenomeRegion;
 
 import org.jetbrains.annotations.NotNull;
 

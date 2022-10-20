@@ -1,7 +1,7 @@
 package com.hartwig.serve.datamodel.range;
 
 import com.hartwig.serve.datamodel.MutationTypeFilter;
-import com.hartwig.serve.datamodel.genome.region.GenomeRegion;
+import com.hartwig.serve.datamodel.genome.GenomeRegion;
 
 import org.jetbrains.annotations.NotNull;
 

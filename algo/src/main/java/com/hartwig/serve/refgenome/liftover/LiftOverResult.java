@@ -1,6 +1,6 @@
 package com.hartwig.serve.refgenome.liftover;
 
-import com.hartwig.serve.datamodel.genome.position.GenomePosition;
+import com.hartwig.serve.datamodel.genome.GenomePosition;
 
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;

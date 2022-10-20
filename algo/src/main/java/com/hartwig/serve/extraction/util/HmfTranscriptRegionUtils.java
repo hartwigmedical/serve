@@ -8,8 +8,8 @@ import com.hartwig.serve.common.genome.ExonData;
 import com.hartwig.serve.common.genome.GeneData;
 import com.hartwig.serve.common.genome.Strand;
 import com.hartwig.serve.common.genome.TranscriptData;
-import com.hartwig.serve.datamodel.genome.region.GenomeRegion;
-import com.hartwig.serve.datamodel.genome.region.ImmutableGenomeRegionImpl;
+import com.hartwig.serve.datamodel.genome.GenomeRegion;
+import com.hartwig.serve.datamodel.genome.ImmutableGenomeRegionImpl;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -47,11 +47,6 @@ public final class HmfTranscriptRegionUtils {
                 .codingEnd(transData.CodingEnd != null ? transData.CodingEnd : -1)
                 .exons(exons)
                 .build();
-    }
-
-    @Nullable
-    public static List<GenomeRegion> codonByIndex(final HmfTranscriptRegion transcript, int index) {
-        return codonRangeByRank(transcript, index, index);
     }
 
     @Nullable

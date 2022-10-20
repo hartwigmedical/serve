@@ -8,7 +8,7 @@ import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.common.drivergene.DriverGene;
 import com.hartwig.serve.common.ensemblcache.EnsemblDataCache;
 import com.hartwig.serve.datamodel.MutationTypeFilter;
-import com.hartwig.serve.datamodel.genome.region.GenomeRegion;
+import com.hartwig.serve.datamodel.genome.GenomeRegion;
 import com.hartwig.serve.extraction.util.DriverInconsistencyMode;
 import com.hartwig.serve.extraction.util.EnsemblFunctions;
 import com.hartwig.serve.extraction.util.GeneChecker;

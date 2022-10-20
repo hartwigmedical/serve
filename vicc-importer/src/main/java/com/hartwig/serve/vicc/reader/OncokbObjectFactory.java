@@ -1,8 +1,8 @@
 package com.hartwig.serve.vicc.reader;
 
-import static com.hartwig.serve.common.json.JsonFunctions.nullableString;
-import static com.hartwig.serve.common.json.JsonFunctions.string;
-import static com.hartwig.serve.common.json.JsonFunctions.stringList;
+import static com.hartwig.serve.common.json.Json.nullableString;
+import static com.hartwig.serve.common.json.Json.string;
+import static com.hartwig.serve.common.json.Json.stringList;
 
 import java.util.List;
 

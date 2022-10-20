@@ -7,9 +7,9 @@ import com.hartwig.serve.common.json.JsonDatamodelChecker;
 
 import org.jetbrains.annotations.NotNull;
 
-final class GeneDataModelChecker {
+final class GeneDatamodelChecker {
 
-    private GeneDataModelChecker() {
+    private GeneDatamodelChecker() {
     }
 
     @NotNull

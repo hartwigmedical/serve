@@ -25,8 +25,8 @@ import com.hartwig.serve.ckb.json.common.ReferenceInfo;
 import com.hartwig.serve.ckb.json.common.TherapyInfo;
 import com.hartwig.serve.ckb.json.common.TreatmentApproachInfo;
 import com.hartwig.serve.ckb.json.common.VariantInfo;
+import com.hartwig.serve.common.json.Json;
 import com.hartwig.serve.common.json.JsonDatamodelChecker;
-import com.hartwig.serve.common.json.JsonFunctions;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -40,21 +40,21 @@ public class ReferenceReader extends CkbJsonDirectoryReader<JsonReference> {
     @NotNull
     @Override
     protected JsonReference read(@NotNull final JsonObject object) {
-        JsonDatamodelChecker referenceChecker = ReferenceDataModelChecker.referenceObjectChecker();
+        JsonDatamodelChecker referenceChecker = ReferenceDatamodelChecker.referenceObjectChecker();
         referenceChecker.check(object);
 
         return ImmutableJsonReference.builder()
-                .id(JsonFunctions.integer(object, "id"))
-                .pubMedId(JsonFunctions.nullableString(object, "pubMedId"))
-                .title(JsonFunctions.nullableString(object, "title"))
-                .url(JsonFunctions.nullableString(object, "url"))
-                .authors(JsonFunctions.nullableString(object, "authors"))
-                .journal(JsonFunctions.nullableString(object, "journal"))
-                .volume(JsonFunctions.nullableString(object, "volume"))
-                .issue(JsonFunctions.nullableString(object, "issue"))
-                .date(JsonFunctions.nullableString(object, "date"))
-                .abstractText(JsonFunctions.nullableString(object, "abstractText"))
-                .year(JsonFunctions.nullableString(object, "year"))
+                .id(Json.integer(object, "id"))
+                .pubMedId(Json.nullableString(object, "pubMedId"))
+                .title(Json.nullableString(object, "title"))
+                .url(Json.nullableString(object, "url"))
+                .authors(Json.nullableString(object, "authors"))
+                .journal(Json.nullableString(object, "journal"))
+                .volume(Json.nullableString(object, "volume"))
+                .issue(Json.nullableString(object, "issue"))
+                .date(Json.nullableString(object, "date"))
+                .abstractText(Json.nullableString(object, "abstractText"))
+                .year(Json.nullableString(object, "year"))
                 .drugs(extractDrugs(object.getAsJsonArray("drugs")))
                 .genes(extractGenes(object.getAsJsonArray("genes")))
                 .evidence(extractEvidence(object.getAsJsonArray("evidence")))
@@ -67,16 +67,16 @@ public class ReferenceReader extends CkbJsonDirectoryReader<JsonReference> {
     @NotNull
     private static List<DrugInfo> extractDrugs(@NotNull JsonArray jsonArray) {
         List<DrugInfo> referenceDrugs = Lists.newArrayList();
-        JsonDatamodelChecker drugChecker = ReferenceDataModelChecker.drugObjectChecker();
+        JsonDatamodelChecker drugChecker = ReferenceDatamodelChecker.drugObjectChecker();
 
         for (JsonElement drug : jsonArray) {
             JsonObject drugJsonObject = drug.getAsJsonObject();
             drugChecker.check(drugJsonObject);
 
             referenceDrugs.add(ImmutableDrugInfo.builder()
-                    .id(JsonFunctions.integer(drugJsonObject, "id"))
-                    .drugName(JsonFunctions.string(drugJsonObject, "drugName"))
-                    .terms(JsonFunctions.stringList(drugJsonObject, "terms"))
+                    .id(Json.integer(drugJsonObject, "id"))
+                    .drugName(Json.string(drugJsonObject, "drugName"))
+                    .terms(Json.stringList(drugJsonObject, "terms"))
                     .build());
         }
         return referenceDrugs;
@@ -85,16 +85,16 @@ public class ReferenceReader extends CkbJsonDirectoryReader<JsonReference> {
     @NotNull
     private static List<GeneInfo> extractGenes(@NotNull JsonArray jsonArray) {
         List<GeneInfo> genes = Lists.newArrayList();
-        JsonDatamodelChecker geneChecker = ReferenceDataModelChecker.geneObjectChecker();
+        JsonDatamodelChecker geneChecker = ReferenceDatamodelChecker.geneObjectChecker();
 
         for (JsonElement gene : jsonArray) {
             JsonObject geneJsonObject = gene.getAsJsonObject();
             geneChecker.check(geneJsonObject);
 
             genes.add(ImmutableGeneInfo.builder()
-                    .id(JsonFunctions.integer(geneJsonObject, "id"))
-                    .geneSymbol(JsonFunctions.string(geneJsonObject, "geneSymbol"))
-                    .terms(JsonFunctions.stringList(geneJsonObject, "terms"))
+                    .id(Json.integer(geneJsonObject, "id"))
+                    .geneSymbol(Json.string(geneJsonObject, "geneSymbol"))
+                    .terms(Json.stringList(geneJsonObject, "terms"))
                     .build());
         }
         return genes;
@@ -103,24 +103,24 @@ public class ReferenceReader extends CkbJsonDirectoryReader<JsonReference> {
     @NotNull
     private static List<EvidenceInfo> extractEvidence(@NotNull JsonArray jsonArray) {
         List<EvidenceInfo> evidences = Lists.newArrayList();
-        JsonDatamodelChecker evidenceChecker = ReferenceDataModelChecker.evidenceObjectChecker();
+        JsonDatamodelChecker evidenceChecker = ReferenceDatamodelChecker.evidenceObjectChecker();
 
         for (JsonElement evidence : jsonArray) {
             JsonObject evidenceJsonObject = evidence.getAsJsonObject();
             evidenceChecker.check(evidenceJsonObject);
 
             evidences.add(ImmutableEvidenceInfo.builder()
-                    .id(JsonFunctions.integer(evidenceJsonObject, "id"))
-                    .approvalStatus(JsonFunctions.string(evidenceJsonObject, "approvalStatus"))
-                    .evidenceType(JsonFunctions.string(evidenceJsonObject, "evidenceType"))
-                    .efficacyEvidence(JsonFunctions.string(evidenceJsonObject, "efficacyEvidence"))
+                    .id(Json.integer(evidenceJsonObject, "id"))
+                    .approvalStatus(Json.string(evidenceJsonObject, "approvalStatus"))
+                    .evidenceType(Json.string(evidenceJsonObject, "evidenceType"))
+                    .efficacyEvidence(Json.string(evidenceJsonObject, "efficacyEvidence"))
                     .molecularProfile(extractMolecularProfile(evidenceJsonObject.getAsJsonObject("molecularProfile")))
                     .therapy(extractTherapy(evidenceJsonObject.getAsJsonObject("therapy")))
                     .indication(extractIndication(evidenceJsonObject.getAsJsonObject("indication")))
-                    .responseType(JsonFunctions.string(evidenceJsonObject, "responseType"))
+                    .responseType(Json.string(evidenceJsonObject, "responseType"))
                     .references(extractReferences(evidenceJsonObject.getAsJsonArray("references")))
-                    .ampCapAscoEvidenceLevel(JsonFunctions.string(evidenceJsonObject, "ampCapAscoEvidenceLevel"))
-                    .ampCapAscoInferredTier(JsonFunctions.string(evidenceJsonObject, "ampCapAscoInferredTier"))
+                    .ampCapAscoEvidenceLevel(Json.string(evidenceJsonObject, "ampCapAscoEvidenceLevel"))
+                    .ampCapAscoInferredTier(Json.string(evidenceJsonObject, "ampCapAscoInferredTier"))
                     .build());
         }
 
@@ -129,53 +129,53 @@ public class ReferenceReader extends CkbJsonDirectoryReader<JsonReference> {
 
     @NotNull
     private static MolecularProfileInfo extractMolecularProfile(@NotNull JsonObject jsonObject) {
-        JsonDatamodelChecker molecularProfileChecker = ReferenceDataModelChecker.molecularProfileObjectChecker();
+        JsonDatamodelChecker molecularProfileChecker = ReferenceDatamodelChecker.molecularProfileObjectChecker();
         molecularProfileChecker.check(jsonObject);
 
         return ImmutableMolecularProfileInfo.builder()
-                .id(JsonFunctions.integer(jsonObject, "id"))
-                .profileName(JsonFunctions.string(jsonObject, "profileName"))
+                .id(Json.integer(jsonObject, "id"))
+                .profileName(Json.string(jsonObject, "profileName"))
                 .build();
     }
 
     @NotNull
     private static TherapyInfo extractTherapy(@NotNull JsonObject jsonObject) {
-        JsonDatamodelChecker therapyChecker = ReferenceDataModelChecker.therapyChecker();
+        JsonDatamodelChecker therapyChecker = ReferenceDatamodelChecker.therapyChecker();
         therapyChecker.check(jsonObject);
 
         return ImmutableTherapyInfo.builder()
-                .id(JsonFunctions.integer(jsonObject, "id"))
-                .therapyName(JsonFunctions.string(jsonObject, "therapyName"))
-                .synonyms(JsonFunctions.nullableStringList(jsonObject, "synonyms"))
+                .id(Json.integer(jsonObject, "id"))
+                .therapyName(Json.string(jsonObject, "therapyName"))
+                .synonyms(Json.nullableStringList(jsonObject, "synonyms"))
                 .build();
     }
 
     @NotNull
     private static IndicationInfo extractIndication(@NotNull JsonObject jsonObject) {
-        JsonDatamodelChecker indicationChecker = ReferenceDataModelChecker.indicationChecker();
+        JsonDatamodelChecker indicationChecker = ReferenceDatamodelChecker.indicationChecker();
         indicationChecker.check(jsonObject);
 
         return ImmutableIndicationInfo.builder()
-                .id(JsonFunctions.integer(jsonObject, "id"))
-                .name(JsonFunctions.string(jsonObject, "name"))
-                .source(JsonFunctions.string(jsonObject, "source"))
+                .id(Json.integer(jsonObject, "id"))
+                .name(Json.string(jsonObject, "name"))
+                .source(Json.string(jsonObject, "source"))
                 .build();
     }
 
     @NotNull
     private static List<ReferenceInfo> extractReferences(@NotNull JsonArray jsonArray) {
         List<ReferenceInfo> references = Lists.newArrayList();
-        JsonDatamodelChecker referenceChecker = ReferenceDataModelChecker.referenceChecker();
+        JsonDatamodelChecker referenceChecker = ReferenceDatamodelChecker.referenceChecker();
 
         for (JsonElement reference : jsonArray) {
             JsonObject referenceJsonObject = reference.getAsJsonObject();
             referenceChecker.check(referenceJsonObject);
 
             references.add(ImmutableReferenceInfo.builder()
-                    .id(JsonFunctions.integer(referenceJsonObject, "id"))
-                    .pubMedId(JsonFunctions.nullableString(referenceJsonObject, "pubMedId"))
-                    .title(JsonFunctions.nullableString(referenceJsonObject, "title"))
-                    .url(JsonFunctions.nullableString(referenceJsonObject, "url"))
+                    .id(Json.integer(referenceJsonObject, "id"))
+                    .pubMedId(Json.nullableString(referenceJsonObject, "pubMedId"))
+                    .title(Json.nullableString(referenceJsonObject, "title"))
+                    .url(Json.nullableString(referenceJsonObject, "url"))
                     .build());
         }
         return references;
@@ -184,16 +184,16 @@ public class ReferenceReader extends CkbJsonDirectoryReader<JsonReference> {
     @NotNull
     private static List<TherapyInfo> extractTherapies(@NotNull JsonArray jsonArray) {
         List<TherapyInfo> therapies = Lists.newArrayList();
-        JsonDatamodelChecker therapyChecker = ReferenceDataModelChecker.therapyChecker();
+        JsonDatamodelChecker therapyChecker = ReferenceDatamodelChecker.therapyChecker();
 
         for (JsonElement therapy : jsonArray) {
             JsonObject therapyJsonObject = therapy.getAsJsonObject();
             therapyChecker.check(therapyJsonObject);
 
             therapies.add(ImmutableTherapyInfo.builder()
-                    .id(JsonFunctions.integer(therapyJsonObject, "id"))
-                    .therapyName(JsonFunctions.string(therapyJsonObject, "therapyName"))
-                    .synonyms(JsonFunctions.nullableStringList(therapyJsonObject, "synonyms"))
+                    .id(Json.integer(therapyJsonObject, "id"))
+                    .therapyName(Json.string(therapyJsonObject, "therapyName"))
+                    .synonyms(Json.nullableStringList(therapyJsonObject, "synonyms"))
                     .build());
         }
         return therapies;
@@ -202,16 +202,16 @@ public class ReferenceReader extends CkbJsonDirectoryReader<JsonReference> {
     @NotNull
     private static List<TreatmentApproachInfo> extractTreatmentApproaches(@NotNull JsonArray jsonArray) {
         List<TreatmentApproachInfo> treatmentApproaches = Lists.newArrayList();
-        JsonDatamodelChecker treatmentApproachChecker = ReferenceDataModelChecker.treatmentApproachObjectChecker();
+        JsonDatamodelChecker treatmentApproachChecker = ReferenceDatamodelChecker.treatmentApproachObjectChecker();
 
         for (JsonElement treatmentApproach : jsonArray) {
             JsonObject treatmentApproachJsonObject = treatmentApproach.getAsJsonObject();
             treatmentApproachChecker.check(treatmentApproachJsonObject);
 
             treatmentApproaches.add(ImmutableTreatmentApproachInfo.builder()
-                    .id(JsonFunctions.integer(treatmentApproachJsonObject, "id"))
-                    .name(JsonFunctions.string(treatmentApproachJsonObject, "name"))
-                    .profileName(JsonFunctions.string(treatmentApproachJsonObject, "profileName"))
+                    .id(Json.integer(treatmentApproachJsonObject, "id"))
+                    .name(Json.string(treatmentApproachJsonObject, "name"))
+                    .profileName(Json.string(treatmentApproachJsonObject, "profileName"))
                     .build());
         }
         return treatmentApproaches;
@@ -220,17 +220,17 @@ public class ReferenceReader extends CkbJsonDirectoryReader<JsonReference> {
     @NotNull
     private static List<VariantInfo> extractVariants(@NotNull JsonArray jsonArray) {
         List<VariantInfo> variants = Lists.newArrayList();
-        JsonDatamodelChecker variantChecker = ReferenceDataModelChecker.variantObjectChecker();
+        JsonDatamodelChecker variantChecker = ReferenceDatamodelChecker.variantObjectChecker();
 
         for (JsonElement variant : jsonArray) {
             JsonObject variantJsonObject = variant.getAsJsonObject();
             variantChecker.check(variantJsonObject);
 
             variants.add(ImmutableVariantInfo.builder()
-                    .id(JsonFunctions.integer(variantJsonObject, "id"))
-                    .fullName(JsonFunctions.string(variantJsonObject, "fullName"))
-                    .impact(JsonFunctions.nullableString(variantJsonObject, "impact"))
-                    .proteinEffect(JsonFunctions.nullableString(variantJsonObject, "proteinEffect"))
+                    .id(Json.integer(variantJsonObject, "id"))
+                    .fullName(Json.string(variantJsonObject, "fullName"))
+                    .impact(Json.nullableString(variantJsonObject, "impact"))
+                    .proteinEffect(Json.nullableString(variantJsonObject, "proteinEffect"))
                     .build());
         }
         return variants;

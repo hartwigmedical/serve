@@ -12,8 +12,8 @@ import com.hartwig.serve.ckb.json.common.ImmutableDrugInfo;
 import com.hartwig.serve.ckb.json.common.ImmutableTreatmentApproachInfo;
 import com.hartwig.serve.ckb.json.common.TreatmentApproachInfo;
 import com.hartwig.serve.ckb.util.DateConverter;
+import com.hartwig.serve.common.json.Json;
 import com.hartwig.serve.common.json.JsonDatamodelChecker;
-import com.hartwig.serve.common.json.JsonFunctions;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -27,13 +27,13 @@ public class DrugClassReader extends CkbJsonDirectoryReader<JsonDrugClass> {
     @NotNull
     @Override
     protected JsonDrugClass read(@NotNull final JsonObject object) {
-        JsonDatamodelChecker drugsClassChecker = DrugClassDataModelChecker.drugClassObjectChecker();
+        JsonDatamodelChecker drugsClassChecker = DrugClassDatamodelChecker.drugClassObjectChecker();
         drugsClassChecker.check(object);
 
         return ImmutableJsonDrugClass.builder()
-                .id(JsonFunctions.integer(object, "id"))
-                .drugClass(JsonFunctions.string(object, "drugClass"))
-                .createDate(DateConverter.toDate(JsonFunctions.string(object, "createDate")))
+                .id(Json.integer(object, "id"))
+                .drugClass(Json.string(object, "drugClass"))
+                .createDate(DateConverter.toDate(Json.string(object, "createDate")))
                 .drugs(extractDrugs(object.getAsJsonArray("drugs")))
                 .treatmentApproaches(extractTreatmentApproaches(object.getAsJsonArray("treatmentApproaches")))
                 .build();
@@ -42,16 +42,16 @@ public class DrugClassReader extends CkbJsonDirectoryReader<JsonDrugClass> {
     @NotNull
     private static List<DrugInfo> extractDrugs(@NotNull JsonArray jsonArray) {
         List<DrugInfo> drugs = Lists.newArrayList();
-        JsonDatamodelChecker drugChecker = DrugClassDataModelChecker.drugObjectChecker();
+        JsonDatamodelChecker drugChecker = DrugClassDatamodelChecker.drugObjectChecker();
 
         for (JsonElement drug : jsonArray) {
             JsonObject drugObject = drug.getAsJsonObject();
             drugChecker.check(drugObject);
 
             drugs.add(ImmutableDrugInfo.builder()
-                    .id(JsonFunctions.integer(drugObject, "id"))
-                    .drugName(JsonFunctions.string(drugObject, "drugName"))
-                    .terms(JsonFunctions.optionalStringList(drugObject, "terms"))
+                    .id(Json.integer(drugObject, "id"))
+                    .drugName(Json.string(drugObject, "drugName"))
+                    .terms(Json.optionalStringList(drugObject, "terms"))
                     .build());
         }
         return drugs;
@@ -60,16 +60,16 @@ public class DrugClassReader extends CkbJsonDirectoryReader<JsonDrugClass> {
     @NotNull
     private static List<TreatmentApproachInfo> extractTreatmentApproaches(@NotNull JsonArray jsonArray) {
         List<TreatmentApproachInfo> treatmentApproaches = Lists.newArrayList();
-        JsonDatamodelChecker treatmentApproachChecker = DrugClassDataModelChecker.treatmentApproachObjectChecker();
+        JsonDatamodelChecker treatmentApproachChecker = DrugClassDatamodelChecker.treatmentApproachObjectChecker();
 
         for (JsonElement treatmentApproach : jsonArray) {
             JsonObject treatmentApproachObject = treatmentApproach.getAsJsonObject();
             treatmentApproachChecker.check(treatmentApproachObject);
 
             treatmentApproaches.add(ImmutableTreatmentApproachInfo.builder()
-                    .id(JsonFunctions.integer(treatmentApproachObject, "id"))
-                    .name(JsonFunctions.string(treatmentApproachObject, "name"))
-                    .profileName(JsonFunctions.string(treatmentApproachObject, "profileName"))
+                    .id(Json.integer(treatmentApproachObject, "id"))
+                    .name(Json.string(treatmentApproachObject, "name"))
+                    .profileName(Json.string(treatmentApproachObject, "profileName"))
                     .build());
         }
         return treatmentApproaches;

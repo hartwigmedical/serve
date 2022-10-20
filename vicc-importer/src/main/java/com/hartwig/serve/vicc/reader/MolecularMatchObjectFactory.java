@@ -1,13 +1,13 @@
 package com.hartwig.serve.vicc.reader;
 
-import static com.hartwig.serve.common.json.JsonFunctions.nullableString;
-import static com.hartwig.serve.common.json.JsonFunctions.optionalArray;
-import static com.hartwig.serve.common.json.JsonFunctions.optionalNullableString;
-import static com.hartwig.serve.common.json.JsonFunctions.optionalObject;
-import static com.hartwig.serve.common.json.JsonFunctions.optionalString;
-import static com.hartwig.serve.common.json.JsonFunctions.optionalStringList;
-import static com.hartwig.serve.common.json.JsonFunctions.string;
-import static com.hartwig.serve.common.json.JsonFunctions.stringList;
+import static com.hartwig.serve.common.json.Json.nullableString;
+import static com.hartwig.serve.common.json.Json.optionalArray;
+import static com.hartwig.serve.common.json.Json.optionalNullableString;
+import static com.hartwig.serve.common.json.Json.optionalObject;
+import static com.hartwig.serve.common.json.Json.optionalString;
+import static com.hartwig.serve.common.json.Json.optionalStringList;
+import static com.hartwig.serve.common.json.Json.string;
+import static com.hartwig.serve.common.json.Json.stringList;
 
 import java.util.List;
 

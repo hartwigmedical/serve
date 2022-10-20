@@ -26,8 +26,8 @@ import com.hartwig.serve.ckb.json.common.TherapyInfo;
 import com.hartwig.serve.ckb.json.common.TreatmentApproachInfo;
 import com.hartwig.serve.ckb.json.common.VariantInfo;
 import com.hartwig.serve.ckb.util.DateConverter;
+import com.hartwig.serve.common.json.Json;
 import com.hartwig.serve.common.json.JsonDatamodelChecker;
-import com.hartwig.serve.common.json.JsonFunctions;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -44,22 +44,22 @@ public class GeneReader extends CkbJsonDirectoryReader<JsonGene> {
     @NotNull
     @Override
     protected JsonGene read(@NotNull final JsonObject object) {
-        JsonDatamodelChecker geneChecker = GeneDataModelChecker.geneObjectChecker();
+        JsonDatamodelChecker geneChecker = GeneDatamodelChecker.geneObjectChecker();
         geneChecker.check(object);
 
         return ImmutableJsonGene.builder()
-                .id(JsonFunctions.integer(object, "id"))
-                .geneSymbol(JsonFunctions.string(object, "geneSymbol"))
-                .terms(JsonFunctions.stringList(object, "terms"))
-                .entrezId(JsonFunctions.nullableString(object, "entrezId"))
-                .synonyms(JsonFunctions.stringList(object, "synonyms"))
-                .chromosome(JsonFunctions.nullableString(object, "chromosome"))
-                .mapLocation(JsonFunctions.nullableString(object, "mapLocation"))
+                .id(Json.integer(object, "id"))
+                .geneSymbol(Json.string(object, "geneSymbol"))
+                .terms(Json.stringList(object, "terms"))
+                .entrezId(Json.nullableString(object, "entrezId"))
+                .synonyms(Json.stringList(object, "synonyms"))
+                .chromosome(Json.nullableString(object, "chromosome"))
+                .mapLocation(Json.nullableString(object, "mapLocation"))
                 .descriptions(extractDescriptions(object.getAsJsonArray("geneDescriptions")))
-                .canonicalTranscript(JsonFunctions.nullableString(object, "canonicalTranscript"))
-                .geneRole(JsonFunctions.string(object, "geneRole"))
-                .createDate(DateConverter.toDate(JsonFunctions.string(object, "createDate")))
-                .updateDate(DateConverter.toDate(JsonFunctions.nullableString(object, "updateDate")))
+                .canonicalTranscript(Json.nullableString(object, "canonicalTranscript"))
+                .geneRole(Json.string(object, "geneRole"))
+                .createDate(DateConverter.toDate(Json.string(object, "createDate")))
+                .updateDate(DateConverter.toDate(Json.nullableString(object, "updateDate")))
                 .clinicalTrials(extractClinicalTrials(object.getAsJsonArray("clinicalTrials")))
                 .evidence(extractEvidence(object.getAsJsonArray("evidence")))
                 .variants(extractVariants(object.getAsJsonArray("variants")))
@@ -71,14 +71,14 @@ public class GeneReader extends CkbJsonDirectoryReader<JsonGene> {
     @NotNull
     private static List<DescriptionInfo> extractDescriptions(@NotNull JsonArray jsonArray) {
         List<DescriptionInfo> descriptions = Lists.newArrayList();
-        JsonDatamodelChecker descriptionChecker = GeneDataModelChecker.descriptionObjectChecker();
+        JsonDatamodelChecker descriptionChecker = GeneDatamodelChecker.descriptionObjectChecker();
 
         for (JsonElement description : jsonArray) {
             JsonObject descriptionJsonObject = description.getAsJsonObject();
             descriptionChecker.check(descriptionJsonObject);
 
             descriptions.add(ImmutableDescriptionInfo.builder()
-                    .description(JsonFunctions.string(descriptionJsonObject, "description"))
+                    .description(Json.string(descriptionJsonObject, "description"))
                     .references(extractReferences(descriptionJsonObject.getAsJsonArray("references")))
                     .build());
         }
@@ -88,17 +88,17 @@ public class GeneReader extends CkbJsonDirectoryReader<JsonGene> {
     @NotNull
     private static List<ReferenceInfo> extractReferences(@NotNull JsonArray jsonArray) {
         List<ReferenceInfo> references = Lists.newArrayList();
-        JsonDatamodelChecker referenceChecker = GeneDataModelChecker.referenceObjectChecker();
+        JsonDatamodelChecker referenceChecker = GeneDatamodelChecker.referenceObjectChecker();
 
         for (JsonElement reference : jsonArray) {
             JsonObject referenceJsonObject = reference.getAsJsonObject();
             referenceChecker.check(referenceJsonObject);
 
             references.add(ImmutableReferenceInfo.builder()
-                    .id(JsonFunctions.integer(referenceJsonObject, "id"))
-                    .pubMedId(JsonFunctions.nullableString(referenceJsonObject, "pubMedId"))
-                    .title(JsonFunctions.nullableString(referenceJsonObject, "title"))
-                    .url(JsonFunctions.nullableString(referenceJsonObject, "url"))
+                    .id(Json.integer(referenceJsonObject, "id"))
+                    .pubMedId(Json.nullableString(referenceJsonObject, "pubMedId"))
+                    .title(Json.nullableString(referenceJsonObject, "title"))
+                    .url(Json.nullableString(referenceJsonObject, "url"))
                     .build());
 
         }
@@ -108,14 +108,14 @@ public class GeneReader extends CkbJsonDirectoryReader<JsonGene> {
     @NotNull
     private static List<ClinicalTrialInfo> extractClinicalTrials(@NotNull JsonArray jsonArray) {
         List<ClinicalTrialInfo> clinicalTrials = Lists.newArrayList();
-        JsonDatamodelChecker clinicalTrialChecker = GeneDataModelChecker.clinicalTrialObjectChecker();
+        JsonDatamodelChecker clinicalTrialChecker = GeneDatamodelChecker.clinicalTrialObjectChecker();
 
         for (JsonElement clinicalTrial : jsonArray) {
             JsonObject clinicalTrialJsonObject = clinicalTrial.getAsJsonObject();
             clinicalTrialChecker.check(clinicalTrialJsonObject);
 
-            String nctId = JsonFunctions.string(clinicalTrialJsonObject, "nctId");
-            String phase = JsonFunctions.nullableString(clinicalTrialJsonObject, "phase");
+            String nctId = Json.string(clinicalTrialJsonObject, "nctId");
+            String phase = Json.nullableString(clinicalTrialJsonObject, "phase");
 
             if (phase == null) {
                 LOGGER.warn("phase of study '{}' is null in GeneReader", nctId);
@@ -123,9 +123,9 @@ public class GeneReader extends CkbJsonDirectoryReader<JsonGene> {
 
             clinicalTrials.add(ImmutableClinicalTrialInfo.builder()
                     .nctId(nctId)
-                    .title(JsonFunctions.string(clinicalTrialJsonObject, "title"))
+                    .title(Json.string(clinicalTrialJsonObject, "title"))
                     .phase(phase)
-                    .recruitment(JsonFunctions.string(clinicalTrialJsonObject, "recruitment"))
+                    .recruitment(Json.string(clinicalTrialJsonObject, "recruitment"))
                     .therapies(extractTherapies(clinicalTrialJsonObject.getAsJsonArray("therapies")))
                     .build());
         }
@@ -135,16 +135,16 @@ public class GeneReader extends CkbJsonDirectoryReader<JsonGene> {
     @NotNull
     private static List<TherapyInfo> extractTherapies(@NotNull JsonArray jsonArray) {
         List<TherapyInfo> therapies = Lists.newArrayList();
-        JsonDatamodelChecker therapyChecker = GeneDataModelChecker.therapyObjectChecker();
+        JsonDatamodelChecker therapyChecker = GeneDatamodelChecker.therapyObjectChecker();
 
         for (JsonElement therapy : jsonArray) {
             JsonObject therapyJsonObject = therapy.getAsJsonObject();
             therapyChecker.check(therapyJsonObject);
 
             therapies.add(ImmutableTherapyInfo.builder()
-                    .id(JsonFunctions.integer(therapyJsonObject, "id"))
-                    .therapyName(JsonFunctions.string(therapyJsonObject, "therapyName"))
-                    .synonyms(JsonFunctions.optionalStringList(therapyJsonObject, "synonyms"))
+                    .id(Json.integer(therapyJsonObject, "id"))
+                    .therapyName(Json.string(therapyJsonObject, "therapyName"))
+                    .synonyms(Json.optionalStringList(therapyJsonObject, "synonyms"))
                     .build());
         }
         return therapies;
@@ -153,24 +153,24 @@ public class GeneReader extends CkbJsonDirectoryReader<JsonGene> {
     @NotNull
     private static List<EvidenceInfo> extractEvidence(@NotNull JsonArray jsonArray) {
         List<EvidenceInfo> evidences = Lists.newArrayList();
-        JsonDatamodelChecker evidenceChecker = GeneDataModelChecker.evidenceObjectChecker();
+        JsonDatamodelChecker evidenceChecker = GeneDatamodelChecker.evidenceObjectChecker();
 
         for (JsonElement evidence : jsonArray) {
             JsonObject evidenceObject = evidence.getAsJsonObject();
             evidenceChecker.check(evidenceObject);
 
             evidences.add(ImmutableEvidenceInfo.builder()
-                    .id(JsonFunctions.integer(evidenceObject, "id"))
-                    .approvalStatus(JsonFunctions.string(evidenceObject, "approvalStatus"))
-                    .evidenceType(JsonFunctions.string(evidenceObject, "evidenceType"))
-                    .efficacyEvidence(JsonFunctions.string(evidenceObject, "efficacyEvidence"))
+                    .id(Json.integer(evidenceObject, "id"))
+                    .approvalStatus(Json.string(evidenceObject, "approvalStatus"))
+                    .evidenceType(Json.string(evidenceObject, "evidenceType"))
+                    .efficacyEvidence(Json.string(evidenceObject, "efficacyEvidence"))
                     .molecularProfile(extractMolecularProfileObject(evidenceObject.getAsJsonObject("molecularProfile")))
                     .therapy(extractTherapyObject(evidenceObject.getAsJsonObject("therapy")))
                     .indication(extractIndicationObject(evidenceObject.getAsJsonObject("indication")))
-                    .responseType(JsonFunctions.string(evidenceObject, "responseType"))
+                    .responseType(Json.string(evidenceObject, "responseType"))
                     .references(extractReferences(evidenceObject.getAsJsonArray("references")))
-                    .ampCapAscoEvidenceLevel(JsonFunctions.string(evidenceObject, "ampCapAscoEvidenceLevel"))
-                    .ampCapAscoInferredTier(JsonFunctions.string(evidenceObject, "ampCapAscoInferredTier"))
+                    .ampCapAscoEvidenceLevel(Json.string(evidenceObject, "ampCapAscoEvidenceLevel"))
+                    .ampCapAscoInferredTier(Json.string(evidenceObject, "ampCapAscoInferredTier"))
                     .build());
         }
         return evidences;
@@ -178,53 +178,53 @@ public class GeneReader extends CkbJsonDirectoryReader<JsonGene> {
 
     @NotNull
     private static MolecularProfileInfo extractMolecularProfileObject(@NotNull JsonObject jsonObject) {
-        JsonDatamodelChecker molecularProfileChecker = GeneDataModelChecker.molecularProfileObjectChecker();
+        JsonDatamodelChecker molecularProfileChecker = GeneDatamodelChecker.molecularProfileObjectChecker();
         molecularProfileChecker.check(jsonObject);
 
         return ImmutableMolecularProfileInfo.builder()
-                .id(JsonFunctions.integer(jsonObject, "id"))
-                .profileName(JsonFunctions.string(jsonObject, "profileName"))
+                .id(Json.integer(jsonObject, "id"))
+                .profileName(Json.string(jsonObject, "profileName"))
                 .build();
     }
 
     @NotNull
     private static TherapyInfo extractTherapyObject(@NotNull JsonObject jsonObject) {
-        JsonDatamodelChecker therapyChecker = GeneDataModelChecker.therapyObjectChecker();
+        JsonDatamodelChecker therapyChecker = GeneDatamodelChecker.therapyObjectChecker();
         therapyChecker.check(jsonObject);
 
         return ImmutableTherapyInfo.builder()
-                .id(JsonFunctions.integer(jsonObject, "id"))
-                .therapyName(JsonFunctions.string(jsonObject, "therapyName"))
-                .synonyms(JsonFunctions.optionalStringList(jsonObject, "synonyms"))
+                .id(Json.integer(jsonObject, "id"))
+                .therapyName(Json.string(jsonObject, "therapyName"))
+                .synonyms(Json.optionalStringList(jsonObject, "synonyms"))
                 .build();
     }
 
     @NotNull
     private static IndicationInfo extractIndicationObject(@NotNull JsonObject jsonObject) {
-        JsonDatamodelChecker indicationChecker = GeneDataModelChecker.indicationObjectChecker();
+        JsonDatamodelChecker indicationChecker = GeneDatamodelChecker.indicationObjectChecker();
         indicationChecker.check(jsonObject);
 
         return ImmutableIndicationInfo.builder()
-                .id(JsonFunctions.integer(jsonObject, "id"))
-                .name(JsonFunctions.string(jsonObject, "name"))
-                .source(JsonFunctions.string(jsonObject, "source"))
+                .id(Json.integer(jsonObject, "id"))
+                .name(Json.string(jsonObject, "name"))
+                .source(Json.string(jsonObject, "source"))
                 .build();
     }
 
     @NotNull
     private static List<VariantInfo> extractVariants(@NotNull JsonArray jsonArray) {
         List<VariantInfo> variants = Lists.newArrayList();
-        JsonDatamodelChecker variantChecker = GeneDataModelChecker.variantObjectChecker();
+        JsonDatamodelChecker variantChecker = GeneDatamodelChecker.variantObjectChecker();
 
         for (JsonElement variant : jsonArray) {
             JsonObject variantObject = variant.getAsJsonObject();
             variantChecker.check(variantObject);
 
             variants.add(ImmutableVariantInfo.builder()
-                    .id(JsonFunctions.integer(variantObject, "id"))
-                    .fullName(JsonFunctions.string(variantObject, "fullName"))
-                    .impact(JsonFunctions.nullableString(variantObject, "impact"))
-                    .proteinEffect(JsonFunctions.nullableString(variantObject, "proteinEffect"))
+                    .id(Json.integer(variantObject, "id"))
+                    .fullName(Json.string(variantObject, "fullName"))
+                    .impact(Json.nullableString(variantObject, "impact"))
+                    .proteinEffect(Json.nullableString(variantObject, "proteinEffect"))
                     .descriptions(extractVariantDescriptions(variantObject.getAsJsonArray("geneVariantDescriptions")))
                     .build());
         }
@@ -234,14 +234,14 @@ public class GeneReader extends CkbJsonDirectoryReader<JsonGene> {
     @NotNull
     private static List<DescriptionInfo> extractVariantDescriptions(@NotNull JsonArray jsonArray) {
         List<DescriptionInfo> variantDescriptions = Lists.newArrayList();
-        JsonDatamodelChecker variantDescriptionChecker = GeneDataModelChecker.variantDescriptionObjectChecker();
+        JsonDatamodelChecker variantDescriptionChecker = GeneDatamodelChecker.variantDescriptionObjectChecker();
 
         for (JsonElement variantDescription : jsonArray) {
             JsonObject variantDescriptionObject = variantDescription.getAsJsonObject();
             variantDescriptionChecker.check(variantDescriptionObject);
 
             variantDescriptions.add(ImmutableDescriptionInfo.builder()
-                    .description(JsonFunctions.string(variantDescriptionObject, "description"))
+                    .description(Json.string(variantDescriptionObject, "description"))
                     .references(extractReferences(variantDescriptionObject.getAsJsonArray("references")))
                     .build());
         }
@@ -251,15 +251,15 @@ public class GeneReader extends CkbJsonDirectoryReader<JsonGene> {
     @NotNull
     private static List<MolecularProfileInfo> extractMolecularProfiles(@NotNull JsonArray jsonArray) {
         List<MolecularProfileInfo> molecularProfiles = Lists.newArrayList();
-        JsonDatamodelChecker molecularProfileChecker = GeneDataModelChecker.molecularProfileObjectChecker();
+        JsonDatamodelChecker molecularProfileChecker = GeneDatamodelChecker.molecularProfileObjectChecker();
 
         for (JsonElement molecularProfile : jsonArray) {
             JsonObject molecularProfileObject = molecularProfile.getAsJsonObject();
             molecularProfileChecker.check(molecularProfileObject);
 
             molecularProfiles.add(ImmutableMolecularProfileInfo.builder()
-                    .id(JsonFunctions.integer(molecularProfileObject, "id"))
-                    .profileName(JsonFunctions.string(molecularProfileObject, "profileName"))
+                    .id(Json.integer(molecularProfileObject, "id"))
+                    .profileName(Json.string(molecularProfileObject, "profileName"))
                     .treatmentApproaches(extractProfileTreatmentApproaches(molecularProfileObject.getAsJsonArray(
                             "profileTreatmentApproaches")))
                     .build());
@@ -270,16 +270,16 @@ public class GeneReader extends CkbJsonDirectoryReader<JsonGene> {
     @NotNull
     private static List<TreatmentApproachInfo> extractProfileTreatmentApproaches(@NotNull JsonArray jsonArray) {
         List<TreatmentApproachInfo> profileTreatmentApproaches = Lists.newArrayList();
-        JsonDatamodelChecker profileTreatmentApproachChecker = GeneDataModelChecker.profileTreatmentApproachObjectChecker();
+        JsonDatamodelChecker profileTreatmentApproachChecker = GeneDatamodelChecker.profileTreatmentApproachObjectChecker();
 
         for (JsonElement profileTreatmentApproach : jsonArray) {
             JsonObject profileTreatmentApproachObject = profileTreatmentApproach.getAsJsonObject();
             profileTreatmentApproachChecker.check(profileTreatmentApproachObject);
 
             profileTreatmentApproaches.add(ImmutableTreatmentApproachInfo.builder()
-                    .id(JsonFunctions.integer(profileTreatmentApproachObject, "id"))
-                    .name(JsonFunctions.string(profileTreatmentApproachObject, "name"))
-                    .profileName(JsonFunctions.string(profileTreatmentApproachObject, "profileName"))
+                    .id(Json.integer(profileTreatmentApproachObject, "id"))
+                    .name(Json.string(profileTreatmentApproachObject, "name"))
+                    .profileName(Json.string(profileTreatmentApproachObject, "profileName"))
                     .build());
         }
         return profileTreatmentApproaches;
@@ -288,17 +288,17 @@ public class GeneReader extends CkbJsonDirectoryReader<JsonGene> {
     @NotNull
     private static List<VariantInfo> extractCategoryVariants(@NotNull JsonArray jsonArray) {
         List<VariantInfo> categoryVariants = Lists.newArrayList();
-        JsonDatamodelChecker categoryVariantObjectChecker = GeneDataModelChecker.categoryVariantObjectChecker();
+        JsonDatamodelChecker categoryVariantObjectChecker = GeneDatamodelChecker.categoryVariantObjectChecker();
 
         for (JsonElement categoryVariant : jsonArray) {
             JsonObject categoryVariantObject = categoryVariant.getAsJsonObject();
             categoryVariantObjectChecker.check(categoryVariantObject);
 
             categoryVariants.add(ImmutableVariantInfo.builder()
-                    .id(JsonFunctions.integer(categoryVariantObject, "id"))
-                    .fullName(JsonFunctions.string(categoryVariantObject, "fullName"))
-                    .impact(JsonFunctions.nullableString(categoryVariantObject, "impact"))
-                    .proteinEffect(JsonFunctions.nullableString(categoryVariantObject, "proteinEffect"))
+                    .id(Json.integer(categoryVariantObject, "id"))
+                    .fullName(Json.string(categoryVariantObject, "fullName"))
+                    .impact(Json.nullableString(categoryVariantObject, "impact"))
+                    .proteinEffect(Json.nullableString(categoryVariantObject, "proteinEffect"))
                     .descriptions(extractVariantDescriptions(categoryVariantObject.getAsJsonArray("geneVariantDescriptions")))
                     .build());
         }

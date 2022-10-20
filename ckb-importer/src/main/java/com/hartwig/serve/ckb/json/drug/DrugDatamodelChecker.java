@@ -7,9 +7,9 @@ import com.hartwig.serve.common.json.JsonDatamodelChecker;
 
 import org.jetbrains.annotations.NotNull;
 
-final class DrugDataModelChecker {
+final class DrugDatamodelChecker {
 
-    private DrugDataModelChecker() {
+    private DrugDatamodelChecker() {
     }
 
     @NotNull

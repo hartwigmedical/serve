@@ -7,9 +7,9 @@ import com.hartwig.serve.common.json.JsonDatamodelChecker;
 
 import org.jetbrains.annotations.NotNull;
 
-final class IndicationDataModelChecker {
+final class IndicationDatamodelChecker {
 
-    private IndicationDataModelChecker() {
+    private IndicationDatamodelChecker() {
     }
 
     @NotNull

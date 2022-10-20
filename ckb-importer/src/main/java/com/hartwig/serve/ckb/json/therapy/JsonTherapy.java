@@ -23,7 +23,7 @@ public abstract class JsonTherapy implements CkbJsonObject {
     @NotNull
     public abstract String therapyName();
 
-    @NotNull
+    @Nullable
     public abstract List<String> synonyms();
 
     @NotNull

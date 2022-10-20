@@ -28,7 +28,7 @@ public abstract class Therapy {
     @NotNull
     public abstract List<Drug> drugs();
 
-    @NotNull
+    @Nullable
     public abstract List<String> synonyms();
 
     @NotNull

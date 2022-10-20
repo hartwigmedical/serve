@@ -1,9 +1,9 @@
 package com.hartwig.serve.vicc.reader;
 
 import static com.hartwig.serve.common.json.JsonFunctions.nullableString;
-import static com.hartwig.serve.common.json.JsonFunctions.optionalJsonArray;
-import static com.hartwig.serve.common.json.JsonFunctions.optionalJsonObject;
+import static com.hartwig.serve.common.json.JsonFunctions.optionalArray;
 import static com.hartwig.serve.common.json.JsonFunctions.optionalNullableString;
+import static com.hartwig.serve.common.json.JsonFunctions.optionalObject;
 import static com.hartwig.serve.common.json.JsonFunctions.optionalString;
 import static com.hartwig.serve.common.json.JsonFunctions.string;
 import static com.hartwig.serve.common.json.JsonFunctions.stringList;
@@ -83,7 +83,7 @@ final class CivicObjectFactory {
                 .coordinates(coordinates)
                 .sources(createSources(civicObject.getAsJsonArray("sources")))
                 .variantAliases(stringList(civicObject, "variant_aliases"))
-                .variantGroups(createVariantGroups(optionalJsonArray(civicObject, "variant_groups")))
+                .variantGroups(createVariantGroups(optionalArray(civicObject, "variant_groups")))
                 .variantTypes(createVariantTypes(civicObject.getAsJsonArray("variant_types")))
                 .hgvsExpressions(stringList(civicObject, "hgvs_expressions"))
                 .evidenceItem(createEvidenceItem(civicObject.getAsJsonArray("evidence_items")))
@@ -138,7 +138,7 @@ final class CivicObjectFactory {
     private static CivicProvisionalValue createProvisionalValue(@NotNull JsonObject provisionalValueObject) {
         ViccDatamodelCheckerFactory.civicProvisionalValueChecker().check(provisionalValueObject);
 
-        JsonObject descriptionObject = optionalJsonObject(provisionalValueObject, "description");
+        JsonObject descriptionObject = optionalObject(provisionalValueObject, "description");
         if (descriptionObject == null) {
             return null;
         }
@@ -191,7 +191,7 @@ final class CivicObjectFactory {
                     .type(string(variantObject, "type"))
                     .variantTypes(createVariantTypes(variantObject.getAsJsonArray("variant_types")))
                     .civicActionabilityScore(optionalNullableString(variantObject, "civic_actionability_score"))
-                    .coordinates(createCoordinates(optionalJsonObject(variantObject, "coordinates")))
+                    .coordinates(createCoordinates(optionalObject(variantObject, "coordinates")))
                     .id(string(variantObject, "id"))
                     .geneId(string(variantObject, "gene_id"))
                     .description(string(variantObject, "description"))
@@ -349,9 +349,9 @@ final class CivicObjectFactory {
         ViccDatamodelCheckerFactory.civicLifecycleActionsChecker().check(lifecycleActionsObject);
 
         return ImmutableCivicLifecycleActions.builder()
-                .lastCommentedOn(createLastCommentedOn(optionalJsonObject(lifecycleActionsObject, "last_commented_on")))
-                .lastModified(createLastModified(optionalJsonObject(lifecycleActionsObject, "last_modified")))
-                .lastReviewed(createLastReviewed(optionalJsonObject(lifecycleActionsObject, "last_reviewed")))
+                .lastCommentedOn(createLastCommentedOn(optionalObject(lifecycleActionsObject, "last_commented_on")))
+                .lastModified(createLastModified(optionalObject(lifecycleActionsObject, "last_modified")))
+                .lastReviewed(createLastReviewed(optionalObject(lifecycleActionsObject, "last_reviewed")))
                 .build();
     }
 
@@ -433,7 +433,7 @@ final class CivicObjectFactory {
         return ImmutableCivicOrganization.builder()
                 .name(optionalString(organizationObject, "name"))
                 .url(optionalString(organizationObject, "url"))
-                .profileImage(createProfileImage(optionalJsonObject(organizationObject, "profile_image")))
+                .profileImage(createProfileImage(optionalObject(organizationObject, "profile_image")))
                 .id(optionalString(organizationObject, "id"))
                 .description(optionalString(organizationObject, "description"))
                 .build();

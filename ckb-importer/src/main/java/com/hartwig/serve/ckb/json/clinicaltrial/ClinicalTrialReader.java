@@ -49,9 +49,9 @@ public class ClinicalTrialReader extends CkbJsonDirectoryReader<JsonClinicalTria
                 .recruitment(JsonFunctions.string(object, "recruitment"))
                 .therapies(extractTherapies(object.getAsJsonArray("therapies")))
                 .ageGroups(JsonFunctions.stringList(object, "ageGroups"))
-                .gender(JsonFunctions.optionalNullableString(object, "gender"))
+                .gender(JsonFunctions.nullableString(object, "gender"))
                 .variantRequirements(JsonFunctions.string(object, "variantRequirements"))
-                .sponsors(JsonFunctions.optionalNullableString(object, "sponsors"))
+                .sponsors(JsonFunctions.nullableString(object, "sponsors"))
                 .updateDate(DateConverter.toDate(JsonFunctions.string(object, "updateDate")))
                 .indications(extractIndications(object.getAsJsonArray("indications")))
                 .variantRequirementDetails(extractVariantRequirementDetails(object.getAsJsonArray("variantRequirementDetails")))
@@ -72,7 +72,7 @@ public class ClinicalTrialReader extends CkbJsonDirectoryReader<JsonClinicalTria
             therapies.add(ImmutableTherapyInfo.builder()
                     .id(JsonFunctions.integer(therapyObject, "id"))
                     .therapyName(JsonFunctions.string(therapyObject, "therapyName"))
-                    .synonyms(JsonFunctions.optionalStringList(therapyObject, "synonyms"))
+                    .synonyms(JsonFunctions.nullableStringList(therapyObject, "synonyms"))
                     .build());
         }
         return therapies;
@@ -136,12 +136,12 @@ public class ClinicalTrialReader extends CkbJsonDirectoryReader<JsonClinicalTria
 
             locations.add(ImmutableJsonLocation.builder()
                     .nctId(JsonFunctions.string(locationObject, "nctId"))
-                    .facility(JsonFunctions.optionalNullableString(locationObject, "facility"))
+                    .facility(JsonFunctions.nullableString(locationObject, "facility"))
                     .city(JsonFunctions.string(locationObject, "city"))
                     .country(JsonFunctions.string(locationObject, "country"))
-                    .status(JsonFunctions.optionalNullableString(locationObject, "status"))
-                    .state(JsonFunctions.optionalNullableString(locationObject, "state"))
-                    .zip(JsonFunctions.optionalNullableString(locationObject, "zip"))
+                    .status(JsonFunctions.nullableString(locationObject, "status"))
+                    .state(JsonFunctions.nullableString(locationObject, "state"))
+                    .zip(JsonFunctions.nullableString(locationObject, "zip"))
                     .contacts(extractContacts(locationObject.getAsJsonArray("clinicalTrialContacts")))
                     .build());
         }
@@ -158,10 +158,10 @@ public class ClinicalTrialReader extends CkbJsonDirectoryReader<JsonClinicalTria
 
             contactChecker.check(contactObject);
             contacts.add(ImmutableJsonContact.builder()
-                    .name(JsonFunctions.optionalNullableString(contactObject, "name"))
-                    .email(JsonFunctions.optionalNullableString(contactObject, "email"))
-                    .phone(JsonFunctions.optionalNullableString(contactObject, "phone"))
-                    .phoneExt(JsonFunctions.optionalNullableString(contactObject, "phoneExt"))
+                    .name(JsonFunctions.nullableString(contactObject, "name"))
+                    .email(JsonFunctions.nullableString(contactObject, "email"))
+                    .phone(JsonFunctions.nullableString(contactObject, "phone"))
+                    .phoneExt(JsonFunctions.nullableString(contactObject, "phoneExt"))
                     .role(JsonFunctions.string(contactObject, "role"))
                     .build());
         }

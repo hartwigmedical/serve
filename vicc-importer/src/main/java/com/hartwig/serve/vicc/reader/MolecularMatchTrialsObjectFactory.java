@@ -1,8 +1,8 @@
 package com.hartwig.serve.vicc.reader;
 
 import static com.hartwig.serve.common.json.JsonFunctions.nullableString;
-import static com.hartwig.serve.common.json.JsonFunctions.optionalJsonObject;
 import static com.hartwig.serve.common.json.JsonFunctions.optionalNullableString;
+import static com.hartwig.serve.common.json.JsonFunctions.optionalObject;
 import static com.hartwig.serve.common.json.JsonFunctions.optionalString;
 import static com.hartwig.serve.common.json.JsonFunctions.optionalStringList;
 import static com.hartwig.serve.common.json.JsonFunctions.string;
@@ -54,7 +54,7 @@ final class MolecularMatchTrialsObjectFactory {
                 .score(string(molecularMatchTrialsObject, "_score"))
                 .interventions(createInterventions(molecularMatchTrialsObject.getAsJsonArray("interventions")))
                 .locations(createLocations(molecularMatchTrialsObject.getAsJsonArray("locations")))
-                .overallContact(createOverallContact(optionalJsonObject(molecularMatchTrialsObject, "overallContact")))
+                .overallContact(createOverallContact(optionalObject(molecularMatchTrialsObject, "overallContact")))
                 .link(string(molecularMatchTrialsObject, "link"))
                 .phase(string(molecularMatchTrialsObject, "phase"))
                 .tags(createTags(molecularMatchTrialsObject.getAsJsonArray("tags")))
@@ -95,7 +95,7 @@ final class MolecularMatchTrialsObjectFactory {
             locationList.add(ImmutableMolecularMatchTrialsLocation.builder()
                     .status(string(locationObject, "status"))
                     .name(optionalString(locationObject, "name"))
-                    .contact(createContact(optionalJsonObject(locationObject, "contact")))
+                    .contact(createContact(optionalObject(locationObject, "contact")))
                     .lastName(optionalString(locationObject, "last_name"))
                     .email(optionalString(locationObject, "email"))
                     .phone(optionalString(locationObject, "phone"))
@@ -104,7 +104,7 @@ final class MolecularMatchTrialsObjectFactory {
                     .emailBackup(optionalString(locationObject, "email_backup"))
                     .phoneBackup(optionalString(locationObject, "phone_backup"))
                     .phoneExtBackup(optionalString(locationObject, "phone_ext_backup"))
-                    .subLocation(createSubLocation(optionalJsonObject(locationObject, "location")))
+                    .subLocation(createSubLocation(optionalObject(locationObject, "location")))
                     .street(optionalString(locationObject, "street"))
                     .city(optionalString(locationObject, "city"))
                     .zip(optionalString(locationObject, "zip"))
@@ -118,7 +118,7 @@ final class MolecularMatchTrialsObjectFactory {
                     .created(optionalString(locationObject, "created"))
                     .lastUpdated(optionalString(locationObject, "lastUpdated"))
                     .failedGeocode(optionalString(locationObject, "failedGeocode"))
-                    .geo(createGeo(optionalJsonObject(locationObject, "geo")))
+                    .geo(createGeo(optionalObject(locationObject, "geo")))
                     .build());
         }
 

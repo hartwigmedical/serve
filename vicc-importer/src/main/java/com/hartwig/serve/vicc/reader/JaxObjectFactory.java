@@ -1,7 +1,7 @@
 package com.hartwig.serve.vicc.reader;
 
 import static com.hartwig.serve.common.json.JsonFunctions.nullableString;
-import static com.hartwig.serve.common.json.JsonFunctions.optionalJsonArray;
+import static com.hartwig.serve.common.json.JsonFunctions.optionalArray;
 import static com.hartwig.serve.common.json.JsonFunctions.string;
 
 import java.util.List;
@@ -42,7 +42,7 @@ final class JaxObjectFactory {
                 .approvalStatus(string(jaxEntryObject, "approvalStatus"))
                 .efficacyEvidence(string(jaxEntryObject, "efficacyEvidence"))
                 .indication(createJaxIndication(jaxEntryObject.getAsJsonObject("indication")))
-                .references(createJaxReferences(optionalJsonArray(jaxEntryObject, "references")))
+                .references(createJaxReferences(optionalArray(jaxEntryObject, "references")))
                 .id(string(jaxEntryObject, "id"))
                 .build();
     }

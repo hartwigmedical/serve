@@ -146,7 +146,7 @@ public class ReferenceReader extends CkbJsonDirectoryReader<JsonReference> {
         return ImmutableTherapyInfo.builder()
                 .id(JsonFunctions.integer(jsonObject, "id"))
                 .therapyName(JsonFunctions.string(jsonObject, "therapyName"))
-                .synonyms(JsonFunctions.optionalStringList(jsonObject, "synonyms"))
+                .synonyms(JsonFunctions.nullableStringList(jsonObject, "synonyms"))
                 .build();
     }
 
@@ -193,7 +193,7 @@ public class ReferenceReader extends CkbJsonDirectoryReader<JsonReference> {
             therapies.add(ImmutableTherapyInfo.builder()
                     .id(JsonFunctions.integer(therapyJsonObject, "id"))
                     .therapyName(JsonFunctions.string(therapyJsonObject, "therapyName"))
-                    .synonyms(JsonFunctions.optionalStringList(therapyJsonObject, "synonyms"))
+                    .synonyms(JsonFunctions.nullableStringList(therapyJsonObject, "synonyms"))
                     .build());
         }
         return therapies;

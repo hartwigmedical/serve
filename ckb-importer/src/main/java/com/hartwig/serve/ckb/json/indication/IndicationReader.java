@@ -174,7 +174,7 @@ public class IndicationReader extends CkbJsonDirectoryReader<JsonIndication> {
             therapies.add(ImmutableTherapyInfo.builder()
                     .id(JsonFunctions.integer(therapyJsonObject, "id"))
                     .therapyName(JsonFunctions.string(therapyJsonObject, "therapyName"))
-                    .synonyms(JsonFunctions.optionalStringList(therapyJsonObject, "synonyms"))
+                    .synonyms(JsonFunctions.nullableStringList(therapyJsonObject, "synonyms"))
                     .build());
         }
         return therapies;

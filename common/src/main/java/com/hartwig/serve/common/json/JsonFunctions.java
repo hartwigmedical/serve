@@ -7,125 +7,93 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public final class JsonFunctions {
 
-    private static final Logger LOGGER = LogManager.getLogger(JsonFunctions.class);
-
     private JsonFunctions() {
     }
 
     @Nullable
-    public static JsonObject optionalJsonObject(@NotNull JsonObject object, @NotNull String field) {
-        if (!object.has(field)) {
-            return null;
-        }
+    public static JsonObject optionalObject(@NotNull JsonObject object, @NotNull String field) {
+        return object.has(field) ? object(object, field) : null;
+    }
 
-        if (object.get(field).isJsonNull()) {
-            return null;
-        }
+    @Nullable
+    public static JsonObject nullableObject(@NotNull JsonObject object, @NotNull String field) {
+        return !isNull(object, field) ? object(object, field) : null;
+    }
 
-        assert object.get(field).isJsonObject();
+    @NotNull
+    public static JsonObject object(@NotNull JsonObject object, @NotNull String field) {
         return object.getAsJsonObject(field);
     }
 
     @Nullable
-    public static JsonArray optionalJsonArray(@NotNull JsonObject object, @NotNull String field) {
-        if (!object.has(field)) {
-            return null;
-        }
+    public static JsonArray optionalArray(@NotNull JsonObject object, @NotNull String field) {
+        return object.has(field) ? array(object, field) : null;
+    }
 
-        if (object.get(field).isJsonNull()) {
-            return null;
-        }
+    @Nullable
+    public static JsonArray nullableArray(@NotNull JsonObject object, @NotNull String field) {
+        return !isNull(object, field) ? array(object, field) : null;
+    }
 
-        assert object.get(field).isJsonArray();
+    @NotNull
+    public static JsonArray array(@NotNull JsonObject object, @NotNull String field) {
         return object.getAsJsonArray(field);
+    }
+
+    @Nullable
+    public static List<String> optionalStringList(@NotNull JsonObject object, @NotNull String field) {
+        return object.has(field) ? stringList(object, field) : null;
+    }
+
+    @Nullable
+    public static List<String> nullableStringList(@NotNull JsonObject object, @NotNull String field) {
+        return !isNull(object, field) ? stringList(object, field) : null;
     }
 
     @NotNull
     public static List<String> stringList(@NotNull JsonObject object, @NotNull String field) {
-        assert object.has(field);
-
-        if (object.get(field).isJsonNull()) {
-            return Lists.newArrayList();
-        }
-
         List<String> values = Lists.newArrayList();
         if (object.get(field).isJsonPrimitive()) {
             values.add(string(object, field));
         } else {
             assert object.get(field).isJsonArray();
             for (JsonElement element : object.getAsJsonArray(field)) {
-                if (!element.isJsonPrimitive()) {
-                    LOGGER.warn("Converting array value for {} into string for element {}", field, element);
-                }
                 values.add(element.getAsJsonPrimitive().getAsString());
             }
         }
         return values;
     }
 
-    @NotNull
-    public static List<String> optionalStringList(@NotNull JsonObject object, @NotNull String field) {
-        if (!object.has(field)) {
-            return Lists.newArrayList();
-        }
-
-        return stringList(object, field);
-    }
-
-    @NotNull
-    public static String string(@NotNull JsonObject object, @NotNull String field) {
-        assert object.has(field);
-
-        JsonElement element = object.get(field);
-        if (!element.isJsonPrimitive()) {
-            LOGGER.warn("Converting {} to String for element {}.", field, element);
-        }
-        return element.getAsJsonPrimitive().getAsString();
+    @Nullable
+    public static String optionalNullableString(@NotNull JsonObject object, @NotNull String field) {
+        return object.has(field) ? nullableString(object, field) : null;
     }
 
     @Nullable
     public static String optionalString(@NotNull JsonObject object, @NotNull String field) {
-        if (!object.has(field)) {
-            return null;
-        }
-
-        return string(object, field);
-    }
-
-    public static int integer(@NotNull JsonObject object, @NotNull String field) {
-        assert object.has(field);
-
-        JsonElement element = object.get(field);
-        if (!element.isJsonPrimitive()) {
-            LOGGER.warn("Converting {} to Integer for element {}.", field, element);
-        }
-        return element.getAsJsonPrimitive().getAsInt();
+        return object.has(field) ?string(object, field) : null;
     }
 
     @Nullable
     public static String nullableString(@NotNull JsonObject object, @NotNull String field) {
-        assert object.has(field);
-
-        if (object.get(field).isJsonNull()) {
-            return null;
-        }
-
-        return string(object, field);
+        return !isNull(object, field) ? string(object, field) : null;
     }
 
-    @Nullable
-    public static String optionalNullableString(@NotNull JsonObject object, @NotNull String field) {
-        if (!object.has(field)) {
-            return null;
-        }
+    @NotNull
+    public static String string(@NotNull JsonObject object, @NotNull String field) {
+        return object.get(field).getAsJsonPrimitive().getAsString();
+    }
 
-        return nullableString(object, field);
+    public static int integer(@NotNull JsonObject object, @NotNull String field) {
+        return object.get(field).getAsJsonPrimitive().getAsInt();
+    }
+
+    private static boolean isNull(@NotNull JsonObject object, @NotNull String field) {
+        return object.get(field).isJsonNull();
     }
 }

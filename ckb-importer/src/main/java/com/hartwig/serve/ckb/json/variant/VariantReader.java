@@ -55,7 +55,7 @@ public class VariantReader extends CkbJsonDirectoryReader<JsonVariant> {
                 .variant(JsonFunctions.string(object, "variant"))
                 .createDate(DateConverter.toDate(JsonFunctions.string(object, "createDate")))
                 .updateDate(DateConverter.toDate(JsonFunctions.string(object, "updateDate")))
-                .referenceTranscriptCoordinate(extractReferenceTranscriptCoordinate(JsonFunctions.optionalJsonObject(object,
+                .referenceTranscriptCoordinate(extractReferenceTranscriptCoordinate(JsonFunctions.optionalObject(object,
                         "referenceTranscriptCoordinates")))
                 .partnerGenes(extractPartnerGenes(object.getAsJsonArray("partnerGenes")))
                 .categoryVariantPaths(extractCategoryVariantPaths(object.getAsJsonArray("categoryVariantPaths")))
@@ -235,7 +235,7 @@ public class VariantReader extends CkbJsonDirectoryReader<JsonVariant> {
         return ImmutableTherapyInfo.builder()
                 .id(JsonFunctions.integer(jsonObject, "id"))
                 .therapyName(JsonFunctions.string(jsonObject, "therapyName"))
-                .synonyms(JsonFunctions.optionalStringList(jsonObject, "synonyms"))
+                .synonyms(JsonFunctions.nullableStringList(jsonObject, "synonyms"))
                 .build();
     }
 

@@ -1,4 +1,4 @@
-package com.hartwig.serve.common.genome;
+package com.hartwig.serve.common.ensemblcache;
 
 public class TranscriptProteinData {
 

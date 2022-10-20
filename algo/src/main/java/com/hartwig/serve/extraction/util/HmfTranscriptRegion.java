@@ -3,8 +3,7 @@ package com.hartwig.serve.extraction.util;
 import java.util.List;
 
 import com.google.common.collect.Lists;
-import com.hartwig.serve.common.genome.Strand;
-import com.hartwig.serve.common.genome.TranscriptRegion;
+import com.hartwig.serve.common.ensemblcache.Strand;
 
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;

@@ -6,7 +6,7 @@ import java.util.Set;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.common.classification.EventClassifierConfig;
 import com.hartwig.serve.common.ensemblcache.EnsemblDataCache;
-import com.hartwig.serve.common.genome.GeneData;
+import com.hartwig.serve.common.ensemblcache.GeneData;
 import com.hartwig.serve.common.knownfusion.KnownFusionCache;
 import com.hartwig.serve.common.knownfusion.KnownFusionData;
 import com.hartwig.serve.common.knownfusion.KnownFusionType;

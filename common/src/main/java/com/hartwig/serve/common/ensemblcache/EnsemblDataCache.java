@@ -11,9 +11,6 @@ import java.util.Map;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.hartwig.serve.common.genome.GeneData;
-import com.hartwig.serve.common.genome.TranscriptData;
-import com.hartwig.serve.common.genome.TranscriptProteinData;
 import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeVersion;
 
 import org.jetbrains.annotations.NotNull;

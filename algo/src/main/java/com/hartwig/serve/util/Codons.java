@@ -1,6 +1,11 @@
-package com.hartwig.serve.common.genome;
+package com.hartwig.serve.util;
 
-public final class Codons {
+import org.jetbrains.annotations.NotNull;
+
+final class Codons {
+
+    private Codons() {
+    }
 
     public static final String START_CODON = "ATG";
 
@@ -15,15 +20,15 @@ public final class Codons {
                     'S', 'S', 'S', 'X', 'C', 'C', 'W', 'Q', 'H', 'H', 'Q', 'L', 'L', 'L', 'L', 'P', 'P', 'P', 'P', 'R', 'R', 'R', 'R', 'E',
                     'D', 'D', 'E', 'V', 'V', 'V', 'V', 'A', 'A', 'A', 'A', 'G', 'G', 'G', 'G' };
 
-    public static boolean isStopCodon(final String codon) {
+    public static boolean isStopCodon(@NotNull String codon) {
         return codon.equals(STOP_CODON_1) || codon.equals(STOP_CODON_2) || codon.equals(STOP_CODON_3);
     }
 
-    public static char codonToAminoAcid(final String codon) {
+    public static char codonToAminoAcid(@NotNull String codon) {
         return codonToAminoAcid(codon, 0);
     }
 
-    public static char codonToAminoAcid(final String dna, int index) {
+    public static char codonToAminoAcid(@NotNull String dna, int index) {
         try {
             // convert the 3 bases into a look-up index
             int lookupIndex = baseToInt(dna.charAt(index)) * 16 + baseToInt(dna.charAt(index + 1)) * 4 + baseToInt(dna.charAt(index + 2));
@@ -34,7 +39,6 @@ public final class Codons {
         }
         return UNKNOWN;
     }
-
 
     // note: this is used only for the lookup table. The ordering must be
     // kept this way otherwise the lookup table needs to be recreated

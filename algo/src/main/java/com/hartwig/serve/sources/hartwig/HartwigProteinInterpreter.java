@@ -1,7 +1,7 @@
 package com.hartwig.serve.sources.hartwig;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.hartwig.serve.common.genome.AminoAcids;
+import com.hartwig.serve.util.AminoAcids;
 
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;

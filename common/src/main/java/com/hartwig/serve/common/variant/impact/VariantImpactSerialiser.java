@@ -10,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
 
 import htsjdk.variant.variantcontext.VariantContext;
 
-// methods for reading from and writing to VCFs
 public final class VariantImpactSerialiser {
 
     private VariantImpactSerialiser() {

@@ -6,9 +6,9 @@ import java.util.Set;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Sets;
-import com.hartwig.serve.common.genome.AminoAcids;
 import com.hartwig.serve.common.variant.impact.VariantTranscriptImpact;
 import com.hartwig.serve.extraction.util.VCFWriterFactory;
+import com.hartwig.serve.util.AminoAcids;
 
 import org.apache.commons.compress.utils.Lists;
 import org.apache.logging.log4j.Level;

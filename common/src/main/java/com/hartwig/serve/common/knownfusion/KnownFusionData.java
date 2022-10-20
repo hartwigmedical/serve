@@ -21,10 +21,10 @@ public class KnownFusionData {
     // type-specific data:
     public boolean mHighImpactPromiscuous;
 
-    private int[] mDownstreamDistance; // used for some known pair 5' genes and IG 3' genes
+    private final int[] mDownstreamDistance; // used for some known pair 5' genes and IG 3' genes
 
-    private int[] mFiveExonRange;
-    private int[] mThreeExonRange;
+    private final int[] mFiveExonRange;
+    private final int[] mThreeExonRange;
 
     // IG region
     private ChrBaseRegion mIgRegion;

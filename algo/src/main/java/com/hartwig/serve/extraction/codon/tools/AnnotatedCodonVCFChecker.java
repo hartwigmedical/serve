@@ -3,10 +3,10 @@ package com.hartwig.serve.extraction.codon.tools;
 import java.io.IOException;
 import java.util.List;
 
-import com.hartwig.serve.common.genome.AminoAcids;
 import com.hartwig.serve.extraction.snpeff.SnpEffAnnotation;
 import com.hartwig.serve.extraction.snpeff.SnpEffAnnotationParser;
 import com.hartwig.serve.extraction.util.VCFWriterFactory;
+import com.hartwig.serve.util.AminoAcids;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;

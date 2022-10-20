@@ -1,6 +1,6 @@
 package com.hartwig.serve.common.knownfusion;
 
-public final class StartEndIterator {
+final class StartEndIterator {
 
     private StartEndIterator() {
     }

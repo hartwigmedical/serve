@@ -1,4 +1,4 @@
-package com.hartwig.serve.common.genome;
+package com.hartwig.serve.common.ensemblcache;
 
 import java.util.List;
 
@@ -46,10 +46,10 @@ public class TranscriptData {
         return TransEnd - TransStart;
     }
 
-    public Strand strand() {
-        return Strand == com.hartwig.serve.common.genome.Strand.POS_STRAND
-                ? com.hartwig.serve.common.genome.Strand.FORWARD
-                : com.hartwig.serve.common.genome.Strand.REVERSE;
+    public com.hartwig.serve.common.ensemblcache.Strand strand() {
+        return Strand == com.hartwig.serve.common.ensemblcache.Strand.POS_STRAND
+                ? com.hartwig.serve.common.ensemblcache.Strand.FORWARD
+                : com.hartwig.serve.common.ensemblcache.Strand.REVERSE;
     }
 
     public String toString() {

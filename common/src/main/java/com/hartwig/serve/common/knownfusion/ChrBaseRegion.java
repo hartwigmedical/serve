@@ -6,35 +6,36 @@ import org.jetbrains.annotations.NotNull;
 
 public class ChrBaseRegion implements Cloneable, Comparable<ChrBaseRegion> {
 
-    public final String Chromosome;
-    public int[] Positions;
+    @NotNull
+    private final String chromosome;
+    private int[] positions;
 
-    public ChrBaseRegion(final String chromosome, final int posStart, final int posEnd) {
-        Chromosome = chromosome;
-        Positions = new int[] { posStart, posEnd };
+    public ChrBaseRegion(@NotNull String chromosome, final int posStart, final int posEnd) {
+        this.chromosome = chromosome;
+        positions = new int[] { posStart, posEnd };
     }
 
     public int start() {
-        return Positions[StartEndIterator.SE_START];
+        return positions[StartEndIterator.SE_START];
     }
 
     public int end() {
-        return Positions[StartEndIterator.SE_END];
+        return positions[StartEndIterator.SE_END];
     }
 
     public boolean matches(final ChrBaseRegion other) {
-        return Chromosome.equals(other.Chromosome) && start() == other.start() && end() == other.end();
+        return chromosome.equals(other.chromosome) && start() == other.start() && end() == other.end();
     }
 
     public String toString() {
-        return String.format("%s:%d-%d", Chromosome, Positions[StartEndIterator.SE_START], Positions[StartEndIterator.SE_END]);
+        return String.format("%s:%d-%d", chromosome, positions[StartEndIterator.SE_START], positions[StartEndIterator.SE_END]);
     }
 
     @Override
     public Object clone() {
         try {
             ChrBaseRegion br = (ChrBaseRegion) super.clone();
-            br.Positions = Positions.clone();
+            br.positions = positions.clone();
             return br;
         } catch (CloneNotSupportedException e) {
             // Will not happen in this case
@@ -63,7 +64,7 @@ public class ChrBaseRegion implements Cloneable, Comparable<ChrBaseRegion> {
 
     @Override
     public int compareTo(@NotNull final ChrBaseRegion other) {
-        if (Chromosome.equals(other.Chromosome)) {
+        if (chromosome.equals(other.chromosome)) {
             if (start() < other.start()) {
                 return -1;
             } else if (start() == other.start()) {
@@ -72,8 +73,8 @@ public class ChrBaseRegion implements Cloneable, Comparable<ChrBaseRegion> {
             return 1;
         }
 
-        int rank1 = HumanChromosome.chromosomeRank(Chromosome);
-        int rank2 = HumanChromosome.chromosomeRank(other.Chromosome);
+        int rank1 = HumanChromosome.chromosomeRank(chromosome);
+        int rank2 = HumanChromosome.chromosomeRank(other.chromosome);
 
         if (rank1 == rank2) {
             return 0;

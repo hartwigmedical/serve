@@ -1,7 +1,7 @@
 package com.hartwig.serve.transvar;
 
-import static com.hartwig.serve.common.genome.AminoAcids.findAminoAcidForCodon;
-import static com.hartwig.serve.common.genome.Nucleotides.reverseStrandBases;
+import static com.hartwig.serve.transvar.util.Nucleotides.reverseStrandBases;
+import static com.hartwig.serve.util.AminoAcids.findAminoAcidForCodon;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -9,9 +9,7 @@ import java.util.List;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
-import com.hartwig.serve.common.genome.AminoAcids;
-import com.hartwig.serve.common.genome.Nucleotides;
-import com.hartwig.serve.common.genome.Strand;
+import com.hartwig.serve.common.ensemblcache.Strand;
 import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeFunctions;
 import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeVersion;
 import com.hartwig.serve.datamodel.hotspot.ImmutableVariantHotspotImpl;
@@ -24,6 +22,8 @@ import com.hartwig.serve.transvar.datamodel.TransvarFrameshift;
 import com.hartwig.serve.transvar.datamodel.TransvarInsertion;
 import com.hartwig.serve.transvar.datamodel.TransvarRecord;
 import com.hartwig.serve.transvar.datamodel.TransvarSnvMnv;
+import com.hartwig.serve.transvar.util.Nucleotides;
+import com.hartwig.serve.util.AminoAcids;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

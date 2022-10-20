@@ -4,10 +4,10 @@ import java.util.Collections;
 import java.util.List;
 
 import com.google.common.collect.Lists;
-import com.hartwig.serve.common.genome.ExonData;
-import com.hartwig.serve.common.genome.GeneData;
-import com.hartwig.serve.common.genome.Strand;
-import com.hartwig.serve.common.genome.TranscriptData;
+import com.hartwig.serve.common.ensemblcache.ExonData;
+import com.hartwig.serve.common.ensemblcache.GeneData;
+import com.hartwig.serve.common.ensemblcache.Strand;
+import com.hartwig.serve.common.ensemblcache.TranscriptData;
 import com.hartwig.serve.datamodel.genome.GenomeRegion;
 import com.hartwig.serve.datamodel.genome.ImmutableGenomeRegionImpl;
 

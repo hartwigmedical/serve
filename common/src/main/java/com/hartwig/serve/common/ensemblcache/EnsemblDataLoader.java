@@ -13,11 +13,6 @@ import java.util.Set;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.hartwig.serve.common.genome.ExonData;
-import com.hartwig.serve.common.genome.GeneData;
-import com.hartwig.serve.common.genome.TranscriptAminoAcids;
-import com.hartwig.serve.common.genome.TranscriptData;
-import com.hartwig.serve.common.genome.TranscriptProteinData;
 import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeFunctions;
 import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeVersion;
 

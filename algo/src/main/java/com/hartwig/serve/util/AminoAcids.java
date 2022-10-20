@@ -1,12 +1,12 @@
-package com.hartwig.serve.common.genome;
+package com.hartwig.serve.util;
 
-import static com.hartwig.serve.common.genome.Codons.START_CODON;
-import static com.hartwig.serve.common.genome.Codons.STOP_CODON_1;
-import static com.hartwig.serve.common.genome.Codons.STOP_CODON_2;
-import static com.hartwig.serve.common.genome.Codons.STOP_CODON_3;
-import static com.hartwig.serve.common.genome.Codons.UNKNOWN;
-import static com.hartwig.serve.common.genome.Codons.codonToAminoAcid;
-import static com.hartwig.serve.common.genome.Codons.isStopCodon;
+import static com.hartwig.serve.util.Codons.START_CODON;
+import static com.hartwig.serve.util.Codons.STOP_CODON_1;
+import static com.hartwig.serve.util.Codons.STOP_CODON_2;
+import static com.hartwig.serve.util.Codons.STOP_CODON_3;
+import static com.hartwig.serve.util.Codons.UNKNOWN;
+import static com.hartwig.serve.util.Codons.codonToAminoAcid;
+import static com.hartwig.serve.util.Codons.isStopCodon;
 
 import java.util.List;
 import java.util.Map;

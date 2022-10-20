@@ -1,9 +1,8 @@
-package com.hartwig.serve.common.genome;
+package com.hartwig.serve.common.ensemblcache;
 
 import org.jetbrains.annotations.NotNull;
 
-public enum Strand
-{
+public enum Strand {
     FORWARD,
     REVERSE;
 
@@ -12,10 +11,8 @@ public enum Strand
     public static final byte NEG_STRAND = -1;
 
     @NotNull
-    public static Strand valueOf(int direction)
-    {
-        switch(direction)
-        {
+    public static Strand valueOf(int direction) {
+        switch (direction) {
             case 1:
                 return Strand.FORWARD;
             case -1:
@@ -25,5 +22,7 @@ public enum Strand
         throw new IllegalArgumentException("Invalid direction " + direction);
     }
 
-    public byte asByte() { return this == FORWARD ? POS_STRAND : NEG_STRAND; }
+    public byte asByte() {
+        return this == FORWARD ? POS_STRAND : NEG_STRAND;
+    }
 }

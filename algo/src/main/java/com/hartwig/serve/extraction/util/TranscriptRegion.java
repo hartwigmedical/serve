@@ -1,4 +1,4 @@
-package com.hartwig.serve.common.genome;
+package com.hartwig.serve.extraction.util;
 
 import com.hartwig.serve.datamodel.genome.GenomeRegion;
 

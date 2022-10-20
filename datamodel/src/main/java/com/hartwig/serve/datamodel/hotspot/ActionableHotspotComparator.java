@@ -2,8 +2,6 @@ package com.hartwig.serve.datamodel.hotspot;
 
 import java.util.Comparator;
 
-import com.hartwig.serve.common.variant.hotspot.VariantHotspot;
-import com.hartwig.serve.common.variant.hotspot.VariantHotspotComparator;
 import com.hartwig.serve.datamodel.ActionableEvent;
 import com.hartwig.serve.datamodel.ActionableEventComparator;
 

@@ -2,8 +2,8 @@ package com.hartwig.serve.refgenome.liftover;
 
 import java.io.File;
 
-import com.hartwig.serve.common.genome.refgenome.RefGenomeFunctions;
-import com.hartwig.serve.common.genome.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeFunctions;
+import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeVersion;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -40,7 +40,7 @@ public class UCSCLiftOver implements LiftOverAlgo {
         }
 
         // We convert chromosome back from UCSC to target ref genome version
-        String targetChromosome = targetVersion.versionedChromosome(lifted.getContig());
+        String targetChromosome = RefGenomeFunctions.versionedChromosome(lifted.getContig(), targetVersion);
         return ImmutableLiftOverResult.builder().chromosome(targetChromosome).position(lifted.getStart()).build();
     }
 }

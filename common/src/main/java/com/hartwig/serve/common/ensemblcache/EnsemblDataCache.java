@@ -21,8 +21,8 @@ import com.hartwig.serve.common.gene.ExonData;
 import com.hartwig.serve.common.gene.GeneData;
 import com.hartwig.serve.common.gene.TranscriptData;
 import com.hartwig.serve.common.gene.TranscriptProteinData;
-import com.hartwig.serve.common.genome.refgenome.RefGenomeVersion;
 import com.hartwig.serve.common.utils.sv.StartEndIterator;
+import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeVersion;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;

@@ -3,9 +3,9 @@ package com.hartwig.serve;
 import java.io.IOException;
 import java.util.Map;
 
-import com.hartwig.serve.common.genome.refgenome.RefGenomeVersion;
 import com.hartwig.serve.curation.DoidLookup;
 import com.hartwig.serve.curation.DoidLookupFactory;
+import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeVersion;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.ExtractionResultWriter;
 import com.hartwig.serve.refgenome.RefGenomeManager;

@@ -2,10 +2,10 @@ package com.hartwig.serve.extraction;
 
 import java.io.IOException;
 
-import com.hartwig.serve.common.genome.refgenome.RefGenomeVersion;
 import com.hartwig.serve.datamodel.characteristic.ActionableCharacteristicFile;
 import com.hartwig.serve.datamodel.fusion.ActionableFusionFile;
 import com.hartwig.serve.datamodel.gene.ActionableGeneFile;
+import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeVersion;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspotFile;
 import com.hartwig.serve.datamodel.immuno.ActionableHLAFile;
 import com.hartwig.serve.datamodel.range.ActionableRangeFile;

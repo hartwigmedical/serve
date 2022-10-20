@@ -3,7 +3,7 @@ package com.hartwig.serve.extraction.hotspot;
 import java.util.List;
 import java.util.Set;
 
-import com.hartwig.serve.common.variant.hotspot.VariantHotspot;
+import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

@@ -1,6 +1,6 @@
-package com.hartwig.serve.common.genome.position;
+package com.hartwig.serve.datamodel.genome.position;
 
-import com.hartwig.serve.common.genome.chromosome.ContigComparator;
+import com.hartwig.serve.datamodel.genome.chromosome.ContigComparator;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -21,7 +21,7 @@ public interface GenomePosition extends Comparable<GenomePosition> {
     // i.e.
     // new TreeMap(GenomePosition::compare);
     static int compare(final GenomePosition gp1, final GenomePosition gp2) {
-        int chromosomeCompare = ContigComparator.INSTANCE.compare(gp1.chromosome(), gp2.chromosome());
+        int chromosomeCompare = new ContigComparator().compare(gp1.chromosome(), gp2.chromosome());
         if (chromosomeCompare == 0) {
             return Integer.compare(gp1.position(), gp2.position());
         }

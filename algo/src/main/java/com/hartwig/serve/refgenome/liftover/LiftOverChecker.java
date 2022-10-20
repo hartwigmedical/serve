@@ -4,8 +4,8 @@ import java.util.Objects;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
-import com.hartwig.serve.common.genome.position.GenomePosition;
-import com.hartwig.serve.common.genome.region.GenomeRegion;
+import com.hartwig.serve.datamodel.genome.position.GenomePosition;
+import com.hartwig.serve.datamodel.genome.region.GenomeRegion;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

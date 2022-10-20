@@ -6,7 +6,7 @@ import java.io.FileNotFoundException;
 
 import com.google.common.io.Resources;
 import com.hartwig.serve.EnsemblDataCacheTestFactory;
-import com.hartwig.serve.common.genome.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeVersion;
 
 import org.junit.Test;
 

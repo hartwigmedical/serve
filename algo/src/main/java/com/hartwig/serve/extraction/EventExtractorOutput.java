@@ -2,9 +2,9 @@ package com.hartwig.serve.extraction;
 
 import java.util.List;
 
-import com.hartwig.serve.common.variant.hotspot.VariantHotspot;
 import com.hartwig.serve.datamodel.characteristic.TumorCharacteristic;
 import com.hartwig.serve.datamodel.gene.GeneLevelAnnotation;
+import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
 import com.hartwig.serve.extraction.codon.CodonAnnotation;
 import com.hartwig.serve.extraction.copynumber.KnownCopyNumber;
 import com.hartwig.serve.extraction.exon.ExonAnnotation;

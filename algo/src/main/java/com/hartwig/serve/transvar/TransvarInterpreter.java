@@ -11,10 +11,11 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import com.hartwig.serve.common.codon.AminoAcids;
 import com.hartwig.serve.common.codon.Nucleotides;
-import com.hartwig.serve.common.genome.refgenome.RefGenomeVersion;
 import com.hartwig.serve.common.genome.region.Strand;
-import com.hartwig.serve.common.variant.hotspot.ImmutableVariantHotspotImpl;
-import com.hartwig.serve.common.variant.hotspot.VariantHotspot;
+import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeFunctions;
+import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.hotspot.ImmutableVariantHotspotImpl;
+import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
 import com.hartwig.serve.transvar.datamodel.TransvarAnnotation;
 import com.hartwig.serve.transvar.datamodel.TransvarComplexInsertDelete;
 import com.hartwig.serve.transvar.datamodel.TransvarDeletion;
@@ -206,10 +207,8 @@ class TransvarInterpreter {
     }
 
     @NotNull
-    public static List<String> allTrinucleotidesForSameAminoAcid(@NotNull String trinucleotideToFind, @NotNull Strand strand)
-    {
-        if(trinucleotideToFind.length() != 3)
-        {
+    public static List<String> allTrinucleotidesForSameAminoAcid(@NotNull String trinucleotideToFind, @NotNull Strand strand) {
+        if (trinucleotideToFind.length() != 3) {
             LOGGER.warn("Cannot look up amino acids for non-trinucleotides: {}", trinucleotideToFind);
             return Lists.newArrayList();
         }
@@ -219,21 +218,16 @@ class TransvarInterpreter {
 
         List<String> allTrinucleotides = Lists.newArrayList();
         List<String> trinucleotides = AminoAcids.AMINO_ACID_TO_CODON_MAP.get(aminoAcid);
-        if(trinucleotides != null)
-        {
-            for(String trinucleotide : trinucleotides)
-            {
+        if (trinucleotides != null) {
+            for (String trinucleotide : trinucleotides) {
                 allTrinucleotides.add(strand == Strand.FORWARD ? trinucleotide : reverseStrandBases(trinucleotide));
             }
-        }
-        else
-        {
+        } else {
             LOGGER.warn("Could not find amino acid for trinucleotide '{}' on {} strand", trinucleotideToFind, strand);
         }
 
         return allTrinucleotides;
     }
-
 
     @NotNull
     private List<VariantHotspot> convertDeletionToHotspots(@NotNull TransvarRecord record, @NotNull TransvarDeletion deletion) {
@@ -295,8 +289,8 @@ class TransvarInterpreter {
 
         String simplifiedRef = complexInsDel.ref();
         String simplifiedAlt = complexInsDel.alt();
-        while (simplifiedRef.length() > 1 && simplifiedAlt.length() > 1 && simplifiedRef.charAt(simplifiedRef.length() - 1) == simplifiedAlt
-                .charAt(simplifiedAlt.length() - 1)) {
+        while (simplifiedRef.length() > 1 && simplifiedAlt.length() > 1
+                && simplifiedRef.charAt(simplifiedRef.length() - 1) == simplifiedAlt.charAt(simplifiedAlt.length() - 1)) {
             simplifiedRef = simplifiedRef.substring(0, simplifiedRef.length() - 1);
             simplifiedAlt = simplifiedAlt.substring(0, simplifiedAlt.length() - 1);
         }
@@ -323,8 +317,7 @@ class TransvarInterpreter {
                 posPriorToCodon = strand == Strand.FORWARD ? posPriorToCodon - 1 : posPriorToCodon + 1;
             }
             String referenceCodon = refSequence(record.chromosome(), posPriorToCodon + 1, posPriorToCodon + 3);
-            String refAminoAcid =
-                    findAminoAcidForCodon(strand == Strand.FORWARD ? referenceCodon : reverseStrandBases(referenceCodon));
+            String refAminoAcid = findAminoAcidForCodon(strand == Strand.FORWARD ? referenceCodon : reverseStrandBases(referenceCodon));
 
             if (refAminoAcid == null) {
                 LOGGER.warn("Could not resolve a valid ref amino acid for '{}' based on reference codon {}. Skipping hotspot generation.",
@@ -370,8 +363,7 @@ class TransvarInterpreter {
                 } else {
                     newRefCodon = refBase1 + refBase2 + base;
                 }
-                String newAminoAcid =
-                        findAminoAcidForCodon(strand == Strand.FORWARD ? newRefCodon : reverseStrandBases(newRefCodon));
+                String newAminoAcid = findAminoAcidForCodon(strand == Strand.FORWARD ? newRefCodon : reverseStrandBases(newRefCodon));
 
                 if (newAminoAcid != null && !newAminoAcid.equals(refAminoAcid)) {
                     hotspots.add(builder.alt(ref + base).build());
@@ -417,8 +409,7 @@ class TransvarInterpreter {
                     newRefCodon = refSequence(record.chromosome(), posPriorToCodon, posPriorToCodon + 2);
                 }
             }
-            String newAminoAcid =
-                    findAminoAcidForCodon(strand == Strand.FORWARD ? newRefCodon : reverseStrandBases(newRefCodon));
+            String newAminoAcid = findAminoAcidForCodon(strand == Strand.FORWARD ? newRefCodon : reverseStrandBases(newRefCodon));
 
             if (newAminoAcid != null && !newAminoAcid.equals(refAminoAcid)) {
                 int pos = posPriorToCodon + i;
@@ -459,8 +450,7 @@ class TransvarInterpreter {
                 }
             }
 
-            String newAminoAcid =
-                    findAminoAcidForCodon(strand == Strand.FORWARD ? newRefCodon : reverseStrandBases(newRefCodon));
+            String newAminoAcid = findAminoAcidForCodon(strand == Strand.FORWARD ? newRefCodon : reverseStrandBases(newRefCodon));
 
             if (newAminoAcid != null && !newAminoAcid.equals(refAminoAcid)) {
                 int pos = posPriorToCodon + i;
@@ -475,12 +465,12 @@ class TransvarInterpreter {
 
     @NotNull
     private String refSequence(@NotNull String chromosome, int start, int end) {
-        String versionedChromosome = refGenomeVersion.versionedChromosome(chromosome);
+        String versionedChromosome = RefGenomeFunctions.versionedChromosome(chromosome, refGenomeVersion);
         return refGenomeFasta.getSubsequenceAt(versionedChromosome, start, end).getBaseString();
     }
 
     @NotNull
     private ImmutableVariantHotspotImpl.Builder withRefBasedChromosome(@NotNull String chromosome) {
-        return ImmutableVariantHotspotImpl.builder().chromosome(refGenomeVersion.versionedChromosome(chromosome));
+        return ImmutableVariantHotspotImpl.builder().chromosome(RefGenomeFunctions.versionedChromosome(chromosome, refGenomeVersion));
     }
 }

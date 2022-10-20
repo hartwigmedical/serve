@@ -1,6 +1,7 @@
 package com.hartwig.serve.extraction.util;
 
-import com.hartwig.serve.common.genome.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeFunctions;
+import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeVersion;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -38,7 +39,7 @@ public class GenerateAltBase {
 
     @NotNull
     public String extractRefBaseAtGenomicPosition(@NotNull String chromosome, long position) {
-        String versionedChromosome = refGenomeVersion.versionedChromosome(chromosome);
+        String versionedChromosome = RefGenomeFunctions.versionedChromosome(chromosome, refGenomeVersion);
         return refGenomeFasta.getSubsequenceAt(versionedChromosome, position, position).getBaseString();
     }
 }

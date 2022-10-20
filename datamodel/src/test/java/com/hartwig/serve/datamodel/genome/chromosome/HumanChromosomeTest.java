@@ -1,11 +1,11 @@
-package com.hartwig.serve.common.genome.chromosome;
+package com.hartwig.serve.datamodel.genome.chromosome;
 
 import static org.junit.Assert.assertFalse;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 
-import com.hartwig.serve.common.purple.Gender;
+import com.hartwig.serve.datamodel.genome.Gender;
 
 import org.junit.Test;
 

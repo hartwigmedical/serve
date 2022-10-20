@@ -1,9 +1,9 @@
-package com.hartwig.serve.common.genome.chromosome;
+package com.hartwig.serve.datamodel.genome.chromosome;
 
-import com.hartwig.serve.common.genome.position.GenomePosition;
-import com.hartwig.serve.common.genome.refgenome.RefGenomeFunctions;
-import com.hartwig.serve.common.genome.region.GenomeRegion;
-import com.hartwig.serve.common.purple.Gender;
+import com.hartwig.serve.datamodel.genome.Gender;
+import com.hartwig.serve.datamodel.genome.position.GenomePosition;
+import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeFunctions;
+import com.hartwig.serve.datamodel.genome.region.GenomeRegion;
 
 import org.jetbrains.annotations.NotNull;
 

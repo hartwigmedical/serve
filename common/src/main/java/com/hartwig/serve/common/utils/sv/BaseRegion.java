@@ -3,7 +3,7 @@ package com.hartwig.serve.common.utils.sv;
 import static com.hartwig.serve.common.utils.sv.StartEndIterator.SE_END;
 import static com.hartwig.serve.common.utils.sv.StartEndIterator.SE_START;
 
-import com.hartwig.serve.common.genome.region.GenomeRegion;
+import com.hartwig.serve.datamodel.genome.region.GenomeRegion;
 
 import org.jetbrains.annotations.NotNull;
 

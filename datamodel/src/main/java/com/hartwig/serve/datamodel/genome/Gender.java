@@ -1,4 +1,4 @@
-package com.hartwig.serve.common.purple;
+package com.hartwig.serve.datamodel.genome;
 
 public enum Gender
 {

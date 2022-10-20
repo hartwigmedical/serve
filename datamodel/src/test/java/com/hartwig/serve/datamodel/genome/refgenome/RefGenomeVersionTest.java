@@ -1,26 +1,10 @@
-package com.hartwig.serve.common.genome.refgenome;
+package com.hartwig.serve.datamodel.genome.refgenome;
 
 import static org.junit.Assert.assertEquals;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 public class RefGenomeVersionTest {
-
-    @Test
-    public void canVersionChromosomes() {
-        String chr37 = "10";
-        String chr19 = "chr10";
-        String chr38 = "chr10";
-
-        Assert.assertEquals(chr37, RefGenomeVersion.V37.versionedChromosome(chr19));
-        Assert.assertEquals(chr37, RefGenomeVersion.V37.versionedChromosome(chr37));
-        Assert.assertEquals(chr37, RefGenomeVersion.V37.versionedChromosome(chr38));
-
-        Assert.assertEquals(chr38, RefGenomeVersion.V38.versionedChromosome(chr19));
-        Assert.assertEquals(chr38, RefGenomeVersion.V38.versionedChromosome(chr37));
-        Assert.assertEquals(chr38, RefGenomeVersion.V38.versionedChromosome(chr38));
-    }
 
     @Test
     public void canVersionFilePaths() {

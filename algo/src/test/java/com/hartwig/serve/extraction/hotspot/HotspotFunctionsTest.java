@@ -7,9 +7,9 @@ import java.util.Set;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.hartwig.serve.common.variant.hotspot.ImmutableVariantHotspotImpl;
-import com.hartwig.serve.common.variant.hotspot.VariantHotspot;
 import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.datamodel.hotspot.ImmutableVariantHotspotImpl;
+import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;

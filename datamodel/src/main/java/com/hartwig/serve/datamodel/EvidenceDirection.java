@@ -25,6 +25,7 @@ public enum EvidenceDirection {
         return isResistant;
     }
 
+    @SuppressWarnings("unused")
     public boolean isCertain() {
         return isCertain;
     }

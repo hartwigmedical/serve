@@ -1,7 +1,7 @@
-package com.hartwig.serve.common.genome.region;
+package com.hartwig.serve.datamodel.genome.region;
 
-import com.hartwig.serve.common.genome.chromosome.ContigComparator;
-import com.hartwig.serve.common.genome.position.GenomePosition;
+import com.hartwig.serve.datamodel.genome.chromosome.ContigComparator;
+import com.hartwig.serve.datamodel.genome.position.GenomePosition;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -28,7 +28,7 @@ public interface GenomeRegion extends Comparable<GenomeRegion> {
             return 1;
         }
 
-        return ContigComparator.INSTANCE.compare(chromosome(), other.chromosome());
+        return new ContigComparator().compare(chromosome(), other.chromosome());
     }
 
     default boolean contains(@NotNull final GenomePosition position) {

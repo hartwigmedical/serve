@@ -5,10 +5,10 @@ import java.util.Set;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.hartwig.serve.common.variant.hotspot.ImmutableVariantHotspotImpl;
-import com.hartwig.serve.common.variant.hotspot.VariantHotspot;
-import com.hartwig.serve.common.variant.hotspot.VariantHotspotImpl;
 import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.datamodel.hotspot.ImmutableVariantHotspotImpl;
+import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
+import com.hartwig.serve.datamodel.hotspot.VariantHotspotImpl;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

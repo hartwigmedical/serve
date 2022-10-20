@@ -3,8 +3,8 @@ package com.hartwig.serve.transvar.tools;
 import java.io.IOException;
 import java.util.List;
 
-import com.hartwig.serve.common.genome.refgenome.RefGenomeVersion;
-import com.hartwig.serve.common.variant.hotspot.VariantHotspot;
+import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
 import com.hartwig.serve.refgenome.EnsemblDataCacheLoader;
 import com.hartwig.serve.transvar.Transvar;
 

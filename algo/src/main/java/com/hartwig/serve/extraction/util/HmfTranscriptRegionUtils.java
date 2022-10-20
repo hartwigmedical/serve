@@ -7,9 +7,9 @@ import com.google.common.collect.Lists;
 import com.hartwig.serve.common.gene.ExonData;
 import com.hartwig.serve.common.gene.GeneData;
 import com.hartwig.serve.common.gene.TranscriptData;
-import com.hartwig.serve.common.genome.region.GenomeRegion;
-import com.hartwig.serve.common.genome.region.ImmutableGenomeRegionImpl;
 import com.hartwig.serve.common.genome.region.Strand;
+import com.hartwig.serve.datamodel.genome.region.GenomeRegion;
+import com.hartwig.serve.datamodel.genome.region.ImmutableGenomeRegionImpl;
 
 import org.jetbrains.annotations.Nullable;
 

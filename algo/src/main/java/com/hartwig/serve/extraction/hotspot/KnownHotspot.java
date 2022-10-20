@@ -1,6 +1,6 @@
 package com.hartwig.serve.extraction.hotspot;
 
-import com.hartwig.serve.common.variant.hotspot.VariantHotspot;
+import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
 import com.hartwig.serve.extraction.KnownEvent;
 
 import org.immutables.value.Value;

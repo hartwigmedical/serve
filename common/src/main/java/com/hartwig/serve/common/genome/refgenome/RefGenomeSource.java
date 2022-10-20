@@ -1,13 +1,9 @@
 package com.hartwig.serve.common.genome.refgenome;
 
-import static com.hartwig.serve.common.genome.refgenome.RefGenomeVersion.REF_GENOME_VERSION;
-import static com.hartwig.serve.common.genome.refgenome.RefGenomeVersion.REF_GENOME_VERSION_CFG_DESC;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import org.apache.commons.cli.Options;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,12 +17,6 @@ public class RefGenomeSource implements RefGenomeInterface
     private final IndexedFastaSequenceFile mRefGenome;
 
     private static final Logger LOGGER = LogManager.getLogger(RefGenomeSource.class);
-
-    public static void addRefGenomeConfig(final Options options)
-    {
-        options.addOption(REF_GENOME_VERSION, true, REF_GENOME_VERSION_CFG_DESC);
-        options.addOption(REF_GENOME, true, REF_GENOME_CFG_DESC);
-    }
 
     public RefGenomeSource(final IndexedFastaSequenceFile refGenome)
     {

@@ -1,4 +1,4 @@
-package com.hartwig.serve.common.genome.position;
+package com.hartwig.serve.datamodel.genome.position;
 
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;

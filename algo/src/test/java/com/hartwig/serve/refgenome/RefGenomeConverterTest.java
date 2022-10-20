@@ -7,8 +7,8 @@ import java.util.Set;
 
 import com.google.common.collect.Sets;
 import com.hartwig.serve.ServeAlgoTestFactory;
-import com.hartwig.serve.common.genome.refgenome.RefGenomeVersion;
 import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeVersion;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
 import com.hartwig.serve.datamodel.hotspot.ImmutableActionableHotspot;
 import com.hartwig.serve.datamodel.range.ActionableRange;

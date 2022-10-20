@@ -3,12 +3,13 @@ package com.hartwig.serve.refgenome;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
-import com.hartwig.serve.common.genome.refgenome.RefGenomeVersion;
-import com.hartwig.serve.common.variant.hotspot.ImmutableVariantHotspotImpl;
-import com.hartwig.serve.common.variant.hotspot.VariantHotspot;
 import com.hartwig.serve.datamodel.MutationTypeFilter;
+import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeFunctions;
+import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeVersion;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
 import com.hartwig.serve.datamodel.hotspot.ImmutableActionableHotspot;
+import com.hartwig.serve.datamodel.hotspot.ImmutableVariantHotspotImpl;
+import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
 import com.hartwig.serve.datamodel.range.ActionableRange;
 import com.hartwig.serve.datamodel.range.ImmutableActionableRange;
 import com.hartwig.serve.datamodel.range.RangeAnnotation;
@@ -234,7 +235,7 @@ class RefGenomeConverter {
     }
 
     private void verifyNoChromosomeChange(@NotNull String prevChromosome, @NotNull LiftOverResult lifted, @NotNull Object object) {
-        String versionedChromosome = targetVersion.versionedChromosome(prevChromosome);
+        String versionedChromosome = RefGenomeFunctions.versionedChromosome(prevChromosome, targetVersion);
         if (!lifted.chromosome().equals(versionedChromosome)) {
             LOGGER.warn(" Liftover from {} to {} moved chromosome from '{}' to '{}' on {}",
                     sourceVersion,
@@ -247,7 +248,7 @@ class RefGenomeConverter {
 
     @NotNull
     private String sequence(@NotNull String chromosome, long start, long length) {
-        String targetChromosome = targetVersion.versionedChromosome(chromosome);
+        String targetChromosome = RefGenomeFunctions.versionedChromosome(chromosome, targetVersion);
         return targetSequence.getSubsequenceAt(targetChromosome, start, start + length - 1).getBaseString();
     }
 }

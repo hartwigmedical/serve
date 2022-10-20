@@ -3,9 +3,9 @@ package com.hartwig.serve.refgenome;
 import static org.junit.Assert.assertTrue;
 
 import com.hartwig.serve.ServeAlgoTestFactory;
-import com.hartwig.serve.common.genome.refgenome.RefGenomeVersion;
 import com.hartwig.serve.datamodel.fusion.ImmutableActionableFusion;
 import com.hartwig.serve.datamodel.gene.ImmutableActionableGene;
+import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeVersion;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.ImmutableExtractionResult;
 import com.hartwig.serve.extraction.codon.ImmutableCodonAnnotation;

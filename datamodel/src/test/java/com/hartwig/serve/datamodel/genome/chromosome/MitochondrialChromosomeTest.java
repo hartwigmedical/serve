@@ -1,4 +1,4 @@
-package com.hartwig.serve.common.genome.chromosome;
+package com.hartwig.serve.datamodel.genome.chromosome;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

@@ -1,4 +1,4 @@
-package com.hartwig.serve.common.variant.hotspot;
+package com.hartwig.serve.datamodel.hotspot;
 
 import java.util.Comparator;
 

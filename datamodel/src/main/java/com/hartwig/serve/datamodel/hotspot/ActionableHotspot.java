@@ -1,6 +1,5 @@
 package com.hartwig.serve.datamodel.hotspot;
 
-import com.hartwig.serve.common.variant.hotspot.VariantHotspot;
 import com.hartwig.serve.datamodel.ActionableEvent;
 
 import org.immutables.value.Value;

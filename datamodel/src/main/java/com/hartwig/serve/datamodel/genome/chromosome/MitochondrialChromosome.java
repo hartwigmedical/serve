@@ -1,4 +1,4 @@
-package com.hartwig.serve.common.genome.chromosome;
+package com.hartwig.serve.datamodel.genome.chromosome;
 
 import org.jetbrains.annotations.NotNull;
 

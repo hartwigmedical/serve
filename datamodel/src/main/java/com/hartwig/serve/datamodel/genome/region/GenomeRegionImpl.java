@@ -1,4 +1,4 @@
-package com.hartwig.serve.common.genome.region;
+package com.hartwig.serve.datamodel.genome.region;
 
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;

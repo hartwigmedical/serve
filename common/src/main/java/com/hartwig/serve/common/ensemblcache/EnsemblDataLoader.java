@@ -18,7 +18,8 @@ import com.hartwig.serve.common.gene.GeneData;
 import com.hartwig.serve.common.gene.TranscriptAminoAcids;
 import com.hartwig.serve.common.gene.TranscriptData;
 import com.hartwig.serve.common.gene.TranscriptProteinData;
-import com.hartwig.serve.common.genome.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeFunctions;
+import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeVersion;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -88,7 +89,7 @@ public final class EnsemblDataLoader {
                     continue;
                 }
 
-                final String chromosome = version.versionedChromosome(items[chromosomeIndex]);
+                final String chromosome = RefGenomeFunctions.versionedChromosome(items[chromosomeIndex], version);
 
                 GeneData geneData = new GeneData(geneId,
                         items[geneNameIndex],

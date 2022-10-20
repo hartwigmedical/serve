@@ -1,9 +1,10 @@
-package com.hartwig.serve.datamodel.actionability.fusion;
+package com.hartwig.serve.actionability;
 
 import java.util.Set;
 
 import com.google.common.collect.Sets;
-import com.hartwig.serve.datamodel.actionability.util.UrlConsolidator;
+import com.hartwig.serve.datamodel.actionability.fusion.ActionableFusion;
+import com.hartwig.serve.datamodel.actionability.fusion.ImmutableActionableFusion;
 
 import org.jetbrains.annotations.NotNull;
 

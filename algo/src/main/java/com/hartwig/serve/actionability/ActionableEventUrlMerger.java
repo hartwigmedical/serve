@@ -1,4 +1,4 @@
-package com.hartwig.serve.datamodel.actionability.util;
+package com.hartwig.serve.actionability;
 
 import java.util.Map;
 import java.util.Set;

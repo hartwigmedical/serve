@@ -7,6 +7,7 @@ import static com.hartwig.serve.database.tables.Actionablehla.ACTIONABLEHLA;
 import static com.hartwig.serve.database.tables.Actionablehotspot.ACTIONABLEHOTSPOT;
 import static com.hartwig.serve.database.tables.Actionablerange.ACTIONABLERANGE;
 import static com.hartwig.serve.database.tables.Eventinterpretation.EVENTINTERPRETATION;
+import static com.hartwig.serve.database.tables.Knowncodon.KNOWNCODON;
 import static com.hartwig.serve.database.tables.Knowncopynumber.KNOWNCOPYNUMBER;
 import static com.hartwig.serve.database.tables.Knownexon.KNOWNEXON;
 import static com.hartwig.serve.database.tables.Knownfusionpair.KNOWNFUSIONPAIR;
@@ -18,7 +19,6 @@ import java.util.List;
 import java.util.Set;
 
 import com.google.common.collect.Iterables;
-import com.hartwig.serve.database.tables.Knowncodon;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.actionability.ActionableEvents;
 import com.hartwig.serve.datamodel.actionability.characteristic.ActionableCharacteristic;
@@ -72,7 +72,7 @@ public class ServeDAO {
         context.deleteFrom(ACTIONABLECHARACTERISTIC).execute();
         context.deleteFrom(ACTIONABLEHLA).execute();
         context.deleteFrom(KNOWNHOTSPOT).execute();
-        context.deleteFrom(Knowncodon.KNOWNCODON).execute();
+        context.deleteFrom(KNOWNCODON).execute();
         context.deleteFrom(KNOWNEXON).execute();
         context.deleteFrom(KNOWNFUSIONPAIR).execute();
         context.deleteFrom(KNOWNCOPYNUMBER).execute();
@@ -81,7 +81,6 @@ public class ServeDAO {
 
     void write(@NotNull ActionableEvents actionableEvents, @NotNull KnownEvents knownEvents,
             @NotNull List<EventInterpretation> eventInterpretations) {
-
         deleteAll();
 
         Timestamp timestamp = new Timestamp(new Date().getTime());
@@ -248,16 +247,16 @@ public class ServeDAO {
 
         Set<KnownCodon> knownCodons = knownEvents.knownCodons();
         for (List<KnownCodon> batch : Iterables.partition(knownCodons, Utils.DB_BATCH_INSERT_SIZE)) {
-            InsertValuesStep9 inserter = context.insertInto(Knowncodon.KNOWNCODON,
-                    Knowncodon.KNOWNCODON.MODIFIED,
-                    Knowncodon.KNOWNCODON.GENE,
-                    Knowncodon.KNOWNCODON.TRANSCRIPT,
-                    Knowncodon.KNOWNCODON.CHROMOSOME,
-                    Knowncodon.KNOWNCODON.START,
-                    Knowncodon.KNOWNCODON.END,
-                    Knowncodon.KNOWNCODON.MUTATIONTYPE,
-                    Knowncodon.KNOWNCODON.CODONRANK,
-                    Knowncodon.KNOWNCODON.SOURCES);
+            InsertValuesStep9 inserter = context.insertInto(KNOWNCODON,
+                    KNOWNCODON.MODIFIED,
+                    KNOWNCODON.GENE,
+                    KNOWNCODON.TRANSCRIPT,
+                    KNOWNCODON.CHROMOSOME,
+                    KNOWNCODON.START,
+                    KNOWNCODON.END,
+                    KNOWNCODON.MUTATIONTYPE,
+                    KNOWNCODON.CODONRANK,
+                    KNOWNCODON.SOURCES);
             batch.forEach(entry -> addRecordKnownCodons(timestamp, inserter, entry));
             inserter.execute();
         }

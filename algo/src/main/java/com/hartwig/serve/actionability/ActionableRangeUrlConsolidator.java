@@ -1,9 +1,10 @@
-package com.hartwig.serve.datamodel.actionability.range;
+package com.hartwig.serve.actionability;
 
 import java.util.Set;
 
 import com.google.common.collect.Sets;
-import com.hartwig.serve.datamodel.actionability.util.UrlConsolidator;
+import com.hartwig.serve.datamodel.actionability.range.ActionableRange;
+import com.hartwig.serve.datamodel.actionability.range.ImmutableActionableRange;
 
 import org.jetbrains.annotations.NotNull;
 

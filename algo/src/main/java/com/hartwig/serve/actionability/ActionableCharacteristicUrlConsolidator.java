@@ -1,9 +1,10 @@
-package com.hartwig.serve.datamodel.actionability.characteristic;
+package com.hartwig.serve.actionability;
 
 import java.util.Set;
 
 import com.google.common.collect.Sets;
-import com.hartwig.serve.datamodel.actionability.util.UrlConsolidator;
+import com.hartwig.serve.datamodel.actionability.characteristic.ActionableCharacteristic;
+import com.hartwig.serve.datamodel.actionability.characteristic.ImmutableActionableCharacteristic;
 
 import org.jetbrains.annotations.NotNull;
 

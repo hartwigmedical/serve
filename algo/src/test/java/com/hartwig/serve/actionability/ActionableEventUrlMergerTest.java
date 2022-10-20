@@ -1,4 +1,4 @@
-package com.hartwig.serve.datamodel.actionability.util;
+package com.hartwig.serve.actionability;
 
 import static org.junit.Assert.assertEquals;
 
@@ -11,7 +11,6 @@ import com.hartwig.serve.datamodel.actionability.EvidenceDirection;
 import com.hartwig.serve.datamodel.actionability.EvidenceLevel;
 import com.hartwig.serve.datamodel.actionability.ImmutableTreatment;
 import com.hartwig.serve.datamodel.actionability.fusion.ActionableFusion;
-import com.hartwig.serve.datamodel.actionability.fusion.ActionableFusionUrlConsolidator;
 import com.hartwig.serve.datamodel.actionability.fusion.ImmutableActionableFusion;
 import com.hartwig.serve.datamodel.cancertype.ImmutableCancerType;
 

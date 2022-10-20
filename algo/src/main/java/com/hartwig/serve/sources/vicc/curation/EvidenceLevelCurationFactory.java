@@ -4,8 +4,8 @@ import java.util.Map;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.hartwig.serve.datamodel.actionability.EvidenceDirection;
-import com.hartwig.serve.datamodel.actionability.EvidenceLevel;
+import com.hartwig.serve.datamodel.EvidenceDirection;
+import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.vicc.datamodel.ViccSource;
 
 import org.jetbrains.annotations.NotNull;

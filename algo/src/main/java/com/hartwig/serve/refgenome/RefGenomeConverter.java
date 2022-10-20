@@ -7,10 +7,10 @@ import com.hartwig.serve.common.genome.refgenome.RefGenomeVersion;
 import com.hartwig.serve.common.variant.hotspot.ImmutableVariantHotspotImpl;
 import com.hartwig.serve.common.variant.hotspot.VariantHotspot;
 import com.hartwig.serve.datamodel.MutationTypeFilter;
-import com.hartwig.serve.datamodel.actionability.hotspot.ActionableHotspot;
-import com.hartwig.serve.datamodel.actionability.hotspot.ImmutableActionableHotspot;
-import com.hartwig.serve.datamodel.actionability.range.ActionableRange;
-import com.hartwig.serve.datamodel.actionability.range.ImmutableActionableRange;
+import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
+import com.hartwig.serve.datamodel.hotspot.ImmutableActionableHotspot;
+import com.hartwig.serve.datamodel.range.ActionableRange;
+import com.hartwig.serve.datamodel.range.ImmutableActionableRange;
 import com.hartwig.serve.datamodel.range.RangeAnnotation;
 import com.hartwig.serve.extraction.codon.ImmutableCodonAnnotation;
 import com.hartwig.serve.extraction.codon.ImmutableKnownCodon;
@@ -85,7 +85,7 @@ class RefGenomeConverter {
                             originalAnnotation,
                             liftedAnnotation);
                 } else {
-                    // We blank out the transcript and codon rank since we are unsure to what extend
+                    // We blank out the transcript and codon rank since we are unsure to what extent
                     // the transcript maps to the new ref genome.
                     convertedCodons.add(ImmutableKnownCodon.builder()
                             .from(codon)
@@ -104,7 +104,7 @@ class RefGenomeConverter {
         for (KnownExon exon : exons) {
             RangeAnnotation liftedAnnotation = liftOverRange(exon.annotation());
             if (liftedAnnotation != null) {
-                // We blank out the transcript and exon rank since we are unsure to what extend the transcript maps to the new ref genome.
+                // We blank out the transcript and exon rank since we are unsure to what extent the transcript maps to the new ref genome.
                 convertedExons.add(ImmutableKnownExon.builder()
                         .from(exon)
                         .annotation(ImmutableExonAnnotation.builder().from(liftedAnnotation).build())

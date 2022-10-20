@@ -2,7 +2,7 @@ package com.hartwig.serve.actionability;
 
 import java.util.Set;
 
-import com.hartwig.serve.datamodel.actionability.ActionableEvent;
+import com.hartwig.serve.datamodel.ActionableEvent;
 
 import org.jetbrains.annotations.NotNull;
 

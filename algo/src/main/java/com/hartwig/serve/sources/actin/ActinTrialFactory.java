@@ -2,11 +2,11 @@ package com.hartwig.serve.sources.actin;
 
 import com.google.common.collect.Sets;
 import com.hartwig.serve.cancertype.CancerTypeConstants;
+import com.hartwig.serve.datamodel.EvidenceDirection;
+import com.hartwig.serve.datamodel.EvidenceLevel;
+import com.hartwig.serve.datamodel.ImmutableTreatment;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.datamodel.actionability.EvidenceDirection;
-import com.hartwig.serve.datamodel.actionability.EvidenceLevel;
-import com.hartwig.serve.datamodel.actionability.ImmutableTreatment;
-import com.hartwig.serve.datamodel.actionability.Treatment;
+import com.hartwig.serve.datamodel.Treatment;
 import com.hartwig.serve.sources.actin.reader.ActinEntry;
 
 import org.apache.logging.log4j.LogManager;

@@ -3,8 +3,8 @@ package com.hartwig.serve.actionability;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
-import com.hartwig.serve.datamodel.actionability.immuno.ActionableHLA;
-import com.hartwig.serve.datamodel.actionability.immuno.ImmutableActionableHLA;
+import com.hartwig.serve.datamodel.immuno.ActionableHLA;
+import com.hartwig.serve.datamodel.immuno.ImmutableActionableHLA;
 
 import org.jetbrains.annotations.NotNull;
 

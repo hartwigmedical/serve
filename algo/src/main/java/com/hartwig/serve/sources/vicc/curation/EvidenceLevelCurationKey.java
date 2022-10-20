@@ -2,8 +2,8 @@ package com.hartwig.serve.sources.vicc.curation;
 
 import java.util.List;
 
-import com.hartwig.serve.datamodel.actionability.EvidenceDirection;
-import com.hartwig.serve.datamodel.actionability.EvidenceLevel;
+import com.hartwig.serve.datamodel.EvidenceDirection;
+import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.vicc.datamodel.ViccSource;
 
 import org.immutables.value.Value;

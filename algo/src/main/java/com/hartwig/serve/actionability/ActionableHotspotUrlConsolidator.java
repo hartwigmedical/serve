@@ -3,8 +3,8 @@ package com.hartwig.serve.actionability;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
-import com.hartwig.serve.datamodel.actionability.hotspot.ActionableHotspot;
-import com.hartwig.serve.datamodel.actionability.hotspot.ImmutableActionableHotspot;
+import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
+import com.hartwig.serve.datamodel.hotspot.ImmutableActionableHotspot;
 
 import org.jetbrains.annotations.NotNull;
 

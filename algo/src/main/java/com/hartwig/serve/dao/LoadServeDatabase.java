@@ -7,8 +7,8 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.hartwig.serve.common.genome.refgenome.RefGenomeVersion;
-import com.hartwig.serve.datamodel.actionability.ActionableEvents;
-import com.hartwig.serve.datamodel.actionability.ActionableEventsLoader;
+import com.hartwig.serve.datamodel.ActionableEvents;
+import com.hartwig.serve.datamodel.ActionableEventsLoader;
 import com.hartwig.serve.extraction.KnownEvents;
 import com.hartwig.serve.extraction.KnownEventsLoader;
 import com.hartwig.serve.extraction.events.EventInterpretation;

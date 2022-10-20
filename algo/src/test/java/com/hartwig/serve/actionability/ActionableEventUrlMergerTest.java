@@ -5,14 +5,14 @@ import static org.junit.Assert.assertEquals;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
+import com.hartwig.serve.datamodel.ActionabilityTestUtil;
+import com.hartwig.serve.datamodel.EvidenceDirection;
+import com.hartwig.serve.datamodel.EvidenceLevel;
+import com.hartwig.serve.datamodel.ImmutableTreatment;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.datamodel.actionability.ActionabilityTestUtil;
-import com.hartwig.serve.datamodel.actionability.EvidenceDirection;
-import com.hartwig.serve.datamodel.actionability.EvidenceLevel;
-import com.hartwig.serve.datamodel.actionability.ImmutableTreatment;
-import com.hartwig.serve.datamodel.actionability.fusion.ActionableFusion;
-import com.hartwig.serve.datamodel.actionability.fusion.ImmutableActionableFusion;
 import com.hartwig.serve.datamodel.cancertype.ImmutableCancerType;
+import com.hartwig.serve.datamodel.fusion.ActionableFusion;
+import com.hartwig.serve.datamodel.fusion.ImmutableActionableFusion;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;

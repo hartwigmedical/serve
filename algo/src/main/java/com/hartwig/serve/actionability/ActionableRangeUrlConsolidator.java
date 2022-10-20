@@ -3,8 +3,8 @@ package com.hartwig.serve.actionability;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
-import com.hartwig.serve.datamodel.actionability.range.ActionableRange;
-import com.hartwig.serve.datamodel.actionability.range.ImmutableActionableRange;
+import com.hartwig.serve.datamodel.range.ActionableRange;
+import com.hartwig.serve.datamodel.range.ImmutableActionableRange;
 
 import org.jetbrains.annotations.NotNull;
 

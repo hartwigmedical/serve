@@ -5,8 +5,8 @@ import static org.junit.Assert.assertTrue;
 import com.hartwig.serve.ServeAlgoTestFactory;
 import com.hartwig.serve.common.genome.refgenome.RefGenomeVersion;
 import com.hartwig.serve.datamodel.ServeTestFactory;
-import com.hartwig.serve.datamodel.actionability.fusion.ImmutableActionableFusion;
-import com.hartwig.serve.datamodel.actionability.gene.ImmutableActionableGene;
+import com.hartwig.serve.datamodel.fusion.ImmutableActionableFusion;
+import com.hartwig.serve.datamodel.gene.ImmutableActionableGene;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.ImmutableExtractionResult;
 import com.hartwig.serve.extraction.codon.ImmutableCodonAnnotation;
@@ -54,7 +54,10 @@ public class ConversionFilterTest {
                         .build())
                 .addKnownExons(ImmutableKnownExon.builder()
                         .from(ServeAlgoTestFactory.createTestKnownExon())
-                        .annotation(ImmutableExonAnnotation.builder().from(ServeAlgoTestFactory.createTestExonAnnotation()).gene(gene).build())
+                        .annotation(ImmutableExonAnnotation.builder()
+                                .from(ServeAlgoTestFactory.createTestExonAnnotation())
+                                .gene(gene)
+                                .build())
                         .build())
                 .addKnownCopyNumbers(ImmutableKnownCopyNumber.builder()
                         .from(ServeAlgoTestFactory.createTestKnownCopyNumber())

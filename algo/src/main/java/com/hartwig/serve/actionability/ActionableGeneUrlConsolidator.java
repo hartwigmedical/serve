@@ -3,8 +3,8 @@ package com.hartwig.serve.actionability;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
-import com.hartwig.serve.datamodel.actionability.gene.ActionableGene;
-import com.hartwig.serve.datamodel.actionability.gene.ImmutableActionableGene;
+import com.hartwig.serve.datamodel.gene.ActionableGene;
+import com.hartwig.serve.datamodel.gene.ImmutableActionableGene;
 
 import org.jetbrains.annotations.NotNull;
 

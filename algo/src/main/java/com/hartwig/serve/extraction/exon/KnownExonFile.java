@@ -1,6 +1,6 @@
 package com.hartwig.serve.extraction.exon;
 
-import static com.hartwig.serve.datamodel.actionability.util.ActionableFileFunctions.FIELD_DELIMITER;
+import static com.hartwig.serve.datamodel.util.ActionableFileFunctions.FIELD_DELIMITER;
 
 import java.io.File;
 import java.io.IOException;

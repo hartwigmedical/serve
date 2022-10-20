@@ -3,8 +3,8 @@ package com.hartwig.serve.actionability;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
-import com.hartwig.serve.datamodel.actionability.characteristic.ActionableCharacteristic;
-import com.hartwig.serve.datamodel.actionability.characteristic.ImmutableActionableCharacteristic;
+import com.hartwig.serve.datamodel.characteristic.ActionableCharacteristic;
+import com.hartwig.serve.datamodel.characteristic.ImmutableActionableCharacteristic;
 
 import org.jetbrains.annotations.NotNull;
 

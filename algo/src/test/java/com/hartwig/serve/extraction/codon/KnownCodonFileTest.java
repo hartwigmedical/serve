@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.List;
 
 import com.hartwig.serve.common.genome.refgenome.RefGenomeVersion;
-import com.hartwig.serve.datamodel.actionability.ActionabilityTestUtil;
+import com.hartwig.serve.datamodel.ActionabilityTestUtil;
 
 import org.junit.Test;
 

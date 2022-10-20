@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.io.IOException;
 import java.util.List;
 
-import com.hartwig.serve.datamodel.actionability.ActionabilityTestUtil;
+import com.hartwig.serve.datamodel.ActionabilityTestUtil;
 
 import org.junit.Test;
 

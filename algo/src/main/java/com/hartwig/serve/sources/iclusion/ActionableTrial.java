@@ -1,6 +1,6 @@
 package com.hartwig.serve.sources.iclusion;
 
-import com.hartwig.serve.datamodel.actionability.ActionableEvent;
+import com.hartwig.serve.datamodel.ActionableEvent;
 
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;

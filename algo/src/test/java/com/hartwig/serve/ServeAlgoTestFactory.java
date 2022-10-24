@@ -7,7 +7,7 @@ import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.ImmutableTreatment;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.datamodel.MutationTypeFilter;
+import com.hartwig.serve.datamodel.MutationType;
 import com.hartwig.serve.datamodel.cancertype.ImmutableCancerType;
 import com.hartwig.serve.datamodel.characteristic.ActionableCharacteristic;
 import com.hartwig.serve.datamodel.characteristic.ImmutableActionableCharacteristic;
@@ -105,7 +105,7 @@ public final class ServeAlgoTestFactory {
                 .chromosome(Strings.EMPTY)
                 .start(0)
                 .end(0)
-                .mutationType(MutationTypeFilter.ANY)
+                .applicableMutationType(MutationType.ANY)
                 .rank(0)
                 .build();
     }
@@ -128,7 +128,7 @@ public final class ServeAlgoTestFactory {
                 .chromosome(Strings.EMPTY)
                 .start(0)
                 .end(0)
-                .mutationType(MutationTypeFilter.ANY)
+                .applicableMutationType(MutationType.ANY)
                 .rank(0)
                 .build();
     }
@@ -183,7 +183,7 @@ public final class ServeAlgoTestFactory {
                 .chromosome(Strings.EMPTY)
                 .start(0)
                 .end(0)
-                .mutationType(MutationTypeFilter.ANY)
+                .applicableMutationType(MutationType.ANY)
                 .rangeType(RangeType.EXON)
                 .rank(0)
                 .build();
@@ -243,7 +243,7 @@ public final class ServeAlgoTestFactory {
 
     @NotNull
     private static ActionableEvent createTestBaseEvent(@NotNull Knowledgebase source) {
-        return DatamodelTestFactory.create(source,
+        return DatamodelTestFactory.createEvent(source,
                 "source event",
                 Sets.newHashSet(),
                 ImmutableTreatment.builder()

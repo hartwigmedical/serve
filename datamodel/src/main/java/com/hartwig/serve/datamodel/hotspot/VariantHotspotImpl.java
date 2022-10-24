@@ -6,6 +6,6 @@ import org.jetbrains.annotations.Nullable;
 
 @Value.Immutable
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class })
-public interface VariantHotspotImpl extends VariantHotspot {
+public abstract class VariantHotspotImpl implements VariantHotspot {
 
 }

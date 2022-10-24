@@ -52,6 +52,7 @@ import org.jooq.InsertValuesStep6;
 import org.jooq.InsertValuesStep8;
 import org.jooq.InsertValuesStep9;
 
+@SuppressWarnings({ "unchecked", "ResultOfMethodCallIgnored" })
 public class ServeDAO {
 
     private static final Logger LOGGER = LogManager.getLogger(ServeDAO.class);
@@ -355,7 +356,7 @@ public class ServeDAO {
                 actionableRange.chromosome(),
                 actionableRange.start(),
                 actionableRange.end(),
-                actionableRange.mutationType(),
+                actionableRange.applicableMutationType(),
                 actionableRange.rangeType(),
                 actionableRange.rank(),
                 actionableRange.source(),
@@ -525,7 +526,7 @@ public class ServeDAO {
                 knownCodon.annotation().chromosome(),
                 knownCodon.annotation().start(),
                 knownCodon.annotation().end(),
-                knownCodon.annotation().mutationType(),
+                knownCodon.annotation().applicableMutationType(),
                 knownCodon.annotation().rank(),
                 Knowledgebase.toCommaSeparatedSourceString(knownCodon.sources()));
     }
@@ -538,7 +539,7 @@ public class ServeDAO {
                 knownExon.annotation().chromosome(),
                 knownExon.annotation().start(),
                 knownExon.annotation().end(),
-                knownExon.annotation().mutationType(),
+                knownExon.annotation().applicableMutationType(),
                 knownExon.annotation().rank(),
                 Knowledgebase.toCommaSeparatedSourceString(knownExon.sources()));
     }

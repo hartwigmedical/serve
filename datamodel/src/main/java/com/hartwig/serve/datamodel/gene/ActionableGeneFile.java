@@ -8,6 +8,8 @@ import java.util.StringJoiner;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
+import com.hartwig.serve.datamodel.GeneRole;
+import com.hartwig.serve.datamodel.ProteinEffect;
 import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeVersion;
 import com.hartwig.serve.datamodel.util.ActionableFileFunctions;
 
@@ -42,6 +44,8 @@ public final class ActionableGeneFile {
     @NotNull
     private static String header() {
         return new StringJoiner(ActionableFileFunctions.FIELD_DELIMITER).add("gene")
+                .add("geneRole")
+                .add("proteinEffect")
                 .add("event")
                 .add(ActionableFileFunctions.header())
                 .toString();
@@ -62,9 +66,11 @@ public final class ActionableGeneFile {
         String[] values = line.split(ActionableFileFunctions.FIELD_DELIMITER);
 
         return ImmutableActionableGene.builder()
-                .from(ActionableFileFunctions.fromLine(values, 2))
+                .from(ActionableFileFunctions.fromLine(values, 4))
                 .gene(values[0])
-                .event(GeneLevelEvent.valueOf(values[1]))
+                .geneRole(GeneRole.valueOf(values[1]))
+                .proteinEffect(ProteinEffect.valueOf(values[2]))
+                .event(GeneLevelEvent.valueOf(values[3]))
                 .build();
     }
 
@@ -90,6 +96,8 @@ public final class ActionableGeneFile {
     @NotNull
     private static String toLine(@NotNull ActionableGene gene) {
         return new StringJoiner(ActionableFileFunctions.FIELD_DELIMITER).add(gene.gene())
+                .add(gene.geneRole().toString())
+                .add(gene.proteinEffect().toString())
                 .add(gene.event().toString())
                 .add(ActionableFileFunctions.toLine(gene))
                 .toString();

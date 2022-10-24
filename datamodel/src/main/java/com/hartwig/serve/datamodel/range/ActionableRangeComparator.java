@@ -11,17 +11,14 @@ class ActionableRangeComparator implements Comparator<ActionableRange> {
 
     @NotNull
     private final Comparator<ActionableEvent> actionableEventComparator = new ActionableEventComparator();
+    @NotNull
+    private final Comparator<RangeAnnotation> rangeAnnotationComparator = new RangeAnnotationComparator();
 
     @Override
     public int compare(@NotNull ActionableRange range1, @NotNull ActionableRange range2) {
-        int defaultCompare = range1.compareTo(range2);
-        if (defaultCompare != 0) {
-            return defaultCompare;
-        }
-
-        int geneCompare = range1.gene().compareTo(range2.gene());
-        if (geneCompare != 0) {
-            return geneCompare;
+        int rangeCompare = rangeAnnotationComparator.compare(range1, range2);
+        if (rangeCompare != 0) {
+            return rangeCompare;
         }
 
         return actionableEventComparator.compare(range1, range2);

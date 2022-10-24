@@ -8,6 +8,8 @@ import java.util.StringJoiner;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
+import com.hartwig.serve.datamodel.GeneRole;
+import com.hartwig.serve.datamodel.ProteinEffect;
 import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeVersion;
 import com.hartwig.serve.datamodel.util.ActionableFileFunctions;
 
@@ -46,6 +48,9 @@ public final class ActionableHotspotFile {
                 .add("position")
                 .add("ref")
                 .add("alt")
+                .add("gene")
+                .add("geneRole")
+                .add("proteinEffect")
                 .add(ActionableFileFunctions.header())
                 .toString();
     }
@@ -65,11 +70,14 @@ public final class ActionableHotspotFile {
         String[] values = line.split(ActionableFileFunctions.FIELD_DELIMITER);
 
         return ImmutableActionableHotspot.builder()
-                .from(ActionableFileFunctions.fromLine(values, 4))
+                .from(ActionableFileFunctions.fromLine(values, 7))
                 .chromosome(values[0])
                 .position(Integer.parseInt(values[1]))
                 .ref(values[2])
                 .alt(values[3])
+                .gene(values[4])
+                .geneRole(GeneRole.valueOf(values[5]))
+                .proteinEffect(ProteinEffect.valueOf(values[6]))
                 .build();
     }
 
@@ -98,6 +106,9 @@ public final class ActionableHotspotFile {
                 .add(Long.toString(variant.position()))
                 .add(variant.ref())
                 .add(variant.alt())
+                .add(variant.gene())
+                .add(variant.geneRole().toString())
+                .add(variant.proteinEffect().toString())
                 .add(ActionableFileFunctions.toLine(variant))
                 .toString();
     }

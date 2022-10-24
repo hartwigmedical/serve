@@ -4,14 +4,17 @@ import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
 
+import com.google.common.io.Resources;
 import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeVersion;
 
 import org.junit.Test;
 
 public class ActionableEventsLoaderTest {
 
+    private static final String TEST_SERVE_DIR = Resources.getResource("serve").getPath();
+
     @Test
     public void canLoadFromTestDir() throws IOException {
-        assertNotNull(ActionableEventsLoader.readFromDir(DatamodelTestFactory.TEST_SERVE_DIR, RefGenomeVersion.V37));
+        assertNotNull(ActionableEventsLoader.readFromDir(TEST_SERVE_DIR, RefGenomeVersion.V37));
     }
 }

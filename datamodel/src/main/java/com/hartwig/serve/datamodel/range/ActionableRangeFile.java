@@ -8,7 +8,9 @@ import java.util.StringJoiner;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
-import com.hartwig.serve.datamodel.MutationTypeFilter;
+import com.hartwig.serve.datamodel.GeneRole;
+import com.hartwig.serve.datamodel.MutationType;
+import com.hartwig.serve.datamodel.ProteinEffect;
 import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeVersion;
 import com.hartwig.serve.datamodel.util.ActionableFileFunctions;
 
@@ -43,11 +45,13 @@ public final class ActionableRangeFile {
     @NotNull
     private static String header() {
         return new StringJoiner(ActionableFileFunctions.FIELD_DELIMITER).add("gene")
+                .add("geneRole")
+                .add("proteinEffect")
                 .add("transcript")
                 .add("chromosome")
                 .add("start")
                 .add("end")
-                .add("mutationType")
+                .add("applicableMutationType")
                 .add("rangeType")
                 .add("rank")
                 .add(ActionableFileFunctions.header())
@@ -69,15 +73,17 @@ public final class ActionableRangeFile {
         String[] values = line.split(ActionableFileFunctions.FIELD_DELIMITER);
 
         return ImmutableActionableRange.builder()
-                .from(ActionableFileFunctions.fromLine(values, 8))
+                .from(ActionableFileFunctions.fromLine(values, 10))
                 .gene(values[0])
-                .transcript(values[1])
-                .chromosome(values[2])
-                .start(Integer.parseInt(values[3]))
-                .end(Integer.parseInt(values[4]))
-                .mutationType(MutationTypeFilter.valueOf(values[5]))
-                .rangeType(RangeType.valueOf(values[6]))
-                .rank(Integer.parseInt(values[7]))
+                .geneRole(GeneRole.valueOf(values[1]))
+                .proteinEffect(ProteinEffect.valueOf(values[2]))
+                .transcript(values[3])
+                .chromosome(values[4])
+                .start(Integer.parseInt(values[5]))
+                .end(Integer.parseInt(values[6]))
+                .applicableMutationType(MutationType.valueOf(values[7]))
+                .rangeType(RangeType.valueOf(values[8]))
+                .rank(Integer.parseInt(values[9]))
                 .build();
     }
 
@@ -103,11 +109,13 @@ public final class ActionableRangeFile {
     @NotNull
     private static String toLine(@NotNull ActionableRange range) {
         return new StringJoiner(ActionableFileFunctions.FIELD_DELIMITER).add(range.gene())
+                .add(range.geneRole().toString())
+                .add(range.proteinEffect().toString())
                 .add(range.transcript())
                 .add(range.chromosome())
                 .add(Long.toString(range.start()))
                 .add(Long.toString(range.end()))
-                .add(range.mutationType().toString())
+                .add(range.applicableMutationType().toString())
                 .add(range.rangeType().toString())
                 .add(String.valueOf(range.rank()))
                 .add(ActionableFileFunctions.toLine(range))

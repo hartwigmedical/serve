@@ -5,18 +5,17 @@ import static org.junit.Assert.assertEquals;
 import java.io.IOException;
 import java.util.List;
 
-import com.hartwig.serve.datamodel.DatamodelTestFactory;
-import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeVersion;
+import com.google.common.io.Resources;
 
 import org.junit.Test;
 
 public class ActionableRangeFileTest {
 
+    private static final String ACTIONABLE_RANGE_TSV = Resources.getResource("serve/ActionableRanges.37.tsv").getPath();
+
     @Test
     public void canReadFromFileAndConvert() throws IOException {
-        String actionableRangeTsv =
-                ActionableRangeFile.actionableRangeTsvPath(DatamodelTestFactory.TEST_SERVE_DIR, RefGenomeVersion.V37);
-        List<ActionableRange> actionableRanges = ActionableRangeFile.read(actionableRangeTsv);
+        List<ActionableRange> actionableRanges = ActionableRangeFile.read(ACTIONABLE_RANGE_TSV);
 
         assertEquals(2, actionableRanges.size());
 

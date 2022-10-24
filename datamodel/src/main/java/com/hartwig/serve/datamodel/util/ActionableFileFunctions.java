@@ -73,8 +73,9 @@ public final class ActionableFileFunctions {
                 int drugClassPosition = startingPosition + 5;
                 return ImmutableTreatment.builder()
                         .treament(values[startingPosition + 3])
-                        .sourceRelevantTreatmentApproaches(
-                                values.length > sourceDrugClassPosition ? stringToDrugClasses(values[sourceDrugClassPosition]) : Sets.newHashSet())
+                        .sourceRelevantTreatmentApproaches(values.length > sourceDrugClassPosition
+                                ? stringToDrugClasses(values[sourceDrugClassPosition])
+                                : Sets.newHashSet())
                         .relevantTreatmentApproaches(
                                 values.length > drugClassPosition ? stringToDrugClasses(values[drugClassPosition]) : Sets.newHashSet())
                         .build();

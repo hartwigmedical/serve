@@ -5,17 +5,17 @@ import static org.junit.Assert.assertEquals;
 import java.io.IOException;
 import java.util.List;
 
-import com.hartwig.serve.datamodel.DatamodelTestFactory;
-import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeVersion;
+import com.google.common.io.Resources;
 
 import org.junit.Test;
 
 public class ActionableHLAFileTest {
 
+    private static final String ACTIONABLE_HLA_TSV = Resources.getResource("serve/ActionableHLA.37.tsv").getPath();
+
     @Test
     public void canReadFromFileAndConvert() throws IOException {
-        String actionableHlATsv = ActionableHLAFile.actionableHLATsvPath(DatamodelTestFactory.TEST_SERVE_DIR, RefGenomeVersion.V37);
-        List<ActionableHLA> actionableHLAs = ActionableHLAFile.read(actionableHlATsv);
+        List<ActionableHLA> actionableHLAs = ActionableHLAFile.read(ACTIONABLE_HLA_TSV);
 
         assertEquals(1, actionableHLAs.size());
 

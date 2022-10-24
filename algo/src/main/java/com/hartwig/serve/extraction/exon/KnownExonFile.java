@@ -11,7 +11,7 @@ import java.util.StringJoiner;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.datamodel.MutationTypeFilter;
+import com.hartwig.serve.datamodel.MutationType;
 import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeVersion;
 
 import org.jetbrains.annotations.NotNull;
@@ -57,7 +57,7 @@ public final class KnownExonFile {
                         .chromosome(values[2])
                         .start(Integer.parseInt(values[3]))
                         .end(Integer.parseInt(values[4]))
-                        .mutationType(MutationTypeFilter.valueOf(values[5]))
+                        .applicableMutationType(MutationType.valueOf(values[5]))
                         .rank(Integer.parseInt(values[6]))
                         .build())
                 .sources(Knowledgebase.fromCommaSeparatedSourceString(values[7]))
@@ -110,7 +110,7 @@ public final class KnownExonFile {
                 .add(exon.annotation().chromosome())
                 .add(String.valueOf(exon.annotation().start()))
                 .add(String.valueOf(exon.annotation().end()))
-                .add(exon.annotation().mutationType().toString())
+                .add(exon.annotation().applicableMutationType().toString())
                 .add(String.valueOf(exon.annotation().rank()))
                 .add(Knowledgebase.toCommaSeparatedSourceString(exon.sources()))
                 .toString();

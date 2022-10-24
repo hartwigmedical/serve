@@ -3,7 +3,9 @@ package com.hartwig.serve.refgenome;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
-import com.hartwig.serve.datamodel.MutationTypeFilter;
+import com.hartwig.serve.datamodel.GeneRole;
+import com.hartwig.serve.datamodel.MutationType;
+import com.hartwig.serve.datamodel.ProteinEffect;
 import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeFunctions;
 import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeVersion;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
@@ -196,6 +198,18 @@ class RefGenomeConverter {
 
             @NotNull
             @Override
+            public GeneRole geneRole() {
+                return annotation.geneRole();
+            }
+
+            @NotNull
+            @Override
+            public ProteinEffect proteinEffect() {
+                return annotation.proteinEffect();
+            }
+
+            @NotNull
+            @Override
             public String transcript() {
                 return Strings.EMPTY;
             }
@@ -207,8 +221,8 @@ class RefGenomeConverter {
 
             @NotNull
             @Override
-            public MutationTypeFilter mutationType() {
-                return annotation.mutationType();
+            public MutationType applicableMutationType() {
+                return annotation.applicableMutationType();
             }
 
             @NotNull

@@ -1,6 +1,5 @@
 package com.hartwig.serve.extraction.util;
 
-import java.util.Collections;
 import java.util.List;
 
 import com.google.common.collect.Lists;
@@ -9,8 +8,10 @@ import com.hartwig.serve.common.ensemblcache.GeneData;
 import com.hartwig.serve.common.ensemblcache.Strand;
 import com.hartwig.serve.common.ensemblcache.TranscriptData;
 import com.hartwig.serve.datamodel.genome.GenomeRegion;
+import com.hartwig.serve.datamodel.genome.GenomeRegionComparator;
 import com.hartwig.serve.datamodel.genome.ImmutableGenomeRegionImpl;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public final class HmfTranscriptRegionUtils {
@@ -18,7 +19,8 @@ public final class HmfTranscriptRegionUtils {
     private HmfTranscriptRegionUtils() {
     }
 
-    public static HmfTranscriptRegion fromTranscript(final GeneData geneData, final TranscriptData transData) {
+    @NotNull
+    public static HmfTranscriptRegion fromTranscript(@NotNull GeneData geneData, @NotNull TranscriptData transData) {
         List<HmfExonRegion> exons = Lists.newArrayList();
 
         for (ExonData exon : transData.exons()) {
@@ -104,7 +106,7 @@ public final class HmfTranscriptRegionUtils {
             }
 
             if (startPosition != null && endPosition != null) {
-                Collections.sort(codonRegions);
+                codonRegions.sort(new GenomeRegionComparator());
                 return codonRegions;
             }
         }

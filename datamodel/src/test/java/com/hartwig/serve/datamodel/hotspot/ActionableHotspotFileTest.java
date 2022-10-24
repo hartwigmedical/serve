@@ -5,18 +5,17 @@ import static org.junit.Assert.assertEquals;
 import java.io.IOException;
 import java.util.List;
 
-import com.hartwig.serve.datamodel.DatamodelTestFactory;
-import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeVersion;
+import com.google.common.io.Resources;
 
 import org.junit.Test;
 
 public class ActionableHotspotFileTest {
 
+    private static final String ACTIONABLE_HOTSPOT_TSV = Resources.getResource("serve/ActionableHotspots.37.tsv").getPath();
+
     @Test
     public void canReadFromFileAndConvert() throws IOException {
-        String actionableHotspotTsv =
-                ActionableHotspotFile.actionableHotspotTsvPath(DatamodelTestFactory.TEST_SERVE_DIR, RefGenomeVersion.V37);
-        List<ActionableHotspot> actionableHotspots = ActionableHotspotFile.read(actionableHotspotTsv);
+        List<ActionableHotspot> actionableHotspots = ActionableHotspotFile.read(ACTIONABLE_HOTSPOT_TSV);
 
         assertEquals(2, actionableHotspots.size());
 

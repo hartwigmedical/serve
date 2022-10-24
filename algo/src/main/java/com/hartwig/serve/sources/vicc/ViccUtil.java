@@ -13,7 +13,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.datamodel.characteristic.TumorCharacteristic;
-import com.hartwig.serve.datamodel.gene.GeneLevelAnnotation;
+import com.hartwig.serve.datamodel.gene.GeneAnnotationImpl;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
 import com.hartwig.serve.extraction.codon.CodonAnnotation;
 import com.hartwig.serve.extraction.copynumber.KnownCopyNumber;
@@ -59,7 +59,7 @@ public final class ViccUtil {
                 List<VariantHotspot> hotspotsForFeature = result.hotspotsPerFeature().get(feature);
                 List<CodonAnnotation> codonsForFeature = result.codonsPerFeature().get(feature);
                 List<ExonAnnotation> exonsForFeature = result.exonsPerFeature().get(feature);
-                GeneLevelAnnotation geneLevelEventForFeature = result.geneLevelEventsPerFeature().get(feature);
+                GeneAnnotationImpl geneLevelEventForFeature = result.geneLevelEventsPerFeature().get(feature);
                 KnownCopyNumber ampDelForFeature = result.ampsDelsPerFeature().get(feature);
                 KnownFusionPair fusionForFeature = result.fusionsPerFeature().get(feature);
                 TumorCharacteristic characteristicForFeature = result.characteristicsPerFeature().get(feature);

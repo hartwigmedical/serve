@@ -2,7 +2,7 @@ package com.hartwig.serve.datamodel;
 
 import org.jetbrains.annotations.NotNull;
 
-public interface ActionableGeneMutation {
+public interface GeneAlteration {
 
     @NotNull
     String gene();

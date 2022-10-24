@@ -3,20 +3,43 @@ package com.hartwig.serve.datamodel;
 import java.util.Objects;
 import java.util.Set;
 
-import com.google.common.io.Resources;
+import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.cancertype.CancerType;
 
+import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 
 public final class DatamodelTestFactory {
-
-    public static final String TEST_SERVE_DIR = Resources.getResource("serve").getPath();
 
     private DatamodelTestFactory() {
     }
 
     @NotNull
-    public static ActionableEvent create(@NotNull Knowledgebase source, @NotNull String sourceEvent, @NotNull Set<String> sourceUrls,
+    static GeneAlteration createEmptyGeneAlteration() {
+        return createGeneAlteration(Strings.EMPTY, GeneRole.UNKNOWN, ProteinEffect.UNKNOWN);
+    }
+
+    @NotNull
+    public static GeneAlteration createGeneAlteration(@NotNull String gene, @NotNull GeneRole geneRole,
+            @NotNull ProteinEffect proteinEffect) {
+        return new GeneAlterationImpl(gene, geneRole, proteinEffect);
+    }
+
+    @NotNull
+    static ActionableEvent createEmptyEvent() {
+        return createEvent(Knowledgebase.UNKNOWN,
+                Strings.EMPTY,
+                Sets.newHashSet(),
+                DatamodelTestBuilders.treatmentBuilder().build(),
+                DatamodelTestBuilders.cancerTypeBuilder().build(),
+                Sets.newHashSet(),
+                EvidenceLevel.A,
+                EvidenceDirection.NO_BENEFIT,
+                Sets.newHashSet());
+    }
+
+    @NotNull
+    public static ActionableEvent createEvent(@NotNull Knowledgebase source, @NotNull String sourceEvent, @NotNull Set<String> sourceUrls,
             @NotNull Treatment treatment, @NotNull CancerType applicableCancerType, @NotNull Set<CancerType> blacklistCancerTypes,
             @NotNull EvidenceLevel level, @NotNull EvidenceDirection direction, @NotNull Set<String> evidenceUrls) {
         return new ActionableEventImpl(source,
@@ -28,6 +51,62 @@ public final class DatamodelTestFactory {
                 level,
                 direction,
                 evidenceUrls);
+    }
+
+    private static class GeneAlterationImpl implements GeneAlteration {
+        @NotNull
+        private final String gene;
+        @NotNull
+        private final GeneRole geneRole;
+        @NotNull
+        private final ProteinEffect proteinEffect;
+
+        public GeneAlterationImpl(@NotNull final String gene, @NotNull final GeneRole geneRole,
+                @NotNull final ProteinEffect proteinEffect) {
+            this.gene = gene;
+            this.geneRole = geneRole;
+            this.proteinEffect = proteinEffect;
+        }
+
+        @NotNull
+        @Override
+        public String gene() {
+            return gene;
+        }
+
+        @NotNull
+        @Override
+        public GeneRole geneRole() {
+            return geneRole;
+        }
+
+        @NotNull
+        @Override
+        public ProteinEffect proteinEffect() {
+            return proteinEffect;
+        }
+
+        @Override
+        public boolean equals(final Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            final GeneAlterationImpl that = (GeneAlterationImpl) o;
+            return gene.equals(that.gene) && geneRole == that.geneRole && proteinEffect == that.proteinEffect;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(gene, geneRole, proteinEffect);
+        }
+
+        @Override
+        public String toString() {
+            return "GeneAlterationImpl{" + "gene='" + gene + '\'' + ", geneRole=" + geneRole + ", proteinEffect=" + proteinEffect + '}';
+        }
     }
 
     private static class ActionableEventImpl implements ActionableEvent {

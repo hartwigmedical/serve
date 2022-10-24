@@ -4,6 +4,8 @@ import java.util.Comparator;
 
 import com.hartwig.serve.datamodel.ActionableEvent;
 import com.hartwig.serve.datamodel.ActionableEventComparator;
+import com.hartwig.serve.datamodel.GeneAlteration;
+import com.hartwig.serve.datamodel.GeneAlterationComparator;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -11,12 +13,14 @@ class ActionableGeneComparator implements Comparator<ActionableGene> {
 
     @NotNull
     private final Comparator<ActionableEvent> actionableEventComparator = new ActionableEventComparator();
+    @NotNull
+    private final Comparator<GeneAlteration> geneAlterationComparator = new GeneAlterationComparator();
 
     @Override
     public int compare(@NotNull ActionableGene gene1, @NotNull ActionableGene gene2) {
-        int geneCompare = gene1.gene().compareTo(gene2.gene());
-        if (geneCompare != 0) {
-            return geneCompare;
+        int geneAlterationCompare = geneAlterationComparator.compare(gene1, gene2);
+        if (geneAlterationCompare != 0) {
+            return geneAlterationCompare;
         }
 
         int eventCompare = gene1.event().toString().compareTo(gene2.event().toString());

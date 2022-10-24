@@ -83,20 +83,20 @@ genomic events implied to be able to driver cancer:
 
 Evidence that is defined on a gene-level is checked to make sure that the gene exists in Hartwig's definition of the exome. 
 If a gene does not exist in Hartwig's exome definition the evidence is ignored. For more information about Hartwig's definition 
-of the exome, see [HMF Gene Utils](../gene-utils/README.md).
+of the exome, see [HMF Gene Utils](https://github.com/hartwigmedical/hmftools/tree/master/gene-utils/README.md).
 
 For fusions, genes are permitted that can exist in the context of a fusion pair (eg @IG genes). 
 
 ### Driver inconsistencies
-In the supported knowledgebases, there can be events defined on genes that are are not part of the Hartwig's driver gene panel.
+In the supported knowledgebases, there can be events defined on genes that are not part of the Hartwig's driver gene panel.
 Also, the event could be inconsistent with respect to driver gene panel (e.g. "Inactivation" evidence for a gene that is configured to be 
 an oncogene). There are various ways to deal with such inconsistencies on a per-knowledgebase level:
 
-Filter  | Description
----|---
-FILTER  | We filter every entry when the gene/event isn't present or there is an inconsistency with the Hartwig's driver gene panel
-IGNORE  | Every gene/event is used regardless of mismatch/inconsistencies 
-WARN_ONLY  | Every gene/event is used regardless of mismatch/inconsistencies, however a warning message is shown for the inconsistencies
+| Filter    | Description                                                                                                                 |
+|-----------|-----------------------------------------------------------------------------------------------------------------------------|
+| FILTER    | We filter every entry when the gene/event isn't present or there is an inconsistency with the Hartwig's driver gene panel   |
+| IGNORE    | Every gene/event is used regardless of mismatch/inconsistencies                                                             |
+| WARN_ONLY | Every gene/event is used regardless of mismatch/inconsistencies, however a warning message is shown for the inconsistencies |
 
 ### Protein resolving for SNVs and (small) INDELs
  
@@ -156,15 +156,15 @@ In addition to resolving coordinates, every codon and exon range is annotated wi
 for this range. SERVE tries to determine this based on the information specified in the knowledgebase, but if that information is not
 sufficient, the Hartwig driver catalog is used to determine the filter.
   
-Filter  | Description
----|---
-NONSENSE_OR_FRAMESHIFT  | Only frameshifts or nonsense mutations are valid for this range
-SPLICE | Only splice mutations are valid for this range
-INFRAME | Any inframe INDEL (insert or delete) is valid for this range
-INFRAME_DELETION | Only inframe deletions are valid for this range
-INFRAME_INSERTION | Only inframe insertions are valid for this range
-MISSENSE | Only missense mutations are valid for this range
-ANY | Any mutation is considered valid for this range.
+| Filter                 | Description                                                     |
+|------------------------|-----------------------------------------------------------------|
+| NONSENSE_OR_FRAMESHIFT | Only frameshifts or nonsense mutations are valid for this range |
+| SPLICE                 | Only splice mutations are valid for this range                  |
+| INFRAME                | Any inframe INDEL (insert or delete) is valid for this range    |
+| INFRAME_DELETION       | Only inframe deletions are valid for this range                 |
+| INFRAME_INSERTION      | Only inframe insertions are valid for this range                |
+| MISSENSE               | Only missense mutations are valid for this range                |
+| ANY                    | Any mutation is considered valid for this range.                |
 
 ### Gene level event determination
 
@@ -172,17 +172,17 @@ For evidence that is applicable when a gene-wide level event has happened, the t
 mutation is derived from the knowledgebase event and no further interpretation is done. In case a knowledgebase provides insufficient 
 details to make a decision (eg. mutant), we annotate to ANY_MUTATION. 
 
-Gene level event  | Description
----|---
-AMPLIFICATION  | Evidence is applicable when the gene has been amplified.
-OVEREXPRESSION | Evidence is applicable when the gene has been amplified.
-DELETION | Evidence is applicable when the gene has been completely deleted from the genome.
-UNDEREXPRESSION | Evidence is applicable when the gene has been completely deleted from the genome.
-ACTIVATION | Evidence is applicable when a gene has been activated. Downstream algorithms are expected to interpret this.
-INACTIVATION | Evidence is applicable when a gene has been inactivated. Downstream algorithms are expected to interpret this.
-ANY_MUTATION | SERVE does not restrict this evidence based on the type of mutation and considers every type of mutation applicable for this evidence.
-FUSION | Evidence is applicable in case the gene has fused with another gene (either 3' or 5').
-WILD_TYPE | Evidence is applicable in case no genomic alteration is detected.
+| Gene level event | Description                                                                                                                            |
+|------------------|----------------------------------------------------------------------------------------------------------------------------------------|
+| AMPLIFICATION    | Evidence is applicable when the gene has been amplified.                                                                               |
+| OVEREXPRESSION   | Evidence is applicable when the gene has been amplified.                                                                               |
+| DELETION         | Evidence is applicable when the gene has been completely deleted from the genome.                                                      |
+| UNDEREXPRESSION  | Evidence is applicable when the gene has been completely deleted from the genome.                                                      |
+| ACTIVATION       | Evidence is applicable when a gene has been activated. Downstream algorithms are expected to interpret this.                           |
+| INACTIVATION     | Evidence is applicable when a gene has been inactivated. Downstream algorithms are expected to interpret this.                         |
+| ANY_MUTATION     | SERVE does not restrict this evidence based on the type of mutation and considers every type of mutation applicable for this evidence. |
+| FUSION           | Evidence is applicable in case the gene has fused with another gene (either 3' or 5').                                                 |
+| WILD_TYPE        | Evidence is applicable in case no genomic alteration is detected.                                                                      |
 
 ### Exonic ranges specific for fusion pairs
 
@@ -197,17 +197,17 @@ For evidence that is applicable when a genome wide event has happened, the type 
 is derived from the knowledgebase event. When the knowledgebase event has a cutoff defined for this evidence this information will be also extracted. 
 When no cut-off values is present but is expected for the characteristics, Hartwig's default cutoff values are used. 
 
-Genome wide event  | Description
----|---
-MICROSATELLITE_UNSTABLE  | Evidence is applicable when the genome has a MSI status
-MICROSATELLITE_STABLE  | Evidence is applicable when the genome does not have a MSI status
-HIGH_TUMOR_MUTATIONAL_LOAD | Evidence is applicable when the genome has a high tumor mutational load status
-LOW_TUMOR_MUTATIONAL_LOAD | Evidence is applicable when the genome does not have a high tumor mutational load status
-HIGH_TUMOR_MUTATIONAL_BURDEN | Evidence is applicable when the genome has a high tumor mutational burden status
-LOW_TUMOR_MUTATIONAL_BURDEN | Evidence is applicable when the genome does not have a high tumor mutational burden status
-HOMOLOGOUS_RECOMBINATION_DEFICIENT | Evidence is applicable when the genome has a HRD status
-HPV_POSITIVE | Evidence is applicable when viral presence of some form of HPV has been found
-EBV_POSITIVE | Evidence is applicable when viral presence of some form of EBV has been found
+| Genome wide event                  | Description                                                                                |
+|------------------------------------|--------------------------------------------------------------------------------------------|
+| MICROSATELLITE_UNSTABLE            | Evidence is applicable when the genome has a MSI status                                    |
+| MICROSATELLITE_STABLE              | Evidence is applicable when the genome does not have a MSI status                          |
+| HIGH_TUMOR_MUTATIONAL_LOAD         | Evidence is applicable when the genome has a high tumor mutational load status             |
+| LOW_TUMOR_MUTATIONAL_LOAD          | Evidence is applicable when the genome does not have a high tumor mutational load status   |
+| HIGH_TUMOR_MUTATIONAL_BURDEN       | Evidence is applicable when the genome has a high tumor mutational burden status           |
+| LOW_TUMOR_MUTATIONAL_BURDEN        | Evidence is applicable when the genome does not have a high tumor mutational burden status |
+| HOMOLOGOUS_RECOMBINATION_DEFICIENT | Evidence is applicable when the genome has a HRD status                                    |
+| HPV_POSITIVE                       | Evidence is applicable when viral presence of some form of HPV has been found              |
+| EBV_POSITIVE                       | Evidence is applicable when viral presence of some form of EBV has been found              |
 
 ### Presence of HLA alleles 
 
@@ -256,34 +256,34 @@ Also, genes that do not follow HGNC model are renamed to their HGNC name.
 ACTIN ingest the molecular inclusion criteria which are extracted from the ACTIN treatment database (see also [actin](https://github.com/hartwigmedical/actin/blob/master/serve-bridge/README.md)).
 The inclusion criteria in the trials of the ACTIN database are defined in terms of specific rules.
 
-Rule | When does a patient pass evaluation?
----|---
-ACTIVATION_OR_AMPLIFICATION_OF_GENE_X | Activating mutation or amplification is found in gene X
-ACTIVATING_MUTATION_IN_GENE_X | Activating mutation is found in gene X
-FUSION_IN_GENE_X | Driver fusion with fusion partner gene X is found
-SPECIFIC_FUSION_OF_X_TO_Y | Driver fusion with 2 specified fusion partner genes is found
-INACTIVATION_OF_GENE_X | Inactivating mutation or deletion/disruption is found in gene X
-MUTATION_IN_GENE_X_OF_TYPE_Y | Specific mutation Y is found in gene X
-AMPLIFICATION_OF_GENE_X | Amplification is found in gene X
-DELETION_OF_GENE_X | Deletion is found in gene X
-WILDTYPE_OF_GENE_X | No driver mutation is found in gene X
-MSI_SIGNATURE | MS Status = MSI
-HRD_SIGNATURE | HR Status = HRD
-TMB_OF_AT_LEAST_X | Tumor Mutational Burden (TMB) should be => X
-TML_OF_AT_LEAST_X | Tumor Mutational Load (TML) should be => X
-TML_OF_AT_MOST_X | TML should be <= X
-HAS_HLA_A_TYPE_X | Patient should have at least one HLA allele of type X   
+| Rule                                  | When does a patient pass evaluation?                            |
+|---------------------------------------|-----------------------------------------------------------------|
+| ACTIVATION_OR_AMPLIFICATION_OF_GENE_X | Activating mutation or amplification is found in gene X         |
+| ACTIVATING_MUTATION_IN_GENE_X         | Activating mutation is found in gene X                          |
+| FUSION_IN_GENE_X                      | Driver fusion with fusion partner gene X is found               |
+| SPECIFIC_FUSION_OF_X_TO_Y             | Driver fusion with 2 specified fusion partner genes is found    |
+| INACTIVATION_OF_GENE_X                | Inactivating mutation or deletion/disruption is found in gene X |
+| MUTATION_IN_GENE_X_OF_TYPE_Y          | Specific mutation Y is found in gene X                          |
+| AMPLIFICATION_OF_GENE_X               | Amplification is found in gene X                                |
+| DELETION_OF_GENE_X                    | Deletion is found in gene X                                     |
+| WILDTYPE_OF_GENE_X                    | No driver mutation is found in gene X                           |
+| MSI_SIGNATURE                         | MS Status = MSI                                                 |
+| HRD_SIGNATURE                         | HR Status = HRD                                                 |
+| TMB_OF_AT_LEAST_X                     | Tumor Mutational Burden (TMB) should be => X                    |
+| TML_OF_AT_LEAST_X                     | Tumor Mutational Load (TML) should be => X                      |
+| TML_OF_AT_MOST_X                      | TML should be <= X                                              |
+| HAS_HLA_A_TYPE_X                      | Patient should have at least one HLA allele of type X           |
 
 SERVE configures every trial to B-level evidence with `RESPONSIVE` direction in case the rule is involved in inclusion, and `NO_BENEFIT` in
 case the rule is used for exclusion. The filtering is predominantly configurable rather than fixed in SERVE. 
 The following filters can be configured in ACTIN:
 
-Filter  | Description
----|---
-FILTER_RULE_ON_GENE | Can be used to remove evidence of a specific rule of a particular gene 
-FILTER_MUTATION_ON_GENE | Can be used to remove evidence of a gene with a specific mutation
-FILTER_EVERYTHING_FOR_GENE | Can be used to remove all evidence of a gene (eg. Mutations that are inconsistent with the Hartwig driver catalog)
-FILTER_EVERYTHING_FOR_RULE | Can be used to remove all evidence of a specific rule 
+| Filter                     | Description                                                                                                        |
+|----------------------------|--------------------------------------------------------------------------------------------------------------------|
+| FILTER_RULE_ON_GENE        | Can be used to remove evidence of a specific rule of a particular gene                                             |
+| FILTER_MUTATION_ON_GENE    | Can be used to remove evidence of a gene with a specific mutation                                                  |
+| FILTER_EVERYTHING_FOR_GENE | Can be used to remove all evidence of a gene (eg. Mutations that are inconsistent with the Hartwig driver catalog) |
+| FILTER_EVERYTHING_FOR_RULE | Can be used to remove all evidence of a specific rule                                                              |
 
 ### iClusion Curation
 
@@ -293,11 +293,11 @@ in SERVE. The fixed curation of iClusion that is done in SERVE is mapping gene n
 
 The following filters can be configured in iClusion:
 
-Filter  | Description
----|---
-FILTER_EVENT_WITH_KEYWORD  | Can be used to remove evidence of a type that is not observable in DNA (eg "hypermethylation")
-FILTER_VARIANT_ON_GENE  | Can be used to remove evidence of a gene (eg. Mutations that are inconsistent with the Hartwig driver catalog)
- 
+| Filter                    | Description                                                                                                    |
+|---------------------------|----------------------------------------------------------------------------------------------------------------|
+| FILTER_EVENT_WITH_KEYWORD | Can be used to remove evidence of a type that is not observable in DNA (eg "hypermethylation")                 |
+| FILTER_VARIANT_ON_GENE    | Can be used to remove evidence of a gene (eg. Mutations that are inconsistent with the Hartwig driver catalog) |
+
 Finally, cancer types for which no DOIDs have been specified get a DOID assigned by SERVE.
 
 ### CKB FLEX Curation
@@ -316,14 +316,14 @@ FILTER_EVIDENCE_FOR_EXONS_ON_GENE  | Some genes may have evidence on specific ex
 FILTER_SECONDARY_GENE_WHEN_FUSION_LEG  | Usage of this filter is similar to the use case for removing all evidence on genes. 
 
 ## Relevant treatment approaches of the evidence
-External knowledgebases can be annotate evidence (treatment/event) with the relevant treatment approach. For making this usuable downstream, this 
+External knowledgebases can be annotated evidence (treatment/event) with the relevant treatment approach. For making this usuable downstream, this 
 is curated for harmonize the knowledge. The following filters can be configured: 
 
-Filter  | Description
----|---
-TREATMENT_APPROACH_CURATION  | The treatment approaches which should curated for downstream usages
-DIRECTION_TREATMENT_APPROACH_CURATION_IGNORE | The treatment approach wouldn't be used because we didn't use the treatment approach for this direction 
-EVENT_TREATMENT_APPROACH_CURATION_IGNORE | The treatment approach wouldn't be used because event is ignored for further interpretation 
+| Filter                                       | Description                                                                                             |
+|----------------------------------------------|---------------------------------------------------------------------------------------------------------|
+| TREATMENT_APPROACH_CURATION                  | The treatment approaches which should curated for downstream usages                                     |
+| DIRECTION_TREATMENT_APPROACH_CURATION_IGNORE | The treatment approach wouldn't be used because we didn't use the treatment approach for this direction |
+| EVENT_TREATMENT_APPROACH_CURATION_IGNORE     | The treatment approach wouldn't be used because event is ignored for further interpretation             |
 
 ## Handling of multiple reference genome versions
  
@@ -363,15 +363,15 @@ Every knowledgebase can be enabled or disabled through configuration.
 SERVE starts with reading the various knowledgebases which are enabled. Knowledge is extracted after applying filtering and curation.
 A knowledgebase can contribute to known and/or actionable events. Current configuration as follows:
       
-Knowledgebase  | Ref genome version | Contributes to known events? | Contributes to actionable events?
----|---|---|---
-ACTIN | v37 | No | Yes
-CKB FLEX | v38 | Yes | Yes
-DoCM | v37 | Yes | No 
-Hartwig Cohort | v37 | Yes | No
-Hartwig Curated | v37 | Yes | No
-iClusion | v37 | No | Yes
-VICC | v37 | Yes | Yes
+| Knowledgebase   | Ref genome version | Contributes to known events? | Contributes to actionable events? |
+|-----------------|--------------------|------------------------------|-----------------------------------|
+| ACTIN           | v37                | No                           | Yes                               |
+| CKB FLEX        | v38                | Yes                          | Yes                               |
+| DoCM            | v37                | Yes                          | No                                |
+| Hartwig Cohort  | v37                | Yes                          | No                                |
+| Hartwig Curated | v37                | Yes                          | No                                |
+| iClusion        | v37                | No                           | Yes                               |
+| VICC            | v37                | Yes                          | Yes                               |
 
 Knowledge extraction is performed on a per-knowledgebase level after which all events are consolidated as follows:
  - All known events are aggregated on a per-event level where every event has a set of knowledgebases in which the event has been defined as pathogenic.
@@ -380,10 +380,12 @@ Knowledge extraction is performed on a per-knowledgebase level after which all e
   
  Within the Hartwig pipeline, SERVE output is used in the following manner:
   - The known output is used in various algorithms for various purposes. For example, the known hotspots produced by SERVE are used by 
-  [SAGE](../sage/README.md) as the definition of the highest tier of calling and HOTSPOT annotation.
-  - The actionable output is the database that [PROTECT](../protect/README.md) bases its clinical evidence matching on.
+  [SAGE](https://github.com/hartwigmedical/hmftools/tree/master/sage/README.md) as the definition of the highest tier of calling and HOTSPOT annotation.
+  - The actionable output is the database that [PROTECT](https://github.com/hartwigmedical/hmftools/tree/master/protect) bases its clinical evidence matching on.
   
 ## Version History and Download Links
+- Upcoming
+  - Replace gene (string) with "Gene Alteration" (mutation annotated with gene, gene role and protein effect)
 - [1.12](https://github.com/hartwigmedical/hmftools/releases/tag/serve-v1.12)
   - Support for generating a mySQL database
   - Support for adding the relevant treatment approaches to the output (which contains only drug classes when the source is CKB)
@@ -413,7 +415,7 @@ Knowledge extraction is performed on a per-knowledgebase level after which all e
   - Support for curation the coordinates of genes because with ensembl data cache BRAF has the wrong coordinates
   - We support the interpretation of the new cancer type(DOIDs) of the CKB knowledgebase (JAX:10000009 and JAX:10000008)
 - [1.8](https://github.com/hartwigmedical/hmftools/releases/tag/serve-v1.8)
-  - Add full support for HGNC gene model implied by [HMF Gene Utils](../gene-utils/README.md)
+  - Add full support for HGNC gene model implied by [HMF Gene Utils](https://github.com/hartwigmedical/hmftools/tree/master/gene-utils/README.md)
     - Removed gene name mapping from ref genome converter when mapping between 37 and 38 (since gene names are always equal)
     - Remove gene name mapping from CKB gene extractor since CKB follows HGNC as well.
     - The ensembl data cache is used for resolving genes and canonical transcripts

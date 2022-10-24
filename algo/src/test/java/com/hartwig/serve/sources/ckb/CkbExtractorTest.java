@@ -11,7 +11,7 @@ import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.common.classification.EventClassifierConfig;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
-import com.hartwig.serve.datamodel.MutationTypeFilter;
+import com.hartwig.serve.datamodel.MutationType;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.codon.CodonAnnotation;
 import com.hartwig.serve.extraction.codon.ImmutableCodonAnnotation;
@@ -84,7 +84,7 @@ public class CkbExtractorTest {
                 .chromosome("1")
                 .start(10)
                 .end(20)
-                .mutationType(MutationTypeFilter.ANY)
+                .applicableMutationType(MutationType.ANY)
                 .rank(600)
                 .build();
 
@@ -94,7 +94,7 @@ public class CkbExtractorTest {
                 .chromosome("1")
                 .start(10)
                 .end(20)
-                .mutationType(MutationTypeFilter.ANY)
+                .applicableMutationType(MutationType.ANY)
                 .rank(600)
                 .build();
 

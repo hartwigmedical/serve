@@ -1,6 +1,6 @@
 package com.hartwig.serve.datamodel;
 
-public enum MutationTypeFilter {
+public enum MutationType {
     NONSENSE_OR_FRAMESHIFT,
     SPLICE,
     INFRAME,

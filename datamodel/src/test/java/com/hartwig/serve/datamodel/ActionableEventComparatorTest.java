@@ -6,7 +6,6 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.hartwig.serve.datamodel.cancertype.ImmutableCancerType;
 
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
@@ -37,15 +36,11 @@ public class ActionableEventComparatorTest {
     @NotNull
     private static ActionableEvent create(@NotNull Knowledgebase source, @NotNull String treatment, @NotNull String applicableCancerType,
             @NotNull EvidenceLevel level, @NotNull EvidenceDirection direction) {
-        return DatamodelTestFactory.create(source,
+        return DatamodelTestFactory.createEvent(source,
                 Strings.EMPTY,
                 Sets.newHashSet(),
-                ImmutableTreatment.builder()
-                        .treament(treatment)
-                        .sourceRelevantTreatmentApproaches(Sets.newHashSet("drugClasses"))
-                        .relevantTreatmentApproaches(Sets.newHashSet("drugClasses"))
-                        .build(),
-                ImmutableCancerType.builder().name(applicableCancerType).doid(Strings.EMPTY).build(),
+                DatamodelTestBuilders.treatmentBuilder().treament(treatment).build(),
+                DatamodelTestBuilders.cancerTypeBuilder().name(applicableCancerType).build(),
                 Sets.newHashSet(),
                 level,
                 direction,

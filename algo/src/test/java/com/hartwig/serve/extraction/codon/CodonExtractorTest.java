@@ -12,7 +12,7 @@ import com.hartwig.serve.DriverGenesTestFactory;
 import com.hartwig.serve.EnsemblDataCacheTestFactory;
 import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.common.drivergene.DriverGene;
-import com.hartwig.serve.datamodel.MutationTypeFilter;
+import com.hartwig.serve.datamodel.MutationType;
 import com.hartwig.serve.extraction.util.DriverInconsistencyMode;
 import com.hartwig.serve.extraction.util.GeneChecker;
 import com.hartwig.serve.extraction.util.MutationTypeFilterAlgo;
@@ -66,7 +66,7 @@ public class CodonExtractorTest {
         Assert.assertEquals(7577534, codons.get(0).start());
         Assert.assertEquals(7577536, codons.get(0).end());
         Assert.assertEquals("TP53", codons.get(0).gene());
-        Assert.assertEquals(MutationTypeFilter.ANY, codons.get(0).mutationType());
+        Assert.assertEquals(MutationType.ANY, codons.get(0).applicableMutationType());
     }
 
     @Test
@@ -80,13 +80,13 @@ public class CodonExtractorTest {
         Assert.assertEquals(25378707, codons.get(0).start());
         Assert.assertEquals(25378707, codons.get(0).end());
         Assert.assertEquals("KRAS", codons.get(0).gene());
-        Assert.assertEquals(MutationTypeFilter.MISSENSE, codons.get(0).mutationType());
+        Assert.assertEquals(MutationType.MISSENSE, codons.get(0).applicableMutationType());
 
         Assert.assertEquals("12", codons.get(1).chromosome());
         Assert.assertEquals(25380168, codons.get(1).start());
         Assert.assertEquals(25380169, codons.get(1).end());
         Assert.assertEquals("KRAS", codons.get(1).gene());
-        Assert.assertEquals(MutationTypeFilter.MISSENSE, codons.get(1).mutationType());
+        Assert.assertEquals(MutationType.MISSENSE, codons.get(1).applicableMutationType());
     }
 
     @Test

@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
-import com.hartwig.serve.datamodel.MutationTypeFilter;
+import com.hartwig.serve.datamodel.MutationType;
 
 import org.junit.Test;
 
@@ -19,7 +19,7 @@ public class KnownExonComparatorTest {
                         .start(10)
                         .end(11)
                         .gene("gene x")
-                        .mutationType(MutationTypeFilter.ANY)
+                        .applicableMutationType(MutationType.ANY)
                         .rank(1)
                         .transcript("transcript x")
                         .build())

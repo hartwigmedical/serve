@@ -8,9 +8,9 @@ import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.common.drivergene.DriverCategory;
 import com.hartwig.serve.common.drivergene.DriverGene;
 import com.hartwig.serve.common.knownfusion.KnownFusionCache;
-import com.hartwig.serve.datamodel.gene.GeneLevelAnnotation;
+import com.hartwig.serve.datamodel.gene.GeneAnnotationImpl;
 import com.hartwig.serve.datamodel.gene.GeneLevelEvent;
-import com.hartwig.serve.datamodel.gene.ImmutableGeneLevelAnnotation;
+import com.hartwig.serve.datamodel.gene.ImmutableGeneAnnotationImpl;
 import com.hartwig.serve.extraction.util.DriverInconsistencyMode;
 import com.hartwig.serve.extraction.util.GeneChecker;
 
@@ -54,7 +54,7 @@ public class GeneLevelExtractor {
     }
 
     @Nullable
-    public GeneLevelAnnotation extract(@NotNull String gene, @NotNull EventType type, @NotNull String event) {
+    public GeneAnnotationImpl extract(@NotNull String gene, @NotNull EventType type, @NotNull String event) {
         if (type == EventType.WILD_TYPE && exomeGeneChecker.isValidGene(gene)) {
             return extractWildTypeEvent(gene, type);
         } else if (type == EventType.GENE_LEVEL && exomeGeneChecker.isValidGene(gene)) {
@@ -67,7 +67,7 @@ public class GeneLevelExtractor {
     }
 
     @Nullable
-    GeneLevelAnnotation extractPromiscuousFusion(@NotNull String gene) {
+    GeneAnnotationImpl extractPromiscuousFusion(@NotNull String gene) {
         if (driverInconsistencyMode.isActive() && !geneIsPresentInFusionCache(gene)) {
             if (driverInconsistencyMode == DriverInconsistencyMode.WARN_ONLY) {
                 LOGGER.warn("Promiscuous fusion '{}' is not present in the known fusion cache", gene);
@@ -77,11 +77,11 @@ public class GeneLevelExtractor {
             }
         }
 
-        return ImmutableGeneLevelAnnotation.builder().gene(gene).event(GeneLevelEvent.FUSION).build();
+        return ImmutableGeneAnnotationImpl.builder().gene(gene).event(GeneLevelEvent.FUSION).build();
     }
 
     @Nullable
-    GeneLevelAnnotation extractWildTypeEvent(@NotNull String gene, @NotNull EventType type) {
+    GeneAnnotationImpl extractWildTypeEvent(@NotNull String gene, @NotNull EventType type) {
         boolean geneInDriverGenesDatabase = geneInDriverGenes(driverGenes, gene);
 
         if (!geneInDriverGenesDatabase && driverInconsistencyMode.isActive()) {
@@ -95,7 +95,7 @@ public class GeneLevelExtractor {
             }
         }
 
-        return ImmutableGeneLevelAnnotation.builder().gene(gene).event(GeneLevelEvent.WILD_TYPE).build();
+        return ImmutableGeneAnnotationImpl.builder().gene(gene).event(GeneLevelEvent.WILD_TYPE).build();
     }
 
     static boolean geneInDriverGenes(@NotNull List<DriverGene> driverGenes, @NotNull String gene) {
@@ -109,7 +109,7 @@ public class GeneLevelExtractor {
 
     @Nullable
     @VisibleForTesting
-    GeneLevelAnnotation extractGeneLevelEvent(@NotNull String gene, @NotNull String event) {
+    GeneAnnotationImpl extractGeneLevelEvent(@NotNull String gene, @NotNull String event) {
         GeneLevelEvent result = GeneLevelEvent.ANY_MUTATION;
         for (String keyPhrase : genericKeyPhrases) {
             if (event.contains(keyPhrase)) {
@@ -161,7 +161,7 @@ public class GeneLevelExtractor {
             }
         }
 
-        return ImmutableGeneLevelAnnotation.builder().gene(gene).event(result).build();
+        return ImmutableGeneAnnotationImpl.builder().gene(gene).event(result).build();
     }
 
     @NotNull

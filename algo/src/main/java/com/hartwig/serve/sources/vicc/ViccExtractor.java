@@ -12,7 +12,7 @@ import com.hartwig.serve.datamodel.characteristic.ActionableCharacteristic;
 import com.hartwig.serve.datamodel.characteristic.TumorCharacteristic;
 import com.hartwig.serve.datamodel.fusion.ActionableFusion;
 import com.hartwig.serve.datamodel.gene.ActionableGene;
-import com.hartwig.serve.datamodel.gene.GeneLevelAnnotation;
+import com.hartwig.serve.datamodel.gene.GeneAnnotationImpl;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
 import com.hartwig.serve.datamodel.range.ActionableRange;
@@ -92,7 +92,7 @@ public final class ViccExtractor {
         Map<Feature, List<VariantHotspot>> hotspotsPerFeature = Maps.newHashMap();
         Map<Feature, List<CodonAnnotation>> codonsPerFeature = Maps.newHashMap();
         Map<Feature, List<ExonAnnotation>> exonsPerFeature = Maps.newHashMap();
-        Map<Feature, GeneLevelAnnotation> geneLevelEventsPerFeature = Maps.newHashMap();
+        Map<Feature, GeneAnnotationImpl> geneLevelEventsPerFeature = Maps.newHashMap();
         Map<Feature, KnownCopyNumber> ampsDelsPerFeature = Maps.newHashMap();
         Map<Feature, KnownFusionPair> fusionsPerFeature = Maps.newHashMap();
         Map<Feature, TumorCharacteristic> characteristicsPerFeature = Maps.newHashMap();
@@ -324,10 +324,10 @@ public final class ViccExtractor {
 
     @NotNull
     private static Set<ActionableGene> extractActionableGeneLevelEvents(@NotNull ViccExtractionResult extraction,
-            @NotNull Map<Feature, GeneLevelAnnotation> geneLevelEventsPerFeature) {
+            @NotNull Map<Feature, GeneAnnotationImpl> geneLevelEventsPerFeature) {
         Set<ActionableGene> actionableGenes = Sets.newHashSet();
-        for (Map.Entry<Feature, GeneLevelAnnotation> entry : geneLevelEventsPerFeature.entrySet()) {
-            GeneLevelAnnotation geneLevelAnnotation = entry.getValue();
+        for (Map.Entry<Feature, GeneAnnotationImpl> entry : geneLevelEventsPerFeature.entrySet()) {
+            GeneAnnotationImpl geneLevelAnnotation = entry.getValue();
             if (geneLevelAnnotation != null) {
                 for (ActionableEvidence evidence : extraction.actionableEvidence()) {
                     ActionableEvidence modified = withSourceEvent(evidence, extraction.eventInterpretationPerFeature().get(entry.getKey()));

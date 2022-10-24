@@ -9,7 +9,7 @@ import com.google.common.collect.Sets;
 import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.common.drivergene.DriverGene;
 import com.hartwig.serve.common.ensemblcache.EnsemblDataCache;
-import com.hartwig.serve.datamodel.MutationTypeFilter;
+import com.hartwig.serve.datamodel.MutationType;
 import com.hartwig.serve.extraction.util.DriverInconsistencyMode;
 import com.hartwig.serve.extraction.util.EnsemblFunctions;
 import com.hartwig.serve.extraction.util.GeneChecker;
@@ -86,14 +86,14 @@ public class ExonExtractor {
                     return null;
                 }
 
-                MutationTypeFilter mutationTypeFilter = mutationTypeFilterAlgo.determine(gene, event);
+                MutationType applicableMutationType = mutationTypeFilterAlgo.determine(gene, event);
 
                 List<ExonAnnotation> annotations = Lists.newArrayList();
                 for (int exonRank : exonRanks) {
                     ExonAnnotation annotation = determineExonAnnotation(gene,
                             canonicalTranscript,
                             exonRank,
-                            mutationTypeFilter,
+                            applicableMutationType,
                             canonicalTranscript.transName());
                     if (annotation != null) {
                         annotations.add(annotation);
@@ -172,7 +172,7 @@ public class ExonExtractor {
 
     @Nullable
     private static ExonAnnotation determineExonAnnotation(@NotNull String gene, @NotNull HmfTranscriptRegion transcript, int exonRank,
-            @NotNull MutationTypeFilter mutationTypeFilter, @NotNull String canonicalTranscriptID) {
+            @NotNull MutationType applicableMutationType, @NotNull String canonicalTranscriptID) {
         HmfExonRegion hmfExonRegion = transcript.exonByIndex(exonRank);
 
         if (hmfExonRegion == null) {
@@ -190,7 +190,7 @@ public class ExonExtractor {
                 .chromosome(hmfExonRegion.chromosome())
                 .start(start)
                 .end(end)
-                .mutationType(mutationTypeFilter)
+                .applicableMutationType(applicableMutationType)
                 .rank(exonRank)
                 .build();
     }

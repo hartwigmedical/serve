@@ -11,7 +11,7 @@ import com.hartwig.serve.DriverGenesTestFactory;
 import com.hartwig.serve.EnsemblDataCacheTestFactory;
 import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.common.drivergene.DriverGene;
-import com.hartwig.serve.datamodel.MutationTypeFilter;
+import com.hartwig.serve.datamodel.MutationType;
 import com.hartwig.serve.extraction.util.DriverInconsistencyMode;
 import com.hartwig.serve.extraction.util.GeneChecker;
 import com.hartwig.serve.extraction.util.MutationTypeFilterAlgo;
@@ -70,7 +70,7 @@ public class ExonExtractorTest {
         Assert.assertEquals(55593572, exons.get(0).start());
         Assert.assertEquals(55593718, exons.get(0).end());
         Assert.assertEquals("KIT", exons.get(0).gene());
-        Assert.assertEquals(MutationTypeFilter.MISSENSE, exons.get(0).mutationType());
+        Assert.assertEquals(MutationType.MISSENSE, exons.get(0).applicableMutationType());
     }
 
     @Test
@@ -85,7 +85,7 @@ public class ExonExtractorTest {
         Assert.assertEquals(55242405, exons.get(0).start());
         Assert.assertEquals(55242523, exons.get(0).end());
         Assert.assertEquals("EGFR", exons.get(0).gene());
-        Assert.assertEquals(MutationTypeFilter.INFRAME_DELETION, exons.get(0).mutationType());
+        Assert.assertEquals(MutationType.INFRAME_DELETION, exons.get(0).applicableMutationType());
     }
 
     @Test
@@ -100,7 +100,7 @@ public class ExonExtractorTest {
         Assert.assertEquals(25398198, exons.get(0).start());
         Assert.assertEquals(25398339, exons.get(0).end());
         Assert.assertEquals("KRAS", exons.get(0).gene());
-        Assert.assertEquals(MutationTypeFilter.INFRAME_DELETION, exons.get(0).mutationType());
+        Assert.assertEquals(MutationType.INFRAME_DELETION, exons.get(0).applicableMutationType());
     }
 
     @Test

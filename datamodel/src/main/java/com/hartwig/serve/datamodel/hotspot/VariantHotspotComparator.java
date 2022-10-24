@@ -2,27 +2,44 @@ package com.hartwig.serve.datamodel.hotspot;
 
 import java.util.Comparator;
 
+import com.hartwig.serve.datamodel.GeneAlteration;
+import com.hartwig.serve.datamodel.GeneAlterationComparator;
+import com.hartwig.serve.datamodel.genome.GenomePosition;
+import com.hartwig.serve.datamodel.genome.GenomePositionComparator;
+
+import org.jetbrains.annotations.NotNull;
+
 public class VariantHotspotComparator implements Comparator<VariantHotspot> {
 
+    @NotNull
+    private final Comparator<GenomePosition> genomePositionComparator = new GenomePositionComparator();
+    @NotNull
+    private final Comparator<GeneAlteration> geneAlterationComparator = new GeneAlterationComparator();
+
     @Override
-    public int compare(final VariantHotspot o1, final VariantHotspot o2) {
-        int standardCompare = o1.compareTo(o2);
-        if (standardCompare != 0) {
-            return standardCompare;
+    public int compare(@NotNull VariantHotspot hotspot1, @NotNull VariantHotspot hotspot2) {
+        int genomePositionCompare = genomePositionComparator.compare(hotspot1, hotspot2);
+        if (genomePositionCompare != 0) {
+            return genomePositionCompare;
         }
 
-        int o1Length = Math.max(o1.ref().length(), o1.alt().length());
-        int o2Length = Math.max(o2.ref().length(), o2.alt().length());
+        int o1Length = Math.max(hotspot1.ref().length(), hotspot1.alt().length());
+        int o2Length = Math.max(hotspot2.ref().length(), hotspot2.alt().length());
         int lengthCompare = Integer.compare(o1Length, o2Length);
         if (lengthCompare != 0) {
             return lengthCompare;
         }
 
-        int refCompare = o1.ref().compareTo(o2.ref());
+        int refCompare = hotspot1.ref().compareTo(hotspot2.ref());
         if (refCompare != 0) {
             return refCompare;
         }
 
-        return o1.alt().compareTo(o2.alt());
+        int altCompare = hotspot1.alt().compareTo(hotspot2.alt());
+        if (altCompare != 0) {
+            return altCompare;
+        }
+
+        return geneAlterationComparator.compare(hotspot1, hotspot2);
     }
 }

@@ -11,7 +11,7 @@ import com.hartwig.serve.datamodel.characteristic.TumorCharacteristic;
 import com.hartwig.serve.datamodel.fusion.ActionableFusion;
 import com.hartwig.serve.datamodel.fusion.ImmutableActionableFusion;
 import com.hartwig.serve.datamodel.gene.ActionableGene;
-import com.hartwig.serve.datamodel.gene.GeneLevelAnnotation;
+import com.hartwig.serve.datamodel.gene.GeneAnnotationImpl;
 import com.hartwig.serve.datamodel.gene.GeneLevelEvent;
 import com.hartwig.serve.datamodel.gene.ImmutableActionableGene;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
@@ -76,7 +76,7 @@ public final class ActionableEventFactory {
                     .start(range.start())
                     .end(range.end())
                     .gene(range.gene())
-                    .mutationType(range.mutationType())
+                    .applicableMutationType(range.applicableMutationType())
                     .rangeType(determineRangeType(range))
                     .rank(range.rank())
                     .build());
@@ -125,7 +125,7 @@ public final class ActionableEventFactory {
 
     @NotNull
     public static ActionableGene geneLevelEventToActionableGene(@NotNull ActionableEvent actionableEvent,
-            @NotNull GeneLevelAnnotation geneLevelEvent) {
+            @NotNull GeneAnnotationImpl geneLevelEvent) {
         return ImmutableActionableGene.builder().from(actionableEvent).gene(geneLevelEvent.gene()).event(geneLevelEvent.event()).build();
     }
 

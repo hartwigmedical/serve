@@ -16,8 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import htsjdk.samtools.reference.IndexedFastaSequenceFile;
 
 @Value.Immutable
-@Value.Style(allParameters = true,
-             passAnnotations = { NotNull.class, Nullable.class })
+@Value.Style(passAnnotations = { NotNull.class, Nullable.class })
 public abstract class RefGenomeResource {
 
     @NotNull

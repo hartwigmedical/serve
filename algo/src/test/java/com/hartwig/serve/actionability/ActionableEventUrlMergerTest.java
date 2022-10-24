@@ -39,7 +39,7 @@ public class ActionableEventUrlMergerTest {
     @NotNull
     private static ActionableFusion createFusion(@NotNull String gene, @NotNull String url) {
         return ImmutableActionableFusion.builder()
-                .from(DatamodelTestFactory.create(Knowledgebase.VICC_CGI,
+                .from(DatamodelTestFactory.createEvent(Knowledgebase.VICC_CGI,
                         "source event",
                         Sets.newHashSet(),
                         ImmutableTreatment.builder()

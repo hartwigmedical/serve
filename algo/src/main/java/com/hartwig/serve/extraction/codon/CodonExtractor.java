@@ -7,7 +7,7 @@ import com.google.common.collect.Lists;
 import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.common.drivergene.DriverGene;
 import com.hartwig.serve.common.ensemblcache.EnsemblDataCache;
-import com.hartwig.serve.datamodel.MutationTypeFilter;
+import com.hartwig.serve.datamodel.MutationType;
 import com.hartwig.serve.datamodel.genome.GenomeRegion;
 import com.hartwig.serve.extraction.util.DriverInconsistencyMode;
 import com.hartwig.serve.extraction.util.EnsemblFunctions;
@@ -83,9 +83,9 @@ public class CodonExtractor {
                     return null;
                 }
 
-                MutationTypeFilter mutationTypeFilter = mutationTypeFilterAlgo.determine(gene, event);
+                MutationType applicableMutationType = mutationTypeFilterAlgo.determine(gene, event);
                 List<CodonAnnotation> codonAnnotations =
-                        determineCodonAnnotations(gene, canonicalTranscript, codonRank, mutationTypeFilter);
+                        determineCodonAnnotations(gene, canonicalTranscript, codonRank, applicableMutationType);
 
                 if (codonAnnotations == null) {
                     LOGGER.warn("Could not resolve codon rank {} on transcript '{}' for gene '{}'",
@@ -125,7 +125,7 @@ public class CodonExtractor {
 
     @Nullable
     private static List<CodonAnnotation> determineCodonAnnotations(@NotNull String gene, @NotNull HmfTranscriptRegion canonicalTranscript,
-            @Nullable Integer codonRank, @NotNull MutationTypeFilter mutationTypeFilter) {
+            @Nullable Integer codonRank, @NotNull MutationType applicableMutationType) {
 
         List<GenomeRegion> regions = Lists.newArrayList();
         if (codonRank != null) {
@@ -141,7 +141,7 @@ public class CodonExtractor {
                         .chromosome(region.chromosome())
                         .start(region.start())
                         .end(region.end())
-                        .mutationType(mutationTypeFilter)
+                        .applicableMutationType(applicableMutationType)
                         .rank(codonRank)
                         .build());
             }

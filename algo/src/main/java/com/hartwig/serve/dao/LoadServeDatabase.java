@@ -35,7 +35,7 @@ public class LoadServeDatabase {
         CommandLine cmd = new DefaultParser().parse(options, args);
 
         String serveActionabilityDir = nonOptionalDir(cmd, SERVE_ACTIONABILITY_DIRECTORY);
-        RefGenomeVersion refGenomeVersion = (RefGenomeVersion.from(nonOptionalValue(cmd, REF_GENOME_VERSION)));
+        RefGenomeVersion refGenomeVersion = resolveRefGenomeVersion(nonOptionalValue(cmd, REF_GENOME_VERSION));
         ActionableEvents actionableEvents = ActionableEventsLoader.readFromDir(serveActionabilityDir, refGenomeVersion);
         KnownEvents knownEvents = KnownEventsLoader.readFromDir(serveActionabilityDir, refGenomeVersion);
         List<EventInterpretation> eventInterpretation =
@@ -88,5 +88,16 @@ public class LoadServeDatabase {
 
     static boolean pathIsDirectory(@NotNull String path) {
         return Files.isDirectory(new File(path).toPath());
+    }
+
+    @NotNull
+    static RefGenomeVersion resolveRefGenomeVersion(@NotNull String version) {
+        if (version.equals(RefGenomeVersion.V37.toString()) || version.equals("37") || version.equals("HG37")) {
+            return RefGenomeVersion.V37;
+        } else if (version.equals(RefGenomeVersion.V38.toString()) || version.equals("38") || version.equals("HG38")) {
+            return RefGenomeVersion.V38;
+        }
+
+        throw new IllegalArgumentException("Cannot resolve ref genome version: " + version);
     }
 }

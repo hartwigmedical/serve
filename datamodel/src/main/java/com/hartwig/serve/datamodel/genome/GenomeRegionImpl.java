@@ -6,6 +6,6 @@ import org.jetbrains.annotations.Nullable;
 
 @Value.Immutable
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class })
-public interface GenomeRegionImpl extends GenomeRegion {
+public abstract class GenomeRegionImpl implements GenomeRegion {
 
 }

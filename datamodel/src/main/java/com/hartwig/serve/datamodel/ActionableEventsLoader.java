@@ -9,13 +9,13 @@ import com.hartwig.serve.datamodel.fusion.ActionableFusion;
 import com.hartwig.serve.datamodel.fusion.ActionableFusionFile;
 import com.hartwig.serve.datamodel.gene.ActionableGene;
 import com.hartwig.serve.datamodel.gene.ActionableGeneFile;
-import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeVersion;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspotFile;
 import com.hartwig.serve.datamodel.immuno.ActionableHLA;
 import com.hartwig.serve.datamodel.immuno.ActionableHLAFile;
 import com.hartwig.serve.datamodel.range.ActionableRange;
 import com.hartwig.serve.datamodel.range.ActionableRangeFile;
+import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

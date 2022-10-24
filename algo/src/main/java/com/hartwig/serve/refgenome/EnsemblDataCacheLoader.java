@@ -3,7 +3,7 @@ package com.hartwig.serve.refgenome;
 import java.io.IOException;
 
 import com.hartwig.serve.common.ensemblcache.EnsemblDataCache;
-import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 
 import org.jetbrains.annotations.NotNull;
 

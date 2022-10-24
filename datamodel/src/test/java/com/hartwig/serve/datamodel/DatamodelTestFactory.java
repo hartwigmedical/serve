@@ -5,6 +5,9 @@ import java.util.Set;
 
 import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.cancertype.CancerType;
+import com.hartwig.serve.datamodel.common.GeneAlteration;
+import com.hartwig.serve.datamodel.common.GeneRole;
+import com.hartwig.serve.datamodel.common.ProteinEffect;
 
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;

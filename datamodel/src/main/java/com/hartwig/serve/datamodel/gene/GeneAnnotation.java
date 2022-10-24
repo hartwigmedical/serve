@@ -1,6 +1,6 @@
 package com.hartwig.serve.datamodel.gene;
 
-import com.hartwig.serve.datamodel.GeneAlteration;
+import com.hartwig.serve.datamodel.common.GeneAlteration;
 
 import org.jetbrains.annotations.NotNull;
 

@@ -11,7 +11,7 @@ import java.util.StringJoiner;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 
 import org.jetbrains.annotations.NotNull;
 

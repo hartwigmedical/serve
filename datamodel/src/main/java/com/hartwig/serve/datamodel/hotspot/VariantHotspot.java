@@ -1,7 +1,7 @@
 package com.hartwig.serve.datamodel.hotspot;
 
-import com.hartwig.serve.datamodel.GeneAlteration;
-import com.hartwig.serve.datamodel.genome.GenomePosition;
+import com.hartwig.serve.datamodel.common.GeneAlteration;
+import com.hartwig.serve.datamodel.common.GenomePosition;
 
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;

@@ -1,4 +1,4 @@
-package com.hartwig.serve.datamodel.genome;
+package com.hartwig.serve.datamodel.common;
 
 import org.jetbrains.annotations.NotNull;
 

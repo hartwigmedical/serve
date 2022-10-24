@@ -1,19 +1,17 @@
-package com.hartwig.serve.datamodel.genome;
+package com.hartwig.serve.datamodel.common;
 
 import java.util.Comparator;
-
-import com.hartwig.serve.datamodel.genome.chromosome.ContigComparator;
 
 import org.jetbrains.annotations.NotNull;
 
 public class GenomeRegionComparator implements Comparator<GenomeRegion> {
 
     @NotNull
-    private final ContigComparator contigComparator = new ContigComparator();
+    private final ChromosomeComparator chromosomeComparator = new ChromosomeComparator();
 
     @Override
     public int compare(@NotNull GenomeRegion region1, @NotNull GenomeRegion region2) {
-        int chromosomeCompare = contigComparator.compare(region1.chromosome(), region2.chromosome());
+        int chromosomeCompare = chromosomeComparator.compare(region1.chromosome(), region2.chromosome());
         if (chromosomeCompare != 0) {
             return chromosomeCompare;
         }

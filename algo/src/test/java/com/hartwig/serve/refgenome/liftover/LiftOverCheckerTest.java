@@ -3,8 +3,8 @@ package com.hartwig.serve.refgenome.liftover;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import com.hartwig.serve.datamodel.genome.GenomePosition;
-import com.hartwig.serve.datamodel.genome.GenomeRegion;
+import com.hartwig.serve.datamodel.common.GenomePosition;
+import com.hartwig.serve.datamodel.common.GenomeRegion;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;

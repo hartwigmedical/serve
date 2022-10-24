@@ -5,9 +5,9 @@ import static org.junit.Assert.assertEquals;
 import java.util.List;
 
 import com.google.common.collect.Lists;
-import com.hartwig.serve.datamodel.GeneRole;
 import com.hartwig.serve.datamodel.MutationType;
-import com.hartwig.serve.datamodel.ProteinEffect;
+import com.hartwig.serve.datamodel.common.GeneRole;
+import com.hartwig.serve.datamodel.common.ProteinEffect;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;

@@ -1,10 +1,11 @@
-package com.hartwig.serve.datamodel;
+package com.hartwig.serve.datamodel.common;
 
 import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
 import com.google.common.collect.Lists;
+import com.hartwig.serve.datamodel.DatamodelTestFactory;
 
 import org.junit.Test;
 

@@ -3,7 +3,7 @@ package com.hartwig.serve.extraction;
 import java.io.IOException;
 import java.util.List;
 
-import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 import com.hartwig.serve.extraction.codon.KnownCodon;
 import com.hartwig.serve.extraction.codon.KnownCodonFile;
 import com.hartwig.serve.extraction.copynumber.KnownCopyNumber;

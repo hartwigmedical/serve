@@ -1,19 +1,17 @@
-package com.hartwig.serve.datamodel.genome;
+package com.hartwig.serve.datamodel.common;
 
 import java.util.Comparator;
-
-import com.hartwig.serve.datamodel.genome.chromosome.ContigComparator;
 
 import org.jetbrains.annotations.NotNull;
 
 public class GenomePositionComparator implements Comparator<GenomePosition> {
 
     @NotNull
-    private final ContigComparator contigComparator = new ContigComparator();
+    private final ChromosomeComparator chromosomeComparator = new ChromosomeComparator();
 
     @Override
     public int compare(@NotNull GenomePosition position1, @NotNull GenomePosition position2) {
-        int chromosomeCompare = contigComparator.compare(position1.chromosome(), position2.chromosome());
+        int chromosomeCompare = chromosomeComparator.compare(position1.chromosome(), position2.chromosome());
         if (chromosomeCompare != 0) {
             return chromosomeCompare;
         }

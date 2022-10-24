@@ -1,4 +1,4 @@
-package com.hartwig.serve.datamodel.genome.chromosome;
+package com.hartwig.serve.common.chromosome;
 
 import static org.junit.Assert.assertFalse;
 
@@ -10,7 +10,7 @@ import org.junit.Test;
 public class HumanChromosomeTest {
 
     @Test
-    public void testFromString() {
+    public void canResolveFromString() {
         assertEquals(HumanChromosome._1, HumanChromosome.fromString("1"));
         assertEquals(HumanChromosome._1, HumanChromosome.fromString("chr1"));
         assertEquals(HumanChromosome._1, HumanChromosome.fromString("CHR1"));
@@ -30,12 +30,12 @@ public class HumanChromosomeTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testUnknownChromosome() {
+    public void crashOnUnknownChromosome() {
         HumanChromosome.fromString("HLA-DRB1*14:54:01");
     }
 
     @Test
-    public void testContained() {
+    public void canDetermineIfContained() {
         assertTrue(HumanChromosome.contains("1"));
         assertTrue(HumanChromosome.contains("chr1"));
         assertFalse(HumanChromosome.contains("HLA-DRB1*14:54:01"));

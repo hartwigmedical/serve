@@ -9,9 +9,9 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeVersion;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspotComparator;
+import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 import com.hartwig.serve.extraction.util.KeyFormatter;
 import com.hartwig.serve.extraction.util.VCFWriterFactory;
 

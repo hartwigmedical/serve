@@ -1,4 +1,4 @@
-package com.hartwig.serve.datamodel.genome.chromosome;
+package com.hartwig.serve.common.chromosome;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -9,13 +9,13 @@ import org.junit.Test;
 public class MitochondrialChromosomeTest {
 
     @Test
-    public void testFromString() {
+    public void canResolveFromString() {
         assertEquals(MitochondrialChromosome.MT, MitochondrialChromosome.fromString("MT"));
         assertEquals(MitochondrialChromosome.MT, MitochondrialChromosome.fromString("chrM"));
     }
 
     @Test
-    public void testContains() {
+    public void canDetermineIfContained() {
         assertTrue(MitochondrialChromosome.contains("MT"));
         assertTrue(MitochondrialChromosome.contains("chrM"));
 

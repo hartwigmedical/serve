@@ -1,8 +1,8 @@
 package com.hartwig.serve.datamodel.range;
 
-import com.hartwig.serve.datamodel.GeneAlteration;
 import com.hartwig.serve.datamodel.MutationType;
-import com.hartwig.serve.datamodel.genome.GenomeRegion;
+import com.hartwig.serve.datamodel.common.GeneAlteration;
+import com.hartwig.serve.datamodel.common.GenomeRegion;
 
 import org.jetbrains.annotations.NotNull;
 

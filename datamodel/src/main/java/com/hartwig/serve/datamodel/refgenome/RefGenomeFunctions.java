@@ -1,4 +1,4 @@
-package com.hartwig.serve.datamodel.genome.refgenome;
+package com.hartwig.serve.datamodel.refgenome;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,7 +26,7 @@ public final class RefGenomeFunctions {
     }
 
     @NotNull
-    public static String stripChrPrefix(@NotNull final String chromosome) {
+    public static String stripChrPrefix(@NotNull String chromosome) {
         if (chromosome.startsWith(CHR_PREFIX)) {
             return chromosome.substring(CHR_PREFIX.length());
         }
@@ -35,7 +35,7 @@ public final class RefGenomeFunctions {
     }
 
     @NotNull
-    public static String enforceChrPrefix(@NotNull final String chromosome) {
+    public static String enforceChrPrefix(@NotNull String chromosome) {
         if (!chromosome.startsWith(CHR_PREFIX)) {
             return CHR_PREFIX + chromosome;
         }

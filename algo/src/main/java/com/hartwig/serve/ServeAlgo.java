@@ -12,7 +12,7 @@ import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.common.classification.EventClassifierConfig;
 import com.hartwig.serve.curation.DoidLookup;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 import com.hartwig.serve.extraction.ExtractionFunctions;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.iclusion.classification.IclusionClassificationConfig;

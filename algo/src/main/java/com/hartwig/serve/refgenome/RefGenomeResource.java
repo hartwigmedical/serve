@@ -6,7 +6,7 @@ import java.util.Map;
 import com.hartwig.serve.common.drivergene.DriverGene;
 import com.hartwig.serve.common.ensemblcache.EnsemblDataCache;
 import com.hartwig.serve.common.knownfusion.KnownFusionCache;
-import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 import com.hartwig.serve.extraction.hotspot.ProteinResolver;
 
 import org.immutables.value.Value;

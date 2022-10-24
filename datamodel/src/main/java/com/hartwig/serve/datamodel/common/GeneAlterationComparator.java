@@ -1,4 +1,4 @@
-package com.hartwig.serve.datamodel;
+package com.hartwig.serve.datamodel.common;
 
 import java.util.Comparator;
 

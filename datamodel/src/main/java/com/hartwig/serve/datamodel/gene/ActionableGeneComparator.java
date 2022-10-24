@@ -4,8 +4,8 @@ import java.util.Comparator;
 
 import com.hartwig.serve.datamodel.ActionableEvent;
 import com.hartwig.serve.datamodel.ActionableEventComparator;
-import com.hartwig.serve.datamodel.GeneAlteration;
-import com.hartwig.serve.datamodel.GeneAlterationComparator;
+import com.hartwig.serve.datamodel.common.GeneAlteration;
+import com.hartwig.serve.datamodel.common.GeneAlterationComparator;
 
 import org.jetbrains.annotations.NotNull;
 

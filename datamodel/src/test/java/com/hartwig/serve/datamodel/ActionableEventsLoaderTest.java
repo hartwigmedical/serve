@@ -5,7 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import java.io.IOException;
 
 import com.google.common.io.Resources;
-import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 
 import org.junit.Test;
 

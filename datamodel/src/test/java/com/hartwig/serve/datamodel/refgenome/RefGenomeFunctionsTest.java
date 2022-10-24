@@ -1,4 +1,4 @@
-package com.hartwig.serve.datamodel.genome.refgenome;
+package com.hartwig.serve.datamodel.refgenome;
 
 import static org.junit.Assert.assertEquals;
 

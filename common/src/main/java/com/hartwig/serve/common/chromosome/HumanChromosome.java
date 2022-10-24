@@ -1,6 +1,6 @@
-package com.hartwig.serve.datamodel.genome.chromosome;
+package com.hartwig.serve.common.chromosome;
 
-import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeFunctions;
+import com.hartwig.serve.datamodel.refgenome.RefGenomeFunctions;
 
 import org.jetbrains.annotations.NotNull;
 

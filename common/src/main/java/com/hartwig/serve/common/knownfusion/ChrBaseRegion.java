@@ -1,6 +1,6 @@
 package com.hartwig.serve.common.knownfusion;
 
-import com.hartwig.serve.datamodel.genome.chromosome.HumanChromosome;
+import com.hartwig.serve.common.chromosome.HumanChromosome;
 
 import org.jetbrains.annotations.NotNull;
 

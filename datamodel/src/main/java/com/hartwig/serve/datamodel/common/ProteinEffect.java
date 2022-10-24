@@ -1,4 +1,4 @@
-package com.hartwig.serve.datamodel;
+package com.hartwig.serve.datamodel.common;
 
 public enum ProteinEffect {
     UNKNOWN,

@@ -11,7 +11,7 @@ import com.hartwig.serve.actionability.ActionableGeneUrlConsolidator;
 import com.hartwig.serve.actionability.ActionableHLAUrlConsolidator;
 import com.hartwig.serve.actionability.ActionableHotspotUrlConsolidator;
 import com.hartwig.serve.actionability.ActionableRangeUrlConsolidator;
-import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 import com.hartwig.serve.extraction.codon.CodonFunctions;
 import com.hartwig.serve.extraction.codon.KnownCodon;
 import com.hartwig.serve.extraction.copynumber.CopyNumberFunctions;

@@ -10,7 +10,7 @@ import java.util.StringJoiner;
 
 import com.google.common.collect.Sets;
 import com.hartwig.serve.common.ensemblcache.EnsemblDataCache;
-import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 import com.hartwig.serve.extraction.snpeff.CanonicalAnnotation;
 import com.hartwig.serve.extraction.snpeff.SnpEffAnnotation;
 import com.hartwig.serve.extraction.snpeff.SnpEffAnnotationParser;
@@ -85,7 +85,7 @@ public class AnnotatedHotspotVCFPrinter {
                 LOGGER.warn("No sources found on {}", variant);
             }
 
-            System.out.println(joiner.toString());
+            System.out.println(joiner);
         }
     }
 }

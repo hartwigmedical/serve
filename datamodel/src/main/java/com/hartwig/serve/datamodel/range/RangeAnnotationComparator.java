@@ -2,10 +2,10 @@ package com.hartwig.serve.datamodel.range;
 
 import java.util.Comparator;
 
-import com.hartwig.serve.datamodel.GeneAlteration;
-import com.hartwig.serve.datamodel.GeneAlterationComparator;
-import com.hartwig.serve.datamodel.genome.GenomeRegion;
-import com.hartwig.serve.datamodel.genome.GenomeRegionComparator;
+import com.hartwig.serve.datamodel.common.GeneAlteration;
+import com.hartwig.serve.datamodel.common.GeneAlterationComparator;
+import com.hartwig.serve.datamodel.common.GenomeRegion;
+import com.hartwig.serve.datamodel.common.GenomeRegionComparator;
 
 import org.jetbrains.annotations.NotNull;
 

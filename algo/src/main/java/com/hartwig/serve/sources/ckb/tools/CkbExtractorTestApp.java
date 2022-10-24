@@ -15,7 +15,7 @@ import com.hartwig.serve.common.drivergene.DriverGeneFile;
 import com.hartwig.serve.common.ensemblcache.EnsemblDataCache;
 import com.hartwig.serve.common.knownfusion.KnownFusionCache;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.ExtractionResultWriter;
 import com.hartwig.serve.extraction.hotspot.ProteinResolverFactory;

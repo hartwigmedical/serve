@@ -13,8 +13,8 @@ import java.util.Set;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeFunctions;
-import com.hartwig.serve.datamodel.genome.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.refgenome.RefGenomeFunctions;
+import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

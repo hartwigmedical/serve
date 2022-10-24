@@ -2,8 +2,6 @@ package com.hartwig.serve.datamodel;
 
 import java.util.Comparator;
 
-import com.hartwig.serve.datamodel.cancertype.CancerType;
-
 import org.jetbrains.annotations.NotNull;
 
 public class ActionableEventComparator implements Comparator<ActionableEvent> {

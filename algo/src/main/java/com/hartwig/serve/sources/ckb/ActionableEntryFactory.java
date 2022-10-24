@@ -14,12 +14,12 @@ import com.hartwig.serve.ckb.datamodel.evidence.Evidence;
 import com.hartwig.serve.ckb.datamodel.reference.Reference;
 import com.hartwig.serve.ckb.datamodel.treatmentapproaches.RelevantTreatmentApproaches;
 import com.hartwig.serve.common.classification.EventType;
+import com.hartwig.serve.datamodel.CancerType;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
+import com.hartwig.serve.datamodel.ImmutableCancerType;
 import com.hartwig.serve.datamodel.ImmutableTreatment;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.datamodel.cancertype.CancerType;
-import com.hartwig.serve.datamodel.cancertype.ImmutableCancerType;
 import com.hartwig.serve.sources.ckb.treatementapproach.ImmutableRelevantTreatmentApprochCurationEntryKey;
 import com.hartwig.serve.sources.ckb.treatementapproach.RelevantTreatmentApprochCurationEntryKey;
 import com.hartwig.serve.sources.ckb.treatementapproach.RelevantTreatmentAproachCuration;
@@ -223,7 +223,7 @@ class ActionableEntryFactory {
                     return CancerTypeConstants.CANCER_DOID;
                 case CancerTypeConstants.JAX_SQUAMOUD_CELL_CARCINOMA_OF_UNKNOWN_PRIMARY:
                     // CKB uses this as Squamous Cell Carcinoma of Unknown Primary
-                    return CancerTypeConstants.SQUAMOUD_CELL_CARCINOMA_OF_UNKNOWN_PRIMARY;
+                    return CancerTypeConstants.SQUAMOUS_CELL_CARCINOMA_OF_UNKNOWN_PRIMARY;
                 case CancerTypeConstants.JAX_ADENOCARCINOMA_OF_UNKNOWN_PRIMARY:
                     // CKB uses this as Adenocarcinoma of Unknown Primary
                     return CancerTypeConstants.ADENOCARCINOMA_OF_UNKNOWN_PRIMARY;

@@ -1,4 +1,4 @@
-package com.hartwig.serve.datamodel.cancertype;
+package com.hartwig.serve.datamodel;
 
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;

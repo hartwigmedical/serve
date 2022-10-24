@@ -1,7 +1,5 @@
 package com.hartwig.serve.extraction.events;
 
-import static com.hartwig.serve.datamodel.util.ActionableFileFunctions.FIELD_DELIMITER;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -17,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 public final class EventInterpretationFile {
 
+    private static final String FIELD_DELIMITER = "\t";
     private static final String EVENT_INTERPRETATION_TSV = "EventInterpretation.tsv";
 
     private EventInterpretationFile() {

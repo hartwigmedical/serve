@@ -7,12 +7,12 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.cancertype.CancerTypeConstants;
 import com.hartwig.serve.curation.DoidLookup;
+import com.hartwig.serve.datamodel.CancerType;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
+import com.hartwig.serve.datamodel.ImmutableCancerType;
 import com.hartwig.serve.datamodel.ImmutableTreatment;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.datamodel.cancertype.CancerType;
-import com.hartwig.serve.datamodel.cancertype.ImmutableCancerType;
 import com.hartwig.serve.iclusion.datamodel.IclusionTrial;
 import com.hartwig.serve.iclusion.datamodel.IclusionTumorLocation;
 

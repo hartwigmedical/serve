@@ -1,7 +1,5 @@
 package com.hartwig.serve.extraction.exon;
 
-import static com.hartwig.serve.datamodel.util.ActionableFileFunctions.FIELD_DELIMITER;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -18,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 public final class KnownExonFile {
 
-    private static final String DELIMITER = "\t";
+    private static final String FIELD_DELIMITER = "\t";
     private static final String KNOWN_EXON_TSV = "KnownExons.SERVE.tsv";
 
     private KnownExonFile() {
@@ -73,7 +71,7 @@ public final class KnownExonFile {
 
     @NotNull
     private static String header() {
-        return new StringJoiner(DELIMITER).add("gene")
+        return new StringJoiner(FIELD_DELIMITER).add("gene")
                 .add("transcript")
                 .add("chromosome")
                 .add("start")
@@ -105,7 +103,7 @@ public final class KnownExonFile {
 
     @NotNull
     private static String toLine(@NotNull KnownExon exon) {
-        return new StringJoiner(DELIMITER).add(exon.annotation().gene())
+        return new StringJoiner(FIELD_DELIMITER).add(exon.annotation().gene())
                 .add(exon.annotation().transcript())
                 .add(exon.annotation().chromosome())
                 .add(String.valueOf(exon.annotation().start()))

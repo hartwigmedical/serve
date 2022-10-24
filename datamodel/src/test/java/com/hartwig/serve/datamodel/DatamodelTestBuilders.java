@@ -1,6 +1,5 @@
 package com.hartwig.serve.datamodel;
 
-import com.hartwig.serve.datamodel.cancertype.ImmutableCancerType;
 import com.hartwig.serve.datamodel.gene.GeneLevelEvent;
 import com.hartwig.serve.datamodel.gene.ImmutableActionableGene;
 

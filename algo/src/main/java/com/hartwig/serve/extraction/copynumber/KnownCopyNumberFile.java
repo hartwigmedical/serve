@@ -1,7 +1,5 @@
 package com.hartwig.serve.extraction.copynumber;
 
-import static com.hartwig.serve.datamodel.util.ActionableFileFunctions.FIELD_DELIMITER;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -17,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 public final class KnownCopyNumberFile {
 
-    private static final String DELIMITER = "\t";
+    private static final String FIELD_DELIMITER = "\t";
     private static final String KNOWN_COPY_NUMBER_TSV = "KnownCopyNumbers.SERVE.tsv";
 
     private KnownCopyNumberFile() {
@@ -65,7 +63,7 @@ public final class KnownCopyNumberFile {
 
     @NotNull
     private static String header() {
-        return new StringJoiner(DELIMITER).add("gene").add("type").add("sources").toString();
+        return new StringJoiner(FIELD_DELIMITER).add("gene").add("type").add("sources").toString();
     }
 
     @NotNull
@@ -88,7 +86,7 @@ public final class KnownCopyNumberFile {
 
     @NotNull
     private static String toLine(@NotNull KnownCopyNumber copyNumber) {
-        return new StringJoiner(DELIMITER).add(copyNumber.gene())
+        return new StringJoiner(FIELD_DELIMITER).add(copyNumber.gene())
                 .add(copyNumber.type().toString().toLowerCase())
                 .add(Knowledgebase.toCommaSeparatedSourceString(copyNumber.sources()))
                 .toString();

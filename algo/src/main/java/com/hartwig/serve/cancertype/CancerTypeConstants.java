@@ -1,13 +1,13 @@
 package com.hartwig.serve.cancertype;
 
-import com.hartwig.serve.datamodel.cancertype.CancerType;
-import com.hartwig.serve.datamodel.cancertype.ImmutableCancerType;
+import com.hartwig.serve.datamodel.CancerType;
+import com.hartwig.serve.datamodel.ImmutableCancerType;
 
 public class CancerTypeConstants {
 
     public static final String CANCER_DOID = "162";
     public static final String ORGAN_SYSTEM_CANCER_DOID = "0050686";
-    public static final String SQUAMOUD_CELL_CARCINOMA_OF_UNKNOWN_PRIMARY = "1749";
+    public static final String SQUAMOUS_CELL_CARCINOMA_OF_UNKNOWN_PRIMARY = "1749";
     public static final String ADENOCARCINOMA_OF_UNKNOWN_PRIMARY = "299";
 
     //JAX defined some doids which isn't a doid itself

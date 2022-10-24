@@ -1,7 +1,5 @@
 package com.hartwig.serve.extraction.codon;
 
-import static com.hartwig.serve.datamodel.util.ActionableFileFunctions.FIELD_DELIMITER;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -18,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 public final class KnownCodonFile {
 
-    private static final String DELIMITER = "\t";
+    private static final String FIELD_DELIMITER = "\t";
     private static final String KNOWN_CODON_TSV = "KnownCodons.SERVE.tsv";
 
     private KnownCodonFile() {
@@ -73,7 +71,7 @@ public final class KnownCodonFile {
 
     @NotNull
     private static String header() {
-        return new StringJoiner(DELIMITER).add("gene")
+        return new StringJoiner(FIELD_DELIMITER).add("gene")
                 .add("transcript")
                 .add("chromosome")
                 .add("start")
@@ -105,7 +103,7 @@ public final class KnownCodonFile {
 
     @NotNull
     private static String toLine(@NotNull KnownCodon codon) {
-        return new StringJoiner(DELIMITER).add(codon.annotation().gene())
+        return new StringJoiner(FIELD_DELIMITER).add(codon.annotation().gene())
                 .add(codon.annotation().transcript())
                 .add(codon.annotation().chromosome())
                 .add(String.valueOf(codon.annotation().start()))

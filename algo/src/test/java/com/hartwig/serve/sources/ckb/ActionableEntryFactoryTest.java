@@ -115,7 +115,7 @@ public class ActionableEntryFactoryTest {
 
         assertEquals("0060463", ActionableEntryFactory.extractAndCurateDoid(new String[] { "DOID", "0060463" }));
         assertEquals(CancerTypeConstants.CANCER_DOID, ActionableEntryFactory.extractAndCurateDoid(new String[] { "JAX", "10000003" }));
-        assertEquals(CancerTypeConstants.SQUAMOUD_CELL_CARCINOMA_OF_UNKNOWN_PRIMARY,
+        assertEquals(CancerTypeConstants.SQUAMOUS_CELL_CARCINOMA_OF_UNKNOWN_PRIMARY,
                 ActionableEntryFactory.extractAndCurateDoid(new String[] { "JAX", "10000009" }));
         assertEquals(CancerTypeConstants.ADENOCARCINOMA_OF_UNKNOWN_PRIMARY,
                 ActionableEntryFactory.extractAndCurateDoid(new String[] { "JAX", "10000008" }));

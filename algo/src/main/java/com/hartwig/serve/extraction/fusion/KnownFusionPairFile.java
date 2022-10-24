@@ -1,7 +1,5 @@
 package com.hartwig.serve.extraction.fusion;
 
-import static com.hartwig.serve.datamodel.util.ActionableFileFunctions.FIELD_DELIMITER;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -20,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 
 public final class KnownFusionPairFile {
 
-    private static final String DELIMITER = "\t";
+    private static final String FIELD_DELIMITER = "\t";
     private static final String KNOWN_FUSION_PAIR_TSV = "KnownFusionPairs.SERVE.tsv";
 
     private KnownFusionPairFile() {
@@ -72,7 +70,7 @@ public final class KnownFusionPairFile {
 
     @NotNull
     private static String header() {
-        return new StringJoiner(DELIMITER).add("geneUp")
+        return new StringJoiner(FIELD_DELIMITER).add("geneUp")
                 .add("minExonUp")
                 .add("maxExonUp")
                 .add("geneDown")
@@ -102,7 +100,7 @@ public final class KnownFusionPairFile {
 
     @NotNull
     private static String toLine(@NotNull KnownFusionPair fusionPair) {
-        return new StringJoiner(DELIMITER).add(fusionPair.geneUp())
+        return new StringJoiner(FIELD_DELIMITER).add(fusionPair.geneUp())
                 .add(nullToEmpty(fusionPair.minExonUp()))
                 .add(nullToEmpty(fusionPair.maxExonUp()))
                 .add(fusionPair.geneDown())

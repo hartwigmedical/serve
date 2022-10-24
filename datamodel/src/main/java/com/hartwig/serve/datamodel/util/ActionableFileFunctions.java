@@ -3,16 +3,16 @@ package com.hartwig.serve.datamodel.util;
 import java.util.Set;
 import java.util.StringJoiner;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.ActionableEvent;
+import com.hartwig.serve.datamodel.CancerType;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
+import com.hartwig.serve.datamodel.ImmutableCancerType;
 import com.hartwig.serve.datamodel.ImmutableTreatment;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.Treatment;
-import com.hartwig.serve.datamodel.cancertype.CancerType;
-import com.hartwig.serve.datamodel.cancertype.CancerTypeFactory;
-import com.hartwig.serve.datamodel.cancertype.ImmutableCancerType;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -20,7 +20,8 @@ public final class ActionableFileFunctions {
 
     public static final String FIELD_DELIMITER = "\t";
 
-    private static final String URL_DELIMITER = ",";
+    private static final String SUB_FIELD_DELIMITER = ",";
+    private static final String NAME_DOID_DELIMITER = ";";
 
     private ActionableFileFunctions() {
     }
@@ -44,7 +45,6 @@ public final class ActionableFileFunctions {
 
     @NotNull
     public static ActionableEvent fromLine(@NotNull String[] values, int startingPosition) {
-
         return new ActionableEvent() {
 
             @NotNull
@@ -63,23 +63,17 @@ public final class ActionableFileFunctions {
             @Override
             public Set<String> sourceUrls() {
                 int urlPosition = startingPosition + 2;
-                return values.length > urlPosition ? stringToUrls(values[urlPosition]) : Sets.newHashSet();
+                return values.length > urlPosition ? fieldToSet(values[urlPosition]) : Sets.newHashSet();
             }
 
             @NotNull
             @Override
             public Treatment treatment() {
-                int sourceDrugClassPosition = startingPosition + 4;
-                int drugClassPosition = startingPosition + 5;
                 return ImmutableTreatment.builder()
                         .treament(values[startingPosition + 3])
-                        .sourceRelevantTreatmentApproaches(values.length > sourceDrugClassPosition
-                                ? stringToDrugClasses(values[sourceDrugClassPosition])
-                                : Sets.newHashSet())
-                        .relevantTreatmentApproaches(
-                                values.length > drugClassPosition ? stringToDrugClasses(values[drugClassPosition]) : Sets.newHashSet())
+                        .sourceRelevantTreatmentApproaches(fieldToSet(values[startingPosition + 4]))
+                        .relevantTreatmentApproaches(fieldToSet(values[startingPosition + 5]))
                         .build();
-
             }
 
             @NotNull
@@ -91,7 +85,7 @@ public final class ActionableFileFunctions {
             @NotNull
             @Override
             public Set<CancerType> blacklistCancerTypes() {
-                return CancerTypeFactory.fromString(values[startingPosition + 8]);
+                return fieldToCancerTypes(values[startingPosition + 8]);
             }
 
             @NotNull
@@ -110,7 +104,7 @@ public final class ActionableFileFunctions {
             @Override
             public Set<String> evidenceUrls() {
                 int urlPosition = startingPosition + 11;
-                return values.length > urlPosition ? stringToUrls(values[urlPosition]) : Sets.newHashSet();
+                return values.length > urlPosition ? fieldToSet(values[urlPosition]) : Sets.newHashSet();
             }
         };
     }
@@ -119,44 +113,60 @@ public final class ActionableFileFunctions {
     public static String toLine(@NotNull ActionableEvent event) {
         return new StringJoiner(FIELD_DELIMITER).add(event.source().toString())
                 .add(event.sourceEvent())
-                .add(urlsToString(event.sourceUrls()))
+                .add(setToField(event.sourceUrls()))
                 .add(event.treatment().treament())
-                .add(drugClassesToString(event.treatment().sourceRelevantTreatmentApproaches()))
-                .add(drugClassesToString(event.treatment().relevantTreatmentApproaches()))
+                .add(setToField(event.treatment().sourceRelevantTreatmentApproaches()))
+                .add(setToField(event.treatment().relevantTreatmentApproaches()))
                 .add(event.applicableCancerType().name())
                 .add(event.applicableCancerType().doid())
-                .add(CancerTypeFactory.toString(event.blacklistCancerTypes()))
+                .add(cancerTypesToField(event.blacklistCancerTypes()))
                 .add(event.level().toString())
                 .add(event.direction().toString())
-                .add(urlsToString(event.evidenceUrls()))
+                .add(setToField(event.evidenceUrls()))
                 .toString();
     }
 
     @NotNull
-    private static Set<String> stringToUrls(@NotNull String fieldValue) {
-        return Sets.newHashSet(fieldValue.split(URL_DELIMITER));
+    private static Set<String> fieldToSet(@NotNull String field) {
+        if (field.isEmpty()) {
+            return Sets.newHashSet();
+        }
+
+        return Sets.newHashSet(field.split(SUB_FIELD_DELIMITER));
     }
 
     @NotNull
-    public static String urlsToString(@NotNull Set<String> urls) {
-        StringJoiner joiner = new StringJoiner(URL_DELIMITER);
-        for (String url : urls) {
-            joiner.add(url);
+    private static String setToField(@NotNull Set<String> strings) {
+        StringJoiner joiner = new StringJoiner(SUB_FIELD_DELIMITER);
+        for (String string : strings) {
+            joiner.add(string);
         }
         return joiner.toString();
     }
 
+    @VisibleForTesting
     @NotNull
-    private static Set<String> stringToDrugClasses(@NotNull String fieldValue) {
-        return Sets.newHashSet(fieldValue.split(URL_DELIMITER));
-    }
-
-    @NotNull
-    public static String drugClassesToString(@NotNull Set<String> drugClasses) {
-        StringJoiner joiner = new StringJoiner(URL_DELIMITER);
-        for (String url : drugClasses) {
-            joiner.add(url);
+    static String cancerTypesToField(@NotNull Set<CancerType> cancerTypes) {
+        StringJoiner joiner = new StringJoiner(SUB_FIELD_DELIMITER);
+        for (CancerType cancerType : cancerTypes) {
+            joiner.add(cancerType.name() + NAME_DOID_DELIMITER + cancerType.doid());
         }
         return joiner.toString();
+    }
+
+    @VisibleForTesting
+    @NotNull
+    static Set<CancerType> fieldToCancerTypes(@NotNull String field) {
+        if (field.isEmpty()) {
+            return Sets.newHashSet();
+        }
+
+        Set<CancerType> cancerTypes = Sets.newHashSet();
+        for (String cancerTypeEntry : field.split(SUB_FIELD_DELIMITER)) {
+            String[] nameAndDoid = cancerTypeEntry.split(NAME_DOID_DELIMITER);
+            cancerTypes.add(ImmutableCancerType.builder().name(nameAndDoid[0]).doid(nameAndDoid[1]).build());
+        }
+
+        return cancerTypes;
     }
 }

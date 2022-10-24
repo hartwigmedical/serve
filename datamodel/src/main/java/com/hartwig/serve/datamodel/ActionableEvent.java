@@ -2,8 +2,6 @@ package com.hartwig.serve.datamodel;
 
 import java.util.Set;
 
-import com.hartwig.serve.datamodel.cancertype.CancerType;
-
 import org.jetbrains.annotations.NotNull;
 
 public interface ActionableEvent {

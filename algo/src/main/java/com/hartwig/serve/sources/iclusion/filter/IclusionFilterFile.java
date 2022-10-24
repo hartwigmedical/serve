@@ -1,7 +1,5 @@
 package com.hartwig.serve.sources.iclusion.filter;
 
-import static com.hartwig.serve.datamodel.util.ActionableFileFunctions.FIELD_DELIMITER;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -11,6 +9,8 @@ import org.apache.commons.compress.utils.Lists;
 import org.jetbrains.annotations.NotNull;
 
 public final class IclusionFilterFile {
+
+    private static final String FIELD_DELIMITER = "\t";
 
     private IclusionFilterFile(){
     }

@@ -17,18 +17,19 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.StringJoiner;
 
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.ActionableEvents;
+import com.hartwig.serve.datamodel.CancerType;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.datamodel.cancertype.CancerTypeFactory;
 import com.hartwig.serve.datamodel.characteristic.ActionableCharacteristic;
 import com.hartwig.serve.datamodel.fusion.ActionableFusion;
 import com.hartwig.serve.datamodel.gene.ActionableGene;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
 import com.hartwig.serve.datamodel.immuno.ActionableHLA;
 import com.hartwig.serve.datamodel.range.ActionableRange;
-import com.hartwig.serve.datamodel.util.ActionableFileFunctions;
 import com.hartwig.serve.extraction.KnownEvents;
 import com.hartwig.serve.extraction.codon.KnownCodon;
 import com.hartwig.serve.extraction.copynumber.KnownCopyNumber;
@@ -56,6 +57,9 @@ import org.jooq.InsertValuesStep9;
 public class ServeDAO {
 
     private static final Logger LOGGER = LogManager.getLogger(ServeDAO.class);
+
+    private static final String MAIN_JOINER = ",";
+    private static final String NAME_DOID_JOINER = ";";
 
     @NotNull
     private final DSLContext context;
@@ -226,7 +230,7 @@ public class ServeDAO {
                     ACTIONABLEHLA.LEVEL,
                     ACTIONABLEHLA.DIRECTION,
                     ACTIONABLEHLA.EVIDENCEURLS);
-            batch.forEach(entry -> addRecordHlas(timestamp, inserter, entry));
+            batch.forEach(entry -> addRecordHLA(timestamp, inserter, entry));
             inserter.execute();
         }
 
@@ -304,7 +308,7 @@ public class ServeDAO {
             inserter.execute();
         }
 
-        for (List<EventInterpretation> batch: Iterables.partition(eventInterpretations, Utils.DB_BATCH_INSERT_SIZE)) {
+        for (List<EventInterpretation> batch : Iterables.partition(eventInterpretations, Utils.DB_BATCH_INSERT_SIZE)) {
             InsertValuesStep6 inserter = context.insertInto(EVENTINTERPRETATION,
                     EVENTINTERPRETATION.MODIFIED,
                     EVENTINTERPRETATION.SOURCE,
@@ -326,26 +330,16 @@ public class ServeDAO {
                 actionableHotspot.alt(),
                 actionableHotspot.source(),
                 actionableHotspot.sourceEvent(),
-                ActionableFileFunctions.urlsToString(actionableHotspot.sourceUrls()).isEmpty()
-                        ? null
-                        : ActionableFileFunctions.urlsToString(actionableHotspot.sourceUrls()),
+                concat(actionableHotspot.sourceUrls()),
                 actionableHotspot.treatment().treament(),
-                ActionableFileFunctions.drugClassesToString(actionableHotspot.treatment().sourceRelevantTreatmentApproaches()).isEmpty()
-                        ? null
-                        : ActionableFileFunctions.drugClassesToString(actionableHotspot.treatment().sourceRelevantTreatmentApproaches()),
-                ActionableFileFunctions.drugClassesToString(actionableHotspot.treatment().relevantTreatmentApproaches()).isEmpty()
-                        ? null
-                        : ActionableFileFunctions.drugClassesToString(actionableHotspot.treatment().relevantTreatmentApproaches()),
+                concat(actionableHotspot.treatment().sourceRelevantTreatmentApproaches()),
+                concat(actionableHotspot.treatment().relevantTreatmentApproaches()),
                 actionableHotspot.applicableCancerType().name(),
                 actionableHotspot.applicableCancerType().doid(),
-                CancerTypeFactory.toString(actionableHotspot.blacklistCancerTypes()).isEmpty()
-                        ? null
-                        : CancerTypeFactory.toString(actionableHotspot.blacklistCancerTypes()),
+                concat(toStrings(actionableHotspot.blacklistCancerTypes())),
                 actionableHotspot.level(),
                 actionableHotspot.direction(),
-                ActionableFileFunctions.urlsToString(actionableHotspot.evidenceUrls()).isEmpty()
-                        ? null
-                        : ActionableFileFunctions.urlsToString(actionableHotspot.evidenceUrls()));
+                concat(actionableHotspot.evidenceUrls()).isEmpty());
     }
 
     private static void addRecordRanges(@NotNull Timestamp timestamp, @NotNull InsertValuesStep21 inserter,
@@ -361,26 +355,16 @@ public class ServeDAO {
                 actionableRange.rank(),
                 actionableRange.source(),
                 actionableRange.sourceEvent(),
-                ActionableFileFunctions.urlsToString(actionableRange.sourceUrls()).isEmpty()
-                        ? null
-                        : ActionableFileFunctions.urlsToString(actionableRange.sourceUrls()),
+                concat(actionableRange.sourceUrls()),
                 actionableRange.treatment().treament(),
-                ActionableFileFunctions.drugClassesToString(actionableRange.treatment().sourceRelevantTreatmentApproaches()).isEmpty()
-                        ? null
-                        : ActionableFileFunctions.drugClassesToString(actionableRange.treatment().sourceRelevantTreatmentApproaches()),
-                ActionableFileFunctions.drugClassesToString(actionableRange.treatment().relevantTreatmentApproaches()).isEmpty()
-                        ? null
-                        : ActionableFileFunctions.drugClassesToString(actionableRange.treatment().relevantTreatmentApproaches()),
+                concat(actionableRange.treatment().sourceRelevantTreatmentApproaches()),
+                concat(actionableRange.treatment().relevantTreatmentApproaches()),
                 actionableRange.applicableCancerType().name(),
                 actionableRange.applicableCancerType().doid(),
-                CancerTypeFactory.toString(actionableRange.blacklistCancerTypes()).isEmpty()
-                        ? null
-                        : CancerTypeFactory.toString(actionableRange.blacklistCancerTypes()),
+                concat(toStrings(actionableRange.blacklistCancerTypes())),
                 actionableRange.level(),
                 actionableRange.direction(),
-                ActionableFileFunctions.urlsToString(actionableRange.evidenceUrls()).isEmpty()
-                        ? null
-                        : ActionableFileFunctions.urlsToString(actionableRange.evidenceUrls()));
+                concat(actionableRange.evidenceUrls()));
     }
 
     private static void addRecordGenes(@NotNull Timestamp timestamp, @NotNull InsertValuesStep15 inserter,
@@ -390,26 +374,16 @@ public class ServeDAO {
                 actionableGene.event(),
                 actionableGene.source(),
                 actionableGene.sourceEvent(),
-                ActionableFileFunctions.urlsToString(actionableGene.sourceUrls()).isEmpty()
-                        ? null
-                        : ActionableFileFunctions.urlsToString(actionableGene.sourceUrls()),
+                concat(actionableGene.sourceUrls()),
                 actionableGene.treatment().treament(),
-                ActionableFileFunctions.drugClassesToString(actionableGene.treatment().sourceRelevantTreatmentApproaches()).isEmpty()
-                        ? null
-                        : ActionableFileFunctions.drugClassesToString(actionableGene.treatment().sourceRelevantTreatmentApproaches()),
-                ActionableFileFunctions.drugClassesToString(actionableGene.treatment().relevantTreatmentApproaches()).isEmpty()
-                        ? null
-                        : ActionableFileFunctions.drugClassesToString(actionableGene.treatment().relevantTreatmentApproaches()),
+                concat(actionableGene.treatment().sourceRelevantTreatmentApproaches()),
+                concat(actionableGene.treatment().relevantTreatmentApproaches()),
                 actionableGene.applicableCancerType().name(),
                 actionableGene.applicableCancerType().doid(),
-                CancerTypeFactory.toString(actionableGene.blacklistCancerTypes()).isEmpty()
-                        ? null
-                        : CancerTypeFactory.toString(actionableGene.blacklistCancerTypes()),
+                concat(toStrings(actionableGene.blacklistCancerTypes())),
                 actionableGene.level(),
                 actionableGene.direction(),
-                ActionableFileFunctions.urlsToString(actionableGene.evidenceUrls()).isEmpty()
-                        ? null
-                        : ActionableFileFunctions.urlsToString(actionableGene.evidenceUrls()));
+                concat(actionableGene.evidenceUrls()));
     }
 
     private static void addRecordFusions(@NotNull Timestamp timestamp, @NotNull InsertValuesStep19 inserter,
@@ -423,26 +397,16 @@ public class ServeDAO {
                 actionableFusion.maxExonDown(),
                 actionableFusion.source(),
                 actionableFusion.sourceEvent(),
-                ActionableFileFunctions.urlsToString(actionableFusion.sourceUrls()).isEmpty()
-                        ? null
-                        : ActionableFileFunctions.urlsToString(actionableFusion.sourceUrls()),
+                concat(actionableFusion.sourceUrls()),
                 actionableFusion.treatment().treament(),
-                ActionableFileFunctions.drugClassesToString(actionableFusion.treatment().sourceRelevantTreatmentApproaches()).isEmpty()
-                        ? null
-                        : ActionableFileFunctions.drugClassesToString(actionableFusion.treatment().sourceRelevantTreatmentApproaches()),
-                ActionableFileFunctions.drugClassesToString(actionableFusion.treatment().relevantTreatmentApproaches()).isEmpty()
-                        ? null
-                        : ActionableFileFunctions.drugClassesToString(actionableFusion.treatment().relevantTreatmentApproaches()),
+                concat(actionableFusion.treatment().sourceRelevantTreatmentApproaches()),
+                concat(actionableFusion.treatment().relevantTreatmentApproaches()),
                 actionableFusion.applicableCancerType().name(),
                 actionableFusion.applicableCancerType().doid(),
-                CancerTypeFactory.toString(actionableFusion.blacklistCancerTypes()).isEmpty()
-                        ? null
-                        : CancerTypeFactory.toString(actionableFusion.blacklistCancerTypes()),
+                concat(toStrings(actionableFusion.blacklistCancerTypes())),
                 actionableFusion.level(),
                 actionableFusion.direction(),
-                ActionableFileFunctions.urlsToString(actionableFusion.evidenceUrls()).isEmpty()
-                        ? null
-                        : ActionableFileFunctions.urlsToString(actionableFusion.evidenceUrls()));
+                concat(actionableFusion.evidenceUrls()));
     }
 
     private static void addRecordCharacteristics(@NotNull Timestamp timestamp, @NotNull InsertValuesStep16 inserter,
@@ -453,56 +417,34 @@ public class ServeDAO {
                 actionableCharacteristic.cutoff(),
                 actionableCharacteristic.source(),
                 actionableCharacteristic.sourceEvent(),
-                ActionableFileFunctions.urlsToString(actionableCharacteristic.sourceUrls()).isEmpty()
-                        ? null
-                        : ActionableFileFunctions.urlsToString(actionableCharacteristic.sourceUrls()),
+                concat(actionableCharacteristic.sourceUrls()),
                 actionableCharacteristic.treatment().treament(),
-                ActionableFileFunctions.drugClassesToString(actionableCharacteristic.treatment().sourceRelevantTreatmentApproaches())
-                        .isEmpty()
-                        ? null
-                        : ActionableFileFunctions.drugClassesToString(actionableCharacteristic.treatment()
-                                .sourceRelevantTreatmentApproaches()),
-                ActionableFileFunctions.drugClassesToString(actionableCharacteristic.treatment().relevantTreatmentApproaches()).isEmpty()
-                        ? null
-                        : ActionableFileFunctions.drugClassesToString(actionableCharacteristic.treatment().relevantTreatmentApproaches()),
+                concat(actionableCharacteristic.treatment().sourceRelevantTreatmentApproaches()),
+                concat(actionableCharacteristic.treatment().relevantTreatmentApproaches()),
                 actionableCharacteristic.applicableCancerType().name(),
                 actionableCharacteristic.applicableCancerType().doid(),
-                CancerTypeFactory.toString(actionableCharacteristic.blacklistCancerTypes()).isEmpty()
-                        ? null
-                        : CancerTypeFactory.toString(actionableCharacteristic.blacklistCancerTypes()),
+                concat(toStrings(actionableCharacteristic.blacklistCancerTypes())),
                 actionableCharacteristic.level(),
                 actionableCharacteristic.direction(),
-                ActionableFileFunctions.urlsToString(actionableCharacteristic.evidenceUrls()).isEmpty()
-                        ? null
-                        : ActionableFileFunctions.urlsToString(actionableCharacteristic.evidenceUrls()));
+                concat(actionableCharacteristic.evidenceUrls()));
     }
 
-    private static void addRecordHlas(@NotNull Timestamp timestamp, @NotNull InsertValuesStep14 inserter,
+    private static void addRecordHLA(@NotNull Timestamp timestamp, @NotNull InsertValuesStep14 inserter,
             @NotNull ActionableHLA actionableHLA) {
         inserter.values(timestamp,
                 actionableHLA.hlaType(),
                 actionableHLA.source(),
                 actionableHLA.sourceEvent(),
-                ActionableFileFunctions.urlsToString(actionableHLA.sourceUrls()).isEmpty()
-                        ? null
-                        : ActionableFileFunctions.urlsToString(actionableHLA.sourceUrls()),
+                concat(actionableHLA.sourceUrls()),
                 actionableHLA.treatment().treament(),
-                ActionableFileFunctions.drugClassesToString(actionableHLA.treatment().sourceRelevantTreatmentApproaches()).isEmpty()
-                        ? null
-                        : ActionableFileFunctions.drugClassesToString(actionableHLA.treatment().sourceRelevantTreatmentApproaches()),
-                ActionableFileFunctions.drugClassesToString(actionableHLA.treatment().relevantTreatmentApproaches()).isEmpty()
-                        ? null
-                        : ActionableFileFunctions.drugClassesToString(actionableHLA.treatment().relevantTreatmentApproaches()),
+                concat(actionableHLA.treatment().sourceRelevantTreatmentApproaches()),
+                concat(actionableHLA.treatment().relevantTreatmentApproaches()),
                 actionableHLA.applicableCancerType().name(),
                 actionableHLA.applicableCancerType().doid(),
-                CancerTypeFactory.toString(actionableHLA.blacklistCancerTypes()).isEmpty()
-                        ? null
-                        : CancerTypeFactory.toString(actionableHLA.blacklistCancerTypes()),
+                concat(toStrings(actionableHLA.blacklistCancerTypes())),
                 actionableHLA.level(),
                 actionableHLA.direction(),
-                ActionableFileFunctions.urlsToString(actionableHLA.evidenceUrls()).isEmpty()
-                        ? null
-                        : ActionableFileFunctions.urlsToString(actionableHLA.evidenceUrls()));
+                concat(actionableHLA.evidenceUrls()));
     }
 
     private static void addRecordKnownHotspots(@NotNull Timestamp timestamp, @NotNull InsertValuesStep9 inserter,
@@ -572,5 +514,23 @@ public class ServeDAO {
                 eventInterpretation.interpretedGene(),
                 eventInterpretation.interpretedEvent(),
                 eventInterpretation.interpretedEventType());
+    }
+
+    @NotNull
+    public static Set<String> toStrings(@NotNull Set<CancerType> cancerTypes) {
+        Set<String> strings = Sets.newHashSet();
+        for (CancerType cancerType : cancerTypes) {
+            strings.add(cancerType.name() + NAME_DOID_JOINER + cancerType.doid());
+        }
+        return strings;
+    }
+
+    @NotNull
+    public static String concat(@NotNull Set<String> strings) {
+        StringJoiner joiner = new StringJoiner(MAIN_JOINER);
+        for (String string : strings) {
+            joiner.add(string);
+        }
+        return joiner.toString();
     }
 }

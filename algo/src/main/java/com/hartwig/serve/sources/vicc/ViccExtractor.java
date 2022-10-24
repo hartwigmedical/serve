@@ -10,6 +10,8 @@ import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.characteristic.ActionableCharacteristic;
 import com.hartwig.serve.datamodel.characteristic.TumorCharacteristic;
+import com.hartwig.serve.datamodel.common.GeneAlteration;
+import com.hartwig.serve.datamodel.common.Variant;
 import com.hartwig.serve.datamodel.fusion.ActionableFusion;
 import com.hartwig.serve.datamodel.gene.ActionableGene;
 import com.hartwig.serve.datamodel.gene.GeneAnnotation;
@@ -105,7 +107,7 @@ public final class ViccExtractor {
             } else {
                 EventExtractorOutput extractorOutput = eventExtractor.extract(gene, entry.transcriptId(), feature.type(), feature.name());
 
-                String sourceEvent = feature.name().startsWith(gene) ? feature.name() :  gene + " " + feature.name();
+                String sourceEvent = feature.name().startsWith(gene) ? feature.name() : gene + " " + feature.name();
                 eventInterpretationPerFeature.put(feature,
                         ImmutableEventInterpretation.builder()
                                 .source(ActionableEvidenceFactory.fromViccSource(entry.source()))
@@ -189,7 +191,8 @@ public final class ViccExtractor {
             Feature feature = featureResult.getKey();
             for (VariantHotspot hotspot : featureResult.getValue()) {
                 hotspots.add(ImmutableKnownHotspot.builder()
-                        .from(hotspot)
+                        .from((Variant) hotspot)
+                        .from((GeneAlteration) hotspot)
                         .addSources(source)
                         .gene(feature.geneSymbol())
                         .transcript(entry.transcriptId())

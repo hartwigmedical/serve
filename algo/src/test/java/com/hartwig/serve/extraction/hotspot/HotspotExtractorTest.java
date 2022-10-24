@@ -13,6 +13,8 @@ import com.hartwig.serve.ServeAlgoTestFactory;
 import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.common.drivergene.DriverCategory;
 import com.hartwig.serve.common.drivergene.DriverGene;
+import com.hartwig.serve.datamodel.common.GeneAlteration;
+import com.hartwig.serve.datamodel.common.Variant;
 import com.hartwig.serve.datamodel.hotspot.ImmutableVariantHotspotImpl;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
 import com.hartwig.serve.extraction.util.DriverInconsistencyMode;
@@ -27,7 +29,8 @@ public class HotspotExtractorTest {
     private static final GeneChecker GENE_CHECKER = new GeneChecker(Sets.newHashSet("BRAF", "KRAS"));
 
     private static final VariantHotspot TEST_HOTSPOT = ImmutableVariantHotspotImpl.builder()
-            .from(ServeAlgoTestFactory.createTestKnownHotspot())
+            .from((Variant) ServeAlgoTestFactory.createTestKnownHotspot())
+            .from((GeneAlteration) ServeAlgoTestFactory.createTestKnownHotspot())
             .chromosome("1")
             .position(10)
             .ref("A")
@@ -119,7 +122,7 @@ public class HotspotExtractorTest {
 
         @NotNull
         @Override
-        public List<VariantHotspot> resolve(@NotNull final String gene, @Nullable final String specificTranscript,
+        public List<Variant> resolve(@NotNull final String gene, @Nullable final String specificTranscript,
                 @NotNull final String proteinAnnotation) {
             return proteinAnnotation.equals(protein) ? Lists.newArrayList(TEST_HOTSPOT) : Lists.newArrayList();
         }

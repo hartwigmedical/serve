@@ -6,6 +6,8 @@ import java.util.Set;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.datamodel.common.GeneAlteration;
+import com.hartwig.serve.datamodel.common.Variant;
 import com.hartwig.serve.datamodel.hotspot.ImmutableVariantHotspotImpl;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
 
@@ -29,7 +31,7 @@ public final class HotspotFunctions {
                     hotspot.gene(),
                     hotspot.transcript(),
                     hotspot.proteinAnnotation());
-            VariantHotspot key = ImmutableVariantHotspotImpl.builder().from(hotspot).build();
+            VariantHotspot key = ImmutableVariantHotspotImpl.builder().from((Variant) hotspot).from((GeneAlteration) hotspot).build();
             HotspotAnnotation existingAnnotation = annotationPerHotspot.get(key);
             if (existingAnnotation == null) {
                 annotationPerHotspot.put(key, newAnnotation);
@@ -41,9 +43,11 @@ public final class HotspotFunctions {
 
         Set<KnownHotspot> consolidatedHotspots = Sets.newHashSet();
         for (Map.Entry<VariantHotspot, HotspotAnnotation> entry : annotationPerHotspot.entrySet()) {
+            VariantHotspot hotspot = entry.getKey();
             HotspotAnnotation annotation = entry.getValue();
             consolidatedHotspots.add(ImmutableKnownHotspot.builder()
-                    .from(entry.getKey())
+                    .from((Variant) hotspot)
+                    .from((GeneAlteration) hotspot)
                     .sources(annotation.sources())
                     .gene(annotation.gene())
                     .transcript(annotation.transcript())

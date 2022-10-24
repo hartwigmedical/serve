@@ -11,9 +11,6 @@ import org.jetbrains.annotations.Nullable;
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class })
 public abstract class KnownHotspot implements VariantHotspot, KnownEvent {
 
-    @NotNull
-    public abstract String gene();
-
     @Nullable
     public abstract String transcript();
 

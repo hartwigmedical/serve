@@ -5,7 +5,9 @@ import java.util.Set;
 
 import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
+import com.hartwig.serve.datamodel.common.GeneRole;
+import com.hartwig.serve.datamodel.common.ProteinEffect;
+import com.hartwig.serve.datamodel.common.Variant;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.ImmutableExtractionResult;
 import com.hartwig.serve.extraction.hotspot.HotspotFunctions;
@@ -30,13 +32,15 @@ public class DocmExtractor {
         Set<KnownHotspot> knownHotspots = Sets.newHashSet();
         ProgressTracker tracker = new ProgressTracker("DoCM", entries.size());
         for (DocmEntry entry : entries) {
-            List<VariantHotspot> hotspots = proteinResolver.resolve(entry.gene(), entry.transcript(), entry.proteinAnnotation());
+            List<Variant> variants = proteinResolver.resolve(entry.gene(), entry.transcript(), entry.proteinAnnotation());
 
-            for (VariantHotspot hotspot : hotspots) {
+            for (Variant variant : variants) {
                 knownHotspots.add(ImmutableKnownHotspot.builder()
-                        .from(hotspot)
+                        .from(variant)
                         .addSources(Knowledgebase.DOCM)
                         .gene(entry.gene())
+                        .geneRole(GeneRole.UNKNOWN)
+                        .proteinEffect(ProteinEffect.UNKNOWN)
                         .transcript(entry.transcript())
                         .proteinAnnotation(entry.proteinAnnotation())
                         .build());

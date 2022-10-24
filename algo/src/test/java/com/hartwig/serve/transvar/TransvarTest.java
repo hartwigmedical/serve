@@ -14,19 +14,19 @@ import org.junit.Test;
 public class TransvarTest {
 
     @Test
-    public void noHotspotsWhenTransvarProcessReturnsEmpty() {
+    public void noVariantsWhenTransvarProcessReturnsEmpty() {
         Transvar transvar = returnsNoTransvarRecord();
         assertTrue(transvar.resolve("BRAF", "ENST00000288602", "V600E").isEmpty());
     }
 
     @Test
-    public void noHotspotsWhenGeneIsUnknown() {
+    public void noVariantsWhenGeneIsUnknown() {
         Transvar transvar = returnsSingleTransvarRecord(createTestRecord());
         assertTrue(transvar.resolve("DoesNotExist", null, Strings.EMPTY).isEmpty());
     }
 
     @Test
-    public void noHotspotsWhenRecordIsNotOnSpecificTranscript() {
+    public void noVariantsWhenRecordIsNotOnSpecificTranscript() {
         Transvar transvar = returnsSingleTransvarRecord(createTestRecord());
         assertTrue(transvar.resolve("BRAF", "DoesNotExist", Strings.EMPTY).isEmpty());
     }

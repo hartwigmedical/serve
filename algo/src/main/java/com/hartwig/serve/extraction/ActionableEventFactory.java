@@ -8,8 +8,10 @@ import com.hartwig.serve.datamodel.ActionableEvent;
 import com.hartwig.serve.datamodel.characteristic.ActionableCharacteristic;
 import com.hartwig.serve.datamodel.characteristic.ImmutableActionableCharacteristic;
 import com.hartwig.serve.datamodel.characteristic.TumorCharacteristic;
+import com.hartwig.serve.datamodel.common.GeneAlteration;
 import com.hartwig.serve.datamodel.common.GeneRole;
 import com.hartwig.serve.datamodel.common.ProteinEffect;
+import com.hartwig.serve.datamodel.common.Variant;
 import com.hartwig.serve.datamodel.fusion.ActionableFusion;
 import com.hartwig.serve.datamodel.fusion.ImmutableActionableFusion;
 import com.hartwig.serve.datamodel.gene.ActionableGene;
@@ -50,7 +52,11 @@ public final class ActionableEventFactory {
 
         Set<ActionableHotspot> actionableHotspots = Sets.newHashSet();
         for (VariantHotspot hotspot : hotspotList) {
-            actionableHotspots.add(ImmutableActionableHotspot.builder().from(actionableEvent).from(hotspot).build());
+            actionableHotspots.add(ImmutableActionableHotspot.builder()
+                    .from(actionableEvent)
+                    .from((Variant) hotspot)
+                    .from((GeneAlteration) hotspot)
+                    .build());
         }
 
         return actionableHotspots;

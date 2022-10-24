@@ -16,6 +16,7 @@ import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.datamodel.ActionableEvent;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.characteristic.ActionableCharacteristic;
+import com.hartwig.serve.datamodel.common.GeneAlteration;
 import com.hartwig.serve.datamodel.fusion.ActionableFusion;
 import com.hartwig.serve.datamodel.gene.ActionableGene;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
@@ -69,8 +70,7 @@ public class CkbExtractor {
     }
 
     @NotNull
-    public ExtractionResult extract(@NotNull List<CkbEntry> ckbEntries,
-            @NotNull RelevantTreatmentAproachCuration curator) {
+    public ExtractionResult extract(@NotNull List<CkbEntry> ckbEntries, @NotNull RelevantTreatmentAproachCuration curator) {
         List<ExtractionResult> extractions = Lists.newArrayList();
 
         ProgressTracker tracker = new ProgressTracker("CKB", ckbEntries.size());
@@ -94,11 +94,8 @@ public class CkbExtractor {
                     sourceEvent = event;
                 }
 
-                Set<ActionableEntry> actionableEvents = ActionableEntryFactory.toActionableEntries(entry,
-                        sourceEvent,
-                        curator,
-                        gene,
-                        entry.type());
+                Set<ActionableEntry> actionableEvents =
+                        ActionableEntryFactory.toActionableEntries(entry, sourceEvent, curator, gene, entry.type());
 
                 EventInterpretation interpretation = ImmutableEventInterpretation.builder()
                         .source(Knowledgebase.CKB)
@@ -218,7 +215,8 @@ public class CkbExtractor {
             CkbProteinAnnotationExtractor proteinExtractor = new CkbProteinAnnotationExtractor();
             for (VariantHotspot hotspot : hotspots) {
                 knownHotspots.add(ImmutableKnownHotspot.builder()
-                        .from(hotspot)
+                        .from((com.hartwig.serve.datamodel.common.Variant) hotspot)
+                        .from((GeneAlteration) hotspot)
                         .addSources(Knowledgebase.CKB)
                         .gene(gene)
                         .transcript(transcript)

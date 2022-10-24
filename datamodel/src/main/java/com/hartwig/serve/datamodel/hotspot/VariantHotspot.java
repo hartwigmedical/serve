@@ -1,15 +1,8 @@
 package com.hartwig.serve.datamodel.hotspot;
 
 import com.hartwig.serve.datamodel.common.GeneAlteration;
-import com.hartwig.serve.datamodel.common.GenomePosition;
+import com.hartwig.serve.datamodel.common.Variant;
 
-import org.jetbrains.annotations.NotNull;
+public interface VariantHotspot extends Variant, GeneAlteration {
 
-public interface VariantHotspot extends GenomePosition, GeneAlteration {
-
-    @NotNull
-    String ref();
-
-    @NotNull
-    String alt();
 }

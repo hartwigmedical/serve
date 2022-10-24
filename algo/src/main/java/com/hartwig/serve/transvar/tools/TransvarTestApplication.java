@@ -3,7 +3,7 @@ package com.hartwig.serve.transvar.tools;
 import java.io.IOException;
 import java.util.List;
 
-import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
+import com.hartwig.serve.datamodel.common.Variant;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 import com.hartwig.serve.refgenome.EnsemblDataCacheLoader;
 import com.hartwig.serve.transvar.Transvar;
@@ -41,22 +41,22 @@ public class TransvarTestApplication {
                 config.refGenome37FastaFile(),
                 EnsemblDataCacheLoader.load(config.ensemblDataDir37(), RefGenomeVersion.V37));
 
-        extractAndPrintHotspots(transvar37, config.gene37(), config.transcript37(), config.protein37());
+        extractAndPrintVariants(transvar37, config.gene37(), config.transcript37(), config.protein37());
 
         Transvar transvar38 = Transvar.withRefGenome(RefGenomeVersion.V38,
                 config.refGenome38FastaFile(),
                 EnsemblDataCacheLoader.load(config.ensemblDataDir38(), RefGenomeVersion.V38));
 
-        extractAndPrintHotspots(transvar38, config.gene38(), config.transcript38(), config.protein38());
+        extractAndPrintVariants(transvar38, config.gene38(), config.transcript38(), config.protein38());
     }
 
-    private static void extractAndPrintHotspots(@NotNull Transvar transvar, @NotNull String gene, @Nullable String specificTranscript,
+    private static void extractAndPrintVariants(@NotNull Transvar transvar, @NotNull String gene, @Nullable String specificTranscript,
             @NotNull String proteinAnnotation) {
-        List<VariantHotspot> hotspots = transvar.resolve(gene, specificTranscript, proteinAnnotation);
+        List<Variant> variants = transvar.resolve(gene, specificTranscript, proteinAnnotation);
 
-        LOGGER.info("Printing hotspots for '{}:p.{}' on transcript {}", gene, proteinAnnotation, specificTranscript);
-        for (VariantHotspot hotspot : hotspots) {
-            LOGGER.info(" {}", hotspot);
+        LOGGER.info("Printing variants for '{}:p.{}' on transcript {}", gene, proteinAnnotation, specificTranscript);
+        for (Variant variant : variants) {
+            LOGGER.info(" {}", variant);
         }
     }
 }

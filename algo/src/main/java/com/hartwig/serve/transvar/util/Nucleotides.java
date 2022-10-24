@@ -1,5 +1,7 @@
 package com.hartwig.serve.transvar.util;
 
+import org.jetbrains.annotations.NotNull;
+
 public final class Nucleotides {
 
     private Nucleotides() {
@@ -7,7 +9,19 @@ public final class Nucleotides {
 
     public static final char[] DNA_BASES = { 'G', 'A', 'T', 'C' };
 
-    public static char swapDnaBase(final char base) {
+    @NotNull
+    public static String reverseStrandBases(@NotNull String bases) {
+        // reverse and swap base pairs
+        StringBuilder newBases = new StringBuilder();
+
+        for (int i = bases.length() - 1; i >= 0; i--) {
+            newBases.append(swapDnaBase(bases.charAt(i)));
+        }
+
+        return newBases.toString();
+    }
+
+    private static char swapDnaBase(char base) {
         if (base == 'A') {
             return 'T';
         }
@@ -21,16 +35,5 @@ public final class Nucleotides {
             return 'C';
         }
         return base;
-    }
-
-    public static String reverseStrandBases(final String bases) {
-        // reverse and swap base pairs
-        StringBuilder newBases = new StringBuilder();
-
-        for (int i = bases.length() - 1; i >= 0; i--) {
-            newBases.append(swapDnaBase(bases.charAt(i)));
-        }
-
-        return newBases.toString();
     }
 }

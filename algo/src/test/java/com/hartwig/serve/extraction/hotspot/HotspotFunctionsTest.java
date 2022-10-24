@@ -9,6 +9,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.ServeAlgoTestFactory;
 import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.datamodel.common.GeneAlteration;
+import com.hartwig.serve.datamodel.common.Variant;
 import com.hartwig.serve.datamodel.hotspot.ImmutableVariantHotspotImpl;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
 
@@ -27,7 +29,8 @@ public class HotspotFunctionsTest {
         Knowledgebase source = Knowledgebase.HARTWIG_CURATED;
         Set<KnownHotspot> knownHotspots = Sets.newHashSet();
         knownHotspots.add(ImmutableKnownHotspot.builder()
-                .from(hotspot1())
+                .from((Variant) hotspot1())
+                .from((GeneAlteration) hotspot1())
                 .addSources(source)
                 .gene("gene1")
                 .transcript("trans1")
@@ -35,7 +38,8 @@ public class HotspotFunctionsTest {
                 .build());
 
         knownHotspots.add(ImmutableKnownHotspot.builder()
-                .from(hotspot1())
+                .from((Variant) hotspot1())
+                .from((GeneAlteration) hotspot1())
                 .addSources(source)
                 .gene("gene1")
                 .transcript(null)
@@ -43,7 +47,8 @@ public class HotspotFunctionsTest {
                 .build());
 
         knownHotspots.add(ImmutableKnownHotspot.builder()
-                .from(hotspot2())
+                .from((Variant) hotspot2())
+                .from((GeneAlteration) hotspot2())
                 .addSources(source)
                 .gene("gene2")
                 .transcript("trans2")
@@ -71,7 +76,8 @@ public class HotspotFunctionsTest {
         Knowledgebase source2 = Knowledgebase.HARTWIG_COHORT;
         Set<KnownHotspot> knownHotspots = Sets.newHashSet();
         knownHotspots.add(ImmutableKnownHotspot.builder()
-                .from(hotspot1())
+                .from((Variant) hotspot1())
+                .from((GeneAlteration) hotspot1())
                 .addSources(source1)
                 .gene(gene)
                 .transcript(null)
@@ -79,7 +85,8 @@ public class HotspotFunctionsTest {
                 .build());
 
         knownHotspots.add(ImmutableKnownHotspot.builder()
-                .from(hotspot1())
+                .from((Variant) hotspot1())
+                .from((GeneAlteration) hotspot1())
                 .addSources(source2)
                 .gene(gene)
                 .transcript("trans2")
@@ -98,7 +105,8 @@ public class HotspotFunctionsTest {
     @NotNull
     private static VariantHotspot hotspot1() {
         return ImmutableVariantHotspotImpl.builder()
-                .from(ServeAlgoTestFactory.createTestKnownHotspot())
+                .from((Variant) ServeAlgoTestFactory.createTestKnownHotspot())
+                .from((GeneAlteration) ServeAlgoTestFactory.createTestKnownHotspot())
                 .chromosome("1")
                 .position(10)
                 .ref("A")
@@ -109,7 +117,8 @@ public class HotspotFunctionsTest {
     @NotNull
     private static VariantHotspot hotspot2() {
         return ImmutableVariantHotspotImpl.builder()
-                .from(ServeAlgoTestFactory.createTestKnownHotspot())
+                .from((Variant) ServeAlgoTestFactory.createTestKnownHotspot())
+                .from((GeneAlteration) ServeAlgoTestFactory.createTestKnownHotspot())
                 .chromosome("1")
                 .position(20)
                 .ref("A")

@@ -10,10 +10,9 @@ import com.google.common.collect.Sets;
 import com.google.common.io.Resources;
 import com.hartwig.serve.DriverGenesTestFactory;
 import com.hartwig.serve.EnsemblDataCacheTestFactory;
-import com.hartwig.serve.ServeAlgoTestFactory;
-import com.hartwig.serve.datamodel.hotspot.ImmutableVariantHotspotImpl;
-import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
+import com.hartwig.serve.datamodel.common.Variant;
 import com.hartwig.serve.extraction.hotspot.ProteinResolver;
+import com.hartwig.serve.extraction.util.ImmutableVariantImpl;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -64,15 +63,9 @@ public final class RefGenomeResourceTestFactory {
 
         @NotNull
         @Override
-        public List<VariantHotspot> resolve(@NotNull final String gene, @Nullable final String specificTranscript,
+        public List<Variant> resolve(@NotNull final String gene, @Nullable final String specificTranscript,
                 @NotNull final String proteinAnnotation) {
-            return Lists.newArrayList(ImmutableVariantHotspotImpl.builder()
-                    .from(ServeAlgoTestFactory.createTestKnownHotspot())
-                    .chromosome("1")
-                    .position(10)
-                    .ref("A")
-                    .alt("T")
-                    .build());
+            return Lists.newArrayList(ImmutableVariantImpl.builder().chromosome("1").position(10).ref("A").alt("T").build());
         }
 
         @NotNull

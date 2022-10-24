@@ -11,13 +11,16 @@ import com.google.common.collect.Sets;
 import com.hartwig.serve.DriverGenesTestFactory;
 import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.common.drivergene.DriverGene;
-import com.hartwig.serve.datamodel.gene.GeneAnnotationImpl;
+import com.hartwig.serve.datamodel.common.GeneRole;
+import com.hartwig.serve.datamodel.common.ProteinEffect;
+import com.hartwig.serve.datamodel.gene.GeneAnnotation;
 import com.hartwig.serve.datamodel.gene.GeneLevelEvent;
 import com.hartwig.serve.datamodel.gene.ImmutableGeneAnnotationImpl;
 import com.hartwig.serve.extraction.util.DriverInconsistencyMode;
 import com.hartwig.serve.extraction.util.GeneChecker;
 import com.hartwig.serve.refgenome.RefGenomeResourceTestFactory;
 
+import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
@@ -124,33 +127,33 @@ public class GeneLevelExtractorTest {
     public void canExtractGeneLevelEventWiltType() {
         GeneLevelExtractor geneLevelExtractor =
                 createWithDriverGenes(DriverGenesTestFactory.createDriverGenes("STK11", "KIT"), DriverInconsistencyMode.IGNORE);
-        GeneAnnotationImpl geneLevelEvent = geneLevelExtractor.extract("KIT", EventType.WILD_TYPE, "KIT  wild type");
+        GeneAnnotation geneAnnotation = geneLevelExtractor.extract("KIT", EventType.WILD_TYPE, "KIT  wild type");
 
-        assertNotNull(geneLevelEvent);
-        assertEquals("KIT", geneLevelEvent.gene());
-        assertEquals(GeneLevelEvent.WILD_TYPE, geneLevelEvent.event());
+        assertNotNull(geneAnnotation);
+        assertEquals("KIT", geneAnnotation.gene());
+        assertEquals(GeneLevelEvent.WILD_TYPE, geneAnnotation.event());
     }
 
     @Test
     public void canExtractGeneLevelEventOnco() {
         GeneLevelExtractor geneLevelExtractor =
                 createWithDriverGenes(DriverGenesTestFactory.createDriverGenes("STK11", "KIT"), DriverInconsistencyMode.IGNORE);
-        GeneAnnotationImpl geneLevelEvent = geneLevelExtractor.extract("KIT", EventType.GENE_LEVEL, "KIT  positive");
+        GeneAnnotation geneAnnotation = geneLevelExtractor.extract("KIT", EventType.GENE_LEVEL, "KIT  positive");
 
-        assertNotNull(geneLevelEvent);
-        assertEquals("KIT", geneLevelEvent.gene());
-        assertEquals(GeneLevelEvent.ACTIVATION, geneLevelEvent.event());
+        assertNotNull(geneAnnotation);
+        assertEquals("KIT", geneAnnotation.gene());
+        assertEquals(GeneLevelEvent.ACTIVATION, geneAnnotation.event());
     }
 
     @Test
     public void canExtractGeneLevelEventTsg() {
         GeneLevelExtractor geneLevelExtractor =
                 createWithDriverGenes(DriverGenesTestFactory.createDriverGenes("TP53", "KIT"), DriverInconsistencyMode.IGNORE);
-        GeneAnnotationImpl geneLevelEvent = geneLevelExtractor.extract("TP53", EventType.GENE_LEVEL, "TP53  negative");
+        GeneAnnotation geneAnnotation = geneLevelExtractor.extract("TP53", EventType.GENE_LEVEL, "TP53  negative");
 
-        assertNotNull(geneLevelEvent);
-        assertEquals("TP53", geneLevelEvent.gene());
-        assertEquals(GeneLevelEvent.INACTIVATION, geneLevelEvent.event());
+        assertNotNull(geneAnnotation);
+        assertEquals("TP53", geneAnnotation.gene());
+        assertEquals(GeneLevelEvent.INACTIVATION, geneAnnotation.event());
     }
 
     @Test
@@ -158,30 +161,30 @@ public class GeneLevelExtractorTest {
         GeneLevelExtractor geneLevelExtractor =
                 createWithDriverGenes(DriverGenesTestFactory.createDriverGenes("STK11", "KIT"), DriverInconsistencyMode.FILTER);
 
-        GeneAnnotationImpl conflictingGeneLevelEvent = geneLevelExtractor.extract("STK11", EventType.GENE_LEVEL, "STK11 positive");
-        assertNull(conflictingGeneLevelEvent);
+        GeneAnnotation conflictingGeneAnnotation = geneLevelExtractor.extract("STK11", EventType.GENE_LEVEL, "STK11 positive");
+        assertNull(conflictingGeneAnnotation);
     }
 
     @Test
     public void canExtractGeneLevelEventGeneral() {
         GeneLevelExtractor geneLevelExtractor =
                 createWithDriverGenes(DriverGenesTestFactory.createDriverGenes("STK11", "MET"), DriverInconsistencyMode.IGNORE);
-        GeneAnnotationImpl geneLevelEvent = geneLevelExtractor.extract("STK11", EventType.GENE_LEVEL, "Truncating Mutations");
+        GeneAnnotation geneAnnotation = geneLevelExtractor.extract("STK11", EventType.GENE_LEVEL, "Truncating Mutations");
 
-        assertNotNull(geneLevelEvent);
-        assertEquals("STK11", geneLevelEvent.gene());
-        assertEquals(GeneLevelEvent.ANY_MUTATION, geneLevelEvent.event());
+        assertNotNull(geneAnnotation);
+        assertEquals("STK11", geneAnnotation.gene());
+        assertEquals(GeneLevelEvent.ANY_MUTATION, geneAnnotation.event());
     }
 
     @Test
     public void canExtractGeneLevelEventFusion() {
         GeneLevelExtractor geneLevelExtractor =
                 createWithDriverGenes(DriverGenesTestFactory.createDriverGenes("STK11", "MET"), DriverInconsistencyMode.IGNORE);
-        GeneAnnotationImpl geneLevelEvent = geneLevelExtractor.extract("NTRK3", EventType.PROMISCUOUS_FUSION, "NTRK3 fusion");
+        GeneAnnotation geneAnnotation = geneLevelExtractor.extract("NTRK3", EventType.PROMISCUOUS_FUSION, "NTRK3 fusion");
 
-        assertNotNull(geneLevelEvent);
-        assertEquals("NTRK3", geneLevelEvent.gene());
-        assertEquals(GeneLevelEvent.FUSION, geneLevelEvent.event());
+        assertNotNull(geneAnnotation);
+        assertEquals("NTRK3", geneAnnotation.gene());
+        assertEquals(GeneLevelEvent.FUSION, geneAnnotation.event());
     }
 
     @Test
@@ -196,20 +199,20 @@ public class GeneLevelExtractorTest {
         GeneLevelExtractor geneLevelExtractor =
                 createWithDriverGenes(DriverGenesTestFactory.createDriverGenes("NOTCH1", "MET"), DriverInconsistencyMode.FILTER);
 
-        assertEquals(ImmutableGeneAnnotationImpl.builder().gene("MET").event(GeneLevelEvent.ACTIVATION).build(),
+        assertEquals(testBuilder().gene("MET").event(GeneLevelEvent.ACTIVATION).build(),
                 geneLevelExtractor.extractGeneLevelEvent("MET", "MET activating mutation"));
-        assertEquals(ImmutableGeneAnnotationImpl.builder().gene("MET").event(GeneLevelEvent.ACTIVATION).build(),
+        assertEquals(testBuilder().gene("MET").event(GeneLevelEvent.ACTIVATION).build(),
                 geneLevelExtractor.extractGeneLevelEvent("MET", "MET act mut"));
-        assertEquals(ImmutableGeneAnnotationImpl.builder().gene("NOTCH1").event(GeneLevelEvent.INACTIVATION).build(),
+        assertEquals(testBuilder().gene("NOTCH1").event(GeneLevelEvent.INACTIVATION).build(),
                 geneLevelExtractor.extractGeneLevelEvent("NOTCH1", "LOSS-OF-FUNCTION"));
-        assertEquals(ImmutableGeneAnnotationImpl.builder().gene("NOTCH1").event(GeneLevelEvent.INACTIVATION).build(),
+        assertEquals(testBuilder().gene("NOTCH1").event(GeneLevelEvent.INACTIVATION).build(),
                 geneLevelExtractor.extractGeneLevelEvent("NOTCH1", "inact mut"));
 
-        assertEquals(ImmutableGeneAnnotationImpl.builder().gene("MET").event(GeneLevelEvent.ANY_MUTATION).build(),
+        assertEquals(testBuilder().gene("MET").event(GeneLevelEvent.ANY_MUTATION).build(),
                 geneLevelExtractor.extractGeneLevelEvent("MET", "MUTATION"));
-        assertEquals(ImmutableGeneAnnotationImpl.builder().gene("NOTCH1").event(GeneLevelEvent.ANY_MUTATION).build(),
+        assertEquals(testBuilder().gene("NOTCH1").event(GeneLevelEvent.ANY_MUTATION).build(),
                 geneLevelExtractor.extractGeneLevelEvent("NOTCH1", "MUTATION"));
-        assertEquals(ImmutableGeneAnnotationImpl.builder().gene("NOTCH1").event(GeneLevelEvent.ANY_MUTATION).build(),
+        assertEquals(testBuilder().gene("NOTCH1").event(GeneLevelEvent.ANY_MUTATION).build(),
                 geneLevelExtractor.extractGeneLevelEvent("NOTCH1", "NOTCH1 "));
         assertNull(geneLevelExtractor.extractGeneLevelEvent("BRCA1", "BRCA1"));
         assertNull(geneLevelExtractor.extractGeneLevelEvent("KRAS", "not a gene level event"));
@@ -219,11 +222,11 @@ public class GeneLevelExtractorTest {
     public void canExtractWildTypeEvents() {
         GeneLevelExtractor geneLevelExtractor =
                 createWithDriverGenes(DriverGenesTestFactory.createDriverGenes("NOTCH1", "MET"), DriverInconsistencyMode.IGNORE);
-        assertEquals(ImmutableGeneAnnotationImpl.builder().gene("MET").event(GeneLevelEvent.WILD_TYPE).build(),
+        assertEquals(testBuilder().gene("MET").event(GeneLevelEvent.WILD_TYPE).build(),
                 geneLevelExtractor.extractWildTypeEvent("MET", EventType.WILD_TYPE));
-        assertEquals(ImmutableGeneAnnotationImpl.builder().gene("AB").event(GeneLevelEvent.WILD_TYPE).build(),
+        assertEquals(testBuilder().gene("AB").event(GeneLevelEvent.WILD_TYPE).build(),
                 geneLevelExtractor.extractWildTypeEvent("AB", EventType.WILD_TYPE));
-        assertNotEquals(ImmutableGeneAnnotationImpl.builder().gene("AB").event(GeneLevelEvent.WILD_TYPE).build(),
+        assertNotEquals(testBuilder().gene("AB").event(GeneLevelEvent.WILD_TYPE).build(),
                 geneLevelExtractor.extractWildTypeEvent("TP53", EventType.WILD_TYPE));
     }
 
@@ -247,5 +250,14 @@ public class GeneLevelExtractorTest {
                 Sets.newHashSet("negative", "LOSS-OF-FUNCTION", "inact mut"),
                 Sets.newHashSet("mutant"),
                 annotation);
+    }
+
+    @NotNull
+    private static ImmutableGeneAnnotationImpl.Builder testBuilder() {
+        return ImmutableGeneAnnotationImpl.builder()
+                .gene(Strings.EMPTY)
+                .geneRole(GeneRole.UNKNOWN)
+                .proteinEffect(ProteinEffect.UNKNOWN)
+                .event(GeneLevelEvent.ANY_MUTATION);
     }
 }

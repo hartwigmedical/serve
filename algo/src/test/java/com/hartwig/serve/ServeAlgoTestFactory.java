@@ -12,6 +12,8 @@ import com.hartwig.serve.datamodel.MutationType;
 import com.hartwig.serve.datamodel.characteristic.ActionableCharacteristic;
 import com.hartwig.serve.datamodel.characteristic.ImmutableActionableCharacteristic;
 import com.hartwig.serve.datamodel.characteristic.TumorCharacteristicAnnotation;
+import com.hartwig.serve.datamodel.common.GeneRole;
+import com.hartwig.serve.datamodel.common.ProteinEffect;
 import com.hartwig.serve.datamodel.fusion.ActionableFusion;
 import com.hartwig.serve.datamodel.fusion.ImmutableActionableFusion;
 import com.hartwig.serve.datamodel.gene.ActionableGene;
@@ -77,6 +79,8 @@ public final class ServeAlgoTestFactory {
     public static KnownHotspot createTestKnownHotspot() {
         return ImmutableKnownHotspot.builder()
                 .gene(Strings.EMPTY)
+                .geneRole(GeneRole.UNKNOWN)
+                .proteinEffect(ProteinEffect.UNKNOWN)
                 .chromosome(Strings.EMPTY)
                 .position(0)
                 .ref(Strings.EMPTY)
@@ -101,6 +105,8 @@ public final class ServeAlgoTestFactory {
     public static CodonAnnotation createTestCodonAnnotation() {
         return ImmutableCodonAnnotation.builder()
                 .gene(Strings.EMPTY)
+                .geneRole(GeneRole.UNKNOWN)
+                .proteinEffect(ProteinEffect.UNKNOWN)
                 .transcript(Strings.EMPTY)
                 .chromosome(Strings.EMPTY)
                 .start(0)
@@ -124,6 +130,8 @@ public final class ServeAlgoTestFactory {
     public static ExonAnnotation createTestExonAnnotation() {
         return ImmutableExonAnnotation.builder()
                 .gene(Strings.EMPTY)
+                .geneRole(GeneRole.UNKNOWN)
+                .proteinEffect(ProteinEffect.UNKNOWN)
                 .transcript(Strings.EMPTY)
                 .chromosome(Strings.EMPTY)
                 .start(0)
@@ -162,6 +170,9 @@ public final class ServeAlgoTestFactory {
     public static ActionableHotspot createTestActionableHotspot() {
         return ImmutableActionableHotspot.builder()
                 .from(createTestBaseEvent())
+                .gene(Strings.EMPTY)
+                .geneRole(GeneRole.UNKNOWN)
+                .proteinEffect(ProteinEffect.UNKNOWN)
                 .chromosome(Strings.EMPTY)
                 .position(0)
                 .ref(Strings.EMPTY)
@@ -179,6 +190,8 @@ public final class ServeAlgoTestFactory {
         return ImmutableActionableRange.builder()
                 .from(createTestBaseEvent())
                 .gene(Strings.EMPTY)
+                .geneRole(GeneRole.UNKNOWN)
+                .proteinEffect(ProteinEffect.UNKNOWN)
                 .transcript(Strings.EMPTY)
                 .chromosome(Strings.EMPTY)
                 .start(0)
@@ -199,6 +212,8 @@ public final class ServeAlgoTestFactory {
         return ImmutableActionableGene.builder()
                 .from(createTestBaseEvent())
                 .gene(Strings.EMPTY)
+                .geneRole(GeneRole.UNKNOWN)
+                .proteinEffect(ProteinEffect.UNKNOWN)
                 .event(GeneLevelEvent.AMPLIFICATION)
                 .build();
     }
@@ -248,8 +263,8 @@ public final class ServeAlgoTestFactory {
                 Sets.newHashSet(),
                 ImmutableTreatment.builder()
                         .name("treatment")
-                        .sourceRelevantTreatmentApproaches(Sets.newHashSet("drugClasses"))
-                        .relevantTreatmentApproaches(Sets.newHashSet("drugClasses"))
+                        .sourceRelevantTreatmentApproaches(Sets.newHashSet("drug classes"))
+                        .relevantTreatmentApproaches(Sets.newHashSet("drug classes"))
                         .build(),
                 ImmutableCancerType.builder().name("applicable name").doid("applicable doid").build(),
                 Sets.newHashSet(ImmutableCancerType.builder().name("blacklist name").doid("blacklist doid").build()),

@@ -23,7 +23,7 @@ public class CopyNumberExtractorTest {
         assertEquals(CopyNumberType.AMPLIFICATION, copyNumberExtractorWarn.extract("AKT1", EventType.AMPLIFICATION).type());
 
         CopyNumberExtractor copyNumberExtractorFilter = createTestExtractor(DriverInconsistencyMode.FILTER);
-        assertEquals(CopyNumberType.OVER_EXPRESSION, copyNumberExtractorFilter.extract("AKT1", EventType.OVER_EXPRESSION).type());
+        assertEquals(CopyNumberType.OVEREXPRESSION, copyNumberExtractorFilter.extract("AKT1", EventType.OVER_EXPRESSION).type());
 
         CopyNumberExtractor copyNumberExtractorFilterDel = createTestExtractor(DriverInconsistencyMode.FILTER);
         assertNull(copyNumberExtractorFilterDel.extract("AKT1", EventType.DELETION));
@@ -62,7 +62,7 @@ public class CopyNumberExtractorTest {
         KnownCopyNumber del = copyNumberExtractor.extract("PTEN", EventType.UNDER_EXPRESSION);
 
         assertEquals("PTEN", del.gene());
-        assertEquals(CopyNumberType.UNDER_EXPRESSION, del.type());
+        assertEquals(CopyNumberType.UNDEREXPRESSION, del.type());
     }
 
     @Test

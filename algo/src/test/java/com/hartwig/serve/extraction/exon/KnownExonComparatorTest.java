@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
+import com.hartwig.serve.ServeAlgoTestFactory;
 import com.hartwig.serve.datamodel.MutationType;
 
 import org.junit.Test;
@@ -15,6 +16,7 @@ public class KnownExonComparatorTest {
     public void canSortKnownExons() {
         KnownExon exon1 = ImmutableKnownExon.builder()
                 .annotation(ImmutableExonAnnotation.builder()
+                        .from(ServeAlgoTestFactory.createTestExonAnnotation())
                         .chromosome("1")
                         .start(10)
                         .end(11)

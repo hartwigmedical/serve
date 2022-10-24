@@ -3,7 +3,7 @@ package com.hartwig.serve.extraction;
 import java.util.List;
 
 import com.hartwig.serve.datamodel.characteristic.TumorCharacteristic;
-import com.hartwig.serve.datamodel.gene.GeneAnnotationImpl;
+import com.hartwig.serve.datamodel.gene.GeneAnnotation;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
 import com.hartwig.serve.extraction.codon.CodonAnnotation;
 import com.hartwig.serve.extraction.copynumber.KnownCopyNumber;
@@ -29,7 +29,7 @@ public abstract class EventExtractorOutput {
     public abstract List<ExonAnnotation> exons();
 
     @Nullable
-    public abstract GeneAnnotationImpl geneLevelEvent();
+    public abstract GeneAnnotation geneAnnotation();
 
     @Nullable
     public abstract KnownCopyNumber knownCopyNumber();

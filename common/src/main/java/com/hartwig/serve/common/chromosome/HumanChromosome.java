@@ -68,18 +68,4 @@ public enum HumanChromosome implements Chromosome {
         }
         return true;
     }
-
-    public static int chromosomeRank(@NotNull String chromosome) {
-        String chrTrimmed = RefGenomeFunctions.stripChrPrefix(chromosome);
-
-        if (chrTrimmed.equalsIgnoreCase("X")) {
-            return 23;
-        } else if (chrTrimmed.equalsIgnoreCase("Y")) {
-            return 24;
-        } else if (chrTrimmed.equalsIgnoreCase("MT") || chrTrimmed.equalsIgnoreCase("M")) {
-            return 25;
-        } else {
-            return Integer.parseInt(chrTrimmed);
-        }
-    }
 }

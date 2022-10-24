@@ -106,8 +106,8 @@ public class ActinExtractor {
         actionableRanges.addAll(ActionableEventFactory.toActionableRanges(trial, extraction.exons()));
 
         Set<ActionableGene> actionableGenes = Sets.newHashSet();
-        if (extraction.geneLevelEvent() != null) {
-            actionableGenes.add(ActionableEventFactory.geneLevelEventToActionableGene(trial, extraction.geneLevelEvent()));
+        if (extraction.geneAnnotation() != null) {
+            actionableGenes.add(ActionableEventFactory.geneAnnotationToActionableGene(trial, extraction.geneAnnotation()));
         }
 
         if (extraction.knownCopyNumber() != null) {

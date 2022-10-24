@@ -10,6 +10,7 @@ import com.google.common.collect.Sets;
 import com.google.common.io.Resources;
 import com.hartwig.serve.DriverGenesTestFactory;
 import com.hartwig.serve.EnsemblDataCacheTestFactory;
+import com.hartwig.serve.ServeAlgoTestFactory;
 import com.hartwig.serve.datamodel.hotspot.ImmutableVariantHotspotImpl;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
 import com.hartwig.serve.extraction.hotspot.ProteinResolver;
@@ -65,7 +66,13 @@ public final class RefGenomeResourceTestFactory {
         @Override
         public List<VariantHotspot> resolve(@NotNull final String gene, @Nullable final String specificTranscript,
                 @NotNull final String proteinAnnotation) {
-            return Lists.newArrayList(ImmutableVariantHotspotImpl.builder().chromosome("1").position(10).ref("A").alt("T").build());
+            return Lists.newArrayList(ImmutableVariantHotspotImpl.builder()
+                    .from(ServeAlgoTestFactory.createTestKnownHotspot())
+                    .chromosome("1")
+                    .position(10)
+                    .ref("A")
+                    .alt("T")
+                    .build());
         }
 
         @NotNull

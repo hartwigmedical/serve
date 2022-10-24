@@ -53,7 +53,7 @@ public class EventExtractor {
                 .hotspots(hotspotExtractor.extract(gene, transcriptId, type, event))
                 .codons(codonExtractor.extract(gene, transcriptId, type, event))
                 .exons(exonExtractor.extract(gene, transcriptId, type, event))
-                .geneLevelEvent(geneLevelExtractor.extract(gene, type, event))
+                .geneAnnotation(geneLevelExtractor.extract(gene, type, event))
                 .knownCopyNumber(copyNumberExtractor.extract(gene, type))
                 .knownFusionPair(fusionExtractor.extract(gene, type, event))
                 .characteristic(tumorCharacteristicExtractor.extract(type, event))

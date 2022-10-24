@@ -8,10 +8,12 @@ import com.hartwig.serve.datamodel.ActionableEvent;
 import com.hartwig.serve.datamodel.characteristic.ActionableCharacteristic;
 import com.hartwig.serve.datamodel.characteristic.ImmutableActionableCharacteristic;
 import com.hartwig.serve.datamodel.characteristic.TumorCharacteristic;
+import com.hartwig.serve.datamodel.common.GeneRole;
+import com.hartwig.serve.datamodel.common.ProteinEffect;
 import com.hartwig.serve.datamodel.fusion.ActionableFusion;
 import com.hartwig.serve.datamodel.fusion.ImmutableActionableFusion;
 import com.hartwig.serve.datamodel.gene.ActionableGene;
-import com.hartwig.serve.datamodel.gene.GeneAnnotationImpl;
+import com.hartwig.serve.datamodel.gene.GeneAnnotation;
 import com.hartwig.serve.datamodel.gene.GeneLevelEvent;
 import com.hartwig.serve.datamodel.gene.ImmutableActionableGene;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
@@ -48,13 +50,7 @@ public final class ActionableEventFactory {
 
         Set<ActionableHotspot> actionableHotspots = Sets.newHashSet();
         for (VariantHotspot hotspot : hotspotList) {
-            actionableHotspots.add(ImmutableActionableHotspot.builder()
-                    .from(actionableEvent)
-                    .chromosome(hotspot.chromosome())
-                    .position(hotspot.position())
-                    .ref(hotspot.ref())
-                    .alt(hotspot.alt())
-                    .build());
+            actionableHotspots.add(ImmutableActionableHotspot.builder().from(actionableEvent).from(hotspot).build());
         }
 
         return actionableHotspots;
@@ -68,17 +64,11 @@ public final class ActionableEventFactory {
         }
 
         Set<ActionableRange> actionableRanges = Sets.newHashSet();
-        for (RangeAnnotation range : ranges) {
+        for (RangeAnnotation rangeAnnotation : ranges) {
             actionableRanges.add(ImmutableActionableRange.builder()
                     .from(actionableEvent)
-                    .chromosome(range.chromosome())
-                    .transcript(range.transcript())
-                    .start(range.start())
-                    .end(range.end())
-                    .gene(range.gene())
-                    .applicableMutationType(range.applicableMutationType())
-                    .rangeType(determineRangeType(range))
-                    .rank(range.rank())
+                    .from(rangeAnnotation)
+                    .rangeType(determineRangeType(rangeAnnotation))
                     .build());
         }
 
@@ -104,7 +94,7 @@ public final class ActionableEventFactory {
                 event = GeneLevelEvent.AMPLIFICATION;
                 break;
             }
-            case OVER_EXPRESSION: {
+            case OVEREXPRESSION: {
                 event = GeneLevelEvent.OVEREXPRESSION;
                 break;
             }
@@ -112,7 +102,7 @@ public final class ActionableEventFactory {
                 event = GeneLevelEvent.DELETION;
                 break;
             }
-            case UNDER_EXPRESSION: {
+            case UNDEREXPRESSION: {
                 event = GeneLevelEvent.UNDEREXPRESSION;
                 break;
             }
@@ -120,26 +110,25 @@ public final class ActionableEventFactory {
                 throw new IllegalStateException("Invalid copy number type: " + copyNumber.type());
         }
 
-        return ImmutableActionableGene.builder().from(actionableEvent).gene(copyNumber.gene()).event(event).build();
+        // TODO Capture gene role and protein effect.
+        return ImmutableActionableGene.builder()
+                .from(actionableEvent)
+                .gene(copyNumber.gene())
+                .geneRole(GeneRole.UNKNOWN)
+                .proteinEffect(ProteinEffect.UNKNOWN)
+                .event(event)
+                .build();
     }
 
     @NotNull
-    public static ActionableGene geneLevelEventToActionableGene(@NotNull ActionableEvent actionableEvent,
-            @NotNull GeneAnnotationImpl geneLevelEvent) {
-        return ImmutableActionableGene.builder().from(actionableEvent).gene(geneLevelEvent.gene()).event(geneLevelEvent.event()).build();
+    public static ActionableGene geneAnnotationToActionableGene(@NotNull ActionableEvent actionableEvent,
+            @NotNull GeneAnnotation geneAnnotation) {
+        return ImmutableActionableGene.builder().from(actionableEvent).from(geneAnnotation).event(geneAnnotation.event()).build();
     }
 
     @NotNull
     public static ActionableFusion toActionableFusion(@NotNull ActionableEvent actionableEvent, @NotNull KnownFusionPair fusion) {
-        return ImmutableActionableFusion.builder()
-                .from(actionableEvent)
-                .geneUp(fusion.geneUp())
-                .minExonUp(fusion.minExonUp())
-                .maxExonUp(fusion.maxExonUp())
-                .geneDown(fusion.geneDown())
-                .minExonDown(fusion.minExonDown())
-                .maxExonDown(fusion.maxExonDown())
-                .build();
+        return ImmutableActionableFusion.builder().from(actionableEvent).from(fusion).build();
     }
 
     @NotNull

@@ -8,7 +8,9 @@ import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.common.drivergene.DriverGene;
 import com.hartwig.serve.common.ensemblcache.EnsemblDataCache;
 import com.hartwig.serve.datamodel.MutationType;
+import com.hartwig.serve.datamodel.common.GeneRole;
 import com.hartwig.serve.datamodel.common.GenomeRegion;
+import com.hartwig.serve.datamodel.common.ProteinEffect;
 import com.hartwig.serve.extraction.util.DriverInconsistencyMode;
 import com.hartwig.serve.extraction.util.EnsemblFunctions;
 import com.hartwig.serve.extraction.util.GeneChecker;
@@ -126,7 +128,6 @@ public class CodonExtractor {
     @Nullable
     private static List<CodonAnnotation> determineCodonAnnotations(@NotNull String gene, @NotNull HmfTranscriptRegion canonicalTranscript,
             @Nullable Integer codonRank, @NotNull MutationType applicableMutationType) {
-
         List<GenomeRegion> regions = Lists.newArrayList();
         if (codonRank != null) {
             regions = HmfTranscriptRegionUtils.codonRangeByRank(canonicalTranscript, codonRank, codonRank);
@@ -137,6 +138,8 @@ public class CodonExtractor {
             for (GenomeRegion region : regions) {
                 codonAnnotations.add(ImmutableCodonAnnotation.builder()
                         .gene(gene)
+                        .geneRole(GeneRole.UNKNOWN)
+                        .proteinEffect(ProteinEffect.UNKNOWN)
                         .transcript(canonicalTranscript.transName())
                         .chromosome(region.chromosome())
                         .start(region.start())

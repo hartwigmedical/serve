@@ -6,6 +6,8 @@ import java.util.Set;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.datamodel.common.GeneRole;
+import com.hartwig.serve.datamodel.common.ProteinEffect;
 import com.hartwig.serve.datamodel.hotspot.ImmutableVariantHotspotImpl;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
 import com.hartwig.serve.extraction.ExtractionResult;
@@ -19,6 +21,7 @@ import com.hartwig.serve.util.ProgressTracker;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 
 public class HartwigExtractor {
@@ -85,6 +88,9 @@ public class HartwigExtractor {
     @NotNull
     private static VariantHotspot toHotspot(@NotNull HartwigEntry entry) {
         return ImmutableVariantHotspotImpl.builder()
+                .gene(Strings.EMPTY)
+                .geneRole(GeneRole.UNKNOWN)
+                .proteinEffect(ProteinEffect.UNKNOWN)
                 .chromosome(entry.chromosome())
                 .position(entry.position())
                 .ref(entry.ref())

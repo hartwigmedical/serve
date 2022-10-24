@@ -8,6 +8,8 @@ import org.jetbrains.annotations.Nullable;
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class })
 public abstract class TumorCharacteristic {
 
+    // TODO Make an interface, and potentially add an Impl class.
+
     @NotNull
     public abstract TumorCharacteristicAnnotation name();
 

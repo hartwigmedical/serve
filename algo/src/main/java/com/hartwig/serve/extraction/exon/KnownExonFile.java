@@ -10,6 +10,8 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.MutationType;
+import com.hartwig.serve.datamodel.common.GeneRole;
+import com.hartwig.serve.datamodel.common.ProteinEffect;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 
 import org.jetbrains.annotations.NotNull;
@@ -51,6 +53,8 @@ public final class KnownExonFile {
         return ImmutableKnownExon.builder()
                 .annotation(ImmutableExonAnnotation.builder()
                         .gene(values[0])
+                        .geneRole(GeneRole.UNKNOWN)
+                        .proteinEffect(ProteinEffect.UNKNOWN)
                         .transcript(values[1])
                         .chromosome(values[2])
                         .start(Integer.parseInt(values[3]))

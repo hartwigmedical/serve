@@ -8,6 +8,8 @@ import static org.junit.Assert.assertEquals;
 import java.util.List;
 
 import com.hartwig.serve.common.ensemblcache.Strand;
+import com.hartwig.serve.datamodel.common.GeneRole;
+import com.hartwig.serve.datamodel.common.ProteinEffect;
 import com.hartwig.serve.datamodel.hotspot.ImmutableVariantHotspotImpl;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
 import com.hartwig.serve.transvar.datamodel.ImmutableTransvarComplexInsertDelete;
@@ -19,6 +21,7 @@ import com.hartwig.serve.transvar.datamodel.ImmutableTransvarRecord;
 import com.hartwig.serve.transvar.datamodel.ImmutableTransvarSnvMnv;
 import com.hartwig.serve.transvar.datamodel.TransvarRecord;
 
+import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
@@ -256,7 +259,7 @@ public class TransvarInterpreterTest {
 
     @Test
     public void canReduceComplexityOnComplexDelInsHotspots() {
-        VariantHotspot hotspot = ImmutableVariantHotspotImpl.builder().chromosome("1").position(10).ref("ATGTTA").alt("ATCCTA").build();
+        VariantHotspot hotspot = baseHotspot().chromosome("1").position(10).ref("ATGTTA").alt("ATCCTA").build();
 
         VariantHotspot simplifiedHotspot = testInterpreter37().reduceComplexityForComplexInsDel(hotspot);
 
@@ -286,7 +289,7 @@ public class TransvarInterpreterTest {
 
         assertEquals(1, hotspots.size());
 
-        assertHotspot(ImmutableVariantHotspotImpl.builder().chromosome("chr1").position(4).ref("C").alt("CGAT").build(), hotspots.get(0));
+        assertHotspot(baseHotspot().chromosome("chr1").position(4).ref("C").alt("CGAT").build(), hotspots.get(0));
     }
 
     @Test
@@ -349,6 +352,10 @@ public class TransvarInterpreterTest {
 
     @NotNull
     private static ImmutableVariantHotspotImpl.Builder baseHotspot() {
-        return ImmutableVariantHotspotImpl.builder().chromosome("1");
+        return ImmutableVariantHotspotImpl.builder()
+                .gene(Strings.EMPTY)
+                .geneRole(GeneRole.UNKNOWN)
+                .proteinEffect(ProteinEffect.UNKNOWN)
+                .chromosome("1");
     }
 }

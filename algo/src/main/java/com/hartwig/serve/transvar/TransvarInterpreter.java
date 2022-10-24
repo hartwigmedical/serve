@@ -10,6 +10,8 @@ import java.util.List;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import com.hartwig.serve.common.ensemblcache.Strand;
+import com.hartwig.serve.datamodel.common.GeneRole;
+import com.hartwig.serve.datamodel.common.ProteinEffect;
 import com.hartwig.serve.datamodel.hotspot.ImmutableVariantHotspotImpl;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeFunctions;
@@ -27,6 +29,7 @@ import com.hartwig.serve.util.AminoAcids;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -471,6 +474,11 @@ class TransvarInterpreter {
 
     @NotNull
     private ImmutableVariantHotspotImpl.Builder withRefBasedChromosome(@NotNull String chromosome) {
-        return ImmutableVariantHotspotImpl.builder().chromosome(RefGenomeFunctions.versionedChromosome(chromosome, refGenomeVersion));
+        // TODO Introduce additional class for just coordinates.
+        return ImmutableVariantHotspotImpl.builder()
+                .gene(Strings.EMPTY)
+                .geneRole(GeneRole.UNKNOWN)
+                .proteinEffect(ProteinEffect.UNKNOWN)
+                .chromosome(RefGenomeFunctions.versionedChromosome(chromosome, refGenomeVersion));
     }
 }

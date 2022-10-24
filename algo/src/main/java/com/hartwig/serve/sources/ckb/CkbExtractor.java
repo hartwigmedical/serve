@@ -60,6 +60,7 @@ public class CkbExtractor {
 
     private static final Logger LOGGER = LogManager.getLogger(CkbExtractor.class);
     private static final String DELIMITER = ",";
+
     @NotNull
     private final EventExtractor eventExtractor;
 
@@ -147,8 +148,8 @@ public class CkbExtractor {
             actionableRanges.addAll(ActionableEventFactory.toActionableRanges(event, codons));
             actionableRanges.addAll(ActionableEventFactory.toActionableRanges(event, output.exons()));
 
-            if (output.geneLevelEvent() != null) {
-                actionableGenes.add(ActionableEventFactory.geneLevelEventToActionableGene(event, output.geneLevelEvent()));
+            if (output.geneAnnotation() != null) {
+                actionableGenes.add(ActionableEventFactory.geneAnnotationToActionableGene(event, output.geneAnnotation()));
             }
 
             if (output.knownCopyNumber() != null) {

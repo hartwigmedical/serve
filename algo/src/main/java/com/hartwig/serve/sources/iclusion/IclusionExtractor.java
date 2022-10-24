@@ -112,8 +112,8 @@ public class IclusionExtractor {
             actionableRanges.addAll(ActionableEventFactory.toActionableRanges(trial, extraction.codons()));
             actionableRanges.addAll(ActionableEventFactory.toActionableRanges(trial, extraction.exons()));
 
-            if (extraction.geneLevelEvent() != null) {
-                actionableGenes.add(ActionableEventFactory.geneLevelEventToActionableGene(trial, extraction.geneLevelEvent()));
+            if (extraction.geneAnnotation() != null) {
+                actionableGenes.add(ActionableEventFactory.geneAnnotationToActionableGene(trial, extraction.geneAnnotation()));
             }
 
             if (extraction.knownCopyNumber() != null) {

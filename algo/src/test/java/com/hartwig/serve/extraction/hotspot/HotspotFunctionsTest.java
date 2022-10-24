@@ -7,6 +7,7 @@ import java.util.Set;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.hartwig.serve.ServeAlgoTestFactory;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.hotspot.ImmutableVariantHotspotImpl;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
@@ -96,12 +97,24 @@ public class HotspotFunctionsTest {
 
     @NotNull
     private static VariantHotspot hotspot1() {
-        return ImmutableVariantHotspotImpl.builder().chromosome("1").position(10).ref("A").alt("T").build();
+        return ImmutableVariantHotspotImpl.builder()
+                .from(ServeAlgoTestFactory.createTestKnownHotspot())
+                .chromosome("1")
+                .position(10)
+                .ref("A")
+                .alt("T")
+                .build();
     }
 
     @NotNull
     private static VariantHotspot hotspot2() {
-        return ImmutableVariantHotspotImpl.builder().chromosome("1").position(20).ref("A").alt("T").build();
+        return ImmutableVariantHotspotImpl.builder()
+                .from(ServeAlgoTestFactory.createTestKnownHotspot())
+                .chromosome("1")
+                .position(20)
+                .ref("A")
+                .alt("T")
+                .build();
     }
 
     @NotNull

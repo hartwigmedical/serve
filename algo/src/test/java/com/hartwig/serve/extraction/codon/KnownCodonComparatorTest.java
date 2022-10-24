@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
+import com.hartwig.serve.ServeAlgoTestFactory;
 import com.hartwig.serve.datamodel.MutationType;
 
 import org.junit.Test;
@@ -15,6 +16,7 @@ public class KnownCodonComparatorTest {
     public void canSortKnownCodons() {
         KnownCodon codon1 = ImmutableKnownCodon.builder()
                 .annotation(ImmutableCodonAnnotation.builder()
+                        .from(ServeAlgoTestFactory.createTestCodonAnnotation())
                         .chromosome("1")
                         .start(10)
                         .end(11)

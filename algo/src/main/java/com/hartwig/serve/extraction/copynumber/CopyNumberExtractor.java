@@ -79,11 +79,11 @@ public class CopyNumberExtractor {
             case AMPLIFICATION:
                 return CopyNumberType.AMPLIFICATION;
             case OVER_EXPRESSION:
-                return CopyNumberType.OVER_EXPRESSION;
+                return CopyNumberType.OVEREXPRESSION;
             case DELETION:
                 return CopyNumberType.DELETION;
             case UNDER_EXPRESSION:
-                return CopyNumberType.UNDER_EXPRESSION;
+                return CopyNumberType.UNDEREXPRESSION;
             default:
                 throw new IllegalStateException("Could not convert event type to copy number type: " + eventType);
         }

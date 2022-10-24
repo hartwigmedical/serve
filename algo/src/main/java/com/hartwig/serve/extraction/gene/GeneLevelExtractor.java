@@ -8,7 +8,9 @@ import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.common.drivergene.DriverCategory;
 import com.hartwig.serve.common.drivergene.DriverGene;
 import com.hartwig.serve.common.knownfusion.KnownFusionCache;
-import com.hartwig.serve.datamodel.gene.GeneAnnotationImpl;
+import com.hartwig.serve.datamodel.common.GeneRole;
+import com.hartwig.serve.datamodel.common.ProteinEffect;
+import com.hartwig.serve.datamodel.gene.GeneAnnotation;
 import com.hartwig.serve.datamodel.gene.GeneLevelEvent;
 import com.hartwig.serve.datamodel.gene.ImmutableGeneAnnotationImpl;
 import com.hartwig.serve.extraction.util.DriverInconsistencyMode;
@@ -54,7 +56,7 @@ public class GeneLevelExtractor {
     }
 
     @Nullable
-    public GeneAnnotationImpl extract(@NotNull String gene, @NotNull EventType type, @NotNull String event) {
+    public GeneAnnotation extract(@NotNull String gene, @NotNull EventType type, @NotNull String event) {
         if (type == EventType.WILD_TYPE && exomeGeneChecker.isValidGene(gene)) {
             return extractWildTypeEvent(gene, type);
         } else if (type == EventType.GENE_LEVEL && exomeGeneChecker.isValidGene(gene)) {
@@ -67,7 +69,7 @@ public class GeneLevelExtractor {
     }
 
     @Nullable
-    GeneAnnotationImpl extractPromiscuousFusion(@NotNull String gene) {
+    GeneAnnotation extractPromiscuousFusion(@NotNull String gene) {
         if (driverInconsistencyMode.isActive() && !geneIsPresentInFusionCache(gene)) {
             if (driverInconsistencyMode == DriverInconsistencyMode.WARN_ONLY) {
                 LOGGER.warn("Promiscuous fusion '{}' is not present in the known fusion cache", gene);
@@ -77,11 +79,16 @@ public class GeneLevelExtractor {
             }
         }
 
-        return ImmutableGeneAnnotationImpl.builder().gene(gene).event(GeneLevelEvent.FUSION).build();
+        return ImmutableGeneAnnotationImpl.builder()
+                .gene(gene)
+                .geneRole(GeneRole.UNKNOWN)
+                .proteinEffect(ProteinEffect.UNKNOWN)
+                .event(GeneLevelEvent.FUSION)
+                .build();
     }
 
     @Nullable
-    GeneAnnotationImpl extractWildTypeEvent(@NotNull String gene, @NotNull EventType type) {
+    GeneAnnotation extractWildTypeEvent(@NotNull String gene, @NotNull EventType type) {
         boolean geneInDriverGenesDatabase = geneInDriverGenes(driverGenes, gene);
 
         if (!geneInDriverGenesDatabase && driverInconsistencyMode.isActive()) {
@@ -95,7 +102,12 @@ public class GeneLevelExtractor {
             }
         }
 
-        return ImmutableGeneAnnotationImpl.builder().gene(gene).event(GeneLevelEvent.WILD_TYPE).build();
+        return ImmutableGeneAnnotationImpl.builder()
+                .gene(gene)
+                .geneRole(GeneRole.UNKNOWN)
+                .proteinEffect(ProteinEffect.UNKNOWN)
+                .event(GeneLevelEvent.WILD_TYPE)
+                .build();
     }
 
     static boolean geneInDriverGenes(@NotNull List<DriverGene> driverGenes, @NotNull String gene) {
@@ -109,7 +121,7 @@ public class GeneLevelExtractor {
 
     @Nullable
     @VisibleForTesting
-    GeneAnnotationImpl extractGeneLevelEvent(@NotNull String gene, @NotNull String event) {
+    GeneAnnotation extractGeneLevelEvent(@NotNull String gene, @NotNull String event) {
         GeneLevelEvent result = GeneLevelEvent.ANY_MUTATION;
         for (String keyPhrase : genericKeyPhrases) {
             if (event.contains(keyPhrase)) {
@@ -150,18 +162,19 @@ public class GeneLevelExtractor {
                             gene);
                     return null;
                 } else if (geneInDriverGenes(driverGenes, gene) && result != GeneLevelEvent.ANY_MUTATION && result != driverBasedEvent) {
-                    LOGGER.info(
-                            "Gene level event filtered -- Mismatch in driver gene event for '{}'. "
-                                    + "Event suggests {} while driver catalog suggests {}",
-                            gene,
-                            result,
-                            driverBasedEvent);
+                    LOGGER.info("Gene level event filtered -- Mismatch in driver gene event for '{}'. "
+                            + "Event suggests {} while driver catalog suggests {}", gene, result, driverBasedEvent);
                     return null;
                 }
             }
         }
 
-        return ImmutableGeneAnnotationImpl.builder().gene(gene).event(result).build();
+        return ImmutableGeneAnnotationImpl.builder()
+                .gene(gene)
+                .geneRole(GeneRole.UNKNOWN)
+                .proteinEffect(ProteinEffect.UNKNOWN)
+                .event(result)
+                .build();
     }
 
     @NotNull

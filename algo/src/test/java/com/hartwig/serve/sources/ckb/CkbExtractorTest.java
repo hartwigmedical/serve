@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.Maps;
+import com.hartwig.serve.ServeAlgoTestFactory;
 import com.hartwig.serve.ckb.classification.CkbClassificationConfig;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.common.classification.EventClassifierConfig;
@@ -79,6 +80,7 @@ public class CkbExtractorTest {
     public void canCurateCodons() {
         List<CodonAnnotation> codonAnnotations = Lists.newArrayList();
         CodonAnnotation codonAnnotation1 = ImmutableCodonAnnotation.builder()
+                .from(ServeAlgoTestFactory.createTestCodonAnnotation())
                 .gene("BRAF")
                 .transcript("A")
                 .chromosome("1")
@@ -89,6 +91,7 @@ public class CkbExtractorTest {
                 .build();
 
         CodonAnnotation codonAnnotation2 = ImmutableCodonAnnotation.builder()
+                .from(ServeAlgoTestFactory.createTestCodonAnnotation())
                 .gene("KRAS")
                 .transcript("transcript")
                 .chromosome("1")

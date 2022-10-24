@@ -9,6 +9,7 @@ import java.util.Set;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.DriverGenesTestFactory;
+import com.hartwig.serve.ServeAlgoTestFactory;
 import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.common.drivergene.DriverCategory;
 import com.hartwig.serve.common.drivergene.DriverGene;
@@ -25,8 +26,13 @@ public class HotspotExtractorTest {
 
     private static final GeneChecker GENE_CHECKER = new GeneChecker(Sets.newHashSet("BRAF", "KRAS"));
 
-    private static final VariantHotspot TEST_HOTSPOT =
-            ImmutableVariantHotspotImpl.builder().chromosome("1").position(10).ref("A").alt("T").build();
+    private static final VariantHotspot TEST_HOTSPOT = ImmutableVariantHotspotImpl.builder()
+            .from(ServeAlgoTestFactory.createTestKnownHotspot())
+            .chromosome("1")
+            .position(10)
+            .ref("A")
+            .alt("T")
+            .build();
 
     @Test
     public void canFindGene() {

@@ -13,7 +13,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.datamodel.characteristic.TumorCharacteristic;
-import com.hartwig.serve.datamodel.gene.GeneAnnotationImpl;
+import com.hartwig.serve.datamodel.gene.GeneAnnotation;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
 import com.hartwig.serve.extraction.codon.CodonAnnotation;
 import com.hartwig.serve.extraction.copynumber.KnownCopyNumber;
@@ -59,12 +59,12 @@ public final class ViccUtil {
                 List<VariantHotspot> hotspotsForFeature = result.hotspotsPerFeature().get(feature);
                 List<CodonAnnotation> codonsForFeature = result.codonsPerFeature().get(feature);
                 List<ExonAnnotation> exonsForFeature = result.exonsPerFeature().get(feature);
-                GeneAnnotationImpl geneLevelEventForFeature = result.geneLevelEventsPerFeature().get(feature);
+                GeneAnnotation geneAnnotationForFeature = result.geneAnnotationsPerFeature().get(feature);
                 KnownCopyNumber ampDelForFeature = result.ampsDelsPerFeature().get(feature);
                 KnownFusionPair fusionForFeature = result.fusionsPerFeature().get(feature);
                 TumorCharacteristic characteristicForFeature = result.characteristicsPerFeature().get(feature);
 
-                if (hotspotsForFeature == null && codonsForFeature == null && exonsForFeature == null && geneLevelEventForFeature == null
+                if (hotspotsForFeature == null && codonsForFeature == null && exonsForFeature == null && geneAnnotationForFeature == null
                         && ampDelForFeature == null && fusionForFeature == null && characteristicForFeature == null) {
                     if (feature.type() != EventType.COMBINED && feature.type() != EventType.COMPLEX) {
                         // For both combined and complex events we expect no genomic events to be derived.
@@ -86,7 +86,7 @@ public final class ViccUtil {
                         totalExonCount += exonsForFeature.size();
                     }
 
-                    if (geneLevelEventForFeature != null) {
+                    if (geneAnnotationForFeature != null) {
                         featuresWithGeneLevelEventCount++;
                     }
 

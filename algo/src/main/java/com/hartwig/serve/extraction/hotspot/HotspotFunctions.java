@@ -8,7 +8,6 @@ import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.hotspot.ImmutableVariantHotspotImpl;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
-import com.hartwig.serve.datamodel.hotspot.VariantHotspotImpl;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -30,7 +29,7 @@ public final class HotspotFunctions {
                     hotspot.gene(),
                     hotspot.transcript(),
                     hotspot.proteinAnnotation());
-            VariantHotspotImpl key = ImmutableVariantHotspotImpl.builder().from(hotspot).build();
+            VariantHotspot key = ImmutableVariantHotspotImpl.builder().from(hotspot).build();
             HotspotAnnotation existingAnnotation = annotationPerHotspot.get(key);
             if (existingAnnotation == null) {
                 annotationPerHotspot.put(key, newAnnotation);

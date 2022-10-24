@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.hartwig.serve.datamodel.characteristic.TumorCharacteristic;
-import com.hartwig.serve.datamodel.gene.GeneAnnotationImpl;
+import com.hartwig.serve.datamodel.gene.GeneAnnotation;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
 import com.hartwig.serve.extraction.codon.CodonAnnotation;
 import com.hartwig.serve.extraction.copynumber.KnownCopyNumber;
@@ -36,7 +36,7 @@ public abstract class ViccExtractionResult {
     public abstract Map<Feature, List<ExonAnnotation>> exonsPerFeature();
 
     @NotNull
-    public abstract Map<Feature, GeneAnnotationImpl> geneLevelEventsPerFeature();
+    public abstract Map<Feature, GeneAnnotation> geneAnnotationsPerFeature();
 
     @NotNull
     public abstract Map<Feature, KnownCopyNumber> ampsDelsPerFeature();

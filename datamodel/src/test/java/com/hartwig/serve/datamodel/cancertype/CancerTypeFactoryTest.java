@@ -94,15 +94,6 @@ public class CancerTypeFactoryTest {
 
     }
 
-    @Test
-    public void canCreateDoidStrings() {
-        Set<CancerType> cancerTypes = Sets.newHashSet();
-        cancerTypes.add(create("Hematologic cancer", "2531"));
-        cancerTypes.add(create("Skin Melanoma", "8923"));
-        Set<String> doids = CancerTypeFactory.doidStrings(cancerTypes);
-        assertEquals(Sets.newHashSet("2531", "8923"), doids);
-    }
-
     @NotNull
     private static CancerType create(@NotNull String name, @NotNull String doid) {
         return ImmutableCancerType.builder().name(name).doid(doid).build();

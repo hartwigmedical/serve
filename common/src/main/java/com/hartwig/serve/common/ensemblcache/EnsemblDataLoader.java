@@ -1,6 +1,6 @@
 package com.hartwig.serve.common.ensemblcache;
 
-import static com.hartwig.serve.common.FileReaderUtils.createFields;
+import static com.hartwig.serve.datamodel.util.FileReaderUtils.createFields;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.Set;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeFunctions;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 
@@ -25,7 +24,6 @@ public final class EnsemblDataLoader {
     public static final String ENSEMBL_TRANS_EXON_DATA_FILE = "ensembl_trans_exon_data.csv";
     public static final String ENSEMBL_TRANS_SPLICE_DATA_FILE = "ensembl_trans_splice_data.csv";
     public static final String ENSEMBL_PROTEIN_FEATURE_DATA_FILE = "ensembl_protein_features.csv";
-    public static final String ENSEMBL_TRANS_AMINO_ACIDS_FILE = "ensembl_trans_amino_acids.csv";
 
     private static final Logger LOGGER = LogManager.getLogger(EnsemblDataLoader.class);
 
@@ -100,12 +98,7 @@ public final class EnsemblDataLoader {
 
                 if (!currentChr.equals(chromosome)) {
                     currentChr = chromosome;
-                    geneList = chrGeneDataMap.get(chromosome);
-
-                    if (geneList == null) {
-                        geneList = Lists.newArrayList();
-                        chrGeneDataMap.put(chromosome, geneList);
-                    }
+                    geneList = chrGeneDataMap.computeIfAbsent(chromosome, k -> Lists.newArrayList());
                 }
 
                 geneList.add(geneData);
@@ -377,82 +370,5 @@ public final class EnsemblDataLoader {
         }
 
         return true;
-    }
-
-    public static boolean loadTranscriptAminoAcidData(final String dataPath, final Map<String, TranscriptAminoAcids> transAminoAcidMap,
-            final List<String> restrictedGeneIds, boolean canonicalOnly) {
-        String filename = dataPath + ENSEMBL_TRANS_AMINO_ACIDS_FILE;
-
-        if (!Files.exists(Paths.get(filename))) {
-            return false;
-        }
-
-        try {
-            BufferedReader fileReader = new BufferedReader(new FileReader(filename));
-
-            String line = fileReader.readLine();
-
-            final Map<String, Integer> fieldsIndexMap = createFields(line, ENSEMBL_DELIM);
-
-            if (line == null) {
-                LOGGER.error("empty Ensembl trans splice acceptor data file({})", filename);
-                return false;
-            }
-
-            // GeneId,TransId,TransName,TransStartPos,PreSpliceAcceptorPosition,Distance
-            int geneIdIndex = fieldsIndexMap.get("GeneId");
-            int geneNameIndex = fieldsIndexMap.get("GeneName");
-            int transIndex = fieldsIndexMap.get("TransName");
-            Integer isCanonicalIndex = fieldsIndexMap.get("Canonical");
-            int aaIndex = fieldsIndexMap.get("AminoAcids");
-
-            while ((line = fileReader.readLine()) != null) {
-                String[] values = line.split(ENSEMBL_DELIM);
-
-                String geneId = values[geneIdIndex];
-
-                if (!restrictedGeneIds.isEmpty() && !restrictedGeneIds.contains(geneId)) {
-                    line = fileReader.readLine();
-                    continue;
-                }
-
-                String transName = values[transIndex];
-                boolean isCanonical = isCanonicalIndex != null ? Boolean.parseBoolean(values[isCanonicalIndex]) : true;
-
-                if (canonicalOnly && !isCanonical) {
-                    continue;
-                }
-
-                transAminoAcidMap.put(transName,
-                        new TranscriptAminoAcids(geneId, values[geneNameIndex], transName, isCanonical, values[aaIndex]));
-            }
-
-            LOGGER.debug("loaded {} trans amino-acid records", transAminoAcidMap.size());
-        } catch (IOException e) {
-            LOGGER.warn("failed to load transcript amino-acid data({}): {}", filename, e.toString());
-            return false;
-        }
-
-        return true;
-    }
-
-    public static Map<String, List<TranscriptAminoAcids>> convertAminoAcidsToGeneMap(
-            final Map<String, TranscriptAminoAcids> transAminoAcidMap) {
-        Map<String, List<TranscriptAminoAcids>> geneTransMap = Maps.newHashMap();
-
-        for (Map.Entry<String, TranscriptAminoAcids> entry : transAminoAcidMap.entrySet()) {
-            TranscriptAminoAcids transAA = entry.getValue();
-
-            List<TranscriptAminoAcids> geneList = geneTransMap.get(transAA.GeneId);
-
-            if (geneList == null) {
-                geneList = Lists.newArrayList();
-                geneTransMap.put(transAA.GeneId, geneList);
-            }
-
-            geneList.add(transAA);
-        }
-
-        return geneTransMap;
     }
 }

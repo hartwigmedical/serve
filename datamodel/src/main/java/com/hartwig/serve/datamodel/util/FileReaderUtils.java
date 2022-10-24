@@ -1,4 +1,4 @@
-package com.hartwig.serve.common;
+package com.hartwig.serve.datamodel.util;
 
 import java.util.Map;
 
@@ -12,9 +12,9 @@ public final class FileReaderUtils {
     }
 
     @NotNull
-    public static Map<String, Integer> createFields(@NotNull String fieldsHeader, @NotNull String delimiter) {
-        final String[] items = fieldsHeader.split(delimiter, -1);
-        final Map<String, Integer> fieldsIndexMap = Maps.newLinkedHashMap();
+    public static Map<String, Integer> createFields(@NotNull String header, @NotNull String delimiter) {
+        String[] items = header.split(delimiter);
+        Map<String, Integer> fieldsIndexMap = Maps.newHashMap();
 
         for (int i = 0; i < items.length; ++i) {
             fieldsIndexMap.put(items[i], i);

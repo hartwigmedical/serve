@@ -79,7 +79,7 @@ public class IclusionExtractorTestApp {
         if (!fusionCache.loadFile(config.knownFusion37File())) {
             throw new IOException("Could not load known fusion cache from " + config.knownFusion37File());
         }
-        LOGGER.info(" Read {} known fusions", fusionCache.getData().size());
+        LOGGER.info(" Read {} known fusions", fusionCache.knownFusions().size());
 
         LOGGER.info(" Reading ensembl data cache from {}", config.ensemblDataDir37());
         EnsemblDataCache ensemblDataCache = EnsemblDataCacheLoader.load(config.ensemblDataDir37(), RefGenomeVersion.V37);

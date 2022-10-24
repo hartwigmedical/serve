@@ -10,103 +10,101 @@ import java.util.Map;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.hartwig.serve.common.FileReaderUtils;
+import com.hartwig.serve.datamodel.util.FileReaderUtils;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 
 public class KnownFusionCache {
 
-    private final List<KnownFusionData> mData;
-    private final Map<KnownFusionType, List<KnownFusionData>> mDataByType;
-
-    // cached since so commonly checked
-    private final List<KnownFusionData> mKnownPairData;
-    private final List<KnownFusionData> mIgRegionData;
-    private final List<KnownFusionData> mHighImpactPromiscuousData;
+    private static final Logger LOGGER = LogManager.getLogger(KnownFusionCache.class);
 
     private static final String FILE_DELIMITER = ",";
 
-    public static final Logger KF_LOGGER = LogManager.getLogger(KnownFusionCache.class);
+    @NotNull
+    private final List<KnownFusionData> data;
+    @NotNull
+    private final Map<KnownFusionType, List<KnownFusionData>> dataByType;
+
+    // cached since so commonly checked
+    private final List<KnownFusionData> knownPairData;
 
     public KnownFusionCache() {
-        mData = Lists.newArrayList();
-        mDataByType = Maps.newHashMap();
-        mIgRegionData = Lists.newArrayList();
-        mKnownPairData = Lists.newArrayList();
-        mHighImpactPromiscuousData = Lists.newArrayList();
+        data = Lists.newArrayList();
+        dataByType = Maps.newHashMap();
+        knownPairData = Lists.newArrayList();
 
         // initialise to avoid having to check for null
-        Arrays.stream(KnownFusionType.values()).filter(x -> x != KnownFusionType.NONE).forEach(x -> mDataByType.put(x, Lists.newArrayList()));
+        Arrays.stream(KnownFusionType.values())
+                .filter(x -> x != KnownFusionType.NONE)
+                .forEach(x -> dataByType.put(x, Lists.newArrayList()));
     }
 
-    public final List<KnownFusionData> getData() {
-        return mData;
+    @NotNull
+    public List<KnownFusionData> knownFusions() {
+        return data;
     }
 
-    public boolean hasKnownFusion(final String fiveGene, final String threeGene) {
-        return mDataByType.get(KnownFusionType.KNOWN_PAIR).stream().anyMatch(x -> x.FiveGene.equals(fiveGene) && x.ThreeGene.equals(threeGene));
+    public boolean hasKnownFusion(@NotNull String fiveGene, @NotNull String threeGene) {
+        return dataByType.get(KnownFusionType.KNOWN_PAIR)
+                .stream()
+                .anyMatch(x -> x.FiveGene.equals(fiveGene) && x.ThreeGene.equals(threeGene));
     }
 
-    public boolean hasKnownIgFusion(final String fiveGene, final String threeGene) {
-        return mDataByType.get(KnownFusionType.IG_KNOWN_PAIR).stream().anyMatch(x -> x.FiveGene.equals(fiveGene) && x.ThreeGene.equals(threeGene));
+    public boolean hasKnownIgFusion(@NotNull String fiveGene, @NotNull String threeGene) {
+        return dataByType.get(KnownFusionType.IG_KNOWN_PAIR)
+                .stream()
+                .anyMatch(x -> x.FiveGene.equals(fiveGene) && x.ThreeGene.equals(threeGene));
     }
 
-    public boolean hasPromiscuousIgFusion(final String gene) {
-        return mDataByType.get(KnownFusionType.IG_PROMISCUOUS).stream().anyMatch(x -> x.FiveGene.equals(gene));
+    public boolean hasPromiscuousIgFusion(@NotNull String gene) {
+        return dataByType.get(KnownFusionType.IG_PROMISCUOUS).stream().anyMatch(x -> x.FiveGene.equals(gene));
     }
 
-    public boolean hasPromiscuousFiveGene(final String gene) {
-        return mDataByType.get(KnownFusionType.PROMISCUOUS_5).stream().anyMatch(x -> x.FiveGene.equals(gene));
+    public boolean hasPromiscuousFiveGene(@NotNull String gene) {
+        return dataByType.get(KnownFusionType.PROMISCUOUS_5).stream().anyMatch(x -> x.FiveGene.equals(gene));
     }
 
-    public boolean hasPromiscuousThreeGene(final String gene) {
-        return mDataByType.get(KnownFusionType.PROMISCUOUS_3).stream().anyMatch(x -> x.ThreeGene.equals(gene));
+    public boolean hasPromiscuousThreeGene(@NotNull String gene) {
+        return dataByType.get(KnownFusionType.PROMISCUOUS_3).stream().anyMatch(x -> x.ThreeGene.equals(gene));
     }
 
-    public boolean hasAnyIgFusion(final String gene) {
-        return mDataByType.get(KnownFusionType.IG_KNOWN_PAIR).stream().anyMatch(x -> x.FiveGene.equals(gene) || x.ThreeGene.equals(gene));
+    public boolean hasAnyIgFusion(@NotNull String gene) {
+        return dataByType.get(KnownFusionType.IG_KNOWN_PAIR).stream().anyMatch(x -> x.FiveGene.equals(gene) || x.ThreeGene.equals(gene));
     }
 
-    public boolean hasExonDelDup(final String gene) {
-        return mDataByType.get(KnownFusionType.EXON_DEL_DUP).stream().anyMatch(x -> x.FiveGene.equals(gene) && x.ThreeGene.equals(gene));
+    public boolean hasExonDelDup(@NotNull String gene) {
+        return dataByType.get(KnownFusionType.EXON_DEL_DUP).stream().anyMatch(x -> x.FiveGene.equals(gene) && x.ThreeGene.equals(gene));
     }
 
-    public boolean hasKnownPairGene(final String gene) {
-        return mKnownPairData.stream().anyMatch(x -> x.FiveGene.equals(gene) || x.ThreeGene.equals(gene));
+    public boolean hasKnownPairGene(@NotNull String gene) {
+        return knownPairData.stream().anyMatch(x -> x.FiveGene.equals(gene) || x.ThreeGene.equals(gene));
     }
 
-    public void addData(final KnownFusionData data) {
-        mData.add(data);
-        mDataByType.get(data.Type).add(data);
+    public void addData(@NotNull KnownFusionData data) {
+        this.data.add(data);
+        dataByType.get(data.Type).add(data);
 
         if (data.Type == KnownFusionType.KNOWN_PAIR) {
-            mKnownPairData.add(data);
-        }
-
-        if (data.igRegion() != null) {
-            mIgRegionData.add(data);
-        }
-
-        if (data.isHighImpactPromiscuous()) {
-            mHighImpactPromiscuousData.add(data);
+            knownPairData.add(data);
         }
     }
 
-    public boolean loadFile(final String filename) {
+    public boolean loadFile(@NotNull String filename) {
         if (!Files.exists(Paths.get(filename))) {
-            KF_LOGGER.error("file({}) not found", filename);
+            LOGGER.error("file({}) not found", filename);
             return false;
         }
 
         try {
-            final List<String> fileContents = Files.readAllLines(new File(filename).toPath());
+            List<String> fileContents = Files.readAllLines(new File(filename).toPath());
 
             if (fileContents.isEmpty()) {
                 return false;
             }
 
-            final Map<String, Integer> fieldIndexMap = FileReaderUtils.createFields(fileContents.get(0), FILE_DELIMITER);
+            Map<String, Integer> fieldIndexMap = FileReaderUtils.createFields(fileContents.get(0), FILE_DELIMITER);
             fileContents.remove(0);
 
             for (String data : fileContents) {
@@ -114,11 +112,11 @@ public class KnownFusionCache {
                     KnownFusionData knownFusionData = KnownFusionData.fromCsv(data, fieldIndexMap);
                     addData(knownFusionData);
                 } catch (Exception e) {
-                    KF_LOGGER.error("file({}) invalid known fusion data will be skipped: {}", filename, data);
+                    LOGGER.error("file({}) invalid known fusion data will be skipped: {}", filename, data);
                 }
             }
         } catch (IOException e) {
-            KF_LOGGER.error("file({}) invalid known fusion data: {}", filename, e.toString());
+            LOGGER.error("file({}) invalid known fusion data: {}", filename, e.toString());
             return false;
         }
 

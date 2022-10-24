@@ -96,7 +96,7 @@ public final class EventExtractorFactory {
     @NotNull
     private static Set<String> extractAllGenesInvolvedInFusions(@NotNull KnownFusionCache knownFusionCache) {
         Set<String> genes = Sets.newHashSet();
-        for (KnownFusionData fusion : knownFusionCache.getData()) {
+        for (KnownFusionData fusion : knownFusionCache.knownFusions()) {
             if (fusion.Type == KnownFusionType.KNOWN_PAIR || fusion.Type == KnownFusionType.IG_KNOWN_PAIR
                     || fusion.Type == KnownFusionType.EXON_DEL_DUP) {
                 genes.add(fusion.FiveGene);

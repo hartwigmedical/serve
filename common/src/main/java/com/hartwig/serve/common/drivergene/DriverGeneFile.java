@@ -1,6 +1,6 @@
 package com.hartwig.serve.common.drivergene;
 
-import static com.hartwig.serve.common.FileReaderUtils.createFields;
+import static com.hartwig.serve.datamodel.util.FileReaderUtils.createFields;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
 
+import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 
 public final class DriverGeneFile {
@@ -81,7 +82,7 @@ public final class DriverGeneFile {
                     .reportGermlineHotspot(DriverGeneGermlineReporting.valueOf(values[germlineHotspotIndex].toUpperCase()))
                     .reportGermlineDisruption(Boolean.parseBoolean(values[germlineDisruptionIndex]))
                     .additionalReportedTranscripts(otherReportableTrans)
-                    .reportPGX(reportPGXIndex != null ? Boolean.parseBoolean(values[reportPGXIndex]) : false);
+                    .reportPGX(reportPGXIndex != null && Boolean.parseBoolean(values[reportPGXIndex]));
 
             driverGenes.add(builder.build());
         }
@@ -89,13 +90,16 @@ public final class DriverGeneFile {
         return driverGenes;
     }
 
-    private static String otherReportableTransStr(final List<String> otherTrans) {
+    @NotNull
+    private static String otherReportableTransStr(@NotNull List<String> otherTrans) {
         if (otherTrans.isEmpty()) {
-            return "";
+            return Strings.EMPTY;
         }
 
         StringJoiner sj = new StringJoiner(OTHER_TRANS_DELIM);
-        otherTrans.forEach(x -> sj.add(x));
+        for (String other : otherTrans) {
+            sj.add(other);
+        }
         return sj.toString();
     }
 

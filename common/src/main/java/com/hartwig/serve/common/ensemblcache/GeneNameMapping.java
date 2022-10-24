@@ -1,6 +1,6 @@
 package com.hartwig.serve.common.ensemblcache;
 
-import static com.hartwig.serve.common.FileReaderUtils.createFields;
+import static com.hartwig.serve.datamodel.util.FileReaderUtils.createFields;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -13,61 +13,57 @@ import java.util.stream.Collectors;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 // a resource to map gene names between GRCh37 and HGNC + GRCh38
 public class GeneNameMapping {
 
-    private final Map<String, GeneMappingData> mGeneNameOldToNewMap;
-    private final Map<String, GeneMappingData> mGeneNameNewToOldMap;
-    private final Set<String> mUnchangedGenes;
-    private final Set<String> mUnmappedGenes;
+    private final Map<String, GeneMappingData> geneNameNewToOldMap;
+    private final Set<String> unchangedGenes;
 
-    private static final String DELIM = ",";
-    private static final String UNMAPPED = "NA";
+    private static final String DELIMITER = ",";
 
     public GeneNameMapping() {
-        mGeneNameOldToNewMap = Maps.newHashMap();
-        mGeneNameNewToOldMap = Maps.newHashMap();
-        mUnchangedGenes = Sets.newHashSet();
-        mUnmappedGenes = Sets.newHashSet();
+        geneNameNewToOldMap = Maps.newHashMap();
+        unchangedGenes = Sets.newHashSet();
 
-        final InputStream inputStream = GeneNameMapping.class.getResourceAsStream("/ensembl/gene_name_mapping.csv");
+        InputStream inputStream = GeneNameMapping.class.getResourceAsStream("/ensembl/gene_name_mapping.csv");
         List<String> lines = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.toList());
 
-        Map<String, Integer> fieldsNameIndex = createFields(lines.get(0), DELIM);
+        Map<String, Integer> fields = createFields(lines.get(0), DELIMITER);
         lines.remove(0);
 
-        int geneIdIndex = fieldsNameIndex.get("GeneId");
-        int geneOldIndex = fieldsNameIndex.get("GeneNameOld");
-        int geneNewIndex = fieldsNameIndex.get("GeneNameNew");
+        int geneIdIndex = fields.get("GeneId");
+        int geneOldIndex = fields.get("GeneNameOld");
+        int geneNewIndex = fields.get("GeneNameNew");
 
         for (String line : lines) {
-            String[] values = line.split(DELIM);
+            String[] values = line.split(DELIMITER);
             String geneId = values[geneIdIndex];
             String geneNameOld = values[geneOldIndex];
             String geneNameNew = values[geneNewIndex];
 
-            if (geneNameNew.isEmpty() || geneNameNew.equals(UNMAPPED)) {
-                mUnmappedGenes.add(geneNameOld);
-            } else if (geneNameOld.equals(geneNameNew)) {
-                mUnchangedGenes.add(geneNameOld);
+            if (geneNameOld.equals(geneNameNew)) {
+                unchangedGenes.add(geneNameOld);
             } else {
                 GeneMappingData data = new GeneMappingData(geneId, geneNameNew, geneNameOld);
-                mGeneNameOldToNewMap.put(geneNameOld, data);
-                mGeneNameNewToOldMap.put(geneNameNew, data);
+                geneNameNewToOldMap.put(geneNameNew, data);
             }
         }
     }
 
-    public boolean hasNewGene(final String geneNameNew) {
-        return mUnchangedGenes.contains(geneNameNew) || mGeneNameNewToOldMap.containsKey(geneNameNew);
+    public boolean hasNewGene(@NotNull String geneNameNew) {
+        return unchangedGenes.contains(geneNameNew) || geneNameNewToOldMap.containsKey(geneNameNew);
     }
 
-    public String getOldName(final String geneNameNew) {
-        if (mUnchangedGenes.contains(geneNameNew)) {
+    @Nullable
+    public String getOldName(@NotNull String geneNameNew) {
+        if (unchangedGenes.contains(geneNameNew)) {
             return geneNameNew;
         }
 
-        GeneMappingData data = mGeneNameNewToOldMap.get(geneNameNew);
+        GeneMappingData data = geneNameNewToOldMap.get(geneNameNew);
         return data != null ? data.GeneNameOld : null;
     }
 }

@@ -90,7 +90,7 @@ public final class RefGenomeManagerFactory {
         if (!cache.loadFile(knownFusionFile)) {
             throw new IOException("Could not load known fusions from " + knownFusionFile);
         }
-        LOGGER.info("  Read {} known fusion entries", cache.getData().size());
+        LOGGER.info("  Read {} known fusion entries", cache.knownFusions().size());
         return cache;
     }
 

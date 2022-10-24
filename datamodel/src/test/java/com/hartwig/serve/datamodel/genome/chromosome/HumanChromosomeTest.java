@@ -5,8 +5,6 @@ import static org.junit.Assert.assertFalse;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 
-import com.hartwig.serve.datamodel.genome.Gender;
-
 import org.junit.Test;
 
 public class HumanChromosomeTest {
@@ -41,22 +39,5 @@ public class HumanChromosomeTest {
         assertTrue(HumanChromosome.contains("1"));
         assertTrue(HumanChromosome.contains("chr1"));
         assertFalse(HumanChromosome.contains("HLA-DRB1*14:54:01"));
-    }
-
-    @Test
-    public void testSexChromosomes() {
-        assertTrue(HumanChromosome._X.isAllosome());
-        assertFalse(HumanChromosome._X.isAutosome());
-
-        assertTrue(HumanChromosome._Y.isAllosome());
-        assertFalse(HumanChromosome._Y.isAutosome());
-    }
-
-    @Test
-    public void testIsDiploid() {
-        assertTrue(HumanChromosome._X.isDiploid(Gender.FEMALE));
-        assertFalse(HumanChromosome._X.isDiploid(Gender.MALE));
-        assertFalse(HumanChromosome._Y.isDiploid(Gender.MALE));
-        assertFalse(HumanChromosome._Y.isDiploid(Gender.FEMALE));
     }
 }

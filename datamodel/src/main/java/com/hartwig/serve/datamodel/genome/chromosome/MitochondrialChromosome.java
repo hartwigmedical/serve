@@ -5,16 +5,6 @@ import org.jetbrains.annotations.NotNull;
 public enum MitochondrialChromosome implements Chromosome {
     MT;
 
-    @Override
-    public boolean isAutosome() {
-        return false;
-    }
-
-    @Override
-    public boolean isAllosome() {
-        return false;
-    }
-
     @NotNull
     public static MitochondrialChromosome fromString(@NotNull String contig) {
         if (!contains(contig)) {

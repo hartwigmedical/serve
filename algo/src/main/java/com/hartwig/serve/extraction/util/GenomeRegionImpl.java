@@ -1,4 +1,6 @@
-package com.hartwig.serve.datamodel.genome;
+package com.hartwig.serve.extraction.util;
+
+import com.hartwig.serve.datamodel.genome.GenomeRegion;
 
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;

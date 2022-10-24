@@ -66,7 +66,7 @@ public class ActionableTrialFactory {
                 .sourceEvent(sourceEvent)
                 .sourceUrls(Sets.newHashSet("https://trial-eye.com/hmf/" + trial.id()))
                 .treatment(ImmutableTreatment.builder()
-                        .treament(trial.acronym())
+                        .name(trial.acronym())
                         .sourceRelevantTreatmentApproaches(Sets.newHashSet())
                         .relevantTreatmentApproaches(Sets.newHashSet())
                         .build())

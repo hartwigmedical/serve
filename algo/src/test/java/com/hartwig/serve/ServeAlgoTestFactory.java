@@ -5,10 +5,10 @@ import com.hartwig.serve.datamodel.ActionableEvent;
 import com.hartwig.serve.datamodel.DatamodelTestFactory;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
+import com.hartwig.serve.datamodel.ImmutableCancerType;
 import com.hartwig.serve.datamodel.ImmutableTreatment;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.MutationType;
-import com.hartwig.serve.datamodel.cancertype.ImmutableCancerType;
 import com.hartwig.serve.datamodel.characteristic.ActionableCharacteristic;
 import com.hartwig.serve.datamodel.characteristic.ImmutableActionableCharacteristic;
 import com.hartwig.serve.datamodel.characteristic.TumorCharacteristicAnnotation;
@@ -247,7 +247,7 @@ public final class ServeAlgoTestFactory {
                 "source event",
                 Sets.newHashSet(),
                 ImmutableTreatment.builder()
-                        .treament("treatment")
+                        .name("treatment")
                         .sourceRelevantTreatmentApproaches(Sets.newHashSet("drugClasses"))
                         .relevantTreatmentApproaches(Sets.newHashSet("drugClasses"))
                         .build(),

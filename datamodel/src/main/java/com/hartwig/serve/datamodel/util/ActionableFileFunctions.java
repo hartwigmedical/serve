@@ -70,7 +70,7 @@ public final class ActionableFileFunctions {
             @Override
             public Treatment treatment() {
                 return ImmutableTreatment.builder()
-                        .treament(values[startingPosition + 3])
+                        .name(values[startingPosition + 3])
                         .sourceRelevantTreatmentApproaches(fieldToSet(values[startingPosition + 4]))
                         .relevantTreatmentApproaches(fieldToSet(values[startingPosition + 5]))
                         .build();
@@ -114,7 +114,7 @@ public final class ActionableFileFunctions {
         return new StringJoiner(FIELD_DELIMITER).add(event.source().toString())
                 .add(event.sourceEvent())
                 .add(setToField(event.sourceUrls()))
-                .add(event.treatment().treament())
+                .add(event.treatment().name())
                 .add(setToField(event.treatment().sourceRelevantTreatmentApproaches()))
                 .add(setToField(event.treatment().relevantTreatmentApproaches()))
                 .add(event.applicableCancerType().name())

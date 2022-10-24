@@ -49,7 +49,7 @@ public final class ActinTrialFactory {
         }
 
         return ImmutableTreatment.builder()
-                .treament(entry.trial() + addon)
+                .name(entry.trial() + addon)
                 .sourceRelevantTreatmentApproaches(Sets.newHashSet())
                 .relevantTreatmentApproaches(Sets.newHashSet())
                 .build();

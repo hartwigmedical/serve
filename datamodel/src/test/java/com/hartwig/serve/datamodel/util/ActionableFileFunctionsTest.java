@@ -24,7 +24,7 @@ public class ActionableFileFunctionsTest {
                 "source event",
                 Sets.newHashSet(),
                 DatamodelTestBuilders.treatmentBuilder()
-                        .treament("treatment")
+                        .name("treatment")
                         .addSourceRelevantTreatmentApproaches("drug classes")
                         .addRelevantTreatmentApproaches("drug classes")
                         .build(),
@@ -38,7 +38,7 @@ public class ActionableFileFunctionsTest {
         ActionableEvent convertedEvent = ActionableFileFunctions.fromLine(line.split(ActionableFileFunctions.FIELD_DELIMITER), 0);
 
         assertEquals(Knowledgebase.VICC_CGI, convertedEvent.source());
-        assertEquals("treatment", convertedEvent.treatment().treament());
+        assertEquals("treatment", convertedEvent.treatment().name());
         assertEquals("applicable name", convertedEvent.applicableCancerType().name());
         assertEquals("applicable doid", convertedEvent.applicableCancerType().doid());
         assertEquals(EvidenceLevel.C, convertedEvent.level());

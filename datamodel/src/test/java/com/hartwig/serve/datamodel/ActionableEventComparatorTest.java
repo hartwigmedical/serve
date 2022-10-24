@@ -39,7 +39,7 @@ public class ActionableEventComparatorTest {
         return DatamodelTestFactory.createEvent(source,
                 Strings.EMPTY,
                 Sets.newHashSet(),
-                DatamodelTestBuilders.treatmentBuilder().treament(treatment).build(),
+                DatamodelTestBuilders.treatmentBuilder().name(treatment).build(),
                 DatamodelTestBuilders.cancerTypeBuilder().name(applicableCancerType).build(),
                 Sets.newHashSet(),
                 level,

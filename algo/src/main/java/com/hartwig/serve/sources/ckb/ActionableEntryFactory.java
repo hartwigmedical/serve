@@ -150,7 +150,7 @@ class ActionableEntryFactory {
                         .sourceEvent(sourceEvent)
                         .sourceUrls(sourceUrls)
                         .treatment(ImmutableTreatment.builder()
-                                .treament(treatment)
+                                .name(treatment)
                                 .sourceRelevantTreatmentApproaches(sourceRelevantTreatmentApproaches)
                                 .relevantTreatmentApproaches(curatedRelevantTreatmentApproaches)
                                 .build())

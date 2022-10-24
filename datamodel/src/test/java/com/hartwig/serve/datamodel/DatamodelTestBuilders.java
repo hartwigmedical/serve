@@ -21,7 +21,7 @@ public final class DatamodelTestBuilders {
 
     @NotNull
     public static ImmutableTreatment.Builder treatmentBuilder() {
-        return ImmutableTreatment.builder().treament(Strings.EMPTY);
+        return ImmutableTreatment.builder().name(Strings.EMPTY);
     }
 
     @NotNull

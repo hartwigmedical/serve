@@ -23,7 +23,7 @@ public class ActionableEventComparator implements Comparator<ActionableEvent> {
             return directionCompare;
         }
 
-        int treatmentCompare = event1.treatment().treament().compareTo(event2.treatment().treament());
+        int treatmentCompare = event1.treatment().name().compareTo(event2.treatment().name());
         if (treatmentCompare != 0) {
             return treatmentCompare;
         }

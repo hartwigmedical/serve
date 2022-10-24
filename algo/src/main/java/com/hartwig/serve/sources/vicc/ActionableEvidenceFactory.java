@@ -127,7 +127,7 @@ class ActionableEvidenceFactory {
 
                     for (List<String> drugList : drugLists) {
                         actionableEvidences.add(builder.treatment(ImmutableTreatment.builder()
-                                        .treament(formatDrugList(drugList))
+                                        .name(formatDrugList(drugList))
                                         .sourceRelevantTreatmentApproaches(Sets.newHashSet())
                                         .relevantTreatmentApproaches(Sets.newHashSet())
                                         .build())

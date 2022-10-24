@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 public abstract class Treatment {
 
     @NotNull
-    public abstract String treament();
+    public abstract String name();
 
     @NotNull
     public abstract Set<String> sourceRelevantTreatmentApproaches();

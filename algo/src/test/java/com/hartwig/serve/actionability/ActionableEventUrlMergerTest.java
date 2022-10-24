@@ -8,9 +8,9 @@ import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.DatamodelTestFactory;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
+import com.hartwig.serve.datamodel.ImmutableCancerType;
 import com.hartwig.serve.datamodel.ImmutableTreatment;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.datamodel.cancertype.ImmutableCancerType;
 import com.hartwig.serve.datamodel.fusion.ActionableFusion;
 import com.hartwig.serve.datamodel.fusion.ImmutableActionableFusion;
 
@@ -43,8 +43,8 @@ public class ActionableEventUrlMergerTest {
                         "source event",
                         Sets.newHashSet(),
                         ImmutableTreatment.builder()
-                                .treament("treatment")
-                                .sourceRelevantTreatmentApproaches(Sets.newHashSet("drugClasses"))
+                                .name("treatment")
+                                .sourceRelevantTreatmentApproaches(Sets.newHashSet("drug classes"))
                                 .build(),
                         ImmutableCancerType.builder().name("applicable cancerType").doid("applicable doid").build(),
                         Sets.newHashSet(ImmutableCancerType.builder().name("blacklist cancerType").doid("blacklist doid").build()),

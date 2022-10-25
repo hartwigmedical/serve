@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Map;
 import java.util.StringJoiner;
 
 import com.google.common.annotations.VisibleForTesting;
@@ -15,9 +16,11 @@ import com.hartwig.serve.datamodel.characteristic.TumorCharacteristicCutoffType;
 import com.hartwig.serve.datamodel.characteristic.TumorCharacteristicType;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 import com.hartwig.serve.datamodel.serialization.util.ActionableFileUtil;
+import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public final class ActionableCharacteristicFile {
 
@@ -37,18 +40,21 @@ public final class ActionableCharacteristicFile {
         List<String> lines = Lists.newArrayList();
         lines.add(header());
         lines.addAll(toLines(actionableCharacteristics));
+
         Files.write(new File(actionableCharacteristicTsv).toPath(), lines);
     }
 
     @NotNull
     public static List<ActionableCharacteristic> read(@NotNull String actionableCharacteristicTsv) throws IOException {
         List<String> lines = Files.readAllLines(new File(actionableCharacteristicTsv).toPath());
-        // Skip header
-        return fromLines(lines.subList(1, lines.size()));
+        Map<String, Integer> fields = SerializationUtil.createFields(lines.get(0), ActionableFileUtil.FIELD_DELIMITER);
+
+        return fromLines(lines.subList(1, lines.size()), fields);
     }
 
     @NotNull
-    private static String header() {
+    @VisibleForTesting
+    static String header() {
         return new StringJoiner(ActionableFileUtil.FIELD_DELIMITER).add("type")
                 .add("cutoffType")
                 .add("cutoff")
@@ -58,23 +64,26 @@ public final class ActionableCharacteristicFile {
 
     @NotNull
     @VisibleForTesting
-    static List<ActionableCharacteristic> fromLines(@NotNull List<String> lines) {
+    static List<ActionableCharacteristic> fromLines(@NotNull List<String> lines, @NotNull Map<String, Integer> fields) {
         List<ActionableCharacteristic> actionableCharacteristics = Lists.newArrayList();
         for (String line : lines) {
-            actionableCharacteristics.add(fromLine(line));
+            actionableCharacteristics.add(fromLine(line, fields));
         }
         return actionableCharacteristics;
     }
 
     @NotNull
-    private static ActionableCharacteristic fromLine(@NotNull String line) {
+    private static ActionableCharacteristic fromLine(@NotNull String line, @NotNull Map<String, Integer> fields) {
         String[] values = line.split(ActionableFileUtil.FIELD_DELIMITER);
 
+        String cutoffType = SerializationUtil.optionalString(values[fields.get("cutoffType")]);
+        String cutoff = SerializationUtil.optionalString(values[fields.get("cutoff")]);
+
         return ImmutableActionableCharacteristic.builder()
-                .from(ActionableFileUtil.fromLine(values, 3))
-                .type(TumorCharacteristicType.valueOf(values[0]))
-                .cutoffType(!values[1].equals(Strings.EMPTY) ? TumorCharacteristicCutoffType.valueOf(values[1]) : null)
-                .cutoff(!values[2].equals(Strings.EMPTY) ? Double.valueOf(values[2]) : null)
+                .from(ActionableFileUtil.fromLine(values, fields))
+                .type(TumorCharacteristicType.valueOf(values[fields.get("type")]))
+                .cutoffType(cutoffType != null ? TumorCharacteristicCutoffType.valueOf(cutoffType) : null)
+                .cutoff(cutoff != null ? Double.valueOf(cutoff) : null)
                 .build();
     }
 
@@ -100,9 +109,14 @@ public final class ActionableCharacteristicFile {
     @NotNull
     private static String toLine(@NotNull ActionableCharacteristic characteristic) {
         return new StringJoiner(ActionableFileUtil.FIELD_DELIMITER).add(characteristic.type().toString())
-                .add(characteristic.cutoffType() != null ? characteristic.cutoffType().toString() : Strings.EMPTY)
-                .add(characteristic.cutoff() != null ? Double.toString(characteristic.cutoff()) : Strings.EMPTY)
+                .add(nullableCutoffType(characteristic.cutoffType()))
+                .add(SerializationUtil.nullableNumber(characteristic.cutoff()))
                 .add(ActionableFileUtil.toLine(characteristic))
                 .toString();
+    }
+
+    @NotNull
+    public static String nullableCutoffType(@Nullable TumorCharacteristicCutoffType cutoffType) {
+        return cutoffType != null ? cutoffType.toString() : Strings.EMPTY;
     }
 }

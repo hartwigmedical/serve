@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Map;
 import java.util.StringJoiner;
 
 import com.google.common.annotations.VisibleForTesting;
@@ -16,6 +17,7 @@ import com.hartwig.serve.datamodel.gene.GeneLevelEvent;
 import com.hartwig.serve.datamodel.gene.ImmutableActionableGene;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 import com.hartwig.serve.datamodel.serialization.util.ActionableFileUtil;
+import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -35,18 +37,21 @@ public final class ActionableGeneFile {
         List<String> lines = Lists.newArrayList();
         lines.add(header());
         lines.addAll(toLines(actionableGenes));
+
         Files.write(new File(actionableGeneTsv).toPath(), lines);
     }
 
     @NotNull
     public static List<ActionableGene> read(@NotNull String actionableGeneTsv) throws IOException {
         List<String> lines = Files.readAllLines(new File(actionableGeneTsv).toPath());
-        // Skip header
-        return fromLines(lines.subList(1, lines.size()));
+        Map<String, Integer> fields = SerializationUtil.createFields(lines.get(0), ActionableFileUtil.FIELD_DELIMITER);
+
+        return fromLines(lines.subList(1, lines.size()), fields);
     }
 
     @NotNull
-    private static String header() {
+    @VisibleForTesting
+    static String header() {
         return new StringJoiner(ActionableFileUtil.FIELD_DELIMITER).add("gene")
                 .add("geneRole")
                 .add("proteinEffect")
@@ -57,24 +62,24 @@ public final class ActionableGeneFile {
 
     @NotNull
     @VisibleForTesting
-    static List<ActionableGene> fromLines(@NotNull List<String> lines) {
+    static List<ActionableGene> fromLines(@NotNull List<String> lines, @NotNull Map<String, Integer> fields) {
         List<ActionableGene> actionableGenes = Lists.newArrayList();
         for (String line : lines) {
-            actionableGenes.add(fromLine(line));
+            actionableGenes.add(fromLine(line, fields));
         }
         return actionableGenes;
     }
 
     @NotNull
-    private static ActionableGene fromLine(@NotNull String line) {
+    private static ActionableGene fromLine(@NotNull String line, @NotNull Map<String, Integer> fields) {
         String[] values = line.split(ActionableFileUtil.FIELD_DELIMITER);
 
         return ImmutableActionableGene.builder()
-                .from(ActionableFileUtil.fromLine(values, 4))
-                .gene(values[0])
-                .geneRole(GeneRole.valueOf(values[1]))
-                .proteinEffect(ProteinEffect.valueOf(values[2]))
-                .event(GeneLevelEvent.valueOf(values[3]))
+                .from(ActionableFileUtil.fromLine(values, fields))
+                .gene(values[fields.get("gene")])
+                .geneRole(GeneRole.valueOf(values[fields.get("geneRole")]))
+                .proteinEffect(ProteinEffect.valueOf(values[fields.get("proteinEffect")]))
+                .event(GeneLevelEvent.valueOf(values[fields.get("event")]))
                 .build();
     }
 

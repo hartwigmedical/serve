@@ -4,10 +4,14 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import com.google.common.io.Resources;
 import com.hartwig.serve.datamodel.gene.ActionableGene;
+import com.hartwig.serve.datamodel.serialization.util.ActionableFileUtil;
+import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
 public class ActionableGeneFileTest {
@@ -16,17 +20,19 @@ public class ActionableGeneFileTest {
 
     @Test
     public void canReadFromFileAndConvert() throws IOException {
-        List<ActionableGene> actionableGenes = ActionableGeneFile.read(ACTIONABLE_GENE_TSV);
+        List<ActionableGene> genes = ActionableGeneFile.read(ACTIONABLE_GENE_TSV);
 
-        assertEquals(7, actionableGenes.size());
+        assertActionableGenes(genes);
 
-        List<String> lines = ActionableGeneFile.toLines(actionableGenes);
-        List<ActionableGene> regeneratedGenes = ActionableGeneFile.fromLines(lines);
-        List<String> regeneratedLines = ActionableGeneFile.toLines(regeneratedGenes);
-        assertEquals(lines.size(), regeneratedLines.size());
+        Map<String, Integer> fields = SerializationUtil.createFields(ActionableGeneFile.header(), ActionableFileUtil.FIELD_DELIMITER);
+        List<ActionableGene> regeneratedGenes = ActionableGeneFile.fromLines(ActionableGeneFile.toLines(genes), fields);
 
-        for (int i = 0; i < lines.size(); i++) {
-            assertEquals(lines.get(i), regeneratedLines.get(i));
-        }
+        assertEquals(genes, regeneratedGenes);
+    }
+
+    private static void assertActionableGenes(@NotNull List<ActionableGene> genes) {
+        assertEquals(7, genes.size());
+
+        // TODO Implement (see ActionableFusionFileTest)
     }
 }

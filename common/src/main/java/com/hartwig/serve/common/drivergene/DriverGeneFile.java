@@ -1,6 +1,6 @@
 package com.hartwig.serve.common.drivergene;
 
-import static com.hartwig.serve.datamodel.serialization.util.FileReaderUtil.createFields;
+import static com.hartwig.serve.datamodel.serialization.util.SerializationUtil.createFields;
 
 import java.io.File;
 import java.io.IOException;

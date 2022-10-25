@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Map;
 import java.util.StringJoiner;
 
 import com.google.common.annotations.VisibleForTesting;
@@ -13,14 +14,13 @@ import com.hartwig.serve.datamodel.fusion.FusionPairComparator;
 import com.hartwig.serve.datamodel.fusion.ImmutableKnownFusionPair;
 import com.hartwig.serve.datamodel.fusion.KnownFusionPair;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
-import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public final class KnownFusionPairFile {
 
-    private static final String FIELD_DELIMITER = "\t";
+    static final String FIELD_DELIMITER = "\t";
     private static final String KNOWN_FUSION_PAIR_TSV = "KnownFusionPairs.SERVE.tsv";
 
     private KnownFusionPairFile() {
@@ -31,38 +31,6 @@ public final class KnownFusionPairFile {
         return refGenomeVersion.addVersionToFilePath(outputDir + File.separator + KNOWN_FUSION_PAIR_TSV);
     }
 
-    @NotNull
-    public static List<KnownFusionPair> read(@NotNull String file) throws IOException {
-        List<String> lines = Files.readAllLines(new File(file).toPath());
-
-        return fromLines(lines.subList(1, lines.size()));
-    }
-
-    @NotNull
-    @VisibleForTesting
-    static List<KnownFusionPair> fromLines(@NotNull List<String> lines) {
-        List<KnownFusionPair> fusionPairs = Lists.newArrayList();
-        for (String line : lines) {
-            fusionPairs.add(fromLine(line));
-        }
-        return fusionPairs;
-    }
-
-    @NotNull
-    private static KnownFusionPair fromLine(@NotNull String line) {
-        String[] values = line.split(FIELD_DELIMITER);
-
-        return ImmutableKnownFusionPair.builder()
-                .geneUp(values[0])
-                .minExonUp(values[1].isEmpty() ? null: Integer.valueOf(values[1]))
-                .maxExonUp(values[2].isEmpty() ? null: Integer.valueOf(values[2]))
-                .geneDown(values[3])
-                .minExonDown(values[4].isEmpty() ? null: Integer.valueOf(values[4]))
-                .maxExonDown(values[5].isEmpty() ? null: Integer.valueOf(values[5]))
-                .sources(Knowledgebase.fromCommaSeparatedSourceString(values[6]))
-                .build();
-    }
-
     public static void write(@NotNull String fusionPairTsv, @NotNull Iterable<KnownFusionPair> fusionPairs) throws IOException {
         List<String> lines = Lists.newArrayList();
         lines.add(header());
@@ -71,7 +39,16 @@ public final class KnownFusionPairFile {
     }
 
     @NotNull
-    private static String header() {
+    public static List<KnownFusionPair> read(@NotNull String file) throws IOException {
+        List<String> lines = Files.readAllLines(new File(file).toPath());
+        Map<String, Integer> fields = SerializationUtil.createFields(lines.get(0), FIELD_DELIMITER);
+
+        return fromLines(lines.subList(1, lines.size()), fields);
+    }
+
+    @NotNull
+    @VisibleForTesting
+    static String header() {
         return new StringJoiner(FIELD_DELIMITER).add("geneUp")
                 .add("minExonUp")
                 .add("maxExonUp")
@@ -80,6 +57,31 @@ public final class KnownFusionPairFile {
                 .add("maxExonDown")
                 .add("sources")
                 .toString();
+    }
+
+    @NotNull
+    @VisibleForTesting
+    static List<KnownFusionPair> fromLines(@NotNull List<String> lines, @NotNull Map<String, Integer> fields) {
+        List<KnownFusionPair> fusionPairs = Lists.newArrayList();
+        for (String line : lines) {
+            fusionPairs.add(fromLine(line, fields));
+        }
+        return fusionPairs;
+    }
+
+    @NotNull
+    private static KnownFusionPair fromLine(@NotNull String line, @NotNull Map<String, Integer> fields) {
+        String[] values = line.split(FIELD_DELIMITER);
+
+        return ImmutableKnownFusionPair.builder()
+                .geneUp(values[fields.get("geneUp")])
+                .minExonUp(SerializationUtil.optionalInteger(values[fields.get("minExonUp")]))
+                .maxExonUp(SerializationUtil.optionalInteger(values[fields.get("maxExonUp")]))
+                .geneDown(values[fields.get("geneDown")])
+                .minExonDown(SerializationUtil.optionalInteger(values[fields.get("minExonDown")]))
+                .maxExonDown(SerializationUtil.optionalInteger(values[fields.get("maxExonDown")]))
+                .sources(Knowledgebase.fromCommaSeparatedSourceString(values[fields.get("sources")]))
+                .build();
     }
 
     @NotNull
@@ -103,17 +105,12 @@ public final class KnownFusionPairFile {
     @NotNull
     private static String toLine(@NotNull KnownFusionPair fusionPair) {
         return new StringJoiner(FIELD_DELIMITER).add(fusionPair.geneUp())
-                .add(nullToEmpty(fusionPair.minExonUp()))
-                .add(nullToEmpty(fusionPair.maxExonUp()))
+                .add(SerializationUtil.nullableInteger(fusionPair.minExonUp()))
+                .add(SerializationUtil.nullableInteger(fusionPair.maxExonUp()))
                 .add(fusionPair.geneDown())
-                .add(nullToEmpty(fusionPair.minExonDown()))
-                .add(nullToEmpty(fusionPair.maxExonDown()))
+                .add(SerializationUtil.nullableInteger(fusionPair.minExonDown()))
+                .add(SerializationUtil.nullableInteger(fusionPair.maxExonDown()))
                 .add(Knowledgebase.toCommaSeparatedSourceString(fusionPair.sources()))
                 .toString();
-    }
-
-    @NotNull
-    private static String nullToEmpty(@Nullable Integer integer) {
-        return integer != null ? String.valueOf(integer) : Strings.EMPTY;
     }
 }

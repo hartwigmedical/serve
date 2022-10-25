@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import com.google.common.io.Resources;
 import com.hartwig.serve.datamodel.DatamodelTestFactory;
@@ -15,6 +16,8 @@ import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.characteristic.ActionableCharacteristic;
 import com.hartwig.serve.datamodel.characteristic.TumorCharacteristicCutoffType;
 import com.hartwig.serve.datamodel.characteristic.TumorCharacteristicType;
+import com.hartwig.serve.datamodel.serialization.util.ActionableFileUtil;
+import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
@@ -32,8 +35,10 @@ public class ActionableCharacteristicFileTest {
 
         assertCharacteristics(characteristics);
 
+        Map<String, Integer> fields =
+                SerializationUtil.createFields(ActionableCharacteristicFile.header(), ActionableFileUtil.FIELD_DELIMITER);
         List<ActionableCharacteristic> regeneratedCharacteristics =
-                ActionableCharacteristicFile.fromLines(ActionableCharacteristicFile.toLines(characteristics));
+                ActionableCharacteristicFile.fromLines(ActionableCharacteristicFile.toLines(characteristics), fields);
 
         assertEquals(characteristics, regeneratedCharacteristics);
     }

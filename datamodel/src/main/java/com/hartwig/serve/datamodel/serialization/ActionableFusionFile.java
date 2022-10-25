@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Map;
 import java.util.StringJoiner;
 
 import com.google.common.annotations.VisibleForTesting;
@@ -13,10 +14,9 @@ import com.hartwig.serve.datamodel.fusion.ActionableFusionComparator;
 import com.hartwig.serve.datamodel.fusion.ImmutableActionableFusion;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 import com.hartwig.serve.datamodel.serialization.util.ActionableFileUtil;
+import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
-import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public final class ActionableFusionFile {
 
@@ -35,18 +35,21 @@ public final class ActionableFusionFile {
         List<String> lines = Lists.newArrayList();
         lines.add(header());
         lines.addAll(toLines(actionableFusions));
+
         Files.write(new File(actionableFusionTsv).toPath(), lines);
     }
 
     @NotNull
     public static List<ActionableFusion> read(@NotNull String actionableFusionTsv) throws IOException {
         List<String> lines = Files.readAllLines(new File(actionableFusionTsv).toPath());
-        // Skip header
-        return fromLines(lines.subList(1, lines.size()));
+        Map<String, Integer> fields = SerializationUtil.createFields(lines.get(0), ActionableFileUtil.FIELD_DELIMITER);
+
+        return fromLines(lines.subList(1, lines.size()), fields);
     }
 
     @NotNull
-    private static String header() {
+    @VisibleForTesting
+    static String header() {
         return new StringJoiner(ActionableFileUtil.FIELD_DELIMITER).add("geneUp")
                 .add("minExonUp")
                 .add("maxExonUp")
@@ -59,36 +62,27 @@ public final class ActionableFusionFile {
 
     @NotNull
     @VisibleForTesting
-    static List<ActionableFusion> fromLines(@NotNull List<String> lines) {
+    static List<ActionableFusion> fromLines(@NotNull List<String> lines, @NotNull Map<String, Integer> fields) {
         List<ActionableFusion> actionableFusions = Lists.newArrayList();
         for (String line : lines) {
-            actionableFusions.add(fromLine(line));
+            actionableFusions.add(fromLine(line, fields));
         }
         return actionableFusions;
     }
 
     @NotNull
-    private static ActionableFusion fromLine(@NotNull String line) {
+    private static ActionableFusion fromLine(@NotNull String line, @NotNull Map<String, Integer> fields) {
         String[] values = line.split(ActionableFileUtil.FIELD_DELIMITER);
 
         return ImmutableActionableFusion.builder()
-                .from(ActionableFileUtil.fromLine(values, 6))
-                .geneUp(values[0])
-                .minExonUp(optionalInteger(values[1]))
-                .maxExonUp(optionalInteger(values[2]))
-                .geneDown(values[3])
-                .minExonDown(optionalInteger(values[4]))
-                .maxExonDown(optionalInteger(values[5]))
+                .from(ActionableFileUtil.fromLine(values, fields))
+                .geneUp(values[fields.get("geneUp")])
+                .minExonUp(SerializationUtil.optionalInteger(values[fields.get("minExonUp")]))
+                .maxExonUp(SerializationUtil.optionalInteger(values[fields.get("maxExonUp")]))
+                .geneDown(values[fields.get("geneDown")])
+                .minExonDown(SerializationUtil.optionalInteger(values[fields.get("minExonDown")]))
+                .maxExonDown(SerializationUtil.optionalInteger(values[fields.get("maxExonDown")]))
                 .build();
-    }
-
-    @Nullable
-    private static Integer optionalInteger(@NotNull String value) {
-        if (value.isEmpty()) {
-            return null;
-        }
-
-        return Integer.parseInt(value);
     }
 
     @NotNull
@@ -113,20 +107,12 @@ public final class ActionableFusionFile {
     @NotNull
     private static String toLine(@NotNull ActionableFusion fusion) {
         return new StringJoiner(ActionableFileUtil.FIELD_DELIMITER).add(fusion.geneUp())
-                .add(fromOptionalInteger(fusion.minExonUp()))
-                .add(fromOptionalInteger(fusion.maxExonUp()))
+                .add(SerializationUtil.nullableInteger(fusion.minExonUp()))
+                .add(SerializationUtil.nullableInteger(fusion.maxExonUp()))
                 .add(fusion.geneDown())
-                .add(fromOptionalInteger(fusion.minExonDown()))
-                .add(fromOptionalInteger(fusion.maxExonDown()))
+                .add(SerializationUtil.nullableInteger(fusion.minExonDown()))
+                .add(SerializationUtil.nullableInteger(fusion.maxExonDown()))
                 .add(ActionableFileUtil.toLine(fusion))
                 .toString();
-    }
-
-    @NotNull
-    private static String fromOptionalInteger(@Nullable Integer value) {
-        if (value == null) {
-            return Strings.EMPTY;
-        }
-        return Integer.toString(value);
     }
 }

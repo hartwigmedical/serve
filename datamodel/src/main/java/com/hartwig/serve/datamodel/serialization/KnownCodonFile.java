@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Map;
 import java.util.StringJoiner;
 
 import com.google.common.annotations.VisibleForTesting;
@@ -17,12 +18,13 @@ import com.hartwig.serve.datamodel.range.ImmutableKnownCodon;
 import com.hartwig.serve.datamodel.range.KnownCodon;
 import com.hartwig.serve.datamodel.range.KnownCodonComparator;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
 import org.jetbrains.annotations.NotNull;
 
 public final class KnownCodonFile {
 
-    private static final String FIELD_DELIMITER = "\t";
+    static final String FIELD_DELIMITER = "\t";
     private static final String KNOWN_CODON_TSV = "KnownCodons.SERVE.tsv";
 
     private KnownCodonFile() {
@@ -33,61 +35,67 @@ public final class KnownCodonFile {
         return refGenomeVersion.addVersionToFilePath(outputDir + File.separator + KNOWN_CODON_TSV);
     }
 
+    public static void write(@NotNull String codonTsv, @NotNull Iterable<KnownCodon> codons) throws IOException {
+        List<String> lines = Lists.newArrayList();
+        lines.add(header());
+        lines.addAll(toLines(codons));
+
+        Files.write(new File(codonTsv).toPath(), lines);
+    }
+
     @NotNull
     public static List<KnownCodon> read(@NotNull String file) throws IOException {
         List<String> lines = Files.readAllLines(new File(file).toPath());
+        Map<String, Integer> fields = SerializationUtil.createFields(lines.get(0), FIELD_DELIMITER);
 
-        return fromLines(lines.subList(1, lines.size()));
+        return fromLines(lines.subList(1, lines.size()), fields);
     }
 
     @NotNull
     @VisibleForTesting
-    static List<KnownCodon> fromLines(@NotNull List<String> lines) {
+    static String header() {
+        return new StringJoiner(FIELD_DELIMITER).add("gene")
+                .add("geneRole")
+                .add("proteinEffect")
+                .add("transcript")
+                .add("chromosome")
+                .add("start")
+                .add("end")
+                .add("applicableMutationType")
+                .add("codonRank")
+                .add("sources")
+                .toString();
+    }
+
+
+    @NotNull
+    @VisibleForTesting
+    static List<KnownCodon> fromLines(@NotNull List<String> lines, @NotNull Map<String, Integer> fields) {
         List<KnownCodon> codons = Lists.newArrayList();
         for (String line : lines) {
-            codons.add(fromLine(line));
+            codons.add(fromLine(line, fields));
         }
         return codons;
     }
 
     @NotNull
-    private static KnownCodon fromLine(@NotNull String line) {
+    private static KnownCodon fromLine(@NotNull String line, @NotNull Map<String, Integer> fields) {
         String[] values = line.split(FIELD_DELIMITER);
 
         return ImmutableKnownCodon.builder()
                 .annotation(ImmutableCodonAnnotation.builder()
-                        .gene(values[0])
-                        .geneRole(GeneRole.UNKNOWN)
-                        .proteinEffect(ProteinEffect.UNKNOWN)
-                        .transcript(values[1])
-                        .chromosome(values[2])
-                        .start(Integer.parseInt(values[3]))
-                        .end(Integer.parseInt(values[4]))
-                        .applicableMutationType(MutationType.valueOf(values[5]))
-                        .rank(Integer.parseInt(values[6]))
+                        .gene(values[fields.get("gene")])
+                        .geneRole(GeneRole.valueOf(values[fields.get("geneRole")]))
+                        .proteinEffect(ProteinEffect.valueOf(values[fields.get("proteinEffect")]))
+                        .transcript(values[fields.get("transcript")])
+                        .chromosome(values[fields.get("chromosome")])
+                        .start(Integer.parseInt(values[fields.get("start")]))
+                        .end(Integer.parseInt(values[fields.get("end")]))
+                        .applicableMutationType(MutationType.valueOf(values[fields.get("applicableMutationType")]))
+                        .rank(Integer.parseInt(values[fields.get("codonRank")]))
                         .build())
-                .sources(Knowledgebase.fromCommaSeparatedSourceString(values[7]))
+                .sources(Knowledgebase.fromCommaSeparatedSourceString(values[fields.get("sources")]))
                 .build();
-    }
-
-    public static void write(@NotNull String codonTsv, @NotNull Iterable<KnownCodon> codons) throws IOException {
-        List<String> lines = Lists.newArrayList();
-        lines.add(header());
-        lines.addAll(toLines(codons));
-        Files.write(new File(codonTsv).toPath(), lines);
-    }
-
-    @NotNull
-    private static String header() {
-        return new StringJoiner(FIELD_DELIMITER).add("gene")
-                .add("transcript")
-                .add("chromosome")
-                .add("start")
-                .add("end")
-                .add("mutationType")
-                .add("codonRank")
-                .add("sources")
-                .toString();
     }
 
     @NotNull
@@ -112,6 +120,8 @@ public final class KnownCodonFile {
     @NotNull
     private static String toLine(@NotNull KnownCodon codon) {
         return new StringJoiner(FIELD_DELIMITER).add(codon.annotation().gene())
+                .add(codon.annotation().geneRole().toString())
+                .add(codon.annotation().proteinEffect().toString())
                 .add(codon.annotation().transcript())
                 .add(codon.annotation().chromosome())
                 .add(String.valueOf(codon.annotation().start()))

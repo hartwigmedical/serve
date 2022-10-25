@@ -10,6 +10,8 @@ import org.jetbrains.annotations.Nullable;
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class })
 public abstract class ActionableHLA implements ActionableEvent {
 
+    // TODO Rename to hlaAllele
+
     @NotNull
     public abstract String hlaType();
 }

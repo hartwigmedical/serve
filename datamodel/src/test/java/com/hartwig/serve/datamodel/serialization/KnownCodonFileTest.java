@@ -4,31 +4,34 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import com.google.common.io.Resources;
 import com.hartwig.serve.datamodel.range.KnownCodon;
-import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
 public class KnownCodonFileTest {
 
-    private static final String TEST_KNOWN_CODON_DIR = Resources.getResource("known_codons").getPath();
+    private static final String KNOWN_CODON_TSV = Resources.getResource("known_codons/KnownCodons.SERVE.37.tsv").getPath();
 
     @Test
     public void canReadFromFileAndConvert() throws IOException {
-        String knownCodonTsv = KnownCodonFile.knownCodonTsvPath(TEST_KNOWN_CODON_DIR, RefGenomeVersion.V37);
-        List<KnownCodon> knownCodons = KnownCodonFile.read(knownCodonTsv);
+        List<KnownCodon> codons = KnownCodonFile.read(KNOWN_CODON_TSV);
 
-        assertEquals(2, knownCodons.size());
+        assertKnownCodons(codons);
 
-        List<String> lines = KnownCodonFile.toLines(knownCodons);
-        List<KnownCodon> regeneratedCodons = KnownCodonFile.fromLines(lines);
-        List<String> regeneratedLines = KnownCodonFile.toLines(regeneratedCodons);
-        assertEquals(lines.size(), regeneratedLines.size());
+        Map<String, Integer> fields = SerializationUtil.createFields(KnownCodonFile.header(), KnownCodonFile.FIELD_DELIMITER);
+        List<KnownCodon> regeneratedCodons = KnownCodonFile.fromLines(KnownCodonFile.toLines(codons), fields);
 
-        for (int i = 0; i < lines.size(); i++) {
-            assertEquals(lines.get(i), regeneratedLines.get(i));
-        }
+        assertEquals(codons, regeneratedCodons);
+    }
+
+    private static void assertKnownCodons(@NotNull List<KnownCodon> codons) {
+        assertEquals(2, codons.size());
+
+        // TODO Implement (See ActionableFusionFileTest)
     }
 }

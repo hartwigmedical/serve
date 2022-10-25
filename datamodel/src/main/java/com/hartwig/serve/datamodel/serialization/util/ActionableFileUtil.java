@@ -1,5 +1,6 @@
 package com.hartwig.serve.datamodel.serialization.util;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
 
@@ -105,6 +106,76 @@ public final class ActionableFileUtil {
             public Set<String> evidenceUrls() {
                 int urlPosition = startingPosition + 11;
                 return values.length > urlPosition ? fieldToSet(values[urlPosition]) : Sets.newHashSet();
+            }
+
+
+        };
+    }
+
+    @NotNull
+    public static ActionableEvent fromLine(@NotNull String[] values, Map<String, Integer> fields) {
+        return new ActionableEvent() {
+
+            @NotNull
+            @Override
+            public Knowledgebase source() {
+                return Knowledgebase.valueOf(values[fields.get("source")]);
+            }
+
+            @NotNull
+            @Override
+            public String sourceEvent() {
+                return values[fields.get("sourceEvent")];
+            }
+
+            @NotNull
+            @Override
+            public Set<String> sourceUrls() {
+                return fieldToSet(values[fields.get("sourceUrls")]);
+            }
+
+            @NotNull
+            @Override
+            public Treatment treatment() {
+                return ImmutableTreatment.builder()
+                        .name(values[fields.get("treatment")])
+                        .sourceRelevantTreatmentApproaches(fieldToSet(values[fields.get("sourceRelevantTreatmentApproaches")]))
+                        .relevantTreatmentApproaches(fieldToSet(values[fields.get("relevantTreatmentApproaches")]))
+                        .build();
+            }
+
+            @NotNull
+            @Override
+            public CancerType applicableCancerType() {
+                return ImmutableCancerType.builder()
+                        .name(values[fields.get("applicableCancerType")])
+                        .doid(values[fields.get("applicableDoid")])
+                        .build();
+            }
+
+            @NotNull
+            @Override
+            public Set<CancerType> blacklistCancerTypes() {
+                return fieldToCancerTypes(values[fields.get("blacklistCancerTypes")]);
+            }
+
+            @NotNull
+            @Override
+            public EvidenceLevel level() {
+                return EvidenceLevel.valueOf(values[fields.get("level")]);
+            }
+
+            @NotNull
+            @Override
+            public EvidenceDirection direction() {
+                return EvidenceDirection.valueOf(values[fields.get("direction")]);
+            }
+
+            @NotNull
+            @Override
+            public Set<String> evidenceUrls() {
+                int evidenceUrlPosition = fields.get("evidenceUrls");
+                return values.length > evidenceUrlPosition ? fieldToSet(values[evidenceUrlPosition]) : Sets.newHashSet();
             }
         };
     }

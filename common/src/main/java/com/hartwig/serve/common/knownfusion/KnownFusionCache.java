@@ -10,7 +10,7 @@ import java.util.Map;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.hartwig.serve.datamodel.serialization.util.FileReaderUtil;
+import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -104,7 +104,7 @@ public class KnownFusionCache {
                 return false;
             }
 
-            Map<String, Integer> fieldIndexMap = FileReaderUtil.createFields(fileContents.get(0), FILE_DELIMITER);
+            Map<String, Integer> fieldIndexMap = SerializationUtil.createFields(fileContents.get(0), FILE_DELIMITER);
             fileContents.remove(0);
 
             for (String data : fileContents) {

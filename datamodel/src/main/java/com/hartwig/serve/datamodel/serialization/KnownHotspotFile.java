@@ -44,6 +44,31 @@ public final class KnownHotspotFile {
         return refGenomeVersion.addVersionToFilePath(outputDir + File.separator + KNOWN_HOTSPOT_VCF);
     }
 
+    public static void write(@NotNull String hotspotVcf, @NotNull IndexedFastaSequenceFile refSequence,
+            @NotNull Iterable<KnownHotspot> hotspots) {
+        VariantContextWriter writer = VCFWriterFactory.openIndexedVCFWriter(hotspotVcf, refSequence, uniqueSourcesString(hotspots));
+
+        for (KnownHotspot hotspot : sort(hotspots)) {
+            List<Allele> hotspotAlleles = buildAlleles(hotspot);
+
+            VariantContext variant = new VariantContextBuilder().noGenotypes()
+                    .source("SERVE")
+                    .chr(hotspot.chromosome())
+                    .start(hotspot.position())
+                    .alleles(hotspotAlleles)
+                    .computeEndFromAlleles(hotspotAlleles, hotspot.position())
+                    .attribute(VCFWriterFactory.INPUT_FIELD,
+                            toProteinKey(hotspot.gene(), hotspot.transcript(), hotspot.proteinAnnotation()))
+                    .attribute(VCFWriterFactory.SOURCES_FIELD, Knowledgebase.toCommaSeparatedSourceString(hotspot.sources()))
+                    .make();
+
+            LOGGER.debug(" Writing variant '{}'", variant);
+            writer.add(variant);
+        }
+
+        writer.close();
+    }
+
     @NotNull
     public static List<KnownHotspot> read(@NotNull String vcfFile) throws IOException {
         List<KnownHotspot> result = Lists.newArrayList();
@@ -79,31 +104,6 @@ public final class KnownHotspotFile {
 
         return result;
 
-    }
-
-    public static void write(@NotNull String hotspotVcf, @NotNull IndexedFastaSequenceFile refSequence,
-            @NotNull Iterable<KnownHotspot> hotspots) {
-        VariantContextWriter writer = VCFWriterFactory.openIndexedVCFWriter(hotspotVcf, refSequence, uniqueSourcesString(hotspots));
-
-        for (KnownHotspot hotspot : sort(hotspots)) {
-            List<Allele> hotspotAlleles = buildAlleles(hotspot);
-
-            VariantContext variant = new VariantContextBuilder().noGenotypes()
-                    .source("SERVE")
-                    .chr(hotspot.chromosome())
-                    .start(hotspot.position())
-                    .alleles(hotspotAlleles)
-                    .computeEndFromAlleles(hotspotAlleles, hotspot.position())
-                    .attribute(VCFWriterFactory.INPUT_FIELD,
-                            toProteinKey(hotspot.gene(), hotspot.transcript(), hotspot.proteinAnnotation()))
-                    .attribute(VCFWriterFactory.SOURCES_FIELD, Knowledgebase.toCommaSeparatedSourceString(hotspot.sources()))
-                    .make();
-
-            LOGGER.debug(" Writing variant '{}'", variant);
-            writer.add(variant);
-        }
-
-        writer.close();
     }
 
     @NotNull

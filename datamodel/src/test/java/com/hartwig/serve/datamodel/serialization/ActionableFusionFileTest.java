@@ -1,13 +1,18 @@
 package com.hartwig.serve.datamodel.serialization;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import com.google.common.io.Resources;
 import com.hartwig.serve.datamodel.fusion.ActionableFusion;
+import com.hartwig.serve.datamodel.serialization.util.ActionableFileUtil;
+import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
 public class ActionableFusionFileTest {
@@ -16,17 +21,42 @@ public class ActionableFusionFileTest {
 
     @Test
     public void canReadFromFileAndConvert() throws IOException {
-        List<ActionableFusion> actionableFusions = ActionableFusionFile.read(ACTIONABLE_FUSION_TSV);
+        List<ActionableFusion> fusions = ActionableFusionFile.read(ACTIONABLE_FUSION_TSV);
 
-        assertEquals(3, actionableFusions.size());
+        assertActionableFusions(fusions);
 
-        List<String> lines = ActionableFusionFile.toLines(actionableFusions);
-        List<ActionableFusion> regeneratedFusions = ActionableFusionFile.fromLines(lines);
-        List<String> regeneratedLines = ActionableFusionFile.toLines(regeneratedFusions);
-        assertEquals(lines.size(), regeneratedLines.size());
+        Map<String, Integer> fields = SerializationUtil.createFields(ActionableFusionFile.header(), ActionableFileUtil.FIELD_DELIMITER);
+        List<ActionableFusion> regeneratedFusions = ActionableFusionFile.fromLines(ActionableFusionFile.toLines(fusions), fields);
 
-        for (int i = 0; i < lines.size(); i++) {
-            assertEquals(lines.get(i), regeneratedLines.get(i));
+        assertEquals(fusions, regeneratedFusions);
+    }
+
+    private static void assertActionableFusions(@NotNull List<ActionableFusion> fusions) {
+        assertEquals(3, fusions.size());
+
+        ActionableFusion fusion1 = findByGeneUp(fusions, "EGFR");
+        assertEquals(1, (int) fusion1.minExonUp());
+        assertEquals(2, (int) fusion1.maxExonUp());
+        assertEquals("EGFR", fusion1.geneDown());
+        assertEquals(8, (int) fusion1.minExonDown());
+        assertEquals(9, (int) fusion1.maxExonDown());
+
+        ActionableFusion fusion2 = findByGeneUp(fusions, "EML4");
+        assertNull(fusion2.minExonUp());
+        assertNull(fusion2.maxExonUp());
+        assertEquals("ALK", fusion2.geneDown());
+        assertNull(fusion2.minExonDown());
+        assertNull(fusion2.maxExonDown());
+    }
+
+    @NotNull
+    private static ActionableFusion findByGeneUp(@NotNull List<ActionableFusion> fusions,  @NotNull String geneUpToFind) {
+        for (ActionableFusion fusion : fusions) {
+            if (fusion.geneUp().equals(geneUpToFind)) {
+                return fusion;
+            }
         }
+
+        throw new IllegalStateException("Could not find fusion with geneUp:" + geneUpToFind);
     }
 }

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Map;
 import java.util.StringJoiner;
 
 import com.google.common.annotations.VisibleForTesting;
@@ -15,6 +16,7 @@ import com.hartwig.serve.datamodel.hotspot.ActionableHotspotComparator;
 import com.hartwig.serve.datamodel.hotspot.ImmutableActionableHotspot;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 import com.hartwig.serve.datamodel.serialization.util.ActionableFileUtil;
+import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -35,18 +37,21 @@ public final class ActionableHotspotFile {
         List<String> lines = Lists.newArrayList();
         lines.add(header());
         lines.addAll(toLines(actionableHotspots));
+
         Files.write(new File(actionableHotspotTsv).toPath(), lines);
     }
 
     @NotNull
     public static List<ActionableHotspot> read(@NotNull String actionableHotspotTsv) throws IOException {
         List<String> lines = Files.readAllLines(new File(actionableHotspotTsv).toPath());
-        // Skip header
-        return fromLines(lines.subList(1, lines.size()));
+        Map<String, Integer> fields = SerializationUtil.createFields(lines.get(0), ActionableFileUtil.FIELD_DELIMITER);
+
+        return fromLines(lines.subList(1, lines.size()), fields);
     }
 
     @NotNull
-    private static String header() {
+    @VisibleForTesting
+    static String header() {
         return new StringJoiner(ActionableFileUtil.FIELD_DELIMITER).add("chromosome")
                 .add("position")
                 .add("ref")
@@ -60,27 +65,27 @@ public final class ActionableHotspotFile {
 
     @NotNull
     @VisibleForTesting
-    static List<ActionableHotspot> fromLines(@NotNull List<String> lines) {
+    static List<ActionableHotspot> fromLines(@NotNull List<String> lines, @NotNull Map<String, Integer> fields) {
         List<ActionableHotspot> actionableHotspots = Lists.newArrayList();
         for (String line : lines) {
-            actionableHotspots.add(fromLine(line));
+            actionableHotspots.add(fromLine(line, fields));
         }
         return actionableHotspots;
     }
 
     @NotNull
-    private static ActionableHotspot fromLine(@NotNull String line) {
+    private static ActionableHotspot fromLine(@NotNull String line, @NotNull Map<String, Integer> fields) {
         String[] values = line.split(ActionableFileUtil.FIELD_DELIMITER);
 
         return ImmutableActionableHotspot.builder()
-                .from(ActionableFileUtil.fromLine(values, 7))
-                .chromosome(values[0])
-                .position(Integer.parseInt(values[1]))
-                .ref(values[2])
-                .alt(values[3])
-                .gene(values[4])
-                .geneRole(GeneRole.valueOf(values[5]))
-                .proteinEffect(ProteinEffect.valueOf(values[6]))
+                .from(ActionableFileUtil.fromLine(values, fields))
+                .chromosome(values[fields.get("chromosome")])
+                .position(Integer.parseInt(values[fields.get("position")]))
+                .ref(values[fields.get("ref")])
+                .alt(values[fields.get("alt")])
+                .gene(values[fields.get("gene")])
+                .geneRole(GeneRole.valueOf(values[fields.get("geneRole")]))
+                .proteinEffect(ProteinEffect.valueOf(values[fields.get("proteinEffect")]))
                 .build();
     }
 
@@ -106,7 +111,7 @@ public final class ActionableHotspotFile {
     @NotNull
     private static String toLine(@NotNull ActionableHotspot variant) {
         return new StringJoiner(ActionableFileUtil.FIELD_DELIMITER).add(variant.chromosome())
-                .add(Long.toString(variant.position()))
+                .add(Integer.toString(variant.position()))
                 .add(variant.ref())
                 .add(variant.alt())
                 .add(variant.gene())

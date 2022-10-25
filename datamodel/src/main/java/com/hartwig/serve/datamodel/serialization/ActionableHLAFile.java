@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Map;
 import java.util.StringJoiner;
 
 import com.google.common.annotations.VisibleForTesting;
@@ -13,6 +14,7 @@ import com.hartwig.serve.datamodel.immuno.ActionableHLAComparator;
 import com.hartwig.serve.datamodel.immuno.ImmutableActionableHLA;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 import com.hartwig.serve.datamodel.serialization.util.ActionableFileUtil;
+import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -32,36 +34,42 @@ public final class ActionableHLAFile {
         List<String> lines = Lists.newArrayList();
         lines.add(header());
         lines.addAll(toLines(actionableHLA));
+
         Files.write(new File(actionableHLATsv).toPath(), lines);
     }
 
     @NotNull
     public static List<ActionableHLA> read(@NotNull String actionableHLATsv) throws IOException {
         List<String> lines = Files.readAllLines(new File(actionableHLATsv).toPath());
-        // Skip header
-        return fromLines(lines.subList(1, lines.size()));
-    }
+        Map<String, Integer> fields = SerializationUtil.createFields(lines.get(0), ActionableFileUtil.FIELD_DELIMITER);
 
-    @NotNull
-    private static String header() {
-        return new StringJoiner(ActionableFileUtil.FIELD_DELIMITER).add("HLAType").add(ActionableFileUtil.header()).toString();
+        return fromLines(lines.subList(1, lines.size()), fields);
     }
 
     @NotNull
     @VisibleForTesting
-    static List<ActionableHLA> fromLines(@NotNull List<String> lines) {
+    static String header() {
+        return new StringJoiner(ActionableFileUtil.FIELD_DELIMITER).add("hlaType").add(ActionableFileUtil.header()).toString();
+    }
+
+    @NotNull
+    @VisibleForTesting
+    static List<ActionableHLA> fromLines(@NotNull List<String> lines, @NotNull Map<String, Integer> fields) {
         List<ActionableHLA> actionableHLA = Lists.newArrayList();
         for (String line : lines) {
-            actionableHLA.add(fromLine(line));
+            actionableHLA.add(fromLine(line, fields));
         }
         return actionableHLA;
     }
 
     @NotNull
-    private static ActionableHLA fromLine(@NotNull String line) {
+    private static ActionableHLA fromLine(@NotNull String line, @NotNull Map<String, Integer> fields) {
         String[] values = line.split(ActionableFileUtil.FIELD_DELIMITER);
 
-        return ImmutableActionableHLA.builder().from(ActionableFileUtil.fromLine(values, 1)).hlaType(values[0]).build();
+        return ImmutableActionableHLA.builder()
+                .from(ActionableFileUtil.fromLine(values, fields))
+                .hlaType(values[fields.get("hlaType")])
+                .build();
     }
 
     @NotNull
@@ -79,13 +87,12 @@ public final class ActionableHLAFile {
         // Need to make a copy since the input may be immutable and cannot be sorted!
         List<ActionableHLA> sorted = Lists.newArrayList(actionableHLAs);
         sorted.sort(new ActionableHLAComparator());
+
         return sorted;
     }
 
     @NotNull
     private static String toLine(@NotNull ActionableHLA hla) {
-        return new StringJoiner(ActionableFileUtil.FIELD_DELIMITER).add(hla.hlaType())
-                .add(ActionableFileUtil.toLine(hla))
-                .toString();
+        return new StringJoiner(ActionableFileUtil.FIELD_DELIMITER).add(hla.hlaType()).add(ActionableFileUtil.toLine(hla)).toString();
     }
 }

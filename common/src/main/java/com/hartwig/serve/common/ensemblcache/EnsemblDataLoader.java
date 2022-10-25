@@ -1,6 +1,6 @@
 package com.hartwig.serve.common.ensemblcache;
 
-import static com.hartwig.serve.datamodel.serialization.util.FileReaderUtil.createFields;
+import static com.hartwig.serve.datamodel.serialization.util.SerializationUtil.createFields;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

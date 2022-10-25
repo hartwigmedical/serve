@@ -4,10 +4,14 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import com.google.common.io.Resources;
 import com.hartwig.serve.datamodel.immuno.ActionableHLA;
+import com.hartwig.serve.datamodel.serialization.util.ActionableFileUtil;
+import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
 public class ActionableHLAFileTest {
@@ -16,17 +20,19 @@ public class ActionableHLAFileTest {
 
     @Test
     public void canReadFromFileAndConvert() throws IOException {
-        List<ActionableHLA> actionableHLAs = ActionableHLAFile.read(ACTIONABLE_HLA_TSV);
+        List<ActionableHLA> hlas = ActionableHLAFile.read(ACTIONABLE_HLA_TSV);
 
-        assertEquals(1, actionableHLAs.size());
+        assertActionableHLAs(hlas);
 
-        List<String> lines = ActionableHLAFile.toLines(actionableHLAs);
-        List<ActionableHLA> regeneratedHLAs = ActionableHLAFile.fromLines(lines);
-        List<String> regeneratedLines = ActionableHLAFile.toLines(regeneratedHLAs);
-        assertEquals(lines.size(), regeneratedLines.size());
+        Map<String, Integer> fields = SerializationUtil.createFields(ActionableHLAFile.header(), ActionableFileUtil.FIELD_DELIMITER);
+        List<ActionableHLA> regeneratedHLAs = ActionableHLAFile.fromLines(ActionableHLAFile.toLines(hlas), fields);
 
-        for (int i = 0; i < lines.size(); i++) {
-            assertEquals(lines.get(i), regeneratedLines.get(i));
-        }
+        assertEquals(hlas, regeneratedHLAs);
+    }
+
+    private static void assertActionableHLAs(@NotNull List<ActionableHLA> hlas) {
+        assertEquals(1, hlas.size());
+
+        // TODO Implement (see ActionableFusionFileTest)
     }
 }

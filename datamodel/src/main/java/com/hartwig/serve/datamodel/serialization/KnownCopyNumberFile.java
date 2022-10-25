@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Map;
 import java.util.StringJoiner;
 
 import com.google.common.annotations.VisibleForTesting;
@@ -16,12 +17,13 @@ import com.hartwig.serve.datamodel.gene.ImmutableKnownCopyNumber;
 import com.hartwig.serve.datamodel.gene.KnownCopyNumber;
 import com.hartwig.serve.datamodel.gene.KnownCopyNumberComparator;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
 import org.jetbrains.annotations.NotNull;
 
 public final class KnownCopyNumberFile {
 
-    private static final String FIELD_DELIMITER = "\t";
+    static final String FIELD_DELIMITER = "\t";
     private static final String KNOWN_COPY_NUMBER_TSV = "KnownCopyNumbers.SERVE.tsv";
 
     private KnownCopyNumberFile() {
@@ -32,46 +34,49 @@ public final class KnownCopyNumberFile {
         return refGenomeVersion.addVersionToFilePath(outputDir + File.separator + KNOWN_COPY_NUMBER_TSV);
     }
 
+    public static void write(@NotNull String copyNumberTsv, @NotNull Iterable<KnownCopyNumber> copyNumbers) throws IOException {
+        List<String> lines = Lists.newArrayList();
+        lines.add(header());
+        lines.addAll(toLines(copyNumbers));
+
+        Files.write(new File(copyNumberTsv).toPath(), lines);
+    }
+
     @NotNull
     public static List<KnownCopyNumber> read(@NotNull String file) throws IOException {
         List<String> lines = Files.readAllLines(new File(file).toPath());
+        Map<String, Integer> fields = SerializationUtil.createFields(lines.get(0), FIELD_DELIMITER);
 
-        return fromLines(lines.subList(1, lines.size()));
+        return fromLines(lines.subList(1, lines.size()), fields);
     }
 
     @NotNull
     @VisibleForTesting
-    static List<KnownCopyNumber> fromLines(@NotNull List<String> lines) {
+    static String header() {
+        return new StringJoiner(FIELD_DELIMITER).add("gene").add("geneRole").add("proteinEffect").add("type").add("sources").toString();
+    }
+
+    @NotNull
+    @VisibleForTesting
+    static List<KnownCopyNumber> fromLines(@NotNull List<String> lines, @NotNull Map<String, Integer> fields) {
         List<KnownCopyNumber> copyNumber = Lists.newArrayList();
         for (String line : lines) {
-            copyNumber.add(fromLine(line));
+            copyNumber.add(fromLine(line, fields));
         }
         return copyNumber;
     }
 
     @NotNull
-    private static KnownCopyNumber fromLine(@NotNull String line) {
+    private static KnownCopyNumber fromLine(@NotNull String line, @NotNull Map<String, Integer> fields) {
         String[] values = line.split(FIELD_DELIMITER);
 
         return ImmutableKnownCopyNumber.builder()
-                .gene(values[0])
-                .geneRole(GeneRole.valueOf(values[1]))
-                .proteinEffect(ProteinEffect.valueOf(values[2]))
-                .type(CopyNumberType.valueOf(values[3]))
-                .sources(Knowledgebase.fromCommaSeparatedSourceString(values[4]))
+                .gene(values[fields.get("gene")])
+                .geneRole(GeneRole.valueOf(values[fields.get("geneRole")]))
+                .proteinEffect(ProteinEffect.valueOf(values[fields.get("proteinEffect")]))
+                .type(CopyNumberType.valueOf(values[fields.get("type")]))
+                .sources(Knowledgebase.fromCommaSeparatedSourceString(values[fields.get("sources")]))
                 .build();
-    }
-
-    public static void write(@NotNull String copyNumberTsv, @NotNull Iterable<KnownCopyNumber> copyNumbers) throws IOException {
-        List<String> lines = Lists.newArrayList();
-        lines.add(header());
-        lines.addAll(toLines(copyNumbers));
-        Files.write(new File(copyNumberTsv).toPath(), lines);
-    }
-
-    @NotNull
-    private static String header() {
-        return new StringJoiner(FIELD_DELIMITER).add("gene").add("geneRole").add("proteinEffect").add("type").add("sources").toString();
     }
 
     @NotNull

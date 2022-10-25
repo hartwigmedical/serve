@@ -4,31 +4,34 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import com.google.common.io.Resources;
 import com.hartwig.serve.datamodel.range.KnownExon;
-import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
 public class KnownExonFileTest {
 
-    private static final String TEST_KNOWN_EXONS_DIR = Resources.getResource("known_exons").getPath();
+    private static final String KNOWN_EXON_TSV = Resources.getResource("known_exons/KnownExons.SERVE.37.tsv").getPath();
 
     @Test
     public void canReadFromFileAndConvert() throws IOException {
-        String knownExonTsv = KnownExonFile.knownExonTsvPath(TEST_KNOWN_EXONS_DIR, RefGenomeVersion.V37);
-        List<KnownExon> knownExons = KnownExonFile.read(knownExonTsv);
+        List<KnownExon> exons = KnownExonFile.read(KNOWN_EXON_TSV);
 
-        assertEquals(2, knownExons.size());
+        assertKnownExons(exons);
 
-        List<String> lines = KnownExonFile.toLines(knownExons);
-        List<KnownExon> regeneratedExons = KnownExonFile.fromLines(lines);
-        List<String> regeneratedLines = KnownExonFile.toLines(regeneratedExons);
-        assertEquals(lines.size(), regeneratedLines.size());
+        Map<String, Integer> fields = SerializationUtil.createFields(KnownExonFile.header(), KnownCodonFile.FIELD_DELIMITER);
+        List<KnownExon> regeneratedExons = KnownExonFile.fromLines(KnownExonFile.toLines(exons), fields);
 
-        for (int i = 0; i < lines.size(); i++) {
-            assertEquals(lines.get(i), regeneratedLines.get(i));
-        }
+        assertEquals(exons, regeneratedExons);
+    }
+
+    private static void assertKnownExons(@NotNull List<KnownExon> exons) {
+        assertEquals(2, exons.size());
+
+        // TODO Implement: See ActionableFusionFileTest
     }
 }

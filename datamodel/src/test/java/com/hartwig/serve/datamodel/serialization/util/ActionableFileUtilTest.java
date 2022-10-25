@@ -2,6 +2,7 @@ package com.hartwig.serve.datamodel.serialization.util;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Map;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
@@ -34,15 +35,18 @@ public class ActionableFileUtilTest {
                 Sets.newHashSet("url1", "url2"));
 
         String line = ActionableFileUtil.toLine(event);
-        ActionableEvent convertedEvent = ActionableFileUtil.fromLine(line.split(ActionableFileUtil.FIELD_DELIMITER), 0);
+        Map<String, Integer> fields = SerializationUtil.createFields(ActionableFileUtil.header(), ActionableFileUtil.FIELD_DELIMITER);
+        ActionableEvent convertedEvent = ActionableFileUtil.fromLine(line.split(ActionableFileUtil.FIELD_DELIMITER), fields);
 
-        assertEquals(Knowledgebase.VICC_CGI, convertedEvent.source());
-        assertEquals("treatment", convertedEvent.treatment().name());
-        assertEquals("applicable name", convertedEvent.applicableCancerType().name());
-        assertEquals("applicable doid", convertedEvent.applicableCancerType().doid());
-        assertEquals(EvidenceLevel.C, convertedEvent.level());
-        assertEquals(EvidenceDirection.RESISTANT, convertedEvent.direction());
-        assertEquals(Sets.newHashSet("url1", "url2"), convertedEvent.evidenceUrls());
+        assertEquals(event.source(), convertedEvent.source());
+        assertEquals(event.sourceEvent(), convertedEvent.sourceEvent());
+        assertEquals(event.sourceUrls(), convertedEvent.sourceUrls());
+        assertEquals(event.treatment(), convertedEvent.treatment());
+        assertEquals(event.applicableCancerType(), convertedEvent.applicableCancerType());
+        assertEquals(event.blacklistCancerTypes(), convertedEvent.blacklistCancerTypes());
+        assertEquals(event.level(), convertedEvent.level());
+        assertEquals(event.direction(), convertedEvent.direction());
+        assertEquals(event.evidenceUrls(), convertedEvent.evidenceUrls());
     }
 
     @Test

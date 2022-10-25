@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Map;
 import java.util.StringJoiner;
 
 import com.google.common.annotations.VisibleForTesting;
@@ -17,6 +18,7 @@ import com.hartwig.serve.datamodel.range.ImmutableActionableRange;
 import com.hartwig.serve.datamodel.range.RangeType;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 import com.hartwig.serve.datamodel.serialization.util.ActionableFileUtil;
+import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -36,18 +38,21 @@ public final class ActionableRangeFile {
         List<String> lines = Lists.newArrayList();
         lines.add(header());
         lines.addAll(toLines(actionableRanges));
+
         Files.write(new File(actionableRangeTsv).toPath(), lines);
     }
 
     @NotNull
     public static List<ActionableRange> read(@NotNull String actionableRangeTsv) throws IOException {
         List<String> lines = Files.readAllLines(new File(actionableRangeTsv).toPath());
-        // Skip header
-        return fromLines(lines.subList(1, lines.size()));
+        Map<String, Integer> fields = SerializationUtil.createFields(lines.get(0), ActionableFileUtil.FIELD_DELIMITER);
+
+        return fromLines(lines.subList(1, lines.size()), fields);
     }
 
     @NotNull
-    private static String header() {
+    @VisibleForTesting
+    static String header() {
         return new StringJoiner(ActionableFileUtil.FIELD_DELIMITER).add("gene")
                 .add("geneRole")
                 .add("proteinEffect")
@@ -64,30 +69,30 @@ public final class ActionableRangeFile {
 
     @NotNull
     @VisibleForTesting
-    static List<ActionableRange> fromLines(@NotNull List<String> lines) {
+    static List<ActionableRange> fromLines(@NotNull List<String> lines, @NotNull Map<String, Integer> fields) {
         List<ActionableRange> actionableRanges = Lists.newArrayList();
         for (String line : lines) {
-            actionableRanges.add(fromLine(line));
+            actionableRanges.add(fromLine(line, fields));
         }
         return actionableRanges;
     }
 
     @NotNull
-    private static ActionableRange fromLine(@NotNull String line) {
+    private static ActionableRange fromLine(@NotNull String line, @NotNull Map<String, Integer> fields) {
         String[] values = line.split(ActionableFileUtil.FIELD_DELIMITER);
 
         return ImmutableActionableRange.builder()
-                .from(ActionableFileUtil.fromLine(values, 10))
-                .gene(values[0])
-                .geneRole(GeneRole.valueOf(values[1]))
-                .proteinEffect(ProteinEffect.valueOf(values[2]))
-                .transcript(values[3])
-                .chromosome(values[4])
-                .start(Integer.parseInt(values[5]))
-                .end(Integer.parseInt(values[6]))
-                .applicableMutationType(MutationType.valueOf(values[7]))
-                .rangeType(RangeType.valueOf(values[8]))
-                .rank(Integer.parseInt(values[9]))
+                .from(ActionableFileUtil.fromLine(values, fields))
+                .gene(values[fields.get("gene")])
+                .geneRole(GeneRole.valueOf(values[fields.get("geneRole")]))
+                .proteinEffect(ProteinEffect.valueOf(values[fields.get("proteinEffect")]))
+                .transcript(values[fields.get("transcript")])
+                .chromosome(values[fields.get("chromosome")])
+                .start(Integer.parseInt(values[fields.get("start")]))
+                .end(Integer.parseInt(values[fields.get("end")]))
+                .applicableMutationType(MutationType.valueOf(values[fields.get("applicableMutationType")]))
+                .rangeType(RangeType.valueOf(values[fields.get("rangeType")]))
+                .rank(Integer.parseInt(values[fields.get("rank")]))
                 .build();
     }
 

@@ -14,12 +14,22 @@ public final class DatamodelTestFactory {
     }
 
     @NotNull
+    public static ImmutableTreatment.Builder treatmentBuilder() {
+        return ImmutableTreatment.builder().name(Strings.EMPTY);
+    }
+
+    @NotNull
+    public static ImmutableCancerType.Builder cancerTypeBuilder() {
+        return ImmutableCancerType.builder().name(Strings.EMPTY).doid(Strings.EMPTY);
+    }
+
+    @NotNull
     public static ActionableEvent createEmptyActionableEvent() {
         return createActionableEvent(Knowledgebase.UNKNOWN,
                 Strings.EMPTY,
                 Sets.newHashSet(),
-                DatamodelTestBuilders.treatmentBuilder().build(),
-                DatamodelTestBuilders.cancerTypeBuilder().build(),
+                DatamodelTestFactory.treatmentBuilder().build(),
+                DatamodelTestFactory.cancerTypeBuilder().build(),
                 Sets.newHashSet(),
                 EvidenceLevel.A,
                 EvidenceDirection.NO_BENEFIT,

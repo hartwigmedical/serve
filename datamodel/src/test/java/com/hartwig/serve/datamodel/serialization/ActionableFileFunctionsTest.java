@@ -7,7 +7,6 @@ import java.util.Set;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.ActionableEvent;
 import com.hartwig.serve.datamodel.CancerType;
-import com.hartwig.serve.datamodel.DatamodelTestBuilders;
 import com.hartwig.serve.datamodel.DatamodelTestFactory;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
@@ -23,13 +22,13 @@ public class ActionableFileFunctionsTest {
         ActionableEvent event = DatamodelTestFactory.createActionableEvent(Knowledgebase.VICC_CGI,
                 "source event",
                 Sets.newHashSet(),
-                DatamodelTestBuilders.treatmentBuilder()
+                DatamodelTestFactory.treatmentBuilder()
                         .name("treatment")
                         .addSourceRelevantTreatmentApproaches("drug classes")
                         .addRelevantTreatmentApproaches("drug classes")
                         .build(),
-                DatamodelTestBuilders.cancerTypeBuilder().name("applicable name").doid("applicable doid").build(),
-                Sets.newHashSet(DatamodelTestBuilders.cancerTypeBuilder().name("blacklist name").doid("blacklist doid").build()),
+                DatamodelTestFactory.cancerTypeBuilder().name("applicable name").doid("applicable doid").build(),
+                Sets.newHashSet(DatamodelTestFactory.cancerTypeBuilder().name("blacklist name").doid("blacklist doid").build()),
                 EvidenceLevel.C,
                 EvidenceDirection.RESISTANT,
                 Sets.newHashSet("url1", "url2"));
@@ -130,6 +129,6 @@ public class ActionableFileFunctionsTest {
 
     @NotNull
     private static CancerType create(@NotNull String name, @NotNull String doid) {
-        return DatamodelTestBuilders.cancerTypeBuilder().name(name).doid(doid).build();
+        return DatamodelTestFactory.cancerTypeBuilder().name(name).doid(doid).build();
     }
 }

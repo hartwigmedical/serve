@@ -19,7 +19,7 @@ public final class CharacteristicTestFactory {
     public static ActionableCharacteristic createTestActionableCharacteristic() {
         return ImmutableActionableCharacteristic.builder()
                 .from(DatamodelTestFactory.createEmptyActionableEvent())
-                .name(TumorCharacteristicAnnotation.MICROSATELLITE_UNSTABLE)
+                .type(TumorCharacteristicType.MICROSATELLITE_UNSTABLE)
                 .build();
     }
 }

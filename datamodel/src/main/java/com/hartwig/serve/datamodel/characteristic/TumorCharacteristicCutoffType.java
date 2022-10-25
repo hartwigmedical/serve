@@ -2,7 +2,7 @@ package com.hartwig.serve.datamodel.characteristic;
 
 import org.jetbrains.annotations.NotNull;
 
-public enum TumorCharacteristicsComparator {
+public enum TumorCharacteristicCutoffType {
     EQUAL_OR_LOWER("<="),
     EQUAL_OR_GREATER(">="),
     LOWER("<"),
@@ -11,7 +11,7 @@ public enum TumorCharacteristicsComparator {
     @NotNull
     private final String keyPhrase;
 
-    TumorCharacteristicsComparator(@NotNull final String keyPhrase) {
+    TumorCharacteristicCutoffType(@NotNull final String keyPhrase) {
         this.keyPhrase = keyPhrase;
     }
 

@@ -3,10 +3,9 @@ package com.hartwig.serve.extraction.characteristic;
 import java.util.Set;
 
 import com.hartwig.serve.common.classification.EventType;
-import com.hartwig.serve.datamodel.characteristic.ImmutableTumorCharacteristic;
 import com.hartwig.serve.datamodel.characteristic.TumorCharacteristic;
-import com.hartwig.serve.datamodel.characteristic.TumorCharacteristicAnnotation;
-import com.hartwig.serve.datamodel.characteristic.TumorCharacteristicsComparator;
+import com.hartwig.serve.datamodel.characteristic.TumorCharacteristicCutoffType;
+import com.hartwig.serve.datamodel.characteristic.TumorCharacteristicType;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -55,39 +54,43 @@ public class TumorCharacteristicExtractor {
     @Nullable
     public TumorCharacteristic extract(@NotNull EventType type, @NotNull String event) {
         if (type == EventType.CHARACTERISTIC) {
-            TumorCharacteristicAnnotation characteristic = determineCharacteristic(event);
-            if (characteristic == null) {
+            TumorCharacteristicType characteristicType = determineCharacteristicType(event);
+            if (characteristicType == null) {
                 LOGGER.warn("Could not extract characteristic annotation from '{}'", event);
                 return null;
             }
 
-            TumorCharacteristicsComparator comparator = determineComparator(event);
-            Double interpretedCutoff = determineCutoff(comparator, event);
-            return ImmutableTumorCharacteristic.builder().name(characteristic).comparator(comparator).cutoff(interpretedCutoff).build();
+            TumorCharacteristicCutoffType cutoffType = determineCutoffType(event);
+            Double interpretedCutoff = determineCutoff(cutoffType, event);
+            return ImmutableTumorCharacteristicImpl.builder()
+                    .type(characteristicType)
+                    .cutoffType(cutoffType)
+                    .cutoff(interpretedCutoff)
+                    .build();
         }
         return null;
     }
 
     @Nullable
-    private TumorCharacteristicAnnotation determineCharacteristic(@NotNull String event) {
+    private TumorCharacteristicType determineCharacteristicType(@NotNull String event) {
         if (hasKeyPhraseMatch(event, microsatelliteUnstableKeyPhrases)) {
-            return TumorCharacteristicAnnotation.MICROSATELLITE_UNSTABLE;
+            return TumorCharacteristicType.MICROSATELLITE_UNSTABLE;
         } else if (hasKeyPhraseMatch(event, microsatelliteStableKeyPhrases)) {
-            return TumorCharacteristicAnnotation.MICROSATELLITE_STABLE;
+            return TumorCharacteristicType.MICROSATELLITE_STABLE;
         } else if (hasKeyPhraseMatch(event, highTumorMutationalLoadKeyPhrases)) {
-            return TumorCharacteristicAnnotation.HIGH_TUMOR_MUTATIONAL_LOAD;
+            return TumorCharacteristicType.HIGH_TUMOR_MUTATIONAL_LOAD;
         } else if (hasKeyPhraseMatch(event, lowTumorMutationalLoadKeyPhrases)) {
-            return TumorCharacteristicAnnotation.LOW_TUMOR_MUTATIONAL_LOAD;
+            return TumorCharacteristicType.LOW_TUMOR_MUTATIONAL_LOAD;
         } else if (hasKeyPhraseMatch(event, highTumorMutationalBurdenKeyPhrases)) {
-            return TumorCharacteristicAnnotation.HIGH_TUMOR_MUTATIONAL_BURDEN;
+            return TumorCharacteristicType.HIGH_TUMOR_MUTATIONAL_BURDEN;
         } else if (hasKeyPhraseMatch(event, lowTumorMutationalBurdenKeyPhrases)) {
-            return TumorCharacteristicAnnotation.LOW_TUMOR_MUTATIONAL_BURDEN;
+            return TumorCharacteristicType.LOW_TUMOR_MUTATIONAL_BURDEN;
         } else if (hasKeyPhraseMatch(event, hrDeficiencyKeyPhrases)) {
-            return TumorCharacteristicAnnotation.HOMOLOGOUS_RECOMBINATION_DEFICIENT;
+            return TumorCharacteristicType.HOMOLOGOUS_RECOMBINATION_DEFICIENT;
         } else if (hpvPositiveEvents.contains(event)) {
-            return TumorCharacteristicAnnotation.HPV_POSITIVE;
+            return TumorCharacteristicType.HPV_POSITIVE;
         } else if (ebvPositiveEvents.contains(event)) {
-            return TumorCharacteristicAnnotation.EBV_POSITIVE;
+            return TumorCharacteristicType.EBV_POSITIVE;
         }
 
         return null;
@@ -103,10 +106,10 @@ public class TumorCharacteristicExtractor {
     }
 
     @Nullable
-    private static TumorCharacteristicsComparator determineComparator(@NotNull String event) {
-        for (TumorCharacteristicsComparator comparator : TumorCharacteristicsComparator.values()) {
-            if (event.contains(comparator.keyPhrase())) {
-                return comparator;
+    private static TumorCharacteristicCutoffType determineCutoffType(@NotNull String event) {
+        for (TumorCharacteristicCutoffType cutoffType : TumorCharacteristicCutoffType.values()) {
+            if (event.contains(cutoffType.keyPhrase())) {
+                return cutoffType;
             }
         }
 
@@ -114,12 +117,12 @@ public class TumorCharacteristicExtractor {
     }
 
     @Nullable
-    private static Double determineCutoff(@Nullable TumorCharacteristicsComparator comparator, @NotNull String event) {
-        if (comparator == null) {
+    private static Double determineCutoff(@Nullable TumorCharacteristicCutoffType cutoffType, @NotNull String event) {
+        if (cutoffType == null) {
             return null;
         }
 
-        int start = event.indexOf(comparator.keyPhrase()) + comparator.keyPhrase().length();
+        int start = event.indexOf(cutoffType.keyPhrase()) + cutoffType.keyPhrase().length();
         return Double.parseDouble(event.substring(start).trim());
     }
 }

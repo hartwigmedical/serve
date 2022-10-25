@@ -1,6 +1,6 @@
 package com.hartwig.serve.datamodel.characteristic;
 
-public enum TumorCharacteristicAnnotation {
+public enum TumorCharacteristicType {
     MICROSATELLITE_UNSTABLE,
     MICROSATELLITE_STABLE,
     HIGH_TUMOR_MUTATIONAL_LOAD,

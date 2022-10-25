@@ -14,7 +14,7 @@ class ActionableCharacteristicComparator implements Comparator<ActionableCharact
 
     @Override
     public int compare(@NotNull ActionableCharacteristic characteristic1, @NotNull ActionableCharacteristic characteristic2) {
-        int nameCompare = characteristic1.name().toString().compareTo(characteristic2.name().toString());
+        int nameCompare = characteristic1.type().toString().compareTo(characteristic2.type().toString());
         if (nameCompare != 0) {
             return nameCompare;
         }

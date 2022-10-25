@@ -412,8 +412,8 @@ public class ServeDAO {
     private static void addRecordCharacteristics(@NotNull Timestamp timestamp, @NotNull InsertValuesStep16 inserter,
             @NotNull ActionableCharacteristic actionableCharacteristic) {
         inserter.values(timestamp,
-                actionableCharacteristic.name(),
-                actionableCharacteristic.comparator(),
+                actionableCharacteristic.type(),
+                actionableCharacteristic.cutoffType(),
                 actionableCharacteristic.cutoff(),
                 actionableCharacteristic.source(),
                 actionableCharacteristic.sourceEvent(),

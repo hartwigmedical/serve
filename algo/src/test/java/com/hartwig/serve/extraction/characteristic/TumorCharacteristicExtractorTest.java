@@ -6,8 +6,8 @@ import static org.junit.Assert.assertNull;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.datamodel.characteristic.TumorCharacteristic;
-import com.hartwig.serve.datamodel.characteristic.TumorCharacteristicAnnotation;
-import com.hartwig.serve.datamodel.characteristic.TumorCharacteristicsComparator;
+import com.hartwig.serve.datamodel.characteristic.TumorCharacteristicCutoffType;
+import com.hartwig.serve.datamodel.characteristic.TumorCharacteristicType;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
@@ -32,8 +32,8 @@ public class TumorCharacteristicExtractorTest {
 
         TumorCharacteristic characteristic = extractor.extract(EventType.CHARACTERISTIC, MSI);
 
-        assertEquals(TumorCharacteristicAnnotation.MICROSATELLITE_UNSTABLE, characteristic.name());
-        assertNull(characteristic.comparator());
+        assertEquals(TumorCharacteristicType.MICROSATELLITE_UNSTABLE, characteristic.type());
+        assertNull(characteristic.cutoffType());
         assertNull(characteristic.cutoff());
     }
 
@@ -43,8 +43,8 @@ public class TumorCharacteristicExtractorTest {
 
         TumorCharacteristic characteristic = extractor.extract(EventType.CHARACTERISTIC, MSS);
 
-        assertEquals(TumorCharacteristicAnnotation.MICROSATELLITE_STABLE, characteristic.name());
-        assertNull(characteristic.comparator());
+        assertEquals(TumorCharacteristicType.MICROSATELLITE_STABLE, characteristic.type());
+        assertNull(characteristic.cutoffType());
         assertNull(characteristic.cutoff());
     }
 
@@ -54,8 +54,8 @@ public class TumorCharacteristicExtractorTest {
 
         TumorCharacteristic characteristic = extractor.extract(EventType.CHARACTERISTIC, LOW_TML + " < 140");
 
-        assertEquals(TumorCharacteristicAnnotation.LOW_TUMOR_MUTATIONAL_LOAD, characteristic.name());
-        assertEquals(TumorCharacteristicsComparator.LOWER, characteristic.comparator());
+        assertEquals(TumorCharacteristicType.LOW_TUMOR_MUTATIONAL_LOAD, characteristic.type());
+        assertEquals(TumorCharacteristicCutoffType.LOWER, characteristic.cutoffType());
         assertEquals(140, characteristic.cutoff(), EPSILON);
     }
 
@@ -65,8 +65,8 @@ public class TumorCharacteristicExtractorTest {
 
         TumorCharacteristic characteristic = extractor.extract(EventType.CHARACTERISTIC, HIGH_TML + " >= 140");
 
-        assertEquals(TumorCharacteristicAnnotation.HIGH_TUMOR_MUTATIONAL_LOAD, characteristic.name());
-        assertEquals(TumorCharacteristicsComparator.EQUAL_OR_GREATER, characteristic.comparator());
+        assertEquals(TumorCharacteristicType.HIGH_TUMOR_MUTATIONAL_LOAD, characteristic.type());
+        assertEquals(TumorCharacteristicCutoffType.EQUAL_OR_GREATER, characteristic.cutoffType());
         assertEquals(140, characteristic.cutoff(), EPSILON);
     }
 
@@ -76,8 +76,8 @@ public class TumorCharacteristicExtractorTest {
 
         TumorCharacteristic characteristic = extractor.extract(EventType.CHARACTERISTIC, LOW_TMB + " <= 3");
 
-        assertEquals(TumorCharacteristicAnnotation.LOW_TUMOR_MUTATIONAL_BURDEN, characteristic.name());
-        assertEquals(TumorCharacteristicsComparator.EQUAL_OR_LOWER, characteristic.comparator());
+        assertEquals(TumorCharacteristicType.LOW_TUMOR_MUTATIONAL_BURDEN, characteristic.type());
+        assertEquals(TumorCharacteristicCutoffType.EQUAL_OR_LOWER, characteristic.cutoffType());
         assertEquals(3, characteristic.cutoff(), EPSILON);
     }
 
@@ -87,8 +87,8 @@ public class TumorCharacteristicExtractorTest {
 
         TumorCharacteristic characteristic = extractor.extract(EventType.CHARACTERISTIC, HIGH_TMB + " > 14.5");
 
-        assertEquals(TumorCharacteristicAnnotation.HIGH_TUMOR_MUTATIONAL_BURDEN, characteristic.name());
-        assertEquals(TumorCharacteristicsComparator.GREATER, characteristic.comparator());
+        assertEquals(TumorCharacteristicType.HIGH_TUMOR_MUTATIONAL_BURDEN, characteristic.type());
+        assertEquals(TumorCharacteristicCutoffType.GREATER, characteristic.cutoffType());
         assertEquals(14.5, characteristic.cutoff(), EPSILON);
     }
 
@@ -98,8 +98,8 @@ public class TumorCharacteristicExtractorTest {
 
         TumorCharacteristic characteristic = extractor.extract(EventType.CHARACTERISTIC, HRD);
 
-        assertEquals(TumorCharacteristicAnnotation.HOMOLOGOUS_RECOMBINATION_DEFICIENT, characteristic.name());
-        assertNull(characteristic.comparator());
+        assertEquals(TumorCharacteristicType.HOMOLOGOUS_RECOMBINATION_DEFICIENT, characteristic.type());
+        assertNull(characteristic.cutoffType());
         assertNull(characteristic.cutoff());
     }
 
@@ -109,8 +109,8 @@ public class TumorCharacteristicExtractorTest {
 
         TumorCharacteristic characteristic = extractor.extract(EventType.CHARACTERISTIC, HPV);
 
-        assertEquals(TumorCharacteristicAnnotation.HPV_POSITIVE, characteristic.name());
-        assertNull(characteristic.comparator());
+        assertEquals(TumorCharacteristicType.HPV_POSITIVE, characteristic.type());
+        assertNull(characteristic.cutoffType());
         assertNull(characteristic.cutoff());
     }
 
@@ -120,8 +120,8 @@ public class TumorCharacteristicExtractorTest {
 
         TumorCharacteristic characteristic = extractor.extract(EventType.CHARACTERISTIC, EBV);
 
-        assertEquals(TumorCharacteristicAnnotation.EBV_POSITIVE, characteristic.name());
-        assertNull(characteristic.comparator());
+        assertEquals(TumorCharacteristicType.EBV_POSITIVE, characteristic.type());
+        assertNull(characteristic.cutoffType());
         assertNull(characteristic.cutoff());
     }
 

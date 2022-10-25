@@ -44,8 +44,8 @@ public final class ActionableCharacteristicFile {
 
     @NotNull
     private static String header() {
-        return new StringJoiner(ActionableFileFunctions.FIELD_DELIMITER).add("name")
-                .add("comparator")
+        return new StringJoiner(ActionableFileFunctions.FIELD_DELIMITER).add("type")
+                .add("cutoffType")
                 .add("cutoff")
                 .add(ActionableFileFunctions.header())
                 .toString();
@@ -67,8 +67,8 @@ public final class ActionableCharacteristicFile {
 
         return ImmutableActionableCharacteristic.builder()
                 .from(ActionableFileFunctions.fromLine(values, 3))
-                .name(TumorCharacteristicAnnotation.valueOf(values[0]))
-                .comparator(!values[1].equals(Strings.EMPTY) ? TumorCharacteristicsComparator.valueOf(values[1]) : null)
+                .type(TumorCharacteristicType.valueOf(values[0]))
+                .cutoffType(!values[1].equals(Strings.EMPTY) ? TumorCharacteristicCutoffType.valueOf(values[1]) : null)
                 .cutoff(!values[2].equals(Strings.EMPTY) ? Double.valueOf(values[2]) : null)
                 .build();
     }
@@ -94,8 +94,8 @@ public final class ActionableCharacteristicFile {
 
     @NotNull
     private static String toLine(@NotNull ActionableCharacteristic characteristic) {
-        return new StringJoiner(ActionableFileFunctions.FIELD_DELIMITER).add(characteristic.name().toString())
-                .add(characteristic.comparator() != null ? characteristic.comparator().toString() : Strings.EMPTY)
+        return new StringJoiner(ActionableFileFunctions.FIELD_DELIMITER).add(characteristic.type().toString())
+                .add(characteristic.cutoffType() != null ? characteristic.cutoffType().toString() : Strings.EMPTY)
                 .add(characteristic.cutoff() != null ? Double.toString(characteristic.cutoff()) : Strings.EMPTY)
                 .add(ActionableFileFunctions.toLine(characteristic))
                 .toString();

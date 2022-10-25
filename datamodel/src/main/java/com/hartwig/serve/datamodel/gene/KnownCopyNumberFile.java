@@ -9,6 +9,8 @@ import java.util.StringJoiner;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.datamodel.common.GeneRole;
+import com.hartwig.serve.datamodel.common.ProteinEffect;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 
 import org.jetbrains.annotations.NotNull;
@@ -49,8 +51,10 @@ public final class KnownCopyNumberFile {
 
         return ImmutableKnownCopyNumber.builder()
                 .gene(values[0])
-                .type(CopyNumberType.valueOf(values[1].toUpperCase()))
-                .sources(Knowledgebase.fromCommaSeparatedSourceString(values[2]))
+                .geneRole(GeneRole.valueOf(values[1]))
+                .proteinEffect(ProteinEffect.valueOf(values[2]))
+                .type(CopyNumberType.valueOf(values[3]))
+                .sources(Knowledgebase.fromCommaSeparatedSourceString(values[4]))
                 .build();
     }
 
@@ -63,7 +67,7 @@ public final class KnownCopyNumberFile {
 
     @NotNull
     private static String header() {
-        return new StringJoiner(FIELD_DELIMITER).add("gene").add("type").add("sources").toString();
+        return new StringJoiner(FIELD_DELIMITER).add("gene").add("geneRole").add("proteinEffect").add("type").add("sources").toString();
     }
 
     @NotNull
@@ -87,7 +91,9 @@ public final class KnownCopyNumberFile {
     @NotNull
     private static String toLine(@NotNull KnownCopyNumber copyNumber) {
         return new StringJoiner(FIELD_DELIMITER).add(copyNumber.gene())
-                .add(copyNumber.type().toString().toLowerCase())
+                .add(copyNumber.geneRole().toString())
+                .add(copyNumber.proteinEffect().toString())
+                .add(copyNumber.type().toString())
                 .add(Knowledgebase.toCommaSeparatedSourceString(copyNumber.sources()))
                 .toString();
     }

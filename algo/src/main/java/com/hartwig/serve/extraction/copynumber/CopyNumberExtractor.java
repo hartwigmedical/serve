@@ -7,6 +7,8 @@ import com.google.common.collect.Sets;
 import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.common.drivergene.DriverCategory;
 import com.hartwig.serve.common.drivergene.DriverGene;
+import com.hartwig.serve.datamodel.common.GeneRole;
+import com.hartwig.serve.datamodel.common.ProteinEffect;
 import com.hartwig.serve.datamodel.gene.CopyNumberType;
 import com.hartwig.serve.datamodel.gene.ImmutableKnownCopyNumber;
 import com.hartwig.serve.datamodel.gene.KnownCopyNumber;
@@ -59,7 +61,12 @@ public class CopyNumberExtractor {
                 }
             }
 
-            return ImmutableKnownCopyNumber.builder().gene(gene).type(toCopyNumberType(type)).build();
+            return ImmutableKnownCopyNumber.builder()
+                    .gene(gene)
+                    .geneRole(GeneRole.UNKNOWN)
+                    .proteinEffect(ProteinEffect.UNKNOWN)
+                    .type(toCopyNumberType(type))
+                    .build();
         }
         return null;
     }

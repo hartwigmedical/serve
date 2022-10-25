@@ -7,7 +7,6 @@ import com.hartwig.serve.datamodel.fusion.ImmutableActionableFusion;
 import com.hartwig.serve.datamodel.fusion.ImmutableKnownFusionPair;
 import com.hartwig.serve.datamodel.gene.GeneTestFactory;
 import com.hartwig.serve.datamodel.gene.ImmutableActionableGene;
-import com.hartwig.serve.datamodel.gene.ImmutableKnownCopyNumber;
 import com.hartwig.serve.datamodel.hotspot.HotspotTestFactory;
 import com.hartwig.serve.datamodel.hotspot.ImmutableKnownHotspot;
 import com.hartwig.serve.datamodel.range.ImmutableCodonAnnotation;
@@ -56,15 +55,9 @@ public class ConversionFilterTest {
                         .build())
                 .addKnownExons(ImmutableKnownExon.builder()
                         .from(RangeTestFactory.createTestKnownExon())
-                        .annotation(ImmutableExonAnnotation.builder()
-                                .from(RangeTestFactory.createTestExonAnnotation())
-                                .gene(gene)
-                                .build())
+                        .annotation(ImmutableExonAnnotation.builder().from(RangeTestFactory.createTestExonAnnotation()).gene(gene).build())
                         .build())
-                .addKnownCopyNumbers(ImmutableKnownCopyNumber.builder()
-                        .from(GeneTestFactory.createTestKnownCopyNumber())
-                        .gene(gene)
-                        .build())
+                .addKnownCopyNumbers(GeneTestFactory.knownCopyNumberBuilder().gene(gene).build())
                 .addKnownFusionPairs(ImmutableKnownFusionPair.builder()
                         .from(FusionTestFactory.createTestKnownFusionPair())
                         .geneUp(gene)

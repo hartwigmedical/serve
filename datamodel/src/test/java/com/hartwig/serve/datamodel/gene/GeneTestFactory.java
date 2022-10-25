@@ -4,7 +4,6 @@ import com.hartwig.serve.datamodel.DatamodelTestFactory;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.common.CommonTestFactory;
 
-import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 
 public final class GeneTestFactory {
@@ -13,13 +12,15 @@ public final class GeneTestFactory {
     }
 
     @NotNull
-    public static KnownCopyNumber createTestKnownCopyNumberForSource(@NotNull Knowledgebase source) {
-        return ImmutableKnownCopyNumber.builder().from(createTestKnownCopyNumber()).addSources(source).build();
+    public static ImmutableKnownCopyNumber.Builder knownCopyNumberBuilder() {
+        return ImmutableKnownCopyNumber.builder()
+                .from(CommonTestFactory.createEmptyGeneAlteration())
+                .type(CopyNumberType.AMPLIFICATION);
     }
 
     @NotNull
-    public static KnownCopyNumber createTestKnownCopyNumber() {
-        return ImmutableKnownCopyNumber.builder().gene(Strings.EMPTY).type(CopyNumberType.AMPLIFICATION).build();
+    public static KnownCopyNumber createTestKnownCopyNumberForSource(@NotNull Knowledgebase source) {
+        return knownCopyNumberBuilder().addSources(source).build();
     }
 
     @NotNull

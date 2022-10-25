@@ -8,6 +8,7 @@ import java.util.List;
 import com.google.common.collect.Lists;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.gene.CopyNumberType;
+import com.hartwig.serve.datamodel.gene.GeneTestFactory;
 import com.hartwig.serve.datamodel.gene.ImmutableKnownCopyNumber;
 import com.hartwig.serve.datamodel.gene.KnownCopyNumber;
 
@@ -41,7 +42,7 @@ public class CopyNumberFunctionsTest {
 
     @NotNull
     private static ImmutableKnownCopyNumber.Builder ampBuilder() {
-        return ImmutableKnownCopyNumber.builder().type(CopyNumberType.AMPLIFICATION);
+        return GeneTestFactory.knownCopyNumberBuilder().type(CopyNumberType.AMPLIFICATION);
     }
 
     @NotNull

@@ -12,10 +12,10 @@ public class KnownCopyNumberComparatorTest {
 
     @Test
     public void canSortKnownCopyNumbers() {
-        KnownCopyNumber copyNumber1 = ImmutableKnownCopyNumber.builder().gene("A").type(CopyNumberType.AMPLIFICATION).build();
-        KnownCopyNumber copyNumber2 = ImmutableKnownCopyNumber.builder().gene("A").type(CopyNumberType.DELETION).build();
-        KnownCopyNumber copyNumber3 = ImmutableKnownCopyNumber.builder().gene("B").type(CopyNumberType.AMPLIFICATION).build();
-        KnownCopyNumber copyNumber4 = ImmutableKnownCopyNumber.builder().gene("C").type(CopyNumberType.DELETION).build();
+        KnownCopyNumber copyNumber1 = GeneTestFactory.knownCopyNumberBuilder().gene("A").type(CopyNumberType.AMPLIFICATION).build();
+        KnownCopyNumber copyNumber2 = GeneTestFactory.knownCopyNumberBuilder().gene("A").type(CopyNumberType.DELETION).build();
+        KnownCopyNumber copyNumber3 = GeneTestFactory.knownCopyNumberBuilder().gene("B").type(CopyNumberType.AMPLIFICATION).build();
+        KnownCopyNumber copyNumber4 = GeneTestFactory.knownCopyNumberBuilder().gene("C").type(CopyNumberType.DELETION).build();
 
         List<KnownCopyNumber> copyNumbers = Lists.newArrayList(copyNumber3, copyNumber2, copyNumber4, copyNumber1);
         copyNumbers.sort(new KnownCopyNumberComparator());

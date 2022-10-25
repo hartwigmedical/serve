@@ -22,16 +22,20 @@ public final class FusionTestFactory {
     }
 
     @NotNull
+    public static ImmutableActionableFusion.Builder actionableFusionBuilder() {
+        return ImmutableActionableFusion.builder()
+                .from(DatamodelTestFactory.createEmptyActionableEvent())
+                .geneUp(Strings.EMPTY)
+                .geneDown(Strings.EMPTY);
+    }
+
+    @NotNull
     public static ActionableFusion createTestActionableFusionForSource(@NotNull Knowledgebase source) {
-        return ImmutableActionableFusion.builder().from(createTestActionableFusion()).source(source).build();
+        return actionableFusionBuilder().source(source).build();
     }
 
     @NotNull
     public static ActionableFusion createTestActionableFusion() {
-        return ImmutableActionableFusion.builder()
-                .from(DatamodelTestFactory.createEmptyActionableEvent())
-                .geneUp(Strings.EMPTY)
-                .geneDown(Strings.EMPTY)
-                .build();
+        return actionableFusionBuilder().build();
     }
 }

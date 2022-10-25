@@ -5,14 +5,8 @@ import static org.junit.Assert.assertEquals;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
-import com.hartwig.serve.datamodel.DatamodelTestFactory;
-import com.hartwig.serve.datamodel.EvidenceDirection;
-import com.hartwig.serve.datamodel.EvidenceLevel;
-import com.hartwig.serve.datamodel.ImmutableCancerType;
-import com.hartwig.serve.datamodel.ImmutableTreatment;
-import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.fusion.ActionableFusion;
-import com.hartwig.serve.datamodel.fusion.ImmutableActionableFusion;
+import com.hartwig.serve.datamodel.fusion.FusionTestFactory;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
@@ -38,22 +32,7 @@ public class ActionableEventUrlMergerTest {
 
     @NotNull
     private static ActionableFusion createFusion(@NotNull String gene, @NotNull String url) {
-        return ImmutableActionableFusion.builder()
-                .from(DatamodelTestFactory.createActionableEvent(Knowledgebase.VICC_CGI,
-                        "source event",
-                        Sets.newHashSet(),
-                        ImmutableTreatment.builder()
-                                .name("treatment")
-                                .sourceRelevantTreatmentApproaches(Sets.newHashSet("drug classes"))
-                                .build(),
-                        ImmutableCancerType.builder().name("applicable cancerType").doid("applicable doid").build(),
-                        Sets.newHashSet(ImmutableCancerType.builder().name("blacklist cancerType").doid("blacklist doid").build()),
-                        EvidenceLevel.A,
-                        EvidenceDirection.RESPONSIVE,
-                        Sets.newHashSet(url)))
-                .geneUp(gene)
-                .geneDown(gene)
-                .build();
+        return FusionTestFactory.actionableFusionBuilder().addEvidenceUrls(url).geneUp(gene).geneDown(gene).build();
     }
 
     @NotNull

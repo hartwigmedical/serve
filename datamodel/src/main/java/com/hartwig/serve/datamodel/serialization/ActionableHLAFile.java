@@ -1,4 +1,4 @@
-package com.hartwig.serve.datamodel.immuno;
+package com.hartwig.serve.datamodel.serialization;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,8 +8,10 @@ import java.util.StringJoiner;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
+import com.hartwig.serve.datamodel.immuno.ActionableHLA;
+import com.hartwig.serve.datamodel.immuno.ActionableHLAComparator;
+import com.hartwig.serve.datamodel.immuno.ImmutableActionableHLA;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
-import com.hartwig.serve.datamodel.util.ActionableFileFunctions;
 
 import org.jetbrains.annotations.NotNull;
 

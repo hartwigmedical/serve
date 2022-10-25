@@ -11,10 +11,10 @@ import com.hartwig.serve.ServeConfig;
 import com.hartwig.serve.ServeLocalConfigProvider;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.KnownEvent;
-import com.hartwig.serve.datamodel.hotspot.VCFWriterFactory;
 import com.hartwig.serve.datamodel.range.KnownExon;
-import com.hartwig.serve.datamodel.range.KnownExonFile;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.serialization.KnownExonFile;
+import com.hartwig.serve.datamodel.serialization.VCFWriterFactory;
 import com.hartwig.serve.extraction.util.GenerateAltBase;
 import com.hartwig.serve.extraction.util.KeyFormatter;
 

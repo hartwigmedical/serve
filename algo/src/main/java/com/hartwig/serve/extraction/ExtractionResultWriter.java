@@ -2,18 +2,18 @@ package com.hartwig.serve.extraction;
 
 import java.io.IOException;
 
-import com.hartwig.serve.datamodel.characteristic.ActionableCharacteristicFile;
-import com.hartwig.serve.datamodel.fusion.ActionableFusionFile;
-import com.hartwig.serve.datamodel.fusion.KnownFusionPairFile;
-import com.hartwig.serve.datamodel.gene.ActionableGeneFile;
-import com.hartwig.serve.datamodel.gene.KnownCopyNumberFile;
-import com.hartwig.serve.datamodel.hotspot.ActionableHotspotFile;
-import com.hartwig.serve.datamodel.hotspot.KnownHotspotFile;
-import com.hartwig.serve.datamodel.immuno.ActionableHLAFile;
-import com.hartwig.serve.datamodel.range.ActionableRangeFile;
-import com.hartwig.serve.datamodel.range.KnownCodonFile;
-import com.hartwig.serve.datamodel.range.KnownExonFile;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.serialization.ActionableCharacteristicFile;
+import com.hartwig.serve.datamodel.serialization.ActionableFusionFile;
+import com.hartwig.serve.datamodel.serialization.ActionableGeneFile;
+import com.hartwig.serve.datamodel.serialization.ActionableHLAFile;
+import com.hartwig.serve.datamodel.serialization.ActionableHotspotFile;
+import com.hartwig.serve.datamodel.serialization.ActionableRangeFile;
+import com.hartwig.serve.datamodel.serialization.KnownCodonFile;
+import com.hartwig.serve.datamodel.serialization.KnownCopyNumberFile;
+import com.hartwig.serve.datamodel.serialization.KnownExonFile;
+import com.hartwig.serve.datamodel.serialization.KnownFusionPairFile;
+import com.hartwig.serve.datamodel.serialization.KnownHotspotFile;
 import com.hartwig.serve.extraction.events.EventInterpretationFile;
 
 import org.apache.logging.log4j.LogManager;

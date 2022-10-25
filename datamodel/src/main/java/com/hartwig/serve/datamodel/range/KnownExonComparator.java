@@ -4,7 +4,7 @@ import java.util.Comparator;
 
 import org.jetbrains.annotations.NotNull;
 
-class KnownExonComparator implements Comparator<KnownExon> {
+public class KnownExonComparator implements Comparator<KnownExon> {
 
     @NotNull
     private final Comparator<RangeAnnotation> rangeAnnotationComparator = new RangeAnnotationComparator();

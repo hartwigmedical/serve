@@ -8,7 +8,7 @@ import java.util.StringJoiner;
 
 import com.hartwig.serve.common.variant.impact.VariantImpact;
 import com.hartwig.serve.common.variant.impact.VariantImpactSerialiser;
-import com.hartwig.serve.datamodel.hotspot.VCFWriterFactory;
+import com.hartwig.serve.datamodel.serialization.VCFWriterFactory;
 import com.hartwig.serve.util.AminoAcids;
 
 import org.apache.logging.log4j.LogManager;

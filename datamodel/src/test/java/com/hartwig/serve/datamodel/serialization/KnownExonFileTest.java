@@ -1,4 +1,4 @@
-package com.hartwig.serve.datamodel.range;
+package com.hartwig.serve.datamodel.serialization;
 
 import static org.junit.Assert.assertEquals;
 
@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.List;
 
 import com.google.common.io.Resources;
+import com.hartwig.serve.datamodel.range.KnownExon;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 
 import org.junit.Test;

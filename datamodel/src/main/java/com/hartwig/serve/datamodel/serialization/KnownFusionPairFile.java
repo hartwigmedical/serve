@@ -1,4 +1,4 @@
-package com.hartwig.serve.datamodel.fusion;
+package com.hartwig.serve.datamodel.serialization;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,6 +9,9 @@ import java.util.StringJoiner;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.datamodel.fusion.FusionPairComparator;
+import com.hartwig.serve.datamodel.fusion.ImmutableKnownFusionPair;
+import com.hartwig.serve.datamodel.fusion.KnownFusionPair;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 
 import org.apache.logging.log4j.util.Strings;

@@ -7,7 +7,7 @@ import com.hartwig.serve.datamodel.ActionableEventComparator;
 
 import org.jetbrains.annotations.NotNull;
 
-class ActionableHotspotComparator implements Comparator<ActionableHotspot> {
+public class ActionableHotspotComparator implements Comparator<ActionableHotspot> {
 
     @NotNull
     private final Comparator<VariantHotspot> hotspotComparator = new VariantHotspotComparator();

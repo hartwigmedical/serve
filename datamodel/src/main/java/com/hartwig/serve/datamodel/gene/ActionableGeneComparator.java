@@ -9,7 +9,7 @@ import com.hartwig.serve.datamodel.common.GeneAlterationComparator;
 
 import org.jetbrains.annotations.NotNull;
 
-class ActionableGeneComparator implements Comparator<ActionableGene> {
+public class ActionableGeneComparator implements Comparator<ActionableGene> {
 
     @NotNull
     private final Comparator<GeneAlteration> geneAlterationComparator = new GeneAlterationComparator();

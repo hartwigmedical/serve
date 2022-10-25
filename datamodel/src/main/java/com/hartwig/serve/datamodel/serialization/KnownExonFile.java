@@ -1,4 +1,4 @@
-package com.hartwig.serve.datamodel.range;
+package com.hartwig.serve.datamodel.serialization;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,25 +12,29 @@ import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.MutationType;
 import com.hartwig.serve.datamodel.common.GeneRole;
 import com.hartwig.serve.datamodel.common.ProteinEffect;
+import com.hartwig.serve.datamodel.range.ImmutableExonAnnotation;
+import com.hartwig.serve.datamodel.range.ImmutableKnownExon;
+import com.hartwig.serve.datamodel.range.KnownExon;
+import com.hartwig.serve.datamodel.range.KnownExonComparator;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 
 import org.jetbrains.annotations.NotNull;
 
-public final class KnownCodonFile {
+public final class KnownExonFile {
 
     private static final String FIELD_DELIMITER = "\t";
-    private static final String KNOWN_CODON_TSV = "KnownCodons.SERVE.tsv";
+    private static final String KNOWN_EXON_TSV = "KnownExons.SERVE.tsv";
 
-    private KnownCodonFile() {
+    private KnownExonFile() {
     }
 
     @NotNull
-    public static String knownCodonTsvPath(@NotNull String outputDir, @NotNull RefGenomeVersion refGenomeVersion) {
-        return refGenomeVersion.addVersionToFilePath(outputDir + File.separator + KNOWN_CODON_TSV);
+    public static String knownExonTsvPath(@NotNull String outputDir, @NotNull RefGenomeVersion refGenomeVersion) {
+        return refGenomeVersion.addVersionToFilePath(outputDir + File.separator + KNOWN_EXON_TSV);
     }
 
     @NotNull
-    public static List<KnownCodon> read(@NotNull String file) throws IOException {
+    public static List<KnownExon> read(@NotNull String file) throws IOException {
         List<String> lines = Files.readAllLines(new File(file).toPath());
 
         return fromLines(lines.subList(1, lines.size()));
@@ -38,20 +42,20 @@ public final class KnownCodonFile {
 
     @NotNull
     @VisibleForTesting
-    static List<KnownCodon> fromLines(@NotNull List<String> lines) {
-        List<KnownCodon> codons = Lists.newArrayList();
+    static List<KnownExon> fromLines(@NotNull List<String> lines) {
+        List<KnownExon> exons = Lists.newArrayList();
         for (String line : lines) {
-            codons.add(fromLine(line));
+            exons.add(fromLine(line));
         }
-        return codons;
+        return exons;
     }
 
     @NotNull
-    private static KnownCodon fromLine(@NotNull String line) {
+    private static KnownExon fromLine(@NotNull String line) {
         String[] values = line.split(FIELD_DELIMITER);
 
-        return ImmutableKnownCodon.builder()
-                .annotation(ImmutableCodonAnnotation.builder()
+        return ImmutableKnownExon.builder()
+                .annotation(ImmutableExonAnnotation.builder()
                         .gene(values[0])
                         .geneRole(GeneRole.UNKNOWN)
                         .proteinEffect(ProteinEffect.UNKNOWN)
@@ -66,11 +70,11 @@ public final class KnownCodonFile {
                 .build();
     }
 
-    public static void write(@NotNull String codonTsv, @NotNull Iterable<KnownCodon> codons) throws IOException {
+    public static void write(@NotNull String exonTsv, @NotNull Iterable<KnownExon> exons) throws IOException {
         List<String> lines = Lists.newArrayList();
         lines.add(header());
-        lines.addAll(toLines(codons));
-        Files.write(new File(codonTsv).toPath(), lines);
+        lines.addAll(toLines(exons));
+        Files.write(new File(exonTsv).toPath(), lines);
     }
 
     @NotNull
@@ -81,40 +85,40 @@ public final class KnownCodonFile {
                 .add("start")
                 .add("end")
                 .add("mutationType")
-                .add("codonRank")
+                .add("exonRank")
                 .add("sources")
                 .toString();
     }
 
     @NotNull
     @VisibleForTesting
-    static List<String> toLines(@NotNull Iterable<KnownCodon> codons) {
+    static List<String> toLines(@NotNull Iterable<KnownExon> exons) {
         List<String> lines = Lists.newArrayList();
-        for (KnownCodon codon : sort(codons)) {
-            lines.add(toLine(codon));
+        for (KnownExon exon : sort(exons)) {
+            lines.add(toLine(exon));
         }
         return lines;
     }
 
     @NotNull
-    private static List<KnownCodon> sort(@NotNull Iterable<KnownCodon> codons) {
+    private static List<KnownExon> sort(@NotNull Iterable<KnownExon> codons) {
         // Need to make a copy since the input may be immutable and cannot be sorted!
-        List<KnownCodon> sorted = Lists.newArrayList(codons);
-        sorted.sort(new KnownCodonComparator());
+        List<KnownExon> sorted = Lists.newArrayList(codons);
+        sorted.sort(new KnownExonComparator());
 
         return sorted;
     }
 
     @NotNull
-    private static String toLine(@NotNull KnownCodon codon) {
-        return new StringJoiner(FIELD_DELIMITER).add(codon.annotation().gene())
-                .add(codon.annotation().transcript())
-                .add(codon.annotation().chromosome())
-                .add(String.valueOf(codon.annotation().start()))
-                .add(String.valueOf(codon.annotation().end()))
-                .add(codon.annotation().applicableMutationType().toString())
-                .add(String.valueOf(codon.annotation().rank()))
-                .add(Knowledgebase.toCommaSeparatedSourceString(codon.sources()))
+    private static String toLine(@NotNull KnownExon exon) {
+        return new StringJoiner(FIELD_DELIMITER).add(exon.annotation().gene())
+                .add(exon.annotation().transcript())
+                .add(exon.annotation().chromosome())
+                .add(String.valueOf(exon.annotation().start()))
+                .add(String.valueOf(exon.annotation().end()))
+                .add(exon.annotation().applicableMutationType().toString())
+                .add(String.valueOf(exon.annotation().rank()))
+                .add(Knowledgebase.toCommaSeparatedSourceString(exon.sources()))
                 .toString();
     }
 }

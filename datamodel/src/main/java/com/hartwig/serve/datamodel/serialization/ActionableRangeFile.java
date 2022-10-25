@@ -1,4 +1,4 @@
-package com.hartwig.serve.datamodel.range;
+package com.hartwig.serve.datamodel.serialization;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,8 +11,11 @@ import com.google.common.collect.Lists;
 import com.hartwig.serve.datamodel.MutationType;
 import com.hartwig.serve.datamodel.common.GeneRole;
 import com.hartwig.serve.datamodel.common.ProteinEffect;
+import com.hartwig.serve.datamodel.range.ActionableRange;
+import com.hartwig.serve.datamodel.range.ActionableRangeComparator;
+import com.hartwig.serve.datamodel.range.ImmutableActionableRange;
+import com.hartwig.serve.datamodel.range.RangeType;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
-import com.hartwig.serve.datamodel.util.ActionableFileFunctions;
 
 import org.jetbrains.annotations.NotNull;
 

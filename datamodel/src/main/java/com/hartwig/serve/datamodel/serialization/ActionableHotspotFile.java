@@ -1,4 +1,4 @@
-package com.hartwig.serve.datamodel.hotspot;
+package com.hartwig.serve.datamodel.serialization;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,8 +10,10 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import com.hartwig.serve.datamodel.common.GeneRole;
 import com.hartwig.serve.datamodel.common.ProteinEffect;
+import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
+import com.hartwig.serve.datamodel.hotspot.ActionableHotspotComparator;
+import com.hartwig.serve.datamodel.hotspot.ImmutableActionableHotspot;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
-import com.hartwig.serve.datamodel.util.ActionableFileFunctions;
 
 import org.jetbrains.annotations.NotNull;
 

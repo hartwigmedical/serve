@@ -7,7 +7,7 @@ import com.hartwig.serve.datamodel.ActionableEventComparator;
 
 import org.jetbrains.annotations.NotNull;
 
-class ActionableCharacteristicComparator implements Comparator<ActionableCharacteristic> {
+public class ActionableCharacteristicComparator implements Comparator<ActionableCharacteristic> {
 
     @NotNull
     private final Comparator<TumorCharacteristic> tumorCharacteristicComparator = new TumorCharacteristicComparator();

@@ -1,4 +1,4 @@
-package com.hartwig.serve.datamodel.gene;
+package com.hartwig.serve.datamodel.serialization;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,6 +11,10 @@ import com.google.common.collect.Lists;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.common.GeneRole;
 import com.hartwig.serve.datamodel.common.ProteinEffect;
+import com.hartwig.serve.datamodel.gene.CopyNumberType;
+import com.hartwig.serve.datamodel.gene.ImmutableKnownCopyNumber;
+import com.hartwig.serve.datamodel.gene.KnownCopyNumber;
+import com.hartwig.serve.datamodel.gene.KnownCopyNumberComparator;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 
 import org.jetbrains.annotations.NotNull;

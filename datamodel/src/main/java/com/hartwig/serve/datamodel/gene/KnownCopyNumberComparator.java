@@ -7,7 +7,7 @@ import com.hartwig.serve.datamodel.common.GeneAlterationComparator;
 
 import org.jetbrains.annotations.NotNull;
 
-class KnownCopyNumberComparator implements Comparator<KnownCopyNumber> {
+public class KnownCopyNumberComparator implements Comparator<KnownCopyNumber> {
 
     @NotNull
     private final Comparator<GeneAlteration> geneAlterationComparator = new GeneAlterationComparator();

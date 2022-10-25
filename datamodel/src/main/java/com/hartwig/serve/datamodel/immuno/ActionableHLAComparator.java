@@ -7,7 +7,7 @@ import com.hartwig.serve.datamodel.ActionableEventComparator;
 
 import org.jetbrains.annotations.NotNull;
 
-class ActionableHLAComparator implements Comparator<ActionableHLA> {
+public class ActionableHLAComparator implements Comparator<ActionableHLA> {
 
     @NotNull
     private final Comparator<ActionableEvent> actionableEventComparator = new ActionableEventComparator();

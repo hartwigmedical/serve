@@ -1,4 +1,4 @@
-package com.hartwig.serve.datamodel.gene;
+package com.hartwig.serve.datamodel.serialization;
 
 import static org.junit.Assert.assertEquals;
 
@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.List;
 
 import com.google.common.io.Resources;
+import com.hartwig.serve.datamodel.gene.ActionableGene;
 
 import org.junit.Test;
 

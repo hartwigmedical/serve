@@ -10,7 +10,7 @@ import java.util.Map;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.hartwig.serve.datamodel.util.FileReaderUtils;
+import com.hartwig.serve.datamodel.serialization.FileReaderUtils;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

@@ -1,4 +1,4 @@
-package com.hartwig.serve.datamodel.characteristic;
+package com.hartwig.serve.datamodel.serialization;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,8 +8,12 @@ import java.util.StringJoiner;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
+import com.hartwig.serve.datamodel.characteristic.ActionableCharacteristic;
+import com.hartwig.serve.datamodel.characteristic.ActionableCharacteristicComparator;
+import com.hartwig.serve.datamodel.characteristic.ImmutableActionableCharacteristic;
+import com.hartwig.serve.datamodel.characteristic.TumorCharacteristicCutoffType;
+import com.hartwig.serve.datamodel.characteristic.TumorCharacteristicType;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
-import com.hartwig.serve.datamodel.util.ActionableFileFunctions;
 
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;

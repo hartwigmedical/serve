@@ -1,6 +1,6 @@
 package com.hartwig.serve.sources.actin.filter;
 
-import static com.hartwig.serve.datamodel.util.FileReaderUtils.createFields;
+import static com.hartwig.serve.datamodel.serialization.FileReaderUtils.createFields;
 
 import java.io.File;
 import java.io.IOException;

@@ -7,7 +7,7 @@ import com.hartwig.serve.datamodel.ActionableEventComparator;
 
 import org.jetbrains.annotations.NotNull;
 
-class ActionableRangeComparator implements Comparator<ActionableRange> {
+public class ActionableRangeComparator implements Comparator<ActionableRange> {
 
     @NotNull
     private final Comparator<ActionableEvent> actionableEventComparator = new ActionableEventComparator();

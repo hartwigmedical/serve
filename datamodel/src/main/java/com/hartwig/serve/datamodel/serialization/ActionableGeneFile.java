@@ -1,4 +1,4 @@
-package com.hartwig.serve.datamodel.gene;
+package com.hartwig.serve.datamodel.serialization;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,8 +10,11 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import com.hartwig.serve.datamodel.common.GeneRole;
 import com.hartwig.serve.datamodel.common.ProteinEffect;
+import com.hartwig.serve.datamodel.gene.ActionableGene;
+import com.hartwig.serve.datamodel.gene.ActionableGeneComparator;
+import com.hartwig.serve.datamodel.gene.GeneLevelEvent;
+import com.hartwig.serve.datamodel.gene.ImmutableActionableGene;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
-import com.hartwig.serve.datamodel.util.ActionableFileFunctions;
 
 import org.jetbrains.annotations.NotNull;
 

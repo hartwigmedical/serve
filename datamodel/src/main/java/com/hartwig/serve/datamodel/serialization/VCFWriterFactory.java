@@ -1,4 +1,4 @@
-package com.hartwig.serve.datamodel.hotspot;
+package com.hartwig.serve.datamodel.serialization;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;

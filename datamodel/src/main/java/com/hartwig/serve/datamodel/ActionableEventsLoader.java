@@ -4,18 +4,18 @@ import java.io.IOException;
 import java.util.List;
 
 import com.hartwig.serve.datamodel.characteristic.ActionableCharacteristic;
-import com.hartwig.serve.datamodel.characteristic.ActionableCharacteristicFile;
 import com.hartwig.serve.datamodel.fusion.ActionableFusion;
-import com.hartwig.serve.datamodel.fusion.ActionableFusionFile;
 import com.hartwig.serve.datamodel.gene.ActionableGene;
-import com.hartwig.serve.datamodel.gene.ActionableGeneFile;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
-import com.hartwig.serve.datamodel.hotspot.ActionableHotspotFile;
 import com.hartwig.serve.datamodel.immuno.ActionableHLA;
-import com.hartwig.serve.datamodel.immuno.ActionableHLAFile;
 import com.hartwig.serve.datamodel.range.ActionableRange;
-import com.hartwig.serve.datamodel.range.ActionableRangeFile;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.serialization.ActionableCharacteristicFile;
+import com.hartwig.serve.datamodel.serialization.ActionableFusionFile;
+import com.hartwig.serve.datamodel.serialization.ActionableGeneFile;
+import com.hartwig.serve.datamodel.serialization.ActionableHLAFile;
+import com.hartwig.serve.datamodel.serialization.ActionableHotspotFile;
+import com.hartwig.serve.datamodel.serialization.ActionableRangeFile;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

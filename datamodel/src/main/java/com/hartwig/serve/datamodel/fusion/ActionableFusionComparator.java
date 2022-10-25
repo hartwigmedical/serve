@@ -7,7 +7,7 @@ import com.hartwig.serve.datamodel.ActionableEventComparator;
 
 import org.jetbrains.annotations.NotNull;
 
-class ActionableFusionComparator implements Comparator<ActionableFusion> {
+public class ActionableFusionComparator implements Comparator<ActionableFusion> {
 
     @NotNull
     private final Comparator<FusionPair> fusionPairComparator = new FusionPairComparator();

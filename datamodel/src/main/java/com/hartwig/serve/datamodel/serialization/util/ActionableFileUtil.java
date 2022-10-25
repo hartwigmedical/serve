@@ -1,4 +1,4 @@
-package com.hartwig.serve.datamodel.serialization;
+package com.hartwig.serve.datamodel.serialization.util;
 
 import java.util.Set;
 import java.util.StringJoiner;
@@ -16,14 +16,14 @@ import com.hartwig.serve.datamodel.Treatment;
 
 import org.jetbrains.annotations.NotNull;
 
-public final class ActionableFileFunctions {
+public final class ActionableFileUtil {
 
     public static final String FIELD_DELIMITER = "\t";
 
     private static final String SUB_FIELD_DELIMITER = ",";
     private static final String NAME_DOID_DELIMITER = ";";
 
-    private ActionableFileFunctions() {
+    private ActionableFileUtil() {
     }
 
     @NotNull

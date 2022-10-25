@@ -14,7 +14,7 @@ import com.hartwig.serve.datamodel.KnownEvent;
 import com.hartwig.serve.datamodel.range.KnownCodon;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 import com.hartwig.serve.datamodel.serialization.KnownCodonFile;
-import com.hartwig.serve.datamodel.serialization.VCFWriterFactory;
+import com.hartwig.serve.datamodel.serialization.util.VCFWriterFactory;
 import com.hartwig.serve.extraction.util.GenerateAltBase;
 import com.hartwig.serve.extraction.util.KeyFormatter;
 

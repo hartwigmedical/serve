@@ -1,4 +1,4 @@
-package com.hartwig.serve.datamodel.serialization;
+package com.hartwig.serve.datamodel.serialization.util;
 
 import static org.junit.Assert.assertEquals;
 
@@ -15,7 +15,7 @@ import com.hartwig.serve.datamodel.Knowledgebase;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
-public class ActionableFileFunctionsTest {
+public class ActionableFileUtilTest {
 
     @Test
     public void canConvertActionableEvents() {
@@ -33,8 +33,8 @@ public class ActionableFileFunctionsTest {
                 EvidenceDirection.RESISTANT,
                 Sets.newHashSet("url1", "url2"));
 
-        String line = ActionableFileFunctions.toLine(event);
-        ActionableEvent convertedEvent = ActionableFileFunctions.fromLine(line.split(ActionableFileFunctions.FIELD_DELIMITER), 0);
+        String line = ActionableFileUtil.toLine(event);
+        ActionableEvent convertedEvent = ActionableFileUtil.fromLine(line.split(ActionableFileUtil.FIELD_DELIMITER), 0);
 
         assertEquals(Knowledgebase.VICC_CGI, convertedEvent.source());
         assertEquals("treatment", convertedEvent.treatment().name());
@@ -49,7 +49,7 @@ public class ActionableFileFunctionsTest {
     public void canConvertSingleCancerTypeToField() {
         Set<CancerType> cancerTypes = Sets.newHashSet();
         cancerTypes.add(create("Hematologic cancer", "2531"));
-        assertEquals("Hematologic cancer;2531", ActionableFileFunctions.cancerTypesToField(cancerTypes));
+        assertEquals("Hematologic cancer;2531", ActionableFileUtil.cancerTypesToField(cancerTypes));
     }
 
     @Test
@@ -58,7 +58,7 @@ public class ActionableFileFunctionsTest {
         cancerTypes.add(create("Hematologic cancer", "2531"));
         cancerTypes.add(create("Skin Melanoma", "8923"));
 
-        assertEquals("Hematologic cancer;2531,Skin Melanoma;8923", ActionableFileFunctions.cancerTypesToField(cancerTypes));
+        assertEquals("Hematologic cancer;2531,Skin Melanoma;8923", ActionableFileUtil.cancerTypesToField(cancerTypes));
     }
 
     @Test
@@ -70,13 +70,13 @@ public class ActionableFileFunctionsTest {
         cancerTypes.add(create("Colorectal Cancer", "1520"));
 
         assertEquals("Hematologic cancer;2531,Colorectal Cancer;1520,Skin Melanoma;8923,Bladder Cancer;11054",
-                ActionableFileFunctions.cancerTypesToField(cancerTypes));
+                ActionableFileUtil.cancerTypesToField(cancerTypes));
     }
 
     @Test
     public void canResolveSingleCancerType() {
         String combinedNameAndDoid = "Hematologic cancer;2531";
-        Set<CancerType> cancerTypes = ActionableFileFunctions.fieldToCancerTypes(combinedNameAndDoid);
+        Set<CancerType> cancerTypes = ActionableFileUtil.fieldToCancerTypes(combinedNameAndDoid);
 
         assertEquals(1, cancerTypes.size());
         CancerType tumorLocationBlacklisting = cancerTypes.iterator().next();
@@ -87,7 +87,7 @@ public class ActionableFileFunctionsTest {
     @Test
     public void canResolveTwoCancerTypes() {
         String combinedNamesAndDoids = "Hematologic cancer;2531,Skin Melanoma;8923";
-        Set<CancerType> cancerTypes = ActionableFileFunctions.fieldToCancerTypes(combinedNamesAndDoids);
+        Set<CancerType> cancerTypes = ActionableFileUtil.fieldToCancerTypes(combinedNamesAndDoids);
 
         assertEquals(2, cancerTypes.size());
         CancerType cancerType1 = findByName(cancerTypes, "Hematologic cancer");
@@ -100,7 +100,7 @@ public class ActionableFileFunctionsTest {
     @Test
     public void canResolveMultipleCancerTypes() {
         String combinedNamesAndDoids = "Hematologic cancer;2531,Skin Melanoma;8923,Bladder Cancer;11054,Colorectal Cancer;1520";
-        Set<CancerType> cancerTypes = ActionableFileFunctions.fieldToCancerTypes(combinedNamesAndDoids);
+        Set<CancerType> cancerTypes = ActionableFileUtil.fieldToCancerTypes(combinedNamesAndDoids);
 
         assertEquals(4, cancerTypes.size());
         CancerType cancerType1 = findByName(cancerTypes, "Hematologic cancer");

@@ -12,6 +12,7 @@ import com.hartwig.serve.datamodel.fusion.ActionableFusion;
 import com.hartwig.serve.datamodel.fusion.ActionableFusionComparator;
 import com.hartwig.serve.datamodel.fusion.ImmutableActionableFusion;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.serialization.util.ActionableFileUtil;
 
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
@@ -46,13 +47,13 @@ public final class ActionableFusionFile {
 
     @NotNull
     private static String header() {
-        return new StringJoiner(ActionableFileFunctions.FIELD_DELIMITER).add("geneUp")
+        return new StringJoiner(ActionableFileUtil.FIELD_DELIMITER).add("geneUp")
                 .add("minExonUp")
                 .add("maxExonUp")
                 .add("geneDown")
                 .add("minExonDown")
                 .add("maxExonDown")
-                .add(ActionableFileFunctions.header())
+                .add(ActionableFileUtil.header())
                 .toString();
     }
 
@@ -68,10 +69,10 @@ public final class ActionableFusionFile {
 
     @NotNull
     private static ActionableFusion fromLine(@NotNull String line) {
-        String[] values = line.split(ActionableFileFunctions.FIELD_DELIMITER);
+        String[] values = line.split(ActionableFileUtil.FIELD_DELIMITER);
 
         return ImmutableActionableFusion.builder()
-                .from(ActionableFileFunctions.fromLine(values, 6))
+                .from(ActionableFileUtil.fromLine(values, 6))
                 .geneUp(values[0])
                 .minExonUp(optionalInteger(values[1]))
                 .maxExonUp(optionalInteger(values[2]))
@@ -111,13 +112,13 @@ public final class ActionableFusionFile {
 
     @NotNull
     private static String toLine(@NotNull ActionableFusion fusion) {
-        return new StringJoiner(ActionableFileFunctions.FIELD_DELIMITER).add(fusion.geneUp())
+        return new StringJoiner(ActionableFileUtil.FIELD_DELIMITER).add(fusion.geneUp())
                 .add(fromOptionalInteger(fusion.minExonUp()))
                 .add(fromOptionalInteger(fusion.maxExonUp()))
                 .add(fusion.geneDown())
                 .add(fromOptionalInteger(fusion.minExonDown()))
                 .add(fromOptionalInteger(fusion.maxExonDown()))
-                .add(ActionableFileFunctions.toLine(fusion))
+                .add(ActionableFileUtil.toLine(fusion))
                 .toString();
     }
 

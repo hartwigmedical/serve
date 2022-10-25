@@ -16,6 +16,7 @@ import com.hartwig.serve.datamodel.range.ActionableRangeComparator;
 import com.hartwig.serve.datamodel.range.ImmutableActionableRange;
 import com.hartwig.serve.datamodel.range.RangeType;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.serialization.util.ActionableFileUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -47,7 +48,7 @@ public final class ActionableRangeFile {
 
     @NotNull
     private static String header() {
-        return new StringJoiner(ActionableFileFunctions.FIELD_DELIMITER).add("gene")
+        return new StringJoiner(ActionableFileUtil.FIELD_DELIMITER).add("gene")
                 .add("geneRole")
                 .add("proteinEffect")
                 .add("transcript")
@@ -57,7 +58,7 @@ public final class ActionableRangeFile {
                 .add("applicableMutationType")
                 .add("rangeType")
                 .add("rank")
-                .add(ActionableFileFunctions.header())
+                .add(ActionableFileUtil.header())
                 .toString();
     }
 
@@ -73,10 +74,10 @@ public final class ActionableRangeFile {
 
     @NotNull
     private static ActionableRange fromLine(@NotNull String line) {
-        String[] values = line.split(ActionableFileFunctions.FIELD_DELIMITER);
+        String[] values = line.split(ActionableFileUtil.FIELD_DELIMITER);
 
         return ImmutableActionableRange.builder()
-                .from(ActionableFileFunctions.fromLine(values, 10))
+                .from(ActionableFileUtil.fromLine(values, 10))
                 .gene(values[0])
                 .geneRole(GeneRole.valueOf(values[1]))
                 .proteinEffect(ProteinEffect.valueOf(values[2]))
@@ -111,7 +112,7 @@ public final class ActionableRangeFile {
 
     @NotNull
     private static String toLine(@NotNull ActionableRange range) {
-        return new StringJoiner(ActionableFileFunctions.FIELD_DELIMITER).add(range.gene())
+        return new StringJoiner(ActionableFileUtil.FIELD_DELIMITER).add(range.gene())
                 .add(range.geneRole().toString())
                 .add(range.proteinEffect().toString())
                 .add(range.transcript())
@@ -121,7 +122,7 @@ public final class ActionableRangeFile {
                 .add(range.applicableMutationType().toString())
                 .add(range.rangeType().toString())
                 .add(String.valueOf(range.rank()))
-                .add(ActionableFileFunctions.toLine(range))
+                .add(ActionableFileUtil.toLine(range))
                 .toString();
     }
 }

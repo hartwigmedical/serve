@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import com.hartwig.serve.common.variant.impact.VariantTranscriptImpact;
-import com.hartwig.serve.datamodel.serialization.VCFWriterFactory;
+import com.hartwig.serve.datamodel.serialization.util.VCFWriterFactory;
 import com.hartwig.serve.extraction.codon.tools.AnnotatedCodonVCFChecker;
 
 import org.apache.commons.compress.utils.Lists;

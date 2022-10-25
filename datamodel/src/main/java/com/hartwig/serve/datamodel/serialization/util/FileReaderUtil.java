@@ -1,4 +1,4 @@
-package com.hartwig.serve.datamodel.serialization;
+package com.hartwig.serve.datamodel.serialization.util;
 
 import java.util.Map;
 
@@ -6,9 +6,9 @@ import com.google.common.collect.Maps;
 
 import org.jetbrains.annotations.NotNull;
 
-public final class FileReaderUtils {
+public final class FileReaderUtil {
 
-    private FileReaderUtils() {
+    private FileReaderUtil() {
     }
 
     @NotNull

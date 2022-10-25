@@ -15,6 +15,7 @@ import com.hartwig.serve.datamodel.gene.ActionableGeneComparator;
 import com.hartwig.serve.datamodel.gene.GeneLevelEvent;
 import com.hartwig.serve.datamodel.gene.ImmutableActionableGene;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.serialization.util.ActionableFileUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -46,11 +47,11 @@ public final class ActionableGeneFile {
 
     @NotNull
     private static String header() {
-        return new StringJoiner(ActionableFileFunctions.FIELD_DELIMITER).add("gene")
+        return new StringJoiner(ActionableFileUtil.FIELD_DELIMITER).add("gene")
                 .add("geneRole")
                 .add("proteinEffect")
                 .add("event")
-                .add(ActionableFileFunctions.header())
+                .add(ActionableFileUtil.header())
                 .toString();
     }
 
@@ -66,10 +67,10 @@ public final class ActionableGeneFile {
 
     @NotNull
     private static ActionableGene fromLine(@NotNull String line) {
-        String[] values = line.split(ActionableFileFunctions.FIELD_DELIMITER);
+        String[] values = line.split(ActionableFileUtil.FIELD_DELIMITER);
 
         return ImmutableActionableGene.builder()
-                .from(ActionableFileFunctions.fromLine(values, 4))
+                .from(ActionableFileUtil.fromLine(values, 4))
                 .gene(values[0])
                 .geneRole(GeneRole.valueOf(values[1]))
                 .proteinEffect(ProteinEffect.valueOf(values[2]))
@@ -98,11 +99,11 @@ public final class ActionableGeneFile {
 
     @NotNull
     private static String toLine(@NotNull ActionableGene gene) {
-        return new StringJoiner(ActionableFileFunctions.FIELD_DELIMITER).add(gene.gene())
+        return new StringJoiner(ActionableFileUtil.FIELD_DELIMITER).add(gene.gene())
                 .add(gene.geneRole().toString())
                 .add(gene.proteinEffect().toString())
                 .add(gene.event().toString())
-                .add(ActionableFileFunctions.toLine(gene))
+                .add(ActionableFileUtil.toLine(gene))
                 .toString();
     }
 }

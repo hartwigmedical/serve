@@ -14,6 +14,7 @@ import com.hartwig.serve.datamodel.characteristic.ImmutableActionableCharacteris
 import com.hartwig.serve.datamodel.characteristic.TumorCharacteristicCutoffType;
 import com.hartwig.serve.datamodel.characteristic.TumorCharacteristicType;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.serialization.util.ActionableFileUtil;
 
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
@@ -48,10 +49,10 @@ public final class ActionableCharacteristicFile {
 
     @NotNull
     private static String header() {
-        return new StringJoiner(ActionableFileFunctions.FIELD_DELIMITER).add("type")
+        return new StringJoiner(ActionableFileUtil.FIELD_DELIMITER).add("type")
                 .add("cutoffType")
                 .add("cutoff")
-                .add(ActionableFileFunctions.header())
+                .add(ActionableFileUtil.header())
                 .toString();
     }
 
@@ -67,10 +68,10 @@ public final class ActionableCharacteristicFile {
 
     @NotNull
     private static ActionableCharacteristic fromLine(@NotNull String line) {
-        String[] values = line.split(ActionableFileFunctions.FIELD_DELIMITER);
+        String[] values = line.split(ActionableFileUtil.FIELD_DELIMITER);
 
         return ImmutableActionableCharacteristic.builder()
-                .from(ActionableFileFunctions.fromLine(values, 3))
+                .from(ActionableFileUtil.fromLine(values, 3))
                 .type(TumorCharacteristicType.valueOf(values[0]))
                 .cutoffType(!values[1].equals(Strings.EMPTY) ? TumorCharacteristicCutoffType.valueOf(values[1]) : null)
                 .cutoff(!values[2].equals(Strings.EMPTY) ? Double.valueOf(values[2]) : null)
@@ -98,10 +99,10 @@ public final class ActionableCharacteristicFile {
 
     @NotNull
     private static String toLine(@NotNull ActionableCharacteristic characteristic) {
-        return new StringJoiner(ActionableFileFunctions.FIELD_DELIMITER).add(characteristic.type().toString())
+        return new StringJoiner(ActionableFileUtil.FIELD_DELIMITER).add(characteristic.type().toString())
                 .add(characteristic.cutoffType() != null ? characteristic.cutoffType().toString() : Strings.EMPTY)
                 .add(characteristic.cutoff() != null ? Double.toString(characteristic.cutoff()) : Strings.EMPTY)
-                .add(ActionableFileFunctions.toLine(characteristic))
+                .add(ActionableFileUtil.toLine(characteristic))
                 .toString();
     }
 }

@@ -1,4 +1,4 @@
-package com.hartwig.serve.datamodel.serialization;
+package com.hartwig.serve.datamodel.serialization.util;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;

@@ -14,6 +14,7 @@ import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspotComparator;
 import com.hartwig.serve.datamodel.hotspot.ImmutableActionableHotspot;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.serialization.util.ActionableFileUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -46,14 +47,14 @@ public final class ActionableHotspotFile {
 
     @NotNull
     private static String header() {
-        return new StringJoiner(ActionableFileFunctions.FIELD_DELIMITER).add("chromosome")
+        return new StringJoiner(ActionableFileUtil.FIELD_DELIMITER).add("chromosome")
                 .add("position")
                 .add("ref")
                 .add("alt")
                 .add("gene")
                 .add("geneRole")
                 .add("proteinEffect")
-                .add(ActionableFileFunctions.header())
+                .add(ActionableFileUtil.header())
                 .toString();
     }
 
@@ -69,10 +70,10 @@ public final class ActionableHotspotFile {
 
     @NotNull
     private static ActionableHotspot fromLine(@NotNull String line) {
-        String[] values = line.split(ActionableFileFunctions.FIELD_DELIMITER);
+        String[] values = line.split(ActionableFileUtil.FIELD_DELIMITER);
 
         return ImmutableActionableHotspot.builder()
-                .from(ActionableFileFunctions.fromLine(values, 7))
+                .from(ActionableFileUtil.fromLine(values, 7))
                 .chromosome(values[0])
                 .position(Integer.parseInt(values[1]))
                 .ref(values[2])
@@ -104,14 +105,14 @@ public final class ActionableHotspotFile {
 
     @NotNull
     private static String toLine(@NotNull ActionableHotspot variant) {
-        return new StringJoiner(ActionableFileFunctions.FIELD_DELIMITER).add(variant.chromosome())
+        return new StringJoiner(ActionableFileUtil.FIELD_DELIMITER).add(variant.chromosome())
                 .add(Long.toString(variant.position()))
                 .add(variant.ref())
                 .add(variant.alt())
                 .add(variant.gene())
                 .add(variant.geneRole().toString())
                 .add(variant.proteinEffect().toString())
-                .add(ActionableFileFunctions.toLine(variant))
+                .add(ActionableFileUtil.toLine(variant))
                 .toString();
     }
 }

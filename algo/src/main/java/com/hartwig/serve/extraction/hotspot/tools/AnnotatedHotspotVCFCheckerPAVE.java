@@ -7,7 +7,7 @@ import java.util.Set;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.common.variant.impact.VariantTranscriptImpact;
-import com.hartwig.serve.datamodel.serialization.VCFWriterFactory;
+import com.hartwig.serve.datamodel.serialization.util.VCFWriterFactory;
 import com.hartwig.serve.util.AminoAcids;
 
 import org.apache.commons.compress.utils.Lists;

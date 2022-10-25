@@ -12,6 +12,7 @@ import com.hartwig.serve.datamodel.immuno.ActionableHLA;
 import com.hartwig.serve.datamodel.immuno.ActionableHLAComparator;
 import com.hartwig.serve.datamodel.immuno.ImmutableActionableHLA;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.serialization.util.ActionableFileUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -43,7 +44,7 @@ public final class ActionableHLAFile {
 
     @NotNull
     private static String header() {
-        return new StringJoiner(ActionableFileFunctions.FIELD_DELIMITER).add("HLAType").add(ActionableFileFunctions.header()).toString();
+        return new StringJoiner(ActionableFileUtil.FIELD_DELIMITER).add("HLAType").add(ActionableFileUtil.header()).toString();
     }
 
     @NotNull
@@ -58,9 +59,9 @@ public final class ActionableHLAFile {
 
     @NotNull
     private static ActionableHLA fromLine(@NotNull String line) {
-        String[] values = line.split(ActionableFileFunctions.FIELD_DELIMITER);
+        String[] values = line.split(ActionableFileUtil.FIELD_DELIMITER);
 
-        return ImmutableActionableHLA.builder().from(ActionableFileFunctions.fromLine(values, 1)).hlaType(values[0]).build();
+        return ImmutableActionableHLA.builder().from(ActionableFileUtil.fromLine(values, 1)).hlaType(values[0]).build();
     }
 
     @NotNull
@@ -83,8 +84,8 @@ public final class ActionableHLAFile {
 
     @NotNull
     private static String toLine(@NotNull ActionableHLA hla) {
-        return new StringJoiner(ActionableFileFunctions.FIELD_DELIMITER).add(hla.hlaType())
-                .add(ActionableFileFunctions.toLine(hla))
+        return new StringJoiner(ActionableFileUtil.FIELD_DELIMITER).add(hla.hlaType())
+                .add(ActionableFileUtil.toLine(hla))
                 .toString();
     }
 }

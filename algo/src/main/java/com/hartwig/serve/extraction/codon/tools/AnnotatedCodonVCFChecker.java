@@ -3,7 +3,7 @@ package com.hartwig.serve.extraction.codon.tools;
 import java.io.IOException;
 import java.util.List;
 
-import com.hartwig.serve.datamodel.serialization.VCFWriterFactory;
+import com.hartwig.serve.datamodel.serialization.util.VCFWriterFactory;
 import com.hartwig.serve.extraction.snpeff.SnpEffAnnotation;
 import com.hartwig.serve.extraction.snpeff.SnpEffAnnotationParser;
 import com.hartwig.serve.util.AminoAcids;

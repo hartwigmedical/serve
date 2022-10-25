@@ -11,7 +11,7 @@ import java.util.StringJoiner;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.common.ensemblcache.EnsemblDataCache;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
-import com.hartwig.serve.datamodel.serialization.VCFWriterFactory;
+import com.hartwig.serve.datamodel.serialization.util.VCFWriterFactory;
 import com.hartwig.serve.extraction.snpeff.CanonicalAnnotation;
 import com.hartwig.serve.extraction.snpeff.SnpEffAnnotation;
 import com.hartwig.serve.extraction.snpeff.SnpEffAnnotationParser;

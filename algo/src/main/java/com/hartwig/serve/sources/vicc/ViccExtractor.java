@@ -190,10 +190,9 @@ public final class ViccExtractor {
             for (VariantHotspot hotspot : featureResult.getValue()) {
                 hotspots.add(ImmutableKnownHotspot.builder()
                         .from(hotspot)
-                        .addSources(source)
-                        .gene(feature.geneSymbol())
                         .transcript(entry.transcriptId())
                         .proteinAnnotation(proteinExtractor.apply(feature.name()))
+                        .addSources(source)
                         .build());
             }
         }

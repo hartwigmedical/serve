@@ -67,12 +67,14 @@ public class HartwigExtractor {
             for (Hotspot hotspot : hotspots) {
                 knownHotspots.add(ImmutableKnownHotspot.builder()
                         .from(hotspot)
-                        .addSources(source)
+                        .ref(hotspot.ref())
+                        .alt(hotspot.alt())
                         .gene(entry.gene())
                         .geneRole(GeneRole.UNKNOWN)
                         .proteinEffect(ProteinEffect.UNKNOWN)
                         .transcript(entry.transcript())
                         .proteinAnnotation(entry.proteinAnnotation())
+                        .addSources(source)
                         .build());
             }
 

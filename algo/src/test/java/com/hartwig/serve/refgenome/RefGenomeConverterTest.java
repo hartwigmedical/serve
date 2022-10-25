@@ -10,7 +10,6 @@ import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
 import com.hartwig.serve.datamodel.hotspot.HotspotTestFactory;
 import com.hartwig.serve.datamodel.hotspot.ImmutableActionableHotspot;
-import com.hartwig.serve.datamodel.hotspot.ImmutableKnownHotspot;
 import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.range.ActionableRange;
 import com.hartwig.serve.datamodel.range.ImmutableActionableRange;
@@ -40,8 +39,7 @@ public class RefGenomeConverterTest {
 
     @Test
     public void canConvertKnownHotspots() {
-        KnownHotspot hotspot = ImmutableKnownHotspot.builder()
-                .from(HotspotTestFactory.createTestKnownHotspot())
+        KnownHotspot hotspot = HotspotTestFactory.knownHotspotBuilder()
                 .gene(TEST_GENE)
                 .chromosome(TEST_CHROMOSOME)
                 .position(1)

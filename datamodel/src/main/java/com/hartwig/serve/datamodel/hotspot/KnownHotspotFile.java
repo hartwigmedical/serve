@@ -42,36 +42,34 @@ public final class KnownHotspotFile {
     @NotNull
     public static List<KnownHotspot> read(@NotNull String vcfFile) throws IOException {
         List<KnownHotspot> result = Lists.newArrayList();
-        try (AbstractFeatureReader<VariantContext, LineIterator> reader = AbstractFeatureReader.getFeatureReader(vcfFile,
-                new VCFCodec(),
-                false)) {
-            for (VariantContext hotspot : reader.iterator()) {
-                String[] inputParts = hotspot.getAttributeAsString(VCFWriterFactory.INPUT_FIELD, Strings.EMPTY).split("\\|");
-                String inputGene = inputParts[0];
-                String inputProteinAnnotation = inputParts[2];
-                String inputTranscript = inputParts[1].equals("null") ? null : inputParts[1];
+        AbstractFeatureReader<VariantContext, LineIterator> reader = AbstractFeatureReader.getFeatureReader(vcfFile, new VCFCodec(), false);
 
-                List<String> sources = hotspot.getAttributeAsStringList(VCFWriterFactory.SOURCES_FIELD, Strings.EMPTY);
-                Set<Knowledgebase> knowledgebaseSet = Sets.newHashSet();
-                if (!sources.isEmpty()) {
-                    for (String source : sources) {
-                        knowledgebaseSet = Knowledgebase.fromCommaSeparatedSourceString(source);
-                    }
-                } else {
-                    LOGGER.warn("No sources found on {}", hotspot);
+        for (VariantContext hotspot : reader.iterator()) {
+            String[] inputParts = hotspot.getAttributeAsString(VCFWriterFactory.INPUT_FIELD, Strings.EMPTY).split("\\|");
+            String inputGene = inputParts[0];
+            String inputProteinAnnotation = inputParts[2];
+            String inputTranscript = inputParts[1].equals("null") ? null : inputParts[1];
+
+            List<String> sources = hotspot.getAttributeAsStringList(VCFWriterFactory.SOURCES_FIELD, Strings.EMPTY);
+            Set<Knowledgebase> knowledgebaseSet = Sets.newHashSet();
+            if (!sources.isEmpty()) {
+                for (String source : sources) {
+                    knowledgebaseSet = Knowledgebase.fromCommaSeparatedSourceString(source);
                 }
-
-                result.add(ImmutableKnownHotspot.builder()
-                        .chromosome(hotspot.getContig())
-                        .gene(inputGene)
-                        .transcript(inputTranscript)
-                        .proteinAnnotation(inputProteinAnnotation)
-                        .position(hotspot.getStart())
-                        .ref(hotspot.getAlleles().get(0).getBaseString())
-                        .alt(hotspot.getAlleles().get(0).getBaseString())
-                        .sources(knowledgebaseSet)
-                        .build());
+            } else {
+                LOGGER.warn("No sources found on {}", hotspot);
             }
+
+            result.add(ImmutableKnownHotspot.builder()
+                    .chromosome(hotspot.getContig())
+                    .gene(inputGene)
+                    .transcript(inputTranscript)
+                    .proteinAnnotation(inputProteinAnnotation)
+                    .position(hotspot.getStart())
+                    .ref(hotspot.getAlleles().get(0).getBaseString())
+                    .alt(hotspot.getAlleles().get(0).getBaseString())
+                    .sources(knowledgebaseSet)
+                    .build());
         }
 
         return result;

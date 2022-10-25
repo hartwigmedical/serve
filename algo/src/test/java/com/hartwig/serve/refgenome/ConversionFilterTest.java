@@ -8,7 +8,6 @@ import com.hartwig.serve.datamodel.fusion.ImmutableKnownFusionPair;
 import com.hartwig.serve.datamodel.gene.GeneTestFactory;
 import com.hartwig.serve.datamodel.gene.ImmutableActionableGene;
 import com.hartwig.serve.datamodel.hotspot.HotspotTestFactory;
-import com.hartwig.serve.datamodel.hotspot.ImmutableKnownHotspot;
 import com.hartwig.serve.datamodel.range.ImmutableCodonAnnotation;
 import com.hartwig.serve.datamodel.range.ImmutableExonAnnotation;
 import com.hartwig.serve.datamodel.range.ImmutableKnownCodon;
@@ -45,7 +44,7 @@ public class ConversionFilterTest {
     private static ExtractionResult createExtractionResultForGene(@NotNull String gene) {
         return ImmutableExtractionResult.builder()
                 .refGenomeVersion(RefGenomeVersion.V38)
-                .addKnownHotspots(ImmutableKnownHotspot.builder().from(HotspotTestFactory.createTestKnownHotspot()).gene(gene).build())
+                .addKnownHotspots(HotspotTestFactory.knownHotspotBuilder().gene(gene).build())
                 .addKnownCodons(ImmutableKnownCodon.builder()
                         .from(RangeTestFactory.createTestKnownCodon())
                         .annotation(ImmutableCodonAnnotation.builder()

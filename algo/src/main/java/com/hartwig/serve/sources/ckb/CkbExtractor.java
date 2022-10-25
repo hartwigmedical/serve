@@ -104,7 +104,7 @@ public class CkbExtractor {
                         .interpretedEventType(entry.type())
                         .build();
 
-                extractions.add(toExtractionResult(gene, event, null, extraction, actionableEvents, interpretation));
+                extractions.add(toExtractionResult(event, null, extraction, actionableEvents, interpretation));
             }
 
             tracker.update();
@@ -125,7 +125,7 @@ public class CkbExtractor {
     }
 
     @NotNull
-    private static ExtractionResult toExtractionResult(@NotNull String gene, @NotNull String variant, @Nullable String transcript,
+    private static ExtractionResult toExtractionResult(@NotNull String variant, @Nullable String transcript,
             @NotNull EventExtractorOutput output, @NotNull Set<ActionableEntry> actionableEvents,
             @NotNull EventInterpretation interpretation) {
         Set<ActionableHotspot> actionableHotspots = Sets.newHashSet();
@@ -168,7 +168,7 @@ public class CkbExtractor {
         return ImmutableExtractionResult.builder()
                 .refGenomeVersion(Knowledgebase.CKB.refGenomeVersion())
                 .addEventInterpretations(interpretation)
-                .knownHotspots(convertToKnownHotspots(output.hotspots(), gene, variant, transcript))
+                .knownHotspots(convertToKnownHotspots(output.hotspots(), variant, transcript))
                 .knownCodons(convertToKnownCodons(codons))
                 .knownExons(convertToKnownExons(output.exons()))
                 .knownCopyNumbers(convertToKnownAmpsDels(output.knownCopyNumber()))
@@ -206,8 +206,8 @@ public class CkbExtractor {
     }
 
     @NotNull
-    private static Set<KnownHotspot> convertToKnownHotspots(@Nullable List<VariantHotspot> hotspots, @NotNull String gene,
-            @NotNull String variant, @Nullable String transcript) {
+    private static Set<KnownHotspot> convertToKnownHotspots(@Nullable List<VariantHotspot> hotspots, @NotNull String variant,
+            @Nullable String transcript) {
         Set<KnownHotspot> knownHotspots = Sets.newHashSet();
 
         if (hotspots != null) {
@@ -216,7 +216,6 @@ public class CkbExtractor {
                 knownHotspots.add(ImmutableKnownHotspot.builder()
                         .from(hotspot)
                         .addSources(Knowledgebase.CKB)
-                        .gene(gene)
                         .transcript(transcript)
                         .proteinAnnotation(proteinExtractor.apply(variant))
                         .build());

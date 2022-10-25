@@ -9,7 +9,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.hotspot.HotspotTestFactory;
-import com.hartwig.serve.datamodel.hotspot.ImmutableKnownHotspot;
 import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
 
@@ -27,7 +26,7 @@ public class HotspotFunctionsTest {
     public void canConsolidateHotspotsFromOneSource() {
         Knowledgebase source = Knowledgebase.HARTWIG_CURATED;
         Set<KnownHotspot> knownHotspots = Sets.newHashSet();
-        knownHotspots.add(ImmutableKnownHotspot.builder()
+        knownHotspots.add(HotspotTestFactory.knownHotspotBuilder()
                 .from(hotspot1())
                 .addSources(source)
                 .gene("gene1")
@@ -35,7 +34,7 @@ public class HotspotFunctionsTest {
                 .proteinAnnotation("prot1")
                 .build());
 
-        knownHotspots.add(ImmutableKnownHotspot.builder()
+        knownHotspots.add(HotspotTestFactory.knownHotspotBuilder()
                 .from(hotspot1())
                 .addSources(source)
                 .gene("gene1")
@@ -43,7 +42,7 @@ public class HotspotFunctionsTest {
                 .proteinAnnotation("prot2")
                 .build());
 
-        knownHotspots.add(ImmutableKnownHotspot.builder()
+        knownHotspots.add(HotspotTestFactory.knownHotspotBuilder()
                 .from(hotspot2())
                 .addSources(source)
                 .gene("gene2")
@@ -71,7 +70,7 @@ public class HotspotFunctionsTest {
         Knowledgebase source1 = Knowledgebase.HARTWIG_CURATED;
         Knowledgebase source2 = Knowledgebase.HARTWIG_COHORT;
         Set<KnownHotspot> knownHotspots = Sets.newHashSet();
-        knownHotspots.add(ImmutableKnownHotspot.builder()
+        knownHotspots.add(HotspotTestFactory.knownHotspotBuilder()
                 .from(hotspot1())
                 .addSources(source1)
                 .gene(gene)
@@ -79,7 +78,7 @@ public class HotspotFunctionsTest {
                 .proteinAnnotation("prot1")
                 .build());
 
-        knownHotspots.add(ImmutableKnownHotspot.builder()
+        knownHotspots.add(HotspotTestFactory.knownHotspotBuilder()
                 .from(hotspot1())
                 .addSources(source2)
                 .gene(gene)
@@ -98,24 +97,12 @@ public class HotspotFunctionsTest {
 
     @NotNull
     private static VariantHotspot hotspot1() {
-        return ImmutableVariantHotspotImpl.builder()
-                .from(HotspotTestFactory.createTestKnownHotspot())
-                .chromosome("1")
-                .position(10)
-                .ref("A")
-                .alt("T")
-                .build();
+        return HotspotTestFactory.knownHotspotBuilder().chromosome("1").position(10).ref("A").alt("T").build();
     }
 
     @NotNull
     private static VariantHotspot hotspot2() {
-        return ImmutableVariantHotspotImpl.builder()
-                .from(HotspotTestFactory.createTestKnownHotspot())
-                .chromosome("1")
-                .position(20)
-                .ref("A")
-                .alt("T")
-                .build();
+        return HotspotTestFactory.knownHotspotBuilder().chromosome("1").position(20).ref("A").alt("T").build();
     }
 
     @NotNull

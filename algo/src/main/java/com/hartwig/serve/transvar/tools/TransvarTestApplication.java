@@ -3,8 +3,8 @@ package com.hartwig.serve.transvar.tools;
 import java.io.IOException;
 import java.util.List;
 
-import com.hartwig.serve.datamodel.common.Variant;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
+import com.hartwig.serve.extraction.hotspot.Hotspot;
 import com.hartwig.serve.refgenome.EnsemblDataCacheLoader;
 import com.hartwig.serve.transvar.Transvar;
 
@@ -52,11 +52,11 @@ public class TransvarTestApplication {
 
     private static void extractAndPrintVariants(@NotNull Transvar transvar, @NotNull String gene, @Nullable String specificTranscript,
             @NotNull String proteinAnnotation) {
-        List<Variant> variants = transvar.resolve(gene, specificTranscript, proteinAnnotation);
+        List<Hotspot> hotspots = transvar.resolve(gene, specificTranscript, proteinAnnotation);
 
-        LOGGER.info("Printing variants for '{}:p.{}' on transcript {}", gene, proteinAnnotation, specificTranscript);
-        for (Variant variant : variants) {
-            LOGGER.info(" {}", variant);
+        LOGGER.info("Printing hotspots for '{}:p.{}' on transcript {}", gene, proteinAnnotation, specificTranscript);
+        for (Hotspot hotspot : hotspots) {
+            LOGGER.info(" {}", hotspot);
         }
     }
 }

@@ -10,10 +10,10 @@ import java.util.List;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import com.hartwig.serve.common.ensemblcache.Strand;
-import com.hartwig.serve.datamodel.common.Variant;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeFunctions;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
-import com.hartwig.serve.extraction.util.ImmutableVariantImpl;
+import com.hartwig.serve.extraction.hotspot.Hotspot;
+import com.hartwig.serve.extraction.hotspot.ImmutableHotspot;
 import com.hartwig.serve.transvar.datamodel.TransvarAnnotation;
 import com.hartwig.serve.transvar.datamodel.TransvarComplexInsertDelete;
 import com.hartwig.serve.transvar.datamodel.TransvarDeletion;
@@ -53,20 +53,20 @@ class TransvarInterpreter {
     }
 
     @NotNull
-    List<Variant> convertRecordToVariants(@NotNull TransvarRecord record, @NotNull Strand strand) {
+    List<Hotspot> convertRecordToHotspots(@NotNull TransvarRecord record, @NotNull Strand strand) {
         TransvarAnnotation annotation = record.annotation();
         if (annotation instanceof TransvarSnvMnv) {
             return convertSnvMnvToHotspots(record, (TransvarSnvMnv) annotation, strand);
         } else if (annotation instanceof TransvarDuplication) {
-            return convertDuplicationToVariants(record, (TransvarDuplication) annotation);
+            return convertDuplicationToHotspots(record, (TransvarDuplication) annotation);
         } else if (annotation instanceof TransvarInsertion) {
-            return convertInsertionToVariants(record, (TransvarInsertion) annotation, strand);
+            return convertInsertionToHotspots(record, (TransvarInsertion) annotation, strand);
         } else if (annotation instanceof TransvarDeletion) {
-            return convertDeletionToVariants(record, (TransvarDeletion) annotation);
+            return convertDeletionToHotspots(record, (TransvarDeletion) annotation);
         } else if (annotation instanceof TransvarComplexInsertDelete) {
-            return convertComplexInsertDeleteToVariants(record, (TransvarComplexInsertDelete) annotation, strand);
+            return convertComplexInsertDeleteToHotspots(record, (TransvarComplexInsertDelete) annotation, strand);
         } else if (annotation instanceof TransvarFrameshift) {
-            return convertFrameshiftToVariants(record, (TransvarFrameshift) annotation, strand);
+            return convertFrameshiftToHotspots(record, (TransvarFrameshift) annotation, strand);
         } else {
             LOGGER.warn("Unrecognized annotation type in transvar record: '{}'. Skipping interpretation.",
                     annotation.getClass().toString());
@@ -75,13 +75,13 @@ class TransvarInterpreter {
     }
 
     @NotNull
-    private List<Variant> convertSnvMnvToHotspots(@NotNull TransvarRecord record, @NotNull TransvarSnvMnv snvMnv, @NotNull Strand strand) {
-        List<Variant> variants = Lists.newArrayList();
+    private List<Hotspot> convertSnvMnvToHotspots(@NotNull TransvarRecord record, @NotNull TransvarSnvMnv snvMnv, @NotNull Strand strand) {
+        List<Hotspot> hotspots = Lists.newArrayList();
 
         if (record.variantSpanMultipleExons()) {
-            // In this case we only generate variants for the base mutation in case it is an SNV.
+            // In this case we only generate hotspots for the base mutation in case it is an SNV.
             if (snvMnv.gdnaRef().length() == 1) {
-                variants.add(withRefBasedChromosome(record.chromosome()).position(record.gdnaPosition())
+                hotspots.add(withRefBasedChromosome(record.chromosome()).position(record.gdnaPosition())
                         .ref(snvMnv.gdnaRef())
                         .alt(snvMnv.gdnaAlt())
                         .build());
@@ -92,14 +92,14 @@ class TransvarInterpreter {
 
             if (gdnaCodonIndex != null) {
                 for (String candidateCodon : snvMnv.candidateCodons()) {
-                    variants.add(fromCandidateCodon(record, snvMnv.referenceCodon(), candidateCodon, gdnaCodonIndex, strand));
+                    hotspots.add(fromCandidateCodon(record, snvMnv.referenceCodon(), candidateCodon, gdnaCodonIndex, strand));
                 }
             } else {
                 LOGGER.warn("Could not resolve gdnaCodonIndex for '{}' on strand {}", record, strand);
             }
         }
 
-        return variants;
+        return hotspots;
     }
 
     @Nullable
@@ -137,7 +137,7 @@ class TransvarInterpreter {
     }
 
     @NotNull
-    private Variant fromCandidateCodon(@NotNull TransvarRecord record, @NotNull String referenceCodon, @NotNull String candidateCodon,
+    private Hotspot fromCandidateCodon(@NotNull TransvarRecord record, @NotNull String referenceCodon, @NotNull String candidateCodon,
             int gdnaCodonIndex, @NotNull Strand strand) {
         String strandAdjustedRefCodon = strand == Strand.FORWARD ? referenceCodon : reverseStrandBases(referenceCodon);
         String strandAdjustedCandidateCodon = strand == Strand.FORWARD ? candidateCodon : reverseStrandBases(candidateCodon);
@@ -162,15 +162,15 @@ class TransvarInterpreter {
     }
 
     @NotNull
-    private List<Variant> convertDuplicationToVariants(@NotNull TransvarRecord record, @NotNull TransvarDuplication dup) {
-        List<Variant> variants = Lists.newArrayList();
+    private List<Hotspot> convertDuplicationToHotspots(@NotNull TransvarRecord record, @NotNull TransvarDuplication dup) {
+        List<Hotspot> hotspots = Lists.newArrayList();
         if (!record.variantSpanMultipleExons()) {
             // Dups don't have ref and alt information so need to look it up in ref genome.
             int position = record.gdnaPosition() - 1;
             String preMutatedSequence = refSequence(record.chromosome(), position, position);
             String dupBases = refSequence(record.chromosome(), position + 1, position + dup.duplicatedBaseCount());
 
-            variants.add(withRefBasedChromosome(record.chromosome()).position(position)
+            hotspots.add(withRefBasedChromosome(record.chromosome()).position(position)
                     .ref(preMutatedSequence)
                     .alt(preMutatedSequence + dupBases)
                     .build());
@@ -178,31 +178,31 @@ class TransvarInterpreter {
             LOGGER.debug("Duplication spanning multiple exons. Ignoring '{}'", record);
         }
 
-        return variants;
+        return hotspots;
     }
 
     @NotNull
-    private List<Variant> convertInsertionToVariants(@NotNull TransvarRecord record, @NotNull TransvarInsertion insertion,
+    private List<Hotspot> convertInsertionToHotspots(@NotNull TransvarRecord record, @NotNull TransvarInsertion insertion,
             @NotNull Strand strand) {
-        List<Variant> variants = Lists.newArrayList();
+        List<Hotspot> hotspots = Lists.newArrayList();
 
         int position = record.gdnaPosition();
         String preMutatedSequence = refSequence(record.chromosome(), position, position);
 
-        ImmutableVariantImpl.Builder variantBuilder =
+        ImmutableHotspot.Builder hotspotBuilder =
                 withRefBasedChromosome(record.chromosome()).position(position).ref(preMutatedSequence);
 
         // We assume inserts of length 3 are always (inframe) amino acid inserts,
         //  and we know the inserted bases match the proteins inserted.
         if (insertion.insertedBases().length() == 3) {
             for (String trinucleotide : allTrinucleotidesForSameAminoAcid(insertion.insertedBases(), strand)) {
-                variants.add(variantBuilder.alt(preMutatedSequence + trinucleotide).build());
+                hotspots.add(hotspotBuilder.alt(preMutatedSequence + trinucleotide).build());
             }
         } else {
-            variants.add(variantBuilder.alt(preMutatedSequence + insertion.insertedBases()).build());
+            hotspots.add(hotspotBuilder.alt(preMutatedSequence + insertion.insertedBases()).build());
         }
 
-        return variants;
+        return hotspots;
     }
 
     @NotNull
@@ -229,17 +229,17 @@ class TransvarInterpreter {
     }
 
     @NotNull
-    private List<Variant> convertDeletionToVariants(@NotNull TransvarRecord record, @NotNull TransvarDeletion deletion) {
-        List<Variant> variants = Lists.newArrayList();
+    private List<Hotspot> convertDeletionToHotspots(@NotNull TransvarRecord record, @NotNull TransvarDeletion deletion) {
+        List<Hotspot> hotspots = Lists.newArrayList();
         if (!record.variantSpanMultipleExons()) {
-            ImmutableVariantImpl.Builder variantBuilder = withRefBasedChromosome(record.chromosome());
+            ImmutableHotspot.Builder hotspotBuilder = withRefBasedChromosome(record.chromosome());
             for (int start = deletion.leftAlignedGDNAPosition(); start <= record.gdnaPosition(); start++) {
                 int adjustedPosition = start - 1;
                 String preMutatedSequence = refSequence(record.chromosome(), adjustedPosition, adjustedPosition);
                 String deletedSequence =
                         refSequence(record.chromosome(), adjustedPosition + 1, adjustedPosition + deletion.deletedBaseCount());
 
-                variants.add(variantBuilder.position(adjustedPosition)
+                hotspots.add(hotspotBuilder.position(adjustedPosition)
                         .ref(preMutatedSequence + deletedSequence)
                         .alt(preMutatedSequence)
                         .build());
@@ -248,22 +248,22 @@ class TransvarInterpreter {
             LOGGER.debug("Deletion spanning multiple exons. Ignoring '{}'", record);
         }
 
-        return variants;
+        return hotspots;
     }
 
     @NotNull
-    private List<Variant> convertComplexInsertDeleteToVariants(@NotNull TransvarRecord record,
+    private List<Hotspot> convertComplexInsertDeleteToHotspots(@NotNull TransvarRecord record,
             @NotNull TransvarComplexInsertDelete insDel, @NotNull Strand strand) {
-        List<Variant> variants = Lists.newArrayList();
+        List<Hotspot> hotspots = Lists.newArrayList();
         if (!record.variantSpanMultipleExons()) {
             int position = record.gdnaPosition();
             String deletedBases = refSequence(record.chromosome(), position, position + insDel.deletedBaseCount() - 1);
 
-            ImmutableVariantImpl.Builder variantBuilder =
+            ImmutableHotspot.Builder hotspotBuilder =
                     withRefBasedChromosome(record.chromosome()).position(position).ref(deletedBases);
 
             String insertedBases = insDel.insertedSequence();
-            variants.add(reduceComplexityForComplexInsDel(variantBuilder.alt(insertedBases).build()));
+            hotspots.add(reduceComplexityForComplexInsDel(hotspotBuilder.alt(insertedBases).build()));
             // For now we only add alternative sequences for insertions of one AA
             if (insertedBases.length() == 3) {
                 for (String candidateAlternativeCodon : insDel.candidateAlternativeCodons()) {
@@ -271,19 +271,19 @@ class TransvarInterpreter {
                     String strandAdjustedAlternativeSequence =
                             strand == Strand.FORWARD ? candidateAlternativeCodon : reverseStrandBases(candidateAlternativeCodon);
                     if (!strandAdjustedAlternativeSequence.equals(insertedBases)) {
-                        variants.add(reduceComplexityForComplexInsDel(variantBuilder.alt(strandAdjustedAlternativeSequence).build()));
+                        hotspots.add(reduceComplexityForComplexInsDel(hotspotBuilder.alt(strandAdjustedAlternativeSequence).build()));
                     }
                 }
             }
         } else {
             LOGGER.debug("Complex insert/delete spanning multiple exons. Ignoring '{}'", record);
         }
-        return variants;
+        return hotspots;
     }
 
     @NotNull
     @VisibleForTesting
-    Variant reduceComplexityForComplexInsDel(@NotNull Variant complexInsDel) {
+    Hotspot reduceComplexityForComplexInsDel(@NotNull Hotspot complexInsDel) {
         assert complexInsDel.ref().length() > 1 && complexInsDel.alt().length() > 1;
 
         String simplifiedRef = complexInsDel.ref();
@@ -306,9 +306,9 @@ class TransvarInterpreter {
     }
 
     @NotNull
-    private List<Variant> convertFrameshiftToVariants(@NotNull TransvarRecord record, @NotNull TransvarFrameshift frameshift,
+    private List<Hotspot> convertFrameshiftToHotspots(@NotNull TransvarRecord record, @NotNull TransvarFrameshift frameshift,
             @NotNull Strand strand) {
-        List<Variant> variants = Lists.newArrayList();
+        List<Hotspot> hotspots = Lists.newArrayList();
         if (!record.variantSpanMultipleExons()) {
             int posPriorToCodon = strand == Strand.FORWARD ? record.gdnaPosition() : record.gdnaPosition() - 3;
             // For frameshifts in start codons, transvar generates the start of the start codon rather than position prior.
@@ -319,27 +319,27 @@ class TransvarInterpreter {
             String refAminoAcid = findAminoAcidForCodon(strand == Strand.FORWARD ? referenceCodon : reverseStrandBases(referenceCodon));
 
             if (refAminoAcid == null) {
-                LOGGER.warn("Could not resolve a valid ref amino acid for '{}' based on reference codon {}. Skipping variant generation.",
+                LOGGER.warn("Could not resolve a valid ref amino acid for '{}' based on reference codon {}. Skipping hotspot generation.",
                         record,
                         referenceCodon);
                 return Lists.newArrayList();
             }
 
-            variants.addAll(generateSingleBaseInserts(record, posPriorToCodon, strand, refAminoAcid));
-            variants.addAll(generateSingleBaseDeletes(record, posPriorToCodon, strand, refAminoAcid));
-            variants.addAll(generateDoubleBaseDeletes(record, posPriorToCodon, strand, refAminoAcid));
+            hotspots.addAll(generateSingleBaseInserts(record, posPriorToCodon, strand, refAminoAcid));
+            hotspots.addAll(generateSingleBaseDeletes(record, posPriorToCodon, strand, refAminoAcid));
+            hotspots.addAll(generateDoubleBaseDeletes(record, posPriorToCodon, strand, refAminoAcid));
         } else {
             LOGGER.debug("Frameshift spanning multiple exons. Ignoring '{}'", record);
         }
 
-        return variants;
+        return hotspots;
     }
 
     @NotNull
-    private List<Variant> generateSingleBaseInserts(@NotNull TransvarRecord record, int posPriorToCodon, @NotNull Strand strand,
+    private List<Hotspot> generateSingleBaseInserts(@NotNull TransvarRecord record, int posPriorToCodon, @NotNull Strand strand,
             @NotNull String refAminoAcid) {
-        List<Variant> variants = Lists.newArrayList();
-        ImmutableVariantImpl.Builder builder = withRefBasedChromosome(record.chromosome());
+        List<Hotspot> hotspots = Lists.newArrayList();
+        ImmutableHotspot.Builder builder = withRefBasedChromosome(record.chromosome());
 
         // Add 12 single base insertions in case they don't lead to synonymous impact in the impacted codon
         for (int i = 0; i < 3; i++) {
@@ -365,18 +365,18 @@ class TransvarInterpreter {
                 String newAminoAcid = findAminoAcidForCodon(strand == Strand.FORWARD ? newRefCodon : reverseStrandBases(newRefCodon));
 
                 if (newAminoAcid != null && !newAminoAcid.equals(refAminoAcid)) {
-                    variants.add(builder.alt(ref + base).build());
+                    hotspots.add(builder.alt(ref + base).build());
                 }
             }
         }
-        return variants;
+        return hotspots;
     }
 
     @NotNull
-    private List<Variant> generateSingleBaseDeletes(@NotNull TransvarRecord record, int posPriorToCodon, @NotNull Strand strand,
+    private List<Hotspot> generateSingleBaseDeletes(@NotNull TransvarRecord record, int posPriorToCodon, @NotNull Strand strand,
             @NotNull String refAminoAcid) {
-        List<Variant> variants = Lists.newArrayList();
-        ImmutableVariantImpl.Builder builder = withRefBasedChromosome(record.chromosome());
+        List<Hotspot> hotspots = Lists.newArrayList();
+        ImmutableHotspot.Builder builder = withRefBasedChromosome(record.chromosome());
 
         // Add the 3 single base deletes in case they don't lead to synonymous impact in the impacted codon
         for (int i = 0; i < 3; i++) {
@@ -415,17 +415,17 @@ class TransvarInterpreter {
                 String ref = refSequence(record.chromosome(), pos, pos + 1);
                 String alt = refSequence(record.chromosome(), pos, pos);
 
-                variants.add(builder.position(pos).ref(ref).alt(alt).build());
+                hotspots.add(builder.position(pos).ref(ref).alt(alt).build());
             }
         }
-        return variants;
+        return hotspots;
     }
 
     @NotNull
-    private List<Variant> generateDoubleBaseDeletes(@NotNull TransvarRecord record, int posPriorToCodon, @NotNull Strand strand,
+    private List<Hotspot> generateDoubleBaseDeletes(@NotNull TransvarRecord record, int posPriorToCodon, @NotNull Strand strand,
             @NotNull String refAminoAcid) {
-        List<Variant> variants = Lists.newArrayList();
-        ImmutableVariantImpl.Builder builder = withRefBasedChromosome(record.chromosome());
+        List<Hotspot> hotspots = Lists.newArrayList();
+        ImmutableHotspot.Builder builder = withRefBasedChromosome(record.chromosome());
 
         // Add the 2 double base deletes in case they don't lead to synonymous impact in the impacted codon
         for (int i = 0; i < 2; i++) {
@@ -456,10 +456,10 @@ class TransvarInterpreter {
                 String ref = refSequence(record.chromosome(), pos, pos + 2);
                 String alt = refSequence(record.chromosome(), pos, pos);
 
-                variants.add(builder.position(pos).ref(ref).alt(alt).build());
+                hotspots.add(builder.position(pos).ref(ref).alt(alt).build());
             }
         }
-        return variants;
+        return hotspots;
     }
 
     @NotNull
@@ -469,7 +469,7 @@ class TransvarInterpreter {
     }
 
     @NotNull
-    private ImmutableVariantImpl.Builder withRefBasedChromosome(@NotNull String chromosome) {
-        return ImmutableVariantImpl.builder().chromosome(RefGenomeFunctions.versionedChromosome(chromosome, refGenomeVersion));
+    private ImmutableHotspot.Builder withRefBasedChromosome(@NotNull String chromosome) {
+        return ImmutableHotspot.builder().chromosome(RefGenomeFunctions.versionedChromosome(chromosome, refGenomeVersion));
     }
 }

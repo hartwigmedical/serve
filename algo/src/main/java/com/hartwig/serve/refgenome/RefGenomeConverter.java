@@ -4,10 +4,8 @@ import java.util.Set;
 
 import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.MutationType;
-import com.hartwig.serve.datamodel.common.GeneAlteration;
 import com.hartwig.serve.datamodel.common.GeneRole;
 import com.hartwig.serve.datamodel.common.ProteinEffect;
-import com.hartwig.serve.datamodel.common.Variant;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
 import com.hartwig.serve.datamodel.hotspot.ImmutableActionableHotspot;
 import com.hartwig.serve.datamodel.hotspot.ImmutableKnownHotspot;
@@ -175,12 +173,7 @@ class RefGenomeConverter {
             return null;
         }
 
-        return ImmutableVariantHotspotImpl.builder()
-                .from((Variant) hotspot)
-                .from((GeneAlteration) hotspot)
-                .chromosome(lifted.chromosome())
-                .position(lifted.position())
-                .build();
+        return ImmutableVariantHotspotImpl.builder().from(hotspot).chromosome(lifted.chromosome()).position(lifted.position()).build();
     }
 
     @Nullable

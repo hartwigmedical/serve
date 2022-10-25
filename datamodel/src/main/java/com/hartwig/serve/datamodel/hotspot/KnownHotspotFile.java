@@ -9,7 +9,6 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.datamodel.common.Variant;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 import com.hartwig.serve.datamodel.util.KeyFormatter;
 
@@ -124,7 +123,7 @@ public final class KnownHotspotFile {
     }
 
     @NotNull
-    private static List<Allele> buildAlleles(@NotNull Variant hotspot) {
+    private static List<Allele> buildAlleles(@NotNull VariantHotspot hotspot) {
         Allele ref = Allele.create(hotspot.ref(), true);
         Allele alt = Allele.create(hotspot.alt(), false);
 

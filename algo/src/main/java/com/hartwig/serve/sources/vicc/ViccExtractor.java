@@ -10,8 +10,6 @@ import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.characteristic.ActionableCharacteristic;
 import com.hartwig.serve.datamodel.characteristic.TumorCharacteristic;
-import com.hartwig.serve.datamodel.common.GeneAlteration;
-import com.hartwig.serve.datamodel.common.Variant;
 import com.hartwig.serve.datamodel.fusion.ActionableFusion;
 import com.hartwig.serve.datamodel.fusion.ImmutableKnownFusionPair;
 import com.hartwig.serve.datamodel.fusion.KnownFusionPair;
@@ -191,8 +189,7 @@ public final class ViccExtractor {
             Feature feature = featureResult.getKey();
             for (VariantHotspot hotspot : featureResult.getValue()) {
                 hotspots.add(ImmutableKnownHotspot.builder()
-                        .from((Variant) hotspot)
-                        .from((GeneAlteration) hotspot)
+                        .from(hotspot)
                         .addSources(source)
                         .gene(feature.geneSymbol())
                         .transcript(entry.transcriptId())

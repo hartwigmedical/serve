@@ -10,7 +10,6 @@ import com.hartwig.serve.common.drivergene.DriverCategory;
 import com.hartwig.serve.common.drivergene.DriverGene;
 import com.hartwig.serve.datamodel.common.GeneRole;
 import com.hartwig.serve.datamodel.common.ProteinEffect;
-import com.hartwig.serve.datamodel.common.Variant;
 import com.hartwig.serve.datamodel.hotspot.ImmutableVariantHotspotImpl;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
 import com.hartwig.serve.extraction.util.DriverInconsistencyMode;
@@ -74,9 +73,11 @@ public class HotspotExtractor {
             }
 
             List<VariantHotspot> hotspots = Lists.newArrayList();
-            for (Variant variant : proteinResolver.resolve(gene, transcriptId, proteinAnnotationExtractor.apply(event))) {
+            for (Hotspot hotspot : proteinResolver.resolve(gene, transcriptId, proteinAnnotationExtractor.apply(event))) {
                 hotspots.add(ImmutableVariantHotspotImpl.builder()
-                        .from(variant)
+                        .from(hotspot)
+                        .ref(hotspot.ref())
+                        .alt(hotspot.alt())
                         .gene(Strings.EMPTY)
                         .geneRole(GeneRole.UNKNOWN)
                         .proteinEffect(ProteinEffect.UNKNOWN)

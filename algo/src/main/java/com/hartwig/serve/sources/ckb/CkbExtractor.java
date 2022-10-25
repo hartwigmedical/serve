@@ -16,7 +16,6 @@ import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.datamodel.ActionableEvent;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.characteristic.ActionableCharacteristic;
-import com.hartwig.serve.datamodel.common.GeneAlteration;
 import com.hartwig.serve.datamodel.fusion.ActionableFusion;
 import com.hartwig.serve.datamodel.fusion.ImmutableKnownFusionPair;
 import com.hartwig.serve.datamodel.fusion.KnownFusionPair;
@@ -215,8 +214,7 @@ public class CkbExtractor {
             CkbProteinAnnotationExtractor proteinExtractor = new CkbProteinAnnotationExtractor();
             for (VariantHotspot hotspot : hotspots) {
                 knownHotspots.add(ImmutableKnownHotspot.builder()
-                        .from((com.hartwig.serve.datamodel.common.Variant) hotspot)
-                        .from((GeneAlteration) hotspot)
+                        .from(hotspot)
                         .addSources(Knowledgebase.CKB)
                         .gene(gene)
                         .transcript(transcript)

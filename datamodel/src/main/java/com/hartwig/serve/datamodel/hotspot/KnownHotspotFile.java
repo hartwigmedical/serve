@@ -39,9 +39,10 @@ public final class KnownHotspotFile {
         return refGenomeVersion.addVersionToFilePath(outputDir + File.separator + KNOWN_HOTSPOT_VCF);
     }
 
+    @NotNull
     public static List<KnownHotspot> read(@NotNull String vcfFile) throws IOException {
-        final List<KnownHotspot> result = Lists.newArrayList();
-        try (final AbstractFeatureReader<VariantContext, LineIterator> reader = AbstractFeatureReader.getFeatureReader(vcfFile,
+        List<KnownHotspot> result = Lists.newArrayList();
+        try (AbstractFeatureReader<VariantContext, LineIterator> reader = AbstractFeatureReader.getFeatureReader(vcfFile,
                 new VCFCodec(),
                 false)) {
             for (VariantContext hotspot : reader.iterator()) {
@@ -53,7 +54,6 @@ public final class KnownHotspotFile {
                 List<String> sources = hotspot.getAttributeAsStringList(VCFWriterFactory.SOURCES_FIELD, Strings.EMPTY);
                 Set<Knowledgebase> knowledgebaseSet = Sets.newHashSet();
                 if (!sources.isEmpty()) {
-
                     for (String source : sources) {
                         knowledgebaseSet = Knowledgebase.fromCommaSeparatedSourceString(source);
                     }

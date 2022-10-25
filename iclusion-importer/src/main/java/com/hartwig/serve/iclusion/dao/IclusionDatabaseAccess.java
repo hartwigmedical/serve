@@ -30,25 +30,20 @@ public class IclusionDatabaseAccess {
     public static final String DB_PASS = "db_pass";
     public static final String DB_URL = "db_url";
 
-    public static final String DB_DEFAULT_ARGS = "?serverTimezone=UTC&useSSL=false";
+    private static final String DB_DEFAULT_ARGS = "?serverTimezone=UTC&useSSL=false";
 
-    @NotNull
-    private final Connection connection;
-    @NotNull
-    private final DSLContext context;
     @NotNull
     private final IclusionDAO iclusionDAO;
-
 
     public IclusionDatabaseAccess(@NotNull final String userName, @NotNull final String password, @NotNull final String url) throws
             SQLException {
         System.setProperty("org.jooq.no-logo", "true");
         System.setProperty("org.jooq.no-tips", "true");
 
-        this.connection = DriverManager.getConnection(url, userName, password);
+        Connection connection = DriverManager.getConnection(url, userName, password);
         String catalog = connection.getCatalog();
         LOGGER.debug("Connecting to database '{}'", catalog);
-        this.context = DSL.using(connection, SQLDialect.MYSQL, settings(catalog));
+        DSLContext context = DSL.using(connection, SQLDialect.MYSQL, settings(catalog));
 
         this.iclusionDAO = new IclusionDAO(context);
     }
@@ -91,6 +86,7 @@ public class IclusionDatabaseAccess {
         options.addOption(Option.builder(DB_PASS).desc("Database password").hasArg(true).required(isRequired).build());
         options.addOption(Option.builder(DB_URL).desc("Database url").hasArg(true).required(isRequired).build());
     }
+    
     public void writeIclusionDAO(@NotNull List<IclusionTrial> trials) {
         iclusionDAO.write(trials);
     }

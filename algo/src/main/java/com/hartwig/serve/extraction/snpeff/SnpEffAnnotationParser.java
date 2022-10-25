@@ -61,7 +61,7 @@ public final class SnpEffAnnotationParser
         final StringJoiner joiner = new StringJoiner("|");
         Stream.of(parts).forEach(joiner::add);
 
-        LOGGER.warn("Annotation found with invalid field count: " + joiner.toString());
+        LOGGER.warn("Annotation found with invalid field count: " + joiner);
         return false;
     }
 

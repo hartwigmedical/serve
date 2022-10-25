@@ -41,7 +41,7 @@ public final class VariantImpactSerialiser {
         String otherReportableEffects = impactValues.get(index++);
 
         CodingEffect worstCodingEffect = CodingEffect.valueOf(impactValues.get(index++));
-        int genesAffected = Integer.parseInt(impactValues.get(index++));
+        int genesAffected = Integer.parseInt(impactValues.get(index));
 
         return new VariantImpact(canonicalGeneName,
                 canonicalTranscript,

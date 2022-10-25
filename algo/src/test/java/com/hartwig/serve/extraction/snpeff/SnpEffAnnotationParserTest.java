@@ -132,7 +132,7 @@ public class SnpEffAnnotationParserTest
         }
 
         final String line =
-                String.format("15\t12345678\trs1;UCSC\t%s\t%s\t2\tPASS\t%s\tGT:AD:DP\t0/1:59,60:120", ref, alt, infoJoiner.toString());
+                String.format("15\t12345678\trs1;UCSC\t%s\t%s\t2\tPASS\t%s\tGT:AD:DP\t0/1:59,60:120", ref, alt, infoJoiner);
 
         return codec.decode(line);
     }

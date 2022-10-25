@@ -14,9 +14,9 @@ In order to load the VICC database into a MySQL database, one needs to:
  * Create the database using create_vicc_database.sql script from the VICC importer resources.
  * Run ViccJsonSQLImporter (default class in the vicc-importer jar) with the following arguments:
  
-Argument  | Description
----|---
-vicc_json  | Required: Path to the VICC json file containing the VICC data.
-db_url | Required: The URL of the database in which to ingest the data.
-db_user | Required: The DB user which has access to the the URL specified
-db_pass | Required: The password needed for the DB user to authenticate on the URL.
+| Argument  | Description                                                               |
+|-----------|---------------------------------------------------------------------------|
+| vicc_json | Required: Path to the VICC json file containing the VICC data.            |
+| db_url    | Required: The URL of the database in which to ingest the data.            |
+| db_user   | Required: The DB user which has access to the the URL specified           |
+| db_pass   | Required: The password needed for the DB user to authenticate on the URL. |

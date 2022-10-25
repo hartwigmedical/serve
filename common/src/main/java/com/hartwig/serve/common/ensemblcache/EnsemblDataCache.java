@@ -24,7 +24,6 @@ public class EnsemblDataCache {
     private final Map<String, List<GeneData>> mChrGeneDataMap; // genes keyed by chromosome
     private final Map<Integer, List<TranscriptProteinData>> mEnsemblProteinDataMap;
     private final Map<Integer, Integer> mTransSpliceAcceptorPosDataMap;
-    private final Map<String, GeneData> mGeneNameIdMap; // for faster look-up by name
 
     // whether to load more details information for each transcript - exons, protein domains, splice positions etc
     private boolean mRequireExons;
@@ -44,8 +43,6 @@ public class EnsemblDataCache {
         mChrGeneDataMap = Maps.newHashMap();
         mEnsemblProteinDataMap = Maps.newHashMap();
         mTransSpliceAcceptorPosDataMap = Maps.newHashMap();
-        // keyed by geneId
-        mGeneNameIdMap = Maps.newHashMap();
         mRequireExons = true;
         mRequireProteinDomains = false;
         mRequireSplicePositions = false;
@@ -65,10 +62,6 @@ public class EnsemblDataCache {
     }
 
     public final GeneData getGeneDataByName(@NotNull String geneName) {
-        if (!mGeneNameIdMap.isEmpty()) {
-            return mGeneNameIdMap.get(geneName);
-        }
-
         return getGeneData(geneName, true);
     }
 

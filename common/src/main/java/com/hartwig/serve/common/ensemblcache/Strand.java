@@ -8,7 +8,6 @@ public enum Strand {
 
     // alternative byte representation for file I/O
     public static final byte POS_STRAND = 1;
-    public static final byte NEG_STRAND = -1;
 
     @NotNull
     public static Strand valueOf(int direction) {
@@ -20,9 +19,5 @@ public enum Strand {
         }
 
         throw new IllegalArgumentException("Invalid direction " + direction);
-    }
-
-    public byte asByte() {
-        return this == FORWARD ? POS_STRAND : NEG_STRAND;
     }
 }

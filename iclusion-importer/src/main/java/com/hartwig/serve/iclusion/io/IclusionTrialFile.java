@@ -100,7 +100,7 @@ public final class IclusionTrialFile {
 
             if (!containsInvalidString(tumorLocation.primaryTumorLocation(), SUB_FIELD_DELIMITER)
                     && !containsInvalidString(tumorLocation.primaryTumorLocation(), SUB_FIELD_SEPARATOR)) {
-                tumorLocationString.add(tumorLocation.primaryTumorLocation() + SUB_FIELD_SEPARATOR + doidString.toString());
+                tumorLocationString.add(tumorLocation.primaryTumorLocation() + SUB_FIELD_SEPARATOR + doidString);
             }
         }
 
@@ -123,7 +123,7 @@ public final class IclusionTrialFile {
             }
             String finalMutationString = mutationString.toString();
             if (!finalMutationString.isEmpty()) {
-                mutationConditionString.add(mutationCondition.logicType().toString() + "(" + mutationString.toString() + ")");
+                mutationConditionString.add(mutationCondition.logicType() + "(" + mutationString + ")");
             }
         }
 

@@ -15,14 +15,14 @@ Some specific notes about the iClusion Importer:
 In order to run the iClusion importer one needs to get an account from iClusion. 
 Assuming this has been provided, the trials can be imported by running the iClusion importer jar with the following params:
   
-Argument  | Description
----|---
-iclusion_endpoint | Required: The URL where the iClusion API runs that one wants to query.
-iclusion_client_id | Required: Provided by iClusion.
-iclusion_client_secret | Required: Provided by iClusion.
-iclusion_username | Required: Provided by iClusion.
-iclusion_password | Required: Provided by iClusion.
-iclusion_trial_tsv | Required: The path to where the trials are going to be written to.
+| Argument               | Description                                                            |
+|------------------------|------------------------------------------------------------------------|
+| iclusion_endpoint      | Required: The URL where the iClusion API runs that one wants to query. |
+| iclusion_client_id     | Required: Provided by iClusion.                                        |
+| iclusion_client_secret | Required: Provided by iClusion.                                        |
+| iclusion_username      | Required: Provided by iClusion.                                        |
+| iclusion_password      | Required: Provided by iClusion.                                        |
+| iclusion_trial_tsv     | Required: The path to where the trials are going to be written to.     |
 
 ## Version History and Download Links
 - [1.6](https://github.com/hartwigmedical/hmftools/releases/tag/iclusion-importer-v1.6)

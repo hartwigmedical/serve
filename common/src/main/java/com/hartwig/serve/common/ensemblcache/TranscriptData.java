@@ -46,7 +46,7 @@ public class TranscriptData {
         return TransEnd - TransStart;
     }
 
-    public com.hartwig.serve.common.ensemblcache.Strand strand() {
+    public Strand strand() {
         return Strand == com.hartwig.serve.common.ensemblcache.Strand.POS_STRAND
                 ? com.hartwig.serve.common.ensemblcache.Strand.FORWARD
                 : com.hartwig.serve.common.ensemblcache.Strand.REVERSE;

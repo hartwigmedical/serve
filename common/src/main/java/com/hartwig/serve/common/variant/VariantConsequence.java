@@ -89,16 +89,6 @@ public enum VariantConsequence {
         return VariantConsequence.OTHER;
     }
 
-    public static String consequencesToString(final List<VariantConsequence> consequences) {
-        return consequencesToString(consequences, VARIANT_CONSEQ_DELIM);
-    }
-
-    public static String consequencesToString(final List<VariantConsequence> consequences, final String delim) {
-        StringJoiner sj = new StringJoiner(delim);
-        consequences.forEach(x -> sj.add(x.toString()));
-        return sj.toString();
-    }
-
     public static String consequenceString(final List<VariantConsequence> consequences) {
         final StringJoiner consequenceString = new StringJoiner(VARIANT_CONSEQ_DELIM);
         for (final VariantConsequence consequence : consequences) {

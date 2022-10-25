@@ -19,7 +19,7 @@ public class ActinFilterTest {
     public void canFilter() {
         List<ActinFilterEntry> filterEntries = Lists.newArrayList();
         filterEntries.add(create(ActinFilterType.FILTER_MUTATION_ON_GENE, "BRAF V600E"));
-        filterEntries.add(create(ActinFilterType.FILTER_RULE_ON_GENE, "BRAF " + ActinRule.ACTIVATING_MUTATION_IN_GENE_X.toString()));
+        filterEntries.add(create(ActinFilterType.FILTER_RULE_ON_GENE, "BRAF " + ActinRule.ACTIVATING_MUTATION_IN_GENE_X));
         filterEntries.add(create(ActinFilterType.FILTER_EVERYTHING_FOR_GENE, "KRAS"));
         filterEntries.add(create(ActinFilterType.FILTER_EVERYTHING_FOR_RULE, ActinRule.WILDTYPE_OF_GENE_X.toString()));
 

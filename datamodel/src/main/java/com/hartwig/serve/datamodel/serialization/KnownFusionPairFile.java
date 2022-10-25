@@ -35,6 +35,7 @@ public final class KnownFusionPairFile {
         List<String> lines = Lists.newArrayList();
         lines.add(header());
         lines.addAll(toLines(fusionPairs));
+
         Files.write(new File(fusionPairTsv).toPath(), lines);
     }
 

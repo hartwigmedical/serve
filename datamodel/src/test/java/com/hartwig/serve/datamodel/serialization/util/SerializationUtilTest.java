@@ -29,6 +29,8 @@ public class SerializationUtilTest {
         assertNull(SerializationUtil.optionalString(Strings.EMPTY));
         assertEquals("hi", SerializationUtil.optionalString("hi"));
 
+        assertEquals(Strings.EMPTY, SerializationUtil.nullableString(null));
+
         assertEquals(Strings.EMPTY, SerializationUtil.nullableInteger(null));
         assertEquals("2", SerializationUtil.nullableInteger(2));
 

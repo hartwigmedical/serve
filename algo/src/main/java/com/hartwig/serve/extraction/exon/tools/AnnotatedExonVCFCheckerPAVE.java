@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.util.List;
 
 import com.hartwig.serve.common.variant.impact.VariantTranscriptImpact;
-import com.hartwig.serve.datamodel.serialization.util.VCFWriterFactory;
 import com.hartwig.serve.extraction.codon.tools.AnnotatedCodonVCFChecker;
+import com.hartwig.serve.extraction.util.VCFWriterFactory;
 
 import org.apache.commons.compress.utils.Lists;
 import org.apache.logging.log4j.Level;

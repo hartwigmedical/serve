@@ -14,9 +14,9 @@ import com.hartwig.serve.datamodel.KnownEvent;
 import com.hartwig.serve.datamodel.range.KnownCodon;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 import com.hartwig.serve.datamodel.serialization.KnownCodonFile;
-import com.hartwig.serve.datamodel.serialization.util.VCFWriterFactory;
 import com.hartwig.serve.extraction.util.GenerateAltBase;
 import com.hartwig.serve.extraction.util.KeyFormatter;
+import com.hartwig.serve.extraction.util.VCFWriterFactory;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;

@@ -1,4 +1,4 @@
-package com.hartwig.serve.datamodel.serialization;
+package com.hartwig.serve.extraction.hotspot;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,12 +9,14 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.datamodel.common.GeneRole;
+import com.hartwig.serve.datamodel.common.ProteinEffect;
 import com.hartwig.serve.datamodel.hotspot.ImmutableKnownHotspot;
 import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspotComparator;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
-import com.hartwig.serve.datamodel.serialization.util.VCFWriterFactory;
+import com.hartwig.serve.extraction.util.VCFWriterFactory;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -93,6 +95,8 @@ public final class KnownHotspotVCF {
             result.add(ImmutableKnownHotspot.builder()
                     .chromosome(hotspot.getContig())
                     .gene(inputGene)
+                    .geneRole(GeneRole.UNKNOWN)
+                    .proteinEffect(ProteinEffect.UNKNOWN)
                     .transcript(inputTranscript)
                     .proteinAnnotation(inputProteinAnnotation)
                     .position(hotspot.getStart())
@@ -103,7 +107,6 @@ public final class KnownHotspotVCF {
         }
 
         return result;
-
     }
 
     @NotNull

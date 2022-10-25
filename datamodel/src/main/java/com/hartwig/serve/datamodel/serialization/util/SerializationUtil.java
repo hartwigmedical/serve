@@ -35,6 +35,11 @@ public final class SerializationUtil {
         return integer != null ? String.valueOf(integer) : Strings.EMPTY;
     }
 
+    @NotNull
+    public static String nullableString(@Nullable String string) {
+        return string != null ? string : Strings.EMPTY;
+    }
+
     @Nullable
     public static String optionalString(@NotNull String string) {
         return !string.isEmpty() ? string : null;

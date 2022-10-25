@@ -39,6 +39,7 @@ public final class KnownExonFile {
         List<String> lines = Lists.newArrayList();
         lines.add(header());
         lines.addAll(toLines(exons));
+
         Files.write(new File(exonTsv).toPath(), lines);
     }
 

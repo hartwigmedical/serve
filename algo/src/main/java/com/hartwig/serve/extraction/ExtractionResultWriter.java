@@ -13,8 +13,9 @@ import com.hartwig.serve.datamodel.serialization.KnownCodonFile;
 import com.hartwig.serve.datamodel.serialization.KnownCopyNumberFile;
 import com.hartwig.serve.datamodel.serialization.KnownExonFile;
 import com.hartwig.serve.datamodel.serialization.KnownFusionPairFile;
-import com.hartwig.serve.datamodel.serialization.KnownHotspotVCF;
+import com.hartwig.serve.datamodel.serialization.KnownHotspotsFile;
 import com.hartwig.serve.extraction.events.EventInterpretationFile;
+import com.hartwig.serve.extraction.hotspot.KnownHotspotVCF;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -43,9 +44,14 @@ public class ExtractionResultWriter {
     public void write(@NotNull ExtractionResult result) throws IOException {
         LOGGER.info("Writing SERVE output to {}", outputDir);
 
+        // We also write a hotspot VCF to be used in SAGE.
         String hotspotVcf = KnownHotspotVCF.knownHotspotVcfPath(outputDir, refGenomeVersion);
         LOGGER.info(" Writing {} known hotspots to {}", result.knownHotspots().size(), hotspotVcf);
         KnownHotspotVCF.write(hotspotVcf, refSequence, result.knownHotspots());
+
+        String hotspotTsv = KnownHotspotsFile.knownHotspotTsvPath(outputDir, refGenomeVersion);
+        LOGGER.info(" Writing {} known hotspots to {}", result.knownHotspots().size(), hotspotTsv);
+        KnownHotspotsFile.write(hotspotTsv, result.knownHotspots());
 
         String codonTsv = KnownCodonFile.knownCodonTsvPath(outputDir, refGenomeVersion);
         LOGGER.info(" Writing {} known codons to {}", result.knownCodons().size(), codonTsv);

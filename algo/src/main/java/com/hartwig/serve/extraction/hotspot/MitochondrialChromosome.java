@@ -1,4 +1,4 @@
-package com.hartwig.serve.datamodel.common;
+package com.hartwig.serve.extraction.hotspot;
 
 import org.jetbrains.annotations.NotNull;
 

@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import com.hartwig.serve.common.variant.impact.VariantImpact;
 import com.hartwig.serve.common.variant.impact.VariantImpactSerialiser;
-import com.hartwig.serve.datamodel.serialization.util.VCFWriterFactory;
+import com.hartwig.serve.extraction.util.VCFWriterFactory;
 import com.hartwig.serve.util.AminoAcids;
 
 import org.apache.logging.log4j.Level;

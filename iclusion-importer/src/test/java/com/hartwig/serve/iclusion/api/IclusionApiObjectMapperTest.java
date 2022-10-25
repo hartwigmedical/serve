@@ -12,7 +12,6 @@ import com.google.common.collect.Lists;
 import com.hartwig.serve.iclusion.datamodel.IclusionMutationLogicType;
 import com.hartwig.serve.iclusion.datamodel.IclusionTrial;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 public class IclusionApiObjectMapperTest {
@@ -92,9 +91,9 @@ public class IclusionApiObjectMapperTest {
 
     @Test
     public void canResolveLogicType() {
-        Assert.assertEquals(IclusionMutationLogicType.UNKNOWN, IclusionApiObjectMapper.toLogicType(null));
-        Assert.assertEquals(IclusionMutationLogicType.OR, IclusionApiObjectMapper.toLogicType(" or "));
-        Assert.assertEquals(IclusionMutationLogicType.AND, IclusionApiObjectMapper.toLogicType("AND"));
-        Assert.assertEquals(IclusionMutationLogicType.UNKNOWN, IclusionApiObjectMapper.toLogicType("any"));
+        assertEquals(IclusionMutationLogicType.UNKNOWN, IclusionApiObjectMapper.toLogicType(null));
+        assertEquals(IclusionMutationLogicType.OR, IclusionApiObjectMapper.toLogicType(" or "));
+        assertEquals(IclusionMutationLogicType.AND, IclusionApiObjectMapper.toLogicType("AND"));
+        assertEquals(IclusionMutationLogicType.UNKNOWN, IclusionApiObjectMapper.toLogicType("any"));
     }
 }

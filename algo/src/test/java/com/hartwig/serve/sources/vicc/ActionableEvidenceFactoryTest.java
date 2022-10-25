@@ -20,7 +20,6 @@ import com.hartwig.serve.vicc.datamodel.ImmutableViccEntry;
 import com.hartwig.serve.vicc.datamodel.ViccEntry;
 
 import org.jetbrains.annotations.NotNull;
-import org.junit.Assert;
 import org.junit.Test;
 
 public class ActionableEvidenceFactoryTest {
@@ -48,22 +47,22 @@ public class ActionableEvidenceFactoryTest {
         assertEquals(2, evidences.size());
 
         ActionableEvidence eventA = findByCancerType(evidences, cancerTypeA);
-        Assert.assertEquals("Treatment", eventA.treatment().name());
-        Assert.assertEquals(cancerTypeA, eventA.applicableCancerType().name());
-        Assert.assertEquals("1", eventA.applicableCancerType().doid());
+        assertEquals("Treatment", eventA.treatment().name());
+        assertEquals(cancerTypeA, eventA.applicableCancerType().name());
+        assertEquals("1", eventA.applicableCancerType().doid());
         assertTrue(eventA.blacklistCancerTypes().isEmpty());
-        Assert.assertEquals(EvidenceLevel.A, eventA.level());
-        Assert.assertEquals(EvidenceDirection.RESPONSIVE, eventA.direction());
-        Assert.assertEquals(Sets.newHashSet("url"), eventA.evidenceUrls());
+        assertEquals(EvidenceLevel.A, eventA.level());
+        assertEquals(EvidenceDirection.RESPONSIVE, eventA.direction());
+        assertEquals(Sets.newHashSet("url"), eventA.evidenceUrls());
 
         ActionableEvidence eventB = findByCancerType(evidences, cancerTypeB);
-        Assert.assertEquals("Treatment", eventB.treatment().name());
-        Assert.assertEquals(cancerTypeB, eventB.applicableCancerType().name());
-        Assert.assertEquals(CancerTypeConstants.CANCER_DOID, eventB.applicableCancerType().doid());
-        Assert.assertEquals(EvidenceLevel.A, eventB.level());
-        Assert.assertEquals(EvidenceDirection.RESPONSIVE, eventB.direction());
-        Assert.assertEquals(Sets.newHashSet("url"), eventB.evidenceUrls());
-        Assert.assertEquals(Sets.newHashSet(CancerTypeConstants.REFRACTORY_HEMATOLOGIC_TYPE,
+        assertEquals("Treatment", eventB.treatment().name());
+        assertEquals(cancerTypeB, eventB.applicableCancerType().name());
+        assertEquals(CancerTypeConstants.CANCER_DOID, eventB.applicableCancerType().doid());
+        assertEquals(EvidenceLevel.A, eventB.level());
+        assertEquals(EvidenceDirection.RESPONSIVE, eventB.direction());
+        assertEquals(Sets.newHashSet("url"), eventB.evidenceUrls());
+        assertEquals(Sets.newHashSet(CancerTypeConstants.REFRACTORY_HEMATOLOGIC_TYPE,
                 CancerTypeConstants.BONE_MARROW_TYPE,
                 CancerTypeConstants.LEUKEMIA_TYPE), eventB.blacklistCancerTypes());
         factory.evaluateCuration();

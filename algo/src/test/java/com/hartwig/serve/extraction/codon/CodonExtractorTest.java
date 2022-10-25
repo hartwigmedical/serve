@@ -19,7 +19,6 @@ import com.hartwig.serve.extraction.util.GeneChecker;
 import com.hartwig.serve.extraction.util.MutationTypeFilterAlgo;
 
 import org.jetbrains.annotations.NotNull;
-import org.junit.Assert;
 import org.junit.Test;
 
 public class CodonExtractorTest {
@@ -63,11 +62,11 @@ public class CodonExtractorTest {
 
         assertEquals(1, codons.size());
 
-        Assert.assertEquals("17", codons.get(0).chromosome());
-        Assert.assertEquals(7577534, codons.get(0).start());
-        Assert.assertEquals(7577536, codons.get(0).end());
-        Assert.assertEquals("TP53", codons.get(0).gene());
-        Assert.assertEquals(MutationType.ANY, codons.get(0).applicableMutationType());
+        assertEquals("17", codons.get(0).chromosome());
+        assertEquals(7577534, codons.get(0).start());
+        assertEquals(7577536, codons.get(0).end());
+        assertEquals("TP53", codons.get(0).gene());
+        assertEquals(MutationType.ANY, codons.get(0).applicableMutationType());
     }
 
     @Test
@@ -77,17 +76,17 @@ public class CodonExtractorTest {
 
         assertEquals(2, codons.size());
 
-        Assert.assertEquals("12", codons.get(0).chromosome());
-        Assert.assertEquals(25378707, codons.get(0).start());
-        Assert.assertEquals(25378707, codons.get(0).end());
-        Assert.assertEquals("KRAS", codons.get(0).gene());
-        Assert.assertEquals(MutationType.MISSENSE, codons.get(0).applicableMutationType());
+        assertEquals("12", codons.get(0).chromosome());
+        assertEquals(25378707, codons.get(0).start());
+        assertEquals(25378707, codons.get(0).end());
+        assertEquals("KRAS", codons.get(0).gene());
+        assertEquals(MutationType.MISSENSE, codons.get(0).applicableMutationType());
 
-        Assert.assertEquals("12", codons.get(1).chromosome());
-        Assert.assertEquals(25380168, codons.get(1).start());
-        Assert.assertEquals(25380169, codons.get(1).end());
-        Assert.assertEquals("KRAS", codons.get(1).gene());
-        Assert.assertEquals(MutationType.MISSENSE, codons.get(1).applicableMutationType());
+        assertEquals("12", codons.get(1).chromosome());
+        assertEquals(25380168, codons.get(1).start());
+        assertEquals(25380169, codons.get(1).end());
+        assertEquals("KRAS", codons.get(1).gene());
+        assertEquals(MutationType.MISSENSE, codons.get(1).applicableMutationType());
     }
 
     @Test

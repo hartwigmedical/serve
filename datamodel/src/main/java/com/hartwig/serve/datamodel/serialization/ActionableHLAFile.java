@@ -15,7 +15,7 @@ import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 
 import org.jetbrains.annotations.NotNull;
 
-public class ActionableHLAFile {
+public final class ActionableHLAFile {
 
     private static final String ACTIONABLE_HLA_TSV = "ActionableHLA.tsv";
 
@@ -23,13 +23,11 @@ public class ActionableHLAFile {
     }
 
     @NotNull
-    public static String actionableHLATsvPath(@NotNull String serveActionabilityDir,
-            @NotNull RefGenomeVersion refGenomeVersion) {
+    public static String actionableHLATsvPath(@NotNull String serveActionabilityDir, @NotNull RefGenomeVersion refGenomeVersion) {
         return refGenomeVersion.addVersionToFilePath(serveActionabilityDir + File.separator + ACTIONABLE_HLA_TSV);
     }
 
-    public static void write(@NotNull String actionableHLATsv,
-            @NotNull Iterable<ActionableHLA> actionableHLA) throws IOException {
+    public static void write(@NotNull String actionableHLATsv, @NotNull Iterable<ActionableHLA> actionableHLA) throws IOException {
         List<String> lines = Lists.newArrayList();
         lines.add(header());
         lines.addAll(toLines(actionableHLA));
@@ -62,10 +60,7 @@ public class ActionableHLAFile {
     private static ActionableHLA fromLine(@NotNull String line) {
         String[] values = line.split(ActionableFileFunctions.FIELD_DELIMITER);
 
-        return ImmutableActionableHLA.builder()
-                .from(ActionableFileFunctions.fromLine(values, 1))
-                .hlaType(values[0])
-                .build();
+        return ImmutableActionableHLA.builder().from(ActionableFileFunctions.fromLine(values, 1)).hlaType(values[0]).build();
     }
 
     @NotNull

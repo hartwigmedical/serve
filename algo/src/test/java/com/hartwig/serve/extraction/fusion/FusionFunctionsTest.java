@@ -11,7 +11,6 @@ import com.hartwig.serve.datamodel.fusion.ImmutableKnownFusionPair;
 import com.hartwig.serve.datamodel.fusion.KnownFusionPair;
 
 import org.jetbrains.annotations.NotNull;
-import org.junit.Assert;
 import org.junit.Test;
 
 public class FusionFunctionsTest {
@@ -34,13 +33,13 @@ public class FusionFunctionsTest {
         assertEquals(2, consolidated.size());
 
         KnownFusionPair gene1Fusion = findByGeneUp(consolidated, gene1);
-        Assert.assertEquals(3, gene1Fusion.sources().size());
+        assertEquals(3, gene1Fusion.sources().size());
         assertTrue(gene1Fusion.sources().contains(Knowledgebase.VICC_CGI));
         assertTrue(gene1Fusion.sources().contains(Knowledgebase.VICC_ONCOKB));
         assertTrue(gene1Fusion.sources().contains(Knowledgebase.VICC_CIVIC));
 
         KnownFusionPair gene2Fusion = findByGeneUp(consolidated, gene2);
-        Assert.assertEquals(1, gene2Fusion.sources().size());
+        assertEquals(1, gene2Fusion.sources().size());
         assertTrue(gene2Fusion.sources().contains(Knowledgebase.VICC_CGI));
     }
 

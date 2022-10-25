@@ -25,7 +25,6 @@ import com.hartwig.serve.sources.ckb.treatementapproach.RelevantTreatmentAprroac
 
 import org.apache.commons.compress.utils.Lists;
 import org.jetbrains.annotations.NotNull;
-import org.junit.Assert;
 import org.junit.Test;
 
 public class CkbExtractorTest {
@@ -107,15 +106,15 @@ public class CkbExtractorTest {
         List<CodonAnnotation> curatedCodons = CkbExtractor.curateCodons(codonAnnotations);
 
         CodonAnnotation codon1 = findByGene(curatedCodons, "BRAF");
-        Assert.assertEquals(140753335, codon1.start());
-        Assert.assertEquals(140753337, codon1.end());
-        Assert.assertEquals("ENST00000646891", codon1.transcript());
+        assertEquals(140753335, codon1.start());
+        assertEquals(140753337, codon1.end());
+        assertEquals("ENST00000646891", codon1.transcript());
 
         CodonAnnotation codon2 = findByGene(curatedCodons, "KRAS");
-        Assert.assertEquals("KRAS", codon2.gene());
-        Assert.assertEquals(10, codon2.start());
-        Assert.assertEquals(20, codon2.end());
-        Assert.assertEquals("transcript", codon2.transcript());
+        assertEquals("KRAS", codon2.gene());
+        assertEquals(10, codon2.start());
+        assertEquals(20, codon2.end());
+        assertEquals("transcript", codon2.transcript());
     }
 
     @NotNull

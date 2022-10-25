@@ -18,7 +18,6 @@ import com.hartwig.serve.extraction.util.GeneChecker;
 import com.hartwig.serve.extraction.util.MutationTypeFilterAlgo;
 
 import org.jetbrains.annotations.NotNull;
-import org.junit.Assert;
 import org.junit.Test;
 
 public class ExonExtractorTest {
@@ -67,11 +66,11 @@ public class ExonExtractorTest {
 
         assertEquals(1, exons.size());
 
-        Assert.assertEquals("4", exons.get(0).chromosome());
-        Assert.assertEquals(55593572, exons.get(0).start());
-        Assert.assertEquals(55593718, exons.get(0).end());
-        Assert.assertEquals("KIT", exons.get(0).gene());
-        Assert.assertEquals(MutationType.MISSENSE, exons.get(0).applicableMutationType());
+        assertEquals("4", exons.get(0).chromosome());
+        assertEquals(55593572, exons.get(0).start());
+        assertEquals(55593718, exons.get(0).end());
+        assertEquals("KIT", exons.get(0).gene());
+        assertEquals(MutationType.MISSENSE, exons.get(0).applicableMutationType());
     }
 
     @Test
@@ -82,11 +81,11 @@ public class ExonExtractorTest {
 
         assertEquals(1, exons.size());
 
-        Assert.assertEquals("7", exons.get(0).chromosome());
-        Assert.assertEquals(55242405, exons.get(0).start());
-        Assert.assertEquals(55242523, exons.get(0).end());
-        Assert.assertEquals("EGFR", exons.get(0).gene());
-        Assert.assertEquals(MutationType.INFRAME_DELETION, exons.get(0).applicableMutationType());
+        assertEquals("7", exons.get(0).chromosome());
+        assertEquals(55242405, exons.get(0).start());
+        assertEquals(55242523, exons.get(0).end());
+        assertEquals("EGFR", exons.get(0).gene());
+        assertEquals(MutationType.INFRAME_DELETION, exons.get(0).applicableMutationType());
     }
 
     @Test
@@ -97,11 +96,11 @@ public class ExonExtractorTest {
 
         assertEquals(1, exons.size());
 
-        Assert.assertEquals("12", exons.get(0).chromosome());
-        Assert.assertEquals(25398198, exons.get(0).start());
-        Assert.assertEquals(25398339, exons.get(0).end());
-        Assert.assertEquals("KRAS", exons.get(0).gene());
-        Assert.assertEquals(MutationType.INFRAME_DELETION, exons.get(0).applicableMutationType());
+        assertEquals("12", exons.get(0).chromosome());
+        assertEquals(25398198, exons.get(0).start());
+        assertEquals(25398339, exons.get(0).end());
+        assertEquals("KRAS", exons.get(0).gene());
+        assertEquals(MutationType.INFRAME_DELETION, exons.get(0).applicableMutationType());
     }
 
     @Test

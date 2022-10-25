@@ -23,7 +23,6 @@ import com.hartwig.serve.sources.ckb.treatementapproach.RelevantTreatmentAproach
 import com.hartwig.serve.sources.ckb.treatementapproach.RelevantTreatmentAprroachCurationTest;
 
 import org.apache.logging.log4j.util.Strings;
-import org.junit.Assert;
 import org.junit.Test;
 
 public class ActionableEntryFactoryTest {
@@ -57,16 +56,16 @@ public class ActionableEntryFactoryTest {
                 ActionableEntryFactory.toActionableEntries(entryCharacteristics, Strings.EMPTY, curator, "-", entryCharacteristics.type());
         assertEquals(1, entryCharacteristicsSet.size());
         ActionableEntry characteristics = entryCharacteristicsSet.iterator().next();
-        Assert.assertEquals(Strings.EMPTY, characteristics.sourceEvent());
-        Assert.assertEquals(Knowledgebase.CKB, characteristics.source());
-        Assert.assertEquals("AB", characteristics.treatment().name());
-        Assert.assertEquals("AB", characteristics.applicableCancerType().name());
-        Assert.assertEquals("162", characteristics.applicableCancerType().doid());
-        Assert.assertEquals(Sets.newHashSet(CancerTypeConstants.REFRACTORY_HEMATOLOGIC_TYPE,
+        assertEquals(Strings.EMPTY, characteristics.sourceEvent());
+        assertEquals(Knowledgebase.CKB, characteristics.source());
+        assertEquals("AB", characteristics.treatment().name());
+        assertEquals("AB", characteristics.applicableCancerType().name());
+        assertEquals("162", characteristics.applicableCancerType().doid());
+        assertEquals(Sets.newHashSet(CancerTypeConstants.REFRACTORY_HEMATOLOGIC_TYPE,
                 CancerTypeConstants.BONE_MARROW_TYPE,
                 CancerTypeConstants.LEUKEMIA_TYPE), characteristics.blacklistCancerTypes());
-        Assert.assertEquals(EvidenceLevel.A, characteristics.level());
-        Assert.assertEquals(EvidenceDirection.RESPONSIVE, characteristics.direction());
+        assertEquals(EvidenceLevel.A, characteristics.level());
+        assertEquals(EvidenceDirection.RESPONSIVE, characteristics.direction());
 
         CkbEntry entryAmplification = CkbTestFactory.createEntry("KRAS",
                 "KRAS amplification",
@@ -81,14 +80,14 @@ public class ActionableEntryFactoryTest {
                 ActionableEntryFactory.toActionableEntries(entryAmplification, "KRAS", curator, "KRAS", entryAmplification.type());
         assertEquals(1, entryAmplificationSet.size());
         ActionableEntry amplification = entryAmplificationSet.iterator().next();
-        Assert.assertEquals("KRAS", amplification.sourceEvent());
-        Assert.assertEquals(Knowledgebase.CKB, amplification.source());
-        Assert.assertEquals("AB", amplification.treatment().name());
-        Assert.assertEquals("AB", amplification.applicableCancerType().name());
-        Assert.assertEquals("163", amplification.applicableCancerType().doid());
+        assertEquals("KRAS", amplification.sourceEvent());
+        assertEquals(Knowledgebase.CKB, amplification.source());
+        assertEquals("AB", amplification.treatment().name());
+        assertEquals("AB", amplification.applicableCancerType().name());
+        assertEquals("163", amplification.applicableCancerType().doid());
         assertTrue(amplification.blacklistCancerTypes().isEmpty());
-        Assert.assertEquals(EvidenceLevel.A, amplification.level());
-        Assert.assertEquals(EvidenceDirection.RESPONSIVE, amplification.direction());
+        assertEquals(EvidenceLevel.A, amplification.level());
+        assertEquals(EvidenceDirection.RESPONSIVE, amplification.direction());
 
         CkbEntry entryHotspot =
                 CkbTestFactory.createEntry("BRAF", "BRAF V600E", "BRAF V600E", "sensitive", "Actionable", "AB", "AB", "A", "DOID:162");
@@ -96,16 +95,16 @@ public class ActionableEntryFactoryTest {
                 ActionableEntryFactory.toActionableEntries(entryHotspot, "BRAF", curator, "BRAF", entryHotspot.type());
         assertEquals(1, entryHotspotSet.size());
         ActionableEntry hotspot = entryHotspotSet.iterator().next();
-        Assert.assertEquals("BRAF", hotspot.sourceEvent());
-        Assert.assertEquals(Knowledgebase.CKB, hotspot.source());
-        Assert.assertEquals("AB", hotspot.treatment().name());
-        Assert.assertEquals("AB", hotspot.applicableCancerType().name());
-        Assert.assertEquals("162", hotspot.applicableCancerType().doid());
-        Assert.assertEquals(Sets.newHashSet(CancerTypeConstants.REFRACTORY_HEMATOLOGIC_TYPE,
+        assertEquals("BRAF", hotspot.sourceEvent());
+        assertEquals(Knowledgebase.CKB, hotspot.source());
+        assertEquals("AB", hotspot.treatment().name());
+        assertEquals("AB", hotspot.applicableCancerType().name());
+        assertEquals("162", hotspot.applicableCancerType().doid());
+        assertEquals(Sets.newHashSet(CancerTypeConstants.REFRACTORY_HEMATOLOGIC_TYPE,
                 CancerTypeConstants.BONE_MARROW_TYPE,
                 CancerTypeConstants.LEUKEMIA_TYPE), hotspot.blacklistCancerTypes());
-        Assert.assertEquals(EvidenceLevel.A, characteristics.level());
-        Assert.assertEquals(EvidenceDirection.RESPONSIVE, characteristics.direction());
+        assertEquals(EvidenceLevel.A, characteristics.level());
+        assertEquals(EvidenceDirection.RESPONSIVE, characteristics.direction());
     }
 
     @Test

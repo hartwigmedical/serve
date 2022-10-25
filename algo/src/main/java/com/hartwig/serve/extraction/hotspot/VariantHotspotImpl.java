@@ -1,4 +1,6 @@
-package com.hartwig.serve.datamodel.hotspot;
+package com.hartwig.serve.extraction.hotspot;
+
+import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
 
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;

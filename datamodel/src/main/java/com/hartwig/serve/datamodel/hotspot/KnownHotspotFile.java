@@ -10,12 +10,12 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
-import com.hartwig.serve.datamodel.util.KeyFormatter;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import htsjdk.samtools.reference.IndexedFastaSequenceFile;
 import htsjdk.tribble.AbstractFeatureReader;
@@ -92,7 +92,7 @@ public final class KnownHotspotFile {
                     .alleles(hotspotAlleles)
                     .computeEndFromAlleles(hotspotAlleles, hotspot.position())
                     .attribute(VCFWriterFactory.INPUT_FIELD,
-                            KeyFormatter.toProteinKey(hotspot.gene(), hotspot.transcript(), hotspot.proteinAnnotation()))
+                            toProteinKey(hotspot.gene(), hotspot.transcript(), hotspot.proteinAnnotation()))
                     .attribute(VCFWriterFactory.SOURCES_FIELD, Knowledgebase.toCommaSeparatedSourceString(hotspot.sources()))
                     .make();
 
@@ -128,5 +128,11 @@ public final class KnownHotspotFile {
         Allele alt = Allele.create(hotspot.alt(), false);
 
         return Lists.newArrayList(ref, alt);
+    }
+
+    @NotNull
+    private static String toProteinKey(@NotNull String gene, @Nullable String transcript, @NotNull String proteinAnnotation) {
+        String formattedProteinAnnotation = !proteinAnnotation.isEmpty() ? "p." + proteinAnnotation : "-";
+        return gene + "|" + transcript + "|" + formattedProteinAnnotation;
     }
 }

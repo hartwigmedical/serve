@@ -10,13 +10,15 @@ import org.jetbrains.annotations.NotNull;
 class ActionableCharacteristicComparator implements Comparator<ActionableCharacteristic> {
 
     @NotNull
+    private final Comparator<TumorCharacteristic> tumorCharacteristicComparator = new TumorCharacteristicComparator();
+    @NotNull
     private final Comparator<ActionableEvent> actionableEventComparator = new ActionableEventComparator();
 
     @Override
     public int compare(@NotNull ActionableCharacteristic characteristic1, @NotNull ActionableCharacteristic characteristic2) {
-        int nameCompare = characteristic1.type().toString().compareTo(characteristic2.type().toString());
-        if (nameCompare != 0) {
-            return nameCompare;
+        int characteristicCompare = tumorCharacteristicComparator.compare(characteristic1, characteristic2);
+        if (characteristicCompare != 0) {
+            return characteristicCompare;
         }
 
         return actionableEventComparator.compare(characteristic1, characteristic2);

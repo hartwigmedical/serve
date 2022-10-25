@@ -12,9 +12,9 @@ import org.jetbrains.annotations.NotNull;
 class ActionableGeneComparator implements Comparator<ActionableGene> {
 
     @NotNull
-    private final Comparator<ActionableEvent> actionableEventComparator = new ActionableEventComparator();
-    @NotNull
     private final Comparator<GeneAlteration> geneAlterationComparator = new GeneAlterationComparator();
+    @NotNull
+    private final Comparator<ActionableEvent> actionableEventComparator = new ActionableEventComparator();
 
     @Override
     public int compare(@NotNull ActionableGene gene1, @NotNull ActionableGene gene2) {

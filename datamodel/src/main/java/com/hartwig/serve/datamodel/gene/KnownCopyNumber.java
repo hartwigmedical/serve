@@ -10,6 +10,8 @@ import org.jetbrains.annotations.Nullable;
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class })
 public abstract class KnownCopyNumber implements KnownEvent {
 
+    // TODO implement Gene Alteration
+
     @NotNull
     public abstract String gene();
 

@@ -12,7 +12,6 @@ import com.hartwig.serve.datamodel.common.GeneRole;
 import com.hartwig.serve.datamodel.common.ProteinEffect;
 import com.hartwig.serve.datamodel.gene.GeneAnnotation;
 import com.hartwig.serve.datamodel.gene.GeneLevelEvent;
-import com.hartwig.serve.datamodel.gene.ImmutableGeneAnnotationImpl;
 import com.hartwig.serve.extraction.util.DriverInconsistencyMode;
 import com.hartwig.serve.extraction.util.GeneChecker;
 

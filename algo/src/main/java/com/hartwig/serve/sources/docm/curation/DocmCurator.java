@@ -5,7 +5,7 @@ import java.util.Set;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.hartwig.serve.datamodel.util.KeyFormatter;
+import com.hartwig.serve.extraction.util.KeyFormatter;
 import com.hartwig.serve.sources.docm.DocmEntry;
 import com.hartwig.serve.sources.docm.ImmutableDocmEntry;
 

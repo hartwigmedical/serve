@@ -1,4 +1,4 @@
-package com.hartwig.serve.datamodel.util;
+package com.hartwig.serve.extraction.util;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

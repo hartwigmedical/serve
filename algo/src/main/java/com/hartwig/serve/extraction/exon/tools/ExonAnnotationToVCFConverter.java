@@ -15,8 +15,8 @@ import com.hartwig.serve.datamodel.hotspot.VCFWriterFactory;
 import com.hartwig.serve.datamodel.range.KnownExon;
 import com.hartwig.serve.datamodel.range.KnownExonFile;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
-import com.hartwig.serve.datamodel.util.KeyFormatter;
 import com.hartwig.serve.extraction.util.GenerateAltBase;
+import com.hartwig.serve.extraction.util.KeyFormatter;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;

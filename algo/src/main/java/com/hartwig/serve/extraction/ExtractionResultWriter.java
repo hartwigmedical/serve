@@ -13,7 +13,7 @@ import com.hartwig.serve.datamodel.serialization.KnownCodonFile;
 import com.hartwig.serve.datamodel.serialization.KnownCopyNumberFile;
 import com.hartwig.serve.datamodel.serialization.KnownExonFile;
 import com.hartwig.serve.datamodel.serialization.KnownFusionPairFile;
-import com.hartwig.serve.datamodel.serialization.KnownHotspotFile;
+import com.hartwig.serve.datamodel.serialization.KnownHotspotVCF;
 import com.hartwig.serve.extraction.events.EventInterpretationFile;
 
 import org.apache.logging.log4j.LogManager;
@@ -43,9 +43,9 @@ public class ExtractionResultWriter {
     public void write(@NotNull ExtractionResult result) throws IOException {
         LOGGER.info("Writing SERVE output to {}", outputDir);
 
-        String hotspotVcf = KnownHotspotFile.knownHotspotVcfPath(outputDir, refGenomeVersion);
+        String hotspotVcf = KnownHotspotVCF.knownHotspotVcfPath(outputDir, refGenomeVersion);
         LOGGER.info(" Writing {} known hotspots to {}", result.knownHotspots().size(), hotspotVcf);
-        KnownHotspotFile.write(hotspotVcf, refSequence, result.knownHotspots());
+        KnownHotspotVCF.write(hotspotVcf, refSequence, result.knownHotspots());
 
         String codonTsv = KnownCodonFile.knownCodonTsvPath(outputDir, refGenomeVersion);
         LOGGER.info(" Writing {} known codons to {}", result.knownCodons().size(), codonTsv);

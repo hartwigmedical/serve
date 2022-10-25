@@ -31,12 +31,12 @@ import htsjdk.variant.variantcontext.VariantContextBuilder;
 import htsjdk.variant.variantcontext.writer.VariantContextWriter;
 import htsjdk.variant.vcf.VCFCodec;
 
-public final class KnownHotspotFile {
+public final class KnownHotspotVCF {
 
-    private static final Logger LOGGER = LogManager.getLogger(KnownHotspotFile.class);
+    private static final Logger LOGGER = LogManager.getLogger(KnownHotspotVCF.class);
     private static final String KNOWN_HOTSPOT_VCF = "KnownHotspots.SERVE.vcf.gz";
 
-    private KnownHotspotFile() {
+    private KnownHotspotVCF() {
     }
 
     @NotNull

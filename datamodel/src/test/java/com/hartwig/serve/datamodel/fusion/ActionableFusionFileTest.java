@@ -11,7 +11,7 @@ import org.junit.Test;
 
 public class ActionableFusionFileTest {
 
-    private static final String ACTIONABLE_FUSION_TSV = Resources.getResource("serve/ActionableFusions.37.tsv").getPath();
+    private static final String ACTIONABLE_FUSION_TSV = Resources.getResource("actionability/ActionableFusions.37.tsv").getPath();
 
     @Test
     public void canReadFromFileAndConvert() throws IOException {

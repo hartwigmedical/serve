@@ -10,13 +10,13 @@ import com.google.common.collect.Sets;
 import com.hartwig.serve.ServeConfig;
 import com.hartwig.serve.ServeLocalConfigProvider;
 import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.datamodel.KnownEvent;
+import com.hartwig.serve.datamodel.hotspot.VCFWriterFactory;
+import com.hartwig.serve.datamodel.range.KnownCodon;
+import com.hartwig.serve.datamodel.range.KnownCodonFile;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
-import com.hartwig.serve.extraction.KnownEvent;
-import com.hartwig.serve.extraction.codon.KnownCodon;
-import com.hartwig.serve.extraction.codon.KnownCodonFile;
+import com.hartwig.serve.datamodel.util.KeyFormatter;
 import com.hartwig.serve.extraction.util.GenerateAltBase;
-import com.hartwig.serve.extraction.util.KeyFormatter;
-import com.hartwig.serve.extraction.util.VCFWriterFactory;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;

@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import java.util.List;
 
 import com.google.common.collect.Lists;
-import com.hartwig.serve.datamodel.DatamodelTestBuilders;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
@@ -30,6 +29,6 @@ public class ActionableGeneComparatorTest {
 
     @NotNull
     private static ActionableGene create(@NotNull String gene, @NotNull GeneLevelEvent event, @NotNull String sourceEvent) {
-        return DatamodelTestBuilders.actionableGeneBuilder().gene(gene).event(event).sourceEvent(sourceEvent).build();
+        return GeneTestFactory.actionableGeneBuilder().gene(gene).event(event).sourceEvent(sourceEvent).build();
     }
 }

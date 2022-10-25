@@ -11,10 +11,10 @@ import com.google.common.collect.Sets;
 import com.hartwig.serve.common.ensemblcache.EnsemblDataCache;
 import com.hartwig.serve.datamodel.common.Variant;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.util.KeyFormatter;
 import com.hartwig.serve.extraction.hotspot.ProteinResolver;
 import com.hartwig.serve.extraction.util.EnsemblFunctions;
 import com.hartwig.serve.extraction.util.HmfTranscriptRegion;
-import com.hartwig.serve.extraction.util.KeyFormatter;
 import com.hartwig.serve.transvar.datamodel.TransvarRecord;
 
 import org.apache.logging.log4j.LogManager;

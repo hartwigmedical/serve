@@ -7,6 +7,8 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.datamodel.fusion.ImmutableKnownFusionPair;
+import com.hartwig.serve.datamodel.fusion.KnownFusionPair;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;

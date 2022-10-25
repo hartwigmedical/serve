@@ -3,6 +3,8 @@ package com.hartwig.serve.extraction.fusion;
 import java.util.Map;
 
 import com.google.common.collect.Maps;
+import com.hartwig.serve.datamodel.fusion.ImmutableKnownFusionPair;
+import com.hartwig.serve.datamodel.fusion.KnownFusionPair;
 
 import org.jetbrains.annotations.NotNull;
 

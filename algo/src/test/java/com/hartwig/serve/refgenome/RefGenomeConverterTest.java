@@ -6,21 +6,22 @@ import static org.junit.Assert.assertTrue;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
-import com.hartwig.serve.ServeAlgoTestFactory;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
+import com.hartwig.serve.datamodel.hotspot.HotspotTestFactory;
 import com.hartwig.serve.datamodel.hotspot.ImmutableActionableHotspot;
+import com.hartwig.serve.datamodel.hotspot.ImmutableKnownHotspot;
+import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.range.ActionableRange;
 import com.hartwig.serve.datamodel.range.ImmutableActionableRange;
+import com.hartwig.serve.datamodel.range.ImmutableCodonAnnotation;
+import com.hartwig.serve.datamodel.range.ImmutableExonAnnotation;
+import com.hartwig.serve.datamodel.range.ImmutableKnownCodon;
+import com.hartwig.serve.datamodel.range.ImmutableKnownExon;
+import com.hartwig.serve.datamodel.range.KnownCodon;
+import com.hartwig.serve.datamodel.range.KnownExon;
+import com.hartwig.serve.datamodel.range.RangeTestFactory;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
-import com.hartwig.serve.extraction.codon.ImmutableCodonAnnotation;
-import com.hartwig.serve.extraction.codon.ImmutableKnownCodon;
-import com.hartwig.serve.extraction.codon.KnownCodon;
-import com.hartwig.serve.extraction.exon.ImmutableExonAnnotation;
-import com.hartwig.serve.extraction.exon.ImmutableKnownExon;
-import com.hartwig.serve.extraction.exon.KnownExon;
-import com.hartwig.serve.extraction.hotspot.ImmutableKnownHotspot;
-import com.hartwig.serve.extraction.hotspot.KnownHotspot;
 import com.hartwig.serve.refgenome.liftover.ImmutableLiftOverResult;
 import com.hartwig.serve.refgenome.liftover.LiftOverAlgo;
 import com.hartwig.serve.refgenome.liftover.LiftOverResult;
@@ -40,7 +41,7 @@ public class RefGenomeConverterTest {
     @Test
     public void canConvertKnownHotspots() {
         KnownHotspot hotspot = ImmutableKnownHotspot.builder()
-                .from(ServeAlgoTestFactory.createTestKnownHotspot())
+                .from(HotspotTestFactory.createTestKnownHotspot())
                 .gene(TEST_GENE)
                 .chromosome(TEST_CHROMOSOME)
                 .position(1)
@@ -58,9 +59,9 @@ public class RefGenomeConverterTest {
     @Test
     public void canConvertKnownCodons() {
         KnownCodon codon = ImmutableKnownCodon.builder()
-                .from(ServeAlgoTestFactory.createTestKnownCodon())
+                .from(RangeTestFactory.createTestKnownCodon())
                 .annotation(ImmutableCodonAnnotation.builder()
-                        .from(ServeAlgoTestFactory.createTestCodonAnnotation())
+                        .from(RangeTestFactory.createTestCodonAnnotation())
                         .gene(TEST_GENE)
                         .chromosome(TEST_CHROMOSOME)
                         .start(1)
@@ -78,9 +79,9 @@ public class RefGenomeConverterTest {
     @Test
     public void canConvertKnownExons() {
         KnownExon exon = ImmutableKnownExon.builder()
-                .from(ServeAlgoTestFactory.createTestKnownExon())
+                .from(RangeTestFactory.createTestKnownExon())
                 .annotation(ImmutableExonAnnotation.builder()
-                        .from(ServeAlgoTestFactory.createTestExonAnnotation())
+                        .from(RangeTestFactory.createTestExonAnnotation())
                         .gene(TEST_GENE)
                         .chromosome(TEST_CHROMOSOME)
                         .start(1)
@@ -98,7 +99,7 @@ public class RefGenomeConverterTest {
     @Test
     public void canConvertActionableHotspots() {
         ActionableHotspot actionableHotspot = ImmutableActionableHotspot.builder()
-                .from(ServeAlgoTestFactory.createTestActionableHotspotForSource(Knowledgebase.HARTWIG_CURATED))
+                .from(HotspotTestFactory.createTestActionableHotspotForSource(Knowledgebase.HARTWIG_CURATED))
                 .chromosome(TEST_CHROMOSOME)
                 .position(1)
                 .ref("G")
@@ -112,7 +113,7 @@ public class RefGenomeConverterTest {
     @Test
     public void canConvertActionableRanges() {
         ActionableRange actionableRange = ImmutableActionableRange.builder()
-                .from(ServeAlgoTestFactory.createTestActionableRangeForSource(Knowledgebase.HARTWIG_CURATED))
+                .from(RangeTestFactory.createTestActionableRangeForSource(Knowledgebase.HARTWIG_CURATED))
                 .gene(TEST_GENE)
                 .chromosome(TEST_CHROMOSOME)
                 .start(3)

@@ -59,17 +59,17 @@ public final class ServeLocalConfigProvider {
         } else {
             // Assume we run on local machine with fixed paths
             String baseDir = System.getProperty("user.home") + "/hmf/";
-            builder.viccJson(baseDir + "serve/static_sources/vicc/all.json");
-            builder.ckbDir(baseDir + "serve/ckb");
-            builder.ckbFilterTsv(baseDir + "serve/curation/ckb_filters.tsv");
-            builder.ckbDrugCurationTsv(baseDir + "serve/curation/ckb_drugs_class_curation.tsv");
-            builder.iClusionTrialTsv(baseDir + "serve/iclusion/iclusion_trials_prod.tsv");
-            builder.iClusionFilterTsv(baseDir + "serve/actin/iclusion_filter.tsv");
-            builder.actinTrialTsv(baseDir + "serve/actin/actin_knowledgebase.tsv");
-            builder.actinFilterTsv(baseDir + "serve/actin/actin_filter.tsv");
+            builder.viccJson(baseDir + "actionability/static_sources/vicc/all.json");
+            builder.ckbDir(baseDir + "actionability/ckb");
+            builder.ckbFilterTsv(baseDir + "actionability/curation/ckb_filters.tsv");
+            builder.ckbDrugCurationTsv(baseDir + "actionability/curation/ckb_drugs_class_curation.tsv");
+            builder.iClusionTrialTsv(baseDir + "actionability/iclusion/iclusion_trials_prod.tsv");
+            builder.iClusionFilterTsv(baseDir + "actionability/actin/iclusion_filter.tsv");
+            builder.actinTrialTsv(baseDir + "actionability/actin/actin_knowledgebase.tsv");
+            builder.actinFilterTsv(baseDir + "actionability/actin/actin_filter.tsv");
 
             builder.outputDir(baseDir + "tmp/serve");
-            builder.missingDoidsMappingTsv(baseDir + "serve/curation/missing_doids_mapping.tsv");
+            builder.missingDoidsMappingTsv(baseDir + "actionability/curation/missing_doids_mapping.tsv");
 
             builder.ensemblDataDir37(baseDir + "repos/common-resources-public/ensembl_data_cache/37");
             builder.ensemblDataDir38(baseDir + "repos/common-resources-public/ensembl_data_cache/38");

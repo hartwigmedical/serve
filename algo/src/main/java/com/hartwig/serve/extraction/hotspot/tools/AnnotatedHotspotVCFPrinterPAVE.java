@@ -8,7 +8,7 @@ import java.util.StringJoiner;
 
 import com.hartwig.serve.common.variant.impact.VariantImpact;
 import com.hartwig.serve.common.variant.impact.VariantImpactSerialiser;
-import com.hartwig.serve.extraction.util.VCFWriterFactory;
+import com.hartwig.serve.datamodel.hotspot.VCFWriterFactory;
 import com.hartwig.serve.util.AminoAcids;
 
 import org.apache.logging.log4j.LogManager;
@@ -70,7 +70,7 @@ public class AnnotatedHotspotVCFPrinterPAVE {
                 LOGGER.warn("No sources found on {}", variant);
             }
 
-            System.out.println(joiner.toString());
+            System.out.println(joiner);
         }
     }
 }

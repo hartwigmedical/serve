@@ -6,9 +6,9 @@ import java.util.Set;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Sets;
+import com.hartwig.serve.datamodel.hotspot.VCFWriterFactory;
 import com.hartwig.serve.extraction.snpeff.SnpEffAnnotation;
 import com.hartwig.serve.extraction.snpeff.SnpEffAnnotationParser;
-import com.hartwig.serve.extraction.util.VCFWriterFactory;
 import com.hartwig.serve.util.AminoAcids;
 
 import org.apache.logging.log4j.Level;

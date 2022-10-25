@@ -7,6 +7,9 @@ import java.util.Set;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.datamodel.gene.CopyNumberType;
+import com.hartwig.serve.datamodel.gene.ImmutableKnownCopyNumber;
+import com.hartwig.serve.datamodel.gene.KnownCopyNumber;
 
 import org.jetbrains.annotations.NotNull;
 

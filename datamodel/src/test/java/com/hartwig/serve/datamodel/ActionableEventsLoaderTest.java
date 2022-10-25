@@ -11,7 +11,7 @@ import org.junit.Test;
 
 public class ActionableEventsLoaderTest {
 
-    private static final String TEST_SERVE_DIR = Resources.getResource("serve").getPath();
+    private static final String TEST_SERVE_DIR = Resources.getResource("actionability").getPath();
 
     @Test
     public void canLoadFromTestDir() throws IOException {

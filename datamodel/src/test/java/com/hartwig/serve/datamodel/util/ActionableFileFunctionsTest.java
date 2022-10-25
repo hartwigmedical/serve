@@ -20,7 +20,7 @@ public class ActionableFileFunctionsTest {
 
     @Test
     public void canConvertActionableEvents() {
-        ActionableEvent event = DatamodelTestFactory.createEvent(Knowledgebase.VICC_CGI,
+        ActionableEvent event = DatamodelTestFactory.createActionableEvent(Knowledgebase.VICC_CGI,
                 "source event",
                 Sets.newHashSet(),
                 DatamodelTestBuilders.treatmentBuilder()

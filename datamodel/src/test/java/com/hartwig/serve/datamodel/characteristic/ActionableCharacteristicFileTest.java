@@ -11,7 +11,7 @@ import org.junit.Test;
 
 public class ActionableCharacteristicFileTest {
 
-    private static final String ACTIONABLE_CHARACTERISTIC_TSV = Resources.getResource("serve/ActionableCharacteristics.37.tsv").getPath();
+    private static final String ACTIONABLE_CHARACTERISTIC_TSV = Resources.getResource("actionability/ActionableCharacteristics.37.tsv").getPath();
 
     @Test
     public void canReadFromFileAndConvert() throws IOException {

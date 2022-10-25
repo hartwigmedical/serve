@@ -6,16 +6,16 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.Maps;
-import com.hartwig.serve.ServeAlgoTestFactory;
 import com.hartwig.serve.ckb.classification.CkbClassificationConfig;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.common.classification.EventClassifierConfig;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.MutationType;
+import com.hartwig.serve.datamodel.range.CodonAnnotation;
+import com.hartwig.serve.datamodel.range.ImmutableCodonAnnotation;
+import com.hartwig.serve.datamodel.range.RangeTestFactory;
 import com.hartwig.serve.extraction.ExtractionResult;
-import com.hartwig.serve.extraction.codon.CodonAnnotation;
-import com.hartwig.serve.extraction.codon.ImmutableCodonAnnotation;
 import com.hartwig.serve.refgenome.RefGenomeResourceTestFactory;
 import com.hartwig.serve.sources.ckb.treatementapproach.RelevantTreatmentApproachCurationType;
 import com.hartwig.serve.sources.ckb.treatementapproach.RelevantTreatmentApprochCurationEntry;
@@ -80,7 +80,7 @@ public class CkbExtractorTest {
     public void canCurateCodons() {
         List<CodonAnnotation> codonAnnotations = Lists.newArrayList();
         CodonAnnotation codonAnnotation1 = ImmutableCodonAnnotation.builder()
-                .from(ServeAlgoTestFactory.createTestCodonAnnotation())
+                .from(RangeTestFactory.createTestCodonAnnotation())
                 .gene("BRAF")
                 .transcript("A")
                 .chromosome("1")
@@ -91,7 +91,7 @@ public class CkbExtractorTest {
                 .build();
 
         CodonAnnotation codonAnnotation2 = ImmutableCodonAnnotation.builder()
-                .from(ServeAlgoTestFactory.createTestCodonAnnotation())
+                .from(RangeTestFactory.createTestCodonAnnotation())
                 .gene("KRAS")
                 .transcript("transcript")
                 .chromosome("1")

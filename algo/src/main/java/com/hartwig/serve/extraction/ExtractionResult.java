@@ -4,17 +4,17 @@ import java.util.Set;
 
 import com.hartwig.serve.datamodel.characteristic.ActionableCharacteristic;
 import com.hartwig.serve.datamodel.fusion.ActionableFusion;
+import com.hartwig.serve.datamodel.fusion.KnownFusionPair;
 import com.hartwig.serve.datamodel.gene.ActionableGene;
+import com.hartwig.serve.datamodel.gene.KnownCopyNumber;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
+import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.immuno.ActionableHLA;
 import com.hartwig.serve.datamodel.range.ActionableRange;
+import com.hartwig.serve.datamodel.range.KnownCodon;
+import com.hartwig.serve.datamodel.range.KnownExon;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
-import com.hartwig.serve.extraction.codon.KnownCodon;
-import com.hartwig.serve.extraction.copynumber.KnownCopyNumber;
 import com.hartwig.serve.extraction.events.EventInterpretation;
-import com.hartwig.serve.extraction.exon.KnownExon;
-import com.hartwig.serve.extraction.fusion.KnownFusionPair;
-import com.hartwig.serve.extraction.hotspot.KnownHotspot;
 
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;

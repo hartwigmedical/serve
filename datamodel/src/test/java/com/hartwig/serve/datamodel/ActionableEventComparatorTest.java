@@ -36,7 +36,7 @@ public class ActionableEventComparatorTest {
     @NotNull
     private static ActionableEvent create(@NotNull Knowledgebase source, @NotNull String treatment, @NotNull String applicableCancerType,
             @NotNull EvidenceLevel level, @NotNull EvidenceDirection direction) {
-        return DatamodelTestFactory.createEvent(source,
+        return DatamodelTestFactory.createActionableEvent(source,
                 Strings.EMPTY,
                 Sets.newHashSet(),
                 DatamodelTestBuilders.treatmentBuilder().name(treatment).build(),

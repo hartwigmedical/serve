@@ -6,11 +6,11 @@ import static org.junit.Assert.assertTrue;
 import com.google.common.collect.Lists;
 import com.hartwig.serve.ServeAlgoTestFactory;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.extraction.codon.KnownCodon;
-import com.hartwig.serve.extraction.copynumber.KnownCopyNumber;
-import com.hartwig.serve.extraction.exon.KnownExon;
-import com.hartwig.serve.extraction.fusion.KnownFusionPair;
-import com.hartwig.serve.extraction.hotspot.KnownHotspot;
+import com.hartwig.serve.datamodel.fusion.KnownFusionPair;
+import com.hartwig.serve.datamodel.gene.KnownCopyNumber;
+import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
+import com.hartwig.serve.datamodel.range.KnownCodon;
+import com.hartwig.serve.datamodel.range.KnownExon;
 
 import org.junit.Test;
 

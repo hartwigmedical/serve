@@ -4,16 +4,16 @@ import java.util.Set;
 
 import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.fusion.ActionableFusion;
+import com.hartwig.serve.datamodel.fusion.KnownFusionPair;
 import com.hartwig.serve.datamodel.gene.ActionableGene;
+import com.hartwig.serve.datamodel.gene.KnownCopyNumber;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
+import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.range.ActionableRange;
+import com.hartwig.serve.datamodel.range.KnownCodon;
+import com.hartwig.serve.datamodel.range.KnownExon;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.ImmutableExtractionResult;
-import com.hartwig.serve.extraction.codon.KnownCodon;
-import com.hartwig.serve.extraction.copynumber.KnownCopyNumber;
-import com.hartwig.serve.extraction.exon.KnownExon;
-import com.hartwig.serve.extraction.fusion.KnownFusionPair;
-import com.hartwig.serve.extraction.hotspot.KnownHotspot;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

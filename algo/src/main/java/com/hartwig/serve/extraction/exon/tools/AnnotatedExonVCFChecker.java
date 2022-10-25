@@ -3,10 +3,10 @@ package com.hartwig.serve.extraction.exon.tools;
 import java.io.IOException;
 import java.util.List;
 
+import com.hartwig.serve.datamodel.hotspot.VCFWriterFactory;
 import com.hartwig.serve.extraction.codon.tools.AnnotatedCodonVCFChecker;
 import com.hartwig.serve.extraction.snpeff.SnpEffAnnotation;
 import com.hartwig.serve.extraction.snpeff.SnpEffAnnotationParser;
-import com.hartwig.serve.extraction.util.VCFWriterFactory;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;

@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.hartwig.serve.datamodel.ActionableEvents;
-import com.hartwig.serve.extraction.KnownEvents;
+import com.hartwig.serve.datamodel.KnownEvents;
 import com.hartwig.serve.extraction.events.EventInterpretation;
 
 import org.apache.commons.cli.CommandLine;
@@ -35,11 +35,6 @@ public class ServeDatabaseAccess {
     public static final String DB_DEFAULT_ARGS = "?serverTimezone=UTC&useSSL=false";
 
     @NotNull
-    private final Connection connection;
-    @NotNull
-    private final DSLContext context;
-
-    @NotNull
     private final ServeDAO serveDAO;
 
     public ServeDatabaseAccess(@NotNull final String userName, @NotNull final String password, @NotNull final String url)
@@ -47,10 +42,10 @@ public class ServeDatabaseAccess {
         System.setProperty("org.jooq.no-logo", "true");
         System.setProperty("org.jooq.no-tips", "true");
 
-        this.connection = DriverManager.getConnection(url, userName, password);
+        Connection connection = DriverManager.getConnection(url, userName, password);
         String catalog = connection.getCatalog();
         LOGGER.debug("Connecting to database '{}'", catalog);
-        this.context = DSL.using(connection, SQLDialect.MYSQL, settings(catalog));
+        DSLContext context = DSL.using(connection, SQLDialect.MYSQL, settings(catalog));
 
         this.serveDAO = new ServeDAO(context);
     }

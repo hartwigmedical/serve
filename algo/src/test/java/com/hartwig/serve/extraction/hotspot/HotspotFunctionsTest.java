@@ -7,11 +7,13 @@ import java.util.Set;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.hartwig.serve.ServeAlgoTestFactory;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.common.GeneAlteration;
 import com.hartwig.serve.datamodel.common.Variant;
+import com.hartwig.serve.datamodel.hotspot.HotspotTestFactory;
+import com.hartwig.serve.datamodel.hotspot.ImmutableKnownHotspot;
 import com.hartwig.serve.datamodel.hotspot.ImmutableVariantHotspotImpl;
+import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
 
 import org.jetbrains.annotations.NotNull;
@@ -105,8 +107,8 @@ public class HotspotFunctionsTest {
     @NotNull
     private static VariantHotspot hotspot1() {
         return ImmutableVariantHotspotImpl.builder()
-                .from((Variant) ServeAlgoTestFactory.createTestKnownHotspot())
-                .from((GeneAlteration) ServeAlgoTestFactory.createTestKnownHotspot())
+                .from((Variant) HotspotTestFactory.createTestKnownHotspot())
+                .from((GeneAlteration) HotspotTestFactory.createTestKnownHotspot())
                 .chromosome("1")
                 .position(10)
                 .ref("A")
@@ -117,8 +119,8 @@ public class HotspotFunctionsTest {
     @NotNull
     private static VariantHotspot hotspot2() {
         return ImmutableVariantHotspotImpl.builder()
-                .from((Variant) ServeAlgoTestFactory.createTestKnownHotspot())
-                .from((GeneAlteration) ServeAlgoTestFactory.createTestKnownHotspot())
+                .from((Variant) HotspotTestFactory.createTestKnownHotspot())
+                .from((GeneAlteration) HotspotTestFactory.createTestKnownHotspot())
                 .chromosome("1")
                 .position(20)
                 .ref("A")

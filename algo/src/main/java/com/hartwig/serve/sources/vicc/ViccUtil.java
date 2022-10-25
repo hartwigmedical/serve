@@ -13,12 +13,12 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.datamodel.characteristic.TumorCharacteristic;
+import com.hartwig.serve.datamodel.fusion.KnownFusionPair;
 import com.hartwig.serve.datamodel.gene.GeneAnnotation;
+import com.hartwig.serve.datamodel.gene.KnownCopyNumber;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
-import com.hartwig.serve.extraction.codon.CodonAnnotation;
-import com.hartwig.serve.extraction.copynumber.KnownCopyNumber;
-import com.hartwig.serve.extraction.exon.ExonAnnotation;
-import com.hartwig.serve.extraction.fusion.KnownFusionPair;
+import com.hartwig.serve.datamodel.range.CodonAnnotation;
+import com.hartwig.serve.datamodel.range.ExonAnnotation;
 import com.hartwig.serve.vicc.datamodel.Feature;
 import com.hartwig.serve.vicc.datamodel.ViccEntry;
 

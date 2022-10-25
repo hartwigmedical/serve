@@ -4,17 +4,17 @@ import java.io.IOException;
 
 import com.hartwig.serve.datamodel.characteristic.ActionableCharacteristicFile;
 import com.hartwig.serve.datamodel.fusion.ActionableFusionFile;
+import com.hartwig.serve.datamodel.fusion.KnownFusionPairFile;
 import com.hartwig.serve.datamodel.gene.ActionableGeneFile;
+import com.hartwig.serve.datamodel.gene.KnownCopyNumberFile;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspotFile;
+import com.hartwig.serve.datamodel.hotspot.KnownHotspotFile;
 import com.hartwig.serve.datamodel.immuno.ActionableHLAFile;
 import com.hartwig.serve.datamodel.range.ActionableRangeFile;
+import com.hartwig.serve.datamodel.range.KnownCodonFile;
+import com.hartwig.serve.datamodel.range.KnownExonFile;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
-import com.hartwig.serve.extraction.codon.KnownCodonFile;
-import com.hartwig.serve.extraction.copynumber.KnownCopyNumberFile;
 import com.hartwig.serve.extraction.events.EventInterpretationFile;
-import com.hartwig.serve.extraction.exon.KnownExonFile;
-import com.hartwig.serve.extraction.fusion.KnownFusionPairFile;
-import com.hartwig.serve.extraction.hotspot.KnownHotspotFile;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

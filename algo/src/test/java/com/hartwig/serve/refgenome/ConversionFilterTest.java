@@ -2,19 +2,22 @@ package com.hartwig.serve.refgenome;
 
 import static org.junit.Assert.assertTrue;
 
-import com.hartwig.serve.ServeAlgoTestFactory;
+import com.hartwig.serve.datamodel.fusion.FusionTestFactory;
 import com.hartwig.serve.datamodel.fusion.ImmutableActionableFusion;
+import com.hartwig.serve.datamodel.fusion.ImmutableKnownFusionPair;
+import com.hartwig.serve.datamodel.gene.GeneTestFactory;
 import com.hartwig.serve.datamodel.gene.ImmutableActionableGene;
+import com.hartwig.serve.datamodel.gene.ImmutableKnownCopyNumber;
+import com.hartwig.serve.datamodel.hotspot.HotspotTestFactory;
+import com.hartwig.serve.datamodel.hotspot.ImmutableKnownHotspot;
+import com.hartwig.serve.datamodel.range.ImmutableCodonAnnotation;
+import com.hartwig.serve.datamodel.range.ImmutableExonAnnotation;
+import com.hartwig.serve.datamodel.range.ImmutableKnownCodon;
+import com.hartwig.serve.datamodel.range.ImmutableKnownExon;
+import com.hartwig.serve.datamodel.range.RangeTestFactory;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.ImmutableExtractionResult;
-import com.hartwig.serve.extraction.codon.ImmutableCodonAnnotation;
-import com.hartwig.serve.extraction.codon.ImmutableKnownCodon;
-import com.hartwig.serve.extraction.copynumber.ImmutableKnownCopyNumber;
-import com.hartwig.serve.extraction.exon.ImmutableExonAnnotation;
-import com.hartwig.serve.extraction.exon.ImmutableKnownExon;
-import com.hartwig.serve.extraction.fusion.ImmutableKnownFusionPair;
-import com.hartwig.serve.extraction.hotspot.ImmutableKnownHotspot;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
@@ -43,40 +46,40 @@ public class ConversionFilterTest {
     private static ExtractionResult createExtractionResultForGene(@NotNull String gene) {
         return ImmutableExtractionResult.builder()
                 .refGenomeVersion(RefGenomeVersion.V38)
-                .addKnownHotspots(ImmutableKnownHotspot.builder().from(ServeAlgoTestFactory.createTestKnownHotspot()).gene(gene).build())
+                .addKnownHotspots(ImmutableKnownHotspot.builder().from(HotspotTestFactory.createTestKnownHotspot()).gene(gene).build())
                 .addKnownCodons(ImmutableKnownCodon.builder()
-                        .from(ServeAlgoTestFactory.createTestKnownCodon())
+                        .from(RangeTestFactory.createTestKnownCodon())
                         .annotation(ImmutableCodonAnnotation.builder()
-                                .from(ServeAlgoTestFactory.createTestCodonAnnotation())
+                                .from(RangeTestFactory.createTestCodonAnnotation())
                                 .gene(gene)
                                 .build())
                         .build())
                 .addKnownExons(ImmutableKnownExon.builder()
-                        .from(ServeAlgoTestFactory.createTestKnownExon())
+                        .from(RangeTestFactory.createTestKnownExon())
                         .annotation(ImmutableExonAnnotation.builder()
-                                .from(ServeAlgoTestFactory.createTestExonAnnotation())
+                                .from(RangeTestFactory.createTestExonAnnotation())
                                 .gene(gene)
                                 .build())
                         .build())
                 .addKnownCopyNumbers(ImmutableKnownCopyNumber.builder()
-                        .from(ServeAlgoTestFactory.createTestKnownCopyNumber())
+                        .from(GeneTestFactory.createTestKnownCopyNumber())
                         .gene(gene)
                         .build())
                 .addKnownFusionPairs(ImmutableKnownFusionPair.builder()
-                        .from(ServeAlgoTestFactory.createTestKnownFusionPair())
+                        .from(FusionTestFactory.createTestKnownFusionPair())
                         .geneUp(gene)
                         .build())
                 .addKnownFusionPairs(ImmutableKnownFusionPair.builder()
-                        .from(ServeAlgoTestFactory.createTestKnownFusionPair())
+                        .from(FusionTestFactory.createTestKnownFusionPair())
                         .geneDown(gene)
                         .build())
-                .addActionableGenes(ImmutableActionableGene.builder().from(ServeAlgoTestFactory.createTestActionableGene()).gene(gene).build())
+                .addActionableGenes(ImmutableActionableGene.builder().from(GeneTestFactory.createTestActionableGene()).gene(gene).build())
                 .addActionableFusions(ImmutableActionableFusion.builder()
-                        .from(ServeAlgoTestFactory.createTestActionableFusion())
+                        .from(FusionTestFactory.createTestActionableFusion())
                         .geneUp(gene)
                         .build())
                 .addActionableFusions(ImmutableActionableFusion.builder()
-                        .from(ServeAlgoTestFactory.createTestActionableFusion())
+                        .from(FusionTestFactory.createTestActionableFusion())
                         .geneDown(gene)
                         .build())
                 .build();

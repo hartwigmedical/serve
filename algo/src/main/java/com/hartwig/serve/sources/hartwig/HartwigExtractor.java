@@ -9,15 +9,15 @@ import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.common.GeneRole;
 import com.hartwig.serve.datamodel.common.ProteinEffect;
 import com.hartwig.serve.datamodel.common.Variant;
+import com.hartwig.serve.datamodel.hotspot.ImmutableKnownHotspot;
 import com.hartwig.serve.datamodel.hotspot.ImmutableVariantHotspotImpl;
+import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
+import com.hartwig.serve.datamodel.util.KeyFormatter;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.ImmutableExtractionResult;
 import com.hartwig.serve.extraction.hotspot.HotspotFunctions;
-import com.hartwig.serve.extraction.hotspot.ImmutableKnownHotspot;
-import com.hartwig.serve.extraction.hotspot.KnownHotspot;
 import com.hartwig.serve.extraction.hotspot.ProteinResolver;
-import com.hartwig.serve.extraction.util.KeyFormatter;
 import com.hartwig.serve.util.ProgressTracker;
 
 import org.apache.logging.log4j.LogManager;

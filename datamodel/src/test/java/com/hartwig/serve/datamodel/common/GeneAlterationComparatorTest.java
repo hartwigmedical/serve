@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import java.util.List;
 
 import com.google.common.collect.Lists;
-import com.hartwig.serve.datamodel.DatamodelTestFactory;
 
 import org.junit.Test;
 
@@ -13,12 +12,12 @@ public class GeneAlterationComparatorTest {
 
     @Test
     public void canSortActionableGeneMutations() {
-        GeneAlteration alteration1 = DatamodelTestFactory.createGeneAlteration("A", GeneRole.ONCO, ProteinEffect.NO_EFFECT);
-        GeneAlteration alteration2 = DatamodelTestFactory.createGeneAlteration("A", GeneRole.ONCO, ProteinEffect.GAIN_OF_FUNCTION);
-        GeneAlteration alteration3 = DatamodelTestFactory.createGeneAlteration("A", GeneRole.TSG, ProteinEffect.GAIN_OF_FUNCTION);
-        GeneAlteration alteration4 = DatamodelTestFactory.createGeneAlteration("A", GeneRole.TSG, ProteinEffect.NO_EFFECT);
-        GeneAlteration alteration5 = DatamodelTestFactory.createGeneAlteration("B", GeneRole.TSG, ProteinEffect.NO_EFFECT);
-        GeneAlteration alteration6 = DatamodelTestFactory.createGeneAlteration("B", GeneRole.TSG, ProteinEffect.GAIN_OF_FUNCTION);
+        GeneAlteration alteration1 = CommonTestFactory.createGeneAlteration("A", GeneRole.ONCO, ProteinEffect.NO_EFFECT);
+        GeneAlteration alteration2 = CommonTestFactory.createGeneAlteration("A", GeneRole.ONCO, ProteinEffect.GAIN_OF_FUNCTION);
+        GeneAlteration alteration3 = CommonTestFactory.createGeneAlteration("A", GeneRole.TSG, ProteinEffect.GAIN_OF_FUNCTION);
+        GeneAlteration alteration4 = CommonTestFactory.createGeneAlteration("A", GeneRole.TSG, ProteinEffect.NO_EFFECT);
+        GeneAlteration alteration5 = CommonTestFactory.createGeneAlteration("B", GeneRole.TSG, ProteinEffect.NO_EFFECT);
+        GeneAlteration alteration6 = CommonTestFactory.createGeneAlteration("B", GeneRole.TSG, ProteinEffect.GAIN_OF_FUNCTION);
 
         List<GeneAlteration> alterations = Lists.newArrayList(alteration1, alteration2, alteration3, alteration4, alteration5, alteration6);
         alterations.sort(new GeneAlterationComparator());

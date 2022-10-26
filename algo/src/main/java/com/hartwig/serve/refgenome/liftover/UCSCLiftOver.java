@@ -2,7 +2,7 @@ package com.hartwig.serve.refgenome.liftover;
 
 import java.io.File;
 
-import com.hartwig.serve.datamodel.refgenome.RefGenomeFunctions;
+import com.hartwig.serve.common.RefGenomeFunctions;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 
 import org.jetbrains.annotations.NotNull;

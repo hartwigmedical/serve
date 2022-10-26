@@ -1,6 +1,6 @@
 package com.hartwig.serve.extraction.hotspot;
 
-import com.hartwig.serve.datamodel.refgenome.RefGenomeFunctions;
+import com.hartwig.serve.common.RefGenomeFunctions;
 
 import org.jetbrains.annotations.NotNull;
 

@@ -139,6 +139,6 @@ public final class ActionableEventFactory {
 
     @NotNull
     public static ActionableHLA toActionableHLa(@NotNull ActionableEvent actionableEvent, @NotNull ImmunoHLA hla) {
-        return ImmutableActionableHLA.builder().from(actionableEvent).hlaType(hla.immunoHLA()).build();
+        return ImmutableActionableHLA.builder().from(actionableEvent).from(hla).build();
     }
 }

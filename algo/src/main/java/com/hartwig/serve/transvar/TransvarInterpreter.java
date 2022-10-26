@@ -9,8 +9,8 @@ import java.util.List;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
+import com.hartwig.serve.common.RefGenomeFunctions;
 import com.hartwig.serve.common.ensemblcache.Strand;
-import com.hartwig.serve.datamodel.refgenome.RefGenomeFunctions;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 import com.hartwig.serve.extraction.hotspot.Hotspot;
 import com.hartwig.serve.extraction.hotspot.ImmutableHotspot;

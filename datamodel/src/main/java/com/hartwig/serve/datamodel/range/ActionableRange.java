@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 @Value.Immutable
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class })
-public abstract class ActionableRange implements ActionableEvent, RangeAnnotation {
+public abstract class ActionableRange implements RangeAnnotation, ActionableEvent {
 
     @NotNull
     public abstract RangeType rangeType();

@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.google.common.collect.Lists;
-import com.hartwig.serve.datamodel.refgenome.RefGenomeFunctions;
+import com.hartwig.serve.common.RefGenomeFunctions;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 
 import org.apache.logging.log4j.LogManager;

@@ -10,9 +10,9 @@ import org.jetbrains.annotations.NotNull;
 public class ActionableRangeComparator implements Comparator<ActionableRange> {
 
     @NotNull
-    private final Comparator<ActionableEvent> actionableEventComparator = new ActionableEventComparator();
-    @NotNull
     private final Comparator<RangeAnnotation> rangeAnnotationComparator = new RangeAnnotationComparator();
+    @NotNull
+    private final Comparator<ActionableEvent> actionableEventComparator = new ActionableEventComparator();
 
     @Override
     public int compare(@NotNull ActionableRange range1, @NotNull ActionableRange range2) {

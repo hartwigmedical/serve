@@ -3,6 +3,7 @@ package com.hartwig.serve.refgenome;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
+import com.hartwig.serve.common.RefGenomeFunctions;
 import com.hartwig.serve.datamodel.MutationType;
 import com.hartwig.serve.datamodel.common.GeneRole;
 import com.hartwig.serve.datamodel.common.ProteinEffect;
@@ -20,7 +21,6 @@ import com.hartwig.serve.datamodel.range.ImmutableKnownExon;
 import com.hartwig.serve.datamodel.range.KnownCodon;
 import com.hartwig.serve.datamodel.range.KnownExon;
 import com.hartwig.serve.datamodel.range.RangeAnnotation;
-import com.hartwig.serve.datamodel.refgenome.RefGenomeFunctions;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 import com.hartwig.serve.extraction.hotspot.ImmutableVariantHotspotImpl;
 import com.hartwig.serve.refgenome.liftover.LiftOverAlgo;

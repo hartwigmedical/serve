@@ -108,7 +108,7 @@ public class TumorCharacteristicExtractor {
     @Nullable
     private static TumorCharacteristicCutoffType determineCutoffType(@NotNull String event) {
         for (TumorCharacteristicCutoffType cutoffType : TumorCharacteristicCutoffType.values()) {
-            if (event.contains(cutoffType.keyPhrase())) {
+            if (event.contains(toKeyPhrase(cutoffType))) {
                 return cutoffType;
             }
         }
@@ -122,7 +122,25 @@ public class TumorCharacteristicExtractor {
             return null;
         }
 
-        int start = event.indexOf(cutoffType.keyPhrase()) + cutoffType.keyPhrase().length();
+        String keyPhrase = toKeyPhrase(cutoffType);
+        int start = event.indexOf(keyPhrase) + keyPhrase.length();
         return Double.parseDouble(event.substring(start).trim());
+    }
+
+    @NotNull
+    private static String toKeyPhrase(@NotNull TumorCharacteristicCutoffType cutoffType) {
+        switch (cutoffType) {
+            case EQUAL_OR_GREATER:
+                return ">=";
+            case GREATER:
+                return ">";
+            case EQUAL_OR_LOWER:
+                return "<=";
+            case LOWER:
+                return "<";
+            default: {
+                throw new IllegalStateException("Could not generate key phrase for cutoff type: " + cutoffType);
+            }
+        }
     }
 }

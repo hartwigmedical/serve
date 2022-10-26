@@ -8,6 +8,6 @@ import org.jetbrains.annotations.Nullable;
 
 @Value.Immutable
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class })
-public abstract class ActionableCharacteristic implements ActionableEvent, TumorCharacteristic {
+public abstract class ActionableCharacteristic implements TumorCharacteristic, ActionableEvent {
 
 }

@@ -432,7 +432,7 @@ public class ServeDAO {
     private static void addRecordHLA(@NotNull Timestamp timestamp, @NotNull InsertValuesStep14 inserter,
             @NotNull ActionableHLA actionableHLA) {
         inserter.values(timestamp,
-                actionableHLA.hlaType(),
+                actionableHLA.hlaAllele(),
                 actionableHLA.source(),
                 actionableHLA.sourceEvent(),
                 concat(actionableHLA.sourceUrls()),

@@ -8,10 +8,6 @@ import org.jetbrains.annotations.Nullable;
 
 @Value.Immutable
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class })
-public abstract class ActionableHLA implements ActionableEvent {
+public abstract class ActionableHLA implements ImmunoAnnotation, ActionableEvent {
 
-    // TODO Rename to hlaAllele
-
-    @NotNull
-    public abstract String hlaType();
 }

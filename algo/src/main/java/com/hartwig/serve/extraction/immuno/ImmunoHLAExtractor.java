@@ -9,21 +9,21 @@ import org.jetbrains.annotations.Nullable;
 
 public class ImmunoHLAExtractor {
 
+    private static final Logger LOGGER = LogManager.getLogger(ImmunoHLAExtractor.class);
+
     public ImmunoHLAExtractor() {
     }
-
-    private static final Logger LOGGER = LogManager.getLogger(ImmunoHLAExtractor.class);
 
     @Nullable
     public ImmunoHLA extract(@NotNull EventType type, @NotNull String event) {
         if (type == EventType.IMMUNO_HLA) {
             String onlyHLAType = event.contains("-") ? event.split("-")[1] : event;
-            String MainHlaType = onlyHLAType.contains(":") ? onlyHLAType.split(":")[0] : onlyHLAType;
+            String mainHlaType = onlyHLAType.contains(":") ? onlyHLAType.split(":")[0] : onlyHLAType;
 
-            if (MainHlaType.length() != 4 ){
-                LOGGER.warn("Unknown HLA type {} in knowledgebase. Investigate in more depth", MainHlaType);
+            if (mainHlaType.length() != 4 ){
+                LOGGER.warn("Unknown HLA allele {} in knowledgebase", mainHlaType);
             }
-            return ImmutableImmunoHLA.builder().immunoHLA(event).build();
+            return ImmutableImmunoHLA.builder().hlaAllele(event).build();
         }
         return null;
     }

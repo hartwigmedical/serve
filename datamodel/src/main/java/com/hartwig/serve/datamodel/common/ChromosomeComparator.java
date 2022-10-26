@@ -2,11 +2,11 @@ package com.hartwig.serve.datamodel.common;
 
 import java.util.Comparator;
 
-import com.hartwig.serve.datamodel.refgenome.RefGenomeFunctions;
-
 import org.jetbrains.annotations.NotNull;
 
 public class ChromosomeComparator implements Comparator<String> {
+
+    private static final String CHR_PREFIX = "chr";
 
     @Override
     public int compare(@NotNull String chromosome1, @NotNull String chromosome2) {
@@ -14,7 +14,7 @@ public class ChromosomeComparator implements Comparator<String> {
     }
 
     private static int chromosomeRank(@NotNull String chromosome) {
-        String chrTrimmed = RefGenomeFunctions.stripChrPrefix(chromosome);
+        String chrTrimmed = stripChrPrefix(chromosome);
 
         if (chrTrimmed.equalsIgnoreCase("X")) {
             return 23;
@@ -25,5 +25,14 @@ public class ChromosomeComparator implements Comparator<String> {
         } else {
             return Integer.parseInt(chrTrimmed);
         }
+    }
+
+    @NotNull
+    private static String stripChrPrefix(@NotNull String chromosome) {
+        if (chromosome.startsWith(CHR_PREFIX)) {
+            return chromosome.substring(CHR_PREFIX.length());
+        }
+
+        return chromosome;
     }
 }

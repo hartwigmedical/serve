@@ -49,7 +49,7 @@ public final class ActionableHLAFile {
     @NotNull
     @VisibleForTesting
     static String header() {
-        return new StringJoiner(ActionableFileUtil.FIELD_DELIMITER).add("hlaType").add(ActionableFileUtil.header()).toString();
+        return new StringJoiner(ActionableFileUtil.FIELD_DELIMITER).add("hlaAllele").add(ActionableFileUtil.header()).toString();
     }
 
     @NotNull
@@ -68,7 +68,7 @@ public final class ActionableHLAFile {
 
         return ImmutableActionableHLA.builder()
                 .from(ActionableFileUtil.fromLine(values, fields))
-                .hlaType(values[fields.get("hlaType")])
+                .hlaAllele(values[fields.get("hlaAllele")])
                 .build();
     }
 
@@ -93,6 +93,6 @@ public final class ActionableHLAFile {
 
     @NotNull
     private static String toLine(@NotNull ActionableHLA hla) {
-        return new StringJoiner(ActionableFileUtil.FIELD_DELIMITER).add(hla.hlaType()).add(ActionableFileUtil.toLine(hla)).toString();
+        return new StringJoiner(ActionableFileUtil.FIELD_DELIMITER).add(hla.hlaAllele()).add(ActionableFileUtil.toLine(hla)).toString();
     }
 }

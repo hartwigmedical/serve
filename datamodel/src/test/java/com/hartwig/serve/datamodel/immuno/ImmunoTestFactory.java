@@ -18,6 +18,6 @@ public final class ImmunoTestFactory {
 
     @NotNull
     public static ActionableHLA createTestActionableHLA() {
-        return ImmutableActionableHLA.builder().from(DatamodelTestFactory.createEmptyActionableEvent()).hlaType(Strings.EMPTY).build();
+        return ImmutableActionableHLA.builder().from(DatamodelTestFactory.createEmptyActionableEvent()).hlaAllele(Strings.EMPTY).build();
     }
 }

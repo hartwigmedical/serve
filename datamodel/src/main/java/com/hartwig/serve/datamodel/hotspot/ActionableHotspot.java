@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 @Value.Immutable
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class })
-public abstract class ActionableHotspot implements ActionableEvent, VariantHotspot {
+public abstract class ActionableHotspot implements VariantHotspot, ActionableEvent {
 
 }
 

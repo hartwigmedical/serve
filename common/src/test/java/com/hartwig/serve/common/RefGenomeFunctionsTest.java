@@ -1,6 +1,8 @@
-package com.hartwig.serve.datamodel.refgenome;
+package com.hartwig.serve.common;
 
 import static org.junit.Assert.assertEquals;
+
+import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 
 import org.junit.Test;
 

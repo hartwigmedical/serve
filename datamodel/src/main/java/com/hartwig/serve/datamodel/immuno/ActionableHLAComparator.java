@@ -14,7 +14,7 @@ public class ActionableHLAComparator implements Comparator<ActionableHLA> {
 
     @Override
     public int compare(@NotNull ActionableHLA hla1, @NotNull ActionableHLA hla2) {
-        int hlaCompare = hla1.hlaType().compareTo(hla2.hlaType());
+        int hlaCompare = hla1.hlaAllele().compareTo(hla2.hlaAllele());
         if (hlaCompare != 0) {
             return hlaCompare;
         }

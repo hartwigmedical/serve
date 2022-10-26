@@ -1,4 +1,6 @@
-package com.hartwig.serve.datamodel.refgenome;
+package com.hartwig.serve.common;
+
+import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

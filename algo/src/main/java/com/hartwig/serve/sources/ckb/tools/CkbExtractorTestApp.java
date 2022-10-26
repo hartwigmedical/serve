@@ -25,8 +25,8 @@ import com.hartwig.serve.refgenome.RefGenomeResource;
 import com.hartwig.serve.sources.ckb.CkbExtractor;
 import com.hartwig.serve.sources.ckb.CkbExtractorFactory;
 import com.hartwig.serve.sources.ckb.CkbReader;
-import com.hartwig.serve.sources.ckb.treatmentapproach.RelevantTreatmentApproachCurationFile;
-import com.hartwig.serve.sources.ckb.treatmentapproach.RelevantTreatmentApproachCurator;
+import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurationFile;
+import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurator;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -52,8 +52,7 @@ public class CkbExtractorTestApp {
         }
 
         RefGenomeResource refGenomeResource = buildRefGenomeResource(config);
-        RelevantTreatmentApproachCurator curator =
-                new RelevantTreatmentApproachCurator(RelevantTreatmentApproachCurationFile.read(config.ckbDrugCurationTsv()));
+        TreatmentApproachCurator curator = new TreatmentApproachCurator(TreatmentApproachCurationFile.read(config.ckbDrugCurationTsv()));
         CkbExtractor extractor = CkbExtractorFactory.buildCkbExtractor(CkbClassificationConfig.build(), refGenomeResource, curator);
 
         List<CkbEntry> entries = CkbReader.readAndCurate(config.ckbDir(), config.ckbFilterTsv());

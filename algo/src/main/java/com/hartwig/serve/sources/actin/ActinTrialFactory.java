@@ -48,10 +48,6 @@ public final class ActinTrialFactory {
             addon = TRIAL_COHORT_SEPARATOR + entry.cohort();
         }
 
-        return ImmutableTreatment.builder()
-                .name(entry.trial() + addon)
-                .sourceRelevantTreatmentApproaches(Sets.newHashSet())
-                .relevantTreatmentApproaches(Sets.newHashSet())
-                .build();
+        return ImmutableTreatment.builder().name(entry.trial() + addon).build();
     }
 }

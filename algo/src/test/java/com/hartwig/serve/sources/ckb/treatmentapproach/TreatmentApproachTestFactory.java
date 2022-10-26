@@ -13,30 +13,30 @@ public final class TreatmentApproachTestFactory {
     }
 
     @NotNull
-    public static RelevantTreatmentApproachCurator createEmptyCurator() {
-       return new RelevantTreatmentApproachCurator(Maps.newHashMap());
+    public static TreatmentApproachCurator createEmptyCurator() {
+       return new TreatmentApproachCurator(Maps.newHashMap());
     }
 
     @NotNull
-    public static RelevantTreatmentApproachCurator createTestCurator() {
-        Map<RelevantTreatmentApproachCurationEntryKey, RelevantTreatmentApproachCurationEntry> curationEntries = Maps.newHashMap();
+    public static TreatmentApproachCurator createTestCurator() {
+        Map<TreatmentApproachCurationEntryKey, TreatmentApproachCurationEntry> curationEntries = Maps.newHashMap();
 
         curationEntries.put(createCurationKey("A", "A", "BRAF amplification", EvidenceDirection.RESPONSIVE),
-                createCurationEntry(RelevantTreatmentApproachCurationType.TREATMENT_APPROACH_CURATION,
+                createCurationEntry(TreatmentApproachCurationType.TREATMENT_APPROACH_CURATION,
                         "A",
                         "A",
                         "BRAF amplification",
                         EvidenceDirection.RESPONSIVE,
                         "AA"));
 
-        return new RelevantTreatmentApproachCurator(curationEntries);
+        return new TreatmentApproachCurator(curationEntries);
     }
 
     @NotNull
-    public static RelevantTreatmentApproachCurationEntry createCurationEntry(@NotNull RelevantTreatmentApproachCurationType type,
+    public static TreatmentApproachCurationEntry createCurationEntry(@NotNull TreatmentApproachCurationType type,
             @NotNull String treatment, @NotNull String treatmentApproach, @NotNull String event, @NotNull EvidenceDirection direction,
             @NotNull String curation) {
-        return ImmutableRelevantTreatmentApproachCurationEntry.builder()
+        return ImmutableTreatmentApproachCurationEntry.builder()
                 .curationType(type)
                 .curationKey(createCurationKey(treatment, treatmentApproach, event, direction))
                 .curatedTreatmentApproach(curation)
@@ -44,9 +44,9 @@ public final class TreatmentApproachTestFactory {
     }
 
     @NotNull
-    public static RelevantTreatmentApproachCurationEntryKey createCurationKey(@NotNull String treatment, @NotNull String treatmentApproach,
+    public static TreatmentApproachCurationEntryKey createCurationKey(@NotNull String treatment, @NotNull String treatmentApproach,
             @NotNull String event, @NotNull EvidenceDirection direction) {
-        return ImmutableRelevantTreatmentApproachCurationEntryKey.builder()
+        return ImmutableTreatmentApproachCurationEntryKey.builder()
                 .treatment(treatment)
                 .treatmentApproach(treatmentApproach)
                 .event(event)

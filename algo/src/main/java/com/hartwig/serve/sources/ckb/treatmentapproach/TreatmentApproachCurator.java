@@ -10,24 +10,24 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 
-public class RelevantTreatmentApproachCurator {
+public class TreatmentApproachCurator {
 
-    private static final Logger LOGGER = LogManager.getLogger(RelevantTreatmentApproachCurator.class);
+    private static final Logger LOGGER = LogManager.getLogger(TreatmentApproachCurator.class);
 
     @NotNull
-    private final Map<RelevantTreatmentApproachCurationEntryKey, RelevantTreatmentApproachCurationEntry> curations;
+    private final Map<TreatmentApproachCurationEntryKey, TreatmentApproachCurationEntry> curations;
     @NotNull
-    private final Set<RelevantTreatmentApproachCurationEntryKey> usedCurations = Sets.newHashSet();
+    private final Set<TreatmentApproachCurationEntryKey> usedCurations = Sets.newHashSet();
 
-    public RelevantTreatmentApproachCurator(
-            @NotNull final Map<RelevantTreatmentApproachCurationEntryKey, RelevantTreatmentApproachCurationEntry> curations) {
+    public TreatmentApproachCurator(
+            @NotNull final Map<TreatmentApproachCurationEntryKey, TreatmentApproachCurationEntry> curations) {
         this.curations = curations;
     }
 
     public void reportUnusedCuratedEntries() {
         int unusedCuratedEntryCount = 0;
 
-        for (RelevantTreatmentApproachCurationEntryKey entrySet : curations.keySet()) {
+        for (TreatmentApproachCurationEntryKey entrySet : curations.keySet()) {
             LOGGER.debug("Entry debug: " + entrySet);
             if (!usedCurations.contains(entrySet)) {
                 unusedCuratedEntryCount++;
@@ -39,8 +39,8 @@ public class RelevantTreatmentApproachCurator {
     }
 
     @NotNull
-    public String isMatch(@NotNull RelevantTreatmentApproachCurationEntryKey key) {
-        RelevantTreatmentApproachCurationEntry curationEntry = curations.get(key);
+    public String isMatch(@NotNull TreatmentApproachCurationEntryKey key) {
+        TreatmentApproachCurationEntry curationEntry = curations.get(key);
 
         if (curationEntry == null) {
             LOGGER.warn("The treatment '{}' with relevant treatment approach '{}' of event '{}' "

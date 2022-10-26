@@ -126,11 +126,7 @@ class ActionableEvidenceFactory {
                     }
 
                     for (List<String> drugList : drugLists) {
-                        actionableEvidences.add(builder.treatment(ImmutableTreatment.builder()
-                                        .name(formatDrugList(drugList))
-                                        .sourceRelevantTreatmentApproaches(Sets.newHashSet())
-                                        .relevantTreatmentApproaches(Sets.newHashSet())
-                                        .build())
+                        actionableEvidences.add(builder.treatment(ImmutableTreatment.builder().name(formatDrugList(drugList)).build())
                                 .applicableCancerType(ImmutableCancerType.builder().name(cancerType).doid(doid).build())
                                 .blacklistCancerTypes(blacklistedCancerTypes)
                                 .build());

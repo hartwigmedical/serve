@@ -11,12 +11,12 @@ import com.hartwig.serve.datamodel.EvidenceDirection;
 
 import org.jetbrains.annotations.NotNull;
 
-public class RelevantTreatmentApproachCurationFile {
+public class TreatmentApproachCurationFile {
 
     private static final String FIELD_DELIMITER = "\t";
 
     @NotNull
-    public static Map<RelevantTreatmentApproachCurationEntryKey, RelevantTreatmentApproachCurationEntry> read(
+    public static Map<TreatmentApproachCurationEntryKey, TreatmentApproachCurationEntry> read(
             @NotNull String treatmentApproachCurationFile) throws IOException {
         List<String> lines = Files.readAllLines(new File(treatmentApproachCurationFile).toPath());
         // Skip header
@@ -24,13 +24,13 @@ public class RelevantTreatmentApproachCurationFile {
     }
 
     @NotNull
-    private static Map<RelevantTreatmentApproachCurationEntryKey, RelevantTreatmentApproachCurationEntry> fromLines(
+    private static Map<TreatmentApproachCurationEntryKey, TreatmentApproachCurationEntry> fromLines(
             @NotNull List<String> lines) {
-        Map<RelevantTreatmentApproachCurationEntryKey, RelevantTreatmentApproachCurationEntry> mapEntry = Maps.newHashMap();
+        Map<TreatmentApproachCurationEntryKey, TreatmentApproachCurationEntry> mapEntry = Maps.newHashMap();
         for (String line : lines) {
             String[] values = line.split(FIELD_DELIMITER);
 
-            RelevantTreatmentApproachCurationEntryKey entryKey = ImmutableRelevantTreatmentApproachCurationEntryKey.builder()
+            TreatmentApproachCurationEntryKey entryKey = ImmutableTreatmentApproachCurationEntryKey.builder()
                     .treatment(values[1])
                     .treatmentApproach(values[2].isEmpty() ? null : values[2])
                     .event(values[3])
@@ -38,8 +38,8 @@ public class RelevantTreatmentApproachCurationFile {
                     .build();
 
             mapEntry.put(entryKey,
-                    ImmutableRelevantTreatmentApproachCurationEntry.builder()
-                            .curationType(RelevantTreatmentApproachCurationType.valueOf(values[0]))
+                    ImmutableTreatmentApproachCurationEntry.builder()
+                            .curationType(TreatmentApproachCurationType.valueOf(values[0]))
                             .curationKey(entryKey)
                             .curatedTreatmentApproach(values.length == 6 ? values[5] : null)
                             .build());

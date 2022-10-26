@@ -65,11 +65,7 @@ public class ActionableTrialFactory {
                 .source(Knowledgebase.ICLUSION)
                 .sourceEvent(sourceEvent)
                 .sourceUrls(Sets.newHashSet("https://trial-eye.com/hmf/" + trial.id()))
-                .treatment(ImmutableTreatment.builder()
-                        .name(trial.acronym())
-                        .sourceRelevantTreatmentApproaches(Sets.newHashSet())
-                        .relevantTreatmentApproaches(Sets.newHashSet())
-                        .build())
+                .treatment(ImmutableTreatment.builder().name(trial.acronym()).build())
                 .level(EvidenceLevel.B)
                 .direction(EvidenceDirection.RESPONSIVE)
                 .evidenceUrls(Sets.newHashSet());

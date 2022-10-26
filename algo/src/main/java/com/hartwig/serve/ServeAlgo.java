@@ -27,10 +27,10 @@ import com.hartwig.serve.sources.actin.reader.ActinEntry;
 import com.hartwig.serve.sources.ckb.CkbExtractor;
 import com.hartwig.serve.sources.ckb.CkbExtractorFactory;
 import com.hartwig.serve.sources.ckb.CkbReader;
-import com.hartwig.serve.sources.ckb.treatmentapproach.RelevantTreatmentApproachCurationEntry;
-import com.hartwig.serve.sources.ckb.treatmentapproach.RelevantTreatmentApproachCurationEntryKey;
-import com.hartwig.serve.sources.ckb.treatmentapproach.RelevantTreatmentApproachCurationFile;
-import com.hartwig.serve.sources.ckb.treatmentapproach.RelevantTreatmentApproachCurator;
+import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurationEntry;
+import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurationEntryKey;
+import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurationFile;
+import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurator;
 import com.hartwig.serve.sources.docm.DocmEntry;
 import com.hartwig.serve.sources.docm.DocmExtractor;
 import com.hartwig.serve.sources.docm.DocmReader;
@@ -143,10 +143,10 @@ public class ServeAlgo {
         EventClassifierConfig config = CkbClassificationConfig.build();
         RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.CKB);
 
-        Map<RelevantTreatmentApproachCurationEntryKey, RelevantTreatmentApproachCurationEntry> treatmentApproachMap =
-                RelevantTreatmentApproachCurationFile.read(ckbDrugCurationTsv);
+        Map<TreatmentApproachCurationEntryKey, TreatmentApproachCurationEntry> treatmentApproachMap =
+                TreatmentApproachCurationFile.read(ckbDrugCurationTsv);
 
-        RelevantTreatmentApproachCurator curator = new RelevantTreatmentApproachCurator(treatmentApproachMap);
+        TreatmentApproachCurator curator = new TreatmentApproachCurator(treatmentApproachMap);
 
         CkbExtractor extractor = CkbExtractorFactory.buildCkbExtractor(config, refGenomeResource, curator);
 

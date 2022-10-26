@@ -10,16 +10,16 @@ import com.hartwig.serve.datamodel.EvidenceDirection;
 import org.apache.logging.log4j.util.Strings;
 import org.junit.Test;
 
-public class RelevantTreatmentApproachCuratorTest {
+public class TreatmentApproachCuratorTest {
 
     @Test
     public void canTestMatchEntries() {
-        Map<RelevantTreatmentApproachCurationEntryKey, RelevantTreatmentApproachCurationEntry> curationEntries = Maps.newHashMap();
+        Map<TreatmentApproachCurationEntryKey, TreatmentApproachCurationEntry> curationEntries = Maps.newHashMap();
         curationEntries.put(TreatmentApproachTestFactory.createCurationKey("Olutasidenib",
                         Strings.EMPTY,
                         "IDH1 GENE_LEVEL",
                         EvidenceDirection.PREDICTED_RESPONSIVE),
-                TreatmentApproachTestFactory.createCurationEntry(RelevantTreatmentApproachCurationType.TREATMENT_APPROACH_CURATION,
+                TreatmentApproachTestFactory.createCurationEntry(TreatmentApproachCurationType.TREATMENT_APPROACH_CURATION,
                         "Olutasidenib",
                         Strings.EMPTY,
                         "IDH1 GENE_LEVEL",
@@ -27,7 +27,7 @@ public class RelevantTreatmentApproachCuratorTest {
                         "AA"));
 
         curationEntries.put(TreatmentApproachTestFactory.createCurationKey("B", "B", "BRAF amplification", EvidenceDirection.RESPONSIVE),
-                TreatmentApproachTestFactory.createCurationEntry(RelevantTreatmentApproachCurationType.TREATMENT_APPROACH_CURATION,
+                TreatmentApproachTestFactory.createCurationEntry(TreatmentApproachCurationType.TREATMENT_APPROACH_CURATION,
                         "B",
                         "B",
                         "BRAF amplification",
@@ -35,30 +35,30 @@ public class RelevantTreatmentApproachCuratorTest {
                         "BB"));
 
         curationEntries.put(TreatmentApproachTestFactory.createCurationKey("C", "C", "BRAF amplification", EvidenceDirection.RESPONSIVE),
-                TreatmentApproachTestFactory.createCurationEntry(RelevantTreatmentApproachCurationType.EVENT_TREATMENT_APPROACH_CURATION_IGNORE,
+                TreatmentApproachTestFactory.createCurationEntry(TreatmentApproachCurationType.EVENT_TREATMENT_APPROACH_CURATION_IGNORE,
                         "C",
                         "C",
                         "BRAF amplification",
                         EvidenceDirection.RESPONSIVE,
                         Strings.EMPTY));
 
-        RelevantTreatmentApproachCurator curator = new RelevantTreatmentApproachCurator(curationEntries);
+        TreatmentApproachCurator curator = new TreatmentApproachCurator(curationEntries);
 
-        RelevantTreatmentApproachCurationEntryKey keyMatch1 = ImmutableRelevantTreatmentApproachCurationEntryKey.builder()
+        TreatmentApproachCurationEntryKey keyMatch1 = ImmutableTreatmentApproachCurationEntryKey.builder()
                 .treatment("Olutasidenib")
                 .treatmentApproach(Strings.EMPTY)
                 .event("IDH1 GENE_LEVEL")
                 .direction(EvidenceDirection.PREDICTED_RESPONSIVE)
                 .build();
 
-        RelevantTreatmentApproachCurationEntryKey keyIgnore = ImmutableRelevantTreatmentApproachCurationEntryKey.builder()
+        TreatmentApproachCurationEntryKey keyIgnore = ImmutableTreatmentApproachCurationEntryKey.builder()
                 .treatment("C")
                 .treatmentApproach("C")
                 .event("BRAF amplification")
                 .direction(EvidenceDirection.RESPONSIVE)
                 .build();
 
-        RelevantTreatmentApproachCurationEntryKey keyUnmatch = ImmutableRelevantTreatmentApproachCurationEntryKey.builder()
+        TreatmentApproachCurationEntryKey keyUnmatch = ImmutableTreatmentApproachCurationEntryKey.builder()
                 .treatment("D")
                 .treatmentApproach("D")
                 .event("BRAF amplification")

@@ -14,7 +14,7 @@ import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.sources.ckb.treatmentapproach.RelevantTreatmentApproachCurator;
+import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurator;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachTestFactory;
 
 import org.apache.logging.log4j.util.Strings;
@@ -24,7 +24,7 @@ public class ActionableEntryFactoryTest {
 
     @Test
     public void canCreateActionableEntries() {
-        RelevantTreatmentApproachCurator curator = TreatmentApproachTestFactory.createTestCurator();
+        TreatmentApproachCurator curator = TreatmentApproachTestFactory.createTestCurator();
 
         CkbEntry entryDeletion =
                 CkbTestFactory.createEntry("KRAS", "deletion", "KRAS deletion", "sensitive", "Emerging", "AB", "AB", "A", "DOID:162");

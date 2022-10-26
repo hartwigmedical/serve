@@ -6,13 +6,13 @@ import org.jetbrains.annotations.Nullable;
 
 @Value.Immutable
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class })
-public abstract class RelevantTreatmentApproachCurationEntry {
+public abstract class TreatmentApproachCurationEntry {
 
     @NotNull
-    public abstract RelevantTreatmentApproachCurationType curationType();
+    public abstract TreatmentApproachCurationType curationType();
 
     @NotNull
-    public abstract RelevantTreatmentApproachCurationEntryKey curationKey();
+    public abstract TreatmentApproachCurationEntryKey curationKey();
 
     @Nullable
     public abstract String curatedTreatmentApproach();

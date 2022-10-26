@@ -20,9 +20,9 @@ import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.ImmutableCancerType;
 import com.hartwig.serve.datamodel.ImmutableTreatment;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.sources.ckb.treatmentapproach.ImmutableRelevantTreatmentApproachCurationEntryKey;
-import com.hartwig.serve.sources.ckb.treatmentapproach.RelevantTreatmentApproachCurationEntryKey;
-import com.hartwig.serve.sources.ckb.treatmentapproach.RelevantTreatmentApproachCurator;
+import com.hartwig.serve.sources.ckb.treatmentapproach.ImmutableTreatmentApproachCurationEntryKey;
+import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurationEntryKey;
+import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurator;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -69,7 +69,7 @@ class ActionableEntryFactory {
 
     @NotNull
     public static Set<ActionableEntry> toActionableEntries(@NotNull CkbEntry entry, @NotNull String sourceEvent,
-            @NotNull RelevantTreatmentApproachCurator curator, @NotNull String gene, @NotNull EventType eventType) {
+            @NotNull TreatmentApproachCurator curator, @NotNull String gene, @NotNull EventType eventType) {
         Set<ActionableEntry> actionableEntries = Sets.newHashSet();
 
         for (Evidence evidence : evidencesWithUsableType(entry.evidences())) {
@@ -134,7 +134,7 @@ class ActionableEntryFactory {
                     treatmentApproachInterpret = treatmentApproachString;
                 }
 
-                RelevantTreatmentApproachCurationEntryKey key = ImmutableRelevantTreatmentApproachCurationEntryKey.builder()
+                TreatmentApproachCurationEntryKey key = ImmutableTreatmentApproachCurationEntryKey.builder()
                         .treatment(treatment)
                         .treatmentApproach(treatmentApproachInterpret == null || treatmentApproachInterpret.isEmpty()
                                 ? null

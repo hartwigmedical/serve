@@ -48,7 +48,7 @@ import com.hartwig.serve.extraction.events.ImmutableEventInterpretation;
 import com.hartwig.serve.extraction.exon.ExonFunctions;
 import com.hartwig.serve.extraction.fusion.FusionFunctions;
 import com.hartwig.serve.extraction.hotspot.HotspotFunctions;
-import com.hartwig.serve.sources.ckb.treatmentapproach.RelevantTreatmentApproachCurator;
+import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurator;
 import com.hartwig.serve.util.ProgressTracker;
 
 import org.apache.logging.log4j.LogManager;
@@ -64,12 +64,11 @@ public class CkbExtractor {
     @NotNull
     private final EventExtractor eventExtractor;
     @NotNull
-    private final RelevantTreatmentApproachCurator relevantTreatmentApproachCurator;
+    private final TreatmentApproachCurator treatmentApproachCurator;
 
-    public CkbExtractor(@NotNull final EventExtractor eventExtractor,
-            @NotNull final RelevantTreatmentApproachCurator relevantTreatmentApproachCurator) {
+    public CkbExtractor(@NotNull final EventExtractor eventExtractor, @NotNull final TreatmentApproachCurator treatmentApproachCurator) {
         this.eventExtractor = eventExtractor;
-        this.relevantTreatmentApproachCurator = relevantTreatmentApproachCurator;
+        this.treatmentApproachCurator = treatmentApproachCurator;
     }
 
     @NotNull
@@ -97,11 +96,8 @@ public class CkbExtractor {
                     sourceEvent = event;
                 }
 
-                Set<ActionableEntry> actionableEvents = ActionableEntryFactory.toActionableEntries(entry,
-                        sourceEvent,
-                        relevantTreatmentApproachCurator,
-                        gene,
-                        entry.type());
+                Set<ActionableEntry> actionableEvents =
+                        ActionableEntryFactory.toActionableEntries(entry, sourceEvent, treatmentApproachCurator, gene, entry.type());
 
                 EventInterpretation interpretation = ImmutableEventInterpretation.builder()
                         .source(Knowledgebase.CKB)
@@ -117,7 +113,7 @@ public class CkbExtractor {
             tracker.update();
         }
 
-        relevantTreatmentApproachCurator.reportUnusedCuratedEntries();
+        treatmentApproachCurator.reportUnusedCuratedEntries();
 
         return ExtractionFunctions.merge(extractions);
     }

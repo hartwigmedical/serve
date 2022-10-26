@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 @Value.Immutable
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class })
-public abstract class RelevantTreatmentApprochCurationEntryKey {
+public abstract class RelevantTreatmentApproachCurationEntryKey {
 
     @NotNull
     public abstract String treatment();

@@ -6,21 +6,16 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Map;
 import java.util.Set;
 
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.cancertype.CancerTypeConstants;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.sources.ckb.treatementapproach.RelevantTreatmentApproachCurationType;
-import com.hartwig.serve.sources.ckb.treatementapproach.RelevantTreatmentApprochCurationEntry;
-import com.hartwig.serve.sources.ckb.treatementapproach.RelevantTreatmentApprochCurationEntryKey;
-import com.hartwig.serve.sources.ckb.treatementapproach.RelevantTreatmentAproachCuration;
-import com.hartwig.serve.sources.ckb.treatementapproach.RelevantTreatmentAprroachCurationTest;
+import com.hartwig.serve.sources.ckb.treatementapproach.RelevantTreatmentApproachCurator;
+import com.hartwig.serve.sources.ckb.treatementapproach.TreatmentApproachTestFactory;
 
 import org.apache.logging.log4j.util.Strings;
 import org.junit.Test;
@@ -29,20 +24,7 @@ public class ActionableEntryFactoryTest {
 
     @Test
     public void canCreateActionableEntries() {
-        Map<RelevantTreatmentApprochCurationEntryKey, RelevantTreatmentApprochCurationEntry> curationEntries = Maps.newHashMap();
-        curationEntries.put(RelevantTreatmentAprroachCurationTest.canGenerateCurationKey("A",
-                        "A",
-                        "BRAF amplification",
-                        EvidenceLevel.A,
-                        EvidenceDirection.RESPONSIVE),
-                RelevantTreatmentAprroachCurationTest.canGenerateCurationEntry(RelevantTreatmentApproachCurationType.TREATMENT_APPROACH_CURATION,
-                        "A",
-                        "A",
-                        "BRAF amplification",
-                        EvidenceLevel.A,
-                        EvidenceDirection.RESPONSIVE,
-                        "AA"));
-        RelevantTreatmentAproachCuration curator = new RelevantTreatmentAproachCuration(curationEntries);
+        RelevantTreatmentApproachCurator curator = TreatmentApproachTestFactory.createTestCurator();
 
         CkbEntry entryDeletion =
                 CkbTestFactory.createEntry("KRAS", "deletion", "KRAS deletion", "sensitive", "Emerging", "AB", "AB", "A", "DOID:162");

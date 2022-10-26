@@ -48,7 +48,7 @@ import com.hartwig.serve.extraction.events.ImmutableEventInterpretation;
 import com.hartwig.serve.extraction.exon.ExonFunctions;
 import com.hartwig.serve.extraction.fusion.FusionFunctions;
 import com.hartwig.serve.extraction.hotspot.HotspotFunctions;
-import com.hartwig.serve.sources.ckb.treatementapproach.RelevantTreatmentAproachCuration;
+import com.hartwig.serve.sources.ckb.treatementapproach.RelevantTreatmentApproachCurator;
 import com.hartwig.serve.util.ProgressTracker;
 
 import org.apache.logging.log4j.LogManager;
@@ -63,13 +63,17 @@ public class CkbExtractor {
 
     @NotNull
     private final EventExtractor eventExtractor;
+    @NotNull
+    private final RelevantTreatmentApproachCurator relevantTreatmentApproachCurator;
 
-    public CkbExtractor(@NotNull final EventExtractor eventExtractor) {
+    public CkbExtractor(@NotNull final EventExtractor eventExtractor,
+            @NotNull final RelevantTreatmentApproachCurator relevantTreatmentApproachCurator) {
         this.eventExtractor = eventExtractor;
+        this.relevantTreatmentApproachCurator = relevantTreatmentApproachCurator;
     }
 
     @NotNull
-    public ExtractionResult extract(@NotNull List<CkbEntry> ckbEntries, @NotNull RelevantTreatmentAproachCuration curator) {
+    public ExtractionResult extract(@NotNull List<CkbEntry> ckbEntries) {
         List<ExtractionResult> extractions = Lists.newArrayList();
 
         ProgressTracker tracker = new ProgressTracker("CKB", ckbEntries.size());
@@ -93,8 +97,11 @@ public class CkbExtractor {
                     sourceEvent = event;
                 }
 
-                Set<ActionableEntry> actionableEvents =
-                        ActionableEntryFactory.toActionableEntries(entry, sourceEvent, curator, gene, entry.type());
+                Set<ActionableEntry> actionableEvents = ActionableEntryFactory.toActionableEntries(entry,
+                        sourceEvent,
+                        relevantTreatmentApproachCurator,
+                        gene,
+                        entry.type());
 
                 EventInterpretation interpretation = ImmutableEventInterpretation.builder()
                         .source(Knowledgebase.CKB)
@@ -110,7 +117,7 @@ public class CkbExtractor {
             tracker.update();
         }
 
-        curator.reportUnusedCuratedEntries();
+        relevantTreatmentApproachCurator.reportUnusedCuratedEntries();
 
         return ExtractionFunctions.merge(extractions);
     }

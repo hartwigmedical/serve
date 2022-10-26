@@ -20,9 +20,9 @@ import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.ImmutableCancerType;
 import com.hartwig.serve.datamodel.ImmutableTreatment;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.sources.ckb.treatementapproach.ImmutableRelevantTreatmentApprochCurationEntryKey;
-import com.hartwig.serve.sources.ckb.treatementapproach.RelevantTreatmentApprochCurationEntryKey;
-import com.hartwig.serve.sources.ckb.treatementapproach.RelevantTreatmentAproachCuration;
+import com.hartwig.serve.sources.ckb.treatementapproach.ImmutableRelevantTreatmentApproachCurationEntryKey;
+import com.hartwig.serve.sources.ckb.treatementapproach.RelevantTreatmentApproachCurationEntryKey;
+import com.hartwig.serve.sources.ckb.treatementapproach.RelevantTreatmentApproachCurator;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -69,7 +69,7 @@ class ActionableEntryFactory {
 
     @NotNull
     public static Set<ActionableEntry> toActionableEntries(@NotNull CkbEntry entry, @NotNull String sourceEvent,
-            @NotNull RelevantTreatmentAproachCuration curator, @NotNull String gene, @NotNull EventType eventType) {
+            @NotNull RelevantTreatmentApproachCurator curator, @NotNull String gene, @NotNull EventType eventType) {
         Set<ActionableEntry> actionableEntries = Sets.newHashSet();
 
         for (Evidence evidence : evidencesWithUsableType(entry.evidences())) {
@@ -134,7 +134,7 @@ class ActionableEntryFactory {
                     treatmentApproachInterpret = treatmentApproachString;
                 }
 
-                RelevantTreatmentApprochCurationEntryKey key = ImmutableRelevantTreatmentApprochCurationEntryKey.builder()
+                RelevantTreatmentApproachCurationEntryKey key = ImmutableRelevantTreatmentApproachCurationEntryKey.builder()
                         .treatment(treatment)
                         .treatmentApproach(treatmentApproachInterpret == null || treatmentApproachInterpret.isEmpty()
                                 ? null

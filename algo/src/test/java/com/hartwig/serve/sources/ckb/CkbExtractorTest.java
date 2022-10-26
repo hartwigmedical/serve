@@ -3,25 +3,17 @@ package com.hartwig.serve.sources.ckb;
 import static org.junit.Assert.assertEquals;
 
 import java.util.List;
-import java.util.Map;
 
-import com.google.common.collect.Maps;
 import com.hartwig.serve.ckb.classification.CkbClassificationConfig;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.common.classification.EventClassifierConfig;
-import com.hartwig.serve.datamodel.EvidenceDirection;
-import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.MutationType;
 import com.hartwig.serve.datamodel.range.CodonAnnotation;
 import com.hartwig.serve.datamodel.range.ImmutableCodonAnnotation;
 import com.hartwig.serve.datamodel.range.RangeTestFactory;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.refgenome.RefGenomeResourceTestFactory;
-import com.hartwig.serve.sources.ckb.treatementapproach.RelevantTreatmentApproachCurationType;
-import com.hartwig.serve.sources.ckb.treatementapproach.RelevantTreatmentApprochCurationEntry;
-import com.hartwig.serve.sources.ckb.treatementapproach.RelevantTreatmentApprochCurationEntryKey;
-import com.hartwig.serve.sources.ckb.treatementapproach.RelevantTreatmentAproachCuration;
-import com.hartwig.serve.sources.ckb.treatementapproach.RelevantTreatmentAprroachCurationTest;
+import com.hartwig.serve.sources.ckb.treatementapproach.TreatmentApproachTestFactory;
 
 import org.apache.commons.compress.utils.Lists;
 import org.jetbrains.annotations.NotNull;
@@ -32,22 +24,8 @@ public class CkbExtractorTest {
     @Test
     public void canExtractFromCkbEntries() {
         EventClassifierConfig config = CkbClassificationConfig.build();
-        CkbExtractor extractor = CkbExtractorFactory.buildCkbExtractor(config, RefGenomeResourceTestFactory.buildTestResource37());
-
-        Map<RelevantTreatmentApprochCurationEntryKey, RelevantTreatmentApprochCurationEntry> curationEntries = Maps.newHashMap();
-        curationEntries.put(RelevantTreatmentAprroachCurationTest.canGenerateCurationKey("A",
-                        "A",
-                        "BRAF amplification",
-                        EvidenceLevel.A,
-                        EvidenceDirection.RESPONSIVE),
-                RelevantTreatmentAprroachCurationTest.canGenerateCurationEntry(RelevantTreatmentApproachCurationType.TREATMENT_APPROACH_CURATION,
-                        "A",
-                        "A",
-                        "BRAF amplification",
-                        EvidenceLevel.A,
-                        EvidenceDirection.RESPONSIVE,
-                        "AA"));
-        RelevantTreatmentAproachCuration curator = new RelevantTreatmentAproachCuration(curationEntries);
+        CkbExtractor extractor = CkbExtractorFactory.buildCkbExtractor(config, RefGenomeResourceTestFactory.buildTestResource37(),
+                TreatmentApproachTestFactory.createEmptyCurator());
 
         List<CkbEntry> ckbEntries = Lists.newArrayList();
         ckbEntries.add(create("KIT", "amp", "KIT amp", "sensitive", "Actionable"));
@@ -58,7 +36,7 @@ public class CkbExtractorTest {
         ckbEntries.add(create("-", "MSI high", "MSI high", "sensitive", "Actionable"));
         ckbEntries.add(create("ALk", "EML4-ALK", "EML4-ALK Fusion", "sensitive", "Actionable"));
 
-        ExtractionResult result = extractor.extract(ckbEntries, curator);
+        ExtractionResult result = extractor.extract(ckbEntries);
         assertEquals(1, result.knownHotspots().size());
         assertEquals(1, result.knownCopyNumbers().size());
         assertEquals(1, result.knownFusionPairs().size());

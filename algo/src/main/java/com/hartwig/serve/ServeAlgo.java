@@ -27,10 +27,10 @@ import com.hartwig.serve.sources.actin.reader.ActinEntry;
 import com.hartwig.serve.sources.ckb.CkbExtractor;
 import com.hartwig.serve.sources.ckb.CkbExtractorFactory;
 import com.hartwig.serve.sources.ckb.CkbReader;
+import com.hartwig.serve.sources.ckb.treatementapproach.RelevantTreatmentApproachCurationEntry;
+import com.hartwig.serve.sources.ckb.treatementapproach.RelevantTreatmentApproachCurationEntryKey;
 import com.hartwig.serve.sources.ckb.treatementapproach.RelevantTreatmentApproachCurationFile;
-import com.hartwig.serve.sources.ckb.treatementapproach.RelevantTreatmentApprochCurationEntry;
-import com.hartwig.serve.sources.ckb.treatementapproach.RelevantTreatmentApprochCurationEntryKey;
-import com.hartwig.serve.sources.ckb.treatementapproach.RelevantTreatmentAproachCuration;
+import com.hartwig.serve.sources.ckb.treatementapproach.RelevantTreatmentApproachCurator;
 import com.hartwig.serve.sources.docm.DocmEntry;
 import com.hartwig.serve.sources.docm.DocmExtractor;
 import com.hartwig.serve.sources.docm.DocmReader;
@@ -142,14 +142,16 @@ public class ServeAlgo {
 
         EventClassifierConfig config = CkbClassificationConfig.build();
         RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.CKB);
-        CkbExtractor extractor = CkbExtractorFactory.buildCkbExtractor(config, refGenomeResource);
 
-        Map<RelevantTreatmentApprochCurationEntryKey, RelevantTreatmentApprochCurationEntry> treatmentApproachMap = RelevantTreatmentApproachCurationFile.read(ckbDrugCurationTsv);
+        Map<RelevantTreatmentApproachCurationEntryKey, RelevantTreatmentApproachCurationEntry> treatmentApproachMap =
+                RelevantTreatmentApproachCurationFile.read(ckbDrugCurationTsv);
 
-        RelevantTreatmentAproachCuration curator = new RelevantTreatmentAproachCuration(treatmentApproachMap);
+        RelevantTreatmentApproachCurator curator = new RelevantTreatmentApproachCurator(treatmentApproachMap);
+
+        CkbExtractor extractor = CkbExtractorFactory.buildCkbExtractor(config, refGenomeResource, curator);
 
         LOGGER.info("Running CKB knowledge extraction");
-        return extractor.extract(ckbEntries, curator);
+        return extractor.extract(ckbEntries);
     }
 
     @NotNull

@@ -16,7 +16,7 @@ public class RelevantTreatmentApproachCurationFile {
     private static final String FIELD_DELIMITER = "\t";
 
     @NotNull
-    public static Map<RelevantTreatmentApprochCurationEntryKey, RelevantTreatmentApprochCurationEntry> read(
+    public static Map<RelevantTreatmentApproachCurationEntryKey, RelevantTreatmentApproachCurationEntry> read(
             @NotNull String treatmentApproachCurationFile) throws IOException {
         List<String> lines = Files.readAllLines(new File(treatmentApproachCurationFile).toPath());
         // Skip header
@@ -24,13 +24,13 @@ public class RelevantTreatmentApproachCurationFile {
     }
 
     @NotNull
-    private static Map<RelevantTreatmentApprochCurationEntryKey, RelevantTreatmentApprochCurationEntry> fromLines(
+    private static Map<RelevantTreatmentApproachCurationEntryKey, RelevantTreatmentApproachCurationEntry> fromLines(
             @NotNull List<String> lines) {
-        Map<RelevantTreatmentApprochCurationEntryKey, RelevantTreatmentApprochCurationEntry> mapEntry = Maps.newHashMap();
+        Map<RelevantTreatmentApproachCurationEntryKey, RelevantTreatmentApproachCurationEntry> mapEntry = Maps.newHashMap();
         for (String line : lines) {
             String[] values = line.split(FIELD_DELIMITER);
 
-            RelevantTreatmentApprochCurationEntryKey entryKey = ImmutableRelevantTreatmentApprochCurationEntryKey.builder()
+            RelevantTreatmentApproachCurationEntryKey entryKey = ImmutableRelevantTreatmentApproachCurationEntryKey.builder()
                     .treatment(values[1])
                     .treatmentApproach(values[2].isEmpty() ? null : values[2])
                     .event(values[3])
@@ -38,7 +38,7 @@ public class RelevantTreatmentApproachCurationFile {
                     .build();
 
             mapEntry.put(entryKey,
-                    ImmutableRelevantTreatmentApprochCurationEntry.builder()
+                    ImmutableRelevantTreatmentApproachCurationEntry.builder()
                             .curationType(RelevantTreatmentApproachCurationType.valueOf(values[0]))
                             .curationKey(entryKey)
                             .curatedTreatmentApproach(values.length == 6 ? values[5] : null)

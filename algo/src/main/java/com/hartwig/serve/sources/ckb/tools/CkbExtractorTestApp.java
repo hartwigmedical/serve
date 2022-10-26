@@ -26,7 +26,7 @@ import com.hartwig.serve.sources.ckb.CkbExtractor;
 import com.hartwig.serve.sources.ckb.CkbExtractorFactory;
 import com.hartwig.serve.sources.ckb.CkbReader;
 import com.hartwig.serve.sources.ckb.treatementapproach.RelevantTreatmentApproachCurationFile;
-import com.hartwig.serve.sources.ckb.treatementapproach.RelevantTreatmentAproachCuration;
+import com.hartwig.serve.sources.ckb.treatementapproach.RelevantTreatmentApproachCurator;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -52,12 +52,13 @@ public class CkbExtractorTestApp {
         }
 
         RefGenomeResource refGenomeResource = buildRefGenomeResource(config);
-        CkbExtractor extractor = CkbExtractorFactory.buildCkbExtractor(CkbClassificationConfig.build(), refGenomeResource);
+        RelevantTreatmentApproachCurator curator =
+                new RelevantTreatmentApproachCurator(RelevantTreatmentApproachCurationFile.read(config.ckbDrugCurationTsv()));
+        CkbExtractor extractor = CkbExtractorFactory.buildCkbExtractor(CkbClassificationConfig.build(), refGenomeResource, curator);
 
         List<CkbEntry> entries = CkbReader.readAndCurate(config.ckbDir(), config.ckbFilterTsv());
-        RelevantTreatmentAproachCuration curator =
-                new RelevantTreatmentAproachCuration(RelevantTreatmentApproachCurationFile.read(config.ckbDrugCurationTsv()));
-        ExtractionResult result = extractor.extract(entries, curator);
+
+        ExtractionResult result = extractor.extract(entries);
 
         String eventsTsv = config.outputDir() + File.separator + "CkbEventClassification.tsv";
         CkbUtil.writeEventsToTsv(eventsTsv, entries);

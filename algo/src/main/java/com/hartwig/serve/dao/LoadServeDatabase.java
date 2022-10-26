@@ -29,7 +29,7 @@ public class LoadServeDatabase {
     private static final String REF_GENOME_VERSION = "ref_genome_version";
 
     private static final String SERVE_ACTIONABILITY_DIRECTORY = "serve_actionability_dir";
-
+    
     public static void main(@NotNull String[] args) throws ParseException, SQLException, IOException {
         Options options = createOptions();
         CommandLine cmd = new DefaultParser().parse(options, args);
@@ -47,7 +47,7 @@ public class LoadServeDatabase {
 
         ServeDatabaseAccess dbWriter = ServeDatabaseAccess.databaseAccess(cmd);
 
-        dbWriter.writeServeDAO(actionableEvents, knownEvents, eventInterpretation);
+        dbWriter.writeServeData(actionableEvents, knownEvents, eventInterpretation);
         LOGGER.info("Written SERVE output to database");
     }
 
@@ -62,7 +62,7 @@ public class LoadServeDatabase {
     }
 
     @NotNull
-    static String nonOptionalDir(@NotNull CommandLine cmd, @NotNull String param) throws ParseException {
+    private static String nonOptionalDir(@NotNull CommandLine cmd, @NotNull String param) throws ParseException {
         String value = nonOptionalValue(cmd, param);
 
         if (!pathExists(value) || !pathIsDirectory(value)) {
@@ -73,7 +73,7 @@ public class LoadServeDatabase {
     }
 
     @NotNull
-    static String nonOptionalValue(@NotNull CommandLine cmd, @NotNull String param) throws ParseException {
+    private static String nonOptionalValue(@NotNull CommandLine cmd, @NotNull String param) throws ParseException {
         String value = cmd.getOptionValue(param);
         if (value == null) {
             throw new ParseException("Parameter must be provided: " + param);
@@ -82,7 +82,7 @@ public class LoadServeDatabase {
         return value;
     }
 
-    static boolean pathExists(@NotNull String path) {
+    private static boolean pathExists(@NotNull String path) {
         return Files.exists(new File(path).toPath());
     }
 
@@ -91,10 +91,10 @@ public class LoadServeDatabase {
     }
 
     @NotNull
-    static RefGenomeVersion resolveRefGenomeVersion(@NotNull String version) {
-        if (version.equals(RefGenomeVersion.V37.toString()) || version.equals("37") || version.equals("HG37")) {
+    private static RefGenomeVersion resolveRefGenomeVersion(@NotNull String version) {
+        if (version.equals(RefGenomeVersion.V37.toString()) || version.equals("37")) {
             return RefGenomeVersion.V37;
-        } else if (version.equals(RefGenomeVersion.V38.toString()) || version.equals("38") || version.equals("HG38")) {
+        } else if (version.equals(RefGenomeVersion.V38.toString()) || version.equals("38")) {
             return RefGenomeVersion.V38;
         }
 

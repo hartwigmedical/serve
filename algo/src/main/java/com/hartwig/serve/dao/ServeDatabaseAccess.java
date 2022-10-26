@@ -32,7 +32,7 @@ public class ServeDatabaseAccess {
     public static final String DB_PASS = "db_pass";
     public static final String DB_URL = "db_url";
 
-    public static final String DB_DEFAULT_ARGS = "?serverTimezone=UTC&useSSL=false";
+    private static final String DB_DEFAULT_ARGS = "?serverTimezone=UTC&useSSL=false";
 
     @NotNull
     private final ServeDAO serveDAO;
@@ -89,8 +89,8 @@ public class ServeDatabaseAccess {
         options.addOption(Option.builder(DB_URL).desc("Database url").hasArg(true).required(isRequired).build());
     }
 
-    public void writeServeDAO(@NotNull ActionableEvents actionableEvents, KnownEvents knownEvents,
-            List<EventInterpretation> eventInterpretations) {
+    public void writeServeData(@NotNull ActionableEvents actionableEvents, @NotNull KnownEvents knownEvents,
+            @NotNull List<EventInterpretation> eventInterpretations) {
         serveDAO.write(actionableEvents, knownEvents, eventInterpretations);
     }
 }

@@ -1,4 +1,4 @@
-package com.hartwig.serve.sources.ckb.treatementapproach;
+package com.hartwig.serve.sources.ckb.treatmentapproach;
 
 public enum RelevantTreatmentApproachCurationType {
     DIRECTION_TREATMENT_APPROACH_CURATION_IGNORE,

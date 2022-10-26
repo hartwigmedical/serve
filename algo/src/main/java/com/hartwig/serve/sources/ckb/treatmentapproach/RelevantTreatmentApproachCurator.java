@@ -1,4 +1,4 @@
-package com.hartwig.serve.sources.ckb.treatementapproach;
+package com.hartwig.serve.sources.ckb.treatmentapproach;
 
 import java.util.Map;
 import java.util.Set;

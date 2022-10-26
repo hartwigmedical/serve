@@ -48,7 +48,7 @@ import com.hartwig.serve.extraction.events.ImmutableEventInterpretation;
 import com.hartwig.serve.extraction.exon.ExonFunctions;
 import com.hartwig.serve.extraction.fusion.FusionFunctions;
 import com.hartwig.serve.extraction.hotspot.HotspotFunctions;
-import com.hartwig.serve.sources.ckb.treatementapproach.RelevantTreatmentApproachCurator;
+import com.hartwig.serve.sources.ckb.treatmentapproach.RelevantTreatmentApproachCurator;
 import com.hartwig.serve.util.ProgressTracker;
 
 import org.apache.logging.log4j.LogManager;

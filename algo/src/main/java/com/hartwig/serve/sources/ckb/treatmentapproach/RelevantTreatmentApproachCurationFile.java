@@ -1,4 +1,4 @@
-package com.hartwig.serve.sources.ckb.treatementapproach;
+package com.hartwig.serve.sources.ckb.treatmentapproach;
 
 import java.io.File;
 import java.io.IOException;

@@ -25,8 +25,8 @@ import com.hartwig.serve.refgenome.RefGenomeResource;
 import com.hartwig.serve.sources.ckb.CkbExtractor;
 import com.hartwig.serve.sources.ckb.CkbExtractorFactory;
 import com.hartwig.serve.sources.ckb.CkbReader;
-import com.hartwig.serve.sources.ckb.treatementapproach.RelevantTreatmentApproachCurationFile;
-import com.hartwig.serve.sources.ckb.treatementapproach.RelevantTreatmentApproachCurator;
+import com.hartwig.serve.sources.ckb.treatmentapproach.RelevantTreatmentApproachCurationFile;
+import com.hartwig.serve.sources.ckb.treatmentapproach.RelevantTreatmentApproachCurator;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;

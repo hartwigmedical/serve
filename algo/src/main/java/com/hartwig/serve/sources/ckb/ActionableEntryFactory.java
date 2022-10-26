@@ -20,9 +20,9 @@ import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.ImmutableCancerType;
 import com.hartwig.serve.datamodel.ImmutableTreatment;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.sources.ckb.treatementapproach.ImmutableRelevantTreatmentApproachCurationEntryKey;
-import com.hartwig.serve.sources.ckb.treatementapproach.RelevantTreatmentApproachCurationEntryKey;
-import com.hartwig.serve.sources.ckb.treatementapproach.RelevantTreatmentApproachCurator;
+import com.hartwig.serve.sources.ckb.treatmentapproach.ImmutableRelevantTreatmentApproachCurationEntryKey;
+import com.hartwig.serve.sources.ckb.treatmentapproach.RelevantTreatmentApproachCurationEntryKey;
+import com.hartwig.serve.sources.ckb.treatmentapproach.RelevantTreatmentApproachCurator;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

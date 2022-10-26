@@ -14,8 +14,8 @@ import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.sources.ckb.treatementapproach.RelevantTreatmentApproachCurator;
-import com.hartwig.serve.sources.ckb.treatementapproach.TreatmentApproachTestFactory;
+import com.hartwig.serve.sources.ckb.treatmentapproach.RelevantTreatmentApproachCurator;
+import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachTestFactory;
 
 import org.apache.logging.log4j.util.Strings;
 import org.junit.Test;

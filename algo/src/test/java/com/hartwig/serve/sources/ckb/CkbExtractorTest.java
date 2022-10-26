@@ -13,7 +13,7 @@ import com.hartwig.serve.datamodel.range.ImmutableCodonAnnotation;
 import com.hartwig.serve.datamodel.range.RangeTestFactory;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.refgenome.RefGenomeResourceTestFactory;
-import com.hartwig.serve.sources.ckb.treatementapproach.TreatmentApproachTestFactory;
+import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachTestFactory;
 
 import org.apache.commons.compress.utils.Lists;
 import org.jetbrains.annotations.NotNull;

@@ -115,7 +115,6 @@ class ActionableEntryFactory {
                 }
 
                 Set<String> sourceRelevantTreatmentApproaches = Sets.newHashSet();
-                Set<String> curatedRelevantTreatmentApproaches = Sets.newHashSet();
                 for (RelevantTreatmentApproaches relevantTreatmentApproaches : evidence.relevantTreatmentApproaches()) {
                     DrugClass relevantTreatmentApproachesInfo = relevantTreatmentApproaches.drugClass();
 
@@ -143,7 +142,7 @@ class ActionableEntryFactory {
                         .direction(direction)
                         .build();
 
-                curatedRelevantTreatmentApproaches.add(curator.isMatch(key));
+                Set<String> curatedRelevantTreatmentApproaches = Sets.newHashSet(curator.isMatch(key));
 
                 actionableEntries.add(ImmutableActionableEntry.builder()
                         .source(Knowledgebase.CKB)
@@ -174,6 +173,55 @@ class ActionableEntryFactory {
             }
         }
         return filtered;
+    }
+
+    @VisibleForTesting
+    static boolean hasUsableEvidenceType(@NotNull String evidenceType) {
+        if (USABLE_EVIDENCE_TYPES.contains(evidenceType)) {
+            return true;
+        } else {
+            if (!EVIDENCE_TYPES_TO_IGNORE.contains(evidenceType)) {
+                LOGGER.warn("Unrecognized CKB evidence type: '{}'", evidenceType);
+            }
+            return false;
+        }
+    }
+
+    @Nullable
+    @VisibleForTesting
+    static EvidenceLevel resolveLevel(@Nullable String evidenceLabel) {
+        if (evidenceLabel == null || evidenceLabel.equals("NA")) {
+            return null;
+        }
+
+        EvidenceLevel level = EvidenceLevel.fromString(evidenceLabel);
+        if (level == null) {
+            LOGGER.warn("Could not resolve CKB evidence level: '{}'", evidenceLabel);
+        }
+        return level;
+    }
+
+    @Nullable
+    @VisibleForTesting
+    static EvidenceDirection resolveDirection(@Nullable String direction) {
+        if (direction == null) {
+            return null;
+        }
+
+        if (RESPONSIVE_DIRECTIONS.contains(direction)) {
+            return EvidenceDirection.RESPONSIVE;
+        } else if (PREDICTED_RESPONSIVE_DIRECTIONS.contains(direction)) {
+            return EvidenceDirection.PREDICTED_RESPONSIVE;
+        } else if (RESISTANT_DIRECTIONS.contains(direction)) {
+            return EvidenceDirection.RESISTANT;
+        } else if (PREDICTED_RESISTANT_DIRECTIONS.contains(direction)) {
+            return EvidenceDirection.PREDICTED_RESISTANT;
+        }
+
+        if (!DIRECTIONS_TO_IGNORE.contains(direction)) {
+            LOGGER.warn("Could not resolve CKB direction '{}'", direction);
+        }
+        return null;
     }
 
     @NotNull
@@ -238,54 +286,5 @@ class ActionableEntryFactory {
             LOGGER.warn("Unexpected source '{}'", source);
             return null;
         }
-    }
-
-    @VisibleForTesting
-    static boolean hasUsableEvidenceType(@NotNull String evidenceType) {
-        if (USABLE_EVIDENCE_TYPES.contains(evidenceType)) {
-            return true;
-        } else {
-            if (!EVIDENCE_TYPES_TO_IGNORE.contains(evidenceType)) {
-                LOGGER.warn("Unrecognized CKB evidence type: '{}'", evidenceType);
-            }
-            return false;
-        }
-    }
-
-    @Nullable
-    @VisibleForTesting
-    static EvidenceLevel resolveLevel(@Nullable String evidenceLabel) {
-        if (evidenceLabel == null || evidenceLabel.equals("NA")) {
-            return null;
-        }
-
-        EvidenceLevel level = EvidenceLevel.fromString(evidenceLabel);
-        if (level == null) {
-            LOGGER.warn("Could not resolve CKB evidence level: '{}'", evidenceLabel);
-        }
-        return level;
-    }
-
-    @Nullable
-    @VisibleForTesting
-    static EvidenceDirection resolveDirection(@Nullable String direction) {
-        if (direction == null) {
-            return null;
-        }
-
-        if (RESPONSIVE_DIRECTIONS.contains(direction)) {
-            return EvidenceDirection.RESPONSIVE;
-        } else if (PREDICTED_RESPONSIVE_DIRECTIONS.contains(direction)) {
-            return EvidenceDirection.PREDICTED_RESPONSIVE;
-        } else if (RESISTANT_DIRECTIONS.contains(direction)) {
-            return EvidenceDirection.RESISTANT;
-        } else if (PREDICTED_RESISTANT_DIRECTIONS.contains(direction)) {
-            return EvidenceDirection.PREDICTED_RESISTANT;
-        }
-
-        if (!DIRECTIONS_TO_IGNORE.contains(direction)) {
-            LOGGER.warn("Could not resolve CKB direction '{}'", direction);
-        }
-        return null;
     }
 }

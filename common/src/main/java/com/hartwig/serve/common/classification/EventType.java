@@ -13,9 +13,9 @@ public enum EventType {
     FUSION_PAIR,
     PROMISCUOUS_FUSION,
     CHARACTERISTIC,
-    COMBINED,
-    COMPLEX,
     WILD_TYPE,
     IMMUNO_HLA,
+    COMBINED,
+    COMPLEX,
     UNKNOWN
 }

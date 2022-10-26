@@ -88,7 +88,7 @@ public class CkbExtractor {
             if (entry.type() == EventType.UNKNOWN) {
                 LOGGER.warn("No event type known for '{}' on '{}'", event, gene);
             } else {
-                EventExtractorOutput extraction = eventExtractor.extract(gene, null, entry.type(), event);
+                EventExtractorOutput extraction = CkbAnnotator.annotate(eventExtractor.extract(gene, null, entry.type(), event), variant);
                 String sourceEvent;
                 if (!gene.equals(CkbConstants.NO_GENE)) {
                     sourceEvent = gene + " " + event;

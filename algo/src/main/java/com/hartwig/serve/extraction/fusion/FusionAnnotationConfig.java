@@ -3,6 +3,7 @@ package com.hartwig.serve.extraction.fusion;
 import java.util.Map;
 
 import com.google.common.collect.Maps;
+import com.hartwig.serve.datamodel.common.ProteinEffect;
 import com.hartwig.serve.datamodel.fusion.ImmutableKnownFusionPair;
 import com.hartwig.serve.datamodel.fusion.KnownFusionPair;
 
@@ -25,6 +26,7 @@ public final class FusionAnnotationConfig {
                 .geneDown("EGFR")
                 .minExonDown(14)
                 .maxExonDown(18)
+                .proteinEffect(ProteinEffect.UNKNOWN)
                 .build();
         map.put("EGFR-KDD", fusionEGFRKDD);
 
@@ -35,6 +37,7 @@ public final class FusionAnnotationConfig {
                 .geneDown("EGFR")
                 .minExonDown(14)
                 .maxExonDown(18)
+                .proteinEffect(ProteinEffect.UNKNOWN)
                 .build();
         map.put("KINASE DOMAIN DUPLICATION (EXON 18-25)", fusionEGFRKinaseDomain);
 
@@ -45,6 +48,7 @@ public final class FusionAnnotationConfig {
                 .geneDown("EGFR")
                 .minExonDown(16)
                 .maxExonDown(16)
+                .proteinEffect(ProteinEffect.UNKNOWN)
                 .build();
         map.put("EGFRvII", fusionEGFRvII);
 
@@ -55,6 +59,7 @@ public final class FusionAnnotationConfig {
                 .geneDown("EGFR")
                 .minExonDown(8)
                 .maxExonDown(8)
+                .proteinEffect(ProteinEffect.UNKNOWN)
                 .build();
         map.put("EGFRvIII", fusionEGFRvIII);
         map.put("VIII", fusionEGFRvIII);
@@ -66,6 +71,7 @@ public final class FusionAnnotationConfig {
                 .geneDown("EGFR")
                 .minExonDown(29)
                 .maxExonDown(29)
+                .proteinEffect(ProteinEffect.UNKNOWN)
                 .build();
         map.put("EGFRvV", fusionEGFRvV);
 

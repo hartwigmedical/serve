@@ -7,6 +7,8 @@ import com.hartwig.serve.ckb.datamodel.variant.Gene;
 import com.hartwig.serve.ckb.datamodel.variant.Variant;
 import com.hartwig.serve.datamodel.common.GeneRole;
 import com.hartwig.serve.datamodel.common.ProteinEffect;
+import com.hartwig.serve.datamodel.fusion.ImmutableKnownFusionPair;
+import com.hartwig.serve.datamodel.fusion.KnownFusionPair;
 import com.hartwig.serve.datamodel.gene.GeneAnnotation;
 import com.hartwig.serve.datamodel.gene.ImmutableKnownCopyNumber;
 import com.hartwig.serve.datamodel.gene.KnownCopyNumber;
@@ -41,6 +43,7 @@ final class CkbAnnotator {
                 .exons(annotateExons(extract.exons(), variant))
                 .geneAnnotation(annotateGeneAnnotation(extract.geneAnnotation(), variant))
                 .knownCopyNumber(annotateKnownCopyNumber(extract.knownCopyNumber(), variant))
+                .knownFusionPair(annotateKnownFusionPair(extract.knownFusionPair(), variant))
                 .build();
     }
 
@@ -124,6 +127,15 @@ final class CkbAnnotator {
                 .geneRole(resolveGeneRole(variant.gene()))
                 .proteinEffect(resolveProteinEffect(variant))
                 .build();
+    }
+
+    @Nullable
+    private static KnownFusionPair annotateKnownFusionPair(@Nullable KnownFusionPair knownFusionPair, @NotNull Variant variant) {
+        if (knownFusionPair == null) {
+            return knownFusionPair;
+        }
+
+        return ImmutableKnownFusionPair.builder().from(knownFusionPair).proteinEffect(resolveProteinEffect(variant)).build();
     }
 
     @NotNull

@@ -7,6 +7,7 @@ import java.util.Set;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.datamodel.common.ProteinEffect;
 import com.hartwig.serve.datamodel.fusion.FusionPair;
 import com.hartwig.serve.datamodel.fusion.ImmutableKnownFusionPair;
 import com.hartwig.serve.datamodel.fusion.KnownFusionPair;
@@ -41,6 +42,7 @@ public final class FusionFunctions {
                     .geneDown(entry.getKey().geneDown())
                     .minExonDown(entry.getKey().minExonDown())
                     .maxExonDown(entry.getKey().maxExonDown())
+                    .proteinEffect(entry.getKey().proteinEffect())
                     .sources(entry.getValue())
                     .build());
         }
@@ -61,6 +63,8 @@ public final class FusionFunctions {
         private final Integer minExonDown;
         @Nullable
         private final Integer maxExonDown;
+        @NotNull
+        private final ProteinEffect proteinEffect;
 
         public FusionKey(@NotNull KnownFusionPair fusionPair) {
             this.geneUp = fusionPair.geneUp();
@@ -69,6 +73,7 @@ public final class FusionFunctions {
             this.geneDown = fusionPair.geneDown();
             this.minExonDown = fusionPair.minExonDown();
             this.maxExonDown = fusionPair.maxExonDown();
+            this.proteinEffect = fusionPair.proteinEffect();
         }
 
         @NotNull
@@ -107,6 +112,12 @@ public final class FusionFunctions {
             return maxExonDown;
         }
 
+        @NotNull
+        @Override
+        public ProteinEffect proteinEffect() {
+            return proteinEffect;
+        }
+
         @Override
         public boolean equals(final Object o) {
             if (this == o) {
@@ -118,12 +129,12 @@ public final class FusionFunctions {
             final FusionKey fusionKey = (FusionKey) o;
             return geneUp.equals(fusionKey.geneUp) && Objects.equals(minExonUp, fusionKey.minExonUp) && Objects.equals(maxExonUp,
                     fusionKey.maxExonUp) && geneDown.equals(fusionKey.geneDown) && Objects.equals(minExonDown, fusionKey.minExonDown)
-                    && Objects.equals(maxExonDown, fusionKey.maxExonDown);
+                    && Objects.equals(maxExonDown, fusionKey.maxExonDown) && proteinEffect == fusionKey.proteinEffect;
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(geneUp, minExonUp, maxExonUp, geneDown, minExonDown, maxExonDown);
+            return Objects.hash(geneUp, minExonUp, maxExonUp, geneDown, minExonDown, maxExonDown, proteinEffect);
         }
     }
 }

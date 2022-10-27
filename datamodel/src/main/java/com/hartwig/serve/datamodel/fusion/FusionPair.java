@@ -1,5 +1,7 @@
 package com.hartwig.serve.datamodel.fusion;
 
+import com.hartwig.serve.datamodel.common.ProteinEffect;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,5 +24,8 @@ public interface FusionPair {
 
     @Nullable
     Integer maxExonDown();
+
+    @NotNull
+    ProteinEffect proteinEffect();
 
 }

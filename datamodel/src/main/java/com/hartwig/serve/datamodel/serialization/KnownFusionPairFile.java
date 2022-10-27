@@ -10,6 +10,7 @@ import java.util.StringJoiner;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.datamodel.common.ProteinEffect;
 import com.hartwig.serve.datamodel.fusion.FusionPairComparator;
 import com.hartwig.serve.datamodel.fusion.ImmutableKnownFusionPair;
 import com.hartwig.serve.datamodel.fusion.KnownFusionPair;
@@ -56,6 +57,7 @@ public final class KnownFusionPairFile {
                 .add("geneDown")
                 .add("minExonDown")
                 .add("maxExonDown")
+                .add("proteinEffect")
                 .add("sources")
                 .toString();
     }
@@ -81,6 +83,7 @@ public final class KnownFusionPairFile {
                 .geneDown(values[fields.get("geneDown")])
                 .minExonDown(SerializationUtil.optionalInteger(values[fields.get("minExonDown")]))
                 .maxExonDown(SerializationUtil.optionalInteger(values[fields.get("maxExonDown")]))
+                .proteinEffect(ProteinEffect.valueOf(values[fields.get("proteinEffect")]))
                 .sources(Knowledgebase.fromCommaSeparatedSourceString(values[fields.get("sources")]))
                 .build();
     }
@@ -112,6 +115,7 @@ public final class KnownFusionPairFile {
                 .add(fusionPair.geneDown())
                 .add(SerializationUtil.nullableInteger(fusionPair.minExonDown()))
                 .add(SerializationUtil.nullableInteger(fusionPair.maxExonDown()))
+                .add(fusionPair.proteinEffect().toString())
                 .add(Knowledgebase.toCommaSeparatedSourceString(fusionPair.sources()))
                 .toString();
     }

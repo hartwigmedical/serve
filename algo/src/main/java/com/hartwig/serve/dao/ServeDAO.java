@@ -46,10 +46,9 @@ import org.jooq.InsertValuesStep11;
 import org.jooq.InsertValuesStep14;
 import org.jooq.InsertValuesStep16;
 import org.jooq.InsertValuesStep17;
-import org.jooq.InsertValuesStep19;
 import org.jooq.InsertValuesStep20;
 import org.jooq.InsertValuesStep6;
-import org.jooq.InsertValuesStep8;
+import org.jooq.InsertValuesStep9;
 import org.jooq.InsertValuesStepN;
 
 @SuppressWarnings({ "unchecked", "ResultOfMethodCallIgnored" })
@@ -263,7 +262,7 @@ public class ServeDAO {
 
     private void writeActionableFusions(@NotNull Timestamp timestamp, @NotNull List<ActionableFusion> fusions) {
         for (List<ActionableFusion> batch : Iterables.partition(fusions, Utils.DB_BATCH_INSERT_SIZE)) {
-            InsertValuesStep19 inserter = context.insertInto(ACTIONABLEFUSION,
+            InsertValuesStep20 inserter = context.insertInto(ACTIONABLEFUSION,
                     ACTIONABLEFUSION.MODIFIED,
                     ACTIONABLEFUSION.GENEUP,
                     ACTIONABLEFUSION.MINEXONUP,
@@ -271,6 +270,7 @@ public class ServeDAO {
                     ACTIONABLEFUSION.GENEDOWN,
                     ACTIONABLEFUSION.MINEXONDOWN,
                     ACTIONABLEFUSION.MAXEXONDOWN,
+                    ACTIONABLEFUSION.PROTEINEFFECT,
                     ACTIONABLEFUSION.SOURCE,
                     ACTIONABLEFUSION.SOURCEEVENT,
                     ACTIONABLEFUSION.SOURCEURLS,
@@ -288,7 +288,7 @@ public class ServeDAO {
         }
     }
 
-    private static void writeActionableFusionBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep19 inserter,
+    private static void writeActionableFusionBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep20 inserter,
             @NotNull ActionableFusion actionableFusion) {
         inserter.values(timestamp,
                 actionableFusion.geneUp(),
@@ -297,6 +297,7 @@ public class ServeDAO {
                 actionableFusion.geneDown(),
                 actionableFusion.minExonDown(),
                 actionableFusion.maxExonDown(),
+                actionableFusion.proteinEffect().toString(),
                 actionableFusion.source(),
                 actionableFusion.sourceEvent(),
                 concat(actionableFusion.sourceUrls()),
@@ -499,7 +500,7 @@ public class ServeDAO {
 
     private void writeKnownFusionPairs(@NotNull Timestamp timestamp, @NotNull Set<KnownFusionPair> fusionPairs) {
         for (List<KnownFusionPair> batch : Iterables.partition(fusionPairs, Utils.DB_BATCH_INSERT_SIZE)) {
-            InsertValuesStep8 inserter = context.insertInto(KNOWNFUSIONPAIR,
+            InsertValuesStep9 inserter = context.insertInto(KNOWNFUSIONPAIR,
                     KNOWNFUSIONPAIR.MODIFIED,
                     KNOWNFUSIONPAIR.GENEUP,
                     KNOWNFUSIONPAIR.MINEXONUP,
@@ -507,22 +508,24 @@ public class ServeDAO {
                     KNOWNFUSIONPAIR.GENEDOWN,
                     KNOWNFUSIONPAIR.MINEXONDOWN,
                     KNOWNFUSIONPAIR.MAXEXONDOWN,
+                    KNOWNFUSIONPAIR.PROTEINEFFECT,
                     KNOWNFUSIONPAIR.SOURCES);
             batch.forEach(entry -> writeKnownFusionPairBatch(timestamp, inserter, entry));
             inserter.execute();
         }
     }
 
-    private static void writeKnownFusionPairBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep8 inserter,
-            @NotNull KnownFusionPair knownFusionPairs) {
+    private static void writeKnownFusionPairBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep9 inserter,
+            @NotNull KnownFusionPair knownFusionPair) {
         inserter.values(timestamp,
-                knownFusionPairs.geneUp(),
-                knownFusionPairs.minExonUp(),
-                knownFusionPairs.maxExonUp(),
-                knownFusionPairs.geneDown(),
-                knownFusionPairs.minExonDown(),
-                knownFusionPairs.maxExonDown(),
-                Knowledgebase.toCommaSeparatedSourceString(knownFusionPairs.sources()));
+                knownFusionPair.geneUp(),
+                knownFusionPair.minExonUp(),
+                knownFusionPair.maxExonUp(),
+                knownFusionPair.geneDown(),
+                knownFusionPair.minExonDown(),
+                knownFusionPair.maxExonDown(),
+                knownFusionPair.proteinEffect().toString(),
+                Knowledgebase.toCommaSeparatedSourceString(knownFusionPair.sources()));
     }
 
     private void writeKnownCopyNumbers(@NotNull Timestamp timestamp, @NotNull Set<KnownCopyNumber> copyNumbers) {

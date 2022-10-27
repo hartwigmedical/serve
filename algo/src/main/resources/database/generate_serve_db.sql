@@ -88,6 +88,7 @@ CREATE TABLE actionableFusion
     geneDown varchar(50) NOT NULL,
     minExonDown int,
     maxExonDown int,
+    proteinEffect varchar(50) NOT NULL,
     source varchar(50) NOT NULL,
     sourceEvent varchar(50) NOT NULL,
     sourceUrls varchar(2000),
@@ -218,6 +219,7 @@ CREATE TABLE knownFusionPair
     geneDown varchar(50) NOT NULL,
     minExonDown varchar(50),
     maxExonDown varchar(50),
+    proteinEffect varchar(50) NOT NULL,
     sources varchar(100) NOT NULL,
     PRIMARY KEY (id)
 );

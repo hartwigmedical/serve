@@ -1,3 +1,3 @@
-geneUp	minExonUp	maxExonUp	geneDown	minExonDown	maxExonDown	sources
-ABCC4			ETV4			VICC_CIVIC
-KIT	11	11	KIT	11	11	VICC_CGI
+geneUp	minExonUp	maxExonUp	geneDown	minExonDown	maxExonDown	proteinEffect	sources
+ABCC4			ETV4			UNKNOWN	VICC_CIVIC
+KIT	11	11	KIT	11	11	GAIN_OF_FUNCTION	VICC_CGI

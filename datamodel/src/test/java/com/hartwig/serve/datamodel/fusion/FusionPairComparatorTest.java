@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.List;
 
 import com.google.common.collect.Lists;
+import com.hartwig.serve.datamodel.common.ProteinEffect;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -68,6 +69,12 @@ public class FusionPairComparatorTest {
             @Override
             public Integer maxExonDown() {
                 return null;
+            }
+
+            @NotNull
+            @Override
+            public ProteinEffect proteinEffect() {
+                return ProteinEffect.UNKNOWN;
             }
         };
     }

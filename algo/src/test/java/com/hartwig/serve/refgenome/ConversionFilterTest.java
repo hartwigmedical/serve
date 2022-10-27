@@ -3,8 +3,6 @@ package com.hartwig.serve.refgenome;
 import static org.junit.Assert.assertTrue;
 
 import com.hartwig.serve.datamodel.fusion.FusionTestFactory;
-import com.hartwig.serve.datamodel.fusion.ImmutableActionableFusion;
-import com.hartwig.serve.datamodel.fusion.ImmutableKnownFusionPair;
 import com.hartwig.serve.datamodel.gene.GeneTestFactory;
 import com.hartwig.serve.datamodel.gene.ImmutableActionableGene;
 import com.hartwig.serve.datamodel.hotspot.HotspotTestFactory;
@@ -57,23 +55,11 @@ public class ConversionFilterTest {
                         .annotation(ImmutableExonAnnotation.builder().from(RangeTestFactory.createTestExonAnnotation()).gene(gene).build())
                         .build())
                 .addKnownCopyNumbers(GeneTestFactory.knownCopyNumberBuilder().gene(gene).build())
-                .addKnownFusionPairs(ImmutableKnownFusionPair.builder()
-                        .from(FusionTestFactory.createTestKnownFusionPair())
-                        .geneUp(gene)
-                        .build())
-                .addKnownFusionPairs(ImmutableKnownFusionPair.builder()
-                        .from(FusionTestFactory.createTestKnownFusionPair())
-                        .geneDown(gene)
-                        .build())
+                .addKnownFusionPairs(FusionTestFactory.knownFusionBuilder().geneUp(gene).build())
+                .addKnownFusionPairs(FusionTestFactory.knownFusionBuilder().geneDown(gene).build())
                 .addActionableGenes(ImmutableActionableGene.builder().from(GeneTestFactory.createTestActionableGene()).gene(gene).build())
-                .addActionableFusions(ImmutableActionableFusion.builder()
-                        .from(FusionTestFactory.createTestActionableFusion())
-                        .geneUp(gene)
-                        .build())
-                .addActionableFusions(ImmutableActionableFusion.builder()
-                        .from(FusionTestFactory.createTestActionableFusion())
-                        .geneDown(gene)
-                        .build())
+                .addActionableFusions(FusionTestFactory.actionableFusionBuilder().geneUp(gene).build())
+                .addActionableFusions(FusionTestFactory.actionableFusionBuilder().geneDown(gene).build())
                 .build();
     }
 }

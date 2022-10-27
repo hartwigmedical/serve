@@ -7,7 +7,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.datamodel.fusion.ImmutableKnownFusionPair;
+import com.hartwig.serve.datamodel.fusion.FusionTestFactory;
 import com.hartwig.serve.datamodel.fusion.KnownFusionPair;
 
 import org.jetbrains.annotations.NotNull;
@@ -19,15 +19,15 @@ public class FusionFunctionsTest {
     public void canConsolidateFusionPairs() {
         String gene1 = "gene1";
         String gene2 = "gene2";
-        KnownFusionPair fusion1 = ImmutableKnownFusionPair.builder()
+        KnownFusionPair fusion1 = FusionTestFactory.knownFusionBuilder()
                 .geneUp(gene1)
                 .geneDown(gene2)
                 .addSources(Knowledgebase.VICC_ONCOKB, Knowledgebase.VICC_CIVIC)
                 .build();
         KnownFusionPair fusion2 =
-                ImmutableKnownFusionPair.builder().geneUp(gene1).geneDown(gene2).addSources(Knowledgebase.VICC_CGI).build();
+                FusionTestFactory.knownFusionBuilder().geneUp(gene1).geneDown(gene2).addSources(Knowledgebase.VICC_CGI).build();
         KnownFusionPair fusion3 =
-                ImmutableKnownFusionPair.builder().geneUp(gene2).geneDown(gene1).addSources(Knowledgebase.VICC_CGI).build();
+                FusionTestFactory.knownFusionBuilder().geneUp(gene2).geneDown(gene1).addSources(Knowledgebase.VICC_CGI).build();
 
         List<KnownFusionPair> consolidated = Lists.newArrayList(FusionFunctions.consolidate(Lists.newArrayList(fusion1, fusion2, fusion3)));
         assertEquals(2, consolidated.size());

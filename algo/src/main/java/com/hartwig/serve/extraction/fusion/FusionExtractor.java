@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.common.knownfusion.KnownFusionCache;
+import com.hartwig.serve.datamodel.common.ProteinEffect;
 import com.hartwig.serve.datamodel.fusion.ImmutableKnownFusionPair;
 import com.hartwig.serve.datamodel.fusion.KnownFusionPair;
 import com.hartwig.serve.extraction.util.DriverInconsistencyMode;
@@ -117,11 +118,12 @@ public class FusionExtractor {
                 .geneDown(gene)
                 .minExonDown(exonDown)
                 .maxExonDown(exonDown)
+                .proteinEffect(ProteinEffect.UNKNOWN)
                 .build();
     }
 
     @Nullable
-    private static Integer extractExonRank(@NotNull String event, @NotNull String [] words) {
+    private static Integer extractExonRank(@NotNull String event, @NotNull String[] words) {
         List<Integer> exons = Lists.newArrayList();
 
         for (String word : words) {
@@ -171,7 +173,11 @@ public class FusionExtractor {
             return null;
         }
 
-        return ImmutableKnownFusionPair.builder().geneUp(removeAllSpaces(geneUp)).geneDown(removeAllSpaces(geneDown)).build();
+        return ImmutableKnownFusionPair.builder()
+                .geneUp(removeAllSpaces(geneUp))
+                .geneDown(removeAllSpaces(geneDown))
+                .proteinEffect(ProteinEffect.UNKNOWN)
+                .build();
     }
 
     private static boolean isInteger(@NotNull String string) {

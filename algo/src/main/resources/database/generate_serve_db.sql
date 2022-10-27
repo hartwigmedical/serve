@@ -1,16 +1,5 @@
 SET FOREIGN_KEY_CHECKS = 0;
 
-DROP TABLE IF EXISTS actionableHotspots;
-DROP TABLE IF EXISTS actionableRanges;
-DROP TABLE IF EXISTS actionableGenes;
-DROP TABLE IF EXISTS actionableFusions;
-DROP TABLE IF EXISTS actionableCharacteristics;
-DROP TABLE IF EXISTS knownHotspots;
-DROP TABLE IF EXISTS knownCodons;
-DROP TABLE IF EXISTS knownExons;
-DROP TABLE IF EXISTS knownCopyNumbers;
-DROP TABLE IF EXISTS knownFusionPair;
-
 DROP TABLE IF EXISTS actionableHotspot;
 CREATE TABLE actionableHotspot
 (   id int NOT NULL AUTO_INCREMENT,
@@ -19,12 +8,15 @@ CREATE TABLE actionableHotspot
     position int NOT NULL,
     ref varchar(100) NOT NULL,
     alt varchar(100) NOT NULL,
+    gene varchar(50) NOT NULL,
+    geneRole varchar(50) NOT NULL,
+    proteinEffect varchar(50) NOT NULL,
     source varchar(50) NOT NULL,
     sourceEvent varchar(50) NOT NULL,
     sourceUrls varchar(2000),
     treatment varchar(500) NOT NULL,
-    sourceTreatmentApproch varchar(500),
-    treatmentApproch varchar(500),
+    sourceTreatmentApproach varchar(500),
+    treatmentApproach varchar(500),
     applicableCancerType varchar(100) NOT NULL,
     applicableDoid varchar(50) NOT NULL,
     blacklistCancerTypes varchar(500),
@@ -39,6 +31,8 @@ CREATE TABLE actionableRange
 (   id int NOT NULL AUTO_INCREMENT,
     modified DATETIME NOT NULL,
     gene varchar(50) NOT NULL,
+    geneRole varchar(50) NOT NULL,
+    proteinEffect varchar(50) NOT NULL,
     transcript varchar(50) NOT NULL,
     chromosome varchar(50) NOT NULL,
     start int NOT NULL,
@@ -50,8 +44,8 @@ CREATE TABLE actionableRange
     sourceEvent varchar(50) NOT NULL,
     sourceUrls varchar(2000),
     treatment varchar(500) NOT NULL,
-    sourceTreatmentApproch varchar(500),
-    treatmentApproch varchar(500),
+    sourceTreatmentApproach varchar(500),
+    treatmentApproach varchar(500),
     applicableCancerType varchar(100) NOT NULL,
     applicableDoid varchar(50) NOT NULL,
     blacklistCancerTypes varchar(500),
@@ -66,13 +60,15 @@ CREATE TABLE actionableGene
 (   id int NOT NULL AUTO_INCREMENT,
     modified DATETIME NOT NULL,
     gene varchar(50) NOT NULL,
+    geneRole varchar(50) NOT NULL,
+    proteinEffect varchar(50) NOT NULL,
     event varchar(50) NOT NULL,
     source varchar(50) NOT NULL,
     sourceEvent varchar(50) NOT NULL,
     sourceUrls varchar(2000),
     treatment varchar(500) NOT NULL,
-    sourceTreatmentApproch varchar(500),
-    treatmentApproch varchar(500),
+    sourceTreatmentApproach varchar(500),
+    treatmentApproach varchar(500),
     applicableCancerType varchar(100) NOT NULL,
     applicableDoid varchar(50) NOT NULL,
     blacklistCancerTypes varchar(500),
@@ -96,8 +92,8 @@ CREATE TABLE actionableFusion
     sourceEvent varchar(50) NOT NULL,
     sourceUrls varchar(2000),
     treatment varchar(500) NOT NULL,
-    sourceTreatmentApproch varchar(500),
-    treatmentApproch varchar(500),
+    sourceTreatmentApproach varchar(500),
+    treatmentApproach varchar(500),
     applicableCancerType varchar(100) NOT NULL,
     applicableDoid varchar(50) NOT NULL,
     blacklistCancerTypes varchar(500),
@@ -118,8 +114,8 @@ CREATE TABLE actionableCharacteristic
     sourceEvent varchar(50) NOT NULL,
     sourceUrls varchar(2000),
     treatment varchar(500) NOT NULL,
-    sourceTreatmentApproch varchar(500),
-    treatmentApproch varchar(500),
+    sourceTreatmentApproach varchar(500),
+    treatmentApproach varchar(500),
     applicableCancerType varchar(100) NOT NULL,
     applicableDoid varchar(50) NOT NULL,
     blacklistCancerTypes varchar(500),
@@ -133,13 +129,13 @@ DROP TABLE IF EXISTS actionableHla;
 CREATE TABLE actionableHla
 (   id int NOT NULL AUTO_INCREMENT,
     modified DATETIME NOT NULL,
-    HLAType varchar(50) NOT NULL,
+    hlaAllele varchar(50) NOT NULL,
     source varchar(50) NOT NULL,
     sourceEvent varchar(50) NOT NULL,
     sourceUrls varchar(2000),
     treatment varchar(500) NOT NULL,
-    sourceTreatmentApproch varchar(500),
-    treatmentApproch varchar(500),
+    sourceTreatmentApproach varchar(500),
+    treatmentApproach varchar(500),
     applicableCancerType varchar(100) NOT NULL,
     applicableDoid varchar(50) NOT NULL,
     blacklistCancerTypes varchar(500),
@@ -155,12 +151,14 @@ CREATE TABLE knownHotspot
     modified DATETIME NOT NULL,
     chromosome varchar(50) NOT NULL,
     position varchar(50) NOT NULL,
-    ref varchar(50) NOT NULL,
-    alt varchar(50) NOT NULL,
-    inputGene varchar(50) NOT NULL,
-    inputTranscript varchar(50),
-    inputProteinAnnotation varchar(50) NOT NULL,
-    inputSource varchar(50) NOT NULL,
+    ref varchar(100) NOT NULL,
+    alt varchar(100) NOT NULL,
+    gene varchar(50) NOT NULL,
+    geneRole varchar(50) NOT NULL,
+    proteinEffect varchar(50) NOT NULL,
+    transcript varchar(50),
+    proteinAnnotation varchar(50) NOT NULL,
+    sources varchar(100) NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -169,13 +167,15 @@ CREATE TABLE knownCodon
 (   id int NOT NULL AUTO_INCREMENT,
     modified DATETIME NOT NULL,
     gene varchar(50) NOT NULL,
+    geneRole varchar(50) NOT NULL,
+    proteinEffect varchar(50) NOT NULL,
     transcript varchar(50) NOT NULL,
     chromosome varchar(50) NOT NULL,
     start varchar(50) NOT NULL,
     end varchar(50) NOT NULL,
     mutationType varchar(50) NOT NULL,
     codonRank varchar(50) NOT NULL,
-    sources varchar(50) NOT NULL,
+    sources varchar(100) NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -184,13 +184,15 @@ CREATE TABLE knownExon
 (   id int NOT NULL AUTO_INCREMENT,
     modified DATETIME NOT NULL,
     gene varchar(50) NOT NULL,
+    geneRole varchar(50) NOT NULL,
+    proteinEffect varchar(50) NOT NULL,
     transcript varchar(50) NOT NULL,
     chromosome varchar(50) NOT NULL,
     start varchar(50) NOT NULL,
     end varchar(50) NOT NULL,
     mutationType varchar(50) NOT NULL,
     exonRank varchar(50) NOT NULL,
-    sources varchar(50) NOT NULL,
+    sources varchar(100) NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -199,8 +201,10 @@ CREATE TABLE knownCopyNumber
 (   id int NOT NULL AUTO_INCREMENT,
     modified DATETIME NOT NULL,
     gene varchar(50) NOT NULL,
+    geneRole varchar(50) NOT NULL,
+    proteinEffect varchar(50) NOT NULL,
     type varchar(50) NOT NULL,
-    sources varchar(50) NOT NULL,
+    sources varchar(100) NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -214,7 +218,7 @@ CREATE TABLE knownFusionPair
     geneDown varchar(50) NOT NULL,
     minExonDown varchar(50),
     maxExonDown varchar(50),
-    sources varchar(50) NOT NULL,
+    sources varchar(100) NOT NULL,
     PRIMARY KEY (id)
 );
 

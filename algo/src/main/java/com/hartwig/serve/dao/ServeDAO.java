@@ -42,16 +42,15 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jooq.DSLContext;
+import org.jooq.InsertValuesStep11;
 import org.jooq.InsertValuesStep14;
-import org.jooq.InsertValuesStep15;
 import org.jooq.InsertValuesStep16;
 import org.jooq.InsertValuesStep17;
 import org.jooq.InsertValuesStep19;
-import org.jooq.InsertValuesStep21;
-import org.jooq.InsertValuesStep4;
+import org.jooq.InsertValuesStep20;
 import org.jooq.InsertValuesStep6;
 import org.jooq.InsertValuesStep8;
-import org.jooq.InsertValuesStep9;
+import org.jooq.InsertValuesStepN;
 
 @SuppressWarnings({ "unchecked", "ResultOfMethodCallIgnored" })
 public class ServeDAO {
@@ -108,18 +107,21 @@ public class ServeDAO {
 
     private void writeActionableHotspots(@NotNull Timestamp timestamp, @NotNull List<ActionableHotspot> hotspots) {
         for (List<ActionableHotspot> batch : Iterables.partition(hotspots, Utils.DB_BATCH_INSERT_SIZE)) {
-            InsertValuesStep17 inserter = context.insertInto(ACTIONABLEHOTSPOT,
+            InsertValuesStep20 inserter = context.insertInto(ACTIONABLEHOTSPOT,
                     ACTIONABLEHOTSPOT.MODIFIED,
                     ACTIONABLEHOTSPOT.CHROMOSOME,
                     ACTIONABLEHOTSPOT.POSITION,
                     ACTIONABLEHOTSPOT.REF,
                     ACTIONABLEHOTSPOT.ALT,
+                    ACTIONABLEHOTSPOT.GENE,
+                    ACTIONABLEHOTSPOT.GENEROLE,
+                    ACTIONABLEHOTSPOT.PROTEINEFFECT,
                     ACTIONABLEHOTSPOT.SOURCE,
                     ACTIONABLEHOTSPOT.SOURCEEVENT,
                     ACTIONABLEHOTSPOT.SOURCEURLS,
                     ACTIONABLEHOTSPOT.TREATMENT,
-                    ACTIONABLEHOTSPOT.SOURCETREATMENTAPPROCH,
-                    ACTIONABLEHOTSPOT.TREATMENTAPPROCH,
+                    ACTIONABLEHOTSPOT.SOURCETREATMENTAPPROACH,
+                    ACTIONABLEHOTSPOT.TREATMENTAPPROACH,
                     ACTIONABLEHOTSPOT.APPLICABLECANCERTYPE,
                     ACTIONABLEHOTSPOT.APPLICABLEDOID,
                     ACTIONABLEHOTSPOT.BLACKLISTCANCERTYPES,
@@ -131,13 +133,16 @@ public class ServeDAO {
         }
     }
 
-    private static void writeActionableHotspotBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep17 inserter,
+    private static void writeActionableHotspotBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep20 inserter,
             @NotNull ActionableHotspot actionableHotspot) {
         inserter.values(timestamp,
                 actionableHotspot.chromosome(),
                 actionableHotspot.position(),
                 actionableHotspot.ref(),
                 actionableHotspot.alt(),
+                actionableHotspot.gene(),
+                actionableHotspot.geneRole().toString(),
+                actionableHotspot.proteinEffect().toString(),
                 actionableHotspot.source(),
                 actionableHotspot.sourceEvent(),
                 concat(actionableHotspot.sourceUrls()),
@@ -154,9 +159,11 @@ public class ServeDAO {
 
     private void writeActionableRanges(final Timestamp timestamp, final List<ActionableRange> ranges) {
         for (List<ActionableRange> batch : Iterables.partition(ranges, Utils.DB_BATCH_INSERT_SIZE)) {
-            InsertValuesStep21 inserter = context.insertInto(ACTIONABLERANGE,
+            InsertValuesStepN inserter = context.insertInto(ACTIONABLERANGE,
                     ACTIONABLERANGE.MODIFIED,
                     ACTIONABLERANGE.GENE,
+                    ACTIONABLERANGE.GENEROLE,
+                    ACTIONABLERANGE.PROTEINEFFECT,
                     ACTIONABLERANGE.TRANSCRIPT,
                     ACTIONABLERANGE.CHROMOSOME,
                     ACTIONABLERANGE.START,
@@ -168,8 +175,8 @@ public class ServeDAO {
                     ACTIONABLERANGE.SOURCEEVENT,
                     ACTIONABLERANGE.SOURCEURLS,
                     ACTIONABLERANGE.TREATMENT,
-                    ACTIONABLERANGE.SOURCETREATMENTAPPROCH,
-                    ACTIONABLERANGE.TREATMENTAPPROCH,
+                    ACTIONABLERANGE.SOURCETREATMENTAPPROACH,
+                    ACTIONABLERANGE.TREATMENTAPPROACH,
                     ACTIONABLERANGE.APPLICABLECANCERTYPE,
                     ACTIONABLERANGE.APPLICABLEDOID,
                     ACTIONABLERANGE.BLACKLISTCANCERTYPES,
@@ -181,10 +188,12 @@ public class ServeDAO {
         }
     }
 
-    private static void writeActionableRangeBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep21 inserter,
+    private static void writeActionableRangeBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStepN inserter,
             @NotNull ActionableRange actionableRange) {
         inserter.values(timestamp,
                 actionableRange.gene(),
+                actionableRange.geneRole().toString(),
+                actionableRange.proteinEffect().toString(),
                 actionableRange.transcript(),
                 actionableRange.chromosome(),
                 actionableRange.start(),
@@ -208,16 +217,18 @@ public class ServeDAO {
 
     private void writeActionableGenes(@NotNull Timestamp timestamp, @NotNull List<ActionableGene> genes) {
         for (List<ActionableGene> batch : Iterables.partition(genes, Utils.DB_BATCH_INSERT_SIZE)) {
-            InsertValuesStep15 inserter = context.insertInto(ACTIONABLEGENE,
+            InsertValuesStep17 inserter = context.insertInto(ACTIONABLEGENE,
                     ACTIONABLEGENE.MODIFIED,
                     ACTIONABLEGENE.GENE,
+                    ACTIONABLEGENE.GENEROLE,
+                    ACTIONABLEGENE.PROTEINEFFECT,
                     ACTIONABLEGENE.EVENT,
                     ACTIONABLEGENE.SOURCE,
                     ACTIONABLEGENE.SOURCEEVENT,
                     ACTIONABLEGENE.SOURCEURLS,
                     ACTIONABLEGENE.TREATMENT,
-                    ACTIONABLEGENE.SOURCETREATMENTAPPROCH,
-                    ACTIONABLEGENE.TREATMENTAPPROCH,
+                    ACTIONABLEGENE.SOURCETREATMENTAPPROACH,
+                    ACTIONABLEGENE.TREATMENTAPPROACH,
                     ACTIONABLEGENE.APPLICABLECANCERTYPE,
                     ACTIONABLEGENE.APPLICABLEDOID,
                     ACTIONABLEGENE.BLACKLISTCANCERTYPES,
@@ -229,10 +240,12 @@ public class ServeDAO {
         }
     }
 
-    private static void writeActionableGeneBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep15 inserter,
+    private static void writeActionableGeneBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep17 inserter,
             @NotNull ActionableGene actionableGene) {
         inserter.values(timestamp,
                 actionableGene.gene(),
+                actionableGene.geneRole().toString(),
+                actionableGene.proteinEffect().toString(),
                 actionableGene.event(),
                 actionableGene.source(),
                 actionableGene.sourceEvent(),
@@ -262,8 +275,8 @@ public class ServeDAO {
                     ACTIONABLEFUSION.SOURCEEVENT,
                     ACTIONABLEFUSION.SOURCEURLS,
                     ACTIONABLEFUSION.TREATMENT,
-                    ACTIONABLEFUSION.SOURCETREATMENTAPPROCH,
-                    ACTIONABLEFUSION.TREATMENTAPPROCH,
+                    ACTIONABLEFUSION.SOURCETREATMENTAPPROACH,
+                    ACTIONABLEFUSION.TREATMENTAPPROACH,
                     ACTIONABLEFUSION.APPLICABLECANCERTYPE,
                     ACTIONABLEFUSION.APPLICABLEDOID,
                     ACTIONABLEFUSION.BLACKLISTCANCERTYPES,
@@ -309,8 +322,8 @@ public class ServeDAO {
                     ACTIONABLECHARACTERISTIC.SOURCEEVENT,
                     ACTIONABLECHARACTERISTIC.SOURCEURLS,
                     ACTIONABLECHARACTERISTIC.TREATMENT,
-                    ACTIONABLECHARACTERISTIC.SOURCETREATMENTAPPROCH,
-                    ACTIONABLECHARACTERISTIC.TREATMENTAPPROCH,
+                    ACTIONABLECHARACTERISTIC.SOURCETREATMENTAPPROACH,
+                    ACTIONABLECHARACTERISTIC.TREATMENTAPPROACH,
                     ACTIONABLECHARACTERISTIC.APPLICABLECANCERTYPE,
                     ACTIONABLECHARACTERISTIC.APPLICABLEDOID,
                     ACTIONABLECHARACTERISTIC.BLACKLISTCANCERTYPES,
@@ -346,13 +359,13 @@ public class ServeDAO {
         for (List<ActionableHLA> batch : Iterables.partition(hla, Utils.DB_BATCH_INSERT_SIZE)) {
             InsertValuesStep14 inserter = context.insertInto(ACTIONABLEHLA,
                     ACTIONABLEHLA.MODIFIED,
-                    ACTIONABLEHLA.HLATYPE,
+                    ACTIONABLEHLA.HLAALLELE,
                     ACTIONABLEHLA.SOURCE,
                     ACTIONABLEHLA.SOURCEEVENT,
                     ACTIONABLEHLA.SOURCEURLS,
                     ACTIONABLEHLA.TREATMENT,
-                    ACTIONABLEHLA.SOURCETREATMENTAPPROCH,
-                    ACTIONABLEHLA.TREATMENTAPPROCH,
+                    ACTIONABLEHLA.SOURCETREATMENTAPPROACH,
+                    ACTIONABLEHLA.TREATMENTAPPROACH,
                     ACTIONABLEHLA.APPLICABLECANCERTYPE,
                     ACTIONABLEHLA.APPLICABLEDOID,
                     ACTIONABLEHLA.BLACKLISTCANCERTYPES,
@@ -384,22 +397,24 @@ public class ServeDAO {
 
     private void writeKnownHotspots(@NotNull Timestamp timestamp, @NotNull Set<KnownHotspot> hotspots) {
         for (List<KnownHotspot> batch : Iterables.partition(hotspots, Utils.DB_BATCH_INSERT_SIZE)) {
-            InsertValuesStep9 inserter = context.insertInto(KNOWNHOTSPOT,
+            InsertValuesStep11 inserter = context.insertInto(KNOWNHOTSPOT,
                     KNOWNHOTSPOT.MODIFIED,
                     KNOWNHOTSPOT.CHROMOSOME,
                     KNOWNHOTSPOT.POSITION,
                     KNOWNHOTSPOT.REF,
                     KNOWNHOTSPOT.ALT,
-                    KNOWNHOTSPOT.INPUTGENE,
-                    KNOWNHOTSPOT.INPUTTRANSCRIPT,
-                    KNOWNHOTSPOT.INPUTPROTEINANNOTATION,
-                    KNOWNHOTSPOT.INPUTSOURCE);
+                    KNOWNHOTSPOT.GENE,
+                    KNOWNHOTSPOT.GENEROLE,
+                    KNOWNHOTSPOT.PROTEINEFFECT,
+                    KNOWNHOTSPOT.TRANSCRIPT,
+                    KNOWNHOTSPOT.PROTEINANNOTATION,
+                    KNOWNHOTSPOT.SOURCES);
             batch.forEach(entry -> writeKnownHotspotBatch(timestamp, inserter, entry));
             inserter.execute();
         }
     }
 
-    private static void writeKnownHotspotBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep9 inserter,
+    private static void writeKnownHotspotBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep11 inserter,
             @NotNull KnownHotspot knownHotspot) {
         inserter.values(timestamp,
                 knownHotspot.chromosome(),
@@ -407,6 +422,8 @@ public class ServeDAO {
                 knownHotspot.ref(),
                 knownHotspot.alt(),
                 knownHotspot.gene(),
+                knownHotspot.geneRole().toString(),
+                knownHotspot.proteinEffect().toString(),
                 knownHotspot.transcript(),
                 knownHotspot.proteinAnnotation(),
                 Knowledgebase.toCommaSeparatedSourceString(knownHotspot.sources()));
@@ -414,9 +431,11 @@ public class ServeDAO {
 
     private void writeKnownCodons(@NotNull Timestamp timestamp, @NotNull Set<KnownCodon> codons) {
         for (List<KnownCodon> batch : Iterables.partition(codons, Utils.DB_BATCH_INSERT_SIZE)) {
-            InsertValuesStep9 inserter = context.insertInto(KNOWNCODON,
+            InsertValuesStep11 inserter = context.insertInto(KNOWNCODON,
                     KNOWNCODON.MODIFIED,
                     KNOWNCODON.GENE,
+                    KNOWNCODON.GENEROLE,
+                    KNOWNCODON.PROTEINEFFECT,
                     KNOWNCODON.TRANSCRIPT,
                     KNOWNCODON.CHROMOSOME,
                     KNOWNCODON.START,
@@ -429,10 +448,12 @@ public class ServeDAO {
         }
     }
 
-    private static void writeKnownCodonBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep9 inserter,
+    private static void writeKnownCodonBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep11 inserter,
             @NotNull KnownCodon knownCodon) {
         inserter.values(timestamp,
                 knownCodon.annotation().gene(),
+                knownCodon.annotation().geneRole().toString(),
+                knownCodon.annotation().proteinEffect().toString(),
                 knownCodon.annotation().transcript(),
                 knownCodon.annotation().chromosome(),
                 knownCodon.annotation().start(),
@@ -444,9 +465,11 @@ public class ServeDAO {
 
     private void writeKnownExons(@NotNull Timestamp timestamp, @NotNull Set<KnownExon> exons) {
         for (List<KnownExon> batch : Iterables.partition(exons, Utils.DB_BATCH_INSERT_SIZE)) {
-            InsertValuesStep9 inserter = context.insertInto(KNOWNEXON,
+            InsertValuesStep11 inserter = context.insertInto(KNOWNEXON,
                     KNOWNEXON.MODIFIED,
                     KNOWNEXON.GENE,
+                    KNOWNEXON.GENEROLE,
+                    KNOWNEXON.PROTEINEFFECT,
                     KNOWNEXON.TRANSCRIPT,
                     KNOWNEXON.CHROMOSOME,
                     KNOWNEXON.START,
@@ -459,10 +482,12 @@ public class ServeDAO {
         }
     }
 
-    private static void writeKnownExonBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep9 inserter,
+    private static void writeKnownExonBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep11 inserter,
             @NotNull KnownExon knownExon) {
         inserter.values(timestamp,
                 knownExon.annotation().gene(),
+                knownExon.annotation().geneRole().toString(),
+                knownExon.annotation().proteinEffect().toString(),
                 knownExon.annotation().transcript(),
                 knownExon.annotation().chromosome(),
                 knownExon.annotation().start(),
@@ -472,7 +497,7 @@ public class ServeDAO {
                 Knowledgebase.toCommaSeparatedSourceString(knownExon.sources()));
     }
 
-    private void writeKnownFusionPairs(final Timestamp timestamp, final Set<KnownFusionPair> fusionPairs) {
+    private void writeKnownFusionPairs(@NotNull Timestamp timestamp, @NotNull Set<KnownFusionPair> fusionPairs) {
         for (List<KnownFusionPair> batch : Iterables.partition(fusionPairs, Utils.DB_BATCH_INSERT_SIZE)) {
             InsertValuesStep8 inserter = context.insertInto(KNOWNFUSIONPAIR,
                     KNOWNFUSIONPAIR.MODIFIED,
@@ -502,19 +527,23 @@ public class ServeDAO {
 
     private void writeKnownCopyNumbers(@NotNull Timestamp timestamp, @NotNull Set<KnownCopyNumber> copyNumbers) {
         for (List<KnownCopyNumber> batch : Iterables.partition(copyNumbers, Utils.DB_BATCH_INSERT_SIZE)) {
-            InsertValuesStep4 inserter = context.insertInto(KNOWNCOPYNUMBER,
+            InsertValuesStep6 inserter = context.insertInto(KNOWNCOPYNUMBER,
                     KNOWNCOPYNUMBER.MODIFIED,
                     KNOWNCOPYNUMBER.GENE,
+                    KNOWNCOPYNUMBER.GENEROLE,
+                    KNOWNCOPYNUMBER.PROTEINEFFECT,
                     KNOWNCOPYNUMBER.TYPE,
                     KNOWNCOPYNUMBER.SOURCES);
             batch.forEach(entry -> writeKnownCopyNumberBatch(timestamp, inserter, entry));
             inserter.execute();
         }
     }
-    private static void writeKnownCopyNumberBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep4 inserter,
+    private static void writeKnownCopyNumberBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep6 inserter,
             @NotNull KnownCopyNumber knownCopyNumber) {
         inserter.values(timestamp,
                 knownCopyNumber.gene(),
+                knownCopyNumber.geneRole().toString(),
+                knownCopyNumber.proteinEffect().toString(),
                 knownCopyNumber.type(),
                 Knowledgebase.toCommaSeparatedSourceString(knownCopyNumber.sources()));
     }

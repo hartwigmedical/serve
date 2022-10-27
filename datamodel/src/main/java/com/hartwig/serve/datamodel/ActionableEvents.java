@@ -15,23 +15,23 @@ import org.jetbrains.annotations.Nullable;
 
 @Value.Immutable
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class })
-public interface ActionableEvents {
+public abstract class ActionableEvents {
 
     @NotNull
-    List<ActionableHotspot> hotspots();
+    public abstract List<ActionableHotspot> hotspots();
 
     @NotNull
-    List<ActionableRange> ranges();
+    public abstract List<ActionableRange> ranges();
 
     @NotNull
-    List<ActionableGene> genes();
+    public abstract List<ActionableGene> genes();
 
     @NotNull
-    List<ActionableFusion> fusions();
+    public abstract List<ActionableFusion> fusions();
 
     @NotNull
-    List<ActionableCharacteristic> characteristics();
+    public abstract List<ActionableCharacteristic> characteristics();
 
     @NotNull
-    List<ActionableHLA> hla();
+    public abstract List<ActionableHLA> hla();
 }

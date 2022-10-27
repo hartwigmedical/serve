@@ -28,10 +28,10 @@ public class TreatmentApproachCurator {
         int unusedCuratedEntryCount = 0;
 
         for (TreatmentApproachCurationEntryKey entrySet : curations.keySet()) {
-            LOGGER.debug("Entry debug: " + entrySet);
             if (!usedCurations.contains(entrySet)) {
                 unusedCuratedEntryCount++;
-                LOGGER.warn(" Curation entry '{}' hasn't been used for treatment approach curation", entrySet);
+                // TODO Enable warning once treatment approaches are properly curated.
+//                LOGGER.warn(" Curation entry '{}' hasn't been used for treatment approach curation", entrySet);
             }
         }
 
@@ -43,12 +43,13 @@ public class TreatmentApproachCurator {
         TreatmentApproachCurationEntry curationEntry = curations.get(key);
 
         if (curationEntry == null) {
-            LOGGER.warn("The treatment '{}' with relevant treatment approach '{}' of event '{}' "
-                            + "with direction '{}' isn't curated because missing in curation resource",
-                    key.treatment(),
-                    key.treatmentApproach() == null ? Strings.EMPTY : key.treatmentApproach(),
-                    key.event(),
-                    key.direction());
+            // TODO Enable or disable once treatment approaches are properly curated.
+//            LOGGER.warn("The treatment '{}' with relevant treatment approach '{}' of event '{}' "
+//                            + "with direction '{}' isn't curated because missing in curation resource",
+//                    key.treatment(),
+//                    key.treatmentApproach() == null ? Strings.EMPTY : key.treatmentApproach(),
+//                    key.event(),
+//                    key.direction());
             return Strings.EMPTY;
         }
 

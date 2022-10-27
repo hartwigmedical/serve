@@ -22,4 +22,5 @@ public interface FusionPair {
 
     @Nullable
     Integer maxExonDown();
+
 }

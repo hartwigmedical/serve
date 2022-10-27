@@ -52,11 +52,11 @@ public class KnownEventsLoader {
         LOGGER.info(" Loaded {} known fusions from {}", knownFusionPairs.size(), knownFusionTsv);
 
         return ImmutableKnownEvents.builder()
-                .knownHotspots(hotspots)
-                .knownCodons(knownCodons)
-                .knownExons(knownExons)
-                .knownCopyNumbers(knownCopyNumbers)
-                .knownFusionPairs(knownFusionPairs)
+                .hotspots(hotspots)
+                .codons(knownCodons)
+                .exons(knownExons)
+                .copyNumbers(knownCopyNumbers)
+                .fusionPairs(knownFusionPairs)
                 .build();
     }
 }

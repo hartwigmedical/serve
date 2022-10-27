@@ -16,21 +16,19 @@ import org.jetbrains.annotations.Nullable;
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class })
 public abstract class KnownEvents {
 
-    // TODO Remove "known" from properties.
+    @NotNull
+    public abstract Set<KnownHotspot> hotspots();
 
     @NotNull
-    public abstract Set<KnownHotspot> knownHotspots();
+    public abstract Set<KnownCodon> codons();
 
     @NotNull
-    public abstract Set<KnownCodon> knownCodons();
+    public abstract Set<KnownExon> exons();
 
     @NotNull
-    public abstract Set<KnownExon> knownExons();
+    public abstract Set<KnownCopyNumber> copyNumbers();
 
     @NotNull
-    public abstract Set<KnownCopyNumber> knownCopyNumbers();
-
-    @NotNull
-    public abstract Set<KnownFusionPair> knownFusionPairs();
+    public abstract Set<KnownFusionPair> fusionPairs();
 
 }

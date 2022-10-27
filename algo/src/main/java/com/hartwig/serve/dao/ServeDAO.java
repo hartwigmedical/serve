@@ -96,11 +96,11 @@ public class ServeDAO {
         writeActionableCharacteristics(timestamp, actionableEvents.characteristics());
         writeActionableHLA(timestamp, actionableEvents.hla());
 
-        writeKnownHotspots(timestamp, knownEvents.knownHotspots());
-        writeKnownCodons(timestamp, knownEvents.knownCodons());
-        writeKnownExons(timestamp, knownEvents.knownExons());
-        writeKnownFusionPairs(timestamp, knownEvents.knownFusionPairs());
-        writeKnownCopyNumbers(timestamp, knownEvents.knownCopyNumbers());
+        writeKnownHotspots(timestamp, knownEvents.hotspots());
+        writeKnownCodons(timestamp, knownEvents.codons());
+        writeKnownExons(timestamp, knownEvents.exons());
+        writeKnownFusionPairs(timestamp, knownEvents.fusionPairs());
+        writeKnownCopyNumbers(timestamp, knownEvents.copyNumbers());
 
         writeEventInterpretations(timestamp, eventInterpretations);
     }

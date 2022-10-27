@@ -168,7 +168,7 @@ public class ServeDAO {
                     ACTIONABLERANGE.CHROMOSOME,
                     ACTIONABLERANGE.START,
                     ACTIONABLERANGE.END,
-                    ACTIONABLERANGE.MUTATIONTYPE,
+                    ACTIONABLERANGE.APPLICABLEMUTATIONTYPE,
                     ACTIONABLERANGE.RANGETYPE,
                     ACTIONABLERANGE.RANGERANK,
                     ACTIONABLERANGE.SOURCE,
@@ -315,8 +315,8 @@ public class ServeDAO {
         for (List<ActionableCharacteristic> batch : Iterables.partition(characteristics, Utils.DB_BATCH_INSERT_SIZE)) {
             InsertValuesStep16 inserter = context.insertInto(ACTIONABLECHARACTERISTIC,
                     ACTIONABLECHARACTERISTIC.MODIFIED,
-                    ACTIONABLECHARACTERISTIC.NAME,
-                    ACTIONABLECHARACTERISTIC.COMPARATOR,
+                    ACTIONABLECHARACTERISTIC.TYPE,
+                    ACTIONABLECHARACTERISTIC.CUTOFFTYPE,
                     ACTIONABLECHARACTERISTIC.CUTOFF,
                     ACTIONABLECHARACTERISTIC.SOURCE,
                     ACTIONABLECHARACTERISTIC.SOURCEEVENT,
@@ -440,7 +440,7 @@ public class ServeDAO {
                     KNOWNCODON.CHROMOSOME,
                     KNOWNCODON.START,
                     KNOWNCODON.END,
-                    KNOWNCODON.MUTATIONTYPE,
+                    KNOWNCODON.APPLICABLEMUTATIONTYPE,
                     KNOWNCODON.CODONRANK,
                     KNOWNCODON.SOURCES);
             batch.forEach(entry -> writeKnownCodonBatch(timestamp, inserter, entry));
@@ -474,7 +474,7 @@ public class ServeDAO {
                     KNOWNEXON.CHROMOSOME,
                     KNOWNEXON.START,
                     KNOWNEXON.END,
-                    KNOWNEXON.MUTATIONTYPE,
+                    KNOWNEXON.APPLICABLEMUTATIONTYPE,
                     KNOWNEXON.EXONRANK,
                     KNOWNEXON.SOURCES);
             batch.forEach(entry -> writeKnownExonBatch(timestamp, inserter, entry));

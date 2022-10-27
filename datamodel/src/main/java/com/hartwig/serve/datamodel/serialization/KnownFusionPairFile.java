@@ -86,7 +86,8 @@ public final class KnownFusionPairFile {
     }
 
     @NotNull
-    private static List<String> toLines(@NotNull Iterable<KnownFusionPair> fusionPairs) {
+    @VisibleForTesting
+    static List<String> toLines(@NotNull Iterable<KnownFusionPair> fusionPairs) {
         List<String> lines = Lists.newArrayList();
         for (KnownFusionPair fusionPair : sort(fusionPairs)) {
             lines.add(toLine(fusionPair));

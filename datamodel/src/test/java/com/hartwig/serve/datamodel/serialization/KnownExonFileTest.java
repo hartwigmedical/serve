@@ -15,7 +15,7 @@ import org.junit.Test;
 
 public class KnownExonFileTest {
 
-    private static final String KNOWN_EXON_TSV = Resources.getResource("known_exons/KnownExons.SERVE.37.tsv").getPath();
+    private static final String KNOWN_EXON_TSV = Resources.getResource("known/KnownExons.SERVE.37.tsv").getPath();
 
     @Test
     public void canReadFromFileAndConvert() throws IOException {

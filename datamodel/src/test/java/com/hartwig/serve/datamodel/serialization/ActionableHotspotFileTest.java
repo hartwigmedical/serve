@@ -16,7 +16,7 @@ import org.junit.Test;
 
 public class ActionableHotspotFileTest {
 
-    private static final String ACTIONABLE_HOTSPOT_TSV = Resources.getResource("actionability/ActionableHotspots.37.tsv").getPath();
+    private static final String ACTIONABLE_HOTSPOT_TSV = Resources.getResource("actionable/ActionableHotspots.37.tsv").getPath();
 
     @Test
     public void canReadFromFileAndConvert() throws IOException {

@@ -20,12 +20,12 @@ import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
 import org.jetbrains.annotations.NotNull;
 
-public final class KnownHotspotsFile {
+public final class KnownHotspotFile {
 
     static final String FIELD_DELIMITER = "\t";
     private static final String KNOWN_HOTSPOT_TSV = "KnownHotspots.SERVE.tsv";
 
-    private KnownHotspotsFile() {
+    private KnownHotspotFile() {
     }
 
     @NotNull
@@ -94,7 +94,8 @@ public final class KnownHotspotsFile {
     }
 
     @NotNull
-    private static List<String> toLines(@NotNull Iterable<KnownHotspot> hotspots) {
+    @VisibleForTesting
+    static List<String> toLines(@NotNull Iterable<KnownHotspot> hotspots) {
         List<String> lines = Lists.newArrayList();
         for (KnownHotspot hotspot : sort(hotspots)) {
             lines.add(toLine(hotspot));

@@ -15,7 +15,7 @@ import org.junit.Test;
 
 public class KnownCodonFileTest {
 
-    private static final String KNOWN_CODON_TSV = Resources.getResource("known_codons/KnownCodons.SERVE.37.tsv").getPath();
+    private static final String KNOWN_CODON_TSV = Resources.getResource("known/KnownCodons.SERVE.37.tsv").getPath();
 
     @Test
     public void canReadFromFileAndConvert() throws IOException {

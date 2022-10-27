@@ -16,7 +16,7 @@ import org.junit.Test;
 
 public class ActionableGeneFileTest {
 
-    private static final String ACTIONABLE_GENE_TSV = Resources.getResource("actionability/ActionableGenes.37.tsv").getPath();
+    private static final String ACTIONABLE_GENE_TSV = Resources.getResource("actionable/ActionableGenes.37.tsv").getPath();
 
     @Test
     public void canReadFromFileAndConvert() throws IOException {

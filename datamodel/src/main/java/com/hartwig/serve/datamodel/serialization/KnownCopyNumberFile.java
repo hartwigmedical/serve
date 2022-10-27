@@ -80,7 +80,8 @@ public final class KnownCopyNumberFile {
     }
 
     @NotNull
-    private static List<String> toLines(@NotNull Iterable<KnownCopyNumber> copyNumbers) {
+    @VisibleForTesting
+    static List<String> toLines(@NotNull Iterable<KnownCopyNumber> copyNumbers) {
         List<String> lines = Lists.newArrayList();
         for (KnownCopyNumber copyNumber : sort(copyNumbers)) {
             lines.add(toLine(copyNumber));

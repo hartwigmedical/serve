@@ -9,12 +9,12 @@ import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 
 import org.junit.Test;
 
-public class ActionableEventsLoaderTest {
+public class KnownEventsLoaderTest {
 
-    private static final String TEST_ACTIONABILITY_DIR = Resources.getResource("actionable").getPath();
+    private static final String TEST_KNOWN_DIR = Resources.getResource("known").getPath();
 
     @Test
     public void canLoadFromTestDir() throws IOException {
-        assertNotNull(ActionableEventsLoader.readFromDir(TEST_ACTIONABILITY_DIR, RefGenomeVersion.V37));
+        assertNotNull(KnownEventsLoader.readFromDir(TEST_KNOWN_DIR, RefGenomeVersion.V37));
     }
 }

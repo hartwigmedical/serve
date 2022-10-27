@@ -25,7 +25,7 @@ import org.junit.Test;
 public class ActionableCharacteristicFileTest {
 
     private static final String ACTIONABLE_CHARACTERISTIC_TSV =
-            Resources.getResource("actionability/ActionableCharacteristics.37.tsv").getPath();
+            Resources.getResource("actionable/ActionableCharacteristics.37.tsv").getPath();
 
     private static final double EPSILON = 1.0E-10;
 

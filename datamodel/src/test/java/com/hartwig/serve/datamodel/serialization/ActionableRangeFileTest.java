@@ -16,7 +16,7 @@ import org.junit.Test;
 
 public class ActionableRangeFileTest {
 
-    private static final String ACTIONABLE_RANGE_TSV = Resources.getResource("actionability/ActionableRanges.37.tsv").getPath();
+    private static final String ACTIONABLE_RANGE_TSV = Resources.getResource("actionable/ActionableRanges.37.tsv").getPath();
 
     @Test
     public void canReadFromFileAndConvert() throws IOException {

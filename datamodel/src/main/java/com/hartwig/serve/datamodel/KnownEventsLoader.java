@@ -13,7 +13,7 @@ import com.hartwig.serve.datamodel.serialization.KnownCodonFile;
 import com.hartwig.serve.datamodel.serialization.KnownCopyNumberFile;
 import com.hartwig.serve.datamodel.serialization.KnownExonFile;
 import com.hartwig.serve.datamodel.serialization.KnownFusionPairFile;
-import com.hartwig.serve.datamodel.serialization.KnownHotspotsFile;
+import com.hartwig.serve.datamodel.serialization.KnownHotspotFile;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,12 +27,11 @@ public final class KnownEventsLoader {
     }
 
     @NotNull
-    public static KnownEvents readFromDir(@NotNull String actionabilityDir, @NotNull RefGenomeVersion refGenomeVersion)
-            throws IOException {
+    public static KnownEvents readFromDir(@NotNull String actionabilityDir, @NotNull RefGenomeVersion refGenomeVersion) throws IOException {
         LOGGER.info("Loading SERVE known files from {} using ref genome version '{}'", actionabilityDir, refGenomeVersion);
 
-        String knownHotspotTsv = KnownHotspotsFile.knownHotspotTsvPath(actionabilityDir, refGenomeVersion);
-        List<KnownHotspot> hotspots = KnownHotspotsFile.read(knownHotspotTsv);
+        String knownHotspotTsv = KnownHotspotFile.knownHotspotTsvPath(actionabilityDir, refGenomeVersion);
+        List<KnownHotspot> hotspots = KnownHotspotFile.read(knownHotspotTsv);
         LOGGER.info(" Loaded {} known hotspots from {}", hotspots.size(), knownHotspotTsv);
 
         String knownCodonTsv = KnownCodonFile.knownCodonTsvPath(actionabilityDir, refGenomeVersion);

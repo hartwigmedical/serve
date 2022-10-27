@@ -16,7 +16,7 @@ import org.junit.Test;
 
 public class ActionableHLAFileTest {
 
-    private static final String ACTIONABLE_HLA_TSV = Resources.getResource("actionability/ActionableHLA.37.tsv").getPath();
+    private static final String ACTIONABLE_HLA_TSV = Resources.getResource("actionable/ActionableHLA.37.tsv").getPath();
 
     @Test
     public void canReadFromFileAndConvert() throws IOException {

@@ -59,17 +59,17 @@ public final class ServeLocalConfigProvider {
         } else {
             // Assume we run on local machine with fixed paths
             String baseDir = System.getProperty("user.home") + "/hmf/";
-            builder.viccJson(baseDir + "actionability/static_sources/vicc/all.json");
-            builder.ckbDir(baseDir + "actionability/ckb");
-            builder.ckbFilterTsv(baseDir + "actionability/curation/ckb_filters.tsv");
-            builder.ckbDrugCurationTsv(baseDir + "actionability/curation/ckb_drugs_class_curation.tsv");
-            builder.iClusionTrialTsv(baseDir + "actionability/iclusion/iclusion_trials_prod.tsv");
-            builder.iClusionFilterTsv(baseDir + "actionability/actin/iclusion_filter.tsv");
-            builder.actinTrialTsv(baseDir + "actionability/actin/actin_knowledgebase.tsv");
-            builder.actinFilterTsv(baseDir + "actionability/actin/actin_filter.tsv");
+            builder.viccJson(baseDir + "actionable/static_sources/vicc/all.json");
+            builder.ckbDir(baseDir + "actionable/ckb");
+            builder.ckbFilterTsv(baseDir + "actionable/curation/ckb_filters.tsv");
+            builder.ckbDrugCurationTsv(baseDir + "actionable/curation/ckb_drugs_class_curation.tsv");
+            builder.iClusionTrialTsv(baseDir + "actionable/iclusion/iclusion_trials_prod.tsv");
+            builder.iClusionFilterTsv(baseDir + "actionable/actin/iclusion_filter.tsv");
+            builder.actinTrialTsv(baseDir + "actionable/actin/actin_knowledgebase.tsv");
+            builder.actinFilterTsv(baseDir + "actionable/actin/actin_filter.tsv");
 
             builder.outputDir(baseDir + "tmp/serve");
-            builder.missingDoidsMappingTsv(baseDir + "actionability/curation/missing_doids_mapping.tsv");
+            builder.missingDoidsMappingTsv(baseDir + "actionable/curation/missing_doids_mapping.tsv");
 
             builder.ensemblDataDir37(baseDir + "repos/common-resources-public/ensembl_data_cache/37");
             builder.ensemblDataDir38(baseDir + "repos/common-resources-public/ensembl_data_cache/38");

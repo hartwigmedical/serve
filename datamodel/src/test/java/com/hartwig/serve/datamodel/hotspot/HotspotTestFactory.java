@@ -22,7 +22,6 @@ public final class HotspotTestFactory {
                 .alt(Strings.EMPTY)
                 .transcript(null)
                 .proteinAnnotation(Strings.EMPTY);
-
     }
 
     @NotNull

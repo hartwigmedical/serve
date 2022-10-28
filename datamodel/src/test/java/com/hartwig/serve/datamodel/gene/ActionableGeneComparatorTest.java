@@ -14,16 +14,16 @@ public class ActionableGeneComparatorTest {
     @Test
     public void canSortActionableGenes() {
         ActionableGene gene1 = create("gene 1", GeneLevelEvent.ANY_MUTATION, "event 1");
-        ActionableGene gene2 = create("gene 1", GeneLevelEvent.DELETION, "event 1");
-        ActionableGene gene3 = create("gene 1", GeneLevelEvent.ANY_MUTATION, "event 2");
+        ActionableGene gene2 = create("gene 1", GeneLevelEvent.ANY_MUTATION, "event 2");
+        ActionableGene gene3 = create("gene 1", GeneLevelEvent.DELETION, "event 1");
         ActionableGene gene4 = create("gene 2", GeneLevelEvent.ANY_MUTATION, "event 1");
 
-        List<ActionableGene> genes = Lists.newArrayList(gene1, gene2, gene3, gene4);
+        List<ActionableGene> genes = Lists.newArrayList(gene1, gene4, gene3, gene2);
         genes.sort(new ActionableGeneComparator());
 
         assertEquals(gene1, genes.get(0));
-        assertEquals(gene3, genes.get(1));
-        assertEquals(gene2, genes.get(2));
+        assertEquals(gene2, genes.get(1));
+        assertEquals(gene3, genes.get(2));
         assertEquals(gene4, genes.get(3));
     }
 

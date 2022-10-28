@@ -1,9 +1,6 @@
 package com.hartwig.serve.extraction.snpeff;
 
 import static com.hartwig.serve.common.variant.VariantConsequence.SPLICE_DONOR_CONSEQUENCE;
-import static com.hartwig.serve.common.variant.enrich.SomaticRefContextEnrichment.MICROHOMOLOGY_FLAG;
-import static com.hartwig.serve.common.variant.enrich.SomaticRefContextEnrichment.REPEAT_COUNT_FLAG;
-import static com.hartwig.serve.common.variant.enrich.SomaticRefContextEnrichment.REPEAT_SEQUENCE_FLAG;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -23,20 +20,17 @@ import htsjdk.variant.vcf.VCFCodec;
 import htsjdk.variant.vcf.VCFHeader;
 import htsjdk.variant.vcf.VCFHeaderVersion;
 
-public class SnpEffAnnotationParserTest
-{
+public class SnpEffAnnotationParserTest {
 
     private VCFCodec codec;
 
     @Before
-    public void setup()
-    {
+    public void setup() {
         codec = createTestCodec();
     }
 
     @Test
-    public void testInitialSpliceBase()
-    {
+    public void testInitialSpliceBase() {
         assertEquals(4, SnpEffAnnotationParser.initialIndelSpliceBase(false, "c.5667+4_5667+9delAAGGGG"));
         assertEquals(3, SnpEffAnnotationParser.initialIndelSpliceBase(true, "c.1023+2_1023+3insA"));
         assertEquals(5, SnpEffAnnotationParser.initialIndelSpliceBase(false, "c.865+5dupT"));
@@ -45,8 +39,7 @@ public class SnpEffAnnotationParserTest
     }
 
     @Test
-    public void testSnvSpliceDonorPlus5()
-    {
+    public void testSnvSpliceDonorPlus5() {
         assertEffect("splice_region_variant",
                 "G",
                 "T",
@@ -55,7 +48,14 @@ public class SnpEffAnnotationParserTest
                 0,
                 "splice_region_variant&intron_variant",
                 "c.375+4G>T");
-        assertEffect(SPLICE_DONOR_CONSEQUENCE, "G", "T", Strings.EMPTY, Strings.EMPTY, 0, "splice_region_variant&intron_variant", "c.375+5G>T");
+        assertEffect(SPLICE_DONOR_CONSEQUENCE,
+                "G",
+                "T",
+                Strings.EMPTY,
+                Strings.EMPTY,
+                0,
+                "splice_region_variant&intron_variant",
+                "c.375+5G>T");
         assertEffect(SPLICE_DONOR_CONSEQUENCE,
                 "GG",
                 "TT",
@@ -77,8 +77,7 @@ public class SnpEffAnnotationParserTest
     }
 
     @Test
-    public void testForwardStrandInsert()
-    {
+    public void testForwardStrandInsert() {
         assertEffect(SPLICE_DONOR_CONSEQUENCE, "G", "TA", Strings.EMPTY, Strings.EMPTY, 0, "splice_region_variant", "c.1023+2_1023+3insA");
 
         assertEffect(SPLICE_DONOR_CONSEQUENCE, "G", "TA", "G", Strings.EMPTY, 0, "splice_region_variant", "c.1023+2_1023+3insA");
@@ -93,8 +92,7 @@ public class SnpEffAnnotationParserTest
     }
 
     @Test
-    public void testReverseStrandInsert()
-    {
+    public void testReverseStrandInsert() {
         assertEffect(SPLICE_DONOR_CONSEQUENCE, "G", "TT", Strings.EMPTY, Strings.EMPTY, 0, "splice_region_variant", "c.1023+2_1023+3insA");
 
         assertEffect(SPLICE_DONOR_CONSEQUENCE, "G", "TT", "G", Strings.EMPTY, 0, "splice_region_variant", "c.1023+2_1023+3insA");
@@ -106,8 +104,7 @@ public class SnpEffAnnotationParserTest
     }
 
     private void assertEffect(@NotNull String expectedStart, @NotNull String ref, @NotNull String alt, @NotNull String mh,
-            @NotNull String repeat, int repeatCount, String effects, @NotNull String hgvs)
-    {
+            @NotNull String repeat, int repeatCount, String effects, @NotNull String hgvs) {
         VariantContext context = create(ref, alt, mh, repeat, repeatCount, effects, hgvs);
         List<SnpEffAnnotation> annotations = SnpEffAnnotationParser.fromContext(context);
         assertEquals(1, annotations.size());
@@ -116,30 +113,26 @@ public class SnpEffAnnotationParserTest
 
     @NotNull
     private VariantContext create(@NotNull String ref, @NotNull String alt, @NotNull String mh, @NotNull String repeat, int repeatCount,
-            @NotNull String effects, @NotNull String hgvs)
-    {
-        final String annotation = String.format("A|%s|LOW|GENE|GENEID|transcript|TRANSCIPTID|protein_coding|4/10|%s||||||", effects, hgvs);
+            @NotNull String effects, @NotNull String hgvs) {
+        String annotation = String.format("A|%s|LOW|GENE|GENEID|transcript|TRANSCIPTID|protein_coding|4/10|%s||||||", effects, hgvs);
 
-        final StringJoiner infoJoiner = new StringJoiner(";").add(SnpEffAnnotationParser.SNPEFF_IDENTIFIER + "=" + annotation);
-        if(!mh.isEmpty())
-        {
-            infoJoiner.add(MICROHOMOLOGY_FLAG + "=" + mh);
-        }
-        if(repeatCount > 0)
-        {
-            infoJoiner.add(REPEAT_COUNT_FLAG + "=" + repeatCount);
-            infoJoiner.add(REPEAT_SEQUENCE_FLAG + "=" + repeat);
+        StringJoiner infoJoiner = new StringJoiner(";").add(SnpEffAnnotationParser.SNPEFF_IDENTIFIER + "=" + annotation);
+        if (!mh.isEmpty()) {
+            infoJoiner.add(SnpEffAnnotationParser.MICROHOMOLOGY_FLAG + "=" + mh);
         }
 
-        final String line =
-                String.format("15\t12345678\trs1;UCSC\t%s\t%s\t2\tPASS\t%s\tGT:AD:DP\t0/1:59,60:120", ref, alt, infoJoiner);
+        if (repeatCount > 0) {
+            infoJoiner.add(SnpEffAnnotationParser.REPEAT_COUNT_FLAG + "=" + repeatCount);
+            infoJoiner.add(SnpEffAnnotationParser.REPEAT_SEQUENCE_FLAG + "=" + repeat);
+        }
+
+        String line = String.format("15\t12345678\trs1;UCSC\t%s\t%s\t2\tPASS\t%s\tGT:AD:DP\t0/1:59,60:120", ref, alt, infoJoiner);
 
         return codec.decode(line);
     }
 
     @NotNull
-    private static VCFCodec createTestCodec()
-    {
+    private static VCFCodec createTestCodec() {
         VCFCodec codec = new VCFCodec();
         VCFHeader header = new VCFHeader(Sets.newHashSet(), Sets.newHashSet("SAMPLE"));
         codec.setVCFHeader(header, VCFHeaderVersion.VCF4_2);

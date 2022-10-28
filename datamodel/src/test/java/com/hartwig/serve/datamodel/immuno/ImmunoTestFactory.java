@@ -12,12 +12,12 @@ public final class ImmunoTestFactory {
     }
 
     @NotNull
-    public static ActionableHLA createTestActionableImmunoHLAForSource(@NotNull Knowledgebase source) {
-        return ImmutableActionableHLA.builder().from(createTestActionableHLA()).source(source).build();
+    public static ImmutableActionableHLA.Builder actionableHLABuilder() {
+        return ImmutableActionableHLA.builder().from(DatamodelTestFactory.createEmptyActionableEvent()).hlaAllele(Strings.EMPTY);
     }
 
     @NotNull
-    public static ActionableHLA createTestActionableHLA() {
-        return ImmutableActionableHLA.builder().from(DatamodelTestFactory.createEmptyActionableEvent()).hlaAllele(Strings.EMPTY).build();
+    public static ActionableHLA createTestActionableImmunoHLAForSource(@NotNull Knowledgebase source) {
+        return actionableHLABuilder().source(source).build();
     }
 }

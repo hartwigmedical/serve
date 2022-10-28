@@ -53,6 +53,9 @@ public class VariantReader extends CkbJsonDirectoryReader<JsonVariant> {
                 .type(Json.nullableString(object, "type"))
                 .gene(extractGene(object.getAsJsonObject("gene")))
                 .variant(Json.string(object, "variant"))
+                .associatedWithDrugResistance(Json.nullableString(object, "associatedWithDrugResistance"))
+                .transformingActivity(Json.nullableString(object, "transformingActivity"))
+                .polymorphism(Json.nullableString(object, "polymorphism"))
                 .createDate(DateConverter.toDate(Json.string(object, "createDate")))
                 .updateDate(DateConverter.toDate(Json.string(object, "updateDate")))
                 .referenceTranscriptCoordinate(extractReferenceTranscriptCoordinate(Json.nullableObject(object,

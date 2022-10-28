@@ -51,6 +51,9 @@ class VariantDAO {
                 Variant.VARIANT.IMPACT,
                 Variant.VARIANT.PROTEINEFFECT,
                 Variant.VARIANT.TYPE,
+                Variant.VARIANT.ASSOCIATEDWITHDRUGRESISTANCE,
+                Variant.VARIANT.TRANSFORMINGACTIVITY,
+                Variant.VARIANT.POLYMORPHISM,
                 Variant.VARIANT.DESCRIPTION)
                 .values(ckbEntryId,
                         variant.id(),
@@ -61,6 +64,9 @@ class VariantDAO {
                         variant.impact(),
                         variant.proteinEffect(),
                         variant.type(),
+                        variant.associatedWithDrugResistance(),
+                        variant.polymorphism(),
+                        variant.description(),
                         variant.description())
                 .returning(Variant.VARIANT.ID)
                 .fetchOne()

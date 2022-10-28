@@ -41,6 +41,15 @@ public abstract class JsonVariant implements CkbJsonObject {
     @NotNull
     public abstract String variant();
 
+    @Nullable
+    public abstract String associatedWithDrugResistance();
+
+    @Nullable
+    public abstract String transformingActivity();
+
+    @Nullable
+    public abstract String polymorphism();
+    
     @NotNull
     public abstract LocalDate createDate();
 

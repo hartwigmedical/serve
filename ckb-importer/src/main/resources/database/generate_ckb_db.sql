@@ -22,6 +22,9 @@ CREATE TABLE variant
     impact varchar(50),
     proteinEffect varchar(50),
     type varchar(50),
+    associatedWithDrugResistance varchar(50),
+    transformingActivity varchar(50),
+    polymorphism varchar(50),
     description varchar(2500),
     PRIMARY KEY (id),
     FOREIGN KEY (ckbEntryId) REFERENCES ckbEntry(id)

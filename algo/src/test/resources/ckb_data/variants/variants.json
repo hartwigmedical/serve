@@ -13,6 +13,9 @@
     ]
   },
   "variant": "",
+  "associatedWithDrugResistance": null,
+  "transformingActivity": null,
+  "polymorphism": null,
   "createDate": "01/01/1900",
   "updateDate": "01/01/1900",
   "referenceTranscriptCoordinates": {

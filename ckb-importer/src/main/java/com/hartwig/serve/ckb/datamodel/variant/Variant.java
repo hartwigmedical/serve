@@ -37,6 +37,15 @@ public abstract class Variant {
     public abstract String type();
 
     @Nullable
+    public abstract String associatedWithDrugResistance();
+
+    @Nullable
+    public abstract String transformingActivity();
+
+    @Nullable
+    public abstract String polymorphism();
+
+    @Nullable
     public abstract Gene gene();
 
     @Nullable

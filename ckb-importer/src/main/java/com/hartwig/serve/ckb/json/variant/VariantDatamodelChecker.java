@@ -23,6 +23,9 @@ final class VariantDatamodelChecker {
         map.put("type", true);
         map.put("gene", true);
         map.put("variant", true);
+        map.put("associatedWithDrugResistance", true);
+        map.put("transformingActivity", true);
+        map.put("polymorphism", true);
         map.put("createDate", true);
         map.put("updateDate", true);
         map.put("referenceTranscriptCoordinates", true);
@@ -33,9 +36,6 @@ final class VariantDatamodelChecker {
         map.put("molecularProfiles", true);
         map.put("allTranscriptCoordinates", true);
         map.put("memberVariants", true);
-        map.put("associatedWithDrugResistance", false); //TODO implement
-        map.put("transformingActivity", false); //TODO implement
-        map.put("polymorphism", false); //TODO implement
 
         return new JsonDatamodelChecker("VariantObject", map);
     }

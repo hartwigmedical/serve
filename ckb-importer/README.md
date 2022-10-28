@@ -23,6 +23,8 @@
 Resources for v1.0 can be found on https://github.com/hartwigmedical/hmftools/releases/tag/ckb-importer-v1.0
 
 ## Version History and Download Links
+- Upcoming
+  - Add fields to Variant datamodel: associatedWithDrugResistance, transformingActivity, polymorphism
 - [1.3](https://github.com/hartwigmedical/hmftools/releases/tag/ckb-importer-v1.3)
   - Implementation of treatment approaches into the datamodel
   - Study phase could be nullable 

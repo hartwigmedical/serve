@@ -23,7 +23,7 @@ public class ServeAlgoTest {
 
     private static final String CKB_DIR = Resources.getResource("ckb_data").getPath();
     private static final String CKB_FILTER_TSV = Resources.getResource("ckb_filter/ckb_filters.tsv").getPath();
-    private static final String CKB_DRUGCLASS_CURATION_TSV =
+    private static final String CKB_DRUG_CLASS_CURATION_TSV =
             Resources.getResource("ckb_curation/ckb_treatment_approach_curation.tsv").getPath();
 
     private static final String DOCM_TSV = Resources.getResource("docm/example.tsv").getPath();
@@ -54,7 +54,7 @@ public class ServeAlgoTest {
                 .useCkb(true)
                 .ckbDir(CKB_DIR)
                 .ckbFilterTsv(CKB_FILTER_TSV)
-                .ckbDrugCurationTsv(CKB_DRUGCLASS_CURATION_TSV)
+                .ckbDrugCurationTsv(CKB_DRUG_CLASS_CURATION_TSV)
                 .useActin(true)
                 .actinTrialTsv(ACTIN_TRIAL_TSV)
                 .actinFilterTsv(ACTIN_FILTER_TSV)

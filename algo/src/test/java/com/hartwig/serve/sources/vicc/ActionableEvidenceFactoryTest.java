@@ -33,7 +33,7 @@ public class ActionableEvidenceFactoryTest {
         doidLookupMap.put(cancerTypeA, Sets.newHashSet("1"));
         doidLookupMap.put(cancerTypeB, Sets.newHashSet(CancerTypeConstants.CANCER_DOID));
         ActionableEvidenceFactory factory =
-                new ActionableEvidenceFactory(DoidLookupTestFactory.test(doidLookupMap), new DrugCurator(), new EvidenceLevelCurator());
+                new ActionableEvidenceFactory(DoidLookupTestFactory.create(doidLookupMap), new DrugCurator(), new EvidenceLevelCurator());
 
         Association actionable = ViccTestFactory.testActionableAssociation("Treatment",
                 cancerTypeA + ";" + cancerTypeB,
@@ -136,7 +136,7 @@ public class ActionableEvidenceFactoryTest {
         Map<String, Set<String>> doidLookupMap = Maps.newHashMap();
         doidLookupMap.put("Cancer", Sets.newHashSet(CancerTypeConstants.CANCER_DOID));
         ActionableEvidenceFactory factory =
-                new ActionableEvidenceFactory(DoidLookupTestFactory.test(doidLookupMap), new DrugCurator(), new EvidenceLevelCurator());
+                new ActionableEvidenceFactory(DoidLookupTestFactory.create(doidLookupMap), new DrugCurator(), new EvidenceLevelCurator());
 
         ViccEntry doesNotSupport = ImmutableViccEntry.builder()
                 .from(actionable)

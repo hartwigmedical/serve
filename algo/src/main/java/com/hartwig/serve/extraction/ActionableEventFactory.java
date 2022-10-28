@@ -8,8 +8,6 @@ import com.hartwig.serve.datamodel.ActionableEvent;
 import com.hartwig.serve.datamodel.characteristic.ActionableCharacteristic;
 import com.hartwig.serve.datamodel.characteristic.ImmutableActionableCharacteristic;
 import com.hartwig.serve.datamodel.characteristic.TumorCharacteristic;
-import com.hartwig.serve.datamodel.common.GeneRole;
-import com.hartwig.serve.datamodel.common.ProteinEffect;
 import com.hartwig.serve.datamodel.fusion.ActionableFusion;
 import com.hartwig.serve.datamodel.fusion.ImmutableActionableFusion;
 import com.hartwig.serve.datamodel.fusion.KnownFusionPair;
@@ -43,13 +41,13 @@ public final class ActionableEventFactory {
 
     @NotNull
     public static Set<ActionableHotspot> toActionableHotspots(@NotNull ActionableEvent actionableEvent,
-            @Nullable List<VariantHotspot> hotspotList) {
-        if (hotspotList == null) {
+            @Nullable List<VariantHotspot> hotspots) {
+        if (hotspots == null) {
             return Sets.newHashSet();
         }
 
         Set<ActionableHotspot> actionableHotspots = Sets.newHashSet();
-        for (VariantHotspot hotspot : hotspotList) {
+        for (VariantHotspot hotspot : hotspots) {
             actionableHotspots.add(ImmutableActionableHotspot.builder().from(actionableEvent).from(hotspot).build());
         }
 
@@ -64,11 +62,11 @@ public final class ActionableEventFactory {
         }
 
         Set<ActionableRange> actionableRanges = Sets.newHashSet();
-        for (RangeAnnotation rangeAnnotation : ranges) {
+        for (RangeAnnotation range : ranges) {
             actionableRanges.add(ImmutableActionableRange.builder()
                     .from(actionableEvent)
-                    .from(rangeAnnotation)
-                    .rangeType(determineRangeType(rangeAnnotation))
+                    .from(range)
+                    .rangeType(determineRangeType(range))
                     .build());
         }
 
@@ -110,14 +108,7 @@ public final class ActionableEventFactory {
                 throw new IllegalStateException("Invalid copy number type: " + copyNumber.type());
         }
 
-        // TODO Capture gene role and protein effect.
-        return ImmutableActionableGene.builder()
-                .from(actionableEvent)
-                .gene(copyNumber.gene())
-                .geneRole(GeneRole.UNKNOWN)
-                .proteinEffect(ProteinEffect.UNKNOWN)
-                .event(event)
-                .build();
+        return ImmutableActionableGene.builder().from(actionableEvent).from(copyNumber).event(event).build();
     }
 
     @NotNull

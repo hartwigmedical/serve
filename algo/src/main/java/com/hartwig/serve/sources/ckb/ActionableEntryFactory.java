@@ -269,7 +269,7 @@ class ActionableEntryFactory {
                 case CancerTypeConstants.JAX_ADVANCES_SOLID_TUMORS:
                     // CKB uses this as Advanced Solid Tumor
                     return CancerTypeConstants.CANCER_DOID;
-                case CancerTypeConstants.JAX_SQUAMOUD_CELL_CARCINOMA_OF_UNKNOWN_PRIMARY:
+                case CancerTypeConstants.JAX_SQUAMOUS_CELL_CARCINOMA_OF_UNKNOWN_PRIMARY:
                     // CKB uses this as Squamous Cell Carcinoma of Unknown Primary
                     return CancerTypeConstants.SQUAMOUS_CELL_CARCINOMA_OF_UNKNOWN_PRIMARY;
                 case CancerTypeConstants.JAX_ADENOCARCINOMA_OF_UNKNOWN_PRIMARY:

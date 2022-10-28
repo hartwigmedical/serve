@@ -14,11 +14,11 @@ public final class DoidLookupTestFactory {
 
     @NotNull
     public static DoidLookup dummy() {
-        return new DoidLookup(Maps.newHashMap());
+        return create(Maps.newHashMap());
     }
 
     @NotNull
-    public static DoidLookup test(@NotNull Map<String, Set<String>> mappings) {
+    public static DoidLookup create(@NotNull Map<String, Set<String>> mappings) {
         return new DoidLookup(mappings);
     }
 }

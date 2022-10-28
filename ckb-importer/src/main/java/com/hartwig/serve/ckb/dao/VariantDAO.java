@@ -65,8 +65,8 @@ class VariantDAO {
                         variant.proteinEffect(),
                         variant.type(),
                         variant.associatedWithDrugResistance(),
+                        variant.transformingActivity(),
                         variant.polymorphism(),
-                        variant.description(),
                         variant.description())
                 .returning(Variant.VARIANT.ID)
                 .fetchOne()

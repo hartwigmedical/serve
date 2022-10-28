@@ -24,7 +24,7 @@ CREATE TABLE variant
     type varchar(50),
     associatedWithDrugResistance varchar(500),
     transformingActivity varchar(500),
-    polymorphism varchar(500),
+    polymorphism varchar(2500),
     description varchar(2500),
     PRIMARY KEY (id),
     FOREIGN KEY (ckbEntryId) REFERENCES ckbEntry(id)

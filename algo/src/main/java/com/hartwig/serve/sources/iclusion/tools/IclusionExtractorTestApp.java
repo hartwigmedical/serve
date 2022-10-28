@@ -11,6 +11,7 @@ import com.hartwig.serve.ServeLocalConfigProvider;
 import com.hartwig.serve.common.drivergene.DriverGene;
 import com.hartwig.serve.common.drivergene.DriverGeneFile;
 import com.hartwig.serve.common.ensemblcache.EnsemblDataCache;
+import com.hartwig.serve.common.ensemblcache.EnsemblDataLoader;
 import com.hartwig.serve.common.knownfusion.KnownFusionCache;
 import com.hartwig.serve.curation.DoidLookup;
 import com.hartwig.serve.curation.DoidLookupFactory;
@@ -21,7 +22,6 @@ import com.hartwig.serve.extraction.ExtractionResultWriter;
 import com.hartwig.serve.extraction.hotspot.ProteinResolverFactory;
 import com.hartwig.serve.iclusion.classification.IclusionClassificationConfig;
 import com.hartwig.serve.iclusion.datamodel.IclusionTrial;
-import com.hartwig.serve.refgenome.EnsemblDataCacheLoader;
 import com.hartwig.serve.refgenome.ImmutableRefGenomeResource;
 import com.hartwig.serve.refgenome.RefGenomeResource;
 import com.hartwig.serve.sources.iclusion.IclusionExtractor;
@@ -82,7 +82,7 @@ public class IclusionExtractorTestApp {
         LOGGER.info(" Read {} known fusions", fusionCache.knownFusions().size());
 
         LOGGER.info(" Reading ensembl data cache from {}", config.ensemblDataDir37());
-        EnsemblDataCache ensemblDataCache = EnsemblDataCacheLoader.load(config.ensemblDataDir37(), RefGenomeVersion.V37);
+        EnsemblDataCache ensemblDataCache = EnsemblDataLoader.load(config.ensemblDataDir37(), RefGenomeVersion.V37);
         LOGGER.info("  Loaded ensembl data cache from {}", ensemblDataCache);
 
         return ImmutableRefGenomeResource.builder()

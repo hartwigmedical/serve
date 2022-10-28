@@ -1,14 +1,20 @@
 package com.hartwig.serve.common.ensemblcache;
 
-public class GeneMappingData {
+import org.immutables.value.Value;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-    public final String GeneId;
-    public final String GeneNameNew;
-    public final String GeneNameOld;
+@Value.Immutable
+@Value.Style(passAnnotations = { NotNull.class, Nullable.class })
+public abstract class GeneMappingData {
 
-    public GeneMappingData(final String geneId, final String geneNameNew, final String geneNameOld) {
-        GeneId = geneId;
-        GeneNameNew = geneNameNew;
-        GeneNameOld = geneNameOld;
-    }
+    @NotNull
+    public abstract String geneId();
+
+    @NotNull
+    public abstract String geneNameNew();
+
+    @NotNull
+    public abstract String geneNameOld();
+
 }

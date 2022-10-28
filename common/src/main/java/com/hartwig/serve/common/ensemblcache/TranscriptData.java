@@ -2,66 +2,39 @@ package com.hartwig.serve.common.ensemblcache;
 
 import java.util.List;
 
-import com.google.common.collect.Lists;
+import org.immutables.value.Value;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class TranscriptData {
+@Value.Immutable
+@Value.Style(passAnnotations = { NotNull.class, Nullable.class })
+public abstract class TranscriptData {
 
-    public final int TransId;
-    public final String TransName;
-    public final String GeneId;
-    public final boolean IsCanonical;
-    public final byte Strand;
-    public final int TransStart;
-    public final int TransEnd;
-    public final Integer CodingStart;
-    public final Integer CodingEnd;
-    public final String BioType;
+    public abstract int transcriptId();
 
-    private List<ExonData> mExons;
+    @NotNull
+    public abstract String transcriptName();
 
-    public TranscriptData(final int transId, final String transName, final String geneId, final boolean isCanonical, final byte strand,
-            int transStart, int transEnd, Integer codingStart, Integer codingEnd, String bioType) {
-        TransId = transId;
-        TransName = transName;
-        GeneId = geneId;
-        IsCanonical = isCanonical;
-        Strand = strand;
-        TransStart = transStart;
-        TransEnd = transEnd;
-        CodingStart = codingStart;
-        CodingEnd = codingEnd;
-        BioType = bioType;
-        mExons = Lists.newArrayList();
-    }
+    @NotNull
+    public abstract String geneId();
 
-    public void setExons(final List<ExonData> exons) {
-        mExons = exons;
-    }
+    public abstract boolean isCanonical();
 
-    public List<ExonData> exons() {
-        return mExons;
-    }
+    public abstract byte strand();
 
-    public int length() {
-        return TransEnd - TransStart;
-    }
+    public abstract int transcriptStart();
 
-    public Strand strand() {
-        return Strand == com.hartwig.serve.common.ensemblcache.Strand.POS_STRAND
-                ? com.hartwig.serve.common.ensemblcache.Strand.FORWARD
-                : com.hartwig.serve.common.ensemblcache.Strand.REVERSE;
-    }
+    public abstract int transcriptEnd();
 
-    public String toString() {
-        return String.format("%d:%s pos(%d-%d) exons(%d) coding(%d-%d) strand(%s) %s",
-                TransId,
-                TransName,
-                TransStart,
-                TransEnd,
-                mExons.size(),
-                CodingStart != null ? CodingStart : 0,
-                CodingEnd != null ? CodingEnd : 0,
-                strand(),
-                IsCanonical ? "canonical" : "");
-    }
+    @Nullable
+    public abstract Integer codingStart();
+
+    @Nullable
+    public abstract Integer codingEnd();
+
+    @NotNull
+    public abstract String bioType();
+
+    @NotNull
+    public abstract List<ExonData> exons();
 }

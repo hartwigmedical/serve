@@ -104,7 +104,7 @@ public class TumorCharacteristicExtractorTest {
     }
 
     @Test
-    public void canExtractHPVPositiveCharacteristic() {
+    public void canExtractHPVPositive() {
         TumorCharacteristicExtractor extractor = buildTestExtractor();
 
         TumorCharacteristic characteristic = extractor.extract(EventType.CHARACTERISTIC, HPV);
@@ -115,7 +115,7 @@ public class TumorCharacteristicExtractorTest {
     }
 
     @Test
-    public void canExtractEBVPositiveCharacteristic() {
+    public void canExtractEBVPositive() {
         TumorCharacteristicExtractor extractor = buildTestExtractor();
 
         TumorCharacteristic characteristic = extractor.extract(EventType.CHARACTERISTIC, EBV);

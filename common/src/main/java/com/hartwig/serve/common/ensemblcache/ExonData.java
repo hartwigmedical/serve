@@ -1,28 +1,20 @@
 package com.hartwig.serve.common.ensemblcache;
 
-public class ExonData {
+import org.immutables.value.Value;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-    public final int TransId;
-    public final int Start;
-    public final int End;
-    public final int Rank;
-    public final int PhaseStart;
-    public final int PhaseEnd;
+@Value.Immutable
+@Value.Style(passAnnotations = { NotNull.class, Nullable.class })
+public abstract class ExonData {
 
-    public ExonData(int transId, int start, int end, int rank, int phaseStart, int phaseEnd) {
-        TransId = transId;
-        Start = start;
-        End = end;
-        Rank = rank;
-        PhaseStart = phaseStart;
-        PhaseEnd = phaseEnd;
-    }
+    public abstract int start();
 
-    public int length() {
-        return End - Start;
-    }
+    public abstract int end();
 
-    public String toString() {
-        return String.format("%d: range(%d -> %d) phases(%d -> %d)", Rank, Start, End, PhaseStart, PhaseEnd);
-    }
+    public abstract int rank();
+
+    public abstract int phaseStart();
+
+    public abstract int phaseEnd();
 }

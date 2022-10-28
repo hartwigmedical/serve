@@ -12,10 +12,10 @@ import htsjdk.variant.variantcontext.VariantContext;
 
 public final class VariantImpactSerialiser {
 
+    public static final String VAR_IMPACT = "IMPACT";
+
     private VariantImpactSerialiser() {
     }
-
-    public static final String VAR_IMPACT = "IMPACT";
 
     @NotNull
     public static VariantImpact fromVariantContext(@NotNull VariantContext context) {

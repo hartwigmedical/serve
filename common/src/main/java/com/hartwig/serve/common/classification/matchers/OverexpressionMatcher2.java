@@ -4,21 +4,20 @@ import java.util.Set;
 
 import org.jetbrains.annotations.NotNull;
 
-class OverExpressionMatcher implements EventMatcher {
+class OverexpressionMatcher2 implements EventMatcher {
 
     @NotNull
     private final Set<String> overexpressionKeywords;
     @NotNull
     private final Set<String> overexpressionKeyPhrases;
 
-    OverExpressionMatcher(@NotNull final Set<String> overexpressionKeywords, @NotNull final Set<String> overexpressionKeyPhrases) {
+    OverexpressionMatcher2(@NotNull final Set<String> overexpressionKeywords, @NotNull final Set<String> overexpressionKeyPhrases) {
         this.overexpressionKeywords = overexpressionKeywords;
         this.overexpressionKeyPhrases = overexpressionKeyPhrases;
     }
 
     @Override
     public boolean matches(@NotNull String gene, @NotNull String event) {
-
         String[] wordsOver = event.split(" ");
         for (String keyword : overexpressionKeywords) {
             for (String word : wordsOver) {

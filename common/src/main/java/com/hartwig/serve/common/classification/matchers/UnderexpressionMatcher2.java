@@ -4,14 +4,14 @@ import java.util.Set;
 
 import org.jetbrains.annotations.NotNull;
 
-class UnderExpressionMatcher implements EventMatcher {
+class UnderexpressionMatcher2 implements EventMatcher {
 
     @NotNull
     private final Set<String> underexpressionKeywords;
     @NotNull
     private final Set<String> underexpressionKeyPhrases;
 
-    public UnderExpressionMatcher(@NotNull final Set<String> underexpressionKeywords,
+    public UnderexpressionMatcher2(@NotNull final Set<String> underexpressionKeywords,
             @NotNull final Set<String> underexpressionKeyPhrases) {
         this.underexpressionKeywords = underexpressionKeywords;
         this.underexpressionKeyPhrases = underexpressionKeyPhrases;
@@ -19,7 +19,6 @@ class UnderExpressionMatcher implements EventMatcher {
 
     @Override
     public boolean matches(@NotNull String gene, @NotNull String event) {
-
         String[] wordsUnder = event.split(" ");
         for (String keyword : underexpressionKeywords) {
             for (String word : wordsUnder) {

@@ -10,6 +10,7 @@ import com.hartwig.serve.ServeConfig;
 import com.hartwig.serve.common.drivergene.DriverGene;
 import com.hartwig.serve.common.drivergene.DriverGeneFile;
 import com.hartwig.serve.common.ensemblcache.EnsemblDataCache;
+import com.hartwig.serve.common.ensemblcache.EnsemblDataLoader;
 import com.hartwig.serve.common.ensemblcache.GeneData;
 import com.hartwig.serve.common.knownfusion.KnownFusionCache;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
@@ -98,9 +99,9 @@ public final class RefGenomeManagerFactory {
     private static EnsemblDataCache loadEnsemblDataCache(@NotNull RefGenomeVersion refGenomeVersion, @NotNull String ensemblDataDir)
             throws IOException {
         LOGGER.info(" Reading ensembl data cache from {}", ensemblDataDir);
-        EnsemblDataCache ensemblDataCache = EnsemblDataCacheLoader.load(ensemblDataDir, refGenomeVersion);
+        EnsemblDataCache ensemblDataCache = EnsemblDataLoader.load(ensemblDataDir, refGenomeVersion);
         int geneCount = 0;
-        for (List<GeneData> genesPerChromosome : ensemblDataCache.getChrGeneDataMap().values()) {
+        for (List<GeneData> genesPerChromosome : ensemblDataCache.genesPerChromosome().values()) {
             geneCount += genesPerChromosome.size();
         }
         LOGGER.info("  Loaded entries for {} genes", geneCount);

@@ -8,11 +8,11 @@ import org.jetbrains.annotations.NotNull;
 
 final class AnnotatedHotspotCurationFactory {
 
-    private AnnotatedHotspotCurationFactory() {
-    }
-
     public static final Set<String> RETIRED_TRANSCRIPTS = createRetiredTranscriptWhitelist();
     public static final Set<String> CHANGED_TRANSCRIPTS = createChangedTranscriptWhitelist();
+
+    private AnnotatedHotspotCurationFactory() {
+    }
 
     @NotNull
     private static Set<String> createRetiredTranscriptWhitelist() {

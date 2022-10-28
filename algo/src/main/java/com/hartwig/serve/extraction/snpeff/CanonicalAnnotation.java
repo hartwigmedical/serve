@@ -10,40 +10,37 @@ import com.google.common.annotations.VisibleForTesting;
 
 import org.jetbrains.annotations.NotNull;
 
-public class CanonicalAnnotation
-{
-    private final Set<String> mDriverCatalogGenes;
-    private final Map<String, String> mTranscriptGeneMap;
+public class CanonicalAnnotation {
 
-    public CanonicalAnnotation(final Set<String> driverGenes, final Map<String,String> transGeneMap)
-    {
-        mDriverCatalogGenes = driverGenes;
-        mTranscriptGeneMap = transGeneMap;
+    @NotNull
+    private final Set<String> driverGenes;
+    @NotNull
+    private final Map<String, String> geneNamePerCanonicalTranscriptMap;
+
+    public CanonicalAnnotation(@NotNull Set<String> driverGenes, @NotNull Map<String, String> geneNamePerCanonicalTranscriptMap) {
+        this.driverGenes = driverGenes;
+        this.geneNamePerCanonicalTranscriptMap = geneNamePerCanonicalTranscriptMap;
     }
 
-    public Optional<SnpEffAnnotation> canonicalSnpEffAnnotation(final List<SnpEffAnnotation> allAnnotations)
-    {
-        final List<SnpEffAnnotation> transcriptAnnotations = allAnnotations.stream()
-                .filter(SnpEffAnnotation::isTranscriptFeature)
-                .collect(Collectors.toList());
+    @NotNull
+    public Optional<SnpEffAnnotation> canonicalSnpEffAnnotation(@NotNull List<SnpEffAnnotation> allAnnotations) {
+        final List<SnpEffAnnotation> transcriptAnnotations =
+                allAnnotations.stream().filter(SnpEffAnnotation::isTranscriptFeature).collect(Collectors.toList());
 
         return pickCanonicalFavourDriverGene(transcriptAnnotations);
     }
 
     @VisibleForTesting
     @NotNull
-    <T extends SnpEffAnnotation> Optional<T> pickCanonicalFavourDriverGene(List<T> annotations)
-    {
+    <T extends SnpEffAnnotation> Optional<T> pickCanonicalFavourDriverGene(@NotNull List<T> annotations) {
         List<T> canonicalAnnotations = annotations.stream()
-                .filter(annotation -> mTranscriptGeneMap.containsKey(trimEnsembleVersion(annotation.transcript())))
+                .filter(annotation -> geneNamePerCanonicalTranscriptMap.containsKey(trimEnsembleVersion(annotation.transcript())))
                 .collect(Collectors.toList());
 
-        if(!canonicalAnnotations.isEmpty())
-        {
+        if (!canonicalAnnotations.isEmpty()) {
             Optional<T> canonicalOnDriverGene =
-                    canonicalAnnotations.stream().filter(annotation -> mDriverCatalogGenes.contains(annotation.gene())).findFirst();
-            if(canonicalOnDriverGene.isPresent())
-            {
+                    canonicalAnnotations.stream().filter(annotation -> driverGenes.contains(annotation.gene())).findFirst();
+            if (canonicalOnDriverGene.isPresent()) {
                 return canonicalOnDriverGene;
             }
 
@@ -53,10 +50,9 @@ public class CanonicalAnnotation
         return Optional.empty();
     }
 
-    static String trimEnsembleVersion(final String transcriptId)
-    {
-        if(transcriptId.startsWith("EN") && transcriptId.contains("."))
-        {
+    @NotNull
+    private static String trimEnsembleVersion(@NotNull String transcriptId) {
+        if (transcriptId.startsWith("EN") && transcriptId.contains(".")) {
             return transcriptId.substring(0, transcriptId.indexOf("."));
         }
 

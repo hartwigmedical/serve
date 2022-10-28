@@ -1,5 +1,7 @@
 package com.hartwig.serve.common.variant.impact;
 
+import org.jetbrains.annotations.NotNull;
+
 public class VariantTranscriptImpact {
 
     public final String GeneId;
@@ -24,7 +26,7 @@ public class VariantTranscriptImpact {
     // the in the VCF, transcript impacts are separated by ',', the components by ',' and the effects by '&"
     public static final String VAR_TRANS_IMPACT_ITEM_DELIM = "\\|";
 
-    public static VariantTranscriptImpact fromVcfData(final String data) {
+    public static VariantTranscriptImpact fromVcfData(@NotNull String data) {
         String[] items = data.split(VAR_TRANS_IMPACT_ITEM_DELIM);
         return new VariantTranscriptImpact(items[0],
                 items[1],

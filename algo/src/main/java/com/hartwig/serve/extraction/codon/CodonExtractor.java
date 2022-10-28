@@ -50,21 +50,10 @@ public class CodonExtractor {
         this.driverGenes = driverGenes;
     }
 
-    @VisibleForTesting
-    public static boolean geneInDriverGenes(@NotNull List<DriverGene> driverGenes, @NotNull String gene) {
-        for (DriverGene driverGene : driverGenes) {
-            if (driverGene.gene().equals(gene)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     @Nullable
     public List<CodonAnnotation> extract(@NotNull String gene, @Nullable String transcriptId, @NotNull EventType type,
             @NotNull String event) {
         if (type == EventType.CODON && geneChecker.isValidGene(gene)) {
-
             boolean geneInDriverGenesDatabase = geneInDriverGenes(driverGenes, gene);
             if (!geneInDriverGenesDatabase && driverInconsistencyMode.isActive()) {
                 if (driverInconsistencyMode == DriverInconsistencyMode.WARN_ONLY) {
@@ -80,7 +69,7 @@ public class CodonExtractor {
             HmfTranscriptRegion canonicalTranscript = EnsemblFunctions.findCanonicalTranscript(ensemblDataCache, gene);
             assert canonicalTranscript != null;
 
-            if (transcriptId == null || transcriptId.equals(canonicalTranscript.transName())) {
+            if (transcriptId == null || transcriptId.equals(canonicalTranscript.transcriptId())) {
                 Integer codonRank = extractCodonRank(event);
                 if (codonRank == null) {
                     LOGGER.warn("Could not extract codon rank from '{}'", event);
@@ -94,7 +83,7 @@ public class CodonExtractor {
                 if (codonAnnotations == null) {
                     LOGGER.warn("Could not resolve codon rank {} on transcript '{}' for gene '{}'",
                             codonRank,
-                            canonicalTranscript.transName(),
+                            canonicalTranscript.transcriptId(),
                             gene);
                 }
 
@@ -102,12 +91,22 @@ public class CodonExtractor {
             } else {
                 LOGGER.warn("Transcript IDs not equal for provided transcript '{}' and HMF canonical transcript '{}' for {} ",
                         transcriptId,
-                        canonicalTranscript.transName(),
+                        canonicalTranscript.transcriptId(),
                         event);
             }
         }
 
         return null;
+    }
+
+    @VisibleForTesting
+    static boolean geneInDriverGenes(@NotNull List<DriverGene> driverGenes, @NotNull String gene) {
+        for (DriverGene driverGene : driverGenes) {
+            if (driverGene.gene().equals(gene)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Nullable
@@ -142,7 +141,7 @@ public class CodonExtractor {
                         .gene(gene)
                         .geneRole(GeneRole.UNKNOWN)
                         .proteinEffect(ProteinEffect.UNKNOWN)
-                        .transcript(canonicalTranscript.transName())
+                        .transcript(canonicalTranscript.transcriptId())
                         .chromosome(region.chromosome())
                         .start(region.start())
                         .end(region.end())

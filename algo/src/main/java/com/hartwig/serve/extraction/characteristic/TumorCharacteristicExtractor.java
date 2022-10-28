@@ -56,18 +56,16 @@ public class TumorCharacteristicExtractor {
         if (type == EventType.CHARACTERISTIC) {
             TumorCharacteristicType characteristicType = determineCharacteristicType(event);
             if (characteristicType == null) {
-                LOGGER.warn("Could not extract characteristic annotation from '{}'", event);
+                LOGGER.warn("Could not determine characteristic type for '{}'", event);
                 return null;
             }
 
             TumorCharacteristicCutoffType cutoffType = determineCutoffType(event);
-            Double interpretedCutoff = determineCutoff(cutoffType, event);
-            return ImmutableTumorCharacteristicImpl.builder()
-                    .type(characteristicType)
-                    .cutoffType(cutoffType)
-                    .cutoff(interpretedCutoff)
-                    .build();
+            Double cutoff = determineCutoff(cutoffType, event);
+
+            return ImmutableTumorCharacteristicImpl.builder().type(characteristicType).cutoffType(cutoffType).cutoff(cutoff).build();
         }
+        
         return null;
     }
 

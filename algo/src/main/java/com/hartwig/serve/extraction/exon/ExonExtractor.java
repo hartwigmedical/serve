@@ -83,7 +83,7 @@ public class ExonExtractor {
             HmfTranscriptRegion canonicalTranscript = EnsemblFunctions.findCanonicalTranscript(ensemblDataCache, gene);
             assert canonicalTranscript != null;
 
-            if (transcriptId == null || transcriptId.equals(canonicalTranscript.transName())) {
+            if (transcriptId == null || transcriptId.equals(canonicalTranscript.transcriptId())) {
                 List<Integer> exonRanks = extractExonIndices(event);
                 if (exonRanks == null) {
                     LOGGER.warn("Could not extract exon indices from '{}'", event);
@@ -98,13 +98,13 @@ public class ExonExtractor {
                             canonicalTranscript,
                             exonRank,
                             applicableMutationType,
-                            canonicalTranscript.transName());
+                            canonicalTranscript.transcriptId());
                     if (annotation != null) {
                         annotations.add(annotation);
                     } else {
                         LOGGER.warn("Could not determine exon annotation for exon rank {} on transcript '{}' on '{}'",
                                 exonRank,
-                                canonicalTranscript.transName(),
+                                canonicalTranscript.transcriptId(),
                                 gene);
                     }
                 }
@@ -112,7 +112,7 @@ public class ExonExtractor {
             } else {
                 LOGGER.warn("Transcript IDs not equal for provided transcript '{}' and HMF canonical transcript '{}' for {} ",
                         transcriptId,
-                        canonicalTranscript.transName(),
+                        canonicalTranscript.transcriptId(),
                         event);
             }
         }

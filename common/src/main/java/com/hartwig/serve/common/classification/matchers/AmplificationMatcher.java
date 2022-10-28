@@ -11,7 +11,6 @@ class AmplificationMatcher implements EventMatcher {
     @NotNull
     private final Set<String> amplificationKeyPhrases;
 
-
     AmplificationMatcher(@NotNull final Set<String> amplificationKeywords, @NotNull final Set<String> amplificationKeyPhrases) {
         this.amplificationKeywords = amplificationKeywords;
         this.amplificationKeyPhrases = amplificationKeyPhrases;

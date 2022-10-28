@@ -8,8 +8,12 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.StringJoiner;
 
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.common.ensemblcache.EnsemblDataCache;
+import com.hartwig.serve.common.ensemblcache.EnsemblDataLoader;
+import com.hartwig.serve.common.ensemblcache.GeneData;
+import com.hartwig.serve.common.ensemblcache.TranscriptData;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 import com.hartwig.serve.extraction.snpeff.CanonicalAnnotation;
 import com.hartwig.serve.extraction.snpeff.SnpEffAnnotation;
@@ -38,14 +42,11 @@ public class AnnotatedHotspotVCFPrinter {
     }
 
     public void run(@NotNull String annotatedInputVcf, final String ensemblDataCacheDir) throws IOException {
+        EnsemblDataCache ensemblDataCache = EnsemblDataLoader.load(ensemblDataCacheDir, RefGenomeVersion.V37);
 
-        EnsemblDataCache ensemblDataCache = new EnsemblDataCache(ensemblDataCacheDir, RefGenomeVersion.V37);
-        ensemblDataCache.setRequiredData(false, false, false, true);
-        ensemblDataCache.load(false);
+        Map<String,String> geneNamePerCanonicalTranscriptMap = createGeneNamePerCanonicalTranscriptMap(ensemblDataCache);
 
-        Map<String,String> transGeneMap = ensemblDataCache.createTransGeneNamesMap();
-
-        CanonicalAnnotation factory = new CanonicalAnnotation(Sets.newHashSet(), transGeneMap);
+        CanonicalAnnotation factory = new CanonicalAnnotation(Sets.newHashSet(), geneNamePerCanonicalTranscriptMap);
 
         LOGGER.info("Simplifying variants from '{}'", annotatedInputVcf);
         AbstractFeatureReader<VariantContext, LineIterator> reader = getFeatureReader(annotatedInputVcf, new VCFCodec(), false);
@@ -87,5 +88,24 @@ public class AnnotatedHotspotVCFPrinter {
 
             System.out.println(joiner);
         }
+    }
+
+    @NotNull
+    private static Map<String, String> createGeneNamePerCanonicalTranscriptMap(@NotNull EnsemblDataCache ensemblDataCache) {
+        Map<String, String> canonicalTranscriptToGeneNameMap = Maps.newHashMap();
+
+        for (List<GeneData> genes : ensemblDataCache.genesPerChromosome().values()) {
+            for (GeneData geneData : genes) {
+                List<TranscriptData> transcripts = ensemblDataCache.transcriptsForGeneId(geneData.geneId());
+
+                for (TranscriptData transcript : transcripts) {
+                    if (transcript.isCanonical()) {
+                        canonicalTranscriptToGeneNameMap.put(transcript.transcriptName(), geneData.geneName());
+                    }
+                }
+            }
+        }
+
+        return canonicalTranscriptToGeneNameMap;
     }
 }

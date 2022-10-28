@@ -5,7 +5,7 @@ import java.util.List;
 import com.google.common.collect.Lists;
 import com.hartwig.serve.common.drivergene.DriverCategory;
 import com.hartwig.serve.common.drivergene.DriverGene;
-import com.hartwig.serve.common.drivergene.DriverGeneGermlineReporting;
+import com.hartwig.serve.common.drivergene.GermlineReportingMode;
 import com.hartwig.serve.common.drivergene.ImmutableDriverGene;
 
 import org.apache.logging.log4j.util.Strings;
@@ -35,8 +35,8 @@ public final class DriverGenesTestFactory {
                 .reportDisruption(false)
                 .reportAmplification(false)
                 .reportSomaticHotspot(false)
-                .reportGermlineVariant(DriverGeneGermlineReporting.NONE)
-                .reportGermlineHotspot(DriverGeneGermlineReporting.NONE)
+                .reportGermlineVariant(GermlineReportingMode.NONE)
+                .reportGermlineHotspot(GermlineReportingMode.NONE)
                 .likelihoodType(DriverCategory.ONCO)
                 .reportGermlineDisruption(false)
                 .reportPGX(false);

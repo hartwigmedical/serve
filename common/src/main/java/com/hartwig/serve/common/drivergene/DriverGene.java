@@ -8,42 +8,37 @@ import org.jetbrains.annotations.Nullable;
 
 @Value.Immutable
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class })
-public interface DriverGene extends Comparable<DriverGene> {
+public abstract class DriverGene {
 
     @NotNull
-    String gene();
+    public abstract String gene();
 
-    boolean reportMissenseAndInframe();
+    public abstract boolean reportMissenseAndInframe();
 
-    boolean reportNonsenseAndFrameshift();
+    public abstract boolean reportNonsenseAndFrameshift();
 
-    boolean reportSplice();
+    public abstract boolean reportSplice();
 
-    boolean reportDeletion();
+    public abstract boolean reportDeletion();
 
-    boolean reportDisruption();
+    public abstract boolean reportDisruption();
 
-    boolean reportAmplification();
+    public abstract boolean reportAmplification();
 
-    boolean reportSomaticHotspot();
-
-    @NotNull
-    DriverGeneGermlineReporting reportGermlineVariant();
+    public abstract boolean reportSomaticHotspot();
 
     @NotNull
-    DriverGeneGermlineReporting reportGermlineHotspot();
+    public abstract GermlineReportingMode reportGermlineVariant();
 
     @NotNull
-    DriverCategory likelihoodType();
+    public abstract GermlineReportingMode reportGermlineHotspot();
 
-    boolean reportGermlineDisruption();
+    @NotNull
+    public abstract DriverCategory likelihoodType();
 
-    List<String> additionalReportedTranscripts();
+    public abstract boolean reportGermlineDisruption();
 
-    boolean reportPGX();
+    public abstract List<String> additionalReportedTranscripts();
 
-    @Override
-    default int compareTo(@NotNull final DriverGene o) {
-        return gene().compareTo(o.gene());
-    }
+    public abstract boolean reportPGX();
 }

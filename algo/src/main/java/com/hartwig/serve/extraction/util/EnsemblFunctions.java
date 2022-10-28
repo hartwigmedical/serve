@@ -13,17 +13,17 @@ public final class EnsemblFunctions {
     }
 
     @Nullable
-    public static HmfTranscriptRegion findCanonicalTranscript(@NotNull EnsemblDataCache ensemblDataCache, @NotNull String gene) {
-        GeneData geneData = ensemblDataCache.getGeneDataByName(gene);
-        if (geneData == null) {
+    public static HmfTranscriptRegion findCanonicalTranscript(@NotNull EnsemblDataCache ensemblDataCache, @NotNull String geneNameToFind) {
+        GeneData gene = ensemblDataCache.findGeneDataByName(geneNameToFind);
+        if (gene == null) {
             return null;
         }
 
-        TranscriptData transcriptData = ensemblDataCache.getCanonicalTranscriptData(geneData.GeneId);
-        if (transcriptData == null) {
+        TranscriptData transcript = ensemblDataCache.findCanonicalTranscript(gene.geneId());
+        if (transcript == null) {
             return null;
         }
 
-        return HmfTranscriptRegionUtils.fromTranscript(geneData, transcriptData);
+        return HmfTranscriptRegionUtils.fromTranscript(gene, transcript);
     }
 }

@@ -9,7 +9,6 @@ import com.google.common.collect.Sets;
 
 import org.junit.Test;
 
-
 public class HlaMatcherTest {
 
     private static final Set<String> HLA_EVENTS = Sets.newHashSet("hla");
@@ -22,5 +21,4 @@ public class HlaMatcherTest {
 
         assertFalse(matcher.matches("BRAF", "V600E"));
     }
-
 }

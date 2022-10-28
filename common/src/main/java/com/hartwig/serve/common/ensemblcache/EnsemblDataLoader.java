@@ -1,374 +1,230 @@
 package com.hartwig.serve.common.ensemblcache;
 
-import static com.hartwig.serve.datamodel.serialization.util.SerializationUtil.createFields;
-
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.hartwig.serve.common.RefGenomeFunctions;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.util.Strings;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public final class EnsemblDataLoader {
 
-    public static final String ENSEMBL_GENE_DATA_FILE = "ensembl_gene_data.csv";
-    public static final String ENSEMBL_TRANS_EXON_DATA_FILE = "ensembl_trans_exon_data.csv";
-    public static final String ENSEMBL_TRANS_SPLICE_DATA_FILE = "ensembl_trans_splice_data.csv";
-    public static final String ENSEMBL_PROTEIN_FEATURE_DATA_FILE = "ensembl_protein_features.csv";
-
     private static final Logger LOGGER = LogManager.getLogger(EnsemblDataLoader.class);
 
-    public static final String ENSEMBL_DELIM = ",";
+    private static final String ENSEMBL_GENE_DATA_FILE = "ensembl_gene_data.csv";
+    private static final String ENSEMBL_TRANS_EXON_DATA_FILE = "ensembl_trans_exon_data.csv";
 
-    public static boolean loadEnsemblGeneData(final String dataPath, final List<String> restrictedGeneIds,
-            final Map<String, List<GeneData>> chrGeneDataMap, RefGenomeVersion version) {
-        return loadEnsemblGeneData(dataPath, restrictedGeneIds, chrGeneDataMap, version, false);
+    private static final String ENSEMBL_FILE_DELIMITER = ",";
+
+    private EnsemblDataLoader() {
     }
 
-    public static boolean loadEnsemblGeneData(final String dataPath, final List<String> restrictedGeneIds,
-            final Map<String, List<GeneData>> chrGeneDataMap, RefGenomeVersion version, boolean loadSynonyms) {
-        String filename = dataPath;
+    @NotNull
+    public static EnsemblDataCache load(@NotNull String dataPath, @NotNull RefGenomeVersion refGenomeVersion) throws IOException {
+        String basePath = dataPath + File.separator;
+        Map<String, List<GeneData>> genesPerChromosome = loadGeneData(basePath + ENSEMBL_GENE_DATA_FILE, refGenomeVersion);
+        Map<String, List<TranscriptData>> transcriptsPerGeneId = loadTranscriptData(basePath + ENSEMBL_TRANS_EXON_DATA_FILE);
 
-        filename += ENSEMBL_GENE_DATA_FILE;
-
-        if (!Files.exists(Paths.get(filename))) {
-            return false;
-        }
-
-        try {
-            BufferedReader fileReader = new BufferedReader(new FileReader(filename));
-
-            String line = fileReader.readLine();
-
-            final Map<String, Integer> fieldsIndexMap = createFields(line, ENSEMBL_DELIM);
-
-            if (line == null) {
-                LOGGER.error("empty Ensembl gene data file({})", filename);
-                return false;
-            }
-
-            // GeneId,GeneName,Chromosome,Strand,GeneStart,GeneEnd,EntrezIds,KaryotypeBand,Synonyms
-            int geneIdIndex = fieldsIndexMap.get("GeneId");
-            int geneNameIndex = fieldsIndexMap.get("GeneName");
-            int chromosomeIndex = fieldsIndexMap.get("Chromosome");
-            int strandIndex = fieldsIndexMap.get("Strand");
-            int geneStartIndex = fieldsIndexMap.get("GeneStart");
-            int geneEndIndex = fieldsIndexMap.get("GeneEnd");
-            int karyotypeBandIndex = fieldsIndexMap.get("KaryotypeBand");
-            int synonymIndex = fieldsIndexMap.get("Synonyms");
-
-            line = fileReader.readLine(); // skip header
-
-            List<GeneData> geneList = null;
-            String currentChr = "";
-            int geneCount = 0;
-
-            while (line != null) {
-                String[] items = line.split(ENSEMBL_DELIM, -1);
-
-                final String geneId = items[geneIdIndex];
-
-                if (!restrictedGeneIds.isEmpty() && !restrictedGeneIds.contains(geneId)) {
-                    line = fileReader.readLine();
-                    continue;
-                }
-
-                final String chromosome = RefGenomeFunctions.versionedChromosome(items[chromosomeIndex], version);
-
-                GeneData geneData = new GeneData(geneId,
-                        items[geneNameIndex],
-                        chromosome,
-                        Byte.parseByte(items[strandIndex]),
-                        Integer.parseInt(items[geneStartIndex]),
-                        Integer.parseInt(items[geneEndIndex]),
-                        items[karyotypeBandIndex]);
-
-                if (loadSynonyms) {
-                    geneData.setSynonyms(items[synonymIndex]);
-                }
-
-                if (!currentChr.equals(chromosome)) {
-                    currentChr = chromosome;
-                    geneList = chrGeneDataMap.computeIfAbsent(chromosome, k -> Lists.newArrayList());
-                }
-
-                geneList.add(geneData);
-                ++geneCount;
-
-                line = fileReader.readLine();
-            }
-
-            LOGGER.debug("loaded {} gene records", geneCount);
-        } catch (IOException e) {
-            LOGGER.warn("failed to load Ensembl gene ({}): {}", filename, e.toString());
-            return false;
-        }
-
-        return true;
+        return new EnsemblDataCache(genesPerChromosome, transcriptsPerGeneId);
     }
 
-    public static boolean loadTranscriptData(final String dataPath, Map<String, List<TranscriptData>> transcriptDataMap,
-            final List<String> restrictedGeneIds, boolean cacheExons, boolean canonicalOnly, final List<String> nonCanonicalTrans) {
-        String filename = dataPath;
+    @NotNull
+    public static Map<String, List<GeneData>> loadGeneData(@NotNull String geneDataFile, @NotNull RefGenomeVersion version)
+            throws IOException {
+        BufferedReader fileReader = new BufferedReader(new FileReader(geneDataFile));
 
-        filename += ENSEMBL_TRANS_EXON_DATA_FILE;
+        Map<String, Integer> fields = SerializationUtil.createFields(fileReader.readLine(), ENSEMBL_FILE_DELIMITER);
 
-        if (!Files.exists(Paths.get(filename))) {
-            return false;
-        }
+        int geneIdIndex = fields.get("GeneId");
+        int geneNameIndex = fields.get("GeneName");
+        int chromosomeIndex = fields.get("Chromosome");
+        int strandIndex = fields.get("Strand");
+        int geneStartIndex = fields.get("GeneStart");
+        int geneEndIndex = fields.get("GeneEnd");
+        int karyotypeBandIndex = fields.get("KaryotypeBand");
 
-        try {
-            BufferedReader fileReader = new BufferedReader(new FileReader(filename));
+        Map<String, List<GeneData>> genesPerChromosome = Maps.newHashMap();
+        List<GeneData> currentGenes = Lists.newArrayList();
+        String currentChromosome = Strings.EMPTY;
 
-            String line = fileReader.readLine();
+        String line = fileReader.readLine();
+        while (line != null) {
+            String[] values = line.split(ENSEMBL_FILE_DELIMITER);
 
-            final Map<String, Integer> fieldsIndexMap = createFields(line, ENSEMBL_DELIM);
-
-            if (line == null) {
-                LOGGER.error("empty Ensembl gene-exon data file({})", filename);
-                return false;
+            String chromosome = RefGenomeFunctions.versionedChromosome(values[chromosomeIndex], version);
+            if (currentChromosome.isEmpty()) {
+                currentChromosome = chromosome;
             }
 
-            // GeneId,CanonicalTranscriptId,Strand,TransId,TransName,BioType,TransStart,TransEnd,ExonRank,ExonStart,ExonEnd,ExonPhase,ExonEndPhase,CodingStart,CodingEnd
-            int geneIdIndex = fieldsIndexMap.get("GeneId");
-            int canonicalTransIdIndex = fieldsIndexMap.get("CanonicalTranscriptId");
-            int strandIndex = fieldsIndexMap.get("Strand");
-            int transIdIndex = fieldsIndexMap.get("TransId");
-            int transNameIndex = fieldsIndexMap.containsKey("TransName") ? fieldsIndexMap.get("TransName") : fieldsIndexMap.get("Trans");
-            int biotypeIndex = fieldsIndexMap.get("BioType");
-            int transStartIndex = fieldsIndexMap.get("TransStart");
-            int transEndIndex = fieldsIndexMap.get("TransEnd");
-            int exonRankIndex = fieldsIndexMap.get("ExonRank");
-            int exonStartIndex = fieldsIndexMap.get("ExonStart");
-            int exonEndIndex = fieldsIndexMap.get("ExonEnd");
-            int exonPhaseIndex = fieldsIndexMap.get("ExonPhase");
-            int exonEndPhaseIndex = fieldsIndexMap.get("ExonEndPhase");
-            int codingStartIndex = fieldsIndexMap.get("CodingStart");
-            int codingEndIndex = fieldsIndexMap.get("CodingEnd");
-
-            int exonCount = 0;
-            int transcriptCount = 0;
-            String currentGene = "";
-            TranscriptData currentTrans = null;
-            String lastSkippedGeneId = "";
-            List<TranscriptData> transDataList = null;
-            List<ExonData> exonDataList = null;
-
-            while (line != null) {
-                line = fileReader.readLine();
-
-                if (line == null) {
-                    break;
-                }
-
-                String[] items = line.split(ENSEMBL_DELIM);
-
-                final String geneId = items[geneIdIndex];
-                int transId = Integer.parseInt(items[transIdIndex]);
-
-                if (lastSkippedGeneId.equals(geneId) || (!restrictedGeneIds.isEmpty() && !restrictedGeneIds.contains(geneId))) {
-                    lastSkippedGeneId = geneId;
-                    continue;
-                }
-
-                if (!geneId.equals(currentGene)) {
-                    currentGene = geneId;
-                    transDataList = Lists.newArrayList();
-                    transcriptDataMap.put(geneId, transDataList);
-                }
-
-                if (currentTrans == null || currentTrans.TransId != transId) {
-                    int canonicalTransId = Integer.parseInt(items[canonicalTransIdIndex]);
-                    boolean isCanonical = (canonicalTransId == transId);
-                    String transName = items[transNameIndex];
-
-                    if (canonicalOnly) {
-                        if (!isCanonical && !nonCanonicalTrans.contains(transName)) {
-                            continue;
-                        }
-                    }
-
-                    exonDataList = Lists.newArrayList();
-
-                    Integer codingStart =
-                            !items[codingStartIndex].equalsIgnoreCase("NULL") ? Integer.parseInt(items[codingStartIndex]) : null;
-                    Integer codingEnd = !items[codingEndIndex].equalsIgnoreCase("NULL") ? Integer.parseInt(items[codingEndIndex]) : null;
-
-                    currentTrans = new TranscriptData(transId,
-                            transName,
-                            geneId,
-                            isCanonical,
-                            Byte.parseByte(items[strandIndex]),
-                            Integer.parseInt(items[transStartIndex]),
-                            Integer.parseInt(items[transEndIndex]),
-                            codingStart,
-                            codingEnd,
-                            items[biotypeIndex]);
-
-                    ++transcriptCount;
-
-                    currentTrans.setExons(exonDataList);
-                    transDataList.add(currentTrans);
-                }
-
-                if (cacheExons || currentTrans.IsCanonical) {
-                    ExonData exonData = new ExonData(transId,
-                            Integer.parseInt(items[exonStartIndex]),
-                            Integer.parseInt(items[exonEndIndex]),
-                            Integer.parseInt(items[exonRankIndex]),
-                            Integer.parseInt(items[exonPhaseIndex]),
-                            Integer.parseInt(items[exonEndPhaseIndex]));
-
-                    exonDataList.add(exonData);
-                    ++exonCount;
-                }
+            if (!currentChromosome.equals(chromosome)) {
+                updateGenesForChromosome(genesPerChromosome, currentChromosome, currentGenes);
+                currentGenes = Lists.newArrayList();
             }
 
-            LOGGER.debug("loaded {} genes with {} transcripts records and {} exons", transcriptDataMap.size(), transcriptCount, exonCount);
-        } catch (IOException e) {
-            LOGGER.warn("failed to load gene transcript exon data({}): {}", filename, e.toString());
-            return false;
+            currentChromosome = chromosome;
+
+            currentGenes.add(ImmutableGeneData.builder()
+                    .geneId(values[geneIdIndex])
+                    .geneName(values[geneNameIndex])
+                    .chromosome(chromosome)
+                    .strand(Byte.parseByte(values[strandIndex]))
+                    .geneStart(Integer.parseInt(values[geneStartIndex]))
+                    .geneEnd(Integer.parseInt(values[geneEndIndex]))
+                    .karyotypeBand(values[karyotypeBandIndex])
+                    .build());
+
+            line = fileReader.readLine();
         }
 
-        return true;
+        // The final record doesn't get added automatically.
+        updateGenesForChromosome(genesPerChromosome, currentChromosome, currentGenes);
+
+        LOGGER.debug("Loaded {} genes from {}", countValues(genesPerChromosome), geneDataFile);
+
+        return genesPerChromosome;
     }
 
-    public static boolean loadTranscriptProteinData(final String dataPath, Map<Integer, List<TranscriptProteinData>> proteinDataMap,
-            Set<Integer> restrictedTransIds) {
-        String filename = dataPath;
-
-        filename += ENSEMBL_PROTEIN_FEATURE_DATA_FILE;
-
-        if (!Files.exists(Paths.get(filename))) {
-            return false;
+    private static void updateGenesForChromosome(@NotNull Map<String, List<GeneData>> genesPerChromosome, @NotNull String chromosome,
+            @NotNull List<GeneData> genes) {
+        List<GeneData> existing = genesPerChromosome.get(chromosome);
+        if (existing == null) {
+            existing = Lists.newArrayList();
         }
-
-        try {
-            BufferedReader fileReader = new BufferedReader(new FileReader(filename));
-
-            String line = fileReader.readLine();
-
-            final Map<String, Integer> fieldsIndexMap = createFields(line, ENSEMBL_DELIM);
-
-            if (line == null) {
-                LOGGER.error("empty Ensembl protein feature data file({})", filename);
-                return false;
-            }
-
-            // TranscriptId,TranslationId,ProteinFeatureId,SeqStart,SeqEnd,HitDescription
-            int transIdIndex = fieldsIndexMap.get("TranscriptId");
-            int translationIdIndex = fieldsIndexMap.get("TranslationId");
-            int pfIdIndex = fieldsIndexMap.get("ProteinFeatureId");
-            int pfStartIndex = fieldsIndexMap.get("SeqStart");
-            int pfEndIndex = fieldsIndexMap.get("SeqEnd");
-            int pfDescIndex = fieldsIndexMap.get("HitDescription");
-
-            int proteinCount = 0;
-            int currentTransId = -1;
-            List<TranscriptProteinData> transProteinDataList = null;
-
-            line = fileReader.readLine(); // skip header
-
-            while (line != null) {
-                // parse CSV data
-                String[] items = line.split(ENSEMBL_DELIM);
-
-                // check if still on the same variant
-                int transId = Integer.parseInt(items[transIdIndex]);
-
-                if (!restrictedTransIds.isEmpty() && !restrictedTransIds.contains(transId)) {
-                    line = fileReader.readLine();
-                    continue;
-                }
-
-                if (transId != currentTransId) {
-                    currentTransId = transId;
-                    transProteinDataList = Lists.newArrayList();
-                    proteinDataMap.put(transId, transProteinDataList);
-                }
-
-                TranscriptProteinData proteinData = new TranscriptProteinData(transId,
-                        Integer.parseInt(items[translationIdIndex]),
-                        Integer.parseInt(items[pfIdIndex]),
-                        Integer.parseInt(items[pfStartIndex]),
-                        Integer.parseInt(items[pfEndIndex]),
-                        items[pfDescIndex]);
-
-                transProteinDataList.add(proteinData);
-                ++proteinCount;
-
-                line = fileReader.readLine();
-            }
-
-            LOGGER.debug("loaded {} protein trans records with {} locations", proteinDataMap.size(), proteinCount);
-        } catch (IOException e) {
-            LOGGER.warn("failed to load transcript protein features({}): {}", filename, e.toString());
-            return false;
-        }
-
-        return true;
+        existing.addAll(genes);
+        genesPerChromosome.put(chromosome, existing);
     }
 
-    public static boolean loadTranscriptSpliceAcceptorData(final String dataPath, Map<Integer, Integer> transSaPositionDataMap,
-            final Set<Integer> restrictedTransIds) {
-        String filename = dataPath;
+    @NotNull
+    public static Map<String, List<TranscriptData>> loadTranscriptData(@NotNull String transcriptDataFile) throws IOException {
+        BufferedReader fileReader = new BufferedReader(new FileReader(transcriptDataFile));
 
-        filename += ENSEMBL_TRANS_SPLICE_DATA_FILE;
+        Map<String, Integer> fields = SerializationUtil.createFields(fileReader.readLine(), ENSEMBL_FILE_DELIMITER);
 
-        if (!Files.exists(Paths.get(filename))) {
-            return false;
-        }
+        int geneIdIndex = fields.get("GeneId");
+        int canonicalTransIdIndex = fields.get("CanonicalTranscriptId");
+        int strandIndex = fields.get("Strand");
+        int transIdIndex = fields.get("TransId");
+        int transcriptNameIndex = fields.get("TransName");
+        int biotypeIndex = fields.get("BioType");
+        int transStartIndex = fields.get("TransStart");
+        int transEndIndex = fields.get("TransEnd");
+        int exonRankIndex = fields.get("ExonRank");
+        int exonStartIndex = fields.get("ExonStart");
+        int exonEndIndex = fields.get("ExonEnd");
+        int exonPhaseIndex = fields.get("ExonPhase");
+        int exonEndPhaseIndex = fields.get("ExonEndPhase");
+        int codingStartIndex = fields.get("CodingStart");
+        int codingEndIndex = fields.get("CodingEnd");
 
-        try {
-            BufferedReader fileReader = new BufferedReader(new FileReader(filename));
+        Map<String, List<TranscriptData>> transcriptsPerGeneId = Maps.newHashMap();
+        String currentGeneId = Strings.EMPTY;
+        int currentTranscriptId = -1;
+        TranscriptData previousTranscript = null;
+        List<TranscriptData> currentTranscripts = Lists.newArrayList();
+        List<ExonData> currentExons = Lists.newArrayList();
 
-            String line = fileReader.readLine();
+        String line = fileReader.readLine();
+        while (line != null) {
+            String[] values = line.split(ENSEMBL_FILE_DELIMITER);
 
-            final Map<String, Integer> fieldsIndexMap = createFields(line, ENSEMBL_DELIM);
-
-            if (line == null) {
-                LOGGER.error("empty Ensembl trans splice acceptor data file({})", filename);
-                return false;
+            int transcriptId = Integer.parseInt(values[transIdIndex]);
+            if (currentTranscriptId == -1) {
+                currentTranscriptId = transcriptId;
             }
 
-            // GeneId,TransId,TransName,TransStartPos,PreSpliceAcceptorPosition,Distance
-            int transIdIndex = fieldsIndexMap.get("TransId");
-            int saPositionIndex = fieldsIndexMap.get("PreSpliceAcceptorPosition");
+            if (transcriptId != currentTranscriptId) {
+                currentTranscripts.add(ImmutableTranscriptData.builder().from(previousTranscript).exons(currentExons).build());
+                currentExons = Lists.newArrayList();
+            }
 
-            line = fileReader.readLine(); // skip header
+            currentTranscriptId = transcriptId;
 
-            while (line != null) {
-                String[] items = line.split(ENSEMBL_DELIM);
+            String geneId = values[geneIdIndex];
+            if (currentGeneId.isEmpty()) {
+                currentGeneId = geneId;
+            }
 
-                final int transId = Integer.parseInt(items[transIdIndex]);
-
-                if (!restrictedTransIds.isEmpty() && !restrictedTransIds.contains(transId)) {
-                    line = fileReader.readLine();
-                    continue;
+            if (!geneId.equals(currentGeneId)) {
+                if (transcriptsPerGeneId.containsKey(currentGeneId)) {
+                    throw new IllegalStateException("Attempt to load ensembl data twice for gene " + currentGeneId);
                 }
-
-                int saPosition = Integer.parseInt(items[saPositionIndex]);
-
-                transSaPositionDataMap.put(transId, saPosition);
-
-                line = fileReader.readLine();
+                transcriptsPerGeneId.put(currentGeneId, currentTranscripts);
+                currentTranscripts = Lists.newArrayList();
             }
 
-            LOGGER.debug("loaded {} trans splice-acceptor position records", transSaPositionDataMap.size());
-        } catch (IOException e) {
-            LOGGER.warn("failed to load transcript splice data({}): {}", filename, e.toString());
-            return false;
+            currentGeneId = geneId;
+
+            previousTranscript = ImmutableTranscriptData.builder()
+                    .transcriptId(transcriptId)
+                    .transcriptName(values[transcriptNameIndex])
+                    .geneId(geneId)
+                    .isCanonical(Integer.parseInt(values[canonicalTransIdIndex]) == transcriptId)
+                    .strand(Byte.parseByte(values[strandIndex]))
+                    .transcriptStart(Integer.parseInt(values[transStartIndex]))
+                    .transcriptEnd(Integer.parseInt(values[transEndIndex]))
+                    .codingStart(nullableInt(values[codingStartIndex]))
+                    .codingEnd(nullableInt(values[codingEndIndex]))
+                    .bioType(values[biotypeIndex])
+                    .build();
+
+            ExonData exon = ImmutableExonData.builder()
+                    .start(Integer.parseInt(values[exonStartIndex]))
+                    .end(Integer.parseInt(values[exonEndIndex]))
+                    .rank(Integer.parseInt(values[exonRankIndex]))
+                    .phaseStart(Integer.parseInt(values[exonPhaseIndex]))
+                    .phaseEnd(Integer.parseInt(values[exonEndPhaseIndex]))
+                    .build();
+
+            currentExons.add(exon);
+
+            line = fileReader.readLine();
         }
 
-        return true;
+        // The final record doesn't get added automatically.
+        currentTranscripts.add(ImmutableTranscriptData.builder().from(previousTranscript).exons(currentExons).build());
+        transcriptsPerGeneId.put(currentGeneId, currentTranscripts);
+
+        LOGGER.debug("Loaded {} genes with {} transcripts and {} exons from {}",
+                transcriptsPerGeneId.size(),
+                countValues(transcriptsPerGeneId),
+                countExons(transcriptsPerGeneId),
+                transcriptDataFile);
+
+        return transcriptsPerGeneId;
+    }
+
+    private static <T> int countValues(@NotNull Map<String, List<T>> objectMap) {
+        int valueCount = 0;
+        for (List<T> objects : objectMap.values()) {
+            valueCount += objects.size();
+        }
+        return valueCount;
+    }
+
+    private static int countExons(@NotNull Map<String, List<TranscriptData>> transcriptsPerGeneId) {
+        int exonCount = 0;
+        for (List<TranscriptData> transcripts : transcriptsPerGeneId.values()) {
+            for (TranscriptData transcript : transcripts) {
+                exonCount += transcript.exons().size();
+            }
+        }
+        return exonCount;
+    }
+
+    @Nullable
+    private static Integer nullableInt(@NotNull String value) {
+        return !value.equalsIgnoreCase("NULL") ? Integer.parseInt(value) : null;
     }
 }

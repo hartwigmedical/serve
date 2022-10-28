@@ -6,11 +6,8 @@ public enum Strand {
     FORWARD,
     REVERSE;
 
-    // alternative byte representation for file I/O
-    public static final byte POS_STRAND = 1;
-
     @NotNull
-    public static Strand valueOf(int direction) {
+    public static Strand resolve(int direction) {
         switch (direction) {
             case 1:
                 return Strand.FORWARD;

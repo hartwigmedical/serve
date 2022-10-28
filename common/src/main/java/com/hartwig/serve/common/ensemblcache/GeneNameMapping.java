@@ -16,10 +16,11 @@ import com.google.common.collect.Sets;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-// a resource to map gene names between GRCh37 and HGNC + GRCh38
 public class GeneNameMapping {
 
+    @NotNull
     private final Map<String, GeneMappingData> geneNameNewToOldMap;
+    @NotNull
     private final Set<String> unchangedGenes;
 
     private static final String DELIMITER = ",";
@@ -34,9 +35,9 @@ public class GeneNameMapping {
         Map<String, Integer> fields = createFields(lines.get(0), DELIMITER);
         lines.remove(0);
 
-        int geneIdIndex = fields.get("GeneId");
-        int geneOldIndex = fields.get("GeneNameOld");
-        int geneNewIndex = fields.get("GeneNameNew");
+        int geneIdIndex = fields.get("geneId");
+        int geneOldIndex = fields.get("geneNameOld");
+        int geneNewIndex = fields.get("geneNameNew");
 
         for (String line : lines) {
             String[] values = line.split(DELIMITER);
@@ -47,7 +48,8 @@ public class GeneNameMapping {
             if (geneNameOld.equals(geneNameNew)) {
                 unchangedGenes.add(geneNameOld);
             } else {
-                GeneMappingData data = new GeneMappingData(geneId, geneNameNew, geneNameOld);
+                GeneMappingData data =
+                        ImmutableGeneMappingData.builder().geneId(geneId).geneNameNew(geneNameNew).geneNameOld(geneNameOld).build();
                 geneNameNewToOldMap.put(geneNameNew, data);
             }
         }
@@ -64,6 +66,6 @@ public class GeneNameMapping {
         }
 
         GeneMappingData data = geneNameNewToOldMap.get(geneNameNew);
-        return data != null ? data.GeneNameOld : null;
+        return data != null ? data.geneNameOld() : null;
     }
 }

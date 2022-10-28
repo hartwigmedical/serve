@@ -85,9 +85,9 @@ public final class EventExtractorFactory {
     @NotNull
     private static Set<String> extractAllValidGenes(@NotNull EnsemblDataCache ensemblDataCache) {
         Set<String> genes = Sets.newHashSet();
-        for (List<GeneData> genesPerChromosome : ensemblDataCache.getChrGeneDataMap().values()) {
+        for (List<GeneData> genesPerChromosome : ensemblDataCache.genesPerChromosome().values()) {
             for (GeneData geneData : genesPerChromosome) {
-                genes.add(geneData.GeneName);
+                genes.add(geneData.geneName());
             }
         }
         return genes;

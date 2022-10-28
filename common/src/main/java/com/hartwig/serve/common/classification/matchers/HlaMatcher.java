@@ -4,7 +4,7 @@ import java.util.Set;
 
 import org.jetbrains.annotations.NotNull;
 
-public class HlaMatcher implements EventMatcher{
+public class HlaMatcher implements EventMatcher {
 
     @NotNull
     private final Set<String> hlaKeyPhrases;

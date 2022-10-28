@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 public interface TranscriptRegion extends GenomeRegion {
 
     @NotNull
-    String transName();
+    String transcriptId();
 
     boolean isCanonical();
 

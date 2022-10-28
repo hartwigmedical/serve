@@ -1,42 +1,28 @@
 package com.hartwig.serve.common.ensemblcache;
 
-public class GeneData {
+import org.immutables.value.Value;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-    public final String GeneId; // aka StableId
-    public final String GeneName;
-    public final String Chromosome;
-    public final byte Strand;
-    public final int GeneStart;
-    public final int GeneEnd;
-    public final String KaryotypeBand;
+@Value.Immutable
+@Value.Style(passAnnotations = { NotNull.class, Nullable.class })
+public abstract class GeneData {
 
-    private String mSynonyms;
+    @NotNull
+    public abstract String geneId();
 
-    public GeneData(final String geneId, final String geneName, final String chromosome, final byte strand, final int geneStart,
-            final int geneEnd, final String karyotypeBand) {
-        GeneId = geneId;
-        GeneName = geneName;
-        Chromosome = chromosome;
-        Strand = strand;
-        GeneStart = geneStart;
-        GeneEnd = geneEnd;
-        KaryotypeBand = karyotypeBand;
-        mSynonyms = "";
-    }
+    @NotNull
+    public abstract String geneName();
 
-    public void setSynonyms(final String synonyms) {
-        mSynonyms = synonyms;
-    }
+    @NotNull
+    public abstract String chromosome();
 
-    public String getSynonyms() {
-        return mSynonyms;
-    }
+    public abstract byte strand();
 
-    public int length() {
-        return GeneEnd - GeneStart;
-    }
+    public abstract int geneStart();
 
-    public String toString() {
-        return String.format("%s:%s chr(%s) pos(%d-%d) strand(%d)", GeneId, GeneName, Chromosome, GeneStart, GeneEnd, Strand);
-    }
+    public abstract int geneEnd();
+
+    @NotNull
+    public abstract String karyotypeBand();
 }

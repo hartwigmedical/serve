@@ -19,33 +19,33 @@ public final class HmfTranscriptRegionUtils {
     }
 
     @NotNull
-    public static HmfTranscriptRegion fromTranscript(@NotNull GeneData geneData, @NotNull TranscriptData transData) {
+    public static HmfTranscriptRegion fromTranscript(@NotNull GeneData gene, @NotNull TranscriptData transcript) {
         List<HmfExonRegion> exons = Lists.newArrayList();
 
-        for (ExonData exon : transData.exons()) {
+        for (ExonData exon : transcript.exons()) {
             exons.add(ImmutableHmfExonRegion.builder()
-                    .chromosome(geneData.Chromosome)
-                    .exonRank(exon.Rank)
-                    .start(exon.Start)
-                    .end(exon.End)
+                    .chromosome(gene.chromosome())
+                    .exonRank(exon.rank())
+                    .start(exon.start())
+                    .end(exon.end())
                     .build());
         }
 
         return ImmutableHmfTranscriptRegion.builder()
-                .geneId(geneData.GeneId)
-                .geneName(geneData.GeneName)
-                .chromosome(geneData.Chromosome)
-                .strand(Strand.valueOf(geneData.Strand))
-                .geneStart(geneData.GeneStart)
-                .geneEnd(geneData.GeneEnd)
+                .geneId(gene.geneId())
+                .geneName(gene.geneName())
+                .chromosome(gene.chromosome())
+                .strand(Strand.resolve(gene.strand()))
+                .geneStart(gene.geneStart())
+                .geneEnd(gene.geneEnd())
                 .entrezId(Lists.newArrayList())
-                .chromosomeBand(geneData.KaryotypeBand)
-                .transName(transData.TransName)
-                .isCanonical(transData.IsCanonical)
-                .start(transData.TransStart)
-                .end(transData.TransEnd)
-                .codingStart(transData.CodingStart != null ? transData.CodingStart : -1)
-                .codingEnd(transData.CodingEnd != null ? transData.CodingEnd : -1)
+                .chromosomeBand(gene.karyotypeBand())
+                .transcriptId(transcript.transcriptName())
+                .isCanonical(transcript.isCanonical())
+                .start(transcript.transcriptStart())
+                .end(transcript.transcriptEnd())
+                .codingStart(transcript.codingStart())
+                .codingEnd(transcript.codingEnd())
                 .exons(exons)
                 .build();
     }
@@ -57,7 +57,7 @@ public final class HmfTranscriptRegionUtils {
             return null;
         }
 
-        if (transcript.codingStart() == 0 || transcript.codingEnd() == 0) {
+        if (transcript.codingStart() == null || transcript.codingEnd() == null) {
             // Only coding transcripts have codons.
             return null;
         }
@@ -69,6 +69,7 @@ public final class HmfTranscriptRegionUtils {
         int basesCovered = 0;
         Integer startPosition = null;
         Integer endPosition = null;
+
         for (HmfExonRegion exon : transcript.strandSortedExome()) {
             int exonCodingStart = Math.max(exon.start(), transcript.codingStart());
             int exonCodingEnd = Math.min(exon.end(), transcript.codingEnd());

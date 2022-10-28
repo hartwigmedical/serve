@@ -45,9 +45,9 @@ public final class EventMatcherFactory {
                 config.deletionKeywords(),
                 config.deletionKeyPhrases());
 
-        OverExpressionMatcher overExpressionMatcher = new OverExpressionMatcher(config.overexpressionKeywords(),
+        OverexpressionMatcher2 overExpressionMatcher = new OverexpressionMatcher2(config.overexpressionKeywords(),
                 config.overexpressionKeyPhrases());
-        UnderExpressionMatcher underExpressionMatcher = new UnderExpressionMatcher(
+        UnderexpressionMatcher2 underExpressionMatcher = new UnderexpressionMatcher2(
                 config.underexpressionKeywords(),
                 config.underexpressionKeyPhrases());
 

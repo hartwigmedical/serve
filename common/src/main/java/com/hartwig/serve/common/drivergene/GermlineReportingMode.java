@@ -1,6 +1,6 @@
 package com.hartwig.serve.common.drivergene;
 
-public enum DriverGeneGermlineReporting {
+public enum GermlineReportingMode {
     ANY,
     VARIANT_NOT_LOST,
     WILDTYPE_LOST,

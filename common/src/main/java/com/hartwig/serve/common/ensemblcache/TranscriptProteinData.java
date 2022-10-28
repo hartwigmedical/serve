@@ -1,21 +1,23 @@
 package com.hartwig.serve.common.ensemblcache;
 
-public class TranscriptProteinData {
+import org.immutables.value.Value;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-    public final int TranscriptId;
-    public final int TranslationId;
-    public final int ProteinFeatureId;
-    public final int SeqStart;
-    public final int SeqEnd;
-    public final String HitDescription;
+@Value.Immutable
+@Value.Style(passAnnotations = { NotNull.class, Nullable.class })
+public abstract class TranscriptProteinData {
 
-    public TranscriptProteinData(int transcriptId, int translationId, int proteinFeatureId, int seqStart, int seqEnd,
-            final String hitDescription) {
-        TranscriptId = transcriptId;
-        TranslationId = translationId;
-        ProteinFeatureId = proteinFeatureId;
-        SeqStart = seqStart;
-        SeqEnd = seqEnd;
-        HitDescription = hitDescription;
-    }
+    public abstract int transcriptId();
+
+    public abstract int translationId();
+
+    public abstract int proteinFeatureId();
+
+    public abstract int seqStart();
+
+    public abstract int seqEnd();
+
+    @NotNull
+    public abstract String hitDescription();
 }

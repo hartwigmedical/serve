@@ -9,16 +9,14 @@ import com.google.common.collect.Sets;
 
 import org.junit.Test;
 
-public class UnderExpressionMatcherTest {
+public class UnderexpressionMatcher2Test {
 
-    private static final Set<String> UNDER_EXPRESSION_KEYWORDS = Sets.newHashSet();
-    private static final Set<String> UNDER_EXPRESSION_KEY_PHRASES = Sets.newHashSet("dec exp");
+    private static final Set<String> UNDEREXPRESSION_KEYWORDS = Sets.newHashSet();
+    private static final Set<String> UNDEREXPRESSION_KEY_PHRASES = Sets.newHashSet("dec exp");
 
     @Test
     public void canAssessWhetherEventIsDeletion() {
-        EventMatcher matcher = new UnderExpressionMatcher(
-                UNDER_EXPRESSION_KEYWORDS,
-                UNDER_EXPRESSION_KEY_PHRASES);
+        EventMatcher matcher = new UnderexpressionMatcher2(UNDEREXPRESSION_KEYWORDS, UNDEREXPRESSION_KEY_PHRASES);
 
         assertTrue(matcher.matches("CDKN2A", "CDKN2A dec exp"));
 
@@ -26,5 +24,4 @@ public class UnderExpressionMatcherTest {
         assertFalse(matcher.matches("EGFR", "EGFR Ex19 del"));
         assertFalse(matcher.matches("BRAF", "V600E"));
     }
-
 }

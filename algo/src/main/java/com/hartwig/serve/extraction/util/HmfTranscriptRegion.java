@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 @Value.Immutable
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class })
 public abstract class HmfTranscriptRegion implements TranscriptRegion {
+
     @NotNull
     public abstract String geneId();
 
@@ -19,9 +20,11 @@ public abstract class HmfTranscriptRegion implements TranscriptRegion {
 
     public abstract int geneEnd();
 
-    public abstract int codingStart();
+    @Nullable
+    public abstract Integer codingStart();
 
-    public abstract int codingEnd();
+    @Nullable
+    public abstract Integer codingEnd();
 
     @NotNull
     public abstract Strand strand();

@@ -2,38 +2,29 @@ package com.hartwig.serve.datamodel.range;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.Set;
+import java.util.List;
 
-import com.google.common.collect.Sets;
-import com.hartwig.serve.datamodel.MutationType;
+import com.google.common.collect.Lists;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
 public class KnownCodonComparatorTest {
 
     @Test
     public void canSortKnownCodons() {
-        KnownCodon codon1 = ImmutableKnownCodon.builder()
-                .annotation(ImmutableCodonAnnotation.builder()
-                        .from(RangeTestFactory.createTestCodonAnnotation())
-                        .chromosome("1")
-                        .start(10)
-                        .end(11)
-                        .gene("gene x")
-                        .applicableMutationType(MutationType.ANY)
-                        .rank(1)
-                        .transcript("transcript x")
-                        .build())
-                .build();
+        KnownCodon codon1 = create(RangeTestFactory.codonAnnotationBuilder().chromosome("1").build());
+        KnownCodon codon2 = create(RangeTestFactory.codonAnnotationBuilder().chromosome("2").build());
 
-        KnownCodon codon2 = ImmutableKnownCodon.builder()
-                .annotation(ImmutableCodonAnnotation.builder().from(codon1.annotation()).rank(2).build())
-                .build();
+        List<KnownCodon> codons = Lists.newArrayList(codon2, codon1);
+        codons.sort(new KnownCodonComparator());
 
-        Set<KnownCodon> sortedExons = Sets.newTreeSet(new KnownCodonComparator());
-        sortedExons.add(codon2);
-        sortedExons.add(codon1);
+        assertEquals(codon1, codons.get(0));
+        assertEquals(codon2, codons.get(1));
+    }
 
-        assertEquals(codon1, sortedExons.iterator().next());
+    @NotNull
+    private static KnownCodon create(@NotNull CodonAnnotation annotation) {
+        return ImmutableKnownCodon.builder().annotation(annotation).build();
     }
 }

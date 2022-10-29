@@ -20,8 +20,6 @@
 | db_user  | Required: The DB user which has access to the the URL specified           |
 | db_pass  | Required: The password needed for the DB user to authenticate on the URL. |
 
-Resources for v1.0 can be found on https://github.com/hartwigmedical/hmftools/releases/tag/ckb-importer-v1.0
-
 ## Version History and Download Links
 - [1.4](https://github.com/hartwigmedical/serve/releases/tag/ckb-importer-v1.4)
   - Added fields to variant datamodel: 

@@ -53,7 +53,13 @@ public final class KnownCopyNumberFile {
     @NotNull
     @VisibleForTesting
     static String header() {
-        return new StringJoiner(FIELD_DELIMITER).add("gene").add("geneRole").add("proteinEffect").add("type").add("sources").toString();
+        return new StringJoiner(FIELD_DELIMITER).add("gene")
+                .add("geneRole")
+                .add("proteinEffect")
+                .add("associatedWithDrugResistance")
+                .add("type")
+                .add("sources")
+                .toString();
     }
 
     @NotNull
@@ -74,6 +80,7 @@ public final class KnownCopyNumberFile {
                 .gene(values[fields.get("gene")])
                 .geneRole(GeneRole.valueOf(values[fields.get("geneRole")]))
                 .proteinEffect(ProteinEffect.valueOf(values[fields.get("proteinEffect")]))
+                .associatedWithDrugResistance(SerializationUtil.optionalBoolean(values[fields.get("associatedWithDrugResistance")]))
                 .type(CopyNumberType.valueOf(values[fields.get("type")]))
                 .sources(Knowledgebase.fromCommaSeparatedSourceString(values[fields.get("sources")]))
                 .build();
@@ -103,6 +110,7 @@ public final class KnownCopyNumberFile {
         return new StringJoiner(FIELD_DELIMITER).add(copyNumber.gene())
                 .add(copyNumber.geneRole().toString())
                 .add(copyNumber.proteinEffect().toString())
+                .add(SerializationUtil.nullableBoolean(copyNumber.associatedWithDrugResistance()))
                 .add(copyNumber.type().toString())
                 .add(Knowledgebase.toCommaSeparatedSourceString(copyNumber.sources()))
                 .toString();

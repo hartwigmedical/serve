@@ -1,3 +1,3 @@
-chromosome	position	ref	alt	gene	geneRole	proteinEffect	source	sourceEvent	sourceUrls	treatment	sourceRelevantTreatmentApproaches	relevantTreatmentApproaches	applicableCancerType	applicableDoid	blacklistCancerTypes	level	direction	evidenceUrls
-7	140453136	A	T	BRAF	ONCO	GAIN_OF_FUNCTION	VICC_CGI	variant	http	Vemurafenib			Skin Melanoma	X		A	RESPONSIVE	http
-7	140453137	A	T	BRAF	ONCO	GAIN_OF_FUNCTION	VICC_CGI	variant	http	Vemurafenib			Skin Melanoma	X		C	RESISTANT	http
+chromosome	position	ref	alt	gene	geneRole	proteinEffect	associatedWithDrugResistance	source	sourceEvent	sourceUrls	treatment	sourceRelevantTreatmentApproaches	relevantTreatmentApproaches	applicableCancerType	applicableDoid	blacklistCancerTypes	level	direction	evidenceUrls
+7	140453136	A	T	BRAF	ONCO	GAIN_OF_FUNCTION	true	VICC_CGI	variant	http	Vemurafenib			Skin Melanoma	X		A	RESPONSIVE	http
+7	140453137	A	T	BRAF	ONCO	GAIN_OF_FUNCTION	false	VICC_CGI	variant	http	Vemurafenib			Skin Melanoma	X		C	RESISTANT	http

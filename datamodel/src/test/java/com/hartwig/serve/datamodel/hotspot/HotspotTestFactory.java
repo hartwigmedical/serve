@@ -10,6 +10,7 @@ import com.hartwig.serve.datamodel.common.ProteinEffect;
 
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public final class HotspotTestFactory {
 
@@ -18,8 +19,9 @@ public final class HotspotTestFactory {
 
     @NotNull
     public static VariantHotspot createVariantHotspot(@NotNull String gene, @NotNull GeneRole geneRole,
-            @NotNull ProteinEffect proteinEffect, @NotNull String chromosome, int position, @NotNull String ref, @NotNull String alt) {
-        return new VariantHotspotImpl(gene, geneRole, proteinEffect, chromosome, position, ref, alt);
+            @NotNull ProteinEffect proteinEffect, @Nullable Boolean associatedWithDrugResistance, @NotNull String chromosome, int position,
+            @NotNull String ref, @NotNull String alt) {
+        return new VariantHotspotImpl(gene, geneRole, proteinEffect, associatedWithDrugResistance, chromosome, position, ref, alt);
     }
 
     @NotNull
@@ -68,6 +70,8 @@ public final class HotspotTestFactory {
         private final GeneRole geneRole;
         @NotNull
         private final ProteinEffect proteinEffect;
+        @Nullable
+        private final Boolean associatedWithDrugResistance;
         @NotNull
         private final String chromosome;
         private final int position;
@@ -77,10 +81,12 @@ public final class HotspotTestFactory {
         private final String alt;
 
         public VariantHotspotImpl(@NotNull final String gene, @NotNull final GeneRole geneRole, @NotNull final ProteinEffect proteinEffect,
-                @NotNull final String chromosome, final int position, @NotNull final String ref, @NotNull final String alt) {
+                @Nullable final Boolean associatedWithDrugResistance, @NotNull final String chromosome, final int position,
+                @NotNull final String ref, @NotNull final String alt) {
             this.gene = gene;
             this.geneRole = geneRole;
             this.proteinEffect = proteinEffect;
+            this.associatedWithDrugResistance = associatedWithDrugResistance;
             this.chromosome = chromosome;
             this.position = position;
             this.ref = ref;
@@ -103,6 +109,12 @@ public final class HotspotTestFactory {
         @Override
         public ProteinEffect proteinEffect() {
             return proteinEffect;
+        }
+
+        @Nullable
+        @Override
+        public Boolean associatedWithDrugResistance() {
+            return associatedWithDrugResistance;
         }
 
         @NotNull
@@ -138,19 +150,20 @@ public final class HotspotTestFactory {
             }
             final VariantHotspotImpl that = (VariantHotspotImpl) o;
             return position == that.position && gene.equals(that.gene) && geneRole == that.geneRole && proteinEffect == that.proteinEffect
-                    && chromosome.equals(that.chromosome) && ref.equals(that.ref) && alt.equals(that.alt);
+                    && Objects.equals(associatedWithDrugResistance, that.associatedWithDrugResistance) && chromosome.equals(that.chromosome)
+                    && ref.equals(that.ref) && alt.equals(that.alt);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(gene, geneRole, proteinEffect, chromosome, position, ref, alt);
+            return Objects.hash(gene, geneRole, proteinEffect, associatedWithDrugResistance, chromosome, position, ref, alt);
         }
 
         @Override
         public String toString() {
             return "VariantHotspotImpl{" + "gene='" + gene + '\'' + ", geneRole=" + geneRole + ", proteinEffect=" + proteinEffect
-                    + ", chromosome='" + chromosome + '\'' + ", position=" + position + ", ref='" + ref + '\'' + ", alt='" + alt + '\''
-                    + '}';
+                    + ", associatedWithDrugResistance=" + associatedWithDrugResistance + ", chromosome='" + chromosome + '\''
+                    + ", position=" + position + ", ref='" + ref + '\'' + ", alt='" + alt + '\'' + '}';
         }
     }
 }

@@ -208,6 +208,12 @@ class RefGenomeConverter {
                 return annotation.proteinEffect();
             }
 
+            @Nullable
+            @Override
+            public Boolean associatedWithDrugResistance() {
+                return annotation.associatedWithDrugResistance();
+            }
+
             @NotNull
             @Override
             public String transcript() {

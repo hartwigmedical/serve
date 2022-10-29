@@ -10,6 +10,7 @@ import com.hartwig.serve.datamodel.common.ProteinEffect;
 
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public final class RangeTestFactory {
 
@@ -18,9 +19,18 @@ public final class RangeTestFactory {
 
     @NotNull
     public static RangeAnnotation createRangeAnnotation(@NotNull String gene, @NotNull GeneRole geneRole,
-            @NotNull ProteinEffect proteinEffect, @NotNull String chromosome, int start, int end, @NotNull String transcript, int rank,
-            @NotNull MutationType applicableMutationType) {
-        return new RangeAnnotationImpl(gene, geneRole, proteinEffect, chromosome, start, end, transcript, rank, applicableMutationType);
+            @NotNull ProteinEffect proteinEffect, @Nullable Boolean associatedWithDrugResistance, @NotNull String chromosome, int start,
+            int end, @NotNull String transcript, int rank, @NotNull MutationType applicableMutationType) {
+        return new RangeAnnotationImpl(gene,
+                geneRole,
+                proteinEffect,
+                associatedWithDrugResistance,
+                chromosome,
+                start,
+                end,
+                transcript,
+                rank,
+                applicableMutationType);
     }
 
     @NotNull
@@ -110,6 +120,8 @@ public final class RangeTestFactory {
         private final GeneRole geneRole;
         @NotNull
         private final ProteinEffect proteinEffect;
+        @Nullable
+        private final Boolean associatedWithDrugResistance;
         @NotNull
         private final String chromosome;
         private final int start;
@@ -121,11 +133,12 @@ public final class RangeTestFactory {
         private final MutationType applicableMutationType;
 
         public RangeAnnotationImpl(@NotNull final String gene, @NotNull final GeneRole geneRole, @NotNull final ProteinEffect proteinEffect,
-                @NotNull final String chromosome, final int start, final int end, @NotNull final String transcript, final int rank,
-                @NotNull final MutationType applicableMutationType) {
+                @Nullable final Boolean associatedWithDrugResistance, @NotNull final String chromosome, final int start, final int end,
+                @NotNull final String transcript, final int rank, @NotNull final MutationType applicableMutationType) {
             this.gene = gene;
             this.geneRole = geneRole;
             this.proteinEffect = proteinEffect;
+            this.associatedWithDrugResistance = associatedWithDrugResistance;
             this.chromosome = chromosome;
             this.start = start;
             this.end = end;
@@ -150,6 +163,12 @@ public final class RangeTestFactory {
         @Override
         public ProteinEffect proteinEffect() {
             return proteinEffect;
+        }
+
+        @Nullable
+        @Override
+        public Boolean associatedWithDrugResistance() {
+            return associatedWithDrugResistance;
         }
 
         @NotNull
@@ -195,20 +214,31 @@ public final class RangeTestFactory {
             }
             final RangeAnnotationImpl that = (RangeAnnotationImpl) o;
             return start == that.start && end == that.end && rank == that.rank && gene.equals(that.gene) && geneRole == that.geneRole
-                    && proteinEffect == that.proteinEffect && chromosome.equals(that.chromosome) && transcript.equals(that.transcript)
+                    && proteinEffect == that.proteinEffect && Objects.equals(associatedWithDrugResistance,
+                    that.associatedWithDrugResistance) && chromosome.equals(that.chromosome) && transcript.equals(that.transcript)
                     && applicableMutationType == that.applicableMutationType;
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(gene, geneRole, proteinEffect, chromosome, start, end, transcript, rank, applicableMutationType);
+            return Objects.hash(gene,
+                    geneRole,
+                    proteinEffect,
+                    associatedWithDrugResistance,
+                    chromosome,
+                    start,
+                    end,
+                    transcript,
+                    rank,
+                    applicableMutationType);
         }
 
         @Override
         public String toString() {
             return "RangeAnnotationImpl{" + "gene='" + gene + '\'' + ", geneRole=" + geneRole + ", proteinEffect=" + proteinEffect
-                    + ", chromosome='" + chromosome + '\'' + ", start=" + start + ", end=" + end + ", transcript='" + transcript + '\''
-                    + ", rank=" + rank + ", applicableMutationType=" + applicableMutationType + '}';
+                    + ", associatedWithDrugResistance=" + associatedWithDrugResistance + ", chromosome='" + chromosome + '\'' + ", start="
+                    + start + ", end=" + end + ", transcript='" + transcript + '\'' + ", rank=" + rank + ", applicableMutationType="
+                    + applicableMutationType + '}';
         }
     }
 }

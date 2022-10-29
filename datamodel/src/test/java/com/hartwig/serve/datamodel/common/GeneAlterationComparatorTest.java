@@ -12,12 +12,12 @@ public class GeneAlterationComparatorTest {
 
     @Test
     public void canSortGeneAlterations() {
-        GeneAlteration alteration1 = CommonTestFactory.createGeneAlteration("A", GeneRole.ONCO, ProteinEffect.GAIN_OF_FUNCTION);
-        GeneAlteration alteration2 = CommonTestFactory.createGeneAlteration("A", GeneRole.ONCO, ProteinEffect.NO_EFFECT);
-        GeneAlteration alteration3 = CommonTestFactory.createGeneAlteration("A", GeneRole.TSG, ProteinEffect.GAIN_OF_FUNCTION);
-        GeneAlteration alteration4 = CommonTestFactory.createGeneAlteration("A", GeneRole.TSG, ProteinEffect.NO_EFFECT);
-        GeneAlteration alteration5 = CommonTestFactory.createGeneAlteration("B", GeneRole.TSG, ProteinEffect.GAIN_OF_FUNCTION);
-        GeneAlteration alteration6 = CommonTestFactory.createGeneAlteration("B", GeneRole.TSG, ProteinEffect.NO_EFFECT);
+        GeneAlteration alteration1 = CommonTestFactory.createGeneAlteration("A", GeneRole.ONCO, ProteinEffect.GAIN_OF_FUNCTION, null);
+        GeneAlteration alteration2 = CommonTestFactory.createGeneAlteration("A", GeneRole.ONCO, ProteinEffect.NO_EFFECT, null);
+        GeneAlteration alteration3 = CommonTestFactory.createGeneAlteration("A", GeneRole.TSG, ProteinEffect.GAIN_OF_FUNCTION, null);
+        GeneAlteration alteration4 = CommonTestFactory.createGeneAlteration("A", GeneRole.TSG, ProteinEffect.NO_EFFECT, null);
+        GeneAlteration alteration5 = CommonTestFactory.createGeneAlteration("B", GeneRole.TSG, ProteinEffect.GAIN_OF_FUNCTION, null);
+        GeneAlteration alteration6 = CommonTestFactory.createGeneAlteration("B", GeneRole.TSG, ProteinEffect.NO_EFFECT, null);
 
         List<GeneAlteration> alterations = Lists.newArrayList(alteration5, alteration4, alteration3, alteration6, alteration1, alteration2);
         alterations.sort(new GeneAlterationComparator());

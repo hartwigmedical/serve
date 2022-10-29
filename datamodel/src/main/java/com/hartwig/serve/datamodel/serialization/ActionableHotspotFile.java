@@ -59,6 +59,7 @@ public final class ActionableHotspotFile {
                 .add("gene")
                 .add("geneRole")
                 .add("proteinEffect")
+                .add("associatedWithDrugResistance")
                 .add(ActionableFileUtil.header())
                 .toString();
     }
@@ -86,6 +87,7 @@ public final class ActionableHotspotFile {
                 .gene(values[fields.get("gene")])
                 .geneRole(GeneRole.valueOf(values[fields.get("geneRole")]))
                 .proteinEffect(ProteinEffect.valueOf(values[fields.get("proteinEffect")]))
+                .associatedWithDrugResistance(SerializationUtil.optionalBoolean(values[fields.get("associatedWithDrugResistance")]))
                 .build();
     }
 
@@ -117,6 +119,7 @@ public final class ActionableHotspotFile {
                 .add(variant.gene())
                 .add(variant.geneRole().toString())
                 .add(variant.proteinEffect().toString())
+                .add(SerializationUtil.nullableBoolean(variant.associatedWithDrugResistance()))
                 .add(ActionableFileUtil.toLine(variant))
                 .toString();
     }

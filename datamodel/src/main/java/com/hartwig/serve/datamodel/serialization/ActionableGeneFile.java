@@ -55,6 +55,7 @@ public final class ActionableGeneFile {
         return new StringJoiner(ActionableFileUtil.FIELD_DELIMITER).add("gene")
                 .add("geneRole")
                 .add("proteinEffect")
+                .add("associatedWithDrugResistance")
                 .add("event")
                 .add(ActionableFileUtil.header())
                 .toString();
@@ -79,6 +80,7 @@ public final class ActionableGeneFile {
                 .gene(values[fields.get("gene")])
                 .geneRole(GeneRole.valueOf(values[fields.get("geneRole")]))
                 .proteinEffect(ProteinEffect.valueOf(values[fields.get("proteinEffect")]))
+                .associatedWithDrugResistance(SerializationUtil.optionalBoolean(values[fields.get("associatedWithDrugResistance")]))
                 .event(GeneLevelEvent.valueOf(values[fields.get("event")]))
                 .build();
     }
@@ -107,6 +109,7 @@ public final class ActionableGeneFile {
         return new StringJoiner(ActionableFileUtil.FIELD_DELIMITER).add(gene.gene())
                 .add(gene.geneRole().toString())
                 .add(gene.proteinEffect().toString())
+                .add(SerializationUtil.nullableBoolean(gene.associatedWithDrugResistance()))
                 .add(gene.event().toString())
                 .add(ActionableFileUtil.toLine(gene))
                 .toString();

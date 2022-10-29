@@ -42,12 +42,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jooq.DSLContext;
-import org.jooq.InsertValuesStep11;
+import org.jooq.InsertValuesStep12;
 import org.jooq.InsertValuesStep14;
 import org.jooq.InsertValuesStep16;
-import org.jooq.InsertValuesStep17;
+import org.jooq.InsertValuesStep18;
 import org.jooq.InsertValuesStep20;
+import org.jooq.InsertValuesStep21;
 import org.jooq.InsertValuesStep6;
+import org.jooq.InsertValuesStep7;
 import org.jooq.InsertValuesStep9;
 import org.jooq.InsertValuesStepN;
 
@@ -105,8 +107,8 @@ public class ServeDAO {
     }
 
     private void writeActionableHotspots(@NotNull Timestamp timestamp, @NotNull List<ActionableHotspot> hotspots) {
-        for (List<ActionableHotspot> batch : Iterables.partition(hotspots, Utils.DB_BATCH_INSERT_SIZE)) {
-            InsertValuesStep20 inserter = context.insertInto(ACTIONABLEHOTSPOT,
+        for (List<ActionableHotspot> batch : Iterables.partition(hotspots, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
+            InsertValuesStep21 inserter = context.insertInto(ACTIONABLEHOTSPOT,
                     ACTIONABLEHOTSPOT.MODIFIED,
                     ACTIONABLEHOTSPOT.CHROMOSOME,
                     ACTIONABLEHOTSPOT.POSITION,
@@ -115,6 +117,7 @@ public class ServeDAO {
                     ACTIONABLEHOTSPOT.GENE,
                     ACTIONABLEHOTSPOT.GENEROLE,
                     ACTIONABLEHOTSPOT.PROTEINEFFECT,
+                    ACTIONABLEHOTSPOT.ASSOCIATEDWITHDRUGRESISTANCE,
                     ACTIONABLEHOTSPOT.SOURCE,
                     ACTIONABLEHOTSPOT.SOURCEEVENT,
                     ACTIONABLEHOTSPOT.SOURCEURLS,
@@ -132,7 +135,7 @@ public class ServeDAO {
         }
     }
 
-    private static void writeActionableHotspotBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep20 inserter,
+    private static void writeActionableHotspotBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep21 inserter,
             @NotNull ActionableHotspot actionableHotspot) {
         inserter.values(timestamp,
                 actionableHotspot.chromosome(),
@@ -142,6 +145,7 @@ public class ServeDAO {
                 actionableHotspot.gene(),
                 actionableHotspot.geneRole().toString(),
                 actionableHotspot.proteinEffect().toString(),
+                DatabaseUtil.toByte(actionableHotspot.associatedWithDrugResistance()),
                 actionableHotspot.source(),
                 actionableHotspot.sourceEvent(),
                 concat(actionableHotspot.sourceUrls()),
@@ -157,12 +161,13 @@ public class ServeDAO {
     }
 
     private void writeActionableRanges(final Timestamp timestamp, final List<ActionableRange> ranges) {
-        for (List<ActionableRange> batch : Iterables.partition(ranges, Utils.DB_BATCH_INSERT_SIZE)) {
+        for (List<ActionableRange> batch : Iterables.partition(ranges, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
             InsertValuesStepN inserter = context.insertInto(ACTIONABLERANGE,
                     ACTIONABLERANGE.MODIFIED,
                     ACTIONABLERANGE.GENE,
                     ACTIONABLERANGE.GENEROLE,
                     ACTIONABLERANGE.PROTEINEFFECT,
+                    ACTIONABLERANGE.ASSOCIATEDWITHDRUGRESISTANCE,
                     ACTIONABLERANGE.TRANSCRIPT,
                     ACTIONABLERANGE.CHROMOSOME,
                     ACTIONABLERANGE.START,
@@ -193,6 +198,7 @@ public class ServeDAO {
                 actionableRange.gene(),
                 actionableRange.geneRole().toString(),
                 actionableRange.proteinEffect().toString(),
+                DatabaseUtil.toByte(actionableRange.associatedWithDrugResistance()),
                 actionableRange.transcript(),
                 actionableRange.chromosome(),
                 actionableRange.start(),
@@ -215,12 +221,13 @@ public class ServeDAO {
     }
 
     private void writeActionableGenes(@NotNull Timestamp timestamp, @NotNull List<ActionableGene> genes) {
-        for (List<ActionableGene> batch : Iterables.partition(genes, Utils.DB_BATCH_INSERT_SIZE)) {
-            InsertValuesStep17 inserter = context.insertInto(ACTIONABLEGENE,
+        for (List<ActionableGene> batch : Iterables.partition(genes, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
+            InsertValuesStep18 inserter = context.insertInto(ACTIONABLEGENE,
                     ACTIONABLEGENE.MODIFIED,
                     ACTIONABLEGENE.GENE,
                     ACTIONABLEGENE.GENEROLE,
                     ACTIONABLEGENE.PROTEINEFFECT,
+                    ACTIONABLEGENE.ASSOCIATEDWITHDRUGRESISTANCE,
                     ACTIONABLEGENE.EVENT,
                     ACTIONABLEGENE.SOURCE,
                     ACTIONABLEGENE.SOURCEEVENT,
@@ -239,12 +246,13 @@ public class ServeDAO {
         }
     }
 
-    private static void writeActionableGeneBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep17 inserter,
+    private static void writeActionableGeneBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep18 inserter,
             @NotNull ActionableGene actionableGene) {
         inserter.values(timestamp,
                 actionableGene.gene(),
                 actionableGene.geneRole().toString(),
                 actionableGene.proteinEffect().toString(),
+                DatabaseUtil.toByte(actionableGene.associatedWithDrugResistance()),
                 actionableGene.event(),
                 actionableGene.source(),
                 actionableGene.sourceEvent(),
@@ -261,7 +269,7 @@ public class ServeDAO {
     }
 
     private void writeActionableFusions(@NotNull Timestamp timestamp, @NotNull List<ActionableFusion> fusions) {
-        for (List<ActionableFusion> batch : Iterables.partition(fusions, Utils.DB_BATCH_INSERT_SIZE)) {
+        for (List<ActionableFusion> batch : Iterables.partition(fusions, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
             InsertValuesStep20 inserter = context.insertInto(ACTIONABLEFUSION,
                     ACTIONABLEFUSION.MODIFIED,
                     ACTIONABLEFUSION.GENEUP,
@@ -313,7 +321,7 @@ public class ServeDAO {
     }
 
     private void writeActionableCharacteristics(@NotNull Timestamp timestamp, @NotNull List<ActionableCharacteristic> characteristics) {
-        for (List<ActionableCharacteristic> batch : Iterables.partition(characteristics, Utils.DB_BATCH_INSERT_SIZE)) {
+        for (List<ActionableCharacteristic> batch : Iterables.partition(characteristics, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
             InsertValuesStep16 inserter = context.insertInto(ACTIONABLECHARACTERISTIC,
                     ACTIONABLECHARACTERISTIC.MODIFIED,
                     ACTIONABLECHARACTERISTIC.TYPE,
@@ -357,7 +365,7 @@ public class ServeDAO {
     }
 
     private void writeActionableHLA(@NotNull Timestamp timestamp, @NotNull List<ActionableHLA> hla) {
-        for (List<ActionableHLA> batch : Iterables.partition(hla, Utils.DB_BATCH_INSERT_SIZE)) {
+        for (List<ActionableHLA> batch : Iterables.partition(hla, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
             InsertValuesStep14 inserter = context.insertInto(ACTIONABLEHLA,
                     ACTIONABLEHLA.MODIFIED,
                     ACTIONABLEHLA.HLAALLELE,
@@ -397,8 +405,8 @@ public class ServeDAO {
     }
 
     private void writeKnownHotspots(@NotNull Timestamp timestamp, @NotNull Set<KnownHotspot> hotspots) {
-        for (List<KnownHotspot> batch : Iterables.partition(hotspots, Utils.DB_BATCH_INSERT_SIZE)) {
-            InsertValuesStep11 inserter = context.insertInto(KNOWNHOTSPOT,
+        for (List<KnownHotspot> batch : Iterables.partition(hotspots, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
+            InsertValuesStep12 inserter = context.insertInto(KNOWNHOTSPOT,
                     KNOWNHOTSPOT.MODIFIED,
                     KNOWNHOTSPOT.CHROMOSOME,
                     KNOWNHOTSPOT.POSITION,
@@ -407,6 +415,7 @@ public class ServeDAO {
                     KNOWNHOTSPOT.GENE,
                     KNOWNHOTSPOT.GENEROLE,
                     KNOWNHOTSPOT.PROTEINEFFECT,
+                    KNOWNHOTSPOT.ASSOCIATEDWITHDRUGRESISTANCE,
                     KNOWNHOTSPOT.TRANSCRIPT,
                     KNOWNHOTSPOT.PROTEINANNOTATION,
                     KNOWNHOTSPOT.SOURCES);
@@ -415,7 +424,7 @@ public class ServeDAO {
         }
     }
 
-    private static void writeKnownHotspotBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep11 inserter,
+    private static void writeKnownHotspotBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep12 inserter,
             @NotNull KnownHotspot knownHotspot) {
         inserter.values(timestamp,
                 knownHotspot.chromosome(),
@@ -425,18 +434,20 @@ public class ServeDAO {
                 knownHotspot.gene(),
                 knownHotspot.geneRole().toString(),
                 knownHotspot.proteinEffect().toString(),
+                DatabaseUtil.toByte(knownHotspot.associatedWithDrugResistance()),
                 knownHotspot.transcript(),
                 knownHotspot.proteinAnnotation(),
                 Knowledgebase.toCommaSeparatedSourceString(knownHotspot.sources()));
     }
 
     private void writeKnownCodons(@NotNull Timestamp timestamp, @NotNull Set<KnownCodon> codons) {
-        for (List<KnownCodon> batch : Iterables.partition(codons, Utils.DB_BATCH_INSERT_SIZE)) {
-            InsertValuesStep11 inserter = context.insertInto(KNOWNCODON,
+        for (List<KnownCodon> batch : Iterables.partition(codons, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
+            InsertValuesStep12 inserter = context.insertInto(KNOWNCODON,
                     KNOWNCODON.MODIFIED,
                     KNOWNCODON.GENE,
                     KNOWNCODON.GENEROLE,
                     KNOWNCODON.PROTEINEFFECT,
+                    KNOWNCODON.ASSOCIATEDWITHDRUGRESISTANCE,
                     KNOWNCODON.TRANSCRIPT,
                     KNOWNCODON.CHROMOSOME,
                     KNOWNCODON.START,
@@ -449,12 +460,13 @@ public class ServeDAO {
         }
     }
 
-    private static void writeKnownCodonBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep11 inserter,
+    private static void writeKnownCodonBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep12 inserter,
             @NotNull KnownCodon knownCodon) {
         inserter.values(timestamp,
                 knownCodon.annotation().gene(),
                 knownCodon.annotation().geneRole().toString(),
                 knownCodon.annotation().proteinEffect().toString(),
+                DatabaseUtil.toByte(knownCodon.annotation().associatedWithDrugResistance()),
                 knownCodon.annotation().transcript(),
                 knownCodon.annotation().chromosome(),
                 knownCodon.annotation().start(),
@@ -465,12 +477,13 @@ public class ServeDAO {
     }
 
     private void writeKnownExons(@NotNull Timestamp timestamp, @NotNull Set<KnownExon> exons) {
-        for (List<KnownExon> batch : Iterables.partition(exons, Utils.DB_BATCH_INSERT_SIZE)) {
-            InsertValuesStep11 inserter = context.insertInto(KNOWNEXON,
+        for (List<KnownExon> batch : Iterables.partition(exons, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
+            InsertValuesStep12 inserter = context.insertInto(KNOWNEXON,
                     KNOWNEXON.MODIFIED,
                     KNOWNEXON.GENE,
                     KNOWNEXON.GENEROLE,
                     KNOWNEXON.PROTEINEFFECT,
+                    KNOWNEXON.ASSOCIATEDWITHDRUGRESISTANCE,
                     KNOWNEXON.TRANSCRIPT,
                     KNOWNEXON.CHROMOSOME,
                     KNOWNEXON.START,
@@ -483,12 +496,13 @@ public class ServeDAO {
         }
     }
 
-    private static void writeKnownExonBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep11 inserter,
+    private static void writeKnownExonBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep12 inserter,
             @NotNull KnownExon knownExon) {
         inserter.values(timestamp,
                 knownExon.annotation().gene(),
                 knownExon.annotation().geneRole().toString(),
                 knownExon.annotation().proteinEffect().toString(),
+                DatabaseUtil.toByte(knownExon.annotation().associatedWithDrugResistance()),
                 knownExon.annotation().transcript(),
                 knownExon.annotation().chromosome(),
                 knownExon.annotation().start(),
@@ -499,7 +513,7 @@ public class ServeDAO {
     }
 
     private void writeKnownFusionPairs(@NotNull Timestamp timestamp, @NotNull Set<KnownFusionPair> fusionPairs) {
-        for (List<KnownFusionPair> batch : Iterables.partition(fusionPairs, Utils.DB_BATCH_INSERT_SIZE)) {
+        for (List<KnownFusionPair> batch : Iterables.partition(fusionPairs, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
             InsertValuesStep9 inserter = context.insertInto(KNOWNFUSIONPAIR,
                     KNOWNFUSIONPAIR.MODIFIED,
                     KNOWNFUSIONPAIR.GENEUP,
@@ -529,30 +543,32 @@ public class ServeDAO {
     }
 
     private void writeKnownCopyNumbers(@NotNull Timestamp timestamp, @NotNull Set<KnownCopyNumber> copyNumbers) {
-        for (List<KnownCopyNumber> batch : Iterables.partition(copyNumbers, Utils.DB_BATCH_INSERT_SIZE)) {
-            InsertValuesStep6 inserter = context.insertInto(KNOWNCOPYNUMBER,
+        for (List<KnownCopyNumber> batch : Iterables.partition(copyNumbers, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
+            InsertValuesStep7 inserter = context.insertInto(KNOWNCOPYNUMBER,
                     KNOWNCOPYNUMBER.MODIFIED,
                     KNOWNCOPYNUMBER.GENE,
                     KNOWNCOPYNUMBER.GENEROLE,
                     KNOWNCOPYNUMBER.PROTEINEFFECT,
+                    KNOWNCOPYNUMBER.ASSOCIATEDWITHDRUGRESISTANCE,
                     KNOWNCOPYNUMBER.TYPE,
                     KNOWNCOPYNUMBER.SOURCES);
             batch.forEach(entry -> writeKnownCopyNumberBatch(timestamp, inserter, entry));
             inserter.execute();
         }
     }
-    private static void writeKnownCopyNumberBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep6 inserter,
+    private static void writeKnownCopyNumberBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep7 inserter,
             @NotNull KnownCopyNumber knownCopyNumber) {
         inserter.values(timestamp,
                 knownCopyNumber.gene(),
                 knownCopyNumber.geneRole().toString(),
                 knownCopyNumber.proteinEffect().toString(),
+                DatabaseUtil.toByte(knownCopyNumber.associatedWithDrugResistance()),
                 knownCopyNumber.type(),
                 Knowledgebase.toCommaSeparatedSourceString(knownCopyNumber.sources()));
     }
 
     private void writeEventInterpretations(@NotNull Timestamp timestamp, @NotNull List<EventInterpretation> eventInterpretations) {
-        for (List<EventInterpretation> batch : Iterables.partition(eventInterpretations, Utils.DB_BATCH_INSERT_SIZE)) {
+        for (List<EventInterpretation> batch : Iterables.partition(eventInterpretations, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
             InsertValuesStep6 inserter = context.insertInto(EVENTINTERPRETATION,
                     EVENTINTERPRETATION.MODIFIED,
                     EVENTINTERPRETATION.SOURCE,

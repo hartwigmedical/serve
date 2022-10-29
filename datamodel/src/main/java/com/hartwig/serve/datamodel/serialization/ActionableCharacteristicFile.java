@@ -77,13 +77,12 @@ public final class ActionableCharacteristicFile {
         String[] values = line.split(ActionableFileUtil.FIELD_DELIMITER);
 
         String cutoffType = SerializationUtil.optionalString(values[fields.get("cutoffType")]);
-        String cutoff = SerializationUtil.optionalString(values[fields.get("cutoff")]);
 
         return ImmutableActionableCharacteristic.builder()
                 .from(ActionableFileUtil.fromLine(values, fields))
                 .type(TumorCharacteristicType.valueOf(values[fields.get("type")]))
                 .cutoffType(cutoffType != null ? TumorCharacteristicCutoffType.valueOf(cutoffType) : null)
-                .cutoff(cutoff != null ? Double.valueOf(cutoff) : null)
+                .cutoff(SerializationUtil.optionalNumber(values[fields.get("cutoff")]))
                 .build();
     }
 

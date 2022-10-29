@@ -41,6 +41,7 @@ public class RangeAnnotationComparatorTest {
         return RangeTestFactory.createRangeAnnotation(gene,
                 GeneRole.UNKNOWN,
                 ProteinEffect.UNKNOWN,
+                null,
                 chromosome,
                 0,
                 0,

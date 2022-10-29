@@ -27,11 +27,11 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-final class CkbAnnotator {
+final class CkbVariantAnnotator {
 
-    private static final Logger LOGGER = LogManager.getLogger(CkbAnnotator.class);
+    private static final Logger LOGGER = LogManager.getLogger(CkbVariantAnnotator.class);
 
-    private CkbAnnotator() {
+    private CkbVariantAnnotator() {
     }
 
     @NotNull
@@ -60,6 +60,7 @@ final class CkbAnnotator {
                     .gene(variant.gene().geneSymbol())
                     .geneRole(resolveGeneRole(variant.gene()))
                     .proteinEffect(resolveProteinEffect(variant))
+                    .associatedWithDrugResistance(resolveAssociatedWithDrugResistance(variant))
                     .build());
         }
         return annotated;
@@ -78,6 +79,7 @@ final class CkbAnnotator {
                     .gene(variant.gene().geneSymbol())
                     .geneRole(resolveGeneRole(variant.gene()))
                     .proteinEffect(resolveProteinEffect(variant))
+                    .associatedWithDrugResistance(resolveAssociatedWithDrugResistance(variant))
                     .build());
         }
         return annotated;
@@ -96,6 +98,7 @@ final class CkbAnnotator {
                     .gene(variant.gene().geneSymbol())
                     .geneRole(resolveGeneRole(variant.gene()))
                     .proteinEffect(resolveProteinEffect(variant))
+                    .associatedWithDrugResistance(resolveAssociatedWithDrugResistance(variant))
                     .build());
         }
         return annotated;
@@ -112,6 +115,7 @@ final class CkbAnnotator {
                 .gene(variant.gene().geneSymbol())
                 .geneRole(resolveGeneRole(variant.gene()))
                 .proteinEffect(resolveProteinEffect(variant))
+                .associatedWithDrugResistance(resolveAssociatedWithDrugResistance(variant))
                 .build();
     }
 
@@ -126,6 +130,7 @@ final class CkbAnnotator {
                 .gene(variant.gene().geneSymbol())
                 .geneRole(resolveGeneRole(variant.gene()))
                 .proteinEffect(resolveProteinEffect(variant))
+                .associatedWithDrugResistance(resolveAssociatedWithDrugResistance(variant))
                 .build();
     }
 
@@ -151,7 +156,7 @@ final class CkbAnnotator {
             return GeneRole.UNKNOWN;
         }
 
-        LOGGER.warn("Unrecognized CKB gene role: " + gene.geneRole());
+        LOGGER.warn("Unrecognized CKB gene role: {}", gene.geneRole());
         return GeneRole.UNKNOWN;
     }
 
@@ -179,9 +184,24 @@ final class CkbAnnotator {
             case "no effect":
                 return ProteinEffect.NO_EFFECT;
             default: {
-                LOGGER.warn("Unrecognized CKB protein effect: " + variant.proteinEffect());
+                LOGGER.warn("Unrecognized CKB protein effect: {}", variant.proteinEffect());
                 return ProteinEffect.UNKNOWN;
             }
         }
+    }
+
+    @Nullable
+    private static Boolean resolveAssociatedWithDrugResistance(@NotNull Variant variant) {
+        String associatedWithDrugResistance = variant.associatedWithDrugResistance();
+        if (associatedWithDrugResistance == null) {
+            return null;
+        }
+
+        if (associatedWithDrugResistance.equals("Y")) {
+            return true;
+        }
+
+        LOGGER.warn("Unrecognized CKB associated with drug resistance: {}", associatedWithDrugResistance);
+        return null;
     }
 }

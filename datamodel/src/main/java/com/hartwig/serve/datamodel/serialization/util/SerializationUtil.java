@@ -26,6 +26,11 @@ public final class SerializationUtil {
     }
 
     @NotNull
+    public static String nullableBoolean(@Nullable Boolean bool) {
+        return bool != null ? String.valueOf(bool) : Strings.EMPTY;
+    }
+
+    @NotNull
     public static String nullableNumber(@Nullable Double number) {
         return number != null ? String.valueOf(number) : Strings.EMPTY;
     }
@@ -41,12 +46,22 @@ public final class SerializationUtil {
     }
 
     @Nullable
-    public static String optionalString(@NotNull String string) {
-        return !string.isEmpty() ? string : null;
+    public static String optionalString(@NotNull String value) {
+        return !value.isEmpty() ? value : null;
+    }
+
+    @Nullable
+    public static Double optionalNumber(@NotNull String value) {
+        return !value.isEmpty() ? Double.parseDouble(value) : null;
     }
 
     @Nullable
     public static Integer optionalInteger(@NotNull String value) {
         return !value.isEmpty() ? Integer.parseInt(value) : null;
+    }
+
+    @Nullable
+    public static Boolean optionalBoolean(@NotNull String value) {
+        return !value.isEmpty() ? Boolean.valueOf(value) : null;
     }
 }

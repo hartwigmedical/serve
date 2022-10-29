@@ -97,14 +97,14 @@ public final class EventExtractorFactory {
     private static Set<String> extractAllGenesInvolvedInFusions(@NotNull KnownFusionCache knownFusionCache) {
         Set<String> genes = Sets.newHashSet();
         for (KnownFusionData fusion : knownFusionCache.knownFusions()) {
-            if (fusion.Type == KnownFusionType.KNOWN_PAIR || fusion.Type == KnownFusionType.IG_KNOWN_PAIR
-                    || fusion.Type == KnownFusionType.EXON_DEL_DUP) {
-                genes.add(fusion.FiveGene);
-                genes.add(fusion.ThreeGene);
-            } else if (fusion.Type == KnownFusionType.PROMISCUOUS_5 || fusion.Type == KnownFusionType.IG_PROMISCUOUS) {
-                genes.add(fusion.FiveGene);
-            } else if (fusion.Type == KnownFusionType.PROMISCUOUS_3) {
-                genes.add(fusion.ThreeGene);
+            if (fusion.type() == KnownFusionType.KNOWN_PAIR || fusion.type() == KnownFusionType.IG_KNOWN_PAIR
+                    || fusion.type() == KnownFusionType.EXON_DEL_DUP) {
+                genes.add(fusion.fiveGene());
+                genes.add(fusion.threeGene());
+            } else if (fusion.type() == KnownFusionType.PROMISCUOUS_5 || fusion.type() == KnownFusionType.IG_PROMISCUOUS) {
+                genes.add(fusion.fiveGene());
+            } else if (fusion.type() == KnownFusionType.PROMISCUOUS_3) {
+                genes.add(fusion.threeGene());
             }
         }
         return genes;

@@ -15,6 +15,7 @@ import com.hartwig.serve.common.drivergene.DriverGeneFile;
 import com.hartwig.serve.common.ensemblcache.EnsemblDataCache;
 import com.hartwig.serve.common.ensemblcache.EnsemblDataLoader;
 import com.hartwig.serve.common.knownfusion.KnownFusionCache;
+import com.hartwig.serve.common.knownfusion.KnownFusionCacheLoader;
 import com.hartwig.serve.curation.DoidLookup;
 import com.hartwig.serve.curation.DoidLookupFactory;
 import com.hartwig.serve.datamodel.Knowledgebase;
@@ -81,10 +82,7 @@ public class ViccExtractorTestApp {
         LOGGER.info(" Read {} driver genes", driverGenes.size());
 
         LOGGER.info("Reading known fusions from {}", config.knownFusion37File());
-        KnownFusionCache fusionCache = new KnownFusionCache();
-        if (!fusionCache.loadFile(config.knownFusion37File())) {
-            throw new IOException("Could not load known fusion cache from " + config.knownFusion37File());
-        }
+        KnownFusionCache fusionCache = KnownFusionCacheLoader.load(config.knownFusion37File());
         LOGGER.info(" Read {} known fusions", fusionCache.knownFusions().size());
 
         LOGGER.info(" Reading ensembl data cache from {}", config.ensemblDataDir37());

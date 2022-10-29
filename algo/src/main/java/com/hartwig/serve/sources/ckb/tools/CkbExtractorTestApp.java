@@ -15,6 +15,7 @@ import com.hartwig.serve.common.drivergene.DriverGeneFile;
 import com.hartwig.serve.common.ensemblcache.EnsemblDataCache;
 import com.hartwig.serve.common.ensemblcache.EnsemblDataLoader;
 import com.hartwig.serve.common.knownfusion.KnownFusionCache;
+import com.hartwig.serve.common.knownfusion.KnownFusionCacheLoader;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 import com.hartwig.serve.extraction.ExtractionResult;
@@ -73,10 +74,7 @@ public class CkbExtractorTestApp {
         LOGGER.info(" Read {} driver genes", driverGenes.size());
 
         LOGGER.info("Reading known fusions from {}", config.knownFusion38File());
-        KnownFusionCache fusionCache = new KnownFusionCache();
-        if (!fusionCache.loadFile(config.knownFusion38File())) {
-            throw new IOException("Could not load known fusion cache from " + config.knownFusion38File());
-        }
+        KnownFusionCache fusionCache = KnownFusionCacheLoader.load(config.knownFusion38File());
         LOGGER.info(" Read {} known fusions", fusionCache.knownFusions().size());
 
         LOGGER.info(" Reading ensembl data cache from {}", config.ensemblDataDir38());

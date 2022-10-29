@@ -61,26 +61,30 @@ public enum VariantConsequence {
     PROTEIN_PROTEIN_CONTACT("protein_protein_contact"),
     OTHER(Strings.EMPTY);
 
-    private final String mParentSequenceOntologyTerm;
-    private final List<String> mSequenceOntologySubTerms;
-
     public static final String VARIANT_CONSEQ_DELIM = "&";
-    public static final String SPLICE_DONOR_CONSEQUENCE = "splice_donor_variant";
 
-    VariantConsequence(final String parentSequenceOntologyTerm, final String... sequenceOntologySubTerms) {
-        mParentSequenceOntologyTerm = parentSequenceOntologyTerm;
-        mSequenceOntologySubTerms = Lists.newArrayList(sequenceOntologySubTerms);
+    @NotNull
+    private final String parentSequenceOntologyTerm;
+    @NotNull
+    private final List<String> sequenceOntologySubTerms;
+
+    VariantConsequence(@NotNull final String parentSequenceOntologyTerm, @NotNull final String... sequenceOntologySubTerms) {
+        this.parentSequenceOntologyTerm = parentSequenceOntologyTerm;
+        this.sequenceOntologySubTerms = Lists.newArrayList(sequenceOntologySubTerms);
     }
 
-    public static List<VariantConsequence> convertFromEffects(@NotNull final List<String> effects) {
-        final List<VariantConsequence> consequences = Lists.newArrayList();
-
-        effects.forEach(x -> consequences.add(fromEffect(x)));
+    @NotNull
+    public static List<VariantConsequence> convertFromEffects(@NotNull List<String> effects) {
+        List<VariantConsequence> consequences = Lists.newArrayList();
+        for (String effect : effects) {
+            consequences.add(fromEffect(effect));
+        }
         return consequences;
     }
 
-    public static VariantConsequence fromEffect(@NotNull final String effect) {
-        for (final VariantConsequence consequence : VariantConsequence.values()) {
+    @NotNull
+    public static VariantConsequence fromEffect(@NotNull String effect) {
+        for (VariantConsequence consequence : VariantConsequence.values()) {
             if (consequence.isParentTypeOf(effect)) {
                 return consequence;
             }
@@ -89,9 +93,10 @@ public enum VariantConsequence {
         return VariantConsequence.OTHER;
     }
 
-    public static String consequenceString(final List<VariantConsequence> consequences) {
-        final StringJoiner consequenceString = new StringJoiner(VARIANT_CONSEQ_DELIM);
-        for (final VariantConsequence consequence : consequences) {
+    @NotNull
+    public static String consequenceString(@NotNull List<VariantConsequence> consequences) {
+        StringJoiner consequenceString = new StringJoiner(VARIANT_CONSEQ_DELIM);
+        for (VariantConsequence consequence : consequences) {
             if (!consequence.parentTerm().isEmpty()) {
                 consequenceString.add(consequence.parentTerm());
             }
@@ -99,20 +104,22 @@ public enum VariantConsequence {
         return consequenceString.toString();
     }
 
-    public boolean isParentTypeOf(@NotNull final String annotation) {
-        return annotation.equals(mParentSequenceOntologyTerm) || mSequenceOntologySubTerms.contains(annotation);
+    public boolean isParentTypeOf(@NotNull String annotation) {
+        return annotation.equals(parentSequenceOntologyTerm) || sequenceOntologySubTerms.contains(annotation);
     }
 
+    @NotNull
     public String parentTerm() {
-        return mParentSequenceOntologyTerm;
+        return parentSequenceOntologyTerm;
     }
 
+    @NotNull
     public String description() {
-        if (!mSequenceOntologySubTerms.isEmpty()) {
-            return mSequenceOntologySubTerms.get(0);
+        if (!sequenceOntologySubTerms.isEmpty()) {
+            return sequenceOntologySubTerms.get(0);
         }
 
-        return mParentSequenceOntologyTerm;
+        return parentSequenceOntologyTerm;
     }
 
     public int rank() {
@@ -130,7 +137,6 @@ public enum VariantConsequence {
                 return 49;
 
             case FRAMESHIFT_VARIANT:
-                return 40;
             case MISSENSE_VARIANT:
                 return 40;
 
@@ -142,7 +148,6 @@ public enum VariantConsequence {
                 return 25;
 
             case UTR_VARIANT:
-                return 20;
             case INTRON_VARIANT:
                 return 20;
 

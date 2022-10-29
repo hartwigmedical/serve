@@ -13,6 +13,7 @@ import com.hartwig.serve.common.ensemblcache.EnsemblDataCache;
 import com.hartwig.serve.common.ensemblcache.EnsemblDataLoader;
 import com.hartwig.serve.common.ensemblcache.GeneData;
 import com.hartwig.serve.common.knownfusion.KnownFusionCache;
+import com.hartwig.serve.common.knownfusion.KnownFusionCacheLoader;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 import com.hartwig.serve.extraction.hotspot.ProteinResolver;
 import com.hartwig.serve.extraction.hotspot.ProteinResolverFactory;
@@ -87,10 +88,7 @@ public final class RefGenomeManagerFactory {
     @NotNull
     public static KnownFusionCache buildKnownFusionCacheFromFile(@NotNull String knownFusionFile) throws IOException {
         LOGGER.info(" Reading known fusions from {}", knownFusionFile);
-        KnownFusionCache cache = new KnownFusionCache();
-        if (!cache.loadFile(knownFusionFile)) {
-            throw new IOException("Could not load known fusions from " + knownFusionFile);
-        }
+        KnownFusionCache cache = KnownFusionCacheLoader.load(knownFusionFile);
         LOGGER.info("  Read {} known fusion entries", cache.knownFusions().size());
         return cache;
     }

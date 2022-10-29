@@ -227,7 +227,7 @@ public class FusionExtractor {
     }
 
     private boolean isIncludedSomewhereInFusionCache(@NotNull String fiveGene, @NotNull String threeGene) {
-        return knownFusionCache.hasExonDelDup(fiveGene) || knownFusionCache.hasPromiscuousFiveGene(fiveGene)
+        return knownFusionCache.hasAnyExonDelDup(fiveGene) || knownFusionCache.hasPromiscuousFiveGene(fiveGene)
                 || knownFusionCache.hasPromiscuousThreeGene(threeGene) || knownFusionCache.hasKnownFusion(fiveGene, threeGene)
                 || knownFusionCache.hasKnownIgFusion(fiveGene, threeGene) || knownFusionCache.hasPromiscuousIgFusion(fiveGene);
     }

@@ -1,6 +1,5 @@
 package com.hartwig.serve.extraction.snpeff;
 
-import static com.hartwig.serve.common.variant.VariantConsequence.SPLICE_DONOR_CONSEQUENCE;
 import static com.hartwig.serve.common.variant.VariantConsequence.VARIANT_CONSEQ_DELIM;
 
 import java.util.Collections;
@@ -29,6 +28,8 @@ public final class SnpEffAnnotationParser {
     static final String REPEAT_COUNT_FLAG = "REP_C";
     static final String REPEAT_SEQUENCE_FLAG = "REP_S";
 
+    static final String SPLICE_DONOR_CONSEQUENCE = "splice_donor_variant";
+
     private static final String FIELD_SEPARATOR = "\\|";
 
     private static final int EXPECTED_FIELD_SIZE_PER_ANNOTATION = 16;
@@ -37,7 +38,7 @@ public final class SnpEffAnnotationParser {
     }
 
     @NotNull
-    public static List<SnpEffAnnotation> fromContext(@NotNull final VariantContext context) {
+    public static List<SnpEffAnnotation> fromContext(@NotNull VariantContext context) {
         if (context.hasAttribute(SNPEFF_IDENTIFIER)) {
             return fromAnnotationList(context, context.getAttributeAsStringList(SNPEFF_IDENTIFIER, ""));
         }
@@ -46,8 +47,7 @@ public final class SnpEffAnnotationParser {
     }
 
     @NotNull
-    private static List<SnpEffAnnotation> fromAnnotationList(@NotNull final VariantContext context,
-            @NotNull final List<String> annotation) {
+    private static List<SnpEffAnnotation> fromAnnotationList(@NotNull VariantContext context, @NotNull List<String> annotation) {
         return annotation.stream()
                 .map(x -> enforceMinLength(x.trim().split(FIELD_SEPARATOR), EXPECTED_FIELD_SIZE_PER_ANNOTATION))
                 .filter(SnpEffAnnotationParser::isCorrectNumberOfParts)
@@ -60,7 +60,7 @@ public final class SnpEffAnnotationParser {
             return true;
         }
 
-        final StringJoiner joiner = new StringJoiner("|");
+        StringJoiner joiner = new StringJoiner("|");
         Stream.of(parts).forEach(joiner::add);
 
         LOGGER.warn("Annotation found with invalid field count: " + joiner);
@@ -84,11 +84,13 @@ public final class SnpEffAnnotationParser {
                 .build();
     }
 
-    private static List<String> toEffects(final String effectString) {
+    @NotNull
+    private static List<String> toEffects(@NotNull String effectString) {
         return Lists.newArrayList(effectString.split(VARIANT_CONSEQ_DELIM));
     }
 
-    private static String addEffect(final String effect, final String effects, boolean atStart) {
+    @NotNull
+    private static String addEffect(@NotNull String effect, @NotNull String effects, boolean atStart) {
         return atStart ? effect + VARIANT_CONSEQ_DELIM + effects : effects + VARIANT_CONSEQ_DELIM + effect;
     }
 
@@ -107,7 +109,7 @@ public final class SnpEffAnnotationParser {
             return hgvsCoding.contains("+5") ? addEffect(SPLICE_DONOR_CONSEQUENCE, effects, true) : effects;
         }
 
-        final String hgvsCodingType;
+        String hgvsCodingType;
         if (hgvsCoding.contains("ins")) {
             hgvsCodingType = "ins";
         } else if (hgvsCoding.contains("del")) {
@@ -123,15 +125,15 @@ public final class SnpEffAnnotationParser {
             return effects;
         }
 
-        final int adjustedSpliceBase;
-        final String ref = variant.getReference().getBaseString();
-        final String alt = variant.getAlternateAllele(0).getBaseString();
+        int adjustedSpliceBase;
+        String ref = variant.getReference().getBaseString();
+        String alt = variant.getAlternateAllele(0).getBaseString();
         if (isPositiveStrand(ref, alt, hgvsCoding)) {
-            final String variantBases = ref.length() > alt.length() ? ref.substring(1) : alt.substring(1);
-            final int microhomologyAdditionalBases = variant.getAttributeAsString(MICROHOMOLOGY_FLAG, Strings.EMPTY).length();
-            final String repeatSequence = variant.getAttributeAsString(REPEAT_SEQUENCE_FLAG, Strings.EMPTY);
-            final int repeatCount = variant.getAttributeAsInt(REPEAT_COUNT_FLAG, 0);
-            final int repeatCountAdditionalBases = variantBases.equals(repeatSequence) ? repeatCount * repeatSequence.length() : 0;
+            String variantBases = ref.length() > alt.length() ? ref.substring(1) : alt.substring(1);
+            int microhomologyAdditionalBases = variant.getAttributeAsString(MICROHOMOLOGY_FLAG, Strings.EMPTY).length();
+            String repeatSequence = variant.getAttributeAsString(REPEAT_SEQUENCE_FLAG, Strings.EMPTY);
+            int repeatCount = variant.getAttributeAsInt(REPEAT_COUNT_FLAG, 0);
+            int repeatCountAdditionalBases = variantBases.equals(repeatSequence) ? repeatCount * repeatSequence.length() : 0;
             adjustedSpliceBase = initialSpliceBase + Math.max(microhomologyAdditionalBases, repeatCountAdditionalBases);
         } else {
             adjustedSpliceBase = initialSpliceBase;
@@ -141,7 +143,7 @@ public final class SnpEffAnnotationParser {
     }
 
     @VisibleForTesting
-    static int initialIndelSpliceBase(final boolean isInsert, final String hgvsCoding) {
+    static int initialIndelSpliceBase(boolean isInsert, @NotNull String hgvsCoding) {
         int firstIndexOfPlus = hgvsCoding.indexOf("+");
         if (firstIndexOfPlus < 0) {
             return -1;
@@ -151,30 +153,30 @@ public final class SnpEffAnnotationParser {
             int spliceLocation = Integer.parseInt(hgvsCoding.substring(firstIndexOfPlus + 1, firstIndexOfPlus + 2));
             int result = isInsert ? spliceLocation + 1 : spliceLocation;
             return result <= 5 ? result : -1;
-
         } catch (NumberFormatException e) {
             return -1;
         }
     }
 
-    private static boolean isPositiveStrand(@NotNull final String ref, final String alt, final String hgvsCoding) {
+    private static boolean isPositiveStrand(@NotNull String ref, @NotNull String alt, @NotNull String hgvsCoding) {
         char lastBaseOfCoding = hgvsCoding.charAt(hgvsCoding.length() - 1);
         return ref.length() > alt.length()
                 ? ref.charAt(ref.length() - 1) == lastBaseOfCoding
                 : alt.charAt(alt.length() - 1) == lastBaseOfCoding;
     }
 
+    @NotNull
     private static String[] enforceMinLength(@NotNull String[] parts, int minSize) {
         if (parts.length > minSize) {
             return parts;
-        } else {
-            final String[] values = new String[minSize];
-            for (int i = 0; i < minSize; i++) {
-                values[i] = i < parts.length ? parts[i] : Strings.EMPTY;
-            }
-            System.arraycopy(parts, 0, values, 0, parts.length);
-
-            return values;
         }
+
+        String[] values = new String[minSize];
+        for (int i = 0; i < minSize; i++) {
+            values[i] = i < parts.length ? parts[i] : Strings.EMPTY;
+        }
+        System.arraycopy(parts, 0, values, 0, parts.length);
+
+        return values;
     }
 }

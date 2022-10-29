@@ -31,13 +31,12 @@ public class AnnotatedHotspotVCFPrinterPAVE {
     }
 
     public void run(@NotNull String annotatedInputVcf) throws IOException {
-
         LOGGER.info("Simplifying variants from '{}'", annotatedInputVcf);
         AbstractFeatureReader<VariantContext, LineIterator> reader = getFeatureReader(annotatedInputVcf, new VCFCodec(), false);
         for (VariantContext variant : reader.iterator()) {
             VariantImpact impact = VariantImpactSerialiser.fromVariantContext(variant);
 
-            String canonicalProtein = impact.CanonicalHgvsProtein;
+            String canonicalProtein = impact.canonicalHgvsProtein();
 
             if (canonicalProtein.isEmpty()) {
                 canonicalProtein = "-";
@@ -48,10 +47,10 @@ public class AnnotatedHotspotVCFPrinterPAVE {
                     .add(String.valueOf(variant.getStart()))
                     .add(variant.getAlleles().get(0).getBaseString())
                     .add(variant.getAlleles().get(1).getBaseString())
-                    .add(impact.CanonicalGeneName)
-                    .add(impact.CanonicalTranscript)
-                    .add(impact.CanonicalEffect)
-                    .add(impact.CanonicalHgvsCoding)
+                    .add(impact.canonicalGeneName())
+                    .add(impact.canonicalTranscript())
+                    .add(impact.canonicalEffect())
+                    .add(impact.canonicalHgvsCoding())
                     .add(AminoAcids.forceSingleLetterProteinAnnotation(canonicalProtein));
 
             Object input = variant.getAttribute(VCFWriterFactory.INPUT_FIELD);

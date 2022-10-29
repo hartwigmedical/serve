@@ -41,7 +41,7 @@ public class AnnotatedHotspotVCFPrinter {
         new AnnotatedHotspotVCFPrinter().run(annotatedInputVcf, ensemblDataCacheDir);
     }
 
-    public void run(@NotNull String annotatedInputVcf, final String ensemblDataCacheDir) throws IOException {
+    public void run(@NotNull String annotatedInputVcf, @NotNull String ensemblDataCacheDir) throws IOException {
         EnsemblDataCache ensemblDataCache = EnsemblDataLoader.load(ensemblDataCacheDir, RefGenomeVersion.V37);
 
         Map<String,String> geneNamePerCanonicalTranscriptMap = createGeneNamePerCanonicalTranscriptMap(ensemblDataCache);

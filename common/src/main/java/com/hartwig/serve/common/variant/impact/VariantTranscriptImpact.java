@@ -1,39 +1,31 @@
 package com.hartwig.serve.common.variant.impact;
 
+import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class VariantTranscriptImpact {
+@Value.Immutable
+@Value.Style(passAnnotations = { NotNull.class, Nullable.class })
+public abstract class VariantTranscriptImpact {
 
-    public final String GeneId;
-    public final String GeneName;
-    public final String Transcript;
-    public final String Effects;
-    public final boolean SpliceRegion;
-    public final String HgvsCoding;
-    public final String HgvsProtein;
+    @NotNull
+    public abstract String geneId();
 
-    public VariantTranscriptImpact(final String geneId, final String geneName, final String transcript, final String effects,
-            final boolean spliceRegion, final String hgvsCoding, final String hgvsProtein) {
-        GeneId = geneId;
-        GeneName = geneName;
-        Transcript = transcript;
-        Effects = effects;
-        SpliceRegion = spliceRegion;
-        HgvsCoding = hgvsCoding;
-        HgvsProtein = hgvsProtein;
-    }
+    @NotNull
+    public abstract String geneName();
 
-    // the in the VCF, transcript impacts are separated by ',', the components by ',' and the effects by '&"
-    public static final String VAR_TRANS_IMPACT_ITEM_DELIM = "\\|";
+    @NotNull
+    public abstract String transcript();
 
-    public static VariantTranscriptImpact fromVcfData(@NotNull String data) {
-        String[] items = data.split(VAR_TRANS_IMPACT_ITEM_DELIM);
-        return new VariantTranscriptImpact(items[0],
-                items[1],
-                items[2],
-                items[3],
-                Boolean.parseBoolean(items[4]),
-                items[5],
-                items.length == 7 ? items[6] : null);
-    }
+    @NotNull
+    public abstract String effects();
+
+    public abstract boolean spliceRegion();
+
+    @NotNull
+    public abstract String hgvsCoding();
+
+    @Nullable
+    public abstract String hgvsProtein();
+
 }

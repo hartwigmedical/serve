@@ -7,6 +7,7 @@ import java.util.Set;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.common.variant.impact.VariantTranscriptImpact;
+import com.hartwig.serve.common.variant.impact.VariantTranscriptImpactFactory;
 import com.hartwig.serve.extraction.util.VCFWriterFactory;
 import com.hartwig.serve.util.AminoAcids;
 
@@ -93,23 +94,22 @@ public class AnnotatedHotspotVCFCheckerPAVE {
                         break;
                     }
                     case NO_MATCH: {
-                        //                        LOGGER.warn("Could not match inputTranscript {}, input protein {} for input gene {}",
-                        //                                inputTranscript,
-                        //                                inputProteinAnnotation,
-                        //                                inputGene);
+                        //  LOGGER.warn("Could not match inputTranscript {}, input protein {} for input gene {}",
+                        //   inputTranscript,
+                        //   inputProteinAnnotation,
+                        //   inputGene);
 
                         for (VariantTranscriptImpact variantTranscriptImpact : annotations) {
-                            if (variantTranscriptImpact.Transcript.equals(inputTranscript)) {
-
+                            if (variantTranscriptImpact.transcript().equals(inputTranscript)) {
                                 LOGGER.warn(
                                         "Could not match inputTranscript {}, paveTranscript {}, input protein {}, pave protein {}, pave coding {} for input gene {}, pave gene {}",
                                         inputTranscript,
-                                        variantTranscriptImpact.Transcript,
+                                        variantTranscriptImpact.transcript(),
                                         inputProteinAnnotation,
-                                        variantTranscriptImpact.HgvsProtein,
-                                        variantTranscriptImpact.HgvsCoding,
+                                        variantTranscriptImpact.hgvsProtein(),
+                                        variantTranscriptImpact.hgvsCoding(),
                                         inputGene,
-                                        variantTranscriptImpact.GeneName);
+                                        variantTranscriptImpact.geneName());
 
                             }
                         }
@@ -134,7 +134,7 @@ public class AnnotatedHotspotVCFCheckerPAVE {
     private static List<VariantTranscriptImpact> toVariantTranscriptImpact(@NotNull final List<String> annotation) {
         List<VariantTranscriptImpact> variantTranscriptImpactList = Lists.newArrayList();
         for (int i = 0; i <= annotation.size() - 1; i++) {
-            variantTranscriptImpactList.add(VariantTranscriptImpact.fromVcfData(annotation.get(i)));
+            variantTranscriptImpactList.add(VariantTranscriptImpactFactory.fromVcfData(annotation.get(i)));
         }
 
         return variantTranscriptImpactList;
@@ -162,8 +162,8 @@ public class AnnotatedHotspotVCFCheckerPAVE {
     @NotNull
     private MatchType matchOnSpecificAnnotation(@NotNull String inputTranscript, @NotNull String inputProteinAnnotation,
             @NotNull VariantTranscriptImpact specificAnnotation) {
-        String PaveProteinAnnotation = AminoAcids.forceSingleLetterProteinAnnotation(specificAnnotation.HgvsProtein);
-        return matchAnnotation(inputTranscript, inputProteinAnnotation, PaveProteinAnnotation, specificAnnotation.Effects);
+        String PaveProteinAnnotation = AminoAcids.forceSingleLetterProteinAnnotation(specificAnnotation.hgvsProtein());
+        return matchAnnotation(inputTranscript, inputProteinAnnotation, PaveProteinAnnotation, specificAnnotation.effects());
     }
 
     @NotNull
@@ -171,9 +171,10 @@ public class AnnotatedHotspotVCFCheckerPAVE {
         MatchType matchedMatchType = MatchType.NO_MATCH;
         for (VariantTranscriptImpact annotation : annotations) {
             // We only want to consider transcript features with coding impact.
-            if (!annotation.HgvsProtein.isEmpty()) {
-                String PaveProteinAnnotation = AminoAcids.forceSingleLetterProteinAnnotation(annotation.HgvsProtein);
-                MatchType match = matchAnnotation(annotation.Transcript, inputProteinAnnotation, PaveProteinAnnotation, annotation.Effects);
+            if (!annotation.hgvsProtein().isEmpty()) {
+                String PaveProteinAnnotation = AminoAcids.forceSingleLetterProteinAnnotation(annotation.hgvsProtein());
+                MatchType match =
+                        matchAnnotation(annotation.transcript(), inputProteinAnnotation, PaveProteinAnnotation, annotation.effects());
                 if (match != MatchType.NO_MATCH && matchedMatchType == MatchType.NO_MATCH) {
                     matchedMatchType = match;
                 }
@@ -187,7 +188,7 @@ public class AnnotatedHotspotVCFCheckerPAVE {
     private static VariantTranscriptImpact annotationForTranscript(@NotNull List<VariantTranscriptImpact> annotations,
             @Nullable String transcript) {
         for (VariantTranscriptImpact annotation : annotations) {
-            if (annotation.Transcript.equals(transcript)) {
+            if (annotation.transcript().equals(transcript)) {
                 return annotation;
             }
         }

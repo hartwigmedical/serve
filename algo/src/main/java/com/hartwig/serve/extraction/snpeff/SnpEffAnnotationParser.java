@@ -33,6 +33,9 @@ public final class SnpEffAnnotationParser {
 
     private static final int EXPECTED_FIELD_SIZE_PER_ANNOTATION = 16;
 
+    private SnpEffAnnotationParser() {
+    }
+
     @NotNull
     public static List<SnpEffAnnotation> fromContext(@NotNull final VariantContext context) {
         if (context.hasAttribute(SNPEFF_IDENTIFIER)) {

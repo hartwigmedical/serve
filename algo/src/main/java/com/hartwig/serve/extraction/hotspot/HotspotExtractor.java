@@ -23,6 +23,7 @@ import org.jetbrains.annotations.Nullable;
 public class HotspotExtractor {
 
     private static final Logger LOGGER = LogManager.getLogger(HotspotExtractor.class);
+
     @NotNull
     private final GeneChecker geneChecker;
     @NotNull

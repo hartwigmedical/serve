@@ -10,8 +10,8 @@ import org.jetbrains.annotations.Nullable;
 
 @Value.Immutable
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class })
-public abstract class SnpEffAnnotation
-{
+public abstract class SnpEffAnnotation {
+
     private static final String FEATURE_TYPE_TRANSCRIPT = "transcript";
 
     @NotNull
@@ -42,28 +42,22 @@ public abstract class SnpEffAnnotation
     public abstract String hgvsProtein();
 
     @NotNull
-    public String consequenceString()
-    {
+    public String consequenceString() {
         return VariantConsequence.consequenceString(consequences());
     }
 
     // when we use the feature ID it is in practice always a transcript, but this mapping may not hold for every annotation
-    public String transcript()
-    {
+    public String transcript() {
         String transcript = featureID();
         // In case transcripts appear with their version (eg ENST001.1) we strip the version part out.
-        if(transcript.contains("."))
-        {
+        if (transcript.contains(".")) {
             return transcript.substring(0, transcript.indexOf("."));
-        }
-        else
-        {
+        } else {
             return transcript;
         }
     }
 
-    public boolean isTranscriptFeature()
-    {
+    public boolean isTranscriptFeature() {
         return featureType().equals(FEATURE_TYPE_TRANSCRIPT);
     }
 }

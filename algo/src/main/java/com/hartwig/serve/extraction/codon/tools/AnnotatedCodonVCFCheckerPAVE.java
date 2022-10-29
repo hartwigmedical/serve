@@ -64,8 +64,7 @@ public class AnnotatedCodonVCFCheckerPAVE {
 
     @Nullable
     private static VariantImpact annotationForTranscript(@NotNull VariantImpact impact, @NotNull String transcript) {
-
-        if (impact.CanonicalTranscript.equals(transcript)) {
+        if (impact.canonicalTranscript().equals(transcript)) {
             return impact;
         }
 
@@ -78,7 +77,7 @@ public class AnnotatedCodonVCFCheckerPAVE {
             VariantImpact variantImpact = annotationForTranscript(impact, inputTranscript);
 
             if (variantImpact != null) {
-                int snpEffCodon = extractCodon(variantImpact.CanonicalHgvsProtein);
+                int snpEffCodon = extractCodon(variantImpact.canonicalHgvsProtein());
                 if (inputCodon == snpEffCodon) {
                     LOGGER.debug("Identical on gene '{}': SERVE input codon '{}' vs PAVE codon '{}'", inputGene, inputCodon, snpEffCodon);
                     return true;
@@ -94,7 +93,7 @@ public class AnnotatedCodonVCFCheckerPAVE {
             // In case input transcript is missing we try to match against any transcript.
             boolean matchFound = false;
 
-            int snpEffCodon = extractCodon(impact.CanonicalHgvsProtein);
+            int snpEffCodon = extractCodon(impact.canonicalHgvsProtein());
             if (inputCodon == snpEffCodon) {
                 matchFound = true;
 

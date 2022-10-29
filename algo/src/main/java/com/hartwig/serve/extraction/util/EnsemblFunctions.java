@@ -24,6 +24,6 @@ public final class EnsemblFunctions {
             return null;
         }
 
-        return HmfTranscriptRegionUtils.fromTranscript(gene, transcript);
+        return HmfTranscriptRegionUtils.fromEnsemblData(gene, transcript);
     }
 }

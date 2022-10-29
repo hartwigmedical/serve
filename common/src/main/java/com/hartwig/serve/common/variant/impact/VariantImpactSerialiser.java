@@ -1,18 +1,21 @@
 package com.hartwig.serve.common.variant.impact;
 
-import static com.hartwig.serve.common.variant.CodingEffect.UNDEFINED;
-
 import java.util.List;
 
 import com.hartwig.serve.common.variant.CodingEffect;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 
 import htsjdk.variant.variantcontext.VariantContext;
 
 public final class VariantImpactSerialiser {
 
-    public static final String VAR_IMPACT = "IMPACT";
+    private static final Logger LOGGER = LogManager.getLogger(VariantImpactSerialiser.class);
+
+    private static final String VAR_IMPACT = "IMPACT";
 
     private VariantImpactSerialiser() {
     }
@@ -25,7 +28,20 @@ public final class VariantImpactSerialiser {
     @NotNull
     public static VariantImpact fromAttributeValues(@NotNull List<String> impactValues) {
         if (impactValues.size() != 10) {
-            return new VariantImpact("", "", "", UNDEFINED, "", "", false, "", UNDEFINED, 0);
+            LOGGER.warn("Could not resolve variant impact from values: " + impactValues);
+
+            return ImmutableVariantImpact.builder()
+                    .canonicalGeneName(Strings.EMPTY)
+                    .canonicalEffect(Strings.EMPTY)
+                    .canonicalTranscript(Strings.EMPTY)
+                    .canonicalCodingEffect(CodingEffect.UNDEFINED)
+                    .canonicalHgvsCoding(Strings.EMPTY)
+                    .canonicalHgvsProtein(Strings.EMPTY)
+                    .canonicalSpliceRegion(false)
+                    .otherReportableEffects(Strings.EMPTY)
+                    .worstCodingEffect(CodingEffect.UNDEFINED)
+                    .genesAffected(0)
+                    .build();
         }
 
         int index = 0;
@@ -43,15 +59,17 @@ public final class VariantImpactSerialiser {
         CodingEffect worstCodingEffect = CodingEffect.valueOf(impactValues.get(index++));
         int genesAffected = Integer.parseInt(impactValues.get(index));
 
-        return new VariantImpact(canonicalGeneName,
-                canonicalTranscript,
-                canonicalEffect,
-                canonicalCodingEffect,
-                canonicalHgvsCodingImpact,
-                canonicalHgvsProteinImpact,
-                canonicalSpliceRegion,
-                otherReportableEffects,
-                worstCodingEffect,
-                genesAffected);
+        return ImmutableVariantImpact.builder()
+                .canonicalGeneName(canonicalGeneName)
+                .canonicalEffect(canonicalEffect)
+                .canonicalTranscript(canonicalTranscript)
+                .canonicalCodingEffect(canonicalCodingEffect)
+                .canonicalHgvsCoding(canonicalHgvsCodingImpact)
+                .canonicalHgvsProtein(canonicalHgvsProteinImpact)
+                .canonicalSpliceRegion(canonicalSpliceRegion)
+                .otherReportableEffects(otherReportableEffects)
+                .worstCodingEffect(worstCodingEffect)
+                .genesAffected(genesAffected)
+                .build();
     }
 }

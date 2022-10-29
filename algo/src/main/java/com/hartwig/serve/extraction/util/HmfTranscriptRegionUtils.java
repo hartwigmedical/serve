@@ -19,7 +19,7 @@ public final class HmfTranscriptRegionUtils {
     }
 
     @NotNull
-    public static HmfTranscriptRegion fromTranscript(@NotNull GeneData gene, @NotNull TranscriptData transcript) {
+    public static HmfTranscriptRegion fromEnsemblData(@NotNull GeneData gene, @NotNull TranscriptData transcript) {
         List<HmfExonRegion> exons = Lists.newArrayList();
 
         for (ExonData exon : transcript.exons()) {

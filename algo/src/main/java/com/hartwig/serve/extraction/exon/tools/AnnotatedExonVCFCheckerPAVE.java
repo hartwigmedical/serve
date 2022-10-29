@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import com.hartwig.serve.common.variant.impact.VariantTranscriptImpact;
+import com.hartwig.serve.common.variant.impact.VariantTranscriptImpactFactory;
 import com.hartwig.serve.extraction.codon.tools.AnnotatedCodonVCFChecker;
 import com.hartwig.serve.extraction.util.VCFWriterFactory;
 
@@ -67,7 +68,7 @@ public class AnnotatedExonVCFCheckerPAVE {
     private static List<VariantTranscriptImpact> toVariantTranscriptImpact(@NotNull final List<String> annotation) {
         List<VariantTranscriptImpact> variantTranscriptImpactList = Lists.newArrayList();
         for (int i = 0; i <= annotation.size() - 1; i++) {
-            variantTranscriptImpactList.add(VariantTranscriptImpact.fromVcfData(annotation.get(i)));
+            variantTranscriptImpactList.add(VariantTranscriptImpactFactory.fromVcfData(annotation.get(i)));
         }
 
         return variantTranscriptImpactList;
@@ -77,7 +78,7 @@ public class AnnotatedExonVCFCheckerPAVE {
     private static VariantTranscriptImpact annotationForTranscript(@NotNull List<VariantTranscriptImpact> annotations,
             @NotNull String transcript) {
         for (VariantTranscriptImpact annotation : annotations) {
-            if (annotation.Transcript.equals(transcript)) {
+            if (annotation.transcript().equals(transcript)) {
                 return annotation;
             }
         }

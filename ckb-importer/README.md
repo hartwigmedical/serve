@@ -35,4 +35,4 @@ Resources for v1.0 can be found on https://github.com/hartwigmedical/hmftools/re
   - Support for java11
 - [1.1](https://github.com/hartwigmedical/hmftools/releases/tag/ckb-importer-v1.1)
 - [1.0](https://github.com/hartwigmedical/hmftools/releases/tag/ckb-importer-v1.0)
-- Initial release. 
+  - Initial release. 

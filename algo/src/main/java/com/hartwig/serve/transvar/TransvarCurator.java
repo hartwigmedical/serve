@@ -30,7 +30,7 @@ class TransvarCurator {
     }
 
     @NotNull
-    private final GeneNameMapping geneNameMapping = new GeneNameMapping();
+    private final GeneNameMapping geneNameMapping = GeneNameMapping.loadFromResource();
 
     public TransvarCurator() {
     }

@@ -41,7 +41,7 @@ public final class EnsemblDataLoader {
     }
 
     @NotNull
-    public static Map<String, List<GeneData>> loadGeneData(@NotNull String geneDataFile, @NotNull RefGenomeVersion version)
+    private static Map<String, List<GeneData>> loadGeneData(@NotNull String geneDataFile, @NotNull RefGenomeVersion version)
             throws IOException {
         BufferedReader fileReader = new BufferedReader(new FileReader(geneDataFile));
 
@@ -107,7 +107,7 @@ public final class EnsemblDataLoader {
     }
 
     @NotNull
-    public static Map<String, List<TranscriptData>> loadTranscriptData(@NotNull String transcriptDataFile) throws IOException {
+    private static Map<String, List<TranscriptData>> loadTranscriptData(@NotNull String transcriptDataFile) throws IOException {
         BufferedReader fileReader = new BufferedReader(new FileReader(transcriptDataFile));
 
         Map<String, Integer> fields = SerializationUtil.createFields(fileReader.readLine(), ENSEMBL_FILE_DELIMITER);

@@ -18,16 +18,17 @@ import org.jetbrains.annotations.Nullable;
 
 public class GeneNameMapping {
 
+    private static final String DELIMITER = ",";
+
     @NotNull
     private final Map<String, GeneMappingData> geneNameNewToOldMap;
     @NotNull
     private final Set<String> unchangedGenes;
 
-    private static final String DELIMITER = ",";
-
-    public GeneNameMapping() {
-        geneNameNewToOldMap = Maps.newHashMap();
-        unchangedGenes = Sets.newHashSet();
+    @NotNull
+    public static GeneNameMapping loadFromResource() {
+        Map<String, GeneMappingData> geneNameNewToOldMap = Maps.newHashMap();
+        Set<String> unchangedGenes = Sets.newHashSet();
 
         InputStream inputStream = GeneNameMapping.class.getResourceAsStream("/ensembl/gene_name_mapping.csv");
         List<String> lines = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.toList());
@@ -53,6 +54,13 @@ public class GeneNameMapping {
                 geneNameNewToOldMap.put(geneNameNew, data);
             }
         }
+
+        return new GeneNameMapping(geneNameNewToOldMap, unchangedGenes);
+    }
+
+    private GeneNameMapping(@NotNull final Map<String, GeneMappingData> geneNameNewToOldMap, @NotNull final Set<String> unchangedGenes) {
+        this.geneNameNewToOldMap = geneNameNewToOldMap;
+        this.unchangedGenes = unchangedGenes;
     }
 
     public boolean hasNewGene(@NotNull String geneNameNew) {

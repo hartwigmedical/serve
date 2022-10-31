@@ -100,7 +100,7 @@ public final class KnownHotspotVCF {
                     .transcript(inputTranscript)
                     .proteinAnnotation(inputProteinAnnotation)
                     .position(hotspot.getStart())
-                    .ref(hotspot.getAlleles().get(0).getBaseString())
+                    .ref(hotspot.getReference().getBaseString())
                     .alt(hotspot.getAlleles().get(0).getBaseString())
                     .sources(knowledgebaseSet)
                     .build());

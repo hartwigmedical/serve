@@ -9,14 +9,8 @@ import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
 import com.hartwig.serve.datamodel.hotspot.HotspotTestFactory;
-import com.hartwig.serve.datamodel.hotspot.ImmutableActionableHotspot;
 import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.range.ActionableRange;
-import com.hartwig.serve.datamodel.range.ImmutableActionableRange;
-import com.hartwig.serve.datamodel.range.ImmutableCodonAnnotation;
-import com.hartwig.serve.datamodel.range.ImmutableExonAnnotation;
-import com.hartwig.serve.datamodel.range.ImmutableKnownCodon;
-import com.hartwig.serve.datamodel.range.ImmutableKnownExon;
 import com.hartwig.serve.datamodel.range.KnownCodon;
 import com.hartwig.serve.datamodel.range.KnownExon;
 import com.hartwig.serve.datamodel.range.RangeTestFactory;
@@ -56,15 +50,11 @@ public class RefGenomeConverterTest {
 
     @Test
     public void canConvertKnownCodons() {
-        KnownCodon codon = ImmutableKnownCodon.builder()
-                .from(RangeTestFactory.createTestKnownCodon())
-                .annotation(ImmutableCodonAnnotation.builder()
-                        .from(RangeTestFactory.createTestCodonAnnotation())
-                        .gene(TEST_GENE)
-                        .chromosome(TEST_CHROMOSOME)
-                        .start(1)
-                        .end(3)
-                        .build())
+        KnownCodon codon = RangeTestFactory.knownCodonBuilder()
+                .gene(TEST_GENE)
+                .chromosome(TEST_CHROMOSOME)
+                .start(1)
+                .end(3)
                 .addSources(Knowledgebase.HARTWIG_CURATED)
                 .build();
 
@@ -76,15 +66,11 @@ public class RefGenomeConverterTest {
 
     @Test
     public void canConvertKnownExons() {
-        KnownExon exon = ImmutableKnownExon.builder()
-                .from(RangeTestFactory.createTestKnownExon())
-                .annotation(ImmutableExonAnnotation.builder()
-                        .from(RangeTestFactory.createTestExonAnnotation())
-                        .gene(TEST_GENE)
-                        .chromosome(TEST_CHROMOSOME)
-                        .start(1)
-                        .end(7)
-                        .build())
+        KnownExon exon = RangeTestFactory.knownExonBuilder()
+                .gene(TEST_GENE)
+                .chromosome(TEST_CHROMOSOME)
+                .start(1)
+                .end(7)
                 .addSources(Knowledgebase.HARTWIG_CURATED)
                 .build();
 
@@ -96,12 +82,13 @@ public class RefGenomeConverterTest {
 
     @Test
     public void canConvertActionableHotspots() {
-        ActionableHotspot actionableHotspot = ImmutableActionableHotspot.builder()
-                .from(HotspotTestFactory.createTestActionableHotspotForSource(Knowledgebase.HARTWIG_CURATED))
+        ActionableHotspot actionableHotspot = HotspotTestFactory.actionableHotspotBuilder()
+                .gene(TEST_GENE)
                 .chromosome(TEST_CHROMOSOME)
                 .position(1)
                 .ref("G")
                 .alt("C")
+                .source(Knowledgebase.HARTWIG_CURATED)
                 .build();
 
         Set<ActionableHotspot> convertedActionableHotspots = DUMMY_CONVERTER.convertActionableHotspots(Sets.newHashSet(actionableHotspot));
@@ -110,12 +97,12 @@ public class RefGenomeConverterTest {
 
     @Test
     public void canConvertActionableRanges() {
-        ActionableRange actionableRange = ImmutableActionableRange.builder()
-                .from(RangeTestFactory.createTestActionableRangeForSource(Knowledgebase.HARTWIG_CURATED))
+        ActionableRange actionableRange = RangeTestFactory.actionableRangeBuilder()
                 .gene(TEST_GENE)
                 .chromosome(TEST_CHROMOSOME)
                 .start(3)
                 .end(4)
+                .source(Knowledgebase.HARTWIG_CURATED)
                 .build();
 
         Set<ActionableRange> convertedActionableRanges = DUMMY_CONVERTER.convertActionableRanges(Sets.newHashSet(actionableRange));

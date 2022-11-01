@@ -25,7 +25,7 @@ public final class ServeAlgoTestFactory {
                 .addKnownCodons(RangeTestFactory.createTestKnownCodonForSource(source))
                 .addKnownExons(RangeTestFactory.createTestKnownExonForSource(source))
                 .addKnownCopyNumbers(GeneTestFactory.createTestKnownCopyNumberForSource(source))
-                .addKnownFusionPairs(FusionTestFactory.createTestKnownFusionPairForSource(source))
+                .addKnownFusions(FusionTestFactory.createTestKnownFusionForSource(source))
                 .addActionableHotspots(HotspotTestFactory.createTestActionableHotspotForSource(source))
                 .addActionableRanges(RangeTestFactory.createTestActionableRangeForSource(source))
                 .addActionableGenes(GeneTestFactory.createTestActionableGeneForSource(source))
@@ -34,6 +34,4 @@ public final class ServeAlgoTestFactory {
                 .addActionableHLA(ImmunoTestFactory.createTestActionableImmunoHLAForSource(source))
                 .build();
     }
-
-
 }

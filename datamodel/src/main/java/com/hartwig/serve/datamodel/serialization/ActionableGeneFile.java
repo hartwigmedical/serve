@@ -9,11 +9,9 @@ import java.util.StringJoiner;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
-import com.hartwig.serve.datamodel.common.GeneRole;
-import com.hartwig.serve.datamodel.common.ProteinEffect;
 import com.hartwig.serve.datamodel.gene.ActionableGene;
 import com.hartwig.serve.datamodel.gene.ActionableGeneComparator;
-import com.hartwig.serve.datamodel.gene.GeneLevelEvent;
+import com.hartwig.serve.datamodel.gene.GeneEvent;
 import com.hartwig.serve.datamodel.gene.ImmutableActionableGene;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 import com.hartwig.serve.datamodel.serialization.util.ActionableFileUtil;
@@ -52,13 +50,7 @@ public final class ActionableGeneFile {
     @NotNull
     @VisibleForTesting
     static String header() {
-        return new StringJoiner(ActionableFileUtil.FIELD_DELIMITER).add("gene")
-                .add("geneRole")
-                .add("proteinEffect")
-                .add("associatedWithDrugResistance")
-                .add("event")
-                .add(ActionableFileUtil.header())
-                .toString();
+        return new StringJoiner(ActionableFileUtil.FIELD_DELIMITER).add("gene").add("event").add(ActionableFileUtil.header()).toString();
     }
 
     @NotNull
@@ -78,10 +70,7 @@ public final class ActionableGeneFile {
         return ImmutableActionableGene.builder()
                 .from(ActionableFileUtil.fromLine(values, fields))
                 .gene(values[fields.get("gene")])
-                .geneRole(GeneRole.valueOf(values[fields.get("geneRole")]))
-                .proteinEffect(ProteinEffect.valueOf(values[fields.get("proteinEffect")]))
-                .associatedWithDrugResistance(SerializationUtil.optionalBoolean(values[fields.get("associatedWithDrugResistance")]))
-                .event(GeneLevelEvent.valueOf(values[fields.get("event")]))
+                .event(GeneEvent.valueOf(values[fields.get("event")]))
                 .build();
     }
 
@@ -107,9 +96,6 @@ public final class ActionableGeneFile {
     @NotNull
     private static String toLine(@NotNull ActionableGene gene) {
         return new StringJoiner(ActionableFileUtil.FIELD_DELIMITER).add(gene.gene())
-                .add(gene.geneRole().toString())
-                .add(gene.proteinEffect().toString())
-                .add(SerializationUtil.nullableBoolean(gene.associatedWithDrugResistance()))
                 .add(gene.event().toString())
                 .add(ActionableFileUtil.toLine(gene))
                 .toString();

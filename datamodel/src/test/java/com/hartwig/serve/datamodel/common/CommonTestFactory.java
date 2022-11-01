@@ -12,8 +12,18 @@ public final class CommonTestFactory {
     }
 
     @NotNull
+    public static GenomePosition createTestGenomePosition() {
+        return createGenomePosition(Strings.EMPTY, 0);
+    }
+
+    @NotNull
     public static GenomePosition createGenomePosition(@NotNull String chromosome, int position) {
         return new GenomePositionImpl(chromosome, position);
+    }
+
+    @NotNull
+    public static GenomeRegion createTestGenomeRegion() {
+        return createGenomeRegion(Strings.EMPTY, 0, 0);
     }
 
     @NotNull
@@ -22,14 +32,14 @@ public final class CommonTestFactory {
     }
 
     @NotNull
-    public static GeneAlteration createEmptyGeneAlteration() {
-        return createGeneAlteration(Strings.EMPTY, GeneRole.UNKNOWN, ProteinEffect.UNKNOWN, null);
+    public static GeneAlteration createTestGeneAlteration() {
+        return createGeneAlteration(GeneRole.UNKNOWN, ProteinEffect.UNKNOWN, null);
     }
 
     @NotNull
-    public static GeneAlteration createGeneAlteration(@NotNull String gene, @NotNull GeneRole geneRole,
+    public static GeneAlteration createGeneAlteration(@NotNull GeneRole geneRole,
             @NotNull ProteinEffect proteinEffect, @Nullable Boolean associatedWithDrugResistance) {
-        return new GeneAlterationImpl(gene, geneRole, proteinEffect, associatedWithDrugResistance);
+        return new GeneAlterationImpl(geneRole, proteinEffect, associatedWithDrugResistance);
     }
 
     private static class GenomePositionImpl implements GenomePosition {
@@ -132,26 +142,17 @@ public final class CommonTestFactory {
     private static class GeneAlterationImpl implements GeneAlteration {
 
         @NotNull
-        private final String gene;
-        @NotNull
         private final GeneRole geneRole;
         @NotNull
         private final ProteinEffect proteinEffect;
         @Nullable
         private final Boolean associatedWithDrugResistance;
 
-        public GeneAlterationImpl(@NotNull final String gene, @NotNull final GeneRole geneRole, @NotNull final ProteinEffect proteinEffect,
+        public GeneAlterationImpl(@NotNull final GeneRole geneRole, @NotNull final ProteinEffect proteinEffect,
                 @Nullable final Boolean associatedWithDrugResistance) {
-            this.gene = gene;
             this.geneRole = geneRole;
             this.proteinEffect = proteinEffect;
             this.associatedWithDrugResistance = associatedWithDrugResistance;
-        }
-
-        @NotNull
-        @Override
-        public String gene() {
-            return gene;
         }
 
         @NotNull
@@ -181,20 +182,19 @@ public final class CommonTestFactory {
                 return false;
             }
             final GeneAlterationImpl that = (GeneAlterationImpl) o;
-            return gene.equals(that.gene) && geneRole == that.geneRole && proteinEffect == that.proteinEffect && Objects.equals(
-                    associatedWithDrugResistance,
+            return geneRole == that.geneRole && proteinEffect == that.proteinEffect && Objects.equals(associatedWithDrugResistance,
                     that.associatedWithDrugResistance);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(gene, geneRole, proteinEffect, associatedWithDrugResistance);
+            return Objects.hash(geneRole, proteinEffect, associatedWithDrugResistance);
         }
 
         @Override
         public String toString() {
-            return "GeneAlterationImpl{" + "gene='" + gene + '\'' + ", geneRole=" + geneRole + ", proteinEffect=" + proteinEffect
-                    + ", associatedWithDrugResistance=" + associatedWithDrugResistance + '}';
+            return "GeneAlterationImpl{" + "geneRole=" + geneRole + ", proteinEffect=" + proteinEffect + ", associatedWithDrugResistance="
+                    + associatedWithDrugResistance + '}';
         }
     }
 }

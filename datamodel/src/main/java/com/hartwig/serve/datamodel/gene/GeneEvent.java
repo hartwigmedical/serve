@@ -1,6 +1,6 @@
 package com.hartwig.serve.datamodel.gene;
 
-public enum GeneLevelEvent {
+public enum GeneEvent {
     AMPLIFICATION,
     OVEREXPRESSION,
     DELETION,

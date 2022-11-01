@@ -10,12 +10,9 @@ import java.util.StringJoiner;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import com.hartwig.serve.datamodel.MutationType;
-import com.hartwig.serve.datamodel.common.GeneRole;
-import com.hartwig.serve.datamodel.common.ProteinEffect;
 import com.hartwig.serve.datamodel.range.ActionableRange;
 import com.hartwig.serve.datamodel.range.ActionableRangeComparator;
 import com.hartwig.serve.datamodel.range.ImmutableActionableRange;
-import com.hartwig.serve.datamodel.range.RangeType;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 import com.hartwig.serve.datamodel.serialization.util.ActionableFileUtil;
 import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
@@ -54,16 +51,10 @@ public final class ActionableRangeFile {
     @VisibleForTesting
     static String header() {
         return new StringJoiner(ActionableFileUtil.FIELD_DELIMITER).add("gene")
-                .add("geneRole")
-                .add("proteinEffect")
-                .add("associatedWithDrugResistance")
-                .add("transcript")
                 .add("chromosome")
                 .add("start")
                 .add("end")
                 .add("applicableMutationType")
-                .add("rangeType")
-                .add("rank")
                 .add(ActionableFileUtil.header())
                 .toString();
     }
@@ -85,16 +76,10 @@ public final class ActionableRangeFile {
         return ImmutableActionableRange.builder()
                 .from(ActionableFileUtil.fromLine(values, fields))
                 .gene(values[fields.get("gene")])
-                .geneRole(GeneRole.valueOf(values[fields.get("geneRole")]))
-                .proteinEffect(ProteinEffect.valueOf(values[fields.get("proteinEffect")]))
-                .associatedWithDrugResistance(SerializationUtil.optionalBoolean(values[fields.get("associatedWithDrugResistance")]))
-                .transcript(values[fields.get("transcript")])
                 .chromosome(values[fields.get("chromosome")])
                 .start(Integer.parseInt(values[fields.get("start")]))
                 .end(Integer.parseInt(values[fields.get("end")]))
                 .applicableMutationType(MutationType.valueOf(values[fields.get("applicableMutationType")]))
-                .rangeType(RangeType.valueOf(values[fields.get("rangeType")]))
-                .rank(Integer.parseInt(values[fields.get("rank")]))
                 .build();
     }
 
@@ -120,16 +105,10 @@ public final class ActionableRangeFile {
     @NotNull
     private static String toLine(@NotNull ActionableRange range) {
         return new StringJoiner(ActionableFileUtil.FIELD_DELIMITER).add(range.gene())
-                .add(range.geneRole().toString())
-                .add(range.proteinEffect().toString())
-                .add(SerializationUtil.nullableBoolean(range.associatedWithDrugResistance()))
-                .add(range.transcript())
                 .add(range.chromosome())
                 .add(Long.toString(range.start()))
                 .add(Long.toString(range.end()))
                 .add(range.applicableMutationType().toString())
-                .add(range.rangeType().toString())
-                .add(String.valueOf(range.rank()))
                 .add(ActionableFileUtil.toLine(range))
                 .toString();
     }

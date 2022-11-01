@@ -10,10 +10,6 @@ import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.common.drivergene.DriverGene;
 import com.hartwig.serve.common.ensemblcache.EnsemblDataCache;
 import com.hartwig.serve.datamodel.MutationType;
-import com.hartwig.serve.datamodel.common.GeneRole;
-import com.hartwig.serve.datamodel.common.ProteinEffect;
-import com.hartwig.serve.datamodel.range.ExonAnnotation;
-import com.hartwig.serve.datamodel.range.ImmutableExonAnnotation;
 import com.hartwig.serve.extraction.util.DriverInconsistencyMode;
 import com.hartwig.serve.extraction.util.EnsemblFunctions;
 import com.hartwig.serve.extraction.util.GeneChecker;
@@ -190,14 +186,12 @@ public class ExonExtractor {
 
         return ImmutableExonAnnotation.builder()
                 .gene(gene)
-                .geneRole(GeneRole.UNKNOWN)
-                .proteinEffect(ProteinEffect.UNKNOWN)
-                .transcript(canonicalTranscriptID)
                 .chromosome(hmfExonRegion.chromosome())
                 .start(start)
                 .end(end)
                 .applicableMutationType(applicableMutationType)
-                .rank(exonRank)
+                .inputTranscript(canonicalTranscriptID)
+                .inputExonRank(exonRank)
                 .build();
     }
 

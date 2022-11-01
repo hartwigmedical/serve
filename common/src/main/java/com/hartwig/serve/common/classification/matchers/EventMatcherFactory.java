@@ -68,9 +68,9 @@ public final class EventMatcherFactory {
         map.put(EventType.GENE_LEVEL, withFirstTierMatchers(firstTierEventMatchers, geneLevelMatcher));
         map.put(EventType.WILD_TYPE, withFirstTierMatchers(firstTierEventMatchers, wildTypeMatcher));
         map.put(EventType.AMPLIFICATION, withFirstTierMatchers(firstTierEventMatchers, amplificationMatcher));
-        map.put(EventType.OVER_EXPRESSION, withFirstTierMatchers(firstTierEventMatchers, overExpressionMatcher));
+        map.put(EventType.OVEREXPRESSION, withFirstTierMatchers(firstTierEventMatchers, overExpressionMatcher));
         map.put(EventType.DELETION, withFirstTierMatchers(firstTierEventMatchers, deletionMatcher));
-        map.put(EventType.UNDER_EXPRESSION, withFirstTierMatchers(firstTierEventMatchers, underExpressionMatcher));
+        map.put(EventType.UNDEREXPRESSION, withFirstTierMatchers(firstTierEventMatchers, underExpressionMatcher));
         map.put(EventType.FUSION_PAIR, withFirstTierMatchers(firstTierEventMatchers, fusionPairMatcher));
         map.put(EventType.PROMISCUOUS_FUSION, withFirstTierMatchers(firstTierEventMatchers, promiscuousFusionMatcher));
         map.put(EventType.CHARACTERISTIC, withFirstTierMatchers(firstTierEventMatchers, characteristicMatcher));

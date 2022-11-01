@@ -3,12 +3,11 @@ package com.hartwig.serve.extraction;
 import java.util.List;
 
 import com.hartwig.serve.datamodel.characteristic.TumorCharacteristic;
-import com.hartwig.serve.datamodel.fusion.KnownFusionPair;
+import com.hartwig.serve.datamodel.fusion.FusionPair;
 import com.hartwig.serve.datamodel.gene.GeneAnnotation;
-import com.hartwig.serve.datamodel.gene.KnownCopyNumber;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
-import com.hartwig.serve.datamodel.range.CodonAnnotation;
-import com.hartwig.serve.datamodel.range.ExonAnnotation;
+import com.hartwig.serve.extraction.codon.CodonAnnotation;
+import com.hartwig.serve.extraction.exon.ExonAnnotation;
 import com.hartwig.serve.extraction.immuno.ImmunoHLA;
 
 import org.immutables.value.Value;
@@ -29,13 +28,13 @@ public abstract class EventExtractorOutput {
     public abstract List<ExonAnnotation> exons();
 
     @Nullable
-    public abstract GeneAnnotation geneAnnotation();
+    public abstract GeneAnnotation geneLevel();
 
     @Nullable
-    public abstract KnownCopyNumber knownCopyNumber();
+    public abstract GeneAnnotation copyNumber();
 
     @Nullable
-    public abstract KnownFusionPair knownFusionPair();
+    public abstract FusionPair fusionPair();
 
     @Nullable
     public abstract TumorCharacteristic characteristic();

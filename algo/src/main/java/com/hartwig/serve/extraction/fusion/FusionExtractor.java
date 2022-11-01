@@ -5,9 +5,7 @@ import java.util.Set;
 
 import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.common.knownfusion.KnownFusionCache;
-import com.hartwig.serve.datamodel.common.ProteinEffect;
-import com.hartwig.serve.datamodel.fusion.ImmutableKnownFusionPair;
-import com.hartwig.serve.datamodel.fusion.KnownFusionPair;
+import com.hartwig.serve.datamodel.fusion.FusionPair;
 import com.hartwig.serve.extraction.util.DriverInconsistencyMode;
 import com.hartwig.serve.extraction.util.GeneChecker;
 
@@ -38,7 +36,7 @@ public class FusionExtractor {
     }
 
     @Nullable
-    public KnownFusionPair extract(@NotNull String gene, @NotNull EventType type, @NotNull String event) {
+    public FusionPair extract(@NotNull String gene, @NotNull EventType type, @NotNull String event) {
         if (type == EventType.FUSION_PAIR) {
             if (FusionAnnotationConfig.EXONIC_FUSIONS_MAP.containsKey(event)) {
                 return fromConfiguredPair(FusionAnnotationConfig.EXONIC_FUSIONS_MAP.get(event), gene);
@@ -65,7 +63,7 @@ public class FusionExtractor {
     }
 
     @Nullable
-    private static KnownFusionPair fromExonicDelDup(@NotNull String gene, @NotNull String event) {
+    private static FusionPair fromExonicDelDup(@NotNull String gene, @NotNull String event) {
         ExonicDelDupType exonicDelDupType = FusionAnnotationConfig.DEL_DUP_TYPE_PER_GENE.get(gene);
         if (exonicDelDupType == null) {
             LOGGER.warn("No exonic del dup type configured for gene '{}'", gene);
@@ -111,14 +109,13 @@ public class FusionExtractor {
             }
         }
 
-        return ImmutableKnownFusionPair.builder()
+        return ImmutableFusionPairImpl.builder()
                 .geneUp(gene)
                 .minExonUp(exonUp)
                 .maxExonUp(exonUp)
                 .geneDown(gene)
                 .minExonDown(exonDown)
                 .maxExonDown(exonDown)
-                .proteinEffect(ProteinEffect.UNKNOWN)
                 .build();
     }
 
@@ -143,7 +140,7 @@ public class FusionExtractor {
     }
 
     @Nullable
-    private KnownFusionPair fromStandardFusionPairEvent(@NotNull String event) {
+    private FusionPair fromStandardFusionPairEvent(@NotNull String event) {
         String[] fusionArray = event.split("-");
         String geneUp = null;
         String geneDown = null;
@@ -173,11 +170,7 @@ public class FusionExtractor {
             return null;
         }
 
-        return ImmutableKnownFusionPair.builder()
-                .geneUp(removeAllSpaces(geneUp))
-                .geneDown(removeAllSpaces(geneDown))
-                .proteinEffect(ProteinEffect.UNKNOWN)
-                .build();
+        return ImmutableFusionPairImpl.builder().geneUp(removeAllSpaces(geneUp)).geneDown(removeAllSpaces(geneDown)).build();
     }
 
     private static boolean isInteger(@NotNull String string) {
@@ -190,9 +183,9 @@ public class FusionExtractor {
     }
 
     @Nullable
-    private KnownFusionPair fromConfiguredPair(@NotNull KnownFusionPair configuredPair, @NotNull String gene) {
-        KnownFusionPair pair = ImmutableKnownFusionPair.builder().from(configuredPair).build();
-        KnownFusionPair pairValidated = validate(pair);
+    private FusionPair fromConfiguredPair(@NotNull FusionPair configuredPair, @NotNull String gene) {
+        FusionPair pair = ImmutableFusionPairImpl.builder().from(configuredPair).build();
+        FusionPair pairValidated = validate(pair);
         if (pairValidated != null) {
             if (!pairValidated.geneUp().equals(gene) || !pairValidated.geneDown().equals(gene)) {
                 LOGGER.warn("Preconfigured fusion '{}' does not match on gene level: {}", configuredPair, gene);
@@ -204,7 +197,7 @@ public class FusionExtractor {
     }
 
     @Nullable
-    private KnownFusionPair validate(@Nullable KnownFusionPair pair) {
+    private FusionPair validate(@Nullable FusionPair pair) {
         if (pair == null) {
             return null;
         }

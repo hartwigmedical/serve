@@ -8,7 +8,7 @@ import java.util.Set;
 
 import com.google.common.collect.Sets;
 import com.hartwig.serve.common.classification.EventType;
-import com.hartwig.serve.datamodel.fusion.KnownFusionPair;
+import com.hartwig.serve.datamodel.fusion.FusionPair;
 import com.hartwig.serve.extraction.util.DriverInconsistencyMode;
 import com.hartwig.serve.extraction.util.GeneChecker;
 import com.hartwig.serve.refgenome.RefGenomeManagerFactoryTest;
@@ -23,37 +23,37 @@ public class FusionExtractorTest {
     @Test
     public void canFilterInCatalog() {
         FusionExtractor fusionExtractorIgnore = buildTestFusionExtractor(GENE_CHECKER, Sets.newHashSet(), DriverInconsistencyMode.IGNORE);
-        KnownFusionPair fusionIgnore = fusionExtractorIgnore.extract("NTRK3", EventType.FUSION_PAIR, "BCR-NTRK3 Fusion");
+        FusionPair fusionIgnore = fusionExtractorIgnore.extract("NTRK3", EventType.FUSION_PAIR, "BCR-NTRK3 Fusion");
         assertNotNull(fusionIgnore);
 
         FusionExtractor fusionExtractorFilter = buildTestFusionExtractor(GENE_CHECKER, Sets.newHashSet(), DriverInconsistencyMode.FILTER);
-        KnownFusionPair fusionFilter = fusionExtractorFilter.extract("NTRK3", EventType.FUSION_PAIR, "BCR-NTRK3 Fusion");
+        FusionPair fusionFilter = fusionExtractorFilter.extract("NTRK3", EventType.FUSION_PAIR, "BCR-NTRK3 Fusion");
         assertNotNull(fusionFilter);
 
         FusionExtractor fusionExtractorWarn = buildTestFusionExtractor(GENE_CHECKER, Sets.newHashSet(), DriverInconsistencyMode.WARN_ONLY);
-        KnownFusionPair fusionWarn = fusionExtractorWarn.extract("NTRK3", EventType.FUSION_PAIR, "BCR-NTRK3 Fusion");
+        FusionPair fusionWarn = fusionExtractorWarn.extract("NTRK3", EventType.FUSION_PAIR, "BCR-NTRK3 Fusion");
         assertNotNull(fusionWarn);
     }
 
     @Test
     public void canFilterNotInCatalog() {
         FusionExtractor fusionExtractorIgnore = buildTestFusionExtractor(GENE_CHECKER, Sets.newHashSet(), DriverInconsistencyMode.IGNORE);
-        KnownFusionPair fusionIgnore = fusionExtractorIgnore.extract("PDGFRA", EventType.FUSION_PAIR, "BCR-PDGFRA Fusion");
+        FusionPair fusionIgnore = fusionExtractorIgnore.extract("PDGFRA", EventType.FUSION_PAIR, "BCR-PDGFRA Fusion");
         assertNotNull(fusionIgnore);
 
         FusionExtractor fusionExtractorFilter = buildTestFusionExtractor(GENE_CHECKER, Sets.newHashSet(), DriverInconsistencyMode.FILTER);
-        KnownFusionPair fusionFilter = fusionExtractorFilter.extract("PDGFRA", EventType.FUSION_PAIR, "BCR-PDGFRA Fusion");
+        FusionPair fusionFilter = fusionExtractorFilter.extract("PDGFRA", EventType.FUSION_PAIR, "BCR-PDGFRA Fusion");
         assertNull(fusionFilter);
 
         FusionExtractor fusionExtractorWarn = buildTestFusionExtractor(GENE_CHECKER, Sets.newHashSet(), DriverInconsistencyMode.WARN_ONLY);
-        KnownFusionPair fusionWarn = fusionExtractorWarn.extract("PDGFRA", EventType.FUSION_PAIR, "BCR-PDGFRA Fusion");
+        FusionPair fusionWarn = fusionExtractorWarn.extract("PDGFRA", EventType.FUSION_PAIR, "BCR-PDGFRA Fusion");
         assertNotNull(fusionWarn);
     }
 
     @Test
     public void canExtractSimpleFusionPair() {
         FusionExtractor fusionExtractor = testFusionExtractor();
-        KnownFusionPair fusion = fusionExtractor.extract("PDGFRA", EventType.FUSION_PAIR, "BCR-PDGFRA Fusion");
+        FusionPair fusion = fusionExtractor.extract("PDGFRA", EventType.FUSION_PAIR, "BCR-PDGFRA Fusion");
 
         assertNotNull(fusion);
         assertEquals("BCR", fusion.geneUp());
@@ -63,7 +63,7 @@ public class FusionExtractorTest {
     @Test
     public void ignoresFusionsOnUnknownGenes() {
         FusionExtractor fusionExtractor = testFusionExtractor();
-        KnownFusionPair fusion = fusionExtractor.extract("IG", EventType.FUSION_PAIR, "IG-BCL2");
+        FusionPair fusion = fusionExtractor.extract("IG", EventType.FUSION_PAIR, "IG-BCL2");
 
         assertNull(fusion);
     }
@@ -71,7 +71,7 @@ public class FusionExtractorTest {
     @Test
     public void canExtractFusionPairsWithExonsUpDown() {
         FusionExtractor fusionExtractor = testFusionExtractor();
-        KnownFusionPair fusion = fusionExtractor.extract("EGFR", EventType.FUSION_PAIR, "EGFRvII");
+        FusionPair fusion = fusionExtractor.extract("EGFR", EventType.FUSION_PAIR, "EGFRvII");
 
         assertNotNull(fusion);
         assertEquals("EGFR", fusion.geneUp());
@@ -86,17 +86,17 @@ public class FusionExtractorTest {
     public void canExtractFusionPairsWithOddNames() {
         FusionExtractor fusionExtractor =
                 testFusionExtractorWithGeneChecker(new GeneChecker(Sets.newHashSet("IGH", "NKX2-1", "HLA-A", "ROS1")));
-        KnownFusionPair fusion1 = fusionExtractor.extract("NKX2-1", EventType.FUSION_PAIR, "IGH-NKX2-1 Fusion");
+        FusionPair fusion1 = fusionExtractor.extract("NKX2-1", EventType.FUSION_PAIR, "IGH-NKX2-1 Fusion");
 
         assertNotNull(fusion1);
         assertEquals("IGH", fusion1.geneUp());
         assertEquals("NKX2-1", fusion1.geneDown());
 
-        KnownFusionPair fusion2 = fusionExtractor.extract("ROS1", EventType.FUSION_PAIR, "HLA-A-ROS1 Fusion");
+        FusionPair fusion2 = fusionExtractor.extract("ROS1", EventType.FUSION_PAIR, "HLA-A-ROS1 Fusion");
         assertEquals("HLA-A", fusion2.geneUp());
         assertEquals("ROS1", fusion2.geneDown());
 
-        KnownFusionPair fusion3 = fusionExtractor.extract("ROS1", EventType.FUSION_PAIR, "HLA-A-HLA-A");
+        FusionPair fusion3 = fusionExtractor.extract("ROS1", EventType.FUSION_PAIR, "HLA-A-HLA-A");
         assertEquals("HLA-A", fusion3.geneUp());
         assertEquals("HLA-A", fusion3.geneDown());
     }
@@ -104,7 +104,7 @@ public class FusionExtractorTest {
     @Test
     public void canExtractFusionPairsWithExons() {
         FusionExtractor fusionExtractor = testFusionExtractor();
-        KnownFusionPair fusion = fusionExtractor.extract("MET", EventType.FUSION_PAIR_AND_EXON, "EXON 14 SKIPPING MUTATION");
+        FusionPair fusion = fusionExtractor.extract("MET", EventType.FUSION_PAIR_AND_EXON, "EXON 14 SKIPPING MUTATION");
 
         assertNotNull(fusion);
         assertEquals("MET", fusion.geneUp());
@@ -118,7 +118,7 @@ public class FusionExtractorTest {
     @Test
     public void canExtractExonicDelDupFusions() {
         FusionExtractor fusionExtractor = testFusionExtractorWithExonicDelDupKeyPhrases(Sets.newHashSet("skip this"));
-        KnownFusionPair fusion = fusionExtractor.extract("EGFR", EventType.FUSION_PAIR, "KINASE DOMAIN DUPLICATION (EXON 18-25)");
+        FusionPair fusion = fusionExtractor.extract("EGFR", EventType.FUSION_PAIR, "KINASE DOMAIN DUPLICATION (EXON 18-25)");
 
         assertNotNull(fusion);
         assertEquals("EGFR", fusion.geneUp());

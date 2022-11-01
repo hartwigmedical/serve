@@ -84,7 +84,7 @@ public class IclusionExtractorTest {
         // Iclusion doesn't extract known events
         assertEquals(0, result.knownHotspots().size());
         assertEquals(0, result.knownCopyNumbers().size());
-        assertEquals(0, result.knownFusionPairs().size());
+        assertEquals(0, result.knownFusions().size());
 
         assertEquals(1, result.actionableHotspots().size());
         assertEquals(2, result.actionableRanges().size());

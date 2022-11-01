@@ -112,16 +112,16 @@ public class IclusionExtractor {
             actionableRanges.addAll(ActionableEventFactory.toActionableRanges(trial, extraction.codons()));
             actionableRanges.addAll(ActionableEventFactory.toActionableRanges(trial, extraction.exons()));
 
-            if (extraction.geneAnnotation() != null) {
-                actionableGenes.add(ActionableEventFactory.geneAnnotationToActionableGene(trial, extraction.geneAnnotation()));
+            if (extraction.geneLevel() != null) {
+                actionableGenes.add(ActionableEventFactory.geneAnnotationToActionableGene(trial, extraction.geneLevel()));
             }
 
-            if (extraction.knownCopyNumber() != null) {
-                actionableGenes.add(ActionableEventFactory.copyNumberToActionableGene(trial, extraction.knownCopyNumber()));
+            if (extraction.copyNumber() != null) {
+                actionableGenes.add(ActionableEventFactory.geneAnnotationToActionableGene(trial, extraction.copyNumber()));
             }
 
-            if (extraction.knownFusionPair() != null) {
-                actionableFusions.add(ActionableEventFactory.toActionableFusion(trial, extraction.knownFusionPair()));
+            if (extraction.fusionPair() != null) {
+                actionableFusions.add(ActionableEventFactory.toActionableFusion(trial, extraction.fusionPair()));
             }
 
             if (extraction.characteristic() != null) {

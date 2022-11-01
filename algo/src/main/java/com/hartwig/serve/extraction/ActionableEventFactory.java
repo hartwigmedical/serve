@@ -9,26 +9,19 @@ import com.hartwig.serve.datamodel.characteristic.ActionableCharacteristic;
 import com.hartwig.serve.datamodel.characteristic.ImmutableActionableCharacteristic;
 import com.hartwig.serve.datamodel.characteristic.TumorCharacteristic;
 import com.hartwig.serve.datamodel.fusion.ActionableFusion;
+import com.hartwig.serve.datamodel.fusion.FusionPair;
 import com.hartwig.serve.datamodel.fusion.ImmutableActionableFusion;
-import com.hartwig.serve.datamodel.fusion.KnownFusionPair;
 import com.hartwig.serve.datamodel.gene.ActionableGene;
 import com.hartwig.serve.datamodel.gene.GeneAnnotation;
-import com.hartwig.serve.datamodel.gene.GeneLevelEvent;
 import com.hartwig.serve.datamodel.gene.ImmutableActionableGene;
-import com.hartwig.serve.datamodel.gene.KnownCopyNumber;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
 import com.hartwig.serve.datamodel.hotspot.ImmutableActionableHotspot;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
 import com.hartwig.serve.datamodel.immuno.ActionableHLA;
 import com.hartwig.serve.datamodel.immuno.ImmutableActionableHLA;
 import com.hartwig.serve.datamodel.range.ActionableRange;
-import com.hartwig.serve.datamodel.range.CodonAnnotation;
-import com.hartwig.serve.datamodel.range.ExonAnnotation;
 import com.hartwig.serve.datamodel.range.ImmutableActionableRange;
-import com.hartwig.serve.datamodel.range.ImmutableCodonAnnotation;
-import com.hartwig.serve.datamodel.range.ImmutableExonAnnotation;
 import com.hartwig.serve.datamodel.range.RangeAnnotation;
-import com.hartwig.serve.datamodel.range.RangeType;
 import com.hartwig.serve.extraction.immuno.ImmunoHLA;
 
 import org.jetbrains.annotations.NotNull;
@@ -63,52 +56,10 @@ public final class ActionableEventFactory {
 
         Set<ActionableRange> actionableRanges = Sets.newHashSet();
         for (RangeAnnotation range : ranges) {
-            actionableRanges.add(ImmutableActionableRange.builder()
-                    .from(actionableEvent)
-                    .from(range)
-                    .rangeType(determineRangeType(range))
-                    .build());
+            actionableRanges.add(ImmutableActionableRange.builder().from(actionableEvent).from(range).build());
         }
 
         return actionableRanges;
-    }
-
-    @NotNull
-    private static RangeType determineRangeType(@NotNull RangeAnnotation annotation) {
-        if (annotation instanceof CodonAnnotation || annotation instanceof ImmutableCodonAnnotation) {
-            return RangeType.CODON;
-        } else if (annotation instanceof ExonAnnotation || annotation instanceof ImmutableExonAnnotation) {
-            return RangeType.EXON;
-        }
-
-        throw new IllegalStateException("Could not determine range type for: " + annotation);
-    }
-
-    @NotNull
-    public static ActionableGene copyNumberToActionableGene(@NotNull ActionableEvent actionableEvent, @NotNull KnownCopyNumber copyNumber) {
-        GeneLevelEvent event;
-        switch (copyNumber.type()) {
-            case AMPLIFICATION: {
-                event = GeneLevelEvent.AMPLIFICATION;
-                break;
-            }
-            case OVEREXPRESSION: {
-                event = GeneLevelEvent.OVEREXPRESSION;
-                break;
-            }
-            case DELETION: {
-                event = GeneLevelEvent.DELETION;
-                break;
-            }
-            case UNDEREXPRESSION: {
-                event = GeneLevelEvent.UNDEREXPRESSION;
-                break;
-            }
-            default:
-                throw new IllegalStateException("Invalid copy number type: " + copyNumber.type());
-        }
-
-        return ImmutableActionableGene.builder().from(actionableEvent).from(copyNumber).event(event).build();
     }
 
     @NotNull
@@ -118,7 +69,7 @@ public final class ActionableEventFactory {
     }
 
     @NotNull
-    public static ActionableFusion toActionableFusion(@NotNull ActionableEvent actionableEvent, @NotNull KnownFusionPair fusion) {
+    public static ActionableFusion toActionableFusion(@NotNull ActionableEvent actionableEvent, @NotNull FusionPair fusion) {
         return ImmutableActionableFusion.builder().from(actionableEvent).from(fusion).build();
     }
 

@@ -27,8 +27,18 @@ public class HotspotExtractorTest {
 
     private static final Hotspot TEST_HOTSPOT = ImmutableHotspot.builder().chromosome("1").position(10).ref("A").alt("T").build();
 
-    private static final VariantHotspot TEST_VARIANT_HOTSPOT = ImmutableVariantHotspotImpl.builder()
+    private static final VariantHotspot TEST_BRAF_VARIANT_HOTSPOT = ImmutableVariantHotspotImpl.builder()
             .from(HotspotTestFactory.createTestKnownHotspot())
+            .gene("BRAF")
+            .chromosome("1")
+            .position(10)
+            .ref("A")
+            .alt("T")
+            .build();
+
+    private static final VariantHotspot TEST_KRAS_VARIANT_HOTSPOT = ImmutableVariantHotspotImpl.builder()
+            .from(HotspotTestFactory.createTestKnownHotspot())
+            .gene("KRAS")
             .chromosome("1")
             .position(10)
             .ref("A")
@@ -49,17 +59,17 @@ public class HotspotExtractorTest {
         HotspotExtractor hotspotExtractorFilter = createWithProtein(protein, DriverInconsistencyMode.FILTER);
         List<VariantHotspot> hotspotExtractorFilterList = hotspotExtractorFilter.extract("BRAF", null, EventType.HOTSPOT, "V600E");
         assertEquals(1, hotspotExtractorFilterList.size());
-        assertEquals(TEST_VARIANT_HOTSPOT, hotspotExtractorFilterList.get(0));
+        assertEquals(TEST_BRAF_VARIANT_HOTSPOT, hotspotExtractorFilterList.get(0));
 
         HotspotExtractor hotspotExtractorIgnore = createWithProtein(protein, DriverInconsistencyMode.IGNORE);
         List<VariantHotspot> hotspotExtractorIgnoreList = hotspotExtractorIgnore.extract("BRAF", null, EventType.HOTSPOT, "V600E");
         assertEquals(1, hotspotExtractorIgnoreList.size());
-        assertEquals(TEST_VARIANT_HOTSPOT, hotspotExtractorIgnoreList.get(0));
+        assertEquals(TEST_BRAF_VARIANT_HOTSPOT, hotspotExtractorIgnoreList.get(0));
 
         HotspotExtractor hotspotExtractorWarn = createWithProtein(protein, DriverInconsistencyMode.WARN_ONLY);
         List<VariantHotspot> hotspotExtractorWarnList = hotspotExtractorWarn.extract("BRAF", null, EventType.HOTSPOT, "V600E");
         assertEquals(1, hotspotExtractorWarnList.size());
-        assertEquals(TEST_VARIANT_HOTSPOT, hotspotExtractorWarnList.get(0));
+        assertEquals(TEST_BRAF_VARIANT_HOTSPOT, hotspotExtractorWarnList.get(0));
     }
 
     @Test
@@ -72,12 +82,12 @@ public class HotspotExtractorTest {
         HotspotExtractor hotspotExtractorIgnore = createWithProtein(protein, DriverInconsistencyMode.IGNORE);
         List<VariantHotspot> hotspotExtractorIgnoreList = hotspotExtractorIgnore.extract("KRAS", null, EventType.HOTSPOT, "V600E");
         assertEquals(1, hotspotExtractorIgnoreList.size());
-        assertEquals(TEST_VARIANT_HOTSPOT, hotspotExtractorIgnoreList.get(0));
+        assertEquals(TEST_KRAS_VARIANT_HOTSPOT, hotspotExtractorIgnoreList.get(0));
 
         HotspotExtractor hotspotExtractorWarn = createWithProtein(protein, DriverInconsistencyMode.WARN_ONLY);
         List<VariantHotspot> hotspotExtractorWarnList = hotspotExtractorWarn.extract("KRAS", null, EventType.HOTSPOT, "V600E");
         assertEquals(1, hotspotExtractorWarnList.size());
-        assertEquals(TEST_VARIANT_HOTSPOT, hotspotExtractorWarnList.get(0));
+        assertEquals(TEST_KRAS_VARIANT_HOTSPOT, hotspotExtractorWarnList.get(0));
     }
 
     @Test
@@ -88,7 +98,7 @@ public class HotspotExtractorTest {
         List<VariantHotspot> hotspots = hotspotExtractor.extract("BRAF", null, EventType.HOTSPOT, "V600E");
 
         assertEquals(1, hotspots.size());
-        assertEquals(TEST_VARIANT_HOTSPOT, hotspots.get(0));
+        assertEquals(TEST_BRAF_VARIANT_HOTSPOT, hotspots.get(0));
     }
 
     @Test

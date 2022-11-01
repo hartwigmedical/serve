@@ -4,7 +4,7 @@ import java.util.Set;
 
 import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.fusion.ActionableFusion;
-import com.hartwig.serve.datamodel.fusion.KnownFusionPair;
+import com.hartwig.serve.datamodel.fusion.KnownFusion;
 import com.hartwig.serve.datamodel.gene.ActionableGene;
 import com.hartwig.serve.datamodel.gene.KnownCopyNumber;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
@@ -33,7 +33,7 @@ class ConversionFilter {
                 .knownCodons(filterCodons(extractionResult.knownCodons()))
                 .knownExons(filterExons(extractionResult.knownExons()))
                 .knownCopyNumbers(filterCopyNumbers(extractionResult.knownCopyNumbers()))
-                .knownFusionPairs(filterFusionPairs(extractionResult.knownFusionPairs()))
+                .knownFusions(filterFusions(extractionResult.knownFusions()))
                 .actionableHotspots(filterActionableHotspots(extractionResult.actionableHotspots()))
                 .actionableRanges(filterActionableRanges(extractionResult.actionableRanges()))
                 .actionableGenes(filterActionableGenes(extractionResult.actionableGenes()))
@@ -70,7 +70,7 @@ class ConversionFilter {
     private Set<KnownCodon> filterCodons(@NotNull Set<KnownCodon> codons) {
         Set<KnownCodon> filteredCodons = Sets.newHashSet();
         for (KnownCodon codon : codons) {
-            if (!isBlacklistedGene(codon.annotation().gene())) {
+            if (!isBlacklistedGene(codon.gene())) {
                 filteredCodons.add(codon);
             } else {
                 LOGGER.debug("Filtered known codon for ref genome conversion: {}", codon);
@@ -83,7 +83,7 @@ class ConversionFilter {
     private Set<KnownExon> filterExons(@NotNull Set<KnownExon> exons) {
         Set<KnownExon> filteredExons = Sets.newHashSet();
         for (KnownExon exon : exons) {
-            if (!isBlacklistedGene(exon.annotation().gene())) {
+            if (!isBlacklistedGene(exon.gene())) {
                 filteredExons.add(exon);
             } else {
                 LOGGER.debug("Filtered known exon for ref genome conversion: {}", exon);
@@ -106,13 +106,13 @@ class ConversionFilter {
     }
 
     @NotNull
-    private Set<KnownFusionPair> filterFusionPairs(@NotNull Set<KnownFusionPair> fusionPairs) {
-        Set<KnownFusionPair> filteredFusionPairs = Sets.newHashSet();
-        for (KnownFusionPair fusionPair : fusionPairs) {
-            if (!isBlacklistedGene(fusionPair.geneUp()) && !isBlacklistedGene(fusionPair.geneDown())) {
-                filteredFusionPairs.add(fusionPair);
+    private Set<KnownFusion> filterFusions(@NotNull Set<KnownFusion> fusions) {
+        Set<KnownFusion> filteredFusionPairs = Sets.newHashSet();
+        for (KnownFusion fusion : fusions) {
+            if (!isBlacklistedGene(fusion.geneUp()) && !isBlacklistedGene(fusion.geneDown())) {
+                filteredFusionPairs.add(fusion);
             } else {
-                LOGGER.debug("Filtered known fusion pair for ref genome conversion: {}", fusionPair);
+                LOGGER.debug("Filtered known fusion for ref genome conversion: {}", fusion);
             }
         }
         return filteredFusionPairs;

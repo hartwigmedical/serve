@@ -9,7 +9,7 @@ import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.common.GeneRole;
 import com.hartwig.serve.datamodel.common.ProteinEffect;
-import com.hartwig.serve.datamodel.gene.CopyNumberType;
+import com.hartwig.serve.datamodel.gene.GeneEvent;
 import com.hartwig.serve.datamodel.gene.ImmutableKnownCopyNumber;
 import com.hartwig.serve.datamodel.gene.KnownCopyNumber;
 
@@ -24,7 +24,7 @@ public final class CopyNumberFunctions {
     public static Set<KnownCopyNumber> consolidate(@NotNull Iterable<KnownCopyNumber> copyNumbers) {
         Map<CopyNumberKey, Set<Knowledgebase>> sourcesPerCopyNumber = Maps.newHashMap();
         for (KnownCopyNumber copyNumber : copyNumbers) {
-            CopyNumberKey key = new CopyNumberKey(copyNumber.gene(), copyNumber.geneRole(), copyNumber.proteinEffect(), copyNumber.type());
+            CopyNumberKey key = new CopyNumberKey(copyNumber.gene(), copyNumber.geneRole(), copyNumber.proteinEffect(), copyNumber.event());
             Set<Knowledgebase> sources = sourcesPerCopyNumber.get(key);
             if (sources == null) {
                 sources = Sets.newHashSet();
@@ -39,7 +39,7 @@ public final class CopyNumberFunctions {
                     .gene(entry.getKey().gene())
                     .geneRole(entry.getKey().geneRole())
                     .proteinEffect(entry.getKey().proteinEffect())
-                    .type(entry.getKey().type())
+                    .event(entry.getKey().event())
                     .sources(entry.getValue())
                     .build());
         }
@@ -55,14 +55,14 @@ public final class CopyNumberFunctions {
         @NotNull
         private final ProteinEffect proteinEffect;
         @NotNull
-        private final CopyNumberType type;
+        private final GeneEvent event;
 
         public CopyNumberKey(@NotNull final String gene, @NotNull final GeneRole geneRole, @NotNull final ProteinEffect proteinEffect,
-                @NotNull final CopyNumberType type) {
+                @NotNull final GeneEvent event) {
             this.gene = gene;
             this.geneRole = geneRole;
             this.proteinEffect = proteinEffect;
-            this.type = type;
+            this.event = event;
         }
 
         @NotNull
@@ -81,8 +81,8 @@ public final class CopyNumberFunctions {
         }
 
         @NotNull
-        public CopyNumberType type() {
-            return type;
+        public GeneEvent event() {
+            return event;
         }
 
         @Override
@@ -94,12 +94,12 @@ public final class CopyNumberFunctions {
                 return false;
             }
             final CopyNumberKey that = (CopyNumberKey) o;
-            return gene.equals(that.gene) && geneRole == that.geneRole && proteinEffect == that.proteinEffect && type == that.type;
+            return gene.equals(that.gene) && geneRole == that.geneRole && proteinEffect == that.proteinEffect && event == that.event;
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(gene, geneRole, proteinEffect, type);
+            return Objects.hash(gene, geneRole, proteinEffect, event);
         }
     }
 }

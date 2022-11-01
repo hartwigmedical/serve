@@ -12,7 +12,7 @@ import com.google.common.collect.Lists;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.common.GeneRole;
 import com.hartwig.serve.datamodel.common.ProteinEffect;
-import com.hartwig.serve.datamodel.gene.CopyNumberType;
+import com.hartwig.serve.datamodel.gene.GeneEvent;
 import com.hartwig.serve.datamodel.gene.ImmutableKnownCopyNumber;
 import com.hartwig.serve.datamodel.gene.KnownCopyNumber;
 import com.hartwig.serve.datamodel.gene.KnownCopyNumberComparator;
@@ -57,7 +57,7 @@ public final class KnownCopyNumberFile {
                 .add("geneRole")
                 .add("proteinEffect")
                 .add("associatedWithDrugResistance")
-                .add("type")
+                .add("event")
                 .add("sources")
                 .toString();
     }
@@ -81,7 +81,7 @@ public final class KnownCopyNumberFile {
                 .geneRole(GeneRole.valueOf(values[fields.get("geneRole")]))
                 .proteinEffect(ProteinEffect.valueOf(values[fields.get("proteinEffect")]))
                 .associatedWithDrugResistance(SerializationUtil.optionalBoolean(values[fields.get("associatedWithDrugResistance")]))
-                .type(CopyNumberType.valueOf(values[fields.get("type")]))
+                .event(GeneEvent.valueOf(values[fields.get("event")]))
                 .sources(Knowledgebase.fromCommaSeparatedSourceString(values[fields.get("sources")]))
                 .build();
     }
@@ -111,7 +111,7 @@ public final class KnownCopyNumberFile {
                 .add(copyNumber.geneRole().toString())
                 .add(copyNumber.proteinEffect().toString())
                 .add(SerializationUtil.nullableBoolean(copyNumber.associatedWithDrugResistance()))
-                .add(copyNumber.type().toString())
+                .add(copyNumber.event().toString())
                 .add(Knowledgebase.toCommaSeparatedSourceString(copyNumber.sources()))
                 .toString();
     }

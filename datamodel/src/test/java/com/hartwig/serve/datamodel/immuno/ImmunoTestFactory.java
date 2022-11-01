@@ -13,7 +13,7 @@ public final class ImmunoTestFactory {
 
     @NotNull
     public static ImmutableActionableHLA.Builder actionableHLABuilder() {
-        return ImmutableActionableHLA.builder().from(DatamodelTestFactory.createEmptyActionableEvent()).hlaAllele(Strings.EMPTY);
+        return ImmutableActionableHLA.builder().from(DatamodelTestFactory.createTestActionableEvent()).hlaAllele(Strings.EMPTY);
     }
 
     @NotNull

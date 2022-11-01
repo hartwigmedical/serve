@@ -9,8 +9,6 @@ import java.util.StringJoiner;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
-import com.hartwig.serve.datamodel.common.GeneRole;
-import com.hartwig.serve.datamodel.common.ProteinEffect;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspotComparator;
 import com.hartwig.serve.datamodel.hotspot.ImmutableActionableHotspot;
@@ -52,14 +50,11 @@ public final class ActionableHotspotFile {
     @NotNull
     @VisibleForTesting
     static String header() {
-        return new StringJoiner(ActionableFileUtil.FIELD_DELIMITER).add("chromosome")
+        return new StringJoiner(ActionableFileUtil.FIELD_DELIMITER).add("gene")
+                .add("chromosome")
                 .add("position")
                 .add("ref")
                 .add("alt")
-                .add("gene")
-                .add("geneRole")
-                .add("proteinEffect")
-                .add("associatedWithDrugResistance")
                 .add(ActionableFileUtil.header())
                 .toString();
     }
@@ -80,14 +75,11 @@ public final class ActionableHotspotFile {
 
         return ImmutableActionableHotspot.builder()
                 .from(ActionableFileUtil.fromLine(values, fields))
+                .gene(values[fields.get("gene")])
                 .chromosome(values[fields.get("chromosome")])
                 .position(Integer.parseInt(values[fields.get("position")]))
                 .ref(values[fields.get("ref")])
                 .alt(values[fields.get("alt")])
-                .gene(values[fields.get("gene")])
-                .geneRole(GeneRole.valueOf(values[fields.get("geneRole")]))
-                .proteinEffect(ProteinEffect.valueOf(values[fields.get("proteinEffect")]))
-                .associatedWithDrugResistance(SerializationUtil.optionalBoolean(values[fields.get("associatedWithDrugResistance")]))
                 .build();
     }
 
@@ -112,14 +104,11 @@ public final class ActionableHotspotFile {
 
     @NotNull
     private static String toLine(@NotNull ActionableHotspot variant) {
-        return new StringJoiner(ActionableFileUtil.FIELD_DELIMITER).add(variant.chromosome())
+        return new StringJoiner(ActionableFileUtil.FIELD_DELIMITER).add(variant.gene())
+                .add(variant.chromosome())
                 .add(Integer.toString(variant.position()))
                 .add(variant.ref())
                 .add(variant.alt())
-                .add(variant.gene())
-                .add(variant.geneRole().toString())
-                .add(variant.proteinEffect().toString())
-                .add(SerializationUtil.nullableBoolean(variant.associatedWithDrugResistance()))
                 .add(ActionableFileUtil.toLine(variant))
                 .toString();
     }

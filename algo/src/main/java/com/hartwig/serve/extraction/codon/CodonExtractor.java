@@ -8,11 +8,7 @@ import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.common.drivergene.DriverGene;
 import com.hartwig.serve.common.ensemblcache.EnsemblDataCache;
 import com.hartwig.serve.datamodel.MutationType;
-import com.hartwig.serve.datamodel.common.GeneRole;
 import com.hartwig.serve.datamodel.common.GenomeRegion;
-import com.hartwig.serve.datamodel.common.ProteinEffect;
-import com.hartwig.serve.datamodel.range.CodonAnnotation;
-import com.hartwig.serve.datamodel.range.ImmutableCodonAnnotation;
 import com.hartwig.serve.extraction.util.DriverInconsistencyMode;
 import com.hartwig.serve.extraction.util.EnsemblFunctions;
 import com.hartwig.serve.extraction.util.GeneChecker;
@@ -139,14 +135,12 @@ public class CodonExtractor {
             for (GenomeRegion region : regions) {
                 codonAnnotations.add(ImmutableCodonAnnotation.builder()
                         .gene(gene)
-                        .geneRole(GeneRole.UNKNOWN)
-                        .proteinEffect(ProteinEffect.UNKNOWN)
-                        .transcript(canonicalTranscript.transcriptId())
                         .chromosome(region.chromosome())
                         .start(region.start())
                         .end(region.end())
                         .applicableMutationType(applicableMutationType)
-                        .rank(codonRank)
+                        .inputTranscript(canonicalTranscript.transcriptId())
+                        .inputCodonRank(codonRank)
                         .build());
             }
             return codonAnnotations;

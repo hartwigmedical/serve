@@ -4,7 +4,7 @@ import java.util.Set;
 
 import com.hartwig.serve.datamodel.characteristic.ActionableCharacteristic;
 import com.hartwig.serve.datamodel.fusion.ActionableFusion;
-import com.hartwig.serve.datamodel.fusion.KnownFusionPair;
+import com.hartwig.serve.datamodel.fusion.KnownFusion;
 import com.hartwig.serve.datamodel.gene.ActionableGene;
 import com.hartwig.serve.datamodel.gene.KnownCopyNumber;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
@@ -43,7 +43,7 @@ public abstract class ExtractionResult {
     public abstract Set<KnownCopyNumber> knownCopyNumbers();
 
     @NotNull
-    public abstract Set<KnownFusionPair> knownFusionPairs();
+    public abstract Set<KnownFusion> knownFusions();
 
     @NotNull
     public abstract Set<ActionableHotspot> actionableHotspots();

@@ -8,10 +8,10 @@ import com.hartwig.serve.ckb.classification.CkbClassificationConfig;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.common.classification.EventClassifierConfig;
 import com.hartwig.serve.datamodel.MutationType;
-import com.hartwig.serve.datamodel.range.CodonAnnotation;
-import com.hartwig.serve.datamodel.range.ImmutableCodonAnnotation;
 import com.hartwig.serve.datamodel.range.RangeTestFactory;
 import com.hartwig.serve.extraction.ExtractionResult;
+import com.hartwig.serve.extraction.codon.CodonAnnotation;
+import com.hartwig.serve.extraction.codon.ImmutableCodonAnnotation;
 import com.hartwig.serve.refgenome.RefGenomeResourceTestFactory;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachTestFactory;
 
@@ -39,7 +39,7 @@ public class CkbExtractorTest {
         ExtractionResult result = extractor.extract(ckbEntries);
         assertEquals(1, result.knownHotspots().size());
         assertEquals(1, result.knownCopyNumbers().size());
-        assertEquals(1, result.knownFusionPairs().size());
+        assertEquals(1, result.knownFusions().size());
         assertEquals(1, result.actionableHotspots().size());
         assertEquals(2, result.actionableRanges().size());
         assertEquals(2, result.actionableGenes().size());
@@ -57,25 +57,25 @@ public class CkbExtractorTest {
     public void canCurateCodons() {
         List<CodonAnnotation> codonAnnotations = Lists.newArrayList();
         CodonAnnotation codonAnnotation1 = ImmutableCodonAnnotation.builder()
-                .from(RangeTestFactory.createTestCodonAnnotation())
+                .from(RangeTestFactory.createTestRangeAnnotation())
                 .gene("BRAF")
-                .transcript("A")
                 .chromosome("1")
                 .start(10)
                 .end(20)
                 .applicableMutationType(MutationType.ANY)
-                .rank(600)
+                .inputTranscript("A")
+                .inputCodonRank(600)
                 .build();
 
         CodonAnnotation codonAnnotation2 = ImmutableCodonAnnotation.builder()
-                .from(RangeTestFactory.createTestCodonAnnotation())
+                .from(RangeTestFactory.createTestRangeAnnotation())
                 .gene("KRAS")
-                .transcript("transcript")
                 .chromosome("1")
                 .start(10)
                 .end(20)
                 .applicableMutationType(MutationType.ANY)
-                .rank(600)
+                .inputTranscript("transcript")
+                .inputCodonRank(600)
                 .build();
 
         codonAnnotations.add(codonAnnotation1);
@@ -86,13 +86,13 @@ public class CkbExtractorTest {
         CodonAnnotation codon1 = findByGene(curatedCodons, "BRAF");
         assertEquals(140753335, codon1.start());
         assertEquals(140753337, codon1.end());
-        assertEquals("ENST00000646891", codon1.transcript());
+        assertEquals("ENST00000646891", codon1.inputTranscript());
 
         CodonAnnotation codon2 = findByGene(curatedCodons, "KRAS");
         assertEquals("KRAS", codon2.gene());
         assertEquals(10, codon2.start());
         assertEquals(20, codon2.end());
-        assertEquals("transcript", codon2.transcript());
+        assertEquals("transcript", codon2.inputTranscript());
     }
 
     @NotNull

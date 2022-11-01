@@ -11,37 +11,37 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.common.ProteinEffect;
-import com.hartwig.serve.datamodel.fusion.FusionPairComparator;
-import com.hartwig.serve.datamodel.fusion.ImmutableKnownFusionPair;
-import com.hartwig.serve.datamodel.fusion.KnownFusionPair;
+import com.hartwig.serve.datamodel.fusion.ImmutableKnownFusion;
+import com.hartwig.serve.datamodel.fusion.KnownFusion;
+import com.hartwig.serve.datamodel.fusion.KnownFusionComparator;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
 import org.jetbrains.annotations.NotNull;
 
-public final class KnownFusionPairFile {
+public final class KnownFusionFile {
 
     static final String FIELD_DELIMITER = "\t";
-    private static final String KNOWN_FUSION_PAIR_TSV = "KnownFusionPairs.SERVE.tsv";
+    private static final String KNOWN_FUSION_TSV = "KnownFusions.SERVE.tsv";
 
-    private KnownFusionPairFile() {
+    private KnownFusionFile() {
     }
 
     @NotNull
-    public static String knownFusionPairTsvPath(@NotNull String outputDir, @NotNull RefGenomeVersion refGenomeVersion) {
-        return refGenomeVersion.addVersionToFilePath(outputDir + File.separator + KNOWN_FUSION_PAIR_TSV);
+    public static String knownFusionTsvPath(@NotNull String outputDir, @NotNull RefGenomeVersion refGenomeVersion) {
+        return refGenomeVersion.addVersionToFilePath(outputDir + File.separator + KNOWN_FUSION_TSV);
     }
 
-    public static void write(@NotNull String fusionPairTsv, @NotNull Iterable<KnownFusionPair> fusionPairs) throws IOException {
+    public static void write(@NotNull String fusionTsv, @NotNull Iterable<KnownFusion> fusions) throws IOException {
         List<String> lines = Lists.newArrayList();
         lines.add(header());
-        lines.addAll(toLines(fusionPairs));
+        lines.addAll(toLines(fusions));
 
-        Files.write(new File(fusionPairTsv).toPath(), lines);
+        Files.write(new File(fusionTsv).toPath(), lines);
     }
 
     @NotNull
-    public static List<KnownFusionPair> read(@NotNull String file) throws IOException {
+    public static List<KnownFusion> read(@NotNull String file) throws IOException {
         List<String> lines = Files.readAllLines(new File(file).toPath());
         Map<String, Integer> fields = SerializationUtil.createFields(lines.get(0), FIELD_DELIMITER);
 
@@ -58,25 +58,26 @@ public final class KnownFusionPairFile {
                 .add("minExonDown")
                 .add("maxExonDown")
                 .add("proteinEffect")
+                .add("associatedWithDrugResistance")
                 .add("sources")
                 .toString();
     }
 
     @NotNull
     @VisibleForTesting
-    static List<KnownFusionPair> fromLines(@NotNull List<String> lines, @NotNull Map<String, Integer> fields) {
-        List<KnownFusionPair> fusionPairs = Lists.newArrayList();
+    static List<KnownFusion> fromLines(@NotNull List<String> lines, @NotNull Map<String, Integer> fields) {
+        List<KnownFusion> fusions = Lists.newArrayList();
         for (String line : lines) {
-            fusionPairs.add(fromLine(line, fields));
+            fusions.add(fromLine(line, fields));
         }
-        return fusionPairs;
+        return fusions;
     }
 
     @NotNull
-    private static KnownFusionPair fromLine(@NotNull String line, @NotNull Map<String, Integer> fields) {
+    private static KnownFusion fromLine(@NotNull String line, @NotNull Map<String, Integer> fields) {
         String[] values = line.split(FIELD_DELIMITER);
 
-        return ImmutableKnownFusionPair.builder()
+        return ImmutableKnownFusion.builder()
                 .geneUp(values[fields.get("geneUp")])
                 .minExonUp(SerializationUtil.optionalInteger(values[fields.get("minExonUp")]))
                 .maxExonUp(SerializationUtil.optionalInteger(values[fields.get("maxExonUp")]))
@@ -84,39 +85,41 @@ public final class KnownFusionPairFile {
                 .minExonDown(SerializationUtil.optionalInteger(values[fields.get("minExonDown")]))
                 .maxExonDown(SerializationUtil.optionalInteger(values[fields.get("maxExonDown")]))
                 .proteinEffect(ProteinEffect.valueOf(values[fields.get("proteinEffect")]))
+                .associatedWithDrugResistance(SerializationUtil.optionalBoolean(values[fields.get("associatedWithDrugResistance")]))
                 .sources(Knowledgebase.fromCommaSeparatedSourceString(values[fields.get("sources")]))
                 .build();
     }
 
     @NotNull
     @VisibleForTesting
-    static List<String> toLines(@NotNull Iterable<KnownFusionPair> fusionPairs) {
+    static List<String> toLines(@NotNull Iterable<KnownFusion> fusions) {
         List<String> lines = Lists.newArrayList();
-        for (KnownFusionPair fusionPair : sort(fusionPairs)) {
-            lines.add(toLine(fusionPair));
+        for (KnownFusion fusion : sort(fusions)) {
+            lines.add(toLine(fusion));
         }
         return lines;
     }
 
     @NotNull
-    private static List<KnownFusionPair> sort(@NotNull Iterable<KnownFusionPair> fusionPairs) {
+    private static List<KnownFusion> sort(@NotNull Iterable<KnownFusion> fusions) {
         // Need to make a copy since the input may be immutable and cannot be sorted!
-        List<KnownFusionPair> sorted = Lists.newArrayList(fusionPairs);
-        sorted.sort(new FusionPairComparator());
+        List<KnownFusion> sorted = Lists.newArrayList(fusions);
+        sorted.sort(new KnownFusionComparator());
 
         return sorted;
     }
 
     @NotNull
-    private static String toLine(@NotNull KnownFusionPair fusionPair) {
-        return new StringJoiner(FIELD_DELIMITER).add(fusionPair.geneUp())
-                .add(SerializationUtil.nullableInteger(fusionPair.minExonUp()))
-                .add(SerializationUtil.nullableInteger(fusionPair.maxExonUp()))
-                .add(fusionPair.geneDown())
-                .add(SerializationUtil.nullableInteger(fusionPair.minExonDown()))
-                .add(SerializationUtil.nullableInteger(fusionPair.maxExonDown()))
-                .add(fusionPair.proteinEffect().toString())
-                .add(Knowledgebase.toCommaSeparatedSourceString(fusionPair.sources()))
+    private static String toLine(@NotNull KnownFusion fusion) {
+        return new StringJoiner(FIELD_DELIMITER).add(fusion.geneUp())
+                .add(SerializationUtil.nullableInteger(fusion.minExonUp()))
+                .add(SerializationUtil.nullableInteger(fusion.maxExonUp()))
+                .add(fusion.geneDown())
+                .add(SerializationUtil.nullableInteger(fusion.minExonDown()))
+                .add(SerializationUtil.nullableInteger(fusion.maxExonDown()))
+                .add(fusion.proteinEffect().toString())
+                .add(SerializationUtil.nullableBoolean(fusion.associatedWithDrugResistance()))
+                .add(Knowledgebase.toCommaSeparatedSourceString(fusion.sources()))
                 .toString();
     }
 }

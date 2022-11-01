@@ -10,13 +10,13 @@ import org.jetbrains.annotations.NotNull;
 public class ActionableHotspotComparator implements Comparator<ActionableHotspot> {
 
     @NotNull
-    private final Comparator<VariantHotspot> hotspotComparator = new VariantHotspotComparator();
+    private final Comparator<VariantHotspot> variantHotspotComparator = new VariantHotspotComparator();
     @NotNull
     private final Comparator<ActionableEvent> actionableEventComparator = new ActionableEventComparator();
 
     @Override
     public int compare(@NotNull ActionableHotspot hotspot1, @NotNull ActionableHotspot hotspot2) {
-        int hotspotCompare = hotspotComparator.compare(hotspot1, hotspot2);
+        int hotspotCompare = variantHotspotComparator.compare(hotspot1, hotspot2);
         if (hotspotCompare != 0) {
             return hotspotCompare;
         }

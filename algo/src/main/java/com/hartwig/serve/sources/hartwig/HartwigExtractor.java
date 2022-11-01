@@ -72,8 +72,8 @@ public class HartwigExtractor {
                         .gene(entry.gene())
                         .geneRole(GeneRole.UNKNOWN)
                         .proteinEffect(ProteinEffect.UNKNOWN)
-                        .transcript(entry.transcript())
-                        .proteinAnnotation(entry.proteinAnnotation())
+                        .inputTranscript(entry.transcript())
+                        .inputProteinAnnotation(entry.proteinAnnotation())
                         .addSources(source)
                         .build());
             }

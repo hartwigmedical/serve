@@ -2,8 +2,6 @@ package com.hartwig.serve.datamodel.hotspot;
 
 import java.util.Comparator;
 
-import com.hartwig.serve.datamodel.common.GeneAlteration;
-import com.hartwig.serve.datamodel.common.GeneAlterationComparator;
 import com.hartwig.serve.datamodel.common.GenomePosition;
 import com.hartwig.serve.datamodel.common.GenomePositionComparator;
 
@@ -13,8 +11,6 @@ public class VariantHotspotComparator implements Comparator<VariantHotspot> {
 
     @NotNull
     private final Comparator<GenomePosition> genomePositionComparator = new GenomePositionComparator();
-    @NotNull
-    private final Comparator<GeneAlteration> geneAlterationComparator = new GeneAlterationComparator();
 
     @Override
     public int compare(@NotNull VariantHotspot hotspot1, @NotNull VariantHotspot hotspot2) {
@@ -40,6 +36,6 @@ public class VariantHotspotComparator implements Comparator<VariantHotspot> {
             return altCompare;
         }
 
-        return geneAlterationComparator.compare(hotspot1, hotspot2);
+        return hotspot1.gene().compareTo(hotspot2.gene());
     }
 }

@@ -10,6 +10,4 @@ import org.jetbrains.annotations.Nullable;
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class })
 public abstract class ActionableRange implements RangeAnnotation, ActionableEvent {
 
-    @NotNull
-    public abstract RangeType rangeType();
 }

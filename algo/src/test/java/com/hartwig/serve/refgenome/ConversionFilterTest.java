@@ -4,12 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.hartwig.serve.datamodel.fusion.FusionTestFactory;
 import com.hartwig.serve.datamodel.gene.GeneTestFactory;
-import com.hartwig.serve.datamodel.gene.ImmutableActionableGene;
 import com.hartwig.serve.datamodel.hotspot.HotspotTestFactory;
-import com.hartwig.serve.datamodel.range.ImmutableCodonAnnotation;
-import com.hartwig.serve.datamodel.range.ImmutableExonAnnotation;
-import com.hartwig.serve.datamodel.range.ImmutableKnownCodon;
-import com.hartwig.serve.datamodel.range.ImmutableKnownExon;
 import com.hartwig.serve.datamodel.range.RangeTestFactory;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 import com.hartwig.serve.extraction.ExtractionResult;
@@ -31,7 +26,7 @@ public class ConversionFilterTest {
         assertTrue(filtered.knownCodons().isEmpty());
         assertTrue(filtered.knownExons().isEmpty());
         assertTrue(filtered.knownCopyNumbers().isEmpty());
-        assertTrue(filtered.knownFusionPairs().isEmpty());
+        assertTrue(filtered.knownFusions().isEmpty());
         assertTrue(filtered.actionableGenes().isEmpty());
         assertTrue(filtered.actionableFusions().isEmpty());
 
@@ -43,21 +38,12 @@ public class ConversionFilterTest {
         return ImmutableExtractionResult.builder()
                 .refGenomeVersion(RefGenomeVersion.V38)
                 .addKnownHotspots(HotspotTestFactory.knownHotspotBuilder().gene(gene).build())
-                .addKnownCodons(ImmutableKnownCodon.builder()
-                        .from(RangeTestFactory.createTestKnownCodon())
-                        .annotation(ImmutableCodonAnnotation.builder()
-                                .from(RangeTestFactory.createTestCodonAnnotation())
-                                .gene(gene)
-                                .build())
-                        .build())
-                .addKnownExons(ImmutableKnownExon.builder()
-                        .from(RangeTestFactory.createTestKnownExon())
-                        .annotation(ImmutableExonAnnotation.builder().from(RangeTestFactory.createTestExonAnnotation()).gene(gene).build())
-                        .build())
+                .addKnownCodons(RangeTestFactory.knownCodonBuilder().gene(gene).build())
+                .addKnownExons(RangeTestFactory.knownExonBuilder().gene(gene).build())
                 .addKnownCopyNumbers(GeneTestFactory.knownCopyNumberBuilder().gene(gene).build())
-                .addKnownFusionPairs(FusionTestFactory.knownFusionBuilder().geneUp(gene).build())
-                .addKnownFusionPairs(FusionTestFactory.knownFusionBuilder().geneDown(gene).build())
-                .addActionableGenes(ImmutableActionableGene.builder().from(GeneTestFactory.createTestActionableGene()).gene(gene).build())
+                .addKnownFusions(FusionTestFactory.knownFusionBuilder().geneUp(gene).build())
+                .addKnownFusions(FusionTestFactory.knownFusionBuilder().geneDown(gene).build())
+                .addActionableGenes(GeneTestFactory.actionableGeneBuilder().gene(gene).build())
                 .addActionableFusions(FusionTestFactory.actionableFusionBuilder().geneUp(gene).build())
                 .addActionableFusions(FusionTestFactory.actionableFusionBuilder().geneDown(gene).build())
                 .build();

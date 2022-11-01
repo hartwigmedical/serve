@@ -11,7 +11,7 @@ import com.hartwig.serve.actionability.ActionableGeneUrlConsolidator;
 import com.hartwig.serve.actionability.ActionableHLAUrlConsolidator;
 import com.hartwig.serve.actionability.ActionableHotspotUrlConsolidator;
 import com.hartwig.serve.actionability.ActionableRangeUrlConsolidator;
-import com.hartwig.serve.datamodel.fusion.KnownFusionPair;
+import com.hartwig.serve.datamodel.fusion.KnownFusion;
 import com.hartwig.serve.datamodel.gene.KnownCopyNumber;
 import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.range.KnownCodon;
@@ -59,7 +59,7 @@ public final class ExtractionFunctions {
         Set<KnownCodon> allCodons = Sets.newHashSet();
         Set<KnownExon> allExons = Sets.newHashSet();
         Set<KnownCopyNumber> allCopyNumbers = Sets.newHashSet();
-        Set<KnownFusionPair> allFusionPairs = Sets.newHashSet();
+        Set<KnownFusion> allFusions = Sets.newHashSet();
 
         for (ExtractionResult result : results) {
             allEventInterpretations.addAll(result.eventInterpretations());
@@ -67,7 +67,7 @@ public final class ExtractionFunctions {
             allCodons.addAll(result.knownCodons());
             allExons.addAll(result.knownExons());
             allCopyNumbers.addAll(result.knownCopyNumbers());
-            allFusionPairs.addAll(result.knownFusionPairs());
+            allFusions.addAll(result.knownFusions());
 
             mergedBuilder.addAllActionableHotspots(result.actionableHotspots());
             mergedBuilder.addAllActionableRanges(result.actionableRanges());
@@ -82,7 +82,7 @@ public final class ExtractionFunctions {
                 .knownCodons(CodonFunctions.consolidate(allCodons))
                 .knownExons(ExonFunctions.consolidate(allExons))
                 .knownCopyNumbers(CopyNumberFunctions.consolidate(allCopyNumbers))
-                .knownFusionPairs(FusionFunctions.consolidate(allFusionPairs))
+                .knownFusions(FusionFunctions.consolidate(allFusions))
                 .build();
 
         return consolidateActionableEvents(mergedResult);

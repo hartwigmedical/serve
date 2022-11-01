@@ -30,24 +30,24 @@ public class HotspotFunctionsTest {
                 .from(hotspot1())
                 .addSources(source)
                 .gene("gene1")
-                .transcript("trans1")
-                .proteinAnnotation("prot1")
+                .inputTranscript("trans1")
+                .inputProteinAnnotation("prot1")
                 .build());
 
         knownHotspots.add(HotspotTestFactory.knownHotspotBuilder()
                 .from(hotspot1())
                 .addSources(source)
                 .gene("gene1")
-                .transcript(null)
-                .proteinAnnotation("prot2")
+                .inputTranscript(null)
+                .inputProteinAnnotation("prot2")
                 .build());
 
         knownHotspots.add(HotspotTestFactory.knownHotspotBuilder()
                 .from(hotspot2())
                 .addSources(source)
                 .gene("gene2")
-                .transcript("trans2")
-                .proteinAnnotation("prot3")
+                .inputTranscript("trans2")
+                .inputProteinAnnotation("prot3")
                 .build());
 
         Set<KnownHotspot> consolidateHotspots = HotspotFunctions.consolidate(knownHotspots);
@@ -55,13 +55,13 @@ public class HotspotFunctionsTest {
 
         KnownHotspot gene1 = findByGene(consolidateHotspots, "gene1");
         assertEquals(Sets.newHashSet(source), gene1.sources());
-        assertEquals("trans1", gene1.transcript());
-        assertEquals("prot1", gene1.proteinAnnotation());
+        assertEquals("trans1", gene1.inputTranscript());
+        assertEquals("prot1", gene1.inputProteinAnnotation());
 
         KnownHotspot gene2 = findByGene(consolidateHotspots, "gene2");
         assertEquals(Sets.newHashSet(source), gene2.sources());
-        assertEquals("trans2", gene2.transcript());
-        assertEquals("prot3", gene2.proteinAnnotation());
+        assertEquals("trans2", gene2.inputTranscript());
+        assertEquals("prot3", gene2.inputProteinAnnotation());
     }
 
     @Test
@@ -74,16 +74,16 @@ public class HotspotFunctionsTest {
                 .from(hotspot1())
                 .addSources(source1)
                 .gene(gene)
-                .transcript(null)
-                .proteinAnnotation("prot1")
+                .inputTranscript(null)
+                .inputProteinAnnotation("prot1")
                 .build());
 
         knownHotspots.add(HotspotTestFactory.knownHotspotBuilder()
                 .from(hotspot1())
                 .addSources(source2)
                 .gene(gene)
-                .transcript("trans2")
-                .proteinAnnotation("prot2")
+                .inputTranscript("trans2")
+                .inputProteinAnnotation("prot2")
                 .build());
 
         Set<KnownHotspot> consolidateHotspots = HotspotFunctions.consolidate(knownHotspots);
@@ -91,18 +91,30 @@ public class HotspotFunctionsTest {
 
         KnownHotspot hotspot = findByGene(consolidateHotspots, gene);
         assertEquals(Sets.newHashSet(source1, source2), hotspot.sources());
-        assertEquals("trans2", hotspot.transcript());
-        assertEquals("prot2", hotspot.proteinAnnotation());
+        assertEquals("trans2", hotspot.inputTranscript());
+        assertEquals("prot2", hotspot.inputProteinAnnotation());
     }
 
     @NotNull
     private static VariantHotspot hotspot1() {
-        return HotspotTestFactory.knownHotspotBuilder().chromosome("1").position(10).ref("A").alt("T").build();
+        return ImmutableVariantHotspotImpl.builder()
+                .from(HotspotTestFactory.createTestVariantHotspot())
+                .chromosome("1")
+                .position(10)
+                .ref("A")
+                .alt("T")
+                .build();
     }
 
     @NotNull
     private static VariantHotspot hotspot2() {
-        return HotspotTestFactory.knownHotspotBuilder().chromosome("1").position(20).ref("A").alt("T").build();
+        return ImmutableVariantHotspotImpl.builder()
+                .from(HotspotTestFactory.createTestVariantHotspot())
+                .chromosome("1")
+                .position(20)
+                .ref("A")
+                .alt("T")
+                .build();
     }
 
     @NotNull

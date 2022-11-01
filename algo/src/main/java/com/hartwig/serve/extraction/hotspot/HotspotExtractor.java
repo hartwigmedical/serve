@@ -8,15 +8,12 @@ import com.hartwig.serve.common.classification.EventPreprocessor;
 import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.common.drivergene.DriverCategory;
 import com.hartwig.serve.common.drivergene.DriverGene;
-import com.hartwig.serve.datamodel.common.GeneRole;
-import com.hartwig.serve.datamodel.common.ProteinEffect;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
 import com.hartwig.serve.extraction.util.DriverInconsistencyMode;
 import com.hartwig.serve.extraction.util.GeneChecker;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -76,11 +73,9 @@ public class HotspotExtractor {
             for (Hotspot hotspot : proteinResolver.resolve(gene, transcriptId, proteinAnnotationExtractor.apply(event))) {
                 hotspots.add(ImmutableVariantHotspotImpl.builder()
                         .from(hotspot)
+                        .gene(gene)
                         .ref(hotspot.ref())
                         .alt(hotspot.alt())
-                        .gene(Strings.EMPTY)
-                        .geneRole(GeneRole.UNKNOWN)
-                        .proteinEffect(ProteinEffect.UNKNOWN)
                         .build());
             }
             return hotspots;

@@ -12,7 +12,6 @@ import com.hartwig.serve.EnsemblDataCacheTestFactory;
 import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.common.drivergene.DriverGene;
 import com.hartwig.serve.datamodel.MutationType;
-import com.hartwig.serve.datamodel.range.ExonAnnotation;
 import com.hartwig.serve.extraction.util.DriverInconsistencyMode;
 import com.hartwig.serve.extraction.util.GeneChecker;
 import com.hartwig.serve.extraction.util.MutationTypeFilterAlgo;

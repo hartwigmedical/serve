@@ -14,7 +14,7 @@ import com.hartwig.serve.datamodel.common.GeneRole;
 import com.hartwig.serve.datamodel.common.ProteinEffect;
 import com.hartwig.serve.datamodel.hotspot.ImmutableKnownHotspot;
 import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
-import com.hartwig.serve.datamodel.hotspot.VariantHotspotComparator;
+import com.hartwig.serve.datamodel.hotspot.KnownHotspotComparator;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
@@ -52,16 +52,16 @@ public final class KnownHotspotFile {
     @NotNull
     @VisibleForTesting
     static String header() {
-        return new StringJoiner(FIELD_DELIMITER).add("chromosome")
-                .add("position")
-                .add("ref")
-                .add("alt")
-                .add("gene")
+        return new StringJoiner(FIELD_DELIMITER).add("gene")
                 .add("geneRole")
                 .add("proteinEffect")
                 .add("associatedWithDrugResistance")
-                .add("transcript")
-                .add("proteinAnnotation")
+                .add("chromosome")
+                .add("position")
+                .add("ref")
+                .add("alt")
+                .add("inputTranscript")
+                .add("inputProteinAnnotation")
                 .add("sources")
                 .toString();
     }
@@ -81,16 +81,16 @@ public final class KnownHotspotFile {
         String[] values = line.split(FIELD_DELIMITER);
 
         return ImmutableKnownHotspot.builder()
-                .chromosome(values[fields.get("chromosome")])
-                .position(Integer.parseInt(values[fields.get("position")]))
-                .ref(values[fields.get("ref")])
-                .alt(values[fields.get("alt")])
                 .gene(values[fields.get("gene")])
                 .geneRole(GeneRole.valueOf(values[fields.get("geneRole")]))
                 .proteinEffect(ProteinEffect.valueOf(values[fields.get("proteinEffect")]))
                 .associatedWithDrugResistance(SerializationUtil.optionalBoolean(values[fields.get("associatedWithDrugResistance")]))
-                .transcript(SerializationUtil.optionalString(values[fields.get("transcript")]))
-                .proteinAnnotation(values[fields.get("proteinAnnotation")])
+                .chromosome(values[fields.get("chromosome")])
+                .position(Integer.parseInt(values[fields.get("position")]))
+                .ref(values[fields.get("ref")])
+                .alt(values[fields.get("alt")])
+                .inputTranscript(SerializationUtil.optionalString(values[fields.get("inputTranscript")]))
+                .inputProteinAnnotation(values[fields.get("inputProteinAnnotation")])
                 .sources(Knowledgebase.fromCommaSeparatedSourceString(values[fields.get("sources")]))
                 .build();
     }
@@ -109,23 +109,23 @@ public final class KnownHotspotFile {
     private static List<KnownHotspot> sort(@NotNull Iterable<KnownHotspot> hotspots) {
         // Need to make a copy since the input may be immutable and cannot be sorted!
         List<KnownHotspot> sorted = Lists.newArrayList(hotspots);
-        sorted.sort(new VariantHotspotComparator());
+        sorted.sort(new KnownHotspotComparator());
 
         return sorted;
     }
 
     @NotNull
     private static String toLine(@NotNull KnownHotspot hotspot) {
-        return new StringJoiner(FIELD_DELIMITER).add(hotspot.chromosome())
-                .add(String.valueOf(hotspot.position()))
-                .add(hotspot.ref())
-                .add(hotspot.alt())
-                .add(hotspot.gene())
+        return new StringJoiner(FIELD_DELIMITER).add(hotspot.gene())
                 .add(hotspot.geneRole().toString())
                 .add(hotspot.proteinEffect().toString())
                 .add(SerializationUtil.nullableBoolean(hotspot.associatedWithDrugResistance()))
-                .add(SerializationUtil.nullableString(hotspot.transcript()))
-                .add(hotspot.proteinAnnotation())
+                .add(hotspot.chromosome())
+                .add(String.valueOf(hotspot.position()))
+                .add(hotspot.ref())
+                .add(hotspot.alt())
+                .add(SerializationUtil.nullableString(hotspot.inputTranscript()))
+                .add(hotspot.inputProteinAnnotation())
                 .add(Knowledgebase.toCommaSeparatedSourceString(hotspot.sources()))
                 .toString();
     }

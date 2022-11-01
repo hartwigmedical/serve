@@ -6,8 +6,8 @@ import static org.junit.Assert.assertNull;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.DriverGenesTestFactory;
 import com.hartwig.serve.common.classification.EventType;
-import com.hartwig.serve.datamodel.gene.CopyNumberType;
-import com.hartwig.serve.datamodel.gene.KnownCopyNumber;
+import com.hartwig.serve.datamodel.gene.GeneAnnotation;
+import com.hartwig.serve.datamodel.gene.GeneEvent;
 import com.hartwig.serve.extraction.util.DriverInconsistencyMode;
 import com.hartwig.serve.extraction.util.GeneChecker;
 
@@ -19,13 +19,13 @@ public class CopyNumberExtractorTest {
     @Test
     public void canCheckFilterInCatalog() {
         CopyNumberExtractor copyNumberExtractorIgnore = createTestExtractor(DriverInconsistencyMode.IGNORE);
-        assertEquals(CopyNumberType.AMPLIFICATION, copyNumberExtractorIgnore.extract("AKT1", EventType.AMPLIFICATION).type());
+        assertEquals(GeneEvent.AMPLIFICATION, copyNumberExtractorIgnore.extract("AKT1", EventType.AMPLIFICATION).event());
 
         CopyNumberExtractor copyNumberExtractorWarn = createTestExtractor(DriverInconsistencyMode.WARN_ONLY);
-        assertEquals(CopyNumberType.AMPLIFICATION, copyNumberExtractorWarn.extract("AKT1", EventType.AMPLIFICATION).type());
+        assertEquals(GeneEvent.AMPLIFICATION, copyNumberExtractorWarn.extract("AKT1", EventType.AMPLIFICATION).event());
 
         CopyNumberExtractor copyNumberExtractorFilter = createTestExtractor(DriverInconsistencyMode.FILTER);
-        assertEquals(CopyNumberType.OVEREXPRESSION, copyNumberExtractorFilter.extract("AKT1", EventType.OVER_EXPRESSION).type());
+        assertEquals(GeneEvent.OVEREXPRESSION, copyNumberExtractorFilter.extract("AKT1", EventType.OVEREXPRESSION).event());
 
         CopyNumberExtractor copyNumberExtractorFilterDel = createTestExtractor(DriverInconsistencyMode.FILTER);
         assertNull(copyNumberExtractorFilterDel.extract("AKT1", EventType.DELETION));
@@ -34,10 +34,10 @@ public class CopyNumberExtractorTest {
     @Test
     public void canCheckFilterNotInCatalog() {
         CopyNumberExtractor copyNumberExtractorIgnore = createTestExtractor(DriverInconsistencyMode.IGNORE);
-        assertEquals(CopyNumberType.AMPLIFICATION, copyNumberExtractorIgnore.extract("KRAS", EventType.AMPLIFICATION).type());
+        assertEquals(GeneEvent.AMPLIFICATION, copyNumberExtractorIgnore.extract("KRAS", EventType.AMPLIFICATION).event());
 
         CopyNumberExtractor copyNumberExtractorWarn = createTestExtractor(DriverInconsistencyMode.WARN_ONLY);
-        assertEquals(CopyNumberType.AMPLIFICATION, copyNumberExtractorWarn.extract("PTEN", EventType.AMPLIFICATION).type());
+        assertEquals(GeneEvent.AMPLIFICATION, copyNumberExtractorWarn.extract("PTEN", EventType.AMPLIFICATION).event());
 
         CopyNumberExtractor copyNumberExtractorFilter = createTestExtractor(DriverInconsistencyMode.FILTER);
         assertNull(copyNumberExtractorFilter.extract("PTEN", EventType.AMPLIFICATION));
@@ -46,10 +46,10 @@ public class CopyNumberExtractorTest {
     @Test
     public void canExtractCopyNumbersAmp() {
         CopyNumberExtractor copyNumberExtractor = createTestExtractor(DriverInconsistencyMode.IGNORE);
-        KnownCopyNumber amp = copyNumberExtractor.extract("AKT1", EventType.AMPLIFICATION);
+        GeneAnnotation amp = copyNumberExtractor.extract("AKT1", EventType.AMPLIFICATION);
 
         assertEquals("AKT1", amp.gene());
-        assertEquals(CopyNumberType.AMPLIFICATION, amp.type());
+        assertEquals(GeneEvent.AMPLIFICATION, amp.event());
     }
 
     @Test
@@ -61,10 +61,10 @@ public class CopyNumberExtractorTest {
     @Test
     public void canExtractCopyNumbersDel() {
         CopyNumberExtractor copyNumberExtractor = createTestExtractor(DriverInconsistencyMode.IGNORE);
-        KnownCopyNumber del = copyNumberExtractor.extract("PTEN", EventType.UNDER_EXPRESSION);
+        GeneAnnotation del = copyNumberExtractor.extract("PTEN", EventType.UNDEREXPRESSION);
 
         assertEquals("PTEN", del.gene());
-        assertEquals(CopyNumberType.UNDEREXPRESSION, del.type());
+        assertEquals(GeneEvent.UNDEREXPRESSION, del.event());
     }
 
     @Test

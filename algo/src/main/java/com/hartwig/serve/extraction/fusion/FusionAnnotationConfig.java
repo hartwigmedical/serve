@@ -3,75 +3,68 @@ package com.hartwig.serve.extraction.fusion;
 import java.util.Map;
 
 import com.google.common.collect.Maps;
-import com.hartwig.serve.datamodel.common.ProteinEffect;
-import com.hartwig.serve.datamodel.fusion.ImmutableKnownFusionPair;
-import com.hartwig.serve.datamodel.fusion.KnownFusionPair;
+import com.hartwig.serve.datamodel.fusion.FusionPair;
 
 import org.jetbrains.annotations.NotNull;
 
-public final class FusionAnnotationConfig {
+final class FusionAnnotationConfig {
 
-    public static final Map<String, KnownFusionPair> EXONIC_FUSIONS_MAP = exonicFusionMap();
+    public static final Map<String, FusionPair> EXONIC_FUSIONS_MAP = exonicFusionMap();
 
     public static final Map<String, ExonicDelDupType> DEL_DUP_TYPE_PER_GENE = exonicDelDupTypes();
 
     @NotNull
-    private static Map<String, KnownFusionPair> exonicFusionMap() {
-        Map<String, KnownFusionPair> map = Maps.newHashMap();
+    private static Map<String, FusionPair> exonicFusionMap() {
+        Map<String, FusionPair> map = Maps.newHashMap();
 
-        KnownFusionPair fusionEGFRKDD = ImmutableKnownFusionPair.builder()
+        FusionPair fusionEGFRKDD = ImmutableFusionPairImpl.builder()
                 .geneUp("EGFR")
                 .minExonUp(25)
                 .maxExonUp(26)
                 .geneDown("EGFR")
                 .minExonDown(14)
                 .maxExonDown(18)
-                .proteinEffect(ProteinEffect.UNKNOWN)
                 .build();
         map.put("EGFR-KDD", fusionEGFRKDD);
 
-        KnownFusionPair fusionEGFRKinaseDomain = ImmutableKnownFusionPair.builder()
+        FusionPair fusionEGFRKinaseDomain = ImmutableFusionPairImpl.builder()
                 .geneUp("EGFR")
                 .minExonUp(25)
                 .maxExonUp(26)
                 .geneDown("EGFR")
                 .minExonDown(14)
                 .maxExonDown(18)
-                .proteinEffect(ProteinEffect.UNKNOWN)
                 .build();
         map.put("KINASE DOMAIN DUPLICATION (EXON 18-25)", fusionEGFRKinaseDomain);
 
-        KnownFusionPair fusionEGFRvII = ImmutableKnownFusionPair.builder()
+        FusionPair fusionEGFRvII = ImmutableFusionPairImpl.builder()
                 .geneUp("EGFR")
                 .minExonUp(13)
                 .maxExonUp(13)
                 .geneDown("EGFR")
                 .minExonDown(16)
                 .maxExonDown(16)
-                .proteinEffect(ProteinEffect.UNKNOWN)
                 .build();
         map.put("EGFRvII", fusionEGFRvII);
 
-        KnownFusionPair fusionEGFRvIII = ImmutableKnownFusionPair.builder()
+        FusionPair fusionEGFRvIII = ImmutableFusionPairImpl.builder()
                 .geneUp("EGFR")
                 .minExonUp(1)
                 .maxExonUp(1)
                 .geneDown("EGFR")
                 .minExonDown(8)
                 .maxExonDown(8)
-                .proteinEffect(ProteinEffect.UNKNOWN)
                 .build();
         map.put("EGFRvIII", fusionEGFRvIII);
         map.put("VIII", fusionEGFRvIII);
 
-        KnownFusionPair fusionEGFRvV = ImmutableKnownFusionPair.builder()
+        FusionPair fusionEGFRvV = ImmutableFusionPairImpl.builder()
                 .geneUp("EGFR")
                 .minExonUp(24)
                 .maxExonUp(24)
                 .geneDown("EGFR")
                 .minExonDown(29)
                 .maxExonDown(29)
-                .proteinEffect(ProteinEffect.UNKNOWN)
                 .build();
         map.put("EGFRvV", fusionEGFRvV);
 

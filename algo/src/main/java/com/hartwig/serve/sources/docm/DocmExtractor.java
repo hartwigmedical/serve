@@ -42,8 +42,8 @@ public class DocmExtractor {
                         .gene(entry.gene())
                         .geneRole(GeneRole.UNKNOWN)
                         .proteinEffect(ProteinEffect.UNKNOWN)
-                        .transcript(entry.transcript())
-                        .proteinAnnotation(entry.proteinAnnotation())
+                        .inputTranscript(entry.transcript())
+                        .inputProteinAnnotation(entry.proteinAnnotation())
                         .addSources(Knowledgebase.DOCM)
                         .build());
             }

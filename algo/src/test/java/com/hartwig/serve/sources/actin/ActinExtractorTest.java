@@ -34,7 +34,7 @@ public class ActinExtractorTest {
         ExtractionResult result = extractor.extract(actinEntries);
         assertEquals(0, result.knownHotspots().size());
         assertEquals(0, result.knownCopyNumbers().size());
-        assertEquals(0, result.knownFusionPairs().size());
+        assertEquals(0, result.knownFusions().size());
         assertEquals(1, result.actionableHotspots().size());
         assertEquals(4, result.actionableRanges().size());
         assertEquals(2, result.actionableGenes().size());

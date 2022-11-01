@@ -5,12 +5,9 @@ import java.util.Objects;
 import com.hartwig.serve.datamodel.DatamodelTestFactory;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.common.CommonTestFactory;
-import com.hartwig.serve.datamodel.common.GeneRole;
-import com.hartwig.serve.datamodel.common.ProteinEffect;
 
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public final class HotspotTestFactory {
 
@@ -18,22 +15,23 @@ public final class HotspotTestFactory {
     }
 
     @NotNull
-    public static VariantHotspot createVariantHotspot(@NotNull String gene, @NotNull GeneRole geneRole,
-            @NotNull ProteinEffect proteinEffect, @Nullable Boolean associatedWithDrugResistance, @NotNull String chromosome, int position,
+    public static VariantHotspot createTestVariantHotspot() {
+        return createVariantHotspot(Strings.EMPTY, Strings.EMPTY, 0, Strings.EMPTY, Strings.EMPTY);
+    }
+
+    @NotNull
+    public static VariantHotspot createVariantHotspot(@NotNull String gene, @NotNull String chromosome, int position,
             @NotNull String ref, @NotNull String alt) {
-        return new VariantHotspotImpl(gene, geneRole, proteinEffect, associatedWithDrugResistance, chromosome, position, ref, alt);
+        return new VariantHotspotImpl(gene, chromosome, position, ref, alt);
     }
 
     @NotNull
     public static ImmutableKnownHotspot.Builder knownHotspotBuilder() {
         return ImmutableKnownHotspot.builder()
-                .from(CommonTestFactory.createEmptyGeneAlteration())
-                .chromosome(Strings.EMPTY)
-                .position(0)
-                .ref(Strings.EMPTY)
-                .alt(Strings.EMPTY)
-                .transcript(null)
-                .proteinAnnotation(Strings.EMPTY);
+                .from(createTestVariantHotspot())
+                .from(CommonTestFactory.createTestGeneAlteration())
+                .inputTranscript(null)
+                .inputProteinAnnotation(Strings.EMPTY);
     }
 
     @NotNull
@@ -49,10 +47,9 @@ public final class HotspotTestFactory {
     @NotNull
     public static ImmutableActionableHotspot.Builder actionableHotspotBuilder() {
         return ImmutableActionableHotspot.builder()
-                .from(DatamodelTestFactory.createEmptyActionableEvent())
-                .from(CommonTestFactory.createEmptyGeneAlteration())
-                .chromosome(Strings.EMPTY)
-                .position(0)
+                .from(DatamodelTestFactory.createTestActionableEvent())
+                .from(CommonTestFactory.createTestGenomePosition())
+                .gene(Strings.EMPTY)
                 .ref(Strings.EMPTY)
                 .alt(Strings.EMPTY);
     }
@@ -67,12 +64,6 @@ public final class HotspotTestFactory {
         @NotNull
         private final String gene;
         @NotNull
-        private final GeneRole geneRole;
-        @NotNull
-        private final ProteinEffect proteinEffect;
-        @Nullable
-        private final Boolean associatedWithDrugResistance;
-        @NotNull
         private final String chromosome;
         private final int position;
         @NotNull
@@ -80,13 +71,9 @@ public final class HotspotTestFactory {
         @NotNull
         private final String alt;
 
-        public VariantHotspotImpl(@NotNull final String gene, @NotNull final GeneRole geneRole, @NotNull final ProteinEffect proteinEffect,
-                @Nullable final Boolean associatedWithDrugResistance, @NotNull final String chromosome, final int position,
+        public VariantHotspotImpl(@NotNull final String gene, @NotNull final String chromosome, final int position,
                 @NotNull final String ref, @NotNull final String alt) {
             this.gene = gene;
-            this.geneRole = geneRole;
-            this.proteinEffect = proteinEffect;
-            this.associatedWithDrugResistance = associatedWithDrugResistance;
             this.chromosome = chromosome;
             this.position = position;
             this.ref = ref;
@@ -97,24 +84,6 @@ public final class HotspotTestFactory {
         @Override
         public String gene() {
             return gene;
-        }
-
-        @NotNull
-        @Override
-        public GeneRole geneRole() {
-            return geneRole;
-        }
-
-        @NotNull
-        @Override
-        public ProteinEffect proteinEffect() {
-            return proteinEffect;
-        }
-
-        @Nullable
-        @Override
-        public Boolean associatedWithDrugResistance() {
-            return associatedWithDrugResistance;
         }
 
         @NotNull
@@ -149,21 +118,19 @@ public final class HotspotTestFactory {
                 return false;
             }
             final VariantHotspotImpl that = (VariantHotspotImpl) o;
-            return position == that.position && gene.equals(that.gene) && geneRole == that.geneRole && proteinEffect == that.proteinEffect
-                    && Objects.equals(associatedWithDrugResistance, that.associatedWithDrugResistance) && chromosome.equals(that.chromosome)
-                    && ref.equals(that.ref) && alt.equals(that.alt);
+            return position == that.position && gene.equals(that.gene) && chromosome.equals(that.chromosome) && ref.equals(that.ref)
+                    && alt.equals(that.alt);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(gene, geneRole, proteinEffect, associatedWithDrugResistance, chromosome, position, ref, alt);
+            return Objects.hash(gene, chromosome, position, ref, alt);
         }
 
         @Override
         public String toString() {
-            return "VariantHotspotImpl{" + "gene='" + gene + '\'' + ", geneRole=" + geneRole + ", proteinEffect=" + proteinEffect
-                    + ", associatedWithDrugResistance=" + associatedWithDrugResistance + ", chromosome='" + chromosome + '\''
-                    + ", position=" + position + ", ref='" + ref + '\'' + ", alt='" + alt + '\'' + '}';
+            return "VariantHotspotImpl{" + "gene='" + gene + '\'' + ", chromosome='" + chromosome + '\'' + ", position=" + position
+                    + ", ref='" + ref + '\'' + ", alt='" + alt + '\'' + '}';
         }
     }
 }

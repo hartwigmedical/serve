@@ -87,7 +87,7 @@ public class RefGenomeManager {
                 .knownCodons(converter.convertKnownCodons(filteredExtraction.knownCodons()))
                 .knownExons(converter.convertKnownExons(filteredExtraction.knownExons()))
                 .knownCopyNumbers(filteredExtraction.knownCopyNumbers())
-                .knownFusionPairs(filteredExtraction.knownFusionPairs())
+                .knownFusions(filteredExtraction.knownFusions())
                 .actionableHotspots(converter.convertActionableHotspots(filteredExtraction.actionableHotspots()))
                 .actionableRanges(converter.convertActionableRanges(filteredExtraction.actionableRanges()))
                 .actionableGenes(filteredExtraction.actionableGenes())

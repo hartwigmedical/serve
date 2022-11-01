@@ -12,7 +12,7 @@ import com.hartwig.serve.datamodel.serialization.ActionableRangeFile;
 import com.hartwig.serve.datamodel.serialization.KnownCodonFile;
 import com.hartwig.serve.datamodel.serialization.KnownCopyNumberFile;
 import com.hartwig.serve.datamodel.serialization.KnownExonFile;
-import com.hartwig.serve.datamodel.serialization.KnownFusionPairFile;
+import com.hartwig.serve.datamodel.serialization.KnownFusionFile;
 import com.hartwig.serve.datamodel.serialization.KnownHotspotFile;
 import com.hartwig.serve.extraction.events.EventInterpretationFile;
 import com.hartwig.serve.extraction.hotspot.KnownHotspotVCF;
@@ -65,9 +65,9 @@ public class ExtractionResultWriter {
         LOGGER.info(" Writing {} known copy numbers to {}", result.knownCopyNumbers().size(), copyNumberTsv);
         KnownCopyNumberFile.write(copyNumberTsv, result.knownCopyNumbers());
 
-        String fusionPairTsv = KnownFusionPairFile.knownFusionPairTsvPath(outputDir, refGenomeVersion);
-        LOGGER.info(" Writing {} known fusion pairs to {}", result.knownFusionPairs().size(), fusionPairTsv);
-        KnownFusionPairFile.write(fusionPairTsv, result.knownFusionPairs());
+        String fusionTsv = KnownFusionFile.knownFusionTsvPath(outputDir, refGenomeVersion);
+        LOGGER.info(" Writing {} known fusions to {}", result.knownFusions().size(), fusionTsv);
+        KnownFusionFile.write(fusionTsv, result.knownFusions());
 
         String actionableHotspotTsv = ActionableHotspotFile.actionableHotspotTsvPath(outputDir, refGenomeVersion);
         LOGGER.info(" Writing {} actionable hotspots to {}", result.actionableHotspots().size(), actionableHotspotTsv);

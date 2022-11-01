@@ -5,8 +5,6 @@ import static org.junit.Assert.assertEquals;
 import java.util.List;
 
 import com.google.common.collect.Lists;
-import com.hartwig.serve.datamodel.common.GeneRole;
-import com.hartwig.serve.datamodel.common.ProteinEffect;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
@@ -36,7 +34,7 @@ public class VariantHotspotComparatorTest {
     @NotNull
     private static VariantHotspot create(@NotNull String gene, @NotNull String chromosome, int position, @NotNull String ref,
             @NotNull String alt) {
-        return HotspotTestFactory.createVariantHotspot(gene, GeneRole.UNKNOWN, ProteinEffect.UNKNOWN, null, chromosome, position, ref, alt);
+        return HotspotTestFactory.createVariantHotspot(gene,  chromosome, position, ref, alt);
     }
 
 }

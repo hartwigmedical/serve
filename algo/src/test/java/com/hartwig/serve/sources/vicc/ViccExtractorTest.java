@@ -39,7 +39,7 @@ public class ViccExtractorTest {
         ExtractionResult result = extractor.extract(entries);
         assertEquals(1, result.knownHotspots().size());
         assertEquals(1, result.knownCopyNumbers().size());
-        assertEquals(1, result.knownFusionPairs().size());
+        assertEquals(1, result.knownFusions().size());
         assertEquals(1, result.actionableHotspots().size());
         assertEquals(2, result.actionableRanges().size());
         assertEquals(2, result.actionableGenes().size());

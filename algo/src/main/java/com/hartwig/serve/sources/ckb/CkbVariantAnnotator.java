@@ -1,26 +1,24 @@
 package com.hartwig.serve.sources.ckb;
 
-import java.util.List;
+import java.util.Set;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.hartwig.serve.ckb.datamodel.variant.Gene;
 import com.hartwig.serve.ckb.datamodel.variant.Variant;
 import com.hartwig.serve.datamodel.common.GeneRole;
 import com.hartwig.serve.datamodel.common.ProteinEffect;
-import com.hartwig.serve.datamodel.fusion.ImmutableKnownFusionPair;
-import com.hartwig.serve.datamodel.fusion.KnownFusionPair;
-import com.hartwig.serve.datamodel.gene.GeneAnnotation;
+import com.hartwig.serve.datamodel.fusion.ImmutableKnownFusion;
+import com.hartwig.serve.datamodel.fusion.KnownFusion;
 import com.hartwig.serve.datamodel.gene.ImmutableKnownCopyNumber;
 import com.hartwig.serve.datamodel.gene.KnownCopyNumber;
-import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
-import com.hartwig.serve.datamodel.range.CodonAnnotation;
-import com.hartwig.serve.datamodel.range.ExonAnnotation;
-import com.hartwig.serve.datamodel.range.ImmutableCodonAnnotation;
-import com.hartwig.serve.datamodel.range.ImmutableExonAnnotation;
-import com.hartwig.serve.extraction.EventExtractorOutput;
-import com.hartwig.serve.extraction.ImmutableEventExtractorOutput;
-import com.hartwig.serve.extraction.gene.ImmutableGeneAnnotationImpl;
-import com.hartwig.serve.extraction.hotspot.ImmutableVariantHotspotImpl;
+import com.hartwig.serve.datamodel.hotspot.ImmutableKnownHotspot;
+import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
+import com.hartwig.serve.datamodel.range.ImmutableKnownCodon;
+import com.hartwig.serve.datamodel.range.ImmutableKnownExon;
+import com.hartwig.serve.datamodel.range.KnownCodon;
+import com.hartwig.serve.datamodel.range.KnownExon;
+import com.hartwig.serve.extraction.ExtractionResult;
+import com.hartwig.serve.extraction.ImmutableExtractionResult;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,29 +33,23 @@ final class CkbVariantAnnotator {
     }
 
     @NotNull
-    public static EventExtractorOutput annotate(@NotNull EventExtractorOutput extract, @NotNull Variant variant) {
-        return ImmutableEventExtractorOutput.builder()
-                .from(extract)
-                .hotspots(annotateHotspots(extract.hotspots(), variant))
-                .codons(annotateCodons(extract.codons(), variant))
-                .exons(annotateExons(extract.exons(), variant))
-                .geneAnnotation(annotateGeneAnnotation(extract.geneAnnotation(), variant))
-                .knownCopyNumber(annotateKnownCopyNumber(extract.knownCopyNumber(), variant))
-                .knownFusionPair(annotateKnownFusionPair(extract.knownFusionPair(), variant))
+    public static ExtractionResult annotate(@NotNull ExtractionResult result, @NotNull Variant variant) {
+        return ImmutableExtractionResult.builder()
+                .from(result)
+                .knownHotspots(annotateHotspots(result.knownHotspots(), variant))
+                .knownCodons(annotateCodons(result.knownCodons(), variant))
+                .knownExons(annotateExons(result.knownExons(), variant))
+                .knownCopyNumbers(annotateCopyNumbers(result.knownCopyNumbers(), variant))
+                .knownFusions(annotateFusions(result.knownFusions(), variant))
                 .build();
     }
 
-    @Nullable
-    private static List<VariantHotspot> annotateHotspots(@Nullable List<VariantHotspot> hotspots, @NotNull Variant variant) {
-        if (hotspots == null) {
-            return null;
-        }
-
-        List<VariantHotspot> annotated = Lists.newArrayList();
-        for (VariantHotspot hotspot : hotspots) {
-            annotated.add(ImmutableVariantHotspotImpl.builder()
+    @NotNull
+    private static Set<KnownHotspot> annotateHotspots(@NotNull Set<KnownHotspot> hotspots, @NotNull Variant variant) {
+        Set<KnownHotspot> annotated = Sets.newHashSet();
+        for (KnownHotspot hotspot : hotspots) {
+            annotated.add(ImmutableKnownHotspot.builder()
                     .from(hotspot)
-                    .gene(variant.gene().geneSymbol())
                     .geneRole(resolveGeneRole(variant.gene()))
                     .proteinEffect(resolveProteinEffect(variant))
                     .associatedWithDrugResistance(resolveAssociatedWithDrugResistance(variant))
@@ -66,17 +58,12 @@ final class CkbVariantAnnotator {
         return annotated;
     }
 
-    @Nullable
-    private static List<CodonAnnotation> annotateCodons(@Nullable List<CodonAnnotation> codons, @NotNull Variant variant) {
-        if (codons == null) {
-            return null;
-        }
-
-        List<CodonAnnotation> annotated = Lists.newArrayList();
-        for (CodonAnnotation codon : codons) {
-            annotated.add(ImmutableCodonAnnotation.builder()
+    @NotNull
+    private static Set<KnownCodon> annotateCodons(@NotNull Set<KnownCodon> codons, @NotNull Variant variant) {
+        Set<KnownCodon> annotated = Sets.newHashSet();
+        for (KnownCodon codon : codons) {
+            annotated.add(ImmutableKnownCodon.builder()
                     .from(codon)
-                    .gene(variant.gene().geneSymbol())
                     .geneRole(resolveGeneRole(variant.gene()))
                     .proteinEffect(resolveProteinEffect(variant))
                     .associatedWithDrugResistance(resolveAssociatedWithDrugResistance(variant))
@@ -85,17 +72,12 @@ final class CkbVariantAnnotator {
         return annotated;
     }
 
-    @Nullable
-    private static List<ExonAnnotation> annotateExons(@Nullable List<ExonAnnotation> exons, @NotNull Variant variant) {
-        if (exons == null) {
-            return null;
-        }
-
-        List<ExonAnnotation> annotated = Lists.newArrayList();
-        for (ExonAnnotation exon : exons) {
-            annotated.add(ImmutableExonAnnotation.builder()
+    @NotNull
+    private static Set<KnownExon> annotateExons(@NotNull Set<KnownExon> exons, @NotNull Variant variant) {
+        Set<KnownExon> annotated = Sets.newHashSet();
+        for (KnownExon exon : exons) {
+            annotated.add(ImmutableKnownExon.builder()
                     .from(exon)
-                    .gene(variant.gene().geneSymbol())
                     .geneRole(resolveGeneRole(variant.gene()))
                     .proteinEffect(resolveProteinEffect(variant))
                     .associatedWithDrugResistance(resolveAssociatedWithDrugResistance(variant))
@@ -104,43 +86,31 @@ final class CkbVariantAnnotator {
         return annotated;
     }
 
-    @Nullable
-    private static GeneAnnotation annotateGeneAnnotation(@Nullable GeneAnnotation geneAnnotation, @NotNull Variant variant) {
-        if (geneAnnotation == null) {
-            return null;
+    @NotNull
+    private static Set<KnownCopyNumber> annotateCopyNumbers(@NotNull Set<KnownCopyNumber> copyNumbers, @NotNull Variant variant) {
+        Set<KnownCopyNumber> annotated = Sets.newHashSet();
+        for (KnownCopyNumber copyNumber : copyNumbers) {
+            annotated.add(ImmutableKnownCopyNumber.builder()
+                    .from(copyNumber)
+                    .geneRole(resolveGeneRole(variant.gene()))
+                    .proteinEffect(resolveProteinEffect(variant))
+                    .associatedWithDrugResistance(resolveAssociatedWithDrugResistance(variant))
+                    .build());
         }
-
-        return ImmutableGeneAnnotationImpl.builder()
-                .from(geneAnnotation)
-                .gene(variant.gene().geneSymbol())
-                .geneRole(resolveGeneRole(variant.gene()))
-                .proteinEffect(resolveProteinEffect(variant))
-                .associatedWithDrugResistance(resolveAssociatedWithDrugResistance(variant))
-                .build();
+        return annotated;
     }
 
-    @Nullable
-    private static KnownCopyNumber annotateKnownCopyNumber(@Nullable KnownCopyNumber knownCopyNumber, @NotNull Variant variant) {
-        if (knownCopyNumber == null) {
-            return null;
+    @NotNull
+    private static Set<KnownFusion> annotateFusions(@NotNull Set<KnownFusion> fusions, @NotNull Variant variant) {
+        Set<KnownFusion> annotated = Sets.newHashSet();
+        for (KnownFusion fusion : fusions) {
+            annotated.add(ImmutableKnownFusion.builder()
+                    .from(fusion)
+                    .proteinEffect(resolveProteinEffect(variant))
+                    .associatedWithDrugResistance(resolveAssociatedWithDrugResistance(variant))
+                    .build());
         }
-
-        return ImmutableKnownCopyNumber.builder()
-                .from(knownCopyNumber)
-                .gene(variant.gene().geneSymbol())
-                .geneRole(resolveGeneRole(variant.gene()))
-                .proteinEffect(resolveProteinEffect(variant))
-                .associatedWithDrugResistance(resolveAssociatedWithDrugResistance(variant))
-                .build();
-    }
-
-    @Nullable
-    private static KnownFusionPair annotateKnownFusionPair(@Nullable KnownFusionPair knownFusionPair, @NotNull Variant variant) {
-        if (knownFusionPair == null) {
-            return knownFusionPair;
-        }
-
-        return ImmutableKnownFusionPair.builder().from(knownFusionPair).proteinEffect(resolveProteinEffect(variant)).build();
+        return annotated;
     }
 
     @NotNull

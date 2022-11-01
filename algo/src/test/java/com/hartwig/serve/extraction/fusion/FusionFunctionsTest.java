@@ -8,7 +8,7 @@ import java.util.List;
 import com.google.common.collect.Lists;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.fusion.FusionTestFactory;
-import com.hartwig.serve.datamodel.fusion.KnownFusionPair;
+import com.hartwig.serve.datamodel.fusion.KnownFusion;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
@@ -16,36 +16,36 @@ import org.junit.Test;
 public class FusionFunctionsTest {
 
     @Test
-    public void canConsolidateFusionPairs() {
+    public void canConsolidateKnownFusions() {
         String gene1 = "gene1";
         String gene2 = "gene2";
-        KnownFusionPair fusion1 = FusionTestFactory.knownFusionBuilder()
+        KnownFusion fusion1 = FusionTestFactory.knownFusionBuilder()
                 .geneUp(gene1)
                 .geneDown(gene2)
                 .addSources(Knowledgebase.VICC_ONCOKB, Knowledgebase.VICC_CIVIC)
                 .build();
-        KnownFusionPair fusion2 =
+        KnownFusion fusion2 =
                 FusionTestFactory.knownFusionBuilder().geneUp(gene1).geneDown(gene2).addSources(Knowledgebase.VICC_CGI).build();
-        KnownFusionPair fusion3 =
+        KnownFusion fusion3 =
                 FusionTestFactory.knownFusionBuilder().geneUp(gene2).geneDown(gene1).addSources(Knowledgebase.VICC_CGI).build();
 
-        List<KnownFusionPair> consolidated = Lists.newArrayList(FusionFunctions.consolidate(Lists.newArrayList(fusion1, fusion2, fusion3)));
+        List<KnownFusion> consolidated = Lists.newArrayList(FusionFunctions.consolidate(Lists.newArrayList(fusion1, fusion2, fusion3)));
         assertEquals(2, consolidated.size());
 
-        KnownFusionPair gene1Fusion = findByGeneUp(consolidated, gene1);
+        KnownFusion gene1Fusion = findByGeneUp(consolidated, gene1);
         assertEquals(3, gene1Fusion.sources().size());
         assertTrue(gene1Fusion.sources().contains(Knowledgebase.VICC_CGI));
         assertTrue(gene1Fusion.sources().contains(Knowledgebase.VICC_ONCOKB));
         assertTrue(gene1Fusion.sources().contains(Knowledgebase.VICC_CIVIC));
 
-        KnownFusionPair gene2Fusion = findByGeneUp(consolidated, gene2);
+        KnownFusion gene2Fusion = findByGeneUp(consolidated, gene2);
         assertEquals(1, gene2Fusion.sources().size());
         assertTrue(gene2Fusion.sources().contains(Knowledgebase.VICC_CGI));
     }
 
     @NotNull
-    private static KnownFusionPair findByGeneUp(@NotNull List<KnownFusionPair> fusionPairs, @NotNull String gene) {
-        for (KnownFusionPair fusionPair : fusionPairs) {
+    private static KnownFusion findByGeneUp(@NotNull List<KnownFusion> fusionPairs, @NotNull String gene) {
+        for (KnownFusion fusionPair : fusionPairs) {
             if (fusionPair.geneUp().equals(gene)) {
                 return fusionPair;
             }

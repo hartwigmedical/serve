@@ -24,7 +24,7 @@ public final class DatamodelTestFactory {
     }
 
     @NotNull
-    public static ActionableEvent createEmptyActionableEvent() {
+    public static ActionableEvent createTestActionableEvent() {
         return createActionableEvent(Knowledgebase.UNKNOWN,
                 Strings.EMPTY,
                 Sets.newHashSet(),

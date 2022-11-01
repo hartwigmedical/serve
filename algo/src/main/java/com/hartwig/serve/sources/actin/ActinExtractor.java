@@ -106,17 +106,17 @@ public class ActinExtractor {
         actionableRanges.addAll(ActionableEventFactory.toActionableRanges(trial, extraction.exons()));
 
         Set<ActionableGene> actionableGenes = Sets.newHashSet();
-        if (extraction.geneAnnotation() != null) {
-            actionableGenes.add(ActionableEventFactory.geneAnnotationToActionableGene(trial, extraction.geneAnnotation()));
+        if (extraction.geneLevel() != null) {
+            actionableGenes.add(ActionableEventFactory.geneAnnotationToActionableGene(trial, extraction.geneLevel()));
         }
 
-        if (extraction.knownCopyNumber() != null) {
-            actionableGenes.add(ActionableEventFactory.copyNumberToActionableGene(trial, extraction.knownCopyNumber()));
+        if (extraction.copyNumber() != null) {
+            actionableGenes.add(ActionableEventFactory.geneAnnotationToActionableGene(trial, extraction.copyNumber()));
         }
 
         Set<ActionableFusion> actionableFusions = Sets.newHashSet();
-        if (extraction.knownFusionPair() != null) {
-            actionableFusions.add(ActionableEventFactory.toActionableFusion(trial, extraction.knownFusionPair()));
+        if (extraction.fusionPair() != null) {
+            actionableFusions.add(ActionableEventFactory.toActionableFusion(trial, extraction.fusionPair()));
         }
 
         Set<ActionableCharacteristic> actionableCharacteristics = Sets.newHashSet();

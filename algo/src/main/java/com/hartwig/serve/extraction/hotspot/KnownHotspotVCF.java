@@ -60,7 +60,7 @@ public final class KnownHotspotVCF {
                     .alleles(hotspotAlleles)
                     .computeEndFromAlleles(hotspotAlleles, hotspot.position())
                     .attribute(VCFWriterFactory.INPUT_FIELD,
-                            toProteinKey(hotspot.gene(), hotspot.transcript(), hotspot.proteinAnnotation()))
+                            toProteinKey(hotspot.gene(), hotspot.inputTranscript(), hotspot.inputProteinAnnotation()))
                     .attribute(VCFWriterFactory.SOURCES_FIELD, Knowledgebase.toCommaSeparatedSourceString(hotspot.sources()))
                     .make();
 
@@ -97,11 +97,11 @@ public final class KnownHotspotVCF {
                     .gene(inputGene)
                     .geneRole(GeneRole.UNKNOWN)
                     .proteinEffect(ProteinEffect.UNKNOWN)
-                    .transcript(inputTranscript)
-                    .proteinAnnotation(inputProteinAnnotation)
                     .position(hotspot.getStart())
                     .ref(hotspot.getReference().getBaseString())
                     .alt(hotspot.getAlleles().get(0).getBaseString())
+                    .inputTranscript(inputTranscript)
+                    .inputProteinAnnotation(inputProteinAnnotation)
                     .sources(knowledgebaseSet)
                     .build());
         }

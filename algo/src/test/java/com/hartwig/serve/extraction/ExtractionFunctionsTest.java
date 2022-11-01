@@ -6,7 +6,7 @@ import static org.junit.Assert.assertTrue;
 import com.google.common.collect.Lists;
 import com.hartwig.serve.ServeAlgoTestFactory;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.datamodel.fusion.KnownFusionPair;
+import com.hartwig.serve.datamodel.fusion.KnownFusion;
 import com.hartwig.serve.datamodel.gene.KnownCopyNumber;
 import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.range.KnownCodon;
@@ -45,8 +45,8 @@ public class ExtractionFunctionsTest {
         assertTrue(copyNumber.sources().contains(source1));
         assertTrue(copyNumber.sources().contains(source2));
 
-        assertEquals(1, merged.knownFusionPairs().size());
-        KnownFusionPair fusionPair = merged.knownFusionPairs().iterator().next();
+        assertEquals(1, merged.knownFusions().size());
+        KnownFusion fusionPair = merged.knownFusions().iterator().next();
         assertTrue(fusionPair.sources().contains(source1));
         assertTrue(fusionPair.sources().contains(source2));
 

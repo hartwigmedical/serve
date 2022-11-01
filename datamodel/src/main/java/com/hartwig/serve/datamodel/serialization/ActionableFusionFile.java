@@ -9,7 +9,6 @@ import java.util.StringJoiner;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
-import com.hartwig.serve.datamodel.common.ProteinEffect;
 import com.hartwig.serve.datamodel.fusion.ActionableFusion;
 import com.hartwig.serve.datamodel.fusion.ActionableFusionComparator;
 import com.hartwig.serve.datamodel.fusion.ImmutableActionableFusion;
@@ -57,7 +56,6 @@ public final class ActionableFusionFile {
                 .add("geneDown")
                 .add("minExonDown")
                 .add("maxExonDown")
-                .add("proteinEffect")
                 .add(ActionableFileUtil.header())
                 .toString();
     }
@@ -84,7 +82,6 @@ public final class ActionableFusionFile {
                 .geneDown(values[fields.get("geneDown")])
                 .minExonDown(SerializationUtil.optionalInteger(values[fields.get("minExonDown")]))
                 .maxExonDown(SerializationUtil.optionalInteger(values[fields.get("maxExonDown")]))
-                .proteinEffect(ProteinEffect.valueOf(values[fields.get("proteinEffect")]))
                 .build();
     }
 
@@ -115,7 +112,6 @@ public final class ActionableFusionFile {
                 .add(fusion.geneDown())
                 .add(SerializationUtil.nullableInteger(fusion.minExonDown()))
                 .add(SerializationUtil.nullableInteger(fusion.maxExonDown()))
-                .add(fusion.proteinEffect().toString())
                 .add(ActionableFileUtil.toLine(fusion))
                 .toString();
     }

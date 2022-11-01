@@ -8,10 +8,10 @@ import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.hotspot.ImmutableKnownHotspot;
 import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
-import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,35 +24,46 @@ public final class HotspotFunctions {
 
     @NotNull
     public static Set<KnownHotspot> consolidate(@NotNull Iterable<KnownHotspot> hotspots) {
-        Map<VariantHotspot, HotspotAnnotation> annotationPerHotspot = Maps.newHashMap();
+        Map<KnownHotspot, HotspotAnnotation> annotationPerHotspot = Maps.newHashMap();
         for (KnownHotspot hotspot : hotspots) {
+            KnownHotspot key = createKey(hotspot);
             HotspotAnnotation newAnnotation = new HotspotAnnotation(Sets.newHashSet(hotspot.sources()),
                     hotspot.gene(),
-                    hotspot.transcript(),
-                    hotspot.proteinAnnotation());
-            VariantHotspot key = ImmutableVariantHotspotImpl.builder().from(hotspot).build();
+                    hotspot.inputTranscript(),
+                    hotspot.inputProteinAnnotation());
             HotspotAnnotation existingAnnotation = annotationPerHotspot.get(key);
             if (existingAnnotation == null) {
                 annotationPerHotspot.put(key, newAnnotation);
             } else {
-                LOGGER.debug("Merging hotspots {} with {} on {}", newAnnotation, existingAnnotation, key);
+                LOGGER.debug("Merging hotspots {} with {} on {}", newAnnotation, existingAnnotation, hotspot);
                 annotationPerHotspot.put(key, mergeHotspotAnnotations(newAnnotation, existingAnnotation));
             }
         }
 
         Set<KnownHotspot> consolidatedHotspots = Sets.newHashSet();
-        for (Map.Entry<VariantHotspot, HotspotAnnotation> entry : annotationPerHotspot.entrySet()) {
-            VariantHotspot hotspot = entry.getKey();
+        for (Map.Entry<KnownHotspot, HotspotAnnotation> entry : annotationPerHotspot.entrySet()) {
+            KnownHotspot hotspot = entry.getKey();
             HotspotAnnotation annotation = entry.getValue();
             consolidatedHotspots.add(ImmutableKnownHotspot.builder()
                     .from(hotspot)
                     .sources(annotation.sources())
                     .gene(annotation.gene())
-                    .transcript(annotation.transcript())
-                    .proteinAnnotation(annotation.proteinAnnotation())
+                    .inputTranscript(annotation.transcript())
+                    .inputProteinAnnotation(annotation.proteinAnnotation())
                     .build());
         }
         return consolidatedHotspots;
+    }
+
+    @NotNull
+    private static KnownHotspot createKey(@NotNull KnownHotspot hotspot) {
+        return ImmutableKnownHotspot.builder()
+                .from(hotspot)
+                .sources(Sets.newHashSet())
+                .gene(Strings.EMPTY)
+                .inputTranscript(Strings.EMPTY)
+                .inputProteinAnnotation(Strings.EMPTY)
+                .build();
     }
 
     @NotNull

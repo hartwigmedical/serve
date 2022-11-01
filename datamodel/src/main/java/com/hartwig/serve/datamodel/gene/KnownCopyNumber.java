@@ -9,8 +9,6 @@ import org.jetbrains.annotations.Nullable;
 
 @Value.Immutable
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class })
-public abstract class KnownCopyNumber implements GeneAlteration, KnownEvent {
+public abstract class KnownCopyNumber implements GeneAnnotation, GeneAlteration, KnownEvent {
 
-    @NotNull
-    public abstract CopyNumberType type();
 }

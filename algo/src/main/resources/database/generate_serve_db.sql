@@ -4,14 +4,11 @@ DROP TABLE IF EXISTS actionableHotspot;
 CREATE TABLE actionableHotspot
 (   id int NOT NULL AUTO_INCREMENT,
     modified DATETIME NOT NULL,
+    gene varchar(50) NOT NULL,
     chromosome varchar(50) NOT NULL,
     position int NOT NULL,
     ref varchar(100) NOT NULL,
     alt varchar(100) NOT NULL,
-    gene varchar(50) NOT NULL,
-    geneRole varchar(50) NOT NULL,
-    proteinEffect varchar(50) NOT NULL,
-    associatedWithDrugResistance BOOLEAN,
     source varchar(50) NOT NULL,
     sourceEvent varchar(50) NOT NULL,
     sourceUrls varchar(2000),
@@ -32,16 +29,10 @@ CREATE TABLE actionableRange
 (   id int NOT NULL AUTO_INCREMENT,
     modified DATETIME NOT NULL,
     gene varchar(50) NOT NULL,
-    geneRole varchar(50) NOT NULL,
-    proteinEffect varchar(50) NOT NULL,
-    associatedWithDrugResistance BOOLEAN,
-    transcript varchar(50) NOT NULL,
     chromosome varchar(50) NOT NULL,
     start int NOT NULL,
     end int NOT NULL,
     applicableMutationType varchar(50) NOT NULL,
-    rangeType varchar(50) NOT NULL,
-    rangeRank varchar(50) NOT NULL,
     source varchar(50) NOT NULL,
     sourceEvent varchar(50) NOT NULL,
     sourceUrls varchar(2000),
@@ -62,9 +53,6 @@ CREATE TABLE actionableGene
 (   id int NOT NULL AUTO_INCREMENT,
     modified DATETIME NOT NULL,
     gene varchar(50) NOT NULL,
-    geneRole varchar(50) NOT NULL,
-    proteinEffect varchar(50) NOT NULL,
-    associatedWithDrugResistance BOOLEAN,
     event varchar(50) NOT NULL,
     source varchar(50) NOT NULL,
     sourceEvent varchar(50) NOT NULL,
@@ -91,7 +79,6 @@ CREATE TABLE actionableFusion
     geneDown varchar(50) NOT NULL,
     minExonDown int,
     maxExonDown int,
-    proteinEffect varchar(50) NOT NULL,
     source varchar(50) NOT NULL,
     sourceEvent varchar(50) NOT NULL,
     sourceUrls varchar(2000),
@@ -153,16 +140,16 @@ DROP TABLE IF EXISTS knownHotspot;
 CREATE TABLE knownHotspot
 (   id int NOT NULL AUTO_INCREMENT,
     modified DATETIME NOT NULL,
-    chromosome varchar(50) NOT NULL,
-    position varchar(50) NOT NULL,
-    ref varchar(100) NOT NULL,
-    alt varchar(100) NOT NULL,
     gene varchar(50) NOT NULL,
     geneRole varchar(50) NOT NULL,
     proteinEffect varchar(50) NOT NULL,
     associatedWithDrugResistance BOOLEAN,
-    transcript varchar(50),
-    proteinAnnotation varchar(50) NOT NULL,
+    chromosome varchar(50) NOT NULL,
+    position varchar(50) NOT NULL,
+    ref varchar(100) NOT NULL,
+    alt varchar(100) NOT NULL,
+    inputTranscript varchar(50),
+    inputProteinAnnotation varchar(50) NOT NULL,
     sources varchar(100) NOT NULL,
     PRIMARY KEY (id)
 );
@@ -175,12 +162,12 @@ CREATE TABLE knownCodon
     geneRole varchar(50) NOT NULL,
     proteinEffect varchar(50) NOT NULL,
     associatedWithDrugResistance BOOLEAN,
-    transcript varchar(50) NOT NULL,
     chromosome varchar(50) NOT NULL,
     start varchar(50) NOT NULL,
     end varchar(50) NOT NULL,
     applicableMutationType varchar(50) NOT NULL,
-    codonRank varchar(50) NOT NULL,
+    inputTranscript varchar(50) NOT NULL,
+    inputCodonRank varchar(50) NOT NULL,
     sources varchar(100) NOT NULL,
     PRIMARY KEY (id)
 );
@@ -193,12 +180,12 @@ CREATE TABLE knownExon
     geneRole varchar(50) NOT NULL,
     proteinEffect varchar(50) NOT NULL,
     associatedWithDrugResistance BOOLEAN,
-    transcript varchar(50) NOT NULL,
     chromosome varchar(50) NOT NULL,
     start varchar(50) NOT NULL,
     end varchar(50) NOT NULL,
     applicableMutationType varchar(50) NOT NULL,
-    exonRank varchar(50) NOT NULL,
+    inputTranscript varchar(50) NOT NULL,
+    inputExonRank varchar(50) NOT NULL,
     sources varchar(100) NOT NULL,
     PRIMARY KEY (id)
 );
@@ -211,13 +198,13 @@ CREATE TABLE knownCopyNumber
     geneRole varchar(50) NOT NULL,
     proteinEffect varchar(50) NOT NULL,
     associatedWithDrugResistance BOOLEAN,
-    type varchar(50) NOT NULL,
+    event varchar(50) NOT NULL,
     sources varchar(100) NOT NULL,
     PRIMARY KEY (id)
 );
 
-DROP TABLE IF EXISTS knownFusionPair;
-CREATE TABLE knownFusionPair
+DROP TABLE IF EXISTS knownFusion;
+CREATE TABLE knownFusion
 (   id int NOT NULL AUTO_INCREMENT,
     modified DATETIME NOT NULL,
     geneUp varchar(50) NOT NULL,
@@ -227,6 +214,7 @@ CREATE TABLE knownFusionPair
     minExonDown varchar(50),
     maxExonDown varchar(50),
     proteinEffect varchar(50) NOT NULL,
+    associatedWithDrugResistance BOOLEAN,
     sources varchar(100) NOT NULL,
     PRIMARY KEY (id)
 );

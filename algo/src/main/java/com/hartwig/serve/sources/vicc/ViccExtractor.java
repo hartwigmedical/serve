@@ -10,9 +10,12 @@ import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.characteristic.ActionableCharacteristic;
 import com.hartwig.serve.datamodel.characteristic.TumorCharacteristic;
+import com.hartwig.serve.datamodel.common.GeneRole;
+import com.hartwig.serve.datamodel.common.ProteinEffect;
 import com.hartwig.serve.datamodel.fusion.ActionableFusion;
-import com.hartwig.serve.datamodel.fusion.ImmutableKnownFusionPair;
-import com.hartwig.serve.datamodel.fusion.KnownFusionPair;
+import com.hartwig.serve.datamodel.fusion.FusionPair;
+import com.hartwig.serve.datamodel.fusion.ImmutableKnownFusion;
+import com.hartwig.serve.datamodel.fusion.KnownFusion;
 import com.hartwig.serve.datamodel.gene.ActionableGene;
 import com.hartwig.serve.datamodel.gene.GeneAnnotation;
 import com.hartwig.serve.datamodel.gene.ImmutableKnownCopyNumber;
@@ -22,8 +25,6 @@ import com.hartwig.serve.datamodel.hotspot.ImmutableKnownHotspot;
 import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
 import com.hartwig.serve.datamodel.range.ActionableRange;
-import com.hartwig.serve.datamodel.range.CodonAnnotation;
-import com.hartwig.serve.datamodel.range.ExonAnnotation;
 import com.hartwig.serve.datamodel.range.ImmutableKnownCodon;
 import com.hartwig.serve.datamodel.range.ImmutableKnownExon;
 import com.hartwig.serve.datamodel.range.KnownCodon;
@@ -35,10 +36,12 @@ import com.hartwig.serve.extraction.EventExtractorOutput;
 import com.hartwig.serve.extraction.ExtractionFunctions;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.ImmutableExtractionResult;
+import com.hartwig.serve.extraction.codon.CodonAnnotation;
 import com.hartwig.serve.extraction.codon.CodonFunctions;
 import com.hartwig.serve.extraction.copynumber.CopyNumberFunctions;
 import com.hartwig.serve.extraction.events.EventInterpretation;
 import com.hartwig.serve.extraction.events.ImmutableEventInterpretation;
+import com.hartwig.serve.extraction.exon.ExonAnnotation;
 import com.hartwig.serve.extraction.exon.ExonFunctions;
 import com.hartwig.serve.extraction.fusion.FusionFunctions;
 import com.hartwig.serve.extraction.hotspot.HotspotFunctions;
@@ -92,9 +95,9 @@ public final class ViccExtractor {
         Map<Feature, List<VariantHotspot>> hotspotsPerFeature = Maps.newHashMap();
         Map<Feature, List<CodonAnnotation>> codonsPerFeature = Maps.newHashMap();
         Map<Feature, List<ExonAnnotation>> exonsPerFeature = Maps.newHashMap();
-        Map<Feature, GeneAnnotation> geneAnnotationsPerFeature = Maps.newHashMap();
-        Map<Feature, KnownCopyNumber> ampsDelsPerFeature = Maps.newHashMap();
-        Map<Feature, KnownFusionPair> fusionsPerFeature = Maps.newHashMap();
+        Map<Feature, GeneAnnotation> geneLevelEventsPerFeature = Maps.newHashMap();
+        Map<Feature, GeneAnnotation> ampsDelsPerFeature = Maps.newHashMap();
+        Map<Feature, FusionPair> fusionsPerFeature = Maps.newHashMap();
         Map<Feature, TumorCharacteristic> characteristicsPerFeature = Maps.newHashMap();
         Map<Feature, ImmunoHLA> hlaPerFeature = Maps.newHashMap();
 
@@ -127,16 +130,16 @@ public final class ViccExtractor {
                     exonsPerFeature.put(feature, extractorOutput.exons());
                 }
 
-                if (extractorOutput.geneAnnotation() != null) {
-                    geneAnnotationsPerFeature.put(feature, extractorOutput.geneAnnotation());
+                if (extractorOutput.geneLevel() != null) {
+                    geneLevelEventsPerFeature.put(feature, extractorOutput.geneLevel());
                 }
 
-                if (extractorOutput.knownCopyNumber() != null) {
-                    ampsDelsPerFeature.put(feature, extractorOutput.knownCopyNumber());
+                if (extractorOutput.copyNumber() != null) {
+                    ampsDelsPerFeature.put(feature, extractorOutput.copyNumber());
                 }
 
-                if (extractorOutput.knownFusionPair() != null) {
-                    fusionsPerFeature.put(feature, extractorOutput.knownFusionPair());
+                if (extractorOutput.fusionPair() != null) {
+                    fusionsPerFeature.put(feature, extractorOutput.fusionPair());
                 }
 
                 if (extractorOutput.characteristic() != null) {
@@ -154,7 +157,7 @@ public final class ViccExtractor {
                 .hotspotsPerFeature(hotspotsPerFeature)
                 .codonsPerFeature(codonsPerFeature)
                 .exonsPerFeature(exonsPerFeature)
-                .geneAnnotationsPerFeature(geneAnnotationsPerFeature)
+                .geneLevelEventsPerFeature(geneLevelEventsPerFeature)
                 .ampsDelsPerFeature(ampsDelsPerFeature)
                 .fusionsPerFeature(fusionsPerFeature)
                 .characteristicsPerFeature(characteristicsPerFeature)
@@ -172,8 +175,8 @@ public final class ViccExtractor {
                 .knownHotspots(convertToHotspots(entry, extraction))
                 .knownCodons(convertToCodons(entry, extraction))
                 .knownExons(convertToExons(entry, extraction))
-                .knownCopyNumbers(convertToKnownAmpsDels(entry, extraction))
-                .knownFusionPairs(convertToKnownFusions(entry, extraction));
+                .knownCopyNumbers(convertToKnownCopyNumbers(entry, extraction))
+                .knownFusions(convertToKnownFusions(entry, extraction));
 
         addActionability(outputBuilder, extraction);
 
@@ -190,8 +193,10 @@ public final class ViccExtractor {
             for (VariantHotspot hotspot : featureResult.getValue()) {
                 hotspots.add(ImmutableKnownHotspot.builder()
                         .from(hotspot)
-                        .transcript(entry.transcriptId())
-                        .proteinAnnotation(proteinExtractor.apply(feature.name()))
+                        .geneRole(GeneRole.UNKNOWN)
+                        .proteinEffect(ProteinEffect.UNKNOWN)
+                        .inputTranscript(entry.transcriptId())
+                        .inputProteinAnnotation(proteinExtractor.apply(feature.name()))
                         .addSources(source)
                         .build());
             }
@@ -207,7 +212,14 @@ public final class ViccExtractor {
         Knowledgebase source = ViccSource.toKnowledgebase(entry.source());
         for (List<CodonAnnotation> annotations : extraction.codonsPerFeature().values()) {
             for (CodonAnnotation annotation : annotations) {
-                codons.add(ImmutableKnownCodon.builder().annotation(annotation).addSources(source).build());
+                codons.add(ImmutableKnownCodon.builder()
+                        .from(annotation)
+                        .geneRole(GeneRole.UNKNOWN)
+                        .proteinEffect(ProteinEffect.UNKNOWN)
+                        .inputTranscript(annotation.inputTranscript())
+                        .inputCodonRank(annotation.inputCodonRank())
+                        .addSources(source)
+                        .build());
             }
         }
 
@@ -221,7 +233,14 @@ public final class ViccExtractor {
         Knowledgebase source = ViccSource.toKnowledgebase(entry.source());
         for (List<ExonAnnotation> annotations : extraction.exonsPerFeature().values()) {
             for (ExonAnnotation annotation : annotations) {
-                exons.add(ImmutableKnownExon.builder().annotation(annotation).addSources(source).build());
+                exons.add(ImmutableKnownExon.builder()
+                        .from(annotation)
+                        .geneRole(GeneRole.UNKNOWN)
+                        .proteinEffect(ProteinEffect.UNKNOWN)
+                        .inputTranscript(annotation.inputTranscript())
+                        .inputExonRank(annotation.inputExonRank())
+                        .addSources(source)
+                        .build());
             }
         }
 
@@ -229,22 +248,27 @@ public final class ViccExtractor {
     }
 
     @NotNull
-    private static Set<KnownCopyNumber> convertToKnownAmpsDels(@NotNull ViccEntry entry, @NotNull ViccExtractionResult extraction) {
+    private static Set<KnownCopyNumber> convertToKnownCopyNumbers(@NotNull ViccEntry entry, @NotNull ViccExtractionResult extraction) {
         Set<KnownCopyNumber> copyNumbers = Sets.newHashSet();
         Knowledgebase source = ViccSource.toKnowledgebase(entry.source());
-        for (KnownCopyNumber copyNumber : extraction.ampsDelsPerFeature().values()) {
-            copyNumbers.add(ImmutableKnownCopyNumber.builder().from(copyNumber).addSources(source).build());
+        for (GeneAnnotation copyNumber : extraction.ampsDelsPerFeature().values()) {
+            copyNumbers.add(ImmutableKnownCopyNumber.builder()
+                    .from(copyNumber)
+                    .geneRole(GeneRole.UNKNOWN)
+                    .proteinEffect(ProteinEffect.UNKNOWN)
+                    .addSources(source)
+                    .build());
         }
 
         return CopyNumberFunctions.consolidate(copyNumbers);
     }
 
     @NotNull
-    private static Set<KnownFusionPair> convertToKnownFusions(@NotNull ViccEntry entry, @NotNull ViccExtractionResult extraction) {
-        Set<KnownFusionPair> fusions = Sets.newHashSet();
+    private static Set<KnownFusion> convertToKnownFusions(@NotNull ViccEntry entry, @NotNull ViccExtractionResult extraction) {
+        Set<KnownFusion> fusions = Sets.newHashSet();
         Knowledgebase source = ViccSource.toKnowledgebase(entry.source());
-        for (KnownFusionPair fusionPair : extraction.fusionsPerFeature().values()) {
-            fusions.add(ImmutableKnownFusionPair.builder().from(fusionPair).addSources(source).build());
+        for (FusionPair fusion : extraction.fusionsPerFeature().values()) {
+            fusions.add(ImmutableKnownFusion.builder().from(fusion).proteinEffect(ProteinEffect.UNKNOWN).addSources(source).build());
         }
 
         return FusionFunctions.consolidate(fusions);
@@ -262,7 +286,7 @@ public final class ViccExtractor {
         actionableRanges.addAll(extractActionableRanges(extraction, extraction.codonsPerFeature()));
         actionableRanges.addAll(extractActionableRanges(extraction, extraction.exonsPerFeature()));
         actionableGenes.addAll(extractActionableAmpsDels(extraction, extraction.ampsDelsPerFeature()));
-        actionableGenes.addAll(extractActionableGenes(extraction, extraction.geneAnnotationsPerFeature()));
+        actionableGenes.addAll(extractActionableGenes(extraction, extraction.geneLevelEventsPerFeature()));
         actionableFusions.addAll(extractActionableFusions(extraction, extraction.fusionsPerFeature()));
         actionableCharacteristics.addAll(extractActionableCharacteristics(extraction, extraction.characteristicsPerFeature()));
 
@@ -307,14 +331,14 @@ public final class ViccExtractor {
 
     @NotNull
     private static Set<ActionableGene> extractActionableAmpsDels(@NotNull ViccExtractionResult extraction,
-            @NotNull Map<Feature, KnownCopyNumber> copyNumbersPerFeature) {
+            @NotNull Map<Feature, GeneAnnotation> copyNumbersPerFeature) {
         Set<ActionableGene> actionableGenes = Sets.newHashSet();
-        for (Map.Entry<Feature, KnownCopyNumber> entry : copyNumbersPerFeature.entrySet()) {
-            KnownCopyNumber knownCopyNumber = entry.getValue();
-            if (knownCopyNumber != null) {
+        for (Map.Entry<Feature, GeneAnnotation> entry : copyNumbersPerFeature.entrySet()) {
+            GeneAnnotation copyNumber = entry.getValue();
+            if (copyNumber != null) {
                 for (ActionableEvidence evidence : extraction.actionableEvidence()) {
                     ActionableEvidence modified = withSourceEvent(evidence, extraction.eventInterpretationPerFeature().get(entry.getKey()));
-                    actionableGenes.add(ActionableEventFactory.copyNumberToActionableGene(modified, knownCopyNumber));
+                    actionableGenes.add(ActionableEventFactory.geneAnnotationToActionableGene(modified, copyNumber));
                 }
             }
         }
@@ -339,10 +363,10 @@ public final class ViccExtractor {
 
     @NotNull
     private static Set<ActionableFusion> extractActionableFusions(@NotNull ViccExtractionResult extraction,
-            @NotNull Map<Feature, KnownFusionPair> knownFusionPerFeature) {
+            @NotNull Map<Feature, FusionPair> fusionsPerFeature) {
         Set<ActionableFusion> actionableFusions = Sets.newHashSet();
-        for (Map.Entry<Feature, KnownFusionPair> entry : knownFusionPerFeature.entrySet()) {
-            KnownFusionPair fusionPair = entry.getValue();
+        for (Map.Entry<Feature, FusionPair> entry : fusionsPerFeature.entrySet()) {
+            FusionPair fusionPair = entry.getValue();
             if (fusionPair != null) {
                 for (ActionableEvidence evidence : extraction.actionableEvidence()) {
                     ActionableEvidence modified = withSourceEvent(evidence, extraction.eventInterpretationPerFeature().get(entry.getKey()));

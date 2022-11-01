@@ -5,12 +5,10 @@ import java.util.Objects;
 import com.hartwig.serve.datamodel.DatamodelTestFactory;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.MutationType;
-import com.hartwig.serve.datamodel.common.GeneRole;
-import com.hartwig.serve.datamodel.common.ProteinEffect;
+import com.hartwig.serve.datamodel.common.CommonTestFactory;
 
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public final class RangeTestFactory {
 
@@ -18,93 +16,49 @@ public final class RangeTestFactory {
     }
 
     @NotNull
-    public static RangeAnnotation createRangeAnnotation(@NotNull String gene, @NotNull GeneRole geneRole,
-            @NotNull ProteinEffect proteinEffect, @Nullable Boolean associatedWithDrugResistance, @NotNull String chromosome, int start,
-            int end, @NotNull String transcript, int rank, @NotNull MutationType applicableMutationType) {
-        return new RangeAnnotationImpl(gene,
-                geneRole,
-                proteinEffect,
-                associatedWithDrugResistance,
-                chromosome,
-                start,
-                end,
-                transcript,
-                rank,
-                applicableMutationType);
+    public static RangeAnnotation createTestRangeAnnotation() {
+        return createRangeAnnotation(Strings.EMPTY, Strings.EMPTY, 0, 0, MutationType.ANY);
     }
 
     @NotNull
-    public static ImmutableCodonAnnotation.Builder codonAnnotationBuilder() {
-        return ImmutableCodonAnnotation.builder()
-                .gene(Strings.EMPTY)
-                .geneRole(GeneRole.UNKNOWN)
-                .proteinEffect(ProteinEffect.UNKNOWN)
-                .chromosome(Strings.EMPTY)
-                .start(0)
-                .end(0)
-                .transcript(Strings.EMPTY)
-                .rank(0)
-                .applicableMutationType(MutationType.ANY);
+    public static RangeAnnotation createRangeAnnotation(@NotNull String gene, @NotNull String chromosome, int start, int end,
+            @NotNull MutationType applicableMutationType) {
+        return new RangeAnnotationImpl(gene, chromosome, start, end, applicableMutationType);
     }
 
     @NotNull
-    public static CodonAnnotation createTestCodonAnnotation() {
-        return codonAnnotationBuilder().build();
+    public static ImmutableKnownCodon.Builder knownCodonBuilder() {
+        return ImmutableKnownCodon.builder()
+                .from(createTestRangeAnnotation())
+                .from(CommonTestFactory.createTestGeneAlteration())
+                .inputTranscript(Strings.EMPTY)
+                .inputCodonRank(0);
     }
 
     @NotNull
     public static KnownCodon createTestKnownCodonForSource(@NotNull Knowledgebase source) {
-        return ImmutableKnownCodon.builder().from(createTestKnownCodon()).addSources(source).build();
+        return knownCodonBuilder().addSources(source).build();
     }
 
     @NotNull
-    public static KnownCodon createTestKnownCodon() {
-        return ImmutableKnownCodon.builder().annotation(createTestCodonAnnotation()).build();
-    }
-
-    @NotNull
-    public static ImmutableExonAnnotation.Builder exonAnnotationBuilder() {
-        return ImmutableExonAnnotation.builder()
-                .gene(Strings.EMPTY)
-                .geneRole(GeneRole.UNKNOWN)
-                .proteinEffect(ProteinEffect.UNKNOWN)
-                .chromosome(Strings.EMPTY)
-                .start(0)
-                .end(0)
-                .transcript(Strings.EMPTY)
-                .rank(0)
-                .applicableMutationType(MutationType.ANY);
-    }
-
-    @NotNull
-    public static ExonAnnotation createTestExonAnnotation() {
-        return exonAnnotationBuilder().build();
+    public static ImmutableKnownExon.Builder knownExonBuilder() {
+        return ImmutableKnownExon.builder()
+                .from(createTestRangeAnnotation())
+                .from(CommonTestFactory.createTestGeneAlteration())
+                .inputTranscript(Strings.EMPTY)
+                .inputExonRank(0);
     }
 
     @NotNull
     public static KnownExon createTestKnownExonForSource(@NotNull Knowledgebase source) {
-        return ImmutableKnownExon.builder().from(createTestKnownExon()).addSources(source).build();
-    }
-
-    @NotNull
-    public static KnownExon createTestKnownExon() {
-        return ImmutableKnownExon.builder().annotation(createTestExonAnnotation()).build();
+        return knownExonBuilder().addSources(source).build();
     }
 
     @NotNull
     public static ImmutableActionableRange.Builder actionableRangeBuilder() {
         return ImmutableActionableRange.builder()
-                .from(DatamodelTestFactory.createEmptyActionableEvent())
-                .gene(Strings.EMPTY)
-                .geneRole(GeneRole.UNKNOWN)
-                .proteinEffect(ProteinEffect.UNKNOWN)
-                .chromosome(Strings.EMPTY)
-                .start(0)
-                .end(0)
-                .transcript(Strings.EMPTY)
-                .rank(0)
-                .applicableMutationType(MutationType.ANY)
-                .rangeType(RangeType.EXON);
+                .from(createTestRangeAnnotation())
+                .from(DatamodelTestFactory.createTestActionableEvent());
     }
 
     @NotNull
@@ -117,33 +71,18 @@ public final class RangeTestFactory {
         @NotNull
         private final String gene;
         @NotNull
-        private final GeneRole geneRole;
-        @NotNull
-        private final ProteinEffect proteinEffect;
-        @Nullable
-        private final Boolean associatedWithDrugResistance;
-        @NotNull
         private final String chromosome;
         private final int start;
         private final int end;
         @NotNull
-        private final String transcript;
-        private final int rank;
-        @NotNull
         private final MutationType applicableMutationType;
 
-        public RangeAnnotationImpl(@NotNull final String gene, @NotNull final GeneRole geneRole, @NotNull final ProteinEffect proteinEffect,
-                @Nullable final Boolean associatedWithDrugResistance, @NotNull final String chromosome, final int start, final int end,
-                @NotNull final String transcript, final int rank, @NotNull final MutationType applicableMutationType) {
+        public RangeAnnotationImpl(@NotNull final String gene, @NotNull final String chromosome, final int start, final int end,
+                @NotNull final MutationType applicableMutationType) {
             this.gene = gene;
-            this.geneRole = geneRole;
-            this.proteinEffect = proteinEffect;
-            this.associatedWithDrugResistance = associatedWithDrugResistance;
             this.chromosome = chromosome;
             this.start = start;
             this.end = end;
-            this.transcript = transcript;
-            this.rank = rank;
             this.applicableMutationType = applicableMutationType;
         }
 
@@ -151,24 +90,6 @@ public final class RangeTestFactory {
         @Override
         public String gene() {
             return gene;
-        }
-
-        @NotNull
-        @Override
-        public GeneRole geneRole() {
-            return geneRole;
-        }
-
-        @NotNull
-        @Override
-        public ProteinEffect proteinEffect() {
-            return proteinEffect;
-        }
-
-        @Nullable
-        @Override
-        public Boolean associatedWithDrugResistance() {
-            return associatedWithDrugResistance;
         }
 
         @NotNull
@@ -189,17 +110,6 @@ public final class RangeTestFactory {
 
         @NotNull
         @Override
-        public String transcript() {
-            return transcript;
-        }
-
-        @Override
-        public int rank() {
-            return rank;
-        }
-
-        @NotNull
-        @Override
         public MutationType applicableMutationType() {
             return applicableMutationType;
         }
@@ -213,32 +123,19 @@ public final class RangeTestFactory {
                 return false;
             }
             final RangeAnnotationImpl that = (RangeAnnotationImpl) o;
-            return start == that.start && end == that.end && rank == that.rank && gene.equals(that.gene) && geneRole == that.geneRole
-                    && proteinEffect == that.proteinEffect && Objects.equals(associatedWithDrugResistance,
-                    that.associatedWithDrugResistance) && chromosome.equals(that.chromosome) && transcript.equals(that.transcript)
+            return start == that.start && end == that.end && gene.equals(that.gene) && chromosome.equals(that.chromosome)
                     && applicableMutationType == that.applicableMutationType;
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(gene,
-                    geneRole,
-                    proteinEffect,
-                    associatedWithDrugResistance,
-                    chromosome,
-                    start,
-                    end,
-                    transcript,
-                    rank,
-                    applicableMutationType);
+            return Objects.hash(gene, chromosome, start, end, applicableMutationType);
         }
 
         @Override
         public String toString() {
-            return "RangeAnnotationImpl{" + "gene='" + gene + '\'' + ", geneRole=" + geneRole + ", proteinEffect=" + proteinEffect
-                    + ", associatedWithDrugResistance=" + associatedWithDrugResistance + ", chromosome='" + chromosome + '\'' + ", start="
-                    + start + ", end=" + end + ", transcript='" + transcript + '\'' + ", rank=" + rank + ", applicableMutationType="
-                    + applicableMutationType + '}';
+            return "RangeAnnotationImpl{" + "gene='" + gene + '\'' + ", chromosome='" + chromosome + '\'' + ", start=" + start + ", end="
+                    + end + ", applicableMutationType=" + applicableMutationType + '}';
         }
     }
 }

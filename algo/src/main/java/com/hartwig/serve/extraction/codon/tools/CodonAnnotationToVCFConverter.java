@@ -58,11 +58,11 @@ public class CodonAnnotationToVCFConverter {
 
         for (KnownCodon codon : codons) {
             List<Long> positions = Lists.newArrayList();
-            for (long i = codon.annotation().start(); i <= codon.annotation().end(); i++) {
+            for (long i = codon.start(); i <= codon.end(); i++) {
                 positions.add(i);
             }
 
-            String chromosome = codon.annotation().chromosome();
+            String chromosome = codon.chromosome();
             for (long position : positions) {
                 String refBaseOfPosition = altBaseGenerator.extractRefBaseAtGenomicPosition(chromosome, position);
                 String randomAltBase = altBaseGenerator.createAltForRefBase(chromosome, position);
@@ -73,9 +73,9 @@ public class CodonAnnotationToVCFConverter {
                         refBaseOfPosition,
                         randomAltBase,
                         codon.sources(),
-                        codon.annotation().gene(),
-                        codon.annotation().transcript(),
-                        codon.annotation().rank());
+                        codon.gene(),
+                        codon.inputTranscript(),
+                        codon.inputCodonRank());
             }
         }
 

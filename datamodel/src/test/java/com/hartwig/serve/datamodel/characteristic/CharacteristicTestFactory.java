@@ -22,7 +22,7 @@ public final class CharacteristicTestFactory {
     @NotNull
     public static ImmutableActionableCharacteristic.Builder actionableCharacteristicBuilder() {
         return ImmutableActionableCharacteristic.builder()
-                .from(DatamodelTestFactory.createEmptyActionableEvent())
+                .from(DatamodelTestFactory.createTestActionableEvent())
                 .type(TumorCharacteristicType.MICROSATELLITE_UNSTABLE);
     }
 

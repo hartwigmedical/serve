@@ -5,13 +5,12 @@ import java.util.Map;
 import java.util.Set;
 
 import com.hartwig.serve.datamodel.characteristic.TumorCharacteristic;
-import com.hartwig.serve.datamodel.fusion.KnownFusionPair;
+import com.hartwig.serve.datamodel.fusion.FusionPair;
 import com.hartwig.serve.datamodel.gene.GeneAnnotation;
-import com.hartwig.serve.datamodel.gene.KnownCopyNumber;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
-import com.hartwig.serve.datamodel.range.CodonAnnotation;
-import com.hartwig.serve.datamodel.range.ExonAnnotation;
+import com.hartwig.serve.extraction.codon.CodonAnnotation;
 import com.hartwig.serve.extraction.events.EventInterpretation;
+import com.hartwig.serve.extraction.exon.ExonAnnotation;
 import com.hartwig.serve.extraction.immuno.ImmunoHLA;
 import com.hartwig.serve.vicc.datamodel.Feature;
 
@@ -36,13 +35,13 @@ public abstract class ViccExtractionResult {
     public abstract Map<Feature, List<ExonAnnotation>> exonsPerFeature();
 
     @NotNull
-    public abstract Map<Feature, GeneAnnotation> geneAnnotationsPerFeature();
+    public abstract Map<Feature, GeneAnnotation> geneLevelEventsPerFeature();
 
     @NotNull
-    public abstract Map<Feature, KnownCopyNumber> ampsDelsPerFeature();
+    public abstract Map<Feature, GeneAnnotation> ampsDelsPerFeature();
 
     @NotNull
-    public abstract Map<Feature, KnownFusionPair> fusionsPerFeature();
+    public abstract Map<Feature, FusionPair> fusionsPerFeature();
 
     @NotNull
     public abstract Map<Feature, TumorCharacteristic> characteristicsPerFeature();

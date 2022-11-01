@@ -10,15 +10,17 @@ import org.jetbrains.annotations.NotNull;
 public class KnownCopyNumberComparator implements Comparator<KnownCopyNumber> {
 
     @NotNull
+    private final Comparator<GeneAnnotation> geneAnnotationComparator = new GeneAnnotationComparator();
+    @NotNull
     private final Comparator<GeneAlteration> geneAlterationComparator = new GeneAlterationComparator();
 
     @Override
     public int compare(@NotNull KnownCopyNumber copyNumber1, @NotNull KnownCopyNumber copyNumber2) {
-        int geneAlterationCompare = geneAlterationComparator.compare(copyNumber1, copyNumber2);
-        if (geneAlterationCompare != 0) {
-            return geneAlterationCompare;
+        int geneAnnotationCompare = geneAnnotationComparator.compare(copyNumber1, copyNumber2);
+        if (geneAnnotationCompare != 0) {
+            return geneAnnotationCompare;
         }
 
-        return copyNumber1.type().toString().compareTo(copyNumber2.type().toString());
+        return geneAlterationComparator.compare(copyNumber1, copyNumber2);
     }
 }

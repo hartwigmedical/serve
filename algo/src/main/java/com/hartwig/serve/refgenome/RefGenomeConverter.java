@@ -4,9 +4,7 @@ import java.util.Set;
 
 import com.google.common.collect.Sets;
 import com.hartwig.serve.common.RefGenomeFunctions;
-import com.hartwig.serve.datamodel.MutationType;
-import com.hartwig.serve.datamodel.common.GeneRole;
-import com.hartwig.serve.datamodel.common.ProteinEffect;
+import com.hartwig.serve.datamodel.common.GenomeRegion;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
 import com.hartwig.serve.datamodel.hotspot.ImmutableActionableHotspot;
 import com.hartwig.serve.datamodel.hotspot.ImmutableKnownHotspot;
@@ -14,22 +12,19 @@ import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
 import com.hartwig.serve.datamodel.range.ActionableRange;
 import com.hartwig.serve.datamodel.range.ImmutableActionableRange;
-import com.hartwig.serve.datamodel.range.ImmutableCodonAnnotation;
-import com.hartwig.serve.datamodel.range.ImmutableExonAnnotation;
 import com.hartwig.serve.datamodel.range.ImmutableKnownCodon;
 import com.hartwig.serve.datamodel.range.ImmutableKnownExon;
 import com.hartwig.serve.datamodel.range.KnownCodon;
 import com.hartwig.serve.datamodel.range.KnownExon;
 import com.hartwig.serve.datamodel.range.RangeAnnotation;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
-import com.hartwig.serve.extraction.hotspot.ImmutableVariantHotspotImpl;
+import com.hartwig.serve.extraction.util.ImmutableGenomeRegionImpl;
 import com.hartwig.serve.refgenome.liftover.LiftOverAlgo;
 import com.hartwig.serve.refgenome.liftover.LiftOverChecker;
 import com.hartwig.serve.refgenome.liftover.LiftOverResult;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -60,14 +55,10 @@ class RefGenomeConverter {
     public Set<KnownHotspot> convertKnownHotspots(@NotNull Set<KnownHotspot> hotspots) {
         Set<KnownHotspot> convertedHotspots = Sets.newHashSet();
         for (KnownHotspot hotspot : hotspots) {
-            VariantHotspot lifted = liftOverHotspot(hotspot);
+            KnownHotspot lifted = liftOverKnownHotspot(hotspot);
 
             if (lifted != null) {
-                convertedHotspots.add(ImmutableKnownHotspot.builder()
-                        .from(hotspot)
-                        .chromosome(lifted.chromosome())
-                        .position(lifted.position())
-                        .build());
+                convertedHotspots.add(lifted);
             }
         }
 
@@ -78,22 +69,16 @@ class RefGenomeConverter {
     public Set<KnownCodon> convertKnownCodons(@NotNull Set<KnownCodon> codons) {
         Set<KnownCodon> convertedCodons = Sets.newHashSet();
         for (KnownCodon codon : codons) {
-            RangeAnnotation originalAnnotation = codon.annotation();
-            RangeAnnotation liftedAnnotation = liftOverRange(originalAnnotation);
-            if (liftedAnnotation != null) {
-                if (originalAnnotation.end() - originalAnnotation.start() == 2 && liftedAnnotation.end() - liftedAnnotation.start() != 2) {
+            KnownCodon lifted = liftOverKnownCodon(codon);
+            if (lifted != null) {
+                if (codon.end() - codon.start() == 2 && lifted.end() - lifted.start() != 2) {
                     LOGGER.warn(" Skipping liftover from {} to {}: Lifted codon '{}' is no longer 3 bases long. Lifted codon: '{}'",
                             sourceVersion,
                             targetVersion,
-                            originalAnnotation,
-                            liftedAnnotation);
+                            codon,
+                            lifted);
                 } else {
-                    // We blank out the transcript and codon rank since we are unsure to what extent
-                    // the transcript maps to the new ref genome.
-                    convertedCodons.add(ImmutableKnownCodon.builder()
-                            .from(codon)
-                            .annotation(ImmutableCodonAnnotation.builder().from(liftedAnnotation).build())
-                            .build());
+                    convertedCodons.add(lifted);
                 }
             }
         }
@@ -105,13 +90,9 @@ class RefGenomeConverter {
     public Set<KnownExon> convertKnownExons(@NotNull Set<KnownExon> exons) {
         Set<KnownExon> convertedExons = Sets.newHashSet();
         for (KnownExon exon : exons) {
-            RangeAnnotation liftedAnnotation = liftOverRange(exon.annotation());
-            if (liftedAnnotation != null) {
-                // We blank out the transcript and exon rank since we are unsure to what extent the transcript maps to the new ref genome.
-                convertedExons.add(ImmutableKnownExon.builder()
-                        .from(exon)
-                        .annotation(ImmutableExonAnnotation.builder().from(liftedAnnotation).build())
-                        .build());
+            KnownExon lifted = liftOverKnownExon(exon);
+            if (lifted != null) {
+                convertedExons.add(lifted);
             }
         }
 
@@ -122,13 +103,9 @@ class RefGenomeConverter {
     public Set<ActionableHotspot> convertActionableHotspots(@NotNull Set<ActionableHotspot> actionableHotspots) {
         Set<ActionableHotspot> convertedActionableHotspots = Sets.newHashSet();
         for (ActionableHotspot actionableHotspot : actionableHotspots) {
-            VariantHotspot lifted = liftOverHotspot(actionableHotspot);
+            ActionableHotspot lifted = liftOverActionableHotspot(actionableHotspot);
             if (lifted != null) {
-                convertedActionableHotspots.add(ImmutableActionableHotspot.builder()
-                        .from(actionableHotspot)
-                        .chromosome(lifted.chromosome())
-                        .position(lifted.position())
-                        .build());
+                convertedActionableHotspots.add(lifted);
             }
         }
         return convertedActionableHotspots;
@@ -138,21 +115,42 @@ class RefGenomeConverter {
     public Set<ActionableRange> convertActionableRanges(@NotNull Set<ActionableRange> actionableRanges) {
         Set<ActionableRange> convertedActionableRanges = Sets.newHashSet();
         for (ActionableRange actionableRange : actionableRanges) {
-            RangeAnnotation lifted = liftOverRange(actionableRange);
+            ActionableRange lifted = liftOverActionableRange(actionableRange);
             if (lifted != null) {
-                convertedActionableRanges.add(ImmutableActionableRange.builder()
-                        .from(actionableRange)
-                        .chromosome(lifted.chromosome())
-                        .start(lifted.start())
-                        .end(lifted.end())
-                        .build());
+                convertedActionableRanges.add(lifted);
             }
         }
         return convertedActionableRanges;
     }
 
     @Nullable
-    private VariantHotspot liftOverHotspot(@NotNull VariantHotspot hotspot) {
+    private KnownHotspot liftOverKnownHotspot(@NotNull KnownHotspot knownHotspot) {
+        LiftOverResult lifted = liftOverHotspot(knownHotspot);
+
+        if (lifted == null) {
+            return null;
+        }
+
+        return ImmutableKnownHotspot.builder().from(knownHotspot).chromosome(lifted.chromosome()).position(lifted.position()).build();
+    }
+
+    @Nullable
+    private ActionableHotspot liftOverActionableHotspot(@NotNull ActionableHotspot actionableHotspot) {
+        LiftOverResult lifted = liftOverHotspot(actionableHotspot);
+
+        if (lifted == null) {
+            return null;
+        }
+
+        return ImmutableActionableHotspot.builder()
+                .from(actionableHotspot)
+                .chromosome(lifted.chromosome())
+                .position(lifted.position())
+                .build();
+    }
+
+    @Nullable
+    private LiftOverResult liftOverHotspot(@NotNull VariantHotspot hotspot) {
         LiftOverResult lifted = liftOverAlgo.liftOver(hotspot.chromosome(), hotspot.position());
 
         if (!LiftOverChecker.isValidLiftedPosition(lifted, hotspot)) {
@@ -173,85 +171,69 @@ class RefGenomeConverter {
             return null;
         }
 
-        return ImmutableVariantHotspotImpl.builder().from(hotspot).chromosome(lifted.chromosome()).position(lifted.position()).build();
+        return lifted;
     }
 
     @Nullable
-    private RangeAnnotation liftOverRange(@NotNull RangeAnnotation annotation) {
-        LiftOverResult liftedStart = liftOverAlgo.liftOver(annotation.chromosome(), annotation.start());
-        LiftOverResult liftedEnd = liftOverAlgo.liftOver(annotation.chromosome(), annotation.end());
+    private KnownCodon liftOverKnownCodon(@NotNull KnownCodon knownCodon) {
+        GenomeRegion lifted = liftOverRange(knownCodon);
 
-        if (!LiftOverChecker.isValidLiftedRegion(liftedStart, liftedEnd, annotation)) {
+        if (lifted == null) {
             return null;
         }
 
-        verifyNoChromosomeChange(annotation.chromosome(), liftedStart, annotation);
-        verifyNoChromosomeChange(annotation.chromosome(), liftedEnd, annotation);
+        return ImmutableKnownCodon.builder()
+                .from(knownCodon)
+                .chromosome(lifted.chromosome())
+                .start(lifted.start())
+                .end(lifted.end())
+                .build();
+    }
 
-        // We blank out the transcript and rank since we are unsure to what extend the transcript maps to the new ref genome.
-        return new RangeAnnotation() {
-            @NotNull
-            @Override
-            public String gene() {
-                return annotation.gene();
-            }
+    @Nullable
+    private KnownExon liftOverKnownExon(@NotNull KnownExon knownExon) {
+        GenomeRegion lifted = liftOverRange(knownExon);
 
-            @NotNull
-            @Override
-            public GeneRole geneRole() {
-                return annotation.geneRole();
-            }
+        if (lifted == null) {
+            return null;
+        }
 
-            @NotNull
-            @Override
-            public ProteinEffect proteinEffect() {
-                return annotation.proteinEffect();
-            }
+        return ImmutableKnownExon.builder().from(knownExon).chromosome(lifted.chromosome()).start(lifted.start()).end(lifted.end()).build();
+    }
 
-            @Nullable
-            @Override
-            public Boolean associatedWithDrugResistance() {
-                return annotation.associatedWithDrugResistance();
-            }
+    @Nullable
+    private ActionableRange liftOverActionableRange(@NotNull ActionableRange actionableRange) {
+        GenomeRegion lifted = liftOverRange(actionableRange);
 
-            @NotNull
-            @Override
-            public String transcript() {
-                return Strings.EMPTY;
-            }
+        if (lifted == null) {
+            return null;
+        }
 
-            @Override
-            public int rank() {
-                return 0;
-            }
+        return ImmutableActionableRange.builder()
+                .from(actionableRange)
+                .chromosome(lifted.chromosome())
+                .start(lifted.start())
+                .end(lifted.end())
+                .build();
+    }
 
-            @NotNull
-            @Override
-            public MutationType applicableMutationType() {
-                return annotation.applicableMutationType();
-            }
+    @Nullable
+    private GenomeRegion liftOverRange(@NotNull RangeAnnotation range) {
+        LiftOverResult liftedStart = liftOverAlgo.liftOver(range.chromosome(), range.start());
+        LiftOverResult liftedEnd = liftOverAlgo.liftOver(range.chromosome(), range.end());
 
-            @NotNull
-            @Override
-            public String chromosome() {
-                return liftedStart.chromosome();
-            }
+        if (!LiftOverChecker.isValidLiftedRegion(liftedStart, liftedEnd, range)) {
+            return null;
+        }
 
-            @Override
-            public int start() {
-                return liftedStart.position();
-            }
+        verifyNoChromosomeChange(range.chromosome(), liftedStart, range);
+        verifyNoChromosomeChange(range.chromosome(), liftedEnd, range);
 
-            @Override
-            public int end() {
-                return liftedEnd.position();
-            }
-
-            @Override
-            public String toString() {
-                return chromosome() + ":" + start() + "-" + end();
-            }
-        };
+        return ImmutableGenomeRegionImpl.builder()
+                .chromosome(range.chromosome())
+                .start(liftedStart.position())
+                .end(liftedEnd.position())
+                .build();
     }
 
     private void verifyNoChromosomeChange(@NotNull String prevChromosome, @NotNull LiftOverResult lifted, @NotNull Object object) {

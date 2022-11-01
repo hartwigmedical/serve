@@ -14,10 +14,10 @@ public class ActionableGeneComparatorTest {
 
     @Test
     public void canSortActionableGenes() {
-        ActionableGene gene1 = create("gene 1", GeneLevelEvent.ANY_MUTATION, EvidenceLevel.A);
-        ActionableGene gene2 = create("gene 1", GeneLevelEvent.ANY_MUTATION, EvidenceLevel.B);
-        ActionableGene gene3 = create("gene 1", GeneLevelEvent.DELETION, EvidenceLevel.A);
-        ActionableGene gene4 = create("gene 2", GeneLevelEvent.ANY_MUTATION, EvidenceLevel.A);
+        ActionableGene gene1 = create("gene 1", GeneEvent.ANY_MUTATION, EvidenceLevel.A);
+        ActionableGene gene2 = create("gene 1", GeneEvent.ANY_MUTATION, EvidenceLevel.B);
+        ActionableGene gene3 = create("gene 1", GeneEvent.DELETION, EvidenceLevel.A);
+        ActionableGene gene4 = create("gene 2", GeneEvent.ANY_MUTATION, EvidenceLevel.A);
 
         List<ActionableGene> genes = Lists.newArrayList(gene1, gene4, gene3, gene2);
         genes.sort(new ActionableGeneComparator());
@@ -29,7 +29,7 @@ public class ActionableGeneComparatorTest {
     }
 
     @NotNull
-    private static ActionableGene create(@NotNull String gene, @NotNull GeneLevelEvent event, @NotNull EvidenceLevel level) {
+    private static ActionableGene create(@NotNull String gene, @NotNull GeneEvent event, @NotNull EvidenceLevel level) {
         return GeneTestFactory.actionableGeneBuilder().gene(gene).event(event).level(level).build();
     }
 }

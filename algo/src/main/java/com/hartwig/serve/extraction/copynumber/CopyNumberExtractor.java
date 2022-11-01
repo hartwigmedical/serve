@@ -7,11 +7,9 @@ import com.google.common.collect.Sets;
 import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.common.drivergene.DriverCategory;
 import com.hartwig.serve.common.drivergene.DriverGene;
-import com.hartwig.serve.datamodel.common.GeneRole;
-import com.hartwig.serve.datamodel.common.ProteinEffect;
-import com.hartwig.serve.datamodel.gene.CopyNumberType;
-import com.hartwig.serve.datamodel.gene.ImmutableKnownCopyNumber;
-import com.hartwig.serve.datamodel.gene.KnownCopyNumber;
+import com.hartwig.serve.datamodel.gene.GeneAnnotation;
+import com.hartwig.serve.datamodel.gene.GeneEvent;
+import com.hartwig.serve.extraction.gene.ImmutableGeneAnnotationImpl;
 import com.hartwig.serve.extraction.util.DriverInconsistencyMode;
 import com.hartwig.serve.extraction.util.GeneChecker;
 
@@ -25,7 +23,7 @@ public class CopyNumberExtractor {
     private static final Logger LOGGER = LogManager.getLogger(CopyNumberExtractor.class);
 
     private static final Set<EventType> COPY_NUMBER_EVENTS =
-            Sets.newHashSet(EventType.AMPLIFICATION, EventType.OVER_EXPRESSION, EventType.DELETION, EventType.UNDER_EXPRESSION);
+            Sets.newHashSet(EventType.AMPLIFICATION, EventType.OVEREXPRESSION, EventType.DELETION, EventType.UNDEREXPRESSION);
 
     @NotNull
     private final GeneChecker geneChecker;
@@ -41,14 +39,14 @@ public class CopyNumberExtractor {
     }
 
     @Nullable
-    public KnownCopyNumber extract(@NotNull String gene, @NotNull EventType type) {
+    public GeneAnnotation extract(@NotNull String gene, @NotNull EventType type) {
         if (COPY_NUMBER_EVENTS.contains(type) && geneChecker.isValidGene(gene)) {
             DriverCategory driverCategory = findByGene(driverGenes, gene);
 
             if (driverInconsistencyMode.isActive()) {
                 if ((driverCategory == DriverCategory.TSG && type == EventType.AMPLIFICATION) || (driverCategory == DriverCategory.TSG
-                        && type == EventType.OVER_EXPRESSION) || (driverCategory == DriverCategory.ONCO && type == EventType.DELETION) || (
-                        driverCategory == DriverCategory.ONCO && type == EventType.UNDER_EXPRESSION) || driverCategory == null) {
+                        && type == EventType.OVEREXPRESSION) || (driverCategory == DriverCategory.ONCO && type == EventType.DELETION) || (
+                        driverCategory == DriverCategory.ONCO && type == EventType.UNDEREXPRESSION) || driverCategory == null) {
                     if (driverInconsistencyMode == DriverInconsistencyMode.WARN_ONLY) {
                         LOGGER.warn("CopyNumber event mismatch for {} in driver category {} vs event type {}", gene, driverCategory, type);
                     } else if (driverInconsistencyMode == DriverInconsistencyMode.FILTER) {
@@ -61,13 +59,9 @@ public class CopyNumberExtractor {
                 }
             }
 
-            return ImmutableKnownCopyNumber.builder()
-                    .gene(gene)
-                    .geneRole(GeneRole.UNKNOWN)
-                    .proteinEffect(ProteinEffect.UNKNOWN)
-                    .type(toCopyNumberType(type))
-                    .build();
+            return ImmutableGeneAnnotationImpl.builder().gene(gene).event(toCopyNumberEvent(type)).build();
         }
+
         return null;
     }
 
@@ -82,20 +76,20 @@ public class CopyNumberExtractor {
     }
 
     @NotNull
-    private static CopyNumberType toCopyNumberType(@NotNull EventType eventType) {
+    private static GeneEvent toCopyNumberEvent(@NotNull EventType eventType) {
         assert COPY_NUMBER_EVENTS.contains(eventType);
 
         switch (eventType) {
             case AMPLIFICATION:
-                return CopyNumberType.AMPLIFICATION;
-            case OVER_EXPRESSION:
-                return CopyNumberType.OVEREXPRESSION;
+                return GeneEvent.AMPLIFICATION;
+            case OVEREXPRESSION:
+                return GeneEvent.OVEREXPRESSION;
             case DELETION:
-                return CopyNumberType.DELETION;
-            case UNDER_EXPRESSION:
-                return CopyNumberType.UNDEREXPRESSION;
+                return GeneEvent.DELETION;
+            case UNDEREXPRESSION:
+                return GeneEvent.UNDEREXPRESSION;
             default:
-                throw new IllegalStateException("Could not convert event type to copy number type: " + eventType);
+                throw new IllegalStateException("Could not convert event type to copy number event: " + eventType);
         }
     }
 }

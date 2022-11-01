@@ -26,7 +26,5 @@ public class GenomeRegionComparatorTest {
         assertEquals(region3, regions.get(2));
         assertEquals(region4, regions.get(3));
         assertEquals(region5, regions.get(4));
-
     }
-
 }

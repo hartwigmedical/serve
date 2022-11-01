@@ -13,7 +13,6 @@ import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.MutationType;
 import com.hartwig.serve.datamodel.common.GeneRole;
 import com.hartwig.serve.datamodel.common.ProteinEffect;
-import com.hartwig.serve.datamodel.range.ImmutableExonAnnotation;
 import com.hartwig.serve.datamodel.range.ImmutableKnownExon;
 import com.hartwig.serve.datamodel.range.KnownExon;
 import com.hartwig.serve.datamodel.range.KnownExonComparator;
@@ -58,12 +57,12 @@ public final class KnownExonFile {
                 .add("geneRole")
                 .add("proteinEffect")
                 .add("associatedWithDrugResistance")
-                .add("transcript")
                 .add("chromosome")
                 .add("start")
                 .add("end")
                 .add("applicableMutationType")
-                .add("exonRank")
+                .add("inputTranscript")
+                .add("inputExonRank")
                 .add("sources")
                 .toString();
     }
@@ -83,18 +82,16 @@ public final class KnownExonFile {
         String[] values = line.split(FIELD_DELIMITER);
 
         return ImmutableKnownExon.builder()
-                .annotation(ImmutableExonAnnotation.builder()
-                        .gene(values[fields.get("gene")])
-                        .geneRole(GeneRole.valueOf(values[fields.get("geneRole")]))
-                        .proteinEffect(ProteinEffect.valueOf(values[fields.get("proteinEffect")]))
-                        .associatedWithDrugResistance(SerializationUtil.optionalBoolean(values[fields.get("associatedWithDrugResistance")]))
-                        .transcript(values[fields.get("transcript")])
-                        .chromosome(values[fields.get("chromosome")])
-                        .start(Integer.parseInt(values[fields.get("start")]))
-                        .end(Integer.parseInt(values[fields.get("end")]))
-                        .applicableMutationType(MutationType.valueOf(values[fields.get("applicableMutationType")]))
-                        .rank(Integer.parseInt(values[fields.get("exonRank")]))
-                        .build())
+                .gene(values[fields.get("gene")])
+                .geneRole(GeneRole.valueOf(values[fields.get("geneRole")]))
+                .proteinEffect(ProteinEffect.valueOf(values[fields.get("proteinEffect")]))
+                .associatedWithDrugResistance(SerializationUtil.optionalBoolean(values[fields.get("associatedWithDrugResistance")]))
+                .chromosome(values[fields.get("chromosome")])
+                .start(Integer.parseInt(values[fields.get("start")]))
+                .end(Integer.parseInt(values[fields.get("end")]))
+                .applicableMutationType(MutationType.valueOf(values[fields.get("applicableMutationType")]))
+                .inputTranscript(values[fields.get("inputTranscript")])
+                .inputExonRank(Integer.parseInt(values[fields.get("inputExonRank")]))
                 .sources(Knowledgebase.fromCommaSeparatedSourceString(values[fields.get("sources")]))
                 .build();
     }
@@ -120,16 +117,16 @@ public final class KnownExonFile {
 
     @NotNull
     private static String toLine(@NotNull KnownExon exon) {
-        return new StringJoiner(FIELD_DELIMITER).add(exon.annotation().gene())
-                .add(exon.annotation().geneRole().toString())
-                .add(exon.annotation().proteinEffect().toString())
-                .add(SerializationUtil.nullableBoolean(exon.annotation().associatedWithDrugResistance()))
-                .add(exon.annotation().transcript())
-                .add(exon.annotation().chromosome())
-                .add(String.valueOf(exon.annotation().start()))
-                .add(String.valueOf(exon.annotation().end()))
-                .add(exon.annotation().applicableMutationType().toString())
-                .add(String.valueOf(exon.annotation().rank()))
+        return new StringJoiner(FIELD_DELIMITER).add(exon.gene())
+                .add(exon.geneRole().toString())
+                .add(exon.proteinEffect().toString())
+                .add(SerializationUtil.nullableBoolean(exon.associatedWithDrugResistance()))
+                .add(exon.chromosome())
+                .add(String.valueOf(exon.start()))
+                .add(String.valueOf(exon.end()))
+                .add(exon.applicableMutationType().toString())
+                .add(exon.inputTranscript())
+                .add(String.valueOf(exon.inputExonRank()))
                 .add(Knowledgebase.toCommaSeparatedSourceString(exon.sources()))
                 .toString();
     }

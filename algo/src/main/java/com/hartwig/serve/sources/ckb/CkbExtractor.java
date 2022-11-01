@@ -16,10 +16,14 @@ import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.datamodel.ActionableEvent;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.characteristic.ActionableCharacteristic;
+import com.hartwig.serve.datamodel.common.GeneRole;
+import com.hartwig.serve.datamodel.common.ProteinEffect;
 import com.hartwig.serve.datamodel.fusion.ActionableFusion;
-import com.hartwig.serve.datamodel.fusion.ImmutableKnownFusionPair;
-import com.hartwig.serve.datamodel.fusion.KnownFusionPair;
+import com.hartwig.serve.datamodel.fusion.FusionPair;
+import com.hartwig.serve.datamodel.fusion.ImmutableKnownFusion;
+import com.hartwig.serve.datamodel.fusion.KnownFusion;
 import com.hartwig.serve.datamodel.gene.ActionableGene;
+import com.hartwig.serve.datamodel.gene.GeneAnnotation;
 import com.hartwig.serve.datamodel.gene.ImmutableKnownCopyNumber;
 import com.hartwig.serve.datamodel.gene.KnownCopyNumber;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
@@ -28,9 +32,6 @@ import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
 import com.hartwig.serve.datamodel.immuno.ActionableHLA;
 import com.hartwig.serve.datamodel.range.ActionableRange;
-import com.hartwig.serve.datamodel.range.CodonAnnotation;
-import com.hartwig.serve.datamodel.range.ExonAnnotation;
-import com.hartwig.serve.datamodel.range.ImmutableCodonAnnotation;
 import com.hartwig.serve.datamodel.range.ImmutableKnownCodon;
 import com.hartwig.serve.datamodel.range.ImmutableKnownExon;
 import com.hartwig.serve.datamodel.range.KnownCodon;
@@ -41,10 +42,13 @@ import com.hartwig.serve.extraction.EventExtractorOutput;
 import com.hartwig.serve.extraction.ExtractionFunctions;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.ImmutableExtractionResult;
+import com.hartwig.serve.extraction.codon.CodonAnnotation;
 import com.hartwig.serve.extraction.codon.CodonFunctions;
+import com.hartwig.serve.extraction.codon.ImmutableCodonAnnotation;
 import com.hartwig.serve.extraction.copynumber.CopyNumberFunctions;
 import com.hartwig.serve.extraction.events.EventInterpretation;
 import com.hartwig.serve.extraction.events.ImmutableEventInterpretation;
+import com.hartwig.serve.extraction.exon.ExonAnnotation;
 import com.hartwig.serve.extraction.exon.ExonFunctions;
 import com.hartwig.serve.extraction.fusion.FusionFunctions;
 import com.hartwig.serve.extraction.hotspot.HotspotFunctions;
@@ -88,7 +92,7 @@ public class CkbExtractor {
             if (entry.type() == EventType.UNKNOWN) {
                 LOGGER.warn("No event type known for '{}' on '{}'", event, gene);
             } else {
-                EventExtractorOutput extraction = CkbVariantAnnotator.annotate(eventExtractor.extract(gene, null, entry.type(), event), variant);
+                EventExtractorOutput extractionOutput = eventExtractor.extract(gene, null, entry.type(), event);
                 String sourceEvent;
                 if (!gene.equals(CkbConstants.NO_GENE)) {
                     sourceEvent = gene + " " + event;
@@ -107,7 +111,8 @@ public class CkbExtractor {
                         .interpretedEventType(entry.type())
                         .build();
 
-                extractions.add(toExtractionResult(event, null, extraction, actionableEvents, interpretation));
+                ExtractionResult extraction = toExtractionResult(event, null, extractionOutput, actionableEvents, interpretation);
+                extractions.add(CkbVariantAnnotator.annotate(extraction, variant));
             }
 
             tracker.update();
@@ -147,16 +152,16 @@ public class CkbExtractor {
             actionableRanges.addAll(ActionableEventFactory.toActionableRanges(event, codons));
             actionableRanges.addAll(ActionableEventFactory.toActionableRanges(event, output.exons()));
 
-            if (output.geneAnnotation() != null) {
-                actionableGenes.add(ActionableEventFactory.geneAnnotationToActionableGene(event, output.geneAnnotation()));
+            if (output.geneLevel() != null) {
+                actionableGenes.add(ActionableEventFactory.geneAnnotationToActionableGene(event, output.geneLevel()));
             }
 
-            if (output.knownCopyNumber() != null) {
-                actionableGenes.add(ActionableEventFactory.copyNumberToActionableGene(event, output.knownCopyNumber()));
+            if (output.copyNumber() != null) {
+                actionableGenes.add(ActionableEventFactory.geneAnnotationToActionableGene(event, output.copyNumber()));
             }
 
-            if (output.knownFusionPair() != null) {
-                actionableFusions.add(ActionableEventFactory.toActionableFusion(event, output.knownFusionPair()));
+            if (output.fusionPair() != null) {
+                actionableFusions.add(ActionableEventFactory.toActionableFusion(event, output.fusionPair()));
             }
 
             if (output.characteristic() != null) {
@@ -174,8 +179,8 @@ public class CkbExtractor {
                 .knownHotspots(convertToKnownHotspots(output.hotspots(), variant, transcript))
                 .knownCodons(convertToKnownCodons(codons))
                 .knownExons(convertToKnownExons(output.exons()))
-                .knownCopyNumbers(convertToKnownAmpsDels(output.knownCopyNumber()))
-                .knownFusionPairs(convertToKnownFusions(output.knownFusionPair()))
+                .knownCopyNumbers(convertToKnownAmpsDels(output.copyNumber()))
+                .knownFusions(convertToKnownFusions(output.fusionPair()))
                 .actionableHotspots(actionableHotspots)
                 .actionableRanges(actionableRanges)
                 .actionableGenes(actionableGenes)
@@ -194,10 +199,10 @@ public class CkbExtractor {
 
         List<CodonAnnotation> curatedCodons = Lists.newArrayList();
         for (CodonAnnotation codon : codonAnnotations) {
-            if (codon.gene().equals("BRAF") && codon.rank() == 600) {
+            if (codon.gene().equals("BRAF") && codon.inputCodonRank() == 600) {
                 curatedCodons.add(ImmutableCodonAnnotation.builder()
                         .from(codon)
-                        .transcript("ENST00000646891")
+                        .inputTranscript("ENST00000646891")
                         .start(140753335)
                         .end(140753337)
                         .build());
@@ -218,9 +223,11 @@ public class CkbExtractor {
             for (VariantHotspot hotspot : hotspots) {
                 knownHotspots.add(ImmutableKnownHotspot.builder()
                         .from(hotspot)
+                        .geneRole(GeneRole.UNKNOWN)
+                        .proteinEffect(ProteinEffect.UNKNOWN)
                         .addSources(Knowledgebase.CKB)
-                        .transcript(transcript)
-                        .proteinAnnotation(proteinExtractor.apply(variant))
+                        .inputTranscript(transcript)
+                        .inputProteinAnnotation(proteinExtractor.apply(variant))
                         .build());
             }
         }
@@ -234,7 +241,14 @@ public class CkbExtractor {
 
         if (codonAnnotations != null) {
             for (CodonAnnotation codonAnnotation : codonAnnotations) {
-                codons.add(ImmutableKnownCodon.builder().annotation(codonAnnotation).addSources(Knowledgebase.CKB).build());
+                codons.add(ImmutableKnownCodon.builder()
+                        .from(codonAnnotation)
+                        .geneRole(GeneRole.UNKNOWN)
+                        .proteinEffect(ProteinEffect.UNKNOWN)
+                        .inputTranscript(codonAnnotation.inputTranscript())
+                        .inputCodonRank(codonAnnotation.inputCodonRank())
+                        .addSources(Knowledgebase.CKB)
+                        .build());
             }
         }
         return CodonFunctions.consolidate(codons);
@@ -246,26 +260,42 @@ public class CkbExtractor {
 
         if (exonAnnotations != null) {
             for (ExonAnnotation exonAnnotation : exonAnnotations) {
-                exons.add(ImmutableKnownExon.builder().annotation(exonAnnotation).addSources(Knowledgebase.CKB).build());
+                exons.add(ImmutableKnownExon.builder()
+                        .from(exonAnnotation)
+                        .geneRole(GeneRole.UNKNOWN)
+                        .proteinEffect(ProteinEffect.UNKNOWN)
+                        .inputTranscript(exonAnnotation.inputTranscript())
+                        .inputExonRank(exonAnnotation.inputExonRank())
+                        .addSources(Knowledgebase.CKB)
+                        .build());
             }
         }
         return ExonFunctions.consolidate(exons);
     }
 
     @NotNull
-    private static Set<KnownCopyNumber> convertToKnownAmpsDels(@Nullable KnownCopyNumber knownCopyNumber) {
+    private static Set<KnownCopyNumber> convertToKnownAmpsDels(@Nullable GeneAnnotation copyNumber) {
         Set<KnownCopyNumber> copyNumbers = Sets.newHashSet();
-        if (knownCopyNumber != null) {
-            copyNumbers.add(ImmutableKnownCopyNumber.builder().from(knownCopyNumber).addSources(Knowledgebase.CKB).build());
+        if (copyNumber != null) {
+            copyNumbers.add(ImmutableKnownCopyNumber.builder()
+                    .from(copyNumber)
+                    .geneRole(GeneRole.UNKNOWN)
+                    .proteinEffect(ProteinEffect.UNKNOWN)
+                    .addSources(Knowledgebase.CKB)
+                    .build());
         }
         return CopyNumberFunctions.consolidate(copyNumbers);
     }
 
     @NotNull
-    private static Set<KnownFusionPair> convertToKnownFusions(@Nullable KnownFusionPair knownFusionPair) {
-        Set<KnownFusionPair> fusions = Sets.newHashSet();
-        if (knownFusionPair != null) {
-            fusions.add(ImmutableKnownFusionPair.builder().from(knownFusionPair).addSources(Knowledgebase.CKB).build());
+    private static Set<KnownFusion> convertToKnownFusions(@Nullable FusionPair fusion) {
+        Set<KnownFusion> fusions = Sets.newHashSet();
+        if (fusion != null) {
+            fusions.add(ImmutableKnownFusion.builder()
+                    .from(fusion)
+                    .proteinEffect(ProteinEffect.UNKNOWN)
+                    .addSources(Knowledgebase.CKB)
+                    .build());
         }
         return FusionFunctions.consolidate(fusions);
     }

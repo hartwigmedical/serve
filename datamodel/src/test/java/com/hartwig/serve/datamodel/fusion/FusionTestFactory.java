@@ -18,26 +18,25 @@ public final class FusionTestFactory {
     @NotNull
     public static FusionPair createFusionPair(@NotNull String geneUp, @NotNull String geneDown, @Nullable Integer minExonUp,
             @Nullable Integer minExonDown) {
-        return new FusionPairImpl(geneUp, minExonUp, null, geneDown, minExonDown, null, ProteinEffect.UNKNOWN);
+        return new FusionPairImpl(geneUp, minExonUp, null, geneDown, minExonDown, null);
     }
 
     @NotNull
-    public static ImmutableKnownFusionPair.Builder knownFusionBuilder() {
-        return ImmutableKnownFusionPair.builder().geneUp(Strings.EMPTY).geneDown(Strings.EMPTY).proteinEffect(ProteinEffect.UNKNOWN);
+    public static ImmutableKnownFusion.Builder knownFusionBuilder() {
+        return ImmutableKnownFusion.builder().geneUp(Strings.EMPTY).geneDown(Strings.EMPTY).proteinEffect(ProteinEffect.UNKNOWN);
     }
 
     @NotNull
-    public static KnownFusionPair createTestKnownFusionPairForSource(@NotNull Knowledgebase source) {
+    public static KnownFusion createTestKnownFusionForSource(@NotNull Knowledgebase source) {
         return knownFusionBuilder().addSources(source).build();
     }
 
     @NotNull
     public static ImmutableActionableFusion.Builder actionableFusionBuilder() {
         return ImmutableActionableFusion.builder()
-                .from(DatamodelTestFactory.createEmptyActionableEvent())
+                .from(DatamodelTestFactory.createTestActionableEvent())
                 .geneUp(Strings.EMPTY)
-                .geneDown(Strings.EMPTY)
-                .proteinEffect(ProteinEffect.UNKNOWN);
+                .geneDown(Strings.EMPTY);
     }
 
     @NotNull
@@ -59,19 +58,15 @@ public final class FusionTestFactory {
         private final Integer minExonDown;
         @Nullable
         private final Integer maxExonDown;
-        @NotNull
-        private final ProteinEffect proteinEffect;
 
         public FusionPairImpl(@NotNull final String geneUp, @Nullable final Integer minExonUp, @Nullable final Integer maxExonUp,
-                @NotNull final String geneDown, @Nullable final Integer minExonDown, @Nullable final Integer maxExonDown,
-                @NotNull final ProteinEffect proteinEffect) {
+                @NotNull final String geneDown, @Nullable final Integer minExonDown, @Nullable final Integer maxExonDown) {
             this.geneUp = geneUp;
             this.minExonUp = minExonUp;
             this.maxExonUp = maxExonUp;
             this.geneDown = geneDown;
             this.minExonDown = minExonDown;
             this.maxExonDown = maxExonDown;
-            this.proteinEffect = proteinEffect;
         }
 
         @NotNull
@@ -110,12 +105,6 @@ public final class FusionTestFactory {
             return maxExonDown;
         }
 
-        @NotNull
-        @Override
-        public ProteinEffect proteinEffect() {
-            return proteinEffect;
-        }
-
         @Override
         public boolean equals(final Object o) {
             if (this == o) {
@@ -127,19 +116,18 @@ public final class FusionTestFactory {
             final FusionPairImpl that = (FusionPairImpl) o;
             return geneUp.equals(that.geneUp) && Objects.equals(minExonUp, that.minExonUp) && Objects.equals(maxExonUp, that.maxExonUp)
                     && geneDown.equals(that.geneDown) && Objects.equals(minExonDown, that.minExonDown) && Objects.equals(maxExonDown,
-                    that.maxExonDown) && proteinEffect == that.proteinEffect;
+                    that.maxExonDown);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(geneUp, minExonUp, maxExonUp, geneDown, minExonDown, maxExonDown, proteinEffect);
+            return Objects.hash(geneUp, minExonUp, maxExonUp, geneDown, minExonDown, maxExonDown);
         }
 
         @Override
         public String toString() {
             return "FusionPairImpl{" + "geneUp='" + geneUp + '\'' + ", minExonUp=" + minExonUp + ", maxExonUp=" + maxExonUp + ", geneDown='"
-                    + geneDown + '\'' + ", minExonDown=" + minExonDown + ", maxExonDown=" + maxExonDown + ", proteinEffect=" + proteinEffect
-                    + '}';
+                    + geneDown + '\'' + ", minExonDown=" + minExonDown + ", maxExonDown=" + maxExonDown + '}';
         }
     }
 }

@@ -13,7 +13,6 @@ import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.MutationType;
 import com.hartwig.serve.datamodel.common.GeneRole;
 import com.hartwig.serve.datamodel.common.ProteinEffect;
-import com.hartwig.serve.datamodel.range.ImmutableCodonAnnotation;
 import com.hartwig.serve.datamodel.range.ImmutableKnownCodon;
 import com.hartwig.serve.datamodel.range.KnownCodon;
 import com.hartwig.serve.datamodel.range.KnownCodonComparator;
@@ -58,16 +57,15 @@ public final class KnownCodonFile {
                 .add("geneRole")
                 .add("proteinEffect")
                 .add("associatedWithDrugResistance")
-                .add("transcript")
                 .add("chromosome")
                 .add("start")
                 .add("end")
                 .add("applicableMutationType")
-                .add("codonRank")
+                .add("inputTranscript")
+                .add("inputCodonRank")
                 .add("sources")
                 .toString();
     }
-
 
     @NotNull
     @VisibleForTesting
@@ -84,18 +82,16 @@ public final class KnownCodonFile {
         String[] values = line.split(FIELD_DELIMITER);
 
         return ImmutableKnownCodon.builder()
-                .annotation(ImmutableCodonAnnotation.builder()
-                        .gene(values[fields.get("gene")])
-                        .geneRole(GeneRole.valueOf(values[fields.get("geneRole")]))
-                        .proteinEffect(ProteinEffect.valueOf(values[fields.get("proteinEffect")]))
-                        .associatedWithDrugResistance(SerializationUtil.optionalBoolean(values[fields.get("associatedWithDrugResistance")]))
-                        .transcript(values[fields.get("transcript")])
-                        .chromosome(values[fields.get("chromosome")])
-                        .start(Integer.parseInt(values[fields.get("start")]))
-                        .end(Integer.parseInt(values[fields.get("end")]))
-                        .applicableMutationType(MutationType.valueOf(values[fields.get("applicableMutationType")]))
-                        .rank(Integer.parseInt(values[fields.get("codonRank")]))
-                        .build())
+                .gene(values[fields.get("gene")])
+                .geneRole(GeneRole.valueOf(values[fields.get("geneRole")]))
+                .proteinEffect(ProteinEffect.valueOf(values[fields.get("proteinEffect")]))
+                .associatedWithDrugResistance(SerializationUtil.optionalBoolean(values[fields.get("associatedWithDrugResistance")]))
+                .chromosome(values[fields.get("chromosome")])
+                .start(Integer.parseInt(values[fields.get("start")]))
+                .end(Integer.parseInt(values[fields.get("end")]))
+                .applicableMutationType(MutationType.valueOf(values[fields.get("applicableMutationType")]))
+                .inputTranscript(values[fields.get("inputTranscript")])
+                .inputCodonRank(Integer.parseInt(values[fields.get("inputCodonRank")]))
                 .sources(Knowledgebase.fromCommaSeparatedSourceString(values[fields.get("sources")]))
                 .build();
     }
@@ -121,16 +117,16 @@ public final class KnownCodonFile {
 
     @NotNull
     private static String toLine(@NotNull KnownCodon codon) {
-        return new StringJoiner(FIELD_DELIMITER).add(codon.annotation().gene())
-                .add(codon.annotation().geneRole().toString())
-                .add(codon.annotation().proteinEffect().toString())
-                .add(SerializationUtil.nullableBoolean(codon.annotation().associatedWithDrugResistance()))
-                .add(codon.annotation().transcript())
-                .add(codon.annotation().chromosome())
-                .add(String.valueOf(codon.annotation().start()))
-                .add(String.valueOf(codon.annotation().end()))
-                .add(codon.annotation().applicableMutationType().toString())
-                .add(String.valueOf(codon.annotation().rank()))
+        return new StringJoiner(FIELD_DELIMITER).add(codon.gene())
+                .add(codon.geneRole().toString())
+                .add(codon.proteinEffect().toString())
+                .add(SerializationUtil.nullableBoolean(codon.associatedWithDrugResistance()))
+                .add(codon.chromosome())
+                .add(String.valueOf(codon.start()))
+                .add(String.valueOf(codon.end()))
+                .add(codon.applicableMutationType().toString())
+                .add(codon.inputTranscript())
+                .add(String.valueOf(codon.inputCodonRank()))
                 .add(Knowledgebase.toCommaSeparatedSourceString(codon.sources()))
                 .toString();
     }

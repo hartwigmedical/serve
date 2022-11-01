@@ -11,9 +11,9 @@ public class TumorCharacteristicComparator implements Comparator<TumorCharacteri
 
     @Override
     public int compare(@NotNull TumorCharacteristic characteristic1, @NotNull TumorCharacteristic characteristic2) {
-        int nameCompare = characteristic1.type().toString().compareTo(characteristic2.type().toString());
-        if (nameCompare != 0) {
-            return nameCompare;
+        int typeCompare = characteristic1.type().toString().compareTo(characteristic2.type().toString());
+        if (typeCompare != 0) {
+            return typeCompare;
         }
 
         int cutoffCompare = CompareFunctions.compareNullableDoubles(characteristic1.cutoff(), characteristic2.cutoff());

@@ -2,6 +2,8 @@ package com.hartwig.serve.datamodel.fusion;
 
 import java.util.Comparator;
 
+import com.hartwig.serve.datamodel.util.CompareFunctions;
+
 import org.jetbrains.annotations.NotNull;
 
 public class KnownFusionComparator implements Comparator<KnownFusion> {
@@ -16,6 +18,11 @@ public class KnownFusionComparator implements Comparator<KnownFusion> {
             return fusionPairCompare;
         }
 
-        return fusion1.proteinEffect().toString().compareTo(fusion2.proteinEffect().toString());
+        int proteinEffectCompare = fusion1.proteinEffect().toString().compareTo(fusion2.proteinEffect().toString());
+        if (proteinEffectCompare != 0) {
+            return proteinEffectCompare;
+        }
+
+        return CompareFunctions.compareNullableBoolean(fusion1.associatedWithDrugResistance(), fusion2.associatedWithDrugResistance());
     }
 }

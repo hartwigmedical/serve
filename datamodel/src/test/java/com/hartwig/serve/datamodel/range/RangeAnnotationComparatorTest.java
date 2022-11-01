@@ -19,8 +19,7 @@ public class RangeAnnotationComparatorTest {
         RangeAnnotation annotation3 = create("gene B", "22", MutationType.ANY);
         RangeAnnotation annotation4 = create("gene A", "X", MutationType.ANY);
 
-        List<RangeAnnotation> annotations =
-                Lists.newArrayList(annotation3, annotation4, annotation1, annotation2);
+        List<RangeAnnotation> annotations = Lists.newArrayList(annotation3, annotation4, annotation1, annotation2);
         annotations.sort(new RangeAnnotationComparator());
 
         assertEquals(annotation1, annotations.get(0));

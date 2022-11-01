@@ -29,5 +29,4 @@ public class ChromosomeComparatorTest {
         assertEquals(chromosome5, chromosomes.get(4));
         assertEquals(chromosome6, chromosomes.get(5));
     }
-
 }

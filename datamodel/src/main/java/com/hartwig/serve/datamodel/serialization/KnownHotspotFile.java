@@ -69,11 +69,11 @@ public final class KnownHotspotFile {
     @NotNull
     @VisibleForTesting
     static List<KnownHotspot> fromLines(@NotNull List<String> lines, @NotNull Map<String, Integer> fields) {
-        List<KnownHotspot> fusionPairs = Lists.newArrayList();
+        List<KnownHotspot> hotspots = Lists.newArrayList();
         for (String line : lines) {
-            fusionPairs.add(fromLine(line, fields));
+            hotspots.add(fromLine(line, fields));
         }
-        return fusionPairs;
+        return hotspots;
     }
 
     @NotNull

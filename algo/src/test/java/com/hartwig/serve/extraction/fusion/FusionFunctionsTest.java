@@ -44,10 +44,10 @@ public class FusionFunctionsTest {
     }
 
     @NotNull
-    private static KnownFusion findByGeneUp(@NotNull List<KnownFusion> fusionPairs, @NotNull String gene) {
-        for (KnownFusion fusionPair : fusionPairs) {
-            if (fusionPair.geneUp().equals(gene)) {
-                return fusionPair;
+    private static KnownFusion findByGeneUp(@NotNull List<KnownFusion> fusions, @NotNull String gene) {
+        for (KnownFusion fusion : fusions) {
+            if (fusion.geneUp().equals(gene)) {
+                return fusion;
             }
         }
 

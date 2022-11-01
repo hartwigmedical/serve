@@ -15,22 +15,22 @@ import org.junit.Test;
 
 public class KnownFusionFileTest {
 
-    private static final String KNOWN_FUSION_PAIR_TSV = Resources.getResource("known/KnownFusions.SERVE.37.tsv").getPath();
+    private static final String KNOWN_FUSION_TSV = Resources.getResource("known/KnownFusions.SERVE.37.tsv").getPath();
 
     @Test
     public void canReadFromFileAndConvert() throws IOException {
-        List<KnownFusion> fusionPairs = KnownFusionFile.read(KNOWN_FUSION_PAIR_TSV);
+        List<KnownFusion> fusions = KnownFusionFile.read(KNOWN_FUSION_TSV);
 
-        assertKnownFusionPairs(fusionPairs);
+        assertKnownFusions(fusions);
 
         Map<String, Integer> fields = SerializationUtil.createFields(KnownFusionFile.header(), KnownCodonFile.FIELD_DELIMITER);
-        List<KnownFusion> regeneratedFusionPairs = KnownFusionFile.fromLines(KnownFusionFile.toLines(fusionPairs), fields);
+        List<KnownFusion> regeneratedFusions = KnownFusionFile.fromLines(KnownFusionFile.toLines(fusions), fields);
 
-        assertEquals(fusionPairs, regeneratedFusionPairs);
+        assertEquals(fusions, regeneratedFusions);
     }
 
-    private static void assertKnownFusionPairs(@NotNull List<KnownFusion> fusionPairs) {
-        assertEquals(2, fusionPairs.size());
+    private static void assertKnownFusions(@NotNull List<KnownFusion> fusions) {
+        assertEquals(2, fusions.size());
 
         // TODO Implement (See ActionableFusionFileTest)
     }

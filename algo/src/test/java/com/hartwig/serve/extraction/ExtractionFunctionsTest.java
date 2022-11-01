@@ -46,9 +46,9 @@ public class ExtractionFunctionsTest {
         assertTrue(copyNumber.sources().contains(source2));
 
         assertEquals(1, merged.knownFusions().size());
-        KnownFusion fusionPair = merged.knownFusions().iterator().next();
-        assertTrue(fusionPair.sources().contains(source1));
-        assertTrue(fusionPair.sources().contains(source2));
+        KnownFusion fusion = merged.knownFusions().iterator().next();
+        assertTrue(fusion.sources().contains(source1));
+        assertTrue(fusion.sources().contains(source2));
 
         assertEquals(2, merged.actionableHotspots().size());
         assertEquals(2, merged.actionableRanges().size());

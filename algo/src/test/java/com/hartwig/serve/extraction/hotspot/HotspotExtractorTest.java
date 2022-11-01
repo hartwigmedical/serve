@@ -12,7 +12,6 @@ import com.hartwig.serve.DriverGenesTestFactory;
 import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.common.drivergene.DriverCategory;
 import com.hartwig.serve.common.drivergene.DriverGene;
-import com.hartwig.serve.datamodel.hotspot.HotspotTestFactory;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
 import com.hartwig.serve.extraction.util.DriverInconsistencyMode;
 import com.hartwig.serve.extraction.util.GeneChecker;
@@ -27,23 +26,11 @@ public class HotspotExtractorTest {
 
     private static final Hotspot TEST_HOTSPOT = ImmutableHotspot.builder().chromosome("1").position(10).ref("A").alt("T").build();
 
-    private static final VariantHotspot TEST_BRAF_VARIANT_HOTSPOT = ImmutableVariantHotspotImpl.builder()
-            .from(HotspotTestFactory.createTestKnownHotspot())
-            .gene("BRAF")
-            .chromosome("1")
-            .position(10)
-            .ref("A")
-            .alt("T")
-            .build();
+    private static final VariantHotspot TEST_BRAF_VARIANT_HOTSPOT =
+            ImmutableVariantHotspotImpl.builder().gene("BRAF").chromosome("1").position(10).ref("A").alt("T").build();
 
-    private static final VariantHotspot TEST_KRAS_VARIANT_HOTSPOT = ImmutableVariantHotspotImpl.builder()
-            .from(HotspotTestFactory.createTestKnownHotspot())
-            .gene("KRAS")
-            .chromosome("1")
-            .position(10)
-            .ref("A")
-            .alt("T")
-            .build();
+    private static final VariantHotspot TEST_KRAS_VARIANT_HOTSPOT =
+            ImmutableVariantHotspotImpl.builder().gene("KRAS").chromosome("1").position(10).ref("A").alt("T").build();
 
     @Test
     public void canFindGene() {

@@ -31,7 +31,7 @@ public final class ServeAlgoTestFactory {
                 .addActionableGenes(GeneTestFactory.createTestActionableGeneForSource(source))
                 .addActionableFusions(FusionTestFactory.createTestActionableFusionForSource(source))
                 .addActionableCharacteristics(CharacteristicTestFactory.createTestActionableCharacteristicForSource(source))
-                .addActionableHLA(ImmunoTestFactory.createTestActionableImmunoHLAForSource(source))
+                .addActionableHLA(ImmunoTestFactory.createTestActionableHLAForSource(source))
                 .build();
     }
 }

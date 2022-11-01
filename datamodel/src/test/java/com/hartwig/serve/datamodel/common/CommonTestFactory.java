@@ -2,7 +2,6 @@ package com.hartwig.serve.datamodel.common;
 
 import java.util.Objects;
 
-import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,18 +11,8 @@ public final class CommonTestFactory {
     }
 
     @NotNull
-    public static GenomePosition createTestGenomePosition() {
-        return createGenomePosition(Strings.EMPTY, 0);
-    }
-
-    @NotNull
     public static GenomePosition createGenomePosition(@NotNull String chromosome, int position) {
         return new GenomePositionImpl(chromosome, position);
-    }
-
-    @NotNull
-    public static GenomeRegion createTestGenomeRegion() {
-        return createGenomeRegion(Strings.EMPTY, 0, 0);
     }
 
     @NotNull

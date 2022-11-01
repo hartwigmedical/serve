@@ -17,7 +17,7 @@ public final class ImmunoTestFactory {
     }
 
     @NotNull
-    public static ActionableHLA createTestActionableImmunoHLAForSource(@NotNull Knowledgebase source) {
+    public static ActionableHLA createTestActionableHLAForSource(@NotNull Knowledgebase source) {
         return actionableHLABuilder().source(source).build();
     }
 }

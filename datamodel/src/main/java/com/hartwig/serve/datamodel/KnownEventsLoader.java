@@ -27,35 +27,35 @@ public final class KnownEventsLoader {
     }
 
     @NotNull
-    public static KnownEvents readFromDir(@NotNull String actionabilityDir, @NotNull RefGenomeVersion refGenomeVersion) throws IOException {
-        LOGGER.info("Loading SERVE known files from {} using ref genome version '{}'", actionabilityDir, refGenomeVersion);
+    public static KnownEvents readFromDir(@NotNull String knownEventDir, @NotNull RefGenomeVersion refGenomeVersion) throws IOException {
+        LOGGER.info("Loading SERVE known files from {} using ref genome version '{}'", knownEventDir, refGenomeVersion);
 
-        String knownHotspotTsv = KnownHotspotFile.knownHotspotTsvPath(actionabilityDir, refGenomeVersion);
+        String knownHotspotTsv = KnownHotspotFile.knownHotspotTsvPath(knownEventDir, refGenomeVersion);
         List<KnownHotspot> hotspots = KnownHotspotFile.read(knownHotspotTsv);
         LOGGER.info(" Loaded {} known hotspots from {}", hotspots.size(), knownHotspotTsv);
 
-        String knownCodonTsv = KnownCodonFile.knownCodonTsvPath(actionabilityDir, refGenomeVersion);
-        List<KnownCodon> knownCodons = KnownCodonFile.read(knownCodonTsv);
-        LOGGER.info(" Loaded {} known codon from {}", knownCodons.size(), knownCodonTsv);
+        String knownCodonTsv = KnownCodonFile.knownCodonTsvPath(knownEventDir, refGenomeVersion);
+        List<KnownCodon> codons = KnownCodonFile.read(knownCodonTsv);
+        LOGGER.info(" Loaded {} known codon from {}", codons.size(), knownCodonTsv);
 
-        String knownExonTsv = KnownExonFile.knownExonTsvPath(actionabilityDir, refGenomeVersion);
-        List<KnownExon> knownExons = KnownExonFile.read(knownExonTsv);
-        LOGGER.info(" Loaded {} known exons from {}", knownExons.size(), knownExonTsv);
+        String knownExonTsv = KnownExonFile.knownExonTsvPath(knownEventDir, refGenomeVersion);
+        List<KnownExon> exons = KnownExonFile.read(knownExonTsv);
+        LOGGER.info(" Loaded {} known exons from {}", exons.size(), knownExonTsv);
 
-        String knownCopyNumberTsv = KnownCopyNumberFile.knownCopyNumberTsvPath(actionabilityDir, refGenomeVersion);
-        List<KnownCopyNumber> knownCopyNumbers = KnownCopyNumberFile.read(knownCopyNumberTsv);
-        LOGGER.info(" Loaded {} known gene copy numbers from {}", knownCopyNumbers.size(), knownCopyNumberTsv);
+        String knownCopyNumberTsv = KnownCopyNumberFile.knownCopyNumberTsvPath(knownEventDir, refGenomeVersion);
+        List<KnownCopyNumber> copyNumbers = KnownCopyNumberFile.read(knownCopyNumberTsv);
+        LOGGER.info(" Loaded {} known gene copy numbers from {}", copyNumbers.size(), knownCopyNumberTsv);
 
-        String knownFusionTsv = KnownFusionFile.knownFusionTsvPath(actionabilityDir, refGenomeVersion);
-        List<KnownFusion> knownFusions = KnownFusionFile.read(knownFusionTsv);
-        LOGGER.info(" Loaded {} known fusions from {}", knownFusions.size(), knownFusionTsv);
+        String knownFusionTsv = KnownFusionFile.knownFusionTsvPath(knownEventDir, refGenomeVersion);
+        List<KnownFusion> fusions = KnownFusionFile.read(knownFusionTsv);
+        LOGGER.info(" Loaded {} known fusions from {}", fusions.size(), knownFusionTsv);
 
         return ImmutableKnownEvents.builder()
                 .hotspots(hotspots)
-                .codons(knownCodons)
-                .exons(knownExons)
-                .copyNumbers(knownCopyNumbers)
-                .fusionPairs(knownFusions)
+                .codons(codons)
+                .exons(exons)
+                .copyNumbers(copyNumbers)
+                .fusions(fusions)
                 .build();
     }
 }

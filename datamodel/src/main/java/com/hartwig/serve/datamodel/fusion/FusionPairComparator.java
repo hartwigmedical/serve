@@ -2,8 +2,9 @@ package com.hartwig.serve.datamodel.fusion;
 
 import java.util.Comparator;
 
+import com.hartwig.serve.datamodel.util.CompareFunctions;
+
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class FusionPairComparator implements Comparator<FusionPair> {
 
@@ -19,23 +20,11 @@ public class FusionPairComparator implements Comparator<FusionPair> {
             return geneDownCompare;
         }
 
-        int exonUpCompare = compare(pair1.minExonUp(), pair2.minExonUp());
-        if (exonUpCompare != 0) {
-            return exonUpCompare;
+        int minExonUpCompare = CompareFunctions.compareNullableIntegers(pair1.minExonUp(), pair2.minExonUp());
+        if (minExonUpCompare != 0) {
+            return minExonUpCompare;
         }
 
-        return compare(pair1.minExonDown(), pair2.minExonDown());
-    }
-
-    private static int compare(@Nullable Integer int1, @Nullable Integer int2) {
-        if (int1 == null && int2 == null) {
-            return 0;
-        } else if (int1 == null) {
-            return 1;
-        } else if (int2 == null) {
-            return -1;
-        }
-
-        return int1.compareTo(int2);
+        return CompareFunctions.compareNullableIntegers(pair1.minExonDown(), pair2.minExonDown());
     }
 }

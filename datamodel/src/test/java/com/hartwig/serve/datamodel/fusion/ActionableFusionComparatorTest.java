@@ -24,5 +24,4 @@ public class ActionableFusionComparatorTest {
         assertEquals(fusion2, fusions.get(1));
         assertEquals(fusion3, fusions.get(2));
     }
-
 }

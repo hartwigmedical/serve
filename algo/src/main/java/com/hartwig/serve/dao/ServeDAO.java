@@ -99,7 +99,7 @@ public class ServeDAO {
         writeKnownHotspots(timestamp, knownEvents.hotspots());
         writeKnownCodons(timestamp, knownEvents.codons());
         writeKnownExons(timestamp, knownEvents.exons());
-        writeKnownFusionPairs(timestamp, knownEvents.fusionPairs());
+        writeKnownFusions(timestamp, knownEvents.fusions());
         writeKnownCopyNumbers(timestamp, knownEvents.copyNumbers());
 
         writeEventInterpretations(timestamp, eventInterpretations);
@@ -485,7 +485,7 @@ public class ServeDAO {
                 Knowledgebase.toCommaSeparatedSourceString(knownExon.sources()));
     }
 
-    private void writeKnownFusionPairs(@NotNull Timestamp timestamp, @NotNull Set<KnownFusion> fusions) {
+    private void writeKnownFusions(@NotNull Timestamp timestamp, @NotNull Set<KnownFusion> fusions) {
         for (List<KnownFusion> batch : Iterables.partition(fusions, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
             InsertValuesStep10 inserter = context.insertInto(KNOWNFUSION,
                     KNOWNFUSION.MODIFIED,
@@ -498,12 +498,12 @@ public class ServeDAO {
                     KNOWNFUSION.PROTEINEFFECT,
                     KNOWNFUSION.ASSOCIATEDWITHDRUGRESISTANCE,
                     KNOWNFUSION.SOURCES);
-            batch.forEach(entry -> writeKnownFusionPairBatch(timestamp, inserter, entry));
+            batch.forEach(entry -> writeKnownFusionBatch(timestamp, inserter, entry));
             inserter.execute();
         }
     }
 
-    private static void writeKnownFusionPairBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep10 inserter,
+    private static void writeKnownFusionBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep10 inserter,
             @NotNull KnownFusion fusion) {
         inserter.values(timestamp,
                 fusion.geneUp(),

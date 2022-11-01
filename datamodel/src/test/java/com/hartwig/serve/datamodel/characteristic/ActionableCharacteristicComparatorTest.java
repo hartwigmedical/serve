@@ -35,5 +35,4 @@ public class ActionableCharacteristicComparatorTest {
         assertEquals(characteristic2, characteristics.get(1));
         assertEquals(characteristic3, characteristics.get(2));
     }
-
 }

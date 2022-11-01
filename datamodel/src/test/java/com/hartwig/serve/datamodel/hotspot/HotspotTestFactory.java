@@ -16,12 +16,12 @@ public final class HotspotTestFactory {
 
     @NotNull
     public static VariantHotspot createTestVariantHotspot() {
-        return createVariantHotspot(Strings.EMPTY, Strings.EMPTY, 0, Strings.EMPTY, Strings.EMPTY);
+        return createVariantHotspot(Strings.EMPTY, "1", 0, Strings.EMPTY, Strings.EMPTY);
     }
 
     @NotNull
-    public static VariantHotspot createVariantHotspot(@NotNull String gene, @NotNull String chromosome, int position,
-            @NotNull String ref, @NotNull String alt) {
+    public static VariantHotspot createVariantHotspot(@NotNull String gene, @NotNull String chromosome, int position, @NotNull String ref,
+            @NotNull String alt) {
         return new VariantHotspotImpl(gene, chromosome, position, ref, alt);
     }
 
@@ -40,18 +40,8 @@ public final class HotspotTestFactory {
     }
 
     @NotNull
-    public static KnownHotspot createTestKnownHotspot() {
-        return knownHotspotBuilder().build();
-    }
-
-    @NotNull
     public static ImmutableActionableHotspot.Builder actionableHotspotBuilder() {
-        return ImmutableActionableHotspot.builder()
-                .from(DatamodelTestFactory.createTestActionableEvent())
-                .from(CommonTestFactory.createTestGenomePosition())
-                .gene(Strings.EMPTY)
-                .ref(Strings.EMPTY)
-                .alt(Strings.EMPTY);
+        return ImmutableActionableHotspot.builder().from(DatamodelTestFactory.createTestActionableEvent()).from(createTestVariantHotspot());
     }
 
     @NotNull

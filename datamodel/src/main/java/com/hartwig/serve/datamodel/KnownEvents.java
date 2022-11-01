@@ -29,6 +29,6 @@ public abstract class KnownEvents {
     public abstract Set<KnownCopyNumber> copyNumbers();
 
     @NotNull
-    public abstract Set<KnownFusion> fusionPairs();
+    public abstract Set<KnownFusion> fusions();
 
 }

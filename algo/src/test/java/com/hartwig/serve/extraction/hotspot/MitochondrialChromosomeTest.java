@@ -1,18 +1,11 @@
 package com.hartwig.serve.extraction.hotspot;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
 public class MitochondrialChromosomeTest {
-
-    @Test
-    public void canResolveFromString() {
-        assertEquals(MitochondrialChromosome.MT, MitochondrialChromosome.fromString("MT"));
-        assertEquals(MitochondrialChromosome.MT, MitochondrialChromosome.fromString("chrM"));
-    }
 
     @Test
     public void canDetermineIfContained() {

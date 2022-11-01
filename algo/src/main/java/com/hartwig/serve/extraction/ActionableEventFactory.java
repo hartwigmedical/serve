@@ -65,7 +65,7 @@ public final class ActionableEventFactory {
     @NotNull
     public static ActionableGene geneAnnotationToActionableGene(@NotNull ActionableEvent actionableEvent,
             @NotNull GeneAnnotation geneAnnotation) {
-        return ImmutableActionableGene.builder().from(actionableEvent).from(geneAnnotation).event(geneAnnotation.event()).build();
+        return ImmutableActionableGene.builder().from(actionableEvent).from(geneAnnotation).build();
     }
 
     @NotNull

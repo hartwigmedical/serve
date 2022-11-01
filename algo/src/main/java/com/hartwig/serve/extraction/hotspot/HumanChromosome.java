@@ -4,7 +4,7 @@ import com.hartwig.serve.common.RefGenomeFunctions;
 
 import org.jetbrains.annotations.NotNull;
 
-public enum HumanChromosome implements Chromosome {
+public enum HumanChromosome {
     _1,
     _2,
     _3,

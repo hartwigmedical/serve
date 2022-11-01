@@ -1,18 +1,15 @@
-package com.hartwig.serve.extraction.snpeff;
+package com.hartwig.serve.snpeff;
 
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 
-final class SnpEffAnnotationTestFactory
-{
+final class SnpEffAnnotationTestFactory {
 
-    private SnpEffAnnotationTestFactory()
-    {
+    private SnpEffAnnotationTestFactory() {
     }
 
     @NotNull
-    static ImmutableSnpEffAnnotation.Builder builder()
-    {
+    static ImmutableSnpEffAnnotation.Builder builder() {
         return ImmutableSnpEffAnnotation.builder()
                 .gene(Strings.EMPTY)
                 .geneID(Strings.EMPTY)

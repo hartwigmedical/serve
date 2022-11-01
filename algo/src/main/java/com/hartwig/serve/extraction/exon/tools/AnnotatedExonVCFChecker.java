@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.util.List;
 
 import com.hartwig.serve.extraction.codon.tools.AnnotatedCodonVCFChecker;
-import com.hartwig.serve.extraction.snpeff.SnpEffAnnotation;
-import com.hartwig.serve.extraction.snpeff.SnpEffAnnotationParser;
 import com.hartwig.serve.extraction.util.VCFWriterFactory;
+import com.hartwig.serve.snpeff.SnpEffAnnotation;
+import com.hartwig.serve.snpeff.SnpEffAnnotationParser;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;

@@ -36,20 +36,6 @@ public final class ExtractionFunctions {
     }
 
     @NotNull
-    public static ExtractionResult consolidateActionableEvents(@NotNull ExtractionResult result) {
-        return ImmutableExtractionResult.builder()
-                .from(result)
-                .actionableHotspots(ActionableEventUrlMerger.merge(result.actionableHotspots(), new ActionableHotspotUrlConsolidator()))
-                .actionableRanges(ActionableEventUrlMerger.merge(result.actionableRanges(), new ActionableRangeUrlConsolidator()))
-                .actionableGenes(ActionableEventUrlMerger.merge(result.actionableGenes(), new ActionableGeneUrlConsolidator()))
-                .actionableFusions(ActionableEventUrlMerger.merge(result.actionableFusions(), new ActionableFusionUrlConsolidator()))
-                .actionableCharacteristics(ActionableEventUrlMerger.merge(result.actionableCharacteristics(),
-                        new ActionableCharacteristicUrlConsolidator()))
-                .actionableHLA(ActionableEventUrlMerger.merge(result.actionableHLA(), new ActionableHLAUrlConsolidator()))
-                .build();
-    }
-
-    @NotNull
     public static ExtractionResult merge(@NotNull List<ExtractionResult> results) {
         RefGenomeVersion version = uniqueVersion(results);
         ImmutableExtractionResult.Builder mergedBuilder = ImmutableExtractionResult.builder().refGenomeVersion(version);
@@ -86,6 +72,20 @@ public final class ExtractionFunctions {
                 .build();
 
         return consolidateActionableEvents(mergedResult);
+    }
+
+    @NotNull
+    private static ExtractionResult consolidateActionableEvents(@NotNull ExtractionResult result) {
+        return ImmutableExtractionResult.builder()
+                .from(result)
+                .actionableHotspots(ActionableEventUrlMerger.merge(result.actionableHotspots(), new ActionableHotspotUrlConsolidator()))
+                .actionableRanges(ActionableEventUrlMerger.merge(result.actionableRanges(), new ActionableRangeUrlConsolidator()))
+                .actionableGenes(ActionableEventUrlMerger.merge(result.actionableGenes(), new ActionableGeneUrlConsolidator()))
+                .actionableFusions(ActionableEventUrlMerger.merge(result.actionableFusions(), new ActionableFusionUrlConsolidator()))
+                .actionableCharacteristics(ActionableEventUrlMerger.merge(result.actionableCharacteristics(),
+                        new ActionableCharacteristicUrlConsolidator()))
+                .actionableHLA(ActionableEventUrlMerger.merge(result.actionableHLA(), new ActionableHLAUrlConsolidator()))
+                .build();
     }
 
     @NotNull

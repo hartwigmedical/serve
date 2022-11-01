@@ -1,4 +1,4 @@
-package com.hartwig.serve.extraction.snpeff;
+package com.hartwig.serve.snpeff;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -10,12 +10,10 @@ import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
-public class SnpEffAnnotationTest
-{
+public class SnpEffAnnotationTest {
 
     @Test
-    public void canGenerateConsequenceString()
-    {
+    public void canGenerateConsequenceString() {
         SnpEffAnnotation noConsequences = withConsequences();
         assertEquals(Strings.EMPTY, noConsequences.consequenceString());
 
@@ -31,8 +29,7 @@ public class SnpEffAnnotationTest
     }
 
     @Test
-    public void canStripVersionFromTranscript()
-    {
+    public void canStripVersionFromTranscript() {
         SnpEffAnnotation normal = withTranscript("ENST001");
         assertEquals("ENST001", normal.transcript());
 
@@ -41,14 +38,12 @@ public class SnpEffAnnotationTest
     }
 
     @NotNull
-    private static SnpEffAnnotation withConsequences(@NotNull VariantConsequence... consequences)
-    {
+    private static SnpEffAnnotation withConsequences(@NotNull VariantConsequence... consequences) {
         return SnpEffAnnotationTestFactory.builder().consequences(Lists.newArrayList(consequences)).build();
     }
 
     @NotNull
-    private static SnpEffAnnotation withTranscript(@NotNull String transcript)
-    {
+    private static SnpEffAnnotation withTranscript(@NotNull String transcript) {
         return SnpEffAnnotationTestFactory.builder().featureID(transcript).build();
     }
 }

@@ -1,12 +1,10 @@
-package com.hartwig.serve.extraction.snpeff;
+package com.hartwig.serve.snpeff;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
-import com.google.common.annotations.VisibleForTesting;
+import com.google.common.collect.Lists;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -15,27 +13,33 @@ public class CanonicalAnnotation {
     @NotNull
     private final Set<String> driverGenes;
     @NotNull
-    private final Map<String, String> geneNamePerCanonicalTranscriptMap;
+    private final Set<String> canonicalTranscripts;
 
-    public CanonicalAnnotation(@NotNull Set<String> driverGenes, @NotNull Map<String, String> geneNamePerCanonicalTranscriptMap) {
+    public CanonicalAnnotation(@NotNull final Set<String> driverGenes, @NotNull final Set<String> canonicalTranscripts) {
         this.driverGenes = driverGenes;
-        this.geneNamePerCanonicalTranscriptMap = geneNamePerCanonicalTranscriptMap;
+        this.canonicalTranscripts = canonicalTranscripts;
     }
 
     @NotNull
     public Optional<SnpEffAnnotation> canonicalSnpEffAnnotation(@NotNull List<SnpEffAnnotation> allAnnotations) {
-        final List<SnpEffAnnotation> transcriptAnnotations =
-                allAnnotations.stream().filter(SnpEffAnnotation::isTranscriptFeature).collect(Collectors.toList());
+        List<SnpEffAnnotation> transcriptAnnotations = Lists.newArrayList();
+        for (SnpEffAnnotation annotation : allAnnotations) {
+            if (annotation.isTranscriptFeature()) {
+                transcriptAnnotations.add(annotation);
+            }
+        }
 
         return pickCanonicalFavourDriverGene(transcriptAnnotations);
     }
 
-    @VisibleForTesting
     @NotNull
-    <T extends SnpEffAnnotation> Optional<T> pickCanonicalFavourDriverGene(@NotNull List<T> annotations) {
-        List<T> canonicalAnnotations = annotations.stream()
-                .filter(annotation -> geneNamePerCanonicalTranscriptMap.containsKey(trimEnsembleVersion(annotation.transcript())))
-                .collect(Collectors.toList());
+    private <T extends SnpEffAnnotation> Optional<T> pickCanonicalFavourDriverGene(@NotNull List<T> annotations) {
+        List<T> canonicalAnnotations = Lists.newArrayList();
+        for (T annotation : annotations) {
+            if (canonicalTranscripts.contains(trimEnsembleVersion(annotation.transcript()))) {
+                canonicalAnnotations.add(annotation);
+            }
+        }
 
         if (!canonicalAnnotations.isEmpty()) {
             Optional<T> canonicalOnDriverGene =

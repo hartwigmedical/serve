@@ -7,11 +7,11 @@ import static org.junit.Assert.assertNull;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
+import com.hartwig.serve.KnownFusionCacheTestFactory;
 import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.datamodel.fusion.FusionPair;
 import com.hartwig.serve.extraction.util.DriverInconsistencyMode;
 import com.hartwig.serve.extraction.util.GeneChecker;
-import com.hartwig.serve.refgenome.RefGenomeManagerFactoryTest;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
@@ -159,6 +159,6 @@ public class FusionExtractorTest {
     @NotNull
     private static FusionExtractor buildTestFusionExtractor(@NotNull GeneChecker geneChecker, @NotNull Set<String> exonicDelDupKeyPhrases,
             @NotNull DriverInconsistencyMode annotation) {
-        return new FusionExtractor(geneChecker, RefGenomeManagerFactoryTest.knownFusionCache(), exonicDelDupKeyPhrases, annotation);
+        return new FusionExtractor(geneChecker, KnownFusionCacheTestFactory.create37(), exonicDelDupKeyPhrases, annotation);
     }
 }

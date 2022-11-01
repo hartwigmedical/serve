@@ -1,4 +1,4 @@
-package com.hartwig.serve.extraction.snpeff;
+package com.hartwig.serve.snpeff;
 
 import java.util.List;
 
@@ -47,6 +47,7 @@ public abstract class SnpEffAnnotation {
     }
 
     // when we use the feature ID it is in practice always a transcript, but this mapping may not hold for every annotation
+    @NotNull
     public String transcript() {
         String transcript = featureID();
         // In case transcripts appear with their version (eg ENST001.1) we strip the version part out.

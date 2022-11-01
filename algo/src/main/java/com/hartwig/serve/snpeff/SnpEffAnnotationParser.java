@@ -1,4 +1,4 @@
-package com.hartwig.serve.extraction.snpeff;
+package com.hartwig.serve.snpeff;
 
 import static com.hartwig.serve.common.variant.VariantConsequence.VARIANT_CONSEQ_DELIM;
 

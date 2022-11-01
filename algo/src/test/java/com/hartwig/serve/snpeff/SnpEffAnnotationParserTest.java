@@ -1,4 +1,4 @@
-package com.hartwig.serve.extraction.snpeff;
+package com.hartwig.serve.snpeff;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

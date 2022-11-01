@@ -4,21 +4,20 @@ import static htsjdk.tribble.AbstractFeatureReader.getFeatureReader;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.StringJoiner;
 
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.common.ensemblcache.EnsemblDataCache;
 import com.hartwig.serve.common.ensemblcache.EnsemblDataLoader;
 import com.hartwig.serve.common.ensemblcache.GeneData;
 import com.hartwig.serve.common.ensemblcache.TranscriptData;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
-import com.hartwig.serve.extraction.snpeff.CanonicalAnnotation;
-import com.hartwig.serve.extraction.snpeff.SnpEffAnnotation;
-import com.hartwig.serve.extraction.snpeff.SnpEffAnnotationParser;
 import com.hartwig.serve.extraction.util.VCFWriterFactory;
+import com.hartwig.serve.snpeff.CanonicalAnnotation;
+import com.hartwig.serve.snpeff.SnpEffAnnotation;
+import com.hartwig.serve.snpeff.SnpEffAnnotationParser;
 import com.hartwig.serve.util.AminoAcids;
 
 import org.apache.logging.log4j.LogManager;
@@ -44,9 +43,7 @@ public class AnnotatedHotspotVCFPrinter {
     public void run(@NotNull String annotatedInputVcf, @NotNull String ensemblDataCacheDir) throws IOException {
         EnsemblDataCache ensemblDataCache = EnsemblDataLoader.load(ensemblDataCacheDir, RefGenomeVersion.V37);
 
-        Map<String,String> geneNamePerCanonicalTranscriptMap = createGeneNamePerCanonicalTranscriptMap(ensemblDataCache);
-
-        CanonicalAnnotation factory = new CanonicalAnnotation(Sets.newHashSet(), geneNamePerCanonicalTranscriptMap);
+        CanonicalAnnotation factory = new CanonicalAnnotation(Sets.newHashSet(), extractCanonicalTranscripts(ensemblDataCache));
 
         LOGGER.info("Simplifying variants from '{}'", annotatedInputVcf);
         AbstractFeatureReader<VariantContext, LineIterator> reader = getFeatureReader(annotatedInputVcf, new VCFCodec(), false);
@@ -91,21 +88,17 @@ public class AnnotatedHotspotVCFPrinter {
     }
 
     @NotNull
-    private static Map<String, String> createGeneNamePerCanonicalTranscriptMap(@NotNull EnsemblDataCache ensemblDataCache) {
-        Map<String, String> canonicalTranscriptToGeneNameMap = Maps.newHashMap();
-
+    private static Set<String> extractCanonicalTranscripts(@NotNull EnsemblDataCache ensemblDataCache) {
+        Set<String> canonicalTranscripts = Sets.newHashSet();
         for (List<GeneData> genes : ensemblDataCache.genesPerChromosome().values()) {
             for (GeneData geneData : genes) {
-                List<TranscriptData> transcripts = ensemblDataCache.transcriptsForGeneId(geneData.geneId());
-
-                for (TranscriptData transcript : transcripts) {
-                    if (transcript.isCanonical()) {
-                        canonicalTranscriptToGeneNameMap.put(transcript.transcriptName(), geneData.geneName());
-                    }
+                TranscriptData canonical = ensemblDataCache.findCanonicalTranscript(geneData.geneId());
+                if (canonical != null) {
+                    canonicalTranscripts.add(canonical.transcriptName());
                 }
             }
         }
 
-        return canonicalTranscriptToGeneNameMap;
+        return canonicalTranscripts;
     }
 }

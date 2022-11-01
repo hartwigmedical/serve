@@ -13,7 +13,7 @@ import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.ImmutableExtractionResult;
 import com.hartwig.serve.extraction.hotspot.Hotspot;
-import com.hartwig.serve.extraction.hotspot.HotspotFunctions;
+import com.hartwig.serve.extraction.hotspot.HotspotConsolidation;
 import com.hartwig.serve.extraction.hotspot.ImmutableHotspot;
 import com.hartwig.serve.extraction.hotspot.ProteinResolver;
 import com.hartwig.serve.extraction.util.KeyFormatter;
@@ -84,7 +84,7 @@ public class HartwigExtractor {
         // Even for Hartwig sources the extractor may generate duplicate hotspots, so we need to consolidate them.
         return ImmutableExtractionResult.builder()
                 .refGenomeVersion(source.refGenomeVersion())
-                .knownHotspots(HotspotFunctions.consolidate(knownHotspots))
+                .knownHotspots(HotspotConsolidation.consolidate(knownHotspots))
                 .build();
     }
 

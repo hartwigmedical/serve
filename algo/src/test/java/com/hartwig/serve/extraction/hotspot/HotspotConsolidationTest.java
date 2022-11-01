@@ -8,6 +8,7 @@ import java.util.Set;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.datamodel.common.ProteinEffect;
 import com.hartwig.serve.datamodel.hotspot.HotspotTestFactory;
 import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
@@ -15,11 +16,11 @@ import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
-public class HotspotFunctionsTest {
+public class HotspotConsolidationTest {
 
     @Test
     public void canConsolidateEmptyHotspots() {
-        assertTrue(HotspotFunctions.consolidate(Lists.newArrayList()).isEmpty());
+        assertTrue(HotspotConsolidation.consolidate(Lists.newArrayList()).isEmpty());
     }
 
     @Test
@@ -32,6 +33,7 @@ public class HotspotFunctionsTest {
                 .gene("gene1")
                 .inputTranscript("trans1")
                 .inputProteinAnnotation("prot1")
+                .proteinEffect(ProteinEffect.NO_EFFECT)
                 .build());
 
         knownHotspots.add(HotspotTestFactory.knownHotspotBuilder()
@@ -40,6 +42,7 @@ public class HotspotFunctionsTest {
                 .gene("gene1")
                 .inputTranscript(null)
                 .inputProteinAnnotation("prot2")
+                .proteinEffect(ProteinEffect.NO_EFFECT_PREDICTED)
                 .build());
 
         knownHotspots.add(HotspotTestFactory.knownHotspotBuilder()
@@ -50,13 +53,14 @@ public class HotspotFunctionsTest {
                 .inputProteinAnnotation("prot3")
                 .build());
 
-        Set<KnownHotspot> consolidateHotspots = HotspotFunctions.consolidate(knownHotspots);
+        Set<KnownHotspot> consolidateHotspots = HotspotConsolidation.consolidate(knownHotspots);
         assertEquals(2, consolidateHotspots.size());
 
         KnownHotspot gene1 = findByGene(consolidateHotspots, "gene1");
         assertEquals(Sets.newHashSet(source), gene1.sources());
         assertEquals("trans1", gene1.inputTranscript());
         assertEquals("prot1", gene1.inputProteinAnnotation());
+        assertEquals(ProteinEffect.NO_EFFECT, gene1.proteinEffect());
 
         KnownHotspot gene2 = findByGene(consolidateHotspots, "gene2");
         assertEquals(Sets.newHashSet(source), gene2.sources());
@@ -86,7 +90,7 @@ public class HotspotFunctionsTest {
                 .inputProteinAnnotation("prot2")
                 .build());
 
-        Set<KnownHotspot> consolidateHotspots = HotspotFunctions.consolidate(knownHotspots);
+        Set<KnownHotspot> consolidateHotspots = HotspotConsolidation.consolidate(knownHotspots);
         assertEquals(1, consolidateHotspots.size());
 
         KnownHotspot hotspot = findByGene(consolidateHotspots, gene);

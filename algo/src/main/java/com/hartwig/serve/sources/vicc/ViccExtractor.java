@@ -37,14 +37,14 @@ import com.hartwig.serve.extraction.ExtractionFunctions;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.ImmutableExtractionResult;
 import com.hartwig.serve.extraction.codon.CodonAnnotation;
-import com.hartwig.serve.extraction.codon.CodonFunctions;
-import com.hartwig.serve.extraction.copynumber.CopyNumberFunctions;
+import com.hartwig.serve.extraction.codon.CodonConsolidation;
+import com.hartwig.serve.extraction.copynumber.CopyNumberConsolidation;
 import com.hartwig.serve.extraction.events.EventInterpretation;
 import com.hartwig.serve.extraction.events.ImmutableEventInterpretation;
 import com.hartwig.serve.extraction.exon.ExonAnnotation;
-import com.hartwig.serve.extraction.exon.ExonFunctions;
-import com.hartwig.serve.extraction.fusion.FusionFunctions;
-import com.hartwig.serve.extraction.hotspot.HotspotFunctions;
+import com.hartwig.serve.extraction.exon.ExonConsolidation;
+import com.hartwig.serve.extraction.fusion.FusionConsolidation;
+import com.hartwig.serve.extraction.hotspot.HotspotConsolidation;
 import com.hartwig.serve.extraction.immuno.ImmunoHLA;
 import com.hartwig.serve.util.ProgressTracker;
 import com.hartwig.serve.vicc.annotation.ViccProteinAnnotationExtractor;
@@ -202,7 +202,7 @@ public final class ViccExtractor {
             }
         }
 
-        return HotspotFunctions.consolidate(hotspots);
+        return HotspotConsolidation.consolidate(hotspots);
     }
 
     @NotNull
@@ -223,7 +223,7 @@ public final class ViccExtractor {
             }
         }
 
-        return CodonFunctions.consolidate(codons);
+        return CodonConsolidation.consolidate(codons);
     }
 
     @NotNull
@@ -244,7 +244,7 @@ public final class ViccExtractor {
             }
         }
 
-        return ExonFunctions.consolidate(exons);
+        return ExonConsolidation.consolidate(exons);
     }
 
     @NotNull
@@ -260,7 +260,7 @@ public final class ViccExtractor {
                     .build());
         }
 
-        return CopyNumberFunctions.consolidate(copyNumbers);
+        return CopyNumberConsolidation.consolidate(copyNumbers);
     }
 
     @NotNull
@@ -271,7 +271,7 @@ public final class ViccExtractor {
             fusions.add(ImmutableKnownFusion.builder().from(fusion).proteinEffect(ProteinEffect.UNKNOWN).addSources(source).build());
         }
 
-        return FusionFunctions.consolidate(fusions);
+        return FusionConsolidation.consolidate(fusions);
     }
 
     private static void addActionability(@NotNull ImmutableExtractionResult.Builder outputBuilder,

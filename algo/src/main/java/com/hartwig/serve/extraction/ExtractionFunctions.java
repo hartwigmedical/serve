@@ -17,12 +17,12 @@ import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.range.KnownCodon;
 import com.hartwig.serve.datamodel.range.KnownExon;
 import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
-import com.hartwig.serve.extraction.codon.CodonFunctions;
-import com.hartwig.serve.extraction.copynumber.CopyNumberFunctions;
+import com.hartwig.serve.extraction.codon.CodonConsolidation;
+import com.hartwig.serve.extraction.copynumber.CopyNumberConsolidation;
 import com.hartwig.serve.extraction.events.EventInterpretation;
-import com.hartwig.serve.extraction.exon.ExonFunctions;
-import com.hartwig.serve.extraction.fusion.FusionFunctions;
-import com.hartwig.serve.extraction.hotspot.HotspotFunctions;
+import com.hartwig.serve.extraction.exon.ExonConsolidation;
+import com.hartwig.serve.extraction.fusion.FusionConsolidation;
+import com.hartwig.serve.extraction.hotspot.HotspotConsolidation;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -64,11 +64,11 @@ public final class ExtractionFunctions {
         }
 
         ExtractionResult mergedResult = mergedBuilder.eventInterpretations(allEventInterpretations)
-                .knownHotspots(HotspotFunctions.consolidate(allHotspots))
-                .knownCodons(CodonFunctions.consolidate(allCodons))
-                .knownExons(ExonFunctions.consolidate(allExons))
-                .knownCopyNumbers(CopyNumberFunctions.consolidate(allCopyNumbers))
-                .knownFusions(FusionFunctions.consolidate(allFusions))
+                .knownHotspots(HotspotConsolidation.consolidate(allHotspots))
+                .knownCodons(CodonConsolidation.consolidate(allCodons))
+                .knownExons(ExonConsolidation.consolidate(allExons))
+                .knownCopyNumbers(CopyNumberConsolidation.consolidate(allCopyNumbers))
+                .knownFusions(FusionConsolidation.consolidate(allFusions))
                 .build();
 
         return consolidateActionableEvents(mergedResult);

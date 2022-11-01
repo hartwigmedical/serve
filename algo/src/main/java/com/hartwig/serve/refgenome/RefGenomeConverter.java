@@ -230,7 +230,7 @@ class RefGenomeConverter {
         verifyNoChromosomeChange(range.chromosome(), liftedEnd, range);
 
         return ImmutableGenomeRegionImpl.builder()
-                .chromosome(range.chromosome())
+                .chromosome(liftedStart.chromosome())
                 .start(liftedStart.position())
                 .end(liftedEnd.position())
                 .build();

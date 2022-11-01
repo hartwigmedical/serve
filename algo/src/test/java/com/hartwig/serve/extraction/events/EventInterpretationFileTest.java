@@ -20,13 +20,9 @@ public class EventInterpretationFileTest {
 
         assertEquals(2, eventInterpretations.size());
 
-        List<String> lines = EventInterpretationFile.toLines(eventInterpretations);
-        List<EventInterpretation> interpretationEvents = EventInterpretationFile.fromLines(lines);
-        List<String> regeneratedLines = EventInterpretationFile.toLines(interpretationEvents);
-        assertEquals(lines.size(), regeneratedLines.size());
+        List<EventInterpretation> regeneratedEvents =
+                EventInterpretationFile.fromLines(EventInterpretationFile.toLines(eventInterpretations));
 
-        for (int i = 0; i < lines.size(); i++) {
-            assertEquals(lines.get(i), regeneratedLines.get(i));
-        }
+        assertEquals(eventInterpretations, regeneratedEvents);
     }
 }

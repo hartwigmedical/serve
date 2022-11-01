@@ -43,15 +43,15 @@ import com.hartwig.serve.extraction.ExtractionFunctions;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.ImmutableExtractionResult;
 import com.hartwig.serve.extraction.codon.CodonAnnotation;
-import com.hartwig.serve.extraction.codon.CodonFunctions;
+import com.hartwig.serve.extraction.codon.CodonConsolidation;
 import com.hartwig.serve.extraction.codon.ImmutableCodonAnnotation;
-import com.hartwig.serve.extraction.copynumber.CopyNumberFunctions;
+import com.hartwig.serve.extraction.copynumber.CopyNumberConsolidation;
 import com.hartwig.serve.extraction.events.EventInterpretation;
 import com.hartwig.serve.extraction.events.ImmutableEventInterpretation;
 import com.hartwig.serve.extraction.exon.ExonAnnotation;
-import com.hartwig.serve.extraction.exon.ExonFunctions;
-import com.hartwig.serve.extraction.fusion.FusionFunctions;
-import com.hartwig.serve.extraction.hotspot.HotspotFunctions;
+import com.hartwig.serve.extraction.exon.ExonConsolidation;
+import com.hartwig.serve.extraction.fusion.FusionConsolidation;
+import com.hartwig.serve.extraction.hotspot.HotspotConsolidation;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurator;
 import com.hartwig.serve.util.ProgressTracker;
 
@@ -76,13 +76,15 @@ public class CkbExtractor {
     }
 
     @NotNull
-    public ExtractionResult extract(@NotNull List<CkbEntry> ckbEntries) {
+    public ExtractionResult extract(@NotNull List<CkbEntry> entries) {
         List<ExtractionResult> extractions = Lists.newArrayList();
 
-        ProgressTracker tracker = new ProgressTracker("CKB", ckbEntries.size());
-        for (CkbEntry entry : ckbEntries) {
+        ProgressTracker tracker = new ProgressTracker("CKB", entries.size());
+        for (CkbEntry entry : entries) {
             // Assume entries without variants are filtered out prior to extraction
-            assert !entry.variants().isEmpty();
+            if (entry.variants().isEmpty()) {
+                throw new IllegalStateException("A CKB entry without variants has been provided for extraction: " + entry);
+            }
 
             int variantCount = entry.variants().size();
             Variant variant = entry.variants().get(0);
@@ -100,7 +102,7 @@ public class CkbExtractor {
                     sourceEvent = event;
                 }
 
-                Set<ActionableEntry> actionableEvents =
+                Set<ActionableEntry> actionableEntries =
                         ActionableEntryFactory.toActionableEntries(entry, sourceEvent, treatmentApproachCurator, gene, entry.type());
 
                 EventInterpretation interpretation = ImmutableEventInterpretation.builder()
@@ -111,7 +113,7 @@ public class CkbExtractor {
                         .interpretedEventType(entry.type())
                         .build();
 
-                ExtractionResult extraction = toExtractionResult(event, null, extractionOutput, actionableEvents, interpretation);
+                ExtractionResult extraction = toExtractionResult(event, null, extractionOutput, actionableEntries, interpretation);
                 extractions.add(CkbVariantAnnotator.annotate(extraction, variant));
             }
 
@@ -134,7 +136,7 @@ public class CkbExtractor {
 
     @NotNull
     private static ExtractionResult toExtractionResult(@NotNull String variant, @Nullable String transcript,
-            @NotNull EventExtractorOutput output, @NotNull Set<ActionableEntry> actionableEvents,
+            @NotNull EventExtractorOutput output, @NotNull Set<ActionableEntry> actionableEntries,
             @NotNull EventInterpretation interpretation) {
         Set<ActionableHotspot> actionableHotspots = Sets.newHashSet();
         Set<ActionableRange> actionableRanges = Sets.newHashSet();
@@ -145,7 +147,7 @@ public class CkbExtractor {
 
         List<CodonAnnotation> codons = Lists.newArrayList();
 
-        for (ActionableEvent event : actionableEvents) {
+        for (ActionableEvent event : actionableEntries) {
             codons = curateCodons(output.codons());
 
             actionableHotspots.addAll(ActionableEventFactory.toActionableHotspots(event, output.hotspots()));
@@ -232,7 +234,7 @@ public class CkbExtractor {
             }
         }
 
-        return HotspotFunctions.consolidate(knownHotspots);
+        return HotspotConsolidation.consolidate(knownHotspots);
     }
 
     @NotNull
@@ -251,7 +253,8 @@ public class CkbExtractor {
                         .build());
             }
         }
-        return CodonFunctions.consolidate(codons);
+
+        return CodonConsolidation.consolidate(codons);
     }
 
     @NotNull
@@ -270,12 +273,14 @@ public class CkbExtractor {
                         .build());
             }
         }
-        return ExonFunctions.consolidate(exons);
+
+        return ExonConsolidation.consolidate(exons);
     }
 
     @NotNull
     private static Set<KnownCopyNumber> convertToKnownAmpsDels(@Nullable GeneAnnotation copyNumber) {
         Set<KnownCopyNumber> copyNumbers = Sets.newHashSet();
+
         if (copyNumber != null) {
             copyNumbers.add(ImmutableKnownCopyNumber.builder()
                     .from(copyNumber)
@@ -284,12 +289,14 @@ public class CkbExtractor {
                     .addSources(Knowledgebase.CKB)
                     .build());
         }
-        return CopyNumberFunctions.consolidate(copyNumbers);
+
+        return CopyNumberConsolidation.consolidate(copyNumbers);
     }
 
     @NotNull
     private static Set<KnownFusion> convertToKnownFusions(@Nullable FusionPair fusion) {
         Set<KnownFusion> fusions = Sets.newHashSet();
+
         if (fusion != null) {
             fusions.add(ImmutableKnownFusion.builder()
                     .from(fusion)
@@ -297,6 +304,7 @@ public class CkbExtractor {
                     .addSources(Knowledgebase.CKB)
                     .build());
         }
-        return FusionFunctions.consolidate(fusions);
+
+        return FusionConsolidation.consolidate(fusions);
     }
 }

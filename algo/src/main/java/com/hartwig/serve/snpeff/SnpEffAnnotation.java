@@ -50,7 +50,7 @@ public abstract class SnpEffAnnotation {
     @NotNull
     public String transcript() {
         String transcript = featureID();
-        // In case transcripts appear with their version (eg ENST001.1) we strip the version part out.
+        // In case transcripts appear with their version (e.g. ENST001.1) we strip the version part out.
         if (transcript.contains(".")) {
             return transcript.substring(0, transcript.indexOf("."));
         } else {

@@ -85,7 +85,7 @@ Evidence that is defined on a gene-level is checked to make sure that the gene e
 If a gene does not exist in Hartwig's exome definition the evidence is ignored. For more information about Hartwig's definition 
 of the exome, see [HMF Gene Utils](https://github.com/hartwigmedical/hmftools/tree/master/gene-utils/README.md).
 
-For fusions, genes are permitted that can exist in the context of a fusion pair (eg @IG genes). 
+For fusions, genes are permitted that can exist in the context of a fusion pair (e.g. @IG genes). 
 
 ### Driver inconsistencies
 In the supported knowledgebases, there can be events defined on genes that are not part of the Hartwig's driver gene panel.
@@ -106,9 +106,9 @@ for the reference genome version that is used by the input knowledgebase.
  
 The first step is to choose what ensembl transcript to use for converting protein annotation back to genomic coordinates:
  1. If the knowledgebase configured a transcript for a mutation, that transcript is used exclusively.
- 1. If no transcript is configured, SERVE uses the typical transcript used by Hartwig which is generally the canonical 
+ 2. If no transcript is configured, SERVE uses the typical transcript used by Hartwig which is generally the canonical 
  transcript defined by ensembl.
- 1. If a protein annotation does not exist on the canonical transcript and has no transcript configured in the knowledgebase, 
+ 3. If a protein annotation does not exist on the canonical transcript and has no transcript configured in the knowledgebase, 
  a consistently specific transcript is picked for protein annotation in case multiple transcripts imply the same hotspot.
  
 If a protein annotated form does not exist on any transcript for a specific gene, the evidence is ignored 
@@ -121,7 +121,7 @@ Assuming a suitable transcript has been found, N hotspots are derived for each p
    - In case a DEL can be left-aligned a hotspot is generated for every position between the left-aligned position and the actual position. 
  - In case the mutation is caused by an inframe insertion (INS) there are two flavors based on the length of the insertion:
    1. In case 1 amino acid is inserted, hotspots are generated for every trinucleotide coding for that amino acid.
-   1. In case multiple amino acids are inserted, one of the potentially many hotspots is generated. This is just for practical reasons
+   2. In case multiple amino acids are inserted, one of the potentially many hotspots is generated. This is just for practical reasons
     to put a limit on the (exponential) number of variants that can code for a multi-amino-acid insert. 
  - In case of a complex deletion/insertion (DELINS) the rules for hotspot generation for deletions and insertions are extrapolated. 
  Hence, the reference sequence is assumed to be deleted, and one new nucleotide sequence is inserted unless the insertion is 1 amino acid 
@@ -170,7 +170,7 @@ sufficient, the Hartwig driver catalog is used to determine the filter.
 
 For evidence that is applicable when a gene-wide level event has happened, the type of event required to match evidence to a 
 mutation is derived from the knowledgebase event and no further interpretation is done. In case a knowledgebase provides insufficient 
-details to make a decision (eg. mutant), we annotate to ANY_MUTATION. 
+details to make a decision (e.g. mutant), we annotate to ANY_MUTATION. 
 
 | Gene level event | Description                                                                                                                            |
 |------------------|----------------------------------------------------------------------------------------------------------------------------------------|
@@ -222,22 +222,22 @@ evidence that is inconsistent with the Hartwig driver model.
 
 For VICC the following curation and filtering is applied prior to presenting the data to SERVE:
  1. General filtering of mutations that are undetectable when analyzing DNA or RNA. Examples are phosphorylation and methylation.
- 1. Determining whether the evidence is supportive of the specified direction. Eg if evidence "does not support" sensitivity
+ 2. Determining whether the evidence is supportive of the specified direction. Eg if evidence "does not support" sensitivity
  we do not generate actionable results from this evidence.
- 1. Filtering of specific mutations:
+ 3. Filtering of specific mutations:
     - Mutations that remove the stop codon. These are simply not interpreted yet by the SERVE main algorithm.
     - Synonymous mutations in coding regions are assumed to be benign by SERVE and ignored.
     - Fusions that are not considered pathogenic by Hartwig are removed for lack of evidence of pathogenicity (regardless of their level of evidence).
     - Events that contradict Hartwig driver catalog. One example is "CCND3 loss" which is assumed to be benign. 
- 1. Curation of specific mutations:
+ 4. Curation of specific mutations:
     - SNVs/INDELs that are not aligned correctly according to HGVS standards are corrected to be HGVS-compliant.
     - SNVs/INDELs that have correct notation but simply don't exist on the transcript specified by VICC are removed.
     - Fusion pairs for which the genes are in the wrong order are flipped around. 
     - Genes which are synonyms of genes used in the Hartwig exome definition are renamed.
- 1. Correction of cancer types and DOID annotation:
+ 5. Correction of cancer types and DOID annotation:
     - Evidence for which DOID is missing have a DOID manually assigned.
     - Evidence on multiple cancer types generally get a wrong DOID assigned by VICC and are rectified.
- 1. Correction of drugs for which A or B level evidence exists:
+ 6. Correction of drugs for which A or B level evidence exists:
     - A whole range of drugs have wrong or inconsistent names in VICC and are rectified by SERVE.
     - VICC does not explicitly model the difference between "multiple different drugs" and a "combination treatment of multiple drugs". 
     This gets rectified by SERVE.
@@ -308,7 +308,7 @@ is mapping evidence for tumor characteristics (such as MSI or High TMB) to actua
 The following filters can be configured for CKB FLEX, along with an example of how this is used by Hartwig:
 Filter  | Description
 ---|---
-ALLOW_GENE_IN_FUSIONS_EXCLUSIVELY  | CKB FLEX uses a hierarchy of events in such a way that every "fusion" is a child of "mutant". For certain genes (eg @IG) we want to ignore the abstract level and only include the fusion evidence since we only handle @IG on a fusion level in the Hartwig pipeline. 
+ALLOW_GENE_IN_FUSIONS_EXCLUSIVELY  | CKB FLEX uses a hierarchy of events in such a way that every "fusion" is a child of "mutant". For certain genes (e.g. @IG) we want to ignore the abstract level and only include the fusion evidence since we only handle @IG on a fusion level in the Hartwig pipeline. 
 FILTER_EVENT_WITH_KEYWORD  | Can be used to remove evidence of a type that is not observable in DNA (eg "hypermethylation")
 FILTER_EXACT_VARIANT_FULLNAME  | Any specific variant can be removed through this filter. This is primarily used to remove variants that have a coding impact on their configured refseq transcript in CKB but are non-coding or don't exist on Hartwig's ensembl transcript.
 FILTER_ALL_EVIDENCE_ON_GENE  | Is primarily used to remove evidence on genes which are simply not modeled correctly in Hartwig's gene model and hence can't be mapped properly
@@ -328,7 +328,7 @@ is curated for harmonize the knowledge. The following filters can be configured:
 ## Handling of multiple reference genome versions
  
 External knowledgebases generally define their knowledge for one specific reference genome version (v37 or v38). SERVE merges knowledgebases 
-defined in either v37 or v38 reference genome versions. In addition SERVE generates its output for both reference genome v37 and v38.
+defined in either v37 or v38 reference genome versions. In addition, SERVE generates its output for both reference genome v37 and v38.
 
 ### Ref-genome dependent knowledge extraction
 
@@ -408,7 +408,7 @@ Knowledge extraction is performed on a per-knowledgebase level after which all e
   - Support the raw input string of the input knowledgebases to the actionable output files
   - Support wild-type events as gene level evidences 
   - Support HLA Class type I as new actionability options 
-  - The filtering of iClusion events is moved to a input file instead inside SERVE  
+  - The filtering of iClusion events is moved to an input file instead inside SERVE  
   - Created a link of CKB of the evidence for CKB Boost (web based)
   - For actionable signatures evidences could be applicable with different cut-offs. Now supporting those cut-off values of the different signatures (eg. TML >= 140 )
   - Support the possibility to blacklist specific tumor locations for particular treatments

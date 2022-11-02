@@ -136,7 +136,7 @@ final class FeatureCurationFactory {
         FEATURE_BLACKLIST.add(jax("FLT3", null, "FLT3 L611_E612insCSSDNEYFYVDFREYEYDLKWEFPRENL "));
         FEATURE_BLACKLIST.add(jax("FLT3", null, "FLT3 E612_F613insGYVDFREYEYDLKWEFRPRENLEF "));
 
-        // The transcript that should have this mutation (ENST00000507379) is annotated as 3' truncated with only 1135 AAs in ensembl)
+        // The transcript that should have this mutation (ENST00000507379) is annotated as 3' truncated with only 1135 AAs in ensembl
         FEATURE_BLACKLIST.add(jax("APC", null, "APC S1197* "));
 
         // The below is pending investigation by JAX, possibly a mistake by the paper.

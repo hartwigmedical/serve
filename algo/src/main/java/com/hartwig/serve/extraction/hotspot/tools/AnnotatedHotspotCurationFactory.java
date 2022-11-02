@@ -34,16 +34,16 @@ final class AnnotatedHotspotCurationFactory {
     private static Set<String> createChangedTranscriptWhitelist() {
         Set<String> transcripts = Sets.newHashSet();
 
-        // This MYC transcript is v2 in 37 and v6 in 38 and they differ by 15 AA.
+        // This MYC transcript is v2 in 37 and v6 in 38, and they differ by 15 AA.
         transcripts.add("ENST00000377970");
 
-        // This TCF7L2 transcript in v1 in 37 and v5 in 38 and they differ by 5 AA.
+        // This TCF7L2 transcript in v1 in 37 and v5 in 38, and they differ by 5 AA.
         transcripts.add("ENST00000543371");
 
-        // This FGFR2 transcript is v6 in 37 and v10 in 38 and they differ by 36 AA (spread across transcript).
+        // This FGFR2 transcript is v6 in 37 and v10 in 38, and they differ by 36 AA (spread across transcript).
         transcripts.add("ENST00000351936");
 
-        // This MED12 transcript is v6 in 37 and v10 in 38 and they differ with 53 AA (spread across transcript)
+        // This MED12 transcript is v6 in 37 and v10 in 38, and they differ with 53 AA (spread across transcript)
         transcripts.add("ENST00000333646");
 
         return transcripts;

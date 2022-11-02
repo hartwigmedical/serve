@@ -19,7 +19,7 @@ class TransvarCurator {
     private static final Set<String> GENES_FOR_WHICH_TO_SKIP_MAPPING = Sets.newHashSet();
 
     static {
-        // Transvar can't interpret start-lost so we map it to another arbitrary mutation.
+        // Transvar can't interpret start-lost, so we map it to another arbitrary mutation.
         PROTEIN_ANNOTATION_MAPPING.put("M1?", "M1I");
 
         // These genes work fine in transvar and should not be mapped to our old HMF v37 name.

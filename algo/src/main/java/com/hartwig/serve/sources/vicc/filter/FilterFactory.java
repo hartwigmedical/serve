@@ -116,7 +116,7 @@ final class FilterFactory {
         FEATURE_KEYS_TO_FILTER.add(new FilterKey(ViccSource.JAX, "KIT", "KIT K550_W557del "));
 
         // Variant is fine, but interpretation currently not supported by SERVE
-        // The unaligned insert lies outside of exonic range, but the left-aligned insert is fine
+        // The unaligned insert lies outside exonic range, but the left-aligned insert is fine
         FEATURE_KEYS_TO_FILTER.add(new FilterKey(ViccSource.ONCOKB, "BRAF", "R506_K507insVLR"));
 
         // Variant is fine, but interpretation currently not supported by SERVE

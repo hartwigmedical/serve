@@ -37,7 +37,7 @@ final class CurationFactory {
         ENTRY_BLACKLIST.add(new CurationKey("RET", "ENST00000355710", "EL632-"));
         ENTRY_BLACKLIST.add(new CurationKey("RET", "ENST00000355710", "DVYE898-"));
 
-        // Unclear what these variants means. Maybe these are INS?
+        // Unclear what these variants mean. Maybe these are INS?
         ENTRY_BLACKLIST.add(new CurationKey("BRAF", "ENST00000288602", "GD593GN"));
         ENTRY_BLACKLIST.add(new CurationKey("ERBB2", "ENST00000269571", "G776CX"));
         ENTRY_BLACKLIST.add(new CurationKey("ERBB2", "ENST00000269571", "G778GSPX"));

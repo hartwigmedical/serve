@@ -35,15 +35,15 @@ final class OncokbDAOFunctions {
         OncoKbBiological oncokbBiological = oncoKb.oncoKbBiological();
         if (oncokbBiological != null) {
             int idBiological = context.insertInto(ONCOKBBIOLOGICAL,
-                    ONCOKBBIOLOGICAL.GENE,
-                    ONCOKBBIOLOGICAL.ENTREZGENEID,
-                    ONCOKBBIOLOGICAL.ISOFORM,
-                    ONCOKBBIOLOGICAL.REFSEQ,
-                    ONCOKBBIOLOGICAL.ONCOGENIC,
-                    ONCOKBBIOLOGICAL.MUTATIONEFFECT,
-                    ONCOKBBIOLOGICAL.MUTATIONEFFECTPMIDS,
-                    ONCOKBBIOLOGICAL.MUTATIONEFFECTABSTRACTS,
-                    ONCOKBBIOLOGICAL.ONCOKBID)
+                            ONCOKBBIOLOGICAL.GENE,
+                            ONCOKBBIOLOGICAL.ENTREZGENEID,
+                            ONCOKBBIOLOGICAL.ISOFORM,
+                            ONCOKBBIOLOGICAL.REFSEQ,
+                            ONCOKBBIOLOGICAL.ONCOGENIC,
+                            ONCOKBBIOLOGICAL.MUTATIONEFFECT,
+                            ONCOKBBIOLOGICAL.MUTATIONEFFECTPMIDS,
+                            ONCOKBBIOLOGICAL.MUTATIONEFFECTABSTRACTS,
+                            ONCOKBBIOLOGICAL.ONCOKBID)
                     .values(oncokbBiological.gene(),
                             oncokbBiological.entrezGeneId(),
                             oncokbBiological.isoform(),
@@ -59,13 +59,13 @@ final class OncokbDAOFunctions {
 
             OncoKbVariant oncokbVariant = oncokbBiological.oncokbVariant();
             int idVariant = context.insertInto(ONCOKBVARIANTBIOLOGICAL,
-                    ONCOKBVARIANTBIOLOGICAL.NAME,
-                    ONCOKBVARIANTBIOLOGICAL.ALTERATION,
-                    ONCOKBVARIANTBIOLOGICAL.PROTEINSTART,
-                    ONCOKBVARIANTBIOLOGICAL.PROTEINEND,
-                    ONCOKBVARIANTBIOLOGICAL.REFRESIDUES,
-                    ONCOKBVARIANTBIOLOGICAL.VARIANTRESIDUES,
-                    ONCOKBVARIANTBIOLOGICAL.ONCOKBBIOLOGICALID)
+                            ONCOKBVARIANTBIOLOGICAL.NAME,
+                            ONCOKBVARIANTBIOLOGICAL.ALTERATION,
+                            ONCOKBVARIANTBIOLOGICAL.PROTEINSTART,
+                            ONCOKBVARIANTBIOLOGICAL.PROTEINEND,
+                            ONCOKBVARIANTBIOLOGICAL.REFRESIDUES,
+                            ONCOKBVARIANTBIOLOGICAL.VARIANTRESIDUES,
+                            ONCOKBVARIANTBIOLOGICAL.ONCOKBBIOLOGICALID)
                     .values(oncokbVariant.name(),
                             oncokbVariant.alteration(),
                             oncokbVariant.proteinStart(),
@@ -79,23 +79,23 @@ final class OncokbDAOFunctions {
 
             OncoKbConsequence oncoKbConsequence = oncokbBiological.oncokbVariant().consequence();
             context.insertInto(ONCOKBCONSEQUENCEBIOLOGICAL,
-                    ONCOKBCONSEQUENCEBIOLOGICAL.TERM,
-                    ONCOKBCONSEQUENCEBIOLOGICAL.DESCRIPTION,
-                    ONCOKBCONSEQUENCEBIOLOGICAL.ISGENERALLYTRUNCATING,
-                    ONCOKBCONSEQUENCEBIOLOGICAL.ONCOKBVARIANTBIOLOGICALID)
+                            ONCOKBCONSEQUENCEBIOLOGICAL.TERM,
+                            ONCOKBCONSEQUENCEBIOLOGICAL.DESCRIPTION,
+                            ONCOKBCONSEQUENCEBIOLOGICAL.ISGENERALLYTRUNCATING,
+                            ONCOKBCONSEQUENCEBIOLOGICAL.ONCOKBVARIANTBIOLOGICALID)
                     .values(oncoKbConsequence.term(), oncoKbConsequence.description(), oncoKbConsequence.isGenerallyTruncating(), idVariant)
                     .execute();
 
             OncoKbGene oncoKbGene = oncokbBiological.oncokbVariant().gene();
             int idGene = context.insertInto(ONCOKBGENEBIOLOGICAL,
-                    ONCOKBGENEBIOLOGICAL.HUGOSYMBOL,
-                    ONCOKBGENEBIOLOGICAL.NAME,
-                    ONCOKBGENEBIOLOGICAL.ENTREZGENEID,
-                    ONCOKBGENEBIOLOGICAL.CURATEDISOFORM,
-                    ONCOKBGENEBIOLOGICAL.CURATEDREFSEQ,
-                    ONCOKBGENEBIOLOGICAL.ONCOGENE,
-                    ONCOKBGENEBIOLOGICAL.TSG,
-                    ONCOKBGENEBIOLOGICAL.ONCOKBVARIANTBIOLOGICALID)
+                            ONCOKBGENEBIOLOGICAL.HUGOSYMBOL,
+                            ONCOKBGENEBIOLOGICAL.NAME,
+                            ONCOKBGENEBIOLOGICAL.ENTREZGENEID,
+                            ONCOKBGENEBIOLOGICAL.CURATEDISOFORM,
+                            ONCOKBGENEBIOLOGICAL.CURATEDREFSEQ,
+                            ONCOKBGENEBIOLOGICAL.ONCOGENE,
+                            ONCOKBGENEBIOLOGICAL.TSG,
+                            ONCOKBGENEBIOLOGICAL.ONCOKBVARIANTBIOLOGICALID)
                     .values(oncoKbGene.hugoSymbol(),
                             oncoKbGene.name(),
                             oncoKbGene.entrezGeneId(),
@@ -111,23 +111,23 @@ final class OncokbDAOFunctions {
             for (String geneAlias : oncoKbGene.geneAliases()) {
                 context.insertInto(ONCOKBGENEALIASBIOLOGICAL,
                         ONCOKBGENEALIASBIOLOGICAL.GENEALIAS,
-                        ONCOKBGENEALIASBIOLOGICAL.ONCOKBGENEBIOLOGICALID).values(geneAlias, idGene);
+                        ONCOKBGENEALIASBIOLOGICAL.ONCOKBGENEBIOLOGICALID).values(geneAlias, idGene).execute();
             }
         }
 
         OncoKbClinical oncokbClinical = oncoKb.oncoKbClinical();
         if (oncokbClinical != null) {
             int idClinical = context.insertInto(ONCOKBCLINICAL,
-                    ONCOKBCLINICAL.GENE,
-                    ONCOKBCLINICAL.ENTREZGENEID,
-                    ONCOKBCLINICAL.ISOFORM,
-                    ONCOKBCLINICAL.REFSEQ,
-                    ONCOKBCLINICAL.CANCERTYPE,
-                    ONCOKBCLINICAL.DRUG,
-                    ONCOKBCLINICAL.DRUGPMIDS,
-                    ONCOKBCLINICAL.LEVEL,
-                    ONCOKBCLINICAL.LEVELLABEL,
-                    ONCOKBCLINICAL.ONCOKBID)
+                            ONCOKBCLINICAL.GENE,
+                            ONCOKBCLINICAL.ENTREZGENEID,
+                            ONCOKBCLINICAL.ISOFORM,
+                            ONCOKBCLINICAL.REFSEQ,
+                            ONCOKBCLINICAL.CANCERTYPE,
+                            ONCOKBCLINICAL.DRUG,
+                            ONCOKBCLINICAL.DRUGPMIDS,
+                            ONCOKBCLINICAL.LEVEL,
+                            ONCOKBCLINICAL.LEVELLABEL,
+                            ONCOKBCLINICAL.ONCOKBID)
                     .values(oncokbClinical.gene(),
                             oncokbClinical.entrezGeneId(),
                             oncokbClinical.isoform(),
@@ -146,20 +146,18 @@ final class OncokbDAOFunctions {
                 context.insertInto(ONCOKBDRUGABSTRACTCLINICAL,
                         ONCOKBDRUGABSTRACTCLINICAL.TEXT,
                         ONCOKBDRUGABSTRACTCLINICAL.LINK,
-                        ONCOKBDRUGABSTRACTCLINICAL.ONCOKBCLINICALID)
-                        .values(drugAbstract.text(), drugAbstract.link(), idClinical)
-                        .execute();
+                        ONCOKBDRUGABSTRACTCLINICAL.ONCOKBCLINICALID).values(drugAbstract.text(), drugAbstract.link(), idClinical).execute();
             }
 
             OncoKbVariant variantClinical = oncokbClinical.variant();
             int idClinicalVariant = context.insertInto(ONCOKBVARIANTCLINICAL,
-                    ONCOKBVARIANTCLINICAL.NAME,
-                    ONCOKBVARIANTCLINICAL.ALTERATION,
-                    ONCOKBVARIANTCLINICAL.PROTEINSTART,
-                    ONCOKBVARIANTCLINICAL.PROTEINEND,
-                    ONCOKBVARIANTCLINICAL.REFRESIDUES,
-                    ONCOKBVARIANTCLINICAL.VARIANTRESIDUES,
-                    ONCOKBVARIANTCLINICAL.ONCOKBCLINICALID)
+                            ONCOKBVARIANTCLINICAL.NAME,
+                            ONCOKBVARIANTCLINICAL.ALTERATION,
+                            ONCOKBVARIANTCLINICAL.PROTEINSTART,
+                            ONCOKBVARIANTCLINICAL.PROTEINEND,
+                            ONCOKBVARIANTCLINICAL.REFRESIDUES,
+                            ONCOKBVARIANTCLINICAL.VARIANTRESIDUES,
+                            ONCOKBVARIANTCLINICAL.ONCOKBCLINICALID)
                     .values(variantClinical.name(),
                             variantClinical.alteration(),
                             variantClinical.proteinStart(),
@@ -173,10 +171,10 @@ final class OncokbDAOFunctions {
 
             OncoKbConsequence consequenceClinical = oncokbClinical.variant().consequence();
             context.insertInto(ONCOKBCONSEQUENCECLINICAL,
-                    ONCOKBCONSEQUENCECLINICAL.TERM,
-                    ONCOKBCONSEQUENCECLINICAL.DESCRIPTION,
-                    ONCOKBCONSEQUENCECLINICAL.ISGENERALLYTRUNCATING,
-                    ONCOKBCONSEQUENCECLINICAL.ONCOKBVARIANTCLINICALID)
+                            ONCOKBCONSEQUENCECLINICAL.TERM,
+                            ONCOKBCONSEQUENCECLINICAL.DESCRIPTION,
+                            ONCOKBCONSEQUENCECLINICAL.ISGENERALLYTRUNCATING,
+                            ONCOKBCONSEQUENCECLINICAL.ONCOKBVARIANTCLINICALID)
                     .values(consequenceClinical.term(),
                             consequenceClinical.description(),
                             consequenceClinical.isGenerallyTruncating(),
@@ -185,14 +183,14 @@ final class OncokbDAOFunctions {
 
             OncoKbGene geneClinical = oncokbClinical.variant().gene();
             int idGeneClinical = context.insertInto(ONCOKBGENECLINICAL,
-                    ONCOKBGENECLINICAL.HUGOSYMBOL,
-                    ONCOKBGENECLINICAL.NAME,
-                    ONCOKBGENECLINICAL.ENTREZGENEID,
-                    ONCOKBGENECLINICAL.CURATEDISOFORM,
-                    ONCOKBGENECLINICAL.CURATEDREFSEQ,
-                    ONCOKBGENECLINICAL.ONCOGENE,
-                    ONCOKBGENECLINICAL.TSG,
-                    ONCOKBGENECLINICAL.ONCOKBVARIANTCLINICALID)
+                            ONCOKBGENECLINICAL.HUGOSYMBOL,
+                            ONCOKBGENECLINICAL.NAME,
+                            ONCOKBGENECLINICAL.ENTREZGENEID,
+                            ONCOKBGENECLINICAL.CURATEDISOFORM,
+                            ONCOKBGENECLINICAL.CURATEDREFSEQ,
+                            ONCOKBGENECLINICAL.ONCOGENE,
+                            ONCOKBGENECLINICAL.TSG,
+                            ONCOKBGENECLINICAL.ONCOKBVARIANTCLINICALID)
                     .values(geneClinical.hugoSymbol(),
                             geneClinical.name(),
                             geneClinical.entrezGeneId(),
@@ -206,9 +204,9 @@ final class OncokbDAOFunctions {
                     .getValue(ONCOKBGENECLINICAL.ID);
 
             for (String geneAlias : geneClinical.geneAliases()) {
-                context.insertInto(ONCOKBGENEALIASCLINICAL,
-                        ONCOKBGENEALIASCLINICAL.GENEALIAS,
-                        ONCOKBGENEALIASCLINICAL.ONCOKBGENECLINICALID).values(geneAlias, idGeneClinical).execute();
+                context.insertInto(ONCOKBGENEALIASCLINICAL, ONCOKBGENEALIASCLINICAL.GENEALIAS, ONCOKBGENEALIASCLINICAL.ONCOKBGENECLINICALID)
+                        .values(geneAlias, idGeneClinical)
+                        .execute();
             }
         }
     }

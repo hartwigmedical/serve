@@ -7,7 +7,6 @@ import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -50,7 +49,7 @@ class TransvarProcessImpl implements TransvarProcess {
         Process process = processBuilder.start();
         if (!process.waitFor(TRANSVAR_TIMEOUT_SEC, TimeUnit.SECONDS)) {
             LOGGER.info("Timeout. '{}' took more than {} {} to execute", command, TRANSVAR_TIMEOUT_SEC, TimeUnit.SECONDS);
-            // We still continue to wait for ever. Assume transvar will eventually succeed.
+            // We still continue to wait forever. Assume transvar will eventually succeed.
             process.waitFor();
         }
 
@@ -168,6 +167,6 @@ class TransvarProcessImpl implements TransvarProcess {
 
     @NotNull
     private static String command(@NotNull ProcessBuilder processBuilder) {
-        return processBuilder.command().stream().collect(Collectors.joining(" "));
+        return String.join(" ", processBuilder.command());
     }
 }

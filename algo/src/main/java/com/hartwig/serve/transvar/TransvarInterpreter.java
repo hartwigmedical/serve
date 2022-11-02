@@ -118,7 +118,7 @@ class TransvarInterpreter {
                         i + mutLength).equals(codonCompatibleAlt)) {
                     boolean match = true;
                     for (int j = 0; j < 3; j++) {
-                        // No match if we find another mismatch outside of the ref->alt range.
+                        // No match if we find another mismatch outside the ref->alt range.
                         if ((j - i >= mutLength || j - i < 0) && !snvMnv.referenceCodon()
                                 .substring(j, j + 1)
                                 .equals(candidateCodon.substring(j, j + 1))) {
@@ -264,7 +264,7 @@ class TransvarInterpreter {
 
             String insertedBases = insDel.insertedSequence();
             hotspots.add(reduceComplexityForComplexInsDel(hotspotBuilder.alt(insertedBases).build()));
-            // For now we only add alternative sequences for insertions of one AA
+            // For now, we only add alternative sequences for insertions of one AA
             if (insertedBases.length() == 3) {
                 for (String candidateAlternativeCodon : insDel.candidateAlternativeCodons()) {
                     assert candidateAlternativeCodon.length() == insertedBases.length();

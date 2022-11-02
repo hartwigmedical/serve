@@ -180,7 +180,7 @@ public class ExonExtractor {
         }
 
         // Extend exonic range to include SPLICE variants.
-        // First exon does not start with a splice region but we don't take this into account since it would not matter downstream anyways.
+        // First exon does not start with a splice region, but we don't take this into account since it would not matter downstream anyway.
         int start = hmfExonRegion.start() - SPLICE_SIZE;
         int end = hmfExonRegion.end() + SPLICE_SIZE;
 

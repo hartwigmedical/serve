@@ -1,12 +1,12 @@
 package com.hartwig.serve.vicc.reader;
 
 import static com.hartwig.serve.common.json.Json.nullableString;
-import static com.hartwig.serve.common.json.Json.optionalArray;
-import static com.hartwig.serve.common.json.Json.optionalNullableString;
-import static com.hartwig.serve.common.json.Json.optionalObject;
 import static com.hartwig.serve.common.json.Json.optionalString;
 import static com.hartwig.serve.common.json.Json.string;
 import static com.hartwig.serve.common.json.Json.stringList;
+import static com.hartwig.serve.vicc.util.ViccJson.optionalOrNullableArray;
+import static com.hartwig.serve.vicc.util.ViccJson.optionalOrNullableObject;
+import static com.hartwig.serve.vicc.util.ViccJson.optionalOrNullableString;
 
 import java.util.List;
 
@@ -83,7 +83,7 @@ final class CivicObjectFactory {
                 .coordinates(coordinates)
                 .sources(createSources(civicObject.getAsJsonArray("sources")))
                 .variantAliases(stringList(civicObject, "variant_aliases"))
-                .variantGroups(createVariantGroups(optionalArray(civicObject, "variant_groups")))
+                .variantGroups(createVariantGroups(optionalOrNullableArray(civicObject, "variant_groups")))
                 .variantTypes(createVariantTypes(civicObject.getAsJsonArray("variant_types")))
                 .hgvsExpressions(stringList(civicObject, "hgvs_expressions"))
                 .evidenceItem(createEvidenceItem(civicObject.getAsJsonArray("evidence_items")))
@@ -138,7 +138,7 @@ final class CivicObjectFactory {
     private static CivicProvisionalValue createProvisionalValue(@NotNull JsonObject provisionalValueObject) {
         ViccDatamodelCheckerFactory.civicProvisionalValueChecker().check(provisionalValueObject);
 
-        JsonObject descriptionObject = optionalObject(provisionalValueObject, "description");
+        JsonObject descriptionObject = optionalOrNullableObject(provisionalValueObject, "description");
         if (descriptionObject == null) {
             return null;
         }
@@ -146,8 +146,8 @@ final class CivicObjectFactory {
         ViccDatamodelCheckerFactory.civicProvisionalValueDescriptionChecker().check(descriptionObject);
 
         return ImmutableCivicProvisionalValue.builder()
-                .revisionId(optionalNullableString(descriptionObject, "revision_id"))
-                .value(optionalNullableString(descriptionObject, "value"))
+                .revisionId(optionalOrNullableString(descriptionObject, "revision_id"))
+                .value(optionalOrNullableString(descriptionObject, "value"))
                 .build();
     }
 
@@ -190,8 +190,8 @@ final class CivicObjectFactory {
                     .name(string(variantObject, "name"))
                     .type(string(variantObject, "type"))
                     .variantTypes(createVariantTypes(variantObject.getAsJsonArray("variant_types")))
-                    .civicActionabilityScore(optionalNullableString(variantObject, "civic_actionability_score"))
-                    .coordinates(createCoordinates(optionalObject(variantObject, "coordinates")))
+                    .civicActionabilityScore(optionalOrNullableString(variantObject, "civic_actionability_score"))
+                    .coordinates(createCoordinates(optionalOrNullableObject(variantObject, "coordinates")))
                     .id(string(variantObject, "id"))
                     .geneId(string(variantObject, "gene_id"))
                     .description(string(variantObject, "description"))
@@ -349,9 +349,9 @@ final class CivicObjectFactory {
         ViccDatamodelCheckerFactory.civicLifecycleActionsChecker().check(lifecycleActionsObject);
 
         return ImmutableCivicLifecycleActions.builder()
-                .lastCommentedOn(createLastCommentedOn(optionalObject(lifecycleActionsObject, "last_commented_on")))
-                .lastModified(createLastModified(optionalObject(lifecycleActionsObject, "last_modified")))
-                .lastReviewed(createLastReviewed(optionalObject(lifecycleActionsObject, "last_reviewed")))
+                .lastCommentedOn(createLastCommentedOn(optionalOrNullableObject(lifecycleActionsObject, "last_commented_on")))
+                .lastModified(createLastModified(optionalOrNullableObject(lifecycleActionsObject, "last_modified")))
+                .lastReviewed(createLastReviewed(optionalOrNullableObject(lifecycleActionsObject, "last_reviewed")))
                 .build();
     }
 
@@ -433,7 +433,7 @@ final class CivicObjectFactory {
         return ImmutableCivicOrganization.builder()
                 .name(optionalString(organizationObject, "name"))
                 .url(optionalString(organizationObject, "url"))
-                .profileImage(createProfileImage(optionalObject(organizationObject, "profile_image")))
+                .profileImage(createProfileImage(optionalOrNullableObject(organizationObject, "profile_image")))
                 .id(optionalString(organizationObject, "id"))
                 .description(optionalString(organizationObject, "description"))
                 .build();

@@ -1,12 +1,12 @@
 package com.hartwig.serve.vicc.reader;
 
 import static com.hartwig.serve.common.json.Json.nullableString;
-import static com.hartwig.serve.common.json.Json.optionalNullableString;
-import static com.hartwig.serve.common.json.Json.optionalObject;
 import static com.hartwig.serve.common.json.Json.optionalString;
-import static com.hartwig.serve.common.json.Json.optionalStringList;
 import static com.hartwig.serve.common.json.Json.string;
 import static com.hartwig.serve.common.json.Json.stringList;
+import static com.hartwig.serve.vicc.util.ViccJson.optionalOrNullableObject;
+import static com.hartwig.serve.vicc.util.ViccJson.optionalOrNullableString;
+import static com.hartwig.serve.vicc.util.ViccJson.optionalStringList;
 
 import java.util.List;
 
@@ -46,7 +46,7 @@ final class MolecularMatchTrialsObjectFactory {
 
         return ImmutableMolecularMatchTrials.builder()
                 .status(string(molecularMatchTrialsObject, "status"))
-                .startDate(optionalNullableString(molecularMatchTrialsObject, "startDate"))
+                .startDate(optionalOrNullableString(molecularMatchTrialsObject, "startDate"))
                 .title(string(molecularMatchTrialsObject, "title"))
                 .briefTitle(nullableString(molecularMatchTrialsObject, "briefTitle"))
                 .studyType(string(molecularMatchTrialsObject, "studyType"))
@@ -54,7 +54,7 @@ final class MolecularMatchTrialsObjectFactory {
                 .score(string(molecularMatchTrialsObject, "_score"))
                 .interventions(createInterventions(molecularMatchTrialsObject.getAsJsonArray("interventions")))
                 .locations(createLocations(molecularMatchTrialsObject.getAsJsonArray("locations")))
-                .overallContact(createOverallContact(optionalObject(molecularMatchTrialsObject, "overallContact")))
+                .overallContact(createOverallContact(optionalOrNullableObject(molecularMatchTrialsObject, "overallContact")))
                 .link(string(molecularMatchTrialsObject, "link"))
                 .phase(string(molecularMatchTrialsObject, "phase"))
                 .tags(createTags(molecularMatchTrialsObject.getAsJsonArray("tags")))
@@ -95,7 +95,7 @@ final class MolecularMatchTrialsObjectFactory {
             locationList.add(ImmutableMolecularMatchTrialsLocation.builder()
                     .status(string(locationObject, "status"))
                     .name(optionalString(locationObject, "name"))
-                    .contact(createContact(optionalObject(locationObject, "contact")))
+                    .contact(createContact(optionalOrNullableObject(locationObject, "contact")))
                     .lastName(optionalString(locationObject, "last_name"))
                     .email(optionalString(locationObject, "email"))
                     .phone(optionalString(locationObject, "phone"))
@@ -104,7 +104,7 @@ final class MolecularMatchTrialsObjectFactory {
                     .emailBackup(optionalString(locationObject, "email_backup"))
                     .phoneBackup(optionalString(locationObject, "phone_backup"))
                     .phoneExtBackup(optionalString(locationObject, "phone_ext_backup"))
-                    .subLocation(createSubLocation(optionalObject(locationObject, "location")))
+                    .subLocation(createSubLocation(optionalOrNullableObject(locationObject, "location")))
                     .street(optionalString(locationObject, "street"))
                     .city(optionalString(locationObject, "city"))
                     .zip(optionalString(locationObject, "zip"))
@@ -118,7 +118,7 @@ final class MolecularMatchTrialsObjectFactory {
                     .created(optionalString(locationObject, "created"))
                     .lastUpdated(optionalString(locationObject, "lastUpdated"))
                     .failedGeocode(optionalString(locationObject, "failedGeocode"))
-                    .geo(createGeo(optionalObject(locationObject, "geo")))
+                    .geo(createGeo(optionalOrNullableObject(locationObject, "geo")))
                     .build());
         }
 
@@ -136,10 +136,10 @@ final class MolecularMatchTrialsObjectFactory {
         return ImmutableMolecularMatchTrialsOverallContact.builder()
                 .name(optionalString(overallContactObject, "name"))
                 .type(optionalString(overallContactObject, "type"))
-                .affiliation(optionalNullableString(overallContactObject, "affiliation"))
+                .affiliation(optionalOrNullableString(overallContactObject, "affiliation"))
                 .lastName(optionalString(overallContactObject, "last_name"))
                 .email(optionalString(overallContactObject, "email"))
-                .phone(optionalNullableString(overallContactObject, "phone"))
+                .phone(optionalOrNullableString(overallContactObject, "phone"))
                 .phoneExt(optionalString(overallContactObject, "phone_ext"))
                 .street(optionalString(overallContactObject, "street"))
                 .city(optionalString(overallContactObject, "city"))

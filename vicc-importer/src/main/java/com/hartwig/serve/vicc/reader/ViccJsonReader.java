@@ -1,13 +1,13 @@
 package com.hartwig.serve.vicc.reader;
 
 import static com.hartwig.serve.common.json.Json.nullableString;
-import static com.hartwig.serve.common.json.Json.optionalArray;
-import static com.hartwig.serve.common.json.Json.optionalNullableString;
-import static com.hartwig.serve.common.json.Json.optionalObject;
 import static com.hartwig.serve.common.json.Json.optionalString;
-import static com.hartwig.serve.common.json.Json.optionalStringList;
 import static com.hartwig.serve.common.json.Json.string;
 import static com.hartwig.serve.common.json.Json.stringList;
+import static com.hartwig.serve.vicc.util.ViccJson.optionalOrNullableArray;
+import static com.hartwig.serve.vicc.util.ViccJson.optionalOrNullableObject;
+import static com.hartwig.serve.vicc.util.ViccJson.optionalOrNullableString;
+import static com.hartwig.serve.vicc.util.ViccJson.optionalStringList;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -182,20 +182,20 @@ public class ViccJsonReader {
                     .biomarkerType(optionalString(featureObject, "biomarker_type"))
                     .referenceName(optionalString(featureObject, "referenceName"))
                     .chromosome(optionalString(featureObject, "chromosome"))
-                    .start(optionalNullableString(featureObject, "start"))
-                    .end(optionalNullableString(featureObject, "end"))
-                    .ref(optionalNullableString(featureObject, "ref"))
-                    .alt(optionalNullableString(featureObject, "alt"))
+                    .start(optionalOrNullableString(featureObject, "start"))
+                    .end(optionalOrNullableString(featureObject, "end"))
+                    .ref(optionalOrNullableString(featureObject, "ref"))
+                    .alt(optionalOrNullableString(featureObject, "alt"))
                     .provenance(optionalStringList(featureObject, "provenance"))
                     .provenanceRule(optionalString(featureObject, "provenance_rule"))
-                    .geneSymbol(optionalNullableString(featureObject, "geneSymbol"))
+                    .geneSymbol(optionalOrNullableString(featureObject, "geneSymbol"))
                     .synonyms(optionalStringList(featureObject, "synonyms"))
                     .entrezId(optionalString(featureObject, "entrez_id"))
-                    .sequenceOntology(createSequenceOntology(optionalObject(featureObject, "sequence_ontology")))
+                    .sequenceOntology(createSequenceOntology(optionalOrNullableObject(featureObject, "sequence_ontology")))
                     .links(optionalStringList(featureObject, "links"))
                     .description(optionalString(featureObject, "description"))
-                    .info(createFeatureInfo(optionalObject(featureObject, "info")))
-                    .attribute(createFeatureAttribute(optionalObject(featureObject, "attributes")))
+                    .info(createFeatureInfo(optionalOrNullableObject(featureObject, "info")))
+                    .attribute(createFeatureAttribute(optionalOrNullableObject(featureObject, "attributes")))
                     .build());
         }
 
@@ -275,14 +275,14 @@ public class ViccJsonReader {
                 .variantNames(optionalStringList(associationObject, "variant_name"))
                 .evidence(createEvidence(associationObject.getAsJsonArray("evidence")))
                 .evidenceLevel(optionalString(associationObject, "evidence_level"))
-                .evidenceLabel(optionalNullableString(associationObject, "evidence_label"))
-                .responseType(optionalNullableString(associationObject, "response_type"))
+                .evidenceLabel(optionalOrNullableString(associationObject, "evidence_label"))
+                .responseType(optionalOrNullableString(associationObject, "response_type"))
                 .drugLabels(optionalString(associationObject, "drug_labels"))
                 .sourceLink(optionalString(associationObject, "source_link"))
                 .publicationUrls(optionalStringList(associationObject, "publication_url"))
-                .phenotype(createPhenotype(optionalObject(associationObject, "phenotype")))
+                .phenotype(createPhenotype(optionalOrNullableObject(associationObject, "phenotype")))
                 .description(string(associationObject, "description"))
-                .environmentalContexts(createEnvironmentalContexts(optionalArray(associationObject, "environmentalContexts")))
+                .environmentalContexts(createEnvironmentalContexts(optionalOrNullableArray(associationObject, "environmentalContexts")))
                 .oncogenic(optionalString(associationObject, "oncogenic"))
                 .build();
     }
@@ -298,7 +298,7 @@ public class ViccJsonReader {
         ViccDatamodelCheckerFactory.evidenceChecker().check(evidenceObject);
 
         return ImmutableEvidence.builder()
-                .info(createEvidenceInfo(optionalObject(evidenceObject, "info")))
+                .info(createEvidenceInfo(optionalOrNullableObject(evidenceObject, "info")))
                 .evidenceType(createEvidenceType(evidenceObject.getAsJsonObject("evidenceType")))
                 .description(nullableString(evidenceObject, "description"))
                 .build();
@@ -341,12 +341,12 @@ public class ViccJsonReader {
             environmentalContextList.add(ImmutableEnvironmentalContext.builder()
                     .term(optionalString(environmentalContextObject, "term"))
                     .description(string(environmentalContextObject, "description"))
-                    .taxonomy(createTaxonomy(optionalObject(environmentalContextObject, "taxonomy")))
+                    .taxonomy(createTaxonomy(optionalOrNullableObject(environmentalContextObject, "taxonomy")))
                     .source(optionalString(environmentalContextObject, "source"))
                     .usanStem(optionalString(environmentalContextObject, "usan_stem"))
                     .approvedCountries(optionalStringList(environmentalContextObject, "approved_countries"))
                     .toxicity(optionalString(environmentalContextObject, "toxicity"))
-                    .id(optionalNullableString(environmentalContextObject, "id"))
+                    .id(optionalOrNullableString(environmentalContextObject, "id"))
                     .build());
         }
         return environmentalContextList;
@@ -378,7 +378,7 @@ public class ViccJsonReader {
         ViccDatamodelCheckerFactory.phenotypeChecker().check(phenotypeObject);
 
         return ImmutablePhenotype.builder()
-                .type(createPhenotypeType(optionalObject(phenotypeObject, "type")))
+                .type(createPhenotypeType(optionalOrNullableObject(phenotypeObject, "type")))
                 .description(string(phenotypeObject, "description"))
                 .family(string(phenotypeObject, "family"))
                 .id(optionalString(phenotypeObject, "id"))

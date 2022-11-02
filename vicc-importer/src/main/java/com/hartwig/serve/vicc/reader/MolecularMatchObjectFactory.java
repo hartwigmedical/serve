@@ -1,13 +1,13 @@
 package com.hartwig.serve.vicc.reader;
 
 import static com.hartwig.serve.common.json.Json.nullableString;
-import static com.hartwig.serve.common.json.Json.optionalArray;
-import static com.hartwig.serve.common.json.Json.optionalNullableString;
-import static com.hartwig.serve.common.json.Json.optionalObject;
 import static com.hartwig.serve.common.json.Json.optionalString;
-import static com.hartwig.serve.common.json.Json.optionalStringList;
 import static com.hartwig.serve.common.json.Json.string;
 import static com.hartwig.serve.common.json.Json.stringList;
+import static com.hartwig.serve.vicc.util.ViccJson.optionalOrNullableArray;
+import static com.hartwig.serve.vicc.util.ViccJson.optionalOrNullableObject;
+import static com.hartwig.serve.vicc.util.ViccJson.optionalOrNullableString;
+import static com.hartwig.serve.vicc.util.ViccJson.optionalStringList;
 
 import java.util.List;
 
@@ -155,12 +155,12 @@ final class MolecularMatchObjectFactory {
                     .transcript(optionalString(mutationObject, "transcript"))
                     .longestTranscript(optionalString(mutationObject, "longestTranscript"))
                     .uniprotTranscript(optionalString(mutationObject, "uniprotTranscript"))
-                    .transcriptConsequences(createTranscriptConsequences(optionalArray(mutationObject, "transcriptConsequence")))
+                    .transcriptConsequences(createTranscriptConsequences(optionalOrNullableArray(mutationObject, "transcriptConsequence")))
                     .parents(createParents(mutationObject.getAsJsonArray("parents")))
-                    .wgsaLocations(createWGSALocations(optionalObject(mutationObject, "wgsaData")))
-                    .wgsaMaps(createWGSAMaps(optionalArray(mutationObject, "wgsaMap")))
-                    .exonsInfo(createExonsInfo(optionalObject(mutationObject, "exonsInfo")))
-                    .fusionData(createFusionData(optionalArray(mutationObject, "fusionData")))
+                    .wgsaLocations(createWGSALocations(optionalOrNullableObject(mutationObject, "wgsaData")))
+                    .wgsaMaps(createWGSAMaps(optionalOrNullableArray(mutationObject, "wgsaMap")))
+                    .exonsInfo(createExonsInfo(optionalOrNullableObject(mutationObject, "exonsInfo")))
+                    .fusionData(createFusionData(optionalOrNullableArray(mutationObject, "fusionData")))
                     .mutationTypes(stringList(mutationObject, "mutation_type"))
                     .sources(stringList(mutationObject, "sources"))
                     .synonyms(stringList(mutationObject, "synonyms"))
@@ -198,7 +198,7 @@ final class MolecularMatchObjectFactory {
                     .transcript(string(transcriptConsequenceObject, "transcript"))
                     .strand(string(transcriptConsequenceObject, "strand"))
                     .cdna(optionalString(transcriptConsequenceObject, "cdna"))
-                    .aminoAcidChange(optionalNullableString(transcriptConsequenceObject, "amino_acid_change"))
+                    .aminoAcidChange(optionalOrNullableString(transcriptConsequenceObject, "amino_acid_change"))
                     .intronNumber(nullableString(transcriptConsequenceObject, "intronNumber"))
                     .exonNumbers(optionalStringList(transcriptConsequenceObject, "exonNumber"))
                     .suppress(string(transcriptConsequenceObject, "suppress"))
@@ -330,47 +330,47 @@ final class MolecularMatchObjectFactory {
         ViccDatamodelCheckerFactory.molecularMatchExonBoundariesChecker().check(exonBoundariesObject);
 
         return ImmutableMolecularMatchExonBoundaries.builder()
-                .exon1(createMolecularPosition(optionalObject(exonBoundariesObject, "1")))
-                .exon2(createMolecularPosition(optionalObject(exonBoundariesObject, "2")))
-                .exon3(createMolecularPosition(optionalObject(exonBoundariesObject, "3")))
-                .exon4(createMolecularPosition(optionalObject(exonBoundariesObject, "4")))
-                .exon5(createMolecularPosition(optionalObject(exonBoundariesObject, "5")))
-                .exon6(createMolecularPosition(optionalObject(exonBoundariesObject, "6")))
-                .exon7(createMolecularPosition(optionalObject(exonBoundariesObject, "7")))
-                .exon8(createMolecularPosition(optionalObject(exonBoundariesObject, "8")))
-                .exon9(createMolecularPosition(optionalObject(exonBoundariesObject, "9")))
-                .exon10(createMolecularPosition(optionalObject(exonBoundariesObject, "10")))
-                .exon11(createMolecularPosition(optionalObject(exonBoundariesObject, "11")))
-                .exon12(createMolecularPosition(optionalObject(exonBoundariesObject, "12")))
-                .exon13(createMolecularPosition(optionalObject(exonBoundariesObject, "13")))
-                .exon14(createMolecularPosition(optionalObject(exonBoundariesObject, "14")))
-                .exon15(createMolecularPosition(optionalObject(exonBoundariesObject, "15")))
-                .exon16(createMolecularPosition(optionalObject(exonBoundariesObject, "16")))
-                .exon17(createMolecularPosition(optionalObject(exonBoundariesObject, "17")))
-                .exon18(createMolecularPosition(optionalObject(exonBoundariesObject, "18")))
-                .exon19(createMolecularPosition(optionalObject(exonBoundariesObject, "19")))
-                .exon20(createMolecularPosition(optionalObject(exonBoundariesObject, "20")))
-                .exon21(createMolecularPosition(optionalObject(exonBoundariesObject, "21")))
-                .exon22(createMolecularPosition(optionalObject(exonBoundariesObject, "22")))
-                .exon23(createMolecularPosition(optionalObject(exonBoundariesObject, "23")))
-                .exon24(createMolecularPosition(optionalObject(exonBoundariesObject, "24")))
-                .exon25(createMolecularPosition(optionalObject(exonBoundariesObject, "25")))
-                .exon26(createMolecularPosition(optionalObject(exonBoundariesObject, "26")))
-                .exon27(createMolecularPosition(optionalObject(exonBoundariesObject, "27")))
-                .exon28(createMolecularPosition(optionalObject(exonBoundariesObject, "28")))
-                .exon29(createMolecularPosition(optionalObject(exonBoundariesObject, "29")))
-                .exon30(createMolecularPosition(optionalObject(exonBoundariesObject, "30")))
-                .exon31(createMolecularPosition(optionalObject(exonBoundariesObject, "31")))
-                .exon32(createMolecularPosition(optionalObject(exonBoundariesObject, "32")))
-                .exon33(createMolecularPosition(optionalObject(exonBoundariesObject, "33")))
-                .exon34(createMolecularPosition(optionalObject(exonBoundariesObject, "34")))
-                .exon35(createMolecularPosition(optionalObject(exonBoundariesObject, "35")))
-                .exon36(createMolecularPosition(optionalObject(exonBoundariesObject, "36")))
-                .exon37(createMolecularPosition(optionalObject(exonBoundariesObject, "37")))
-                .exon38(createMolecularPosition(optionalObject(exonBoundariesObject, "38")))
-                .exon39(createMolecularPosition(optionalObject(exonBoundariesObject, "39")))
-                .exon40(createMolecularPosition(optionalObject(exonBoundariesObject, "40")))
-                .exon41(createMolecularPosition(optionalObject(exonBoundariesObject, "41")))
+                .exon1(createMolecularPosition(optionalOrNullableObject(exonBoundariesObject, "1")))
+                .exon2(createMolecularPosition(optionalOrNullableObject(exonBoundariesObject, "2")))
+                .exon3(createMolecularPosition(optionalOrNullableObject(exonBoundariesObject, "3")))
+                .exon4(createMolecularPosition(optionalOrNullableObject(exonBoundariesObject, "4")))
+                .exon5(createMolecularPosition(optionalOrNullableObject(exonBoundariesObject, "5")))
+                .exon6(createMolecularPosition(optionalOrNullableObject(exonBoundariesObject, "6")))
+                .exon7(createMolecularPosition(optionalOrNullableObject(exonBoundariesObject, "7")))
+                .exon8(createMolecularPosition(optionalOrNullableObject(exonBoundariesObject, "8")))
+                .exon9(createMolecularPosition(optionalOrNullableObject(exonBoundariesObject, "9")))
+                .exon10(createMolecularPosition(optionalOrNullableObject(exonBoundariesObject, "10")))
+                .exon11(createMolecularPosition(optionalOrNullableObject(exonBoundariesObject, "11")))
+                .exon12(createMolecularPosition(optionalOrNullableObject(exonBoundariesObject, "12")))
+                .exon13(createMolecularPosition(optionalOrNullableObject(exonBoundariesObject, "13")))
+                .exon14(createMolecularPosition(optionalOrNullableObject(exonBoundariesObject, "14")))
+                .exon15(createMolecularPosition(optionalOrNullableObject(exonBoundariesObject, "15")))
+                .exon16(createMolecularPosition(optionalOrNullableObject(exonBoundariesObject, "16")))
+                .exon17(createMolecularPosition(optionalOrNullableObject(exonBoundariesObject, "17")))
+                .exon18(createMolecularPosition(optionalOrNullableObject(exonBoundariesObject, "18")))
+                .exon19(createMolecularPosition(optionalOrNullableObject(exonBoundariesObject, "19")))
+                .exon20(createMolecularPosition(optionalOrNullableObject(exonBoundariesObject, "20")))
+                .exon21(createMolecularPosition(optionalOrNullableObject(exonBoundariesObject, "21")))
+                .exon22(createMolecularPosition(optionalOrNullableObject(exonBoundariesObject, "22")))
+                .exon23(createMolecularPosition(optionalOrNullableObject(exonBoundariesObject, "23")))
+                .exon24(createMolecularPosition(optionalOrNullableObject(exonBoundariesObject, "24")))
+                .exon25(createMolecularPosition(optionalOrNullableObject(exonBoundariesObject, "25")))
+                .exon26(createMolecularPosition(optionalOrNullableObject(exonBoundariesObject, "26")))
+                .exon27(createMolecularPosition(optionalOrNullableObject(exonBoundariesObject, "27")))
+                .exon28(createMolecularPosition(optionalOrNullableObject(exonBoundariesObject, "28")))
+                .exon29(createMolecularPosition(optionalOrNullableObject(exonBoundariesObject, "29")))
+                .exon30(createMolecularPosition(optionalOrNullableObject(exonBoundariesObject, "30")))
+                .exon31(createMolecularPosition(optionalOrNullableObject(exonBoundariesObject, "31")))
+                .exon32(createMolecularPosition(optionalOrNullableObject(exonBoundariesObject, "32")))
+                .exon33(createMolecularPosition(optionalOrNullableObject(exonBoundariesObject, "33")))
+                .exon34(createMolecularPosition(optionalOrNullableObject(exonBoundariesObject, "34")))
+                .exon35(createMolecularPosition(optionalOrNullableObject(exonBoundariesObject, "35")))
+                .exon36(createMolecularPosition(optionalOrNullableObject(exonBoundariesObject, "36")))
+                .exon37(createMolecularPosition(optionalOrNullableObject(exonBoundariesObject, "37")))
+                .exon38(createMolecularPosition(optionalOrNullableObject(exonBoundariesObject, "38")))
+                .exon39(createMolecularPosition(optionalOrNullableObject(exonBoundariesObject, "39")))
+                .exon40(createMolecularPosition(optionalOrNullableObject(exonBoundariesObject, "40")))
+                .exon41(createMolecularPosition(optionalOrNullableObject(exonBoundariesObject, "41")))
                 .build();
     }
 
@@ -410,14 +410,14 @@ final class MolecularMatchObjectFactory {
                     .aCoords(optionalStringList(fusionDataObject, "Acoord"))
                     .aTranscripts(optionalStringList(fusionDataObject, "Atx"))
                     .aOrientations(optionalStringList(fusionDataObject, "Aori"))
-                    .aGenomicRegions(createFusionGenomicRegions(optionalArray(fusionDataObject, "Agreg")))
+                    .aGenomicRegions(createFusionGenomicRegions(optionalOrNullableArray(fusionDataObject, "Agreg")))
                     .bChromosomes(optionalStringList(fusionDataObject, "Bchr"))
                     .bBands(optionalStringList(fusionDataObject, "Bband"))
                     .bGenes(optionalStringList(fusionDataObject, "Bgene"))
                     .bCoords(optionalStringList(fusionDataObject, "Bcoord"))
                     .bTranscripts(optionalStringList(fusionDataObject, "Btx"))
                     .bOrientations(optionalStringList(fusionDataObject, "Bori"))
-                    .bGenomicRegions(createFusionGenomicRegions(optionalArray(fusionDataObject, "Bgreg")))
+                    .bGenomicRegions(createFusionGenomicRegions(optionalOrNullableArray(fusionDataObject, "Bgreg")))
                     .inserts(optionalStringList(fusionDataObject, "ins"))
                     .paper(optionalString(fusionDataObject, "Paper"))
                     .build());
@@ -674,8 +674,8 @@ final class MolecularMatchObjectFactory {
                 .raw(optionalString(astObject, "raw"))
                 .value(optionalString(astObject, "value"))
                 .operator(optionalString(astObject, "operator"))
-                .left(createAstLeft(optionalObject(astObject, "left")))
-                .right(createAstRight(optionalObject(astObject, "right")))
+                .left(createAstLeft(optionalOrNullableObject(astObject, "left")))
+                .right(createAstRight(optionalOrNullableObject(astObject, "right")))
                 .build();
     }
 
@@ -692,8 +692,8 @@ final class MolecularMatchObjectFactory {
                 .raw(optionalString(astLeftObject, "raw"))
                 .value(optionalString(astLeftObject, "value"))
                 .operator(optionalString(astLeftObject, "operator"))
-                .left(createAstLeftLeft(optionalObject(astLeftObject, "left")))
-                .right(createAstLeftRight(optionalObject(astLeftObject, "right")))
+                .left(createAstLeftLeft(optionalOrNullableObject(astLeftObject, "left")))
+                .right(createAstLeftRight(optionalOrNullableObject(astLeftObject, "right")))
                 .build();
     }
 
@@ -744,8 +744,8 @@ final class MolecularMatchObjectFactory {
                 .raw(optionalString(astRightObject, "raw"))
                 .value(optionalString(astRightObject, "value"))
                 .operator(optionalString(astRightObject, "operator"))
-                .left(createAstRightLeft(optionalObject(astRightObject, "left")))
-                .right(createAstRightRight(optionalObject(astRightObject, "right")))
+                .left(createAstRightLeft(optionalOrNullableObject(astRightObject, "left")))
+                .right(createAstRightRight(optionalOrNullableObject(astRightObject, "right")))
                 .build();
     }
 
@@ -826,7 +826,7 @@ final class MolecularMatchObjectFactory {
                     .name(optionalString(classificationObject, "name"))
                     .geneSymbol(optionalString(classificationObject, "geneSymbol"))
                     .expandGeneSearch(optionalString(classificationObject, "expandGeneSearch"))
-                    .transcript(optionalNullableString(classificationObject, "transcript"))
+                    .transcript(optionalOrNullableString(classificationObject, "transcript"))
                     .transcripts(optionalStringList(classificationObject, "transcripts"))
                     .chromosomes(optionalStringList(classificationObject, "Chr"))
                     .starts(optionalStringList(classificationObject, "Start"))
@@ -837,9 +837,9 @@ final class MolecularMatchObjectFactory {
                     .exons(optionalStringList(classificationObject, "Exon"))
                     .exonicFuncs(optionalStringList(classificationObject, "ExonicFunc"))
                     .classification(string(classificationObject, "classification"))
-                    .classificationOverride(optionalNullableString(classificationObject, "classificationOverride"))
+                    .classificationOverride(optionalOrNullableString(classificationObject, "classificationOverride"))
                     .pathology(optionalStringList(classificationObject, "pathology"))
-                    .copyNumberType(optionalNullableString(classificationObject, "copyNumberType"))
+                    .copyNumberType(optionalOrNullableString(classificationObject, "copyNumberType"))
                     .drugsApprovedOnLabelCount(optionalString(classificationObject, "drugsApprovedOnLabelCount"))
                     .drugsApprovedOffLabelCount(optionalString(classificationObject, "drugsApprovedOffLabelCount"))
                     .drugsExperimentalCount(optionalString(classificationObject, "drugsExperimentalCount"))
@@ -849,7 +849,7 @@ final class MolecularMatchObjectFactory {
                     .dbSNPs(optionalStringList(classificationObject, "dbSNP"))
                     .cosmicIds(optionalStringList(classificationObject, "COSMIC_ID"))
                     .popFreqMaxes(optionalStringList(classificationObject, "PopFreqMax"))
-                    .parents(createParents(optionalArray(classificationObject, "parents")))
+                    .parents(createParents(optionalOrNullableArray(classificationObject, "parents")))
                     .rootTerm(optionalString(classificationObject, "rootTerm"))
                     .alias(optionalString(classificationObject, "alias"))
                     .priority(optionalString(classificationObject, "priority"))
@@ -874,7 +874,7 @@ final class MolecularMatchObjectFactory {
 
             parentList.add(ImmutableMolecularMatchParent.builder()
                     .name(string(parentObject, "name"))
-                    .type(optionalNullableString(parentObject, "type"))
+                    .type(optionalOrNullableString(parentObject, "type"))
                     .actionableParent(optionalString(parentObject, "actionableParent"))
                     .transcripts(stringList(parentObject, "transcripts"))
                     .build());

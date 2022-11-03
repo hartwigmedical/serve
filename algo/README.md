@@ -385,8 +385,8 @@ Knowledge extraction is performed on a per-knowledgebase level after which all e
   
 ## Version History and Download Links
 - Upcoming
-  - Replace gene (string) with "Gene Alteration" (mutation annotated with gene, gene role and protein effect)
   - Major changes to datamodel in general (different packages, different classes etc)
+  - Known events are annotated with the following additional data: geneRole, proteinEffect, associatedWithDrugResistance (y/n)
 - [1.12](https://github.com/hartwigmedical/hmftools/releases/tag/serve-v1.12)
   - Support for generating a mySQL database
   - Support for adding the relevant treatment approaches to the output (which contains only drug classes when the source is CKB)

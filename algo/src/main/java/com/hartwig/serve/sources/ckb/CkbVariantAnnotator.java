@@ -50,7 +50,7 @@ final class CkbVariantAnnotator {
         for (KnownHotspot hotspot : hotspots) {
             annotated.add(ImmutableKnownHotspot.builder()
                     .from(hotspot)
-                    .geneRole(resolveGeneRole(variant.gene()))
+                    .geneRole(resolveGeneRole(variant))
                     .proteinEffect(resolveProteinEffect(variant))
                     .associatedWithDrugResistance(resolveAssociatedWithDrugResistance(variant))
                     .build());
@@ -64,7 +64,7 @@ final class CkbVariantAnnotator {
         for (KnownCodon codon : codons) {
             annotated.add(ImmutableKnownCodon.builder()
                     .from(codon)
-                    .geneRole(resolveGeneRole(variant.gene()))
+                    .geneRole(resolveGeneRole(variant))
                     .proteinEffect(resolveProteinEffect(variant))
                     .associatedWithDrugResistance(resolveAssociatedWithDrugResistance(variant))
                     .build());
@@ -78,7 +78,7 @@ final class CkbVariantAnnotator {
         for (KnownExon exon : exons) {
             annotated.add(ImmutableKnownExon.builder()
                     .from(exon)
-                    .geneRole(resolveGeneRole(variant.gene()))
+                    .geneRole(resolveGeneRole(variant))
                     .proteinEffect(resolveProteinEffect(variant))
                     .associatedWithDrugResistance(resolveAssociatedWithDrugResistance(variant))
                     .build());
@@ -92,7 +92,7 @@ final class CkbVariantAnnotator {
         for (KnownCopyNumber copyNumber : copyNumbers) {
             annotated.add(ImmutableKnownCopyNumber.builder()
                     .from(copyNumber)
-                    .geneRole(resolveGeneRole(variant.gene()))
+                    .geneRole(resolveGeneRole(variant))
                     .proteinEffect(resolveProteinEffect(variant))
                     .associatedWithDrugResistance(resolveAssociatedWithDrugResistance(variant))
                     .build());
@@ -114,7 +114,12 @@ final class CkbVariantAnnotator {
     }
 
     @NotNull
-    private static GeneRole resolveGeneRole(@NotNull Gene gene) {
+    private static GeneRole resolveGeneRole(@NotNull Variant variant) {
+        Gene gene = variant.gene();
+        if (gene == null) {
+            throw new IllegalStateException("Cannot resolve gene role for variant with no gene: " + variant);
+        }
+
         String role = gene.geneRole().toLowerCase();
         if (role.contains("both")) {
             return GeneRole.BOTH;

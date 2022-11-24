@@ -2,6 +2,7 @@ package com.hartwig.serve.datamodel.refgenome;
 
 import org.jetbrains.annotations.NotNull;
 
+// TODO Rename to avoid annoying name clashing with downstream classes in packages depending on SERVE
 public enum RefGenomeVersion {
     V37("37"),
     V38("38");

@@ -17,7 +17,7 @@ import com.hartwig.serve.common.ensemblcache.EnsemblDataLoader;
 import com.hartwig.serve.common.knownfusion.KnownFusionCache;
 import com.hartwig.serve.common.knownfusion.KnownFusionCacheLoader;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.ExtractionResultWriter;
 import com.hartwig.serve.extraction.hotspot.ProteinResolverFactory;
@@ -78,7 +78,7 @@ public class CkbExtractorTestApp {
         LOGGER.info(" Read {} known fusions", fusionCache.knownFusions().size());
 
         LOGGER.info(" Reading ensembl data cache from {}", config.ensemblDataDir38());
-        EnsemblDataCache ensemblDataCache = EnsemblDataLoader.load(config.ensemblDataDir38(), RefGenomeVersion.V38);
+        EnsemblDataCache ensemblDataCache = EnsemblDataLoader.load(config.ensemblDataDir38(), RefGenome.V38);
         LOGGER.info("  Loaded ensembl data cache from {}", ensemblDataCache);
 
         return ImmutableRefGenomeResource.builder()

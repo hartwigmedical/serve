@@ -1,9 +1,8 @@
-package com.hartwig.serve.datamodel.refgenome;
+package com.hartwig.serve.datamodel;
 
 import org.jetbrains.annotations.NotNull;
 
-// TODO Rename to avoid annoying name clashing with downstream classes in packages depending on SERVE
-public enum RefGenomeVersion {
+public enum RefGenome {
     V37("37"),
     V38("38");
 
@@ -12,7 +11,7 @@ public enum RefGenomeVersion {
 
     private static final String GZIP_EXTENSION = ".gz";
 
-    RefGenomeVersion(@NotNull final String identifier) {
+    RefGenome(@NotNull final String identifier) {
         this.identifier = identifier;
     }
 

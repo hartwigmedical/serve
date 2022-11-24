@@ -8,7 +8,6 @@ import com.hartwig.serve.datamodel.gene.KnownCopyNumber;
 import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.range.KnownCodon;
 import com.hartwig.serve.datamodel.range.KnownExon;
-import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 import com.hartwig.serve.datamodel.serialization.KnownCodonFile;
 import com.hartwig.serve.datamodel.serialization.KnownCopyNumberFile;
 import com.hartwig.serve.datamodel.serialization.KnownExonFile;
@@ -27,26 +26,26 @@ public final class KnownEventsLoader {
     }
 
     @NotNull
-    public static KnownEvents readFromDir(@NotNull String knownEventDir, @NotNull RefGenomeVersion refGenomeVersion) throws IOException {
-        LOGGER.info("Loading SERVE known files from {} using ref genome version '{}'", knownEventDir, refGenomeVersion);
+    public static KnownEvents readFromDir(@NotNull String knownEventDir, @NotNull RefGenome refGenome) throws IOException {
+        LOGGER.info("Loading SERVE known files from {} using ref genome version '{}'", knownEventDir, refGenome);
 
-        String knownHotspotTsv = KnownHotspotFile.knownHotspotTsvPath(knownEventDir, refGenomeVersion);
+        String knownHotspotTsv = KnownHotspotFile.knownHotspotTsvPath(knownEventDir, refGenome);
         List<KnownHotspot> hotspots = KnownHotspotFile.read(knownHotspotTsv);
         LOGGER.info(" Loaded {} known hotspots from {}", hotspots.size(), knownHotspotTsv);
 
-        String knownCodonTsv = KnownCodonFile.knownCodonTsvPath(knownEventDir, refGenomeVersion);
+        String knownCodonTsv = KnownCodonFile.knownCodonTsvPath(knownEventDir, refGenome);
         List<KnownCodon> codons = KnownCodonFile.read(knownCodonTsv);
         LOGGER.info(" Loaded {} known codon from {}", codons.size(), knownCodonTsv);
 
-        String knownExonTsv = KnownExonFile.knownExonTsvPath(knownEventDir, refGenomeVersion);
+        String knownExonTsv = KnownExonFile.knownExonTsvPath(knownEventDir, refGenome);
         List<KnownExon> exons = KnownExonFile.read(knownExonTsv);
         LOGGER.info(" Loaded {} known exons from {}", exons.size(), knownExonTsv);
 
-        String knownCopyNumberTsv = KnownCopyNumberFile.knownCopyNumberTsvPath(knownEventDir, refGenomeVersion);
+        String knownCopyNumberTsv = KnownCopyNumberFile.knownCopyNumberTsvPath(knownEventDir, refGenome);
         List<KnownCopyNumber> copyNumbers = KnownCopyNumberFile.read(knownCopyNumberTsv);
         LOGGER.info(" Loaded {} known gene copy numbers from {}", copyNumbers.size(), knownCopyNumberTsv);
 
-        String knownFusionTsv = KnownFusionFile.knownFusionTsvPath(knownEventDir, refGenomeVersion);
+        String knownFusionTsv = KnownFusionFile.knownFusionTsvPath(knownEventDir, refGenome);
         List<KnownFusion> fusions = KnownFusionFile.read(knownFusionTsv);
         LOGGER.info(" Loaded {} known fusions from {}", fusions.size(), knownFusionTsv);
 

@@ -1,6 +1,6 @@
 package com.hartwig.serve.common;
 
-import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.RefGenome;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,13 +16,13 @@ public final class RefGenomeFunctions {
     }
 
     @NotNull
-    public static String versionedChromosome(@NotNull String chromosome, @NotNull RefGenomeVersion refGenomeVersion) {
-        if (refGenomeVersion == RefGenomeVersion.V38) {
+    public static String versionedChromosome(@NotNull String chromosome, @NotNull RefGenome refGenome) {
+        if (refGenome == RefGenome.V38) {
             return RefGenomeFunctions.enforceChrPrefix(chromosome);
-        } else if (refGenomeVersion == RefGenomeVersion.V37) {
+        } else if (refGenome == RefGenome.V37) {
             return RefGenomeFunctions.stripChrPrefix(chromosome);
         } else {
-            LOGGER.warn("Unrecognized ref genome version for making chromosome ref genome specific: {}", refGenomeVersion);
+            LOGGER.warn("Unrecognized ref genome version for making chromosome ref genome specific: {}", refGenome);
             return chromosome;
         }
     }

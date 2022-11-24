@@ -2,6 +2,7 @@ package com.hartwig.serve.extraction;
 
 import java.util.Set;
 
+import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.datamodel.characteristic.ActionableCharacteristic;
 import com.hartwig.serve.datamodel.fusion.ActionableFusion;
 import com.hartwig.serve.datamodel.fusion.KnownFusion;
@@ -13,7 +14,6 @@ import com.hartwig.serve.datamodel.immuno.ActionableHLA;
 import com.hartwig.serve.datamodel.range.ActionableRange;
 import com.hartwig.serve.datamodel.range.KnownCodon;
 import com.hartwig.serve.datamodel.range.KnownExon;
-import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 import com.hartwig.serve.extraction.events.EventInterpretation;
 
 import org.immutables.value.Value;
@@ -25,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
 public abstract class ExtractionResult {
 
     @NotNull
-    public abstract RefGenomeVersion refGenomeVersion();
+    public abstract RefGenome refGenomeVersion();
 
     @NotNull
     public abstract Set<EventInterpretation> eventInterpretations();

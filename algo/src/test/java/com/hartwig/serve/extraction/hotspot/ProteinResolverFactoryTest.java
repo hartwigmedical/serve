@@ -6,7 +6,7 @@ import java.io.FileNotFoundException;
 
 import com.google.common.io.Resources;
 import com.hartwig.serve.EnsemblDataCacheTestFactory;
-import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.RefGenome;
 
 import org.junit.Test;
 
@@ -16,7 +16,7 @@ public class ProteinResolverFactoryTest {
 
     @Test
     public void canCreateTransvarResolver() throws FileNotFoundException {
-        assertNotNull(ProteinResolverFactory.transvarWithRefGenome(RefGenomeVersion.V37,
+        assertNotNull(ProteinResolverFactory.transvarWithRefGenome(RefGenome.V37,
                 REF_GENOME_FASTA_FILE,
                 EnsemblDataCacheTestFactory.create37()));
     }

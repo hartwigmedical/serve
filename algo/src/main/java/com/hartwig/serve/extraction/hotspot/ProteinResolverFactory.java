@@ -7,7 +7,7 @@ import java.util.Set;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.common.ensemblcache.EnsemblDataCache;
-import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.transvar.Transvar;
 
 import org.jetbrains.annotations.NotNull;
@@ -19,9 +19,9 @@ public final class ProteinResolverFactory {
     }
 
     @NotNull
-    public static ProteinResolver transvarWithRefGenome(@NotNull RefGenomeVersion refGenomeVersion, @NotNull String refGenomeFastaFile,
+    public static ProteinResolver transvarWithRefGenome(@NotNull RefGenome refGenome, @NotNull String refGenomeFastaFile,
             @NotNull EnsemblDataCache ensemblDataCache) throws FileNotFoundException {
-        return Transvar.withRefGenome(refGenomeVersion, refGenomeFastaFile, ensemblDataCache);
+        return Transvar.withRefGenome(refGenome, refGenomeFastaFile, ensemblDataCache);
     }
 
     @NotNull

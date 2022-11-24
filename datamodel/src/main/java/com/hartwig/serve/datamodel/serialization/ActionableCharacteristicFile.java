@@ -9,12 +9,12 @@ import java.util.StringJoiner;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
+import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.datamodel.characteristic.ActionableCharacteristic;
 import com.hartwig.serve.datamodel.characteristic.ActionableCharacteristicComparator;
 import com.hartwig.serve.datamodel.characteristic.ImmutableActionableCharacteristic;
 import com.hartwig.serve.datamodel.characteristic.TumorCharacteristicCutoffType;
 import com.hartwig.serve.datamodel.characteristic.TumorCharacteristicType;
-import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 import com.hartwig.serve.datamodel.serialization.util.ActionableFileUtil;
 import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
@@ -31,8 +31,8 @@ public final class ActionableCharacteristicFile {
 
     @NotNull
     public static String actionableCharacteristicTsvPath(@NotNull String serveActionabilityDir,
-            @NotNull RefGenomeVersion refGenomeVersion) {
-        return refGenomeVersion.addVersionToFilePath(serveActionabilityDir + File.separator + ACTIONABLE_CHARACTERISTIC_TSV);
+            @NotNull RefGenome refGenome) {
+        return refGenome.addVersionToFilePath(serveActionabilityDir + File.separator + ACTIONABLE_CHARACTERISTIC_TSV);
     }
 
     public static void write(@NotNull String actionableCharacteristicTsv,

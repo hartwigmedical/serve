@@ -10,7 +10,7 @@ import com.hartwig.serve.datamodel.ActionableEvents;
 import com.hartwig.serve.datamodel.ActionableEventsLoader;
 import com.hartwig.serve.datamodel.KnownEvents;
 import com.hartwig.serve.datamodel.KnownEventsLoader;
-import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.extraction.events.EventInterpretation;
 import com.hartwig.serve.extraction.events.EventInterpretationFile;
 
@@ -35,9 +35,9 @@ public class LoadServeDatabase {
         CommandLine cmd = new DefaultParser().parse(options, args);
 
         String serveActionabilityDir = nonOptionalDir(cmd, SERVE_ACTIONABILITY_DIRECTORY);
-        RefGenomeVersion refGenomeVersion = resolveRefGenomeVersion(nonOptionalValue(cmd, REF_GENOME_VERSION));
-        ActionableEvents actionableEvents = ActionableEventsLoader.readFromDir(serveActionabilityDir, refGenomeVersion);
-        KnownEvents knownEvents = KnownEventsLoader.readFromDir(serveActionabilityDir, refGenomeVersion);
+        RefGenome refGenome = resolveRefGenomeVersion(nonOptionalValue(cmd, REF_GENOME_VERSION));
+        ActionableEvents actionableEvents = ActionableEventsLoader.readFromDir(serveActionabilityDir, refGenome);
+        KnownEvents knownEvents = KnownEventsLoader.readFromDir(serveActionabilityDir, refGenome);
         List<EventInterpretation> eventInterpretation =
                 EventInterpretationFile.read(EventInterpretationFile.eventInterpretationTsv(serveActionabilityDir));
 
@@ -91,11 +91,11 @@ public class LoadServeDatabase {
     }
 
     @NotNull
-    private static RefGenomeVersion resolveRefGenomeVersion(@NotNull String version) {
-        if (version.equals(RefGenomeVersion.V37.toString()) || version.equals("37")) {
-            return RefGenomeVersion.V37;
-        } else if (version.equals(RefGenomeVersion.V38.toString()) || version.equals("38")) {
-            return RefGenomeVersion.V38;
+    private static RefGenome resolveRefGenomeVersion(@NotNull String version) {
+        if (version.equals(RefGenome.V37.toString()) || version.equals("37")) {
+            return RefGenome.V37;
+        } else if (version.equals(RefGenome.V38.toString()) || version.equals("38")) {
+            return RefGenome.V38;
         }
 
         throw new IllegalArgumentException("Cannot resolve ref genome version: " + version);

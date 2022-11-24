@@ -11,7 +11,7 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import com.hartwig.serve.common.RefGenomeFunctions;
 import com.hartwig.serve.common.ensemblcache.Strand;
-import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.extraction.hotspot.Hotspot;
 import com.hartwig.serve.extraction.hotspot.ImmutableHotspot;
 import com.hartwig.serve.transvar.datamodel.TransvarAnnotation;
@@ -37,18 +37,18 @@ class TransvarInterpreter {
     private static final Logger LOGGER = LogManager.getLogger(TransvarInterpreter.class);
 
     @NotNull
-    private final RefGenomeVersion refGenomeVersion;
+    private final RefGenome refGenome;
     @NotNull
     private final IndexedFastaSequenceFile refGenomeFasta;
 
     @NotNull
-    static TransvarInterpreter withRefGenome(@NotNull RefGenomeVersion refGenomeVersion, @NotNull String refGenomeFastaFile)
+    static TransvarInterpreter withRefGenome(@NotNull RefGenome refGenome, @NotNull String refGenomeFastaFile)
             throws FileNotFoundException {
-        return new TransvarInterpreter(refGenomeVersion, new IndexedFastaSequenceFile(new File(refGenomeFastaFile)));
+        return new TransvarInterpreter(refGenome, new IndexedFastaSequenceFile(new File(refGenomeFastaFile)));
     }
 
-    private TransvarInterpreter(@NotNull final RefGenomeVersion refGenomeVersion, @NotNull final IndexedFastaSequenceFile refGenomeFasta) {
-        this.refGenomeVersion = refGenomeVersion;
+    private TransvarInterpreter(@NotNull final RefGenome refGenome, @NotNull final IndexedFastaSequenceFile refGenomeFasta) {
+        this.refGenome = refGenome;
         this.refGenomeFasta = refGenomeFasta;
     }
 
@@ -464,12 +464,12 @@ class TransvarInterpreter {
 
     @NotNull
     private String refSequence(@NotNull String chromosome, int start, int end) {
-        String versionedChromosome = RefGenomeFunctions.versionedChromosome(chromosome, refGenomeVersion);
+        String versionedChromosome = RefGenomeFunctions.versionedChromosome(chromosome, refGenome);
         return refGenomeFasta.getSubsequenceAt(versionedChromosome, start, end).getBaseString();
     }
 
     @NotNull
     private ImmutableHotspot.Builder withRefBasedChromosome(@NotNull String chromosome) {
-        return ImmutableHotspot.builder().chromosome(RefGenomeFunctions.versionedChromosome(chromosome, refGenomeVersion));
+        return ImmutableHotspot.builder().chromosome(RefGenomeFunctions.versionedChromosome(chromosome, refGenome));
     }
 }

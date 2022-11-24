@@ -9,7 +9,7 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.common.ensemblcache.EnsemblDataCache;
-import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.extraction.hotspot.Hotspot;
 import com.hartwig.serve.extraction.hotspot.ProteinResolver;
 import com.hartwig.serve.extraction.util.EnsemblFunctions;
@@ -36,10 +36,10 @@ public class Transvar implements ProteinResolver {
     private final Set<String> unresolvedProteinAnnotations = Sets.newHashSet();
 
     @NotNull
-    public static Transvar withRefGenome(@NotNull RefGenomeVersion refGenomeVersion, @NotNull String refGenomeFastaFile,
+    public static Transvar withRefGenome(@NotNull RefGenome refGenome, @NotNull String refGenomeFastaFile,
             @NotNull EnsemblDataCache ensemblDataCache) throws FileNotFoundException {
-        return new Transvar(new TransvarProcessImpl(refGenomeVersion, refGenomeFastaFile),
-                TransvarInterpreter.withRefGenome(refGenomeVersion, refGenomeFastaFile),
+        return new Transvar(new TransvarProcessImpl(refGenome, refGenomeFastaFile),
+                TransvarInterpreter.withRefGenome(refGenome, refGenomeFastaFile),
                 ensemblDataCache);
     }
 
@@ -153,7 +153,6 @@ public class Transvar implements ProteinResolver {
             return canonicalRecord;
         }
 
-        assert bestRecord != null;
         return bestRecord;
     }
 }

@@ -12,7 +12,7 @@ import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.common.classification.EventClassifierConfig;
 import com.hartwig.serve.curation.DoidLookup;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.extraction.ExtractionFunctions;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.iclusion.classification.IclusionClassificationConfig;
@@ -66,7 +66,7 @@ public class ServeAlgo {
     }
 
     @NotNull
-    public Map<RefGenomeVersion, ExtractionResult> run(@NotNull ServeConfig config) throws IOException {
+    public Map<RefGenome, ExtractionResult> run(@NotNull ServeConfig config) throws IOException {
         List<ExtractionResult> extractions = Lists.newArrayList();
         if (config.useVicc()) {
             extractions.add(extractViccKnowledge(config.viccJson(), config.viccSources()));
@@ -96,10 +96,10 @@ public class ServeAlgo {
             extractions.add(extractHartwigCuratedKnowledge(config.hartwigCuratedTsv(), !config.skipHotspotResolving()));
         }
 
-        Map<RefGenomeVersion, List<ExtractionResult>> versionedMap = refGenomeManager.makeVersioned(extractions);
+        Map<RefGenome, List<ExtractionResult>> versionedMap = refGenomeManager.makeVersioned(extractions);
 
-        Map<RefGenomeVersion, ExtractionResult> refDependentExtractionMap = Maps.newHashMap();
-        for (Map.Entry<RefGenomeVersion, List<ExtractionResult>> entry : versionedMap.entrySet()) {
+        Map<RefGenome, ExtractionResult> refDependentExtractionMap = Maps.newHashMap();
+        for (Map.Entry<RefGenome, List<ExtractionResult>> entry : versionedMap.entrySet()) {
             refDependentExtractionMap.put(entry.getKey(), ExtractionFunctions.merge(entry.getValue()));
         }
 

@@ -2,7 +2,7 @@ package com.hartwig.serve.extraction;
 
 import java.io.IOException;
 
-import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.datamodel.serialization.ActionableCharacteristicFile;
 import com.hartwig.serve.datamodel.serialization.ActionableFusionFile;
 import com.hartwig.serve.datamodel.serialization.ActionableGeneFile;
@@ -30,14 +30,14 @@ public class ExtractionResultWriter {
     @NotNull
     private final String outputDir;
     @NotNull
-    private final RefGenomeVersion refGenomeVersion;
+    private final RefGenome refGenome;
     @NotNull
     private final IndexedFastaSequenceFile refSequence;
 
-    public ExtractionResultWriter(@NotNull final String outputDir, @NotNull final RefGenomeVersion refGenomeVersion,
+    public ExtractionResultWriter(@NotNull final String outputDir, @NotNull final RefGenome refGenome,
             @NotNull final IndexedFastaSequenceFile refSequence) {
         this.outputDir = outputDir;
-        this.refGenomeVersion = refGenomeVersion;
+        this.refGenome = refGenome;
         this.refSequence = refSequence;
     }
 
@@ -45,53 +45,53 @@ public class ExtractionResultWriter {
         LOGGER.info("Writing SERVE output to {}", outputDir);
 
         // We also write a hotspot VCF to be used in SAGE.
-        String hotspotVcf = KnownHotspotVCF.knownHotspotVcfPath(outputDir, refGenomeVersion);
+        String hotspotVcf = KnownHotspotVCF.knownHotspotVcfPath(outputDir, refGenome);
         LOGGER.info(" Writing {} known hotspots to {}", result.knownHotspots().size(), hotspotVcf);
         KnownHotspotVCF.write(hotspotVcf, refSequence, result.knownHotspots());
 
-        String hotspotTsv = KnownHotspotFile.knownHotspotTsvPath(outputDir, refGenomeVersion);
+        String hotspotTsv = KnownHotspotFile.knownHotspotTsvPath(outputDir, refGenome);
         LOGGER.info(" Writing {} known hotspots to {}", result.knownHotspots().size(), hotspotTsv);
         KnownHotspotFile.write(hotspotTsv, result.knownHotspots());
 
-        String codonTsv = KnownCodonFile.knownCodonTsvPath(outputDir, refGenomeVersion);
+        String codonTsv = KnownCodonFile.knownCodonTsvPath(outputDir, refGenome);
         LOGGER.info(" Writing {} known codons to {}", result.knownCodons().size(), codonTsv);
         KnownCodonFile.write(codonTsv, result.knownCodons());
 
-        String exonTsv = KnownExonFile.knownExonTsvPath(outputDir, refGenomeVersion);
+        String exonTsv = KnownExonFile.knownExonTsvPath(outputDir, refGenome);
         LOGGER.info(" Writing {} known exons to {}", result.knownExons().size(), exonTsv);
         KnownExonFile.write(exonTsv, result.knownExons());
 
-        String copyNumberTsv = KnownCopyNumberFile.knownCopyNumberTsvPath(outputDir, refGenomeVersion);
+        String copyNumberTsv = KnownCopyNumberFile.knownCopyNumberTsvPath(outputDir, refGenome);
         LOGGER.info(" Writing {} known copy numbers to {}", result.knownCopyNumbers().size(), copyNumberTsv);
         KnownCopyNumberFile.write(copyNumberTsv, result.knownCopyNumbers());
 
-        String fusionTsv = KnownFusionFile.knownFusionTsvPath(outputDir, refGenomeVersion);
+        String fusionTsv = KnownFusionFile.knownFusionTsvPath(outputDir, refGenome);
         LOGGER.info(" Writing {} known fusions to {}", result.knownFusions().size(), fusionTsv);
         KnownFusionFile.write(fusionTsv, result.knownFusions());
 
-        String actionableHotspotTsv = ActionableHotspotFile.actionableHotspotTsvPath(outputDir, refGenomeVersion);
+        String actionableHotspotTsv = ActionableHotspotFile.actionableHotspotTsvPath(outputDir, refGenome);
         LOGGER.info(" Writing {} actionable hotspots to {}", result.actionableHotspots().size(), actionableHotspotTsv);
         ActionableHotspotFile.write(actionableHotspotTsv, result.actionableHotspots());
 
-        String actionableRangeTsv = ActionableRangeFile.actionableRangeTsvPath(outputDir, refGenomeVersion);
+        String actionableRangeTsv = ActionableRangeFile.actionableRangeTsvPath(outputDir, refGenome);
         LOGGER.info(" Writing {} actionable ranges to {}", result.actionableRanges().size(), actionableRangeTsv);
         ActionableRangeFile.write(actionableRangeTsv, result.actionableRanges());
 
-        String actionableGeneTsv = ActionableGeneFile.actionableGeneTsvPath(outputDir, refGenomeVersion);
+        String actionableGeneTsv = ActionableGeneFile.actionableGeneTsvPath(outputDir, refGenome);
         LOGGER.info(" Writing {} actionable genes to {}", result.actionableGenes().size(), actionableGeneTsv);
         ActionableGeneFile.write(actionableGeneTsv, result.actionableGenes());
 
-        String actionableFusionTsv = ActionableFusionFile.actionableFusionTsvPath(outputDir, refGenomeVersion);
+        String actionableFusionTsv = ActionableFusionFile.actionableFusionTsvPath(outputDir, refGenome);
         LOGGER.info(" Writing {} actionable fusions to {}", result.actionableFusions().size(), actionableFusionTsv);
         ActionableFusionFile.write(actionableFusionTsv, result.actionableFusions());
 
-        String actionableCharacteristicTsv = ActionableCharacteristicFile.actionableCharacteristicTsvPath(outputDir, refGenomeVersion);
+        String actionableCharacteristicTsv = ActionableCharacteristicFile.actionableCharacteristicTsvPath(outputDir, refGenome);
         LOGGER.info(" Writing {} actionable tumor characteristics to {}",
                 result.actionableCharacteristics().size(),
                 actionableCharacteristicTsv);
         ActionableCharacteristicFile.write(actionableCharacteristicTsv, result.actionableCharacteristics());
 
-        String actionableHLATsv = ActionableHLAFile.actionableHLATsvPath(outputDir, refGenomeVersion);
+        String actionableHLATsv = ActionableHLAFile.actionableHLATsvPath(outputDir, refGenome);
         LOGGER.info(" Writing {} actionable hla to {}", result.actionableHLA().size(), actionableHLATsv);
         ActionableHLAFile.write(actionableHLATsv, result.actionableHLA());
 

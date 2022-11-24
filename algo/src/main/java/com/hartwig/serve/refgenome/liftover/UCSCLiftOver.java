@@ -3,7 +3,7 @@ package com.hartwig.serve.refgenome.liftover;
 import java.io.File;
 
 import com.hartwig.serve.common.RefGenomeFunctions;
-import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.RefGenome;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -16,14 +16,14 @@ public class UCSCLiftOver implements LiftOverAlgo {
     @NotNull
     private final LiftOver liftOver;
     @NotNull
-    private final RefGenomeVersion targetVersion;
+    private final RefGenome targetVersion;
 
     @NotNull
-    public static UCSCLiftOver fromChainFile(@NotNull String chainFile, @NotNull RefGenomeVersion targetVersion) {
+    public static UCSCLiftOver fromChainFile(@NotNull String chainFile, @NotNull RefGenome targetVersion) {
         return new UCSCLiftOver(new LiftOver(new File(chainFile)), targetVersion);
     }
 
-    private UCSCLiftOver(@NotNull final LiftOver liftOver, @NotNull final RefGenomeVersion targetVersion) {
+    private UCSCLiftOver(@NotNull final LiftOver liftOver, @NotNull final RefGenome targetVersion) {
         this.liftOver = liftOver;
         this.targetVersion = targetVersion;
     }

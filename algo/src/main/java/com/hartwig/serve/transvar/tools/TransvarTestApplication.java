@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import com.hartwig.serve.common.ensemblcache.EnsemblDataLoader;
-import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.extraction.hotspot.Hotspot;
 import com.hartwig.serve.transvar.Transvar;
 
@@ -37,15 +37,15 @@ public class TransvarTestApplication {
             System.exit(1);
         }
 
-        Transvar transvar37 = Transvar.withRefGenome(RefGenomeVersion.V37,
+        Transvar transvar37 = Transvar.withRefGenome(RefGenome.V37,
                 config.refGenome37FastaFile(),
-                EnsemblDataLoader.load(config.ensemblDataDir37(), RefGenomeVersion.V37));
+                EnsemblDataLoader.load(config.ensemblDataDir37(), RefGenome.V37));
 
         extractAndPrintVariants(transvar37, config.gene37(), config.transcript37(), config.protein37());
 
-        Transvar transvar38 = Transvar.withRefGenome(RefGenomeVersion.V38,
+        Transvar transvar38 = Transvar.withRefGenome(RefGenome.V38,
                 config.refGenome38FastaFile(),
-                EnsemblDataLoader.load(config.ensemblDataDir38(), RefGenomeVersion.V38));
+                EnsemblDataLoader.load(config.ensemblDataDir38(), RefGenome.V38));
 
         extractAndPrintVariants(transvar38, config.gene38(), config.transcript38(), config.protein38());
     }

@@ -9,10 +9,10 @@ import java.util.StringJoiner;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
+import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.datamodel.immuno.ActionableHLA;
 import com.hartwig.serve.datamodel.immuno.ActionableHLAComparator;
 import com.hartwig.serve.datamodel.immuno.ImmutableActionableHLA;
-import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 import com.hartwig.serve.datamodel.serialization.util.ActionableFileUtil;
 import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
@@ -26,8 +26,8 @@ public final class ActionableHLAFile {
     }
 
     @NotNull
-    public static String actionableHLATsvPath(@NotNull String serveActionabilityDir, @NotNull RefGenomeVersion refGenomeVersion) {
-        return refGenomeVersion.addVersionToFilePath(serveActionabilityDir + File.separator + ACTIONABLE_HLA_TSV);
+    public static String actionableHLATsvPath(@NotNull String serveActionabilityDir, @NotNull RefGenome refGenome) {
+        return refGenome.addVersionToFilePath(serveActionabilityDir + File.separator + ACTIONABLE_HLA_TSV);
     }
 
     public static void write(@NotNull String actionableHLATsv, @NotNull Iterable<ActionableHLA> actionableHLA) throws IOException {

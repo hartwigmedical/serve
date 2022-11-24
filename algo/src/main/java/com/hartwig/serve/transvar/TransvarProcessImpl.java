@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.transvar.datamodel.TransvarRecord;
 
 import org.apache.logging.log4j.LogManager;
@@ -27,14 +27,14 @@ class TransvarProcessImpl implements TransvarProcess {
     private static final int TRANSVAR_TIMEOUT_SEC = 120;
 
     @NotNull
-    private final RefGenomeVersion refGenomeVersion;
+    private final RefGenome refGenome;
     @NotNull
     private final String refGenomeFastaFile;
     @NotNull
     private final TransvarCurator curator = new TransvarCurator();
 
-    TransvarProcessImpl(@NotNull RefGenomeVersion refGenomeVersion, @NotNull String refGenomeFastaFile) {
-        this.refGenomeVersion = refGenomeVersion;
+    TransvarProcessImpl(@NotNull RefGenome refGenome, @NotNull String refGenomeFastaFile) {
+        this.refGenome = refGenome;
         this.refGenomeFastaFile = refGenomeFastaFile;
     }
 
@@ -87,7 +87,7 @@ class TransvarProcessImpl implements TransvarProcess {
                 "--reference",
                 refGenomeFastaFile,
                 "--refversion",
-                toTransvarRefVersion(refGenomeVersion),
+                toTransvarRefVersion(refGenome),
                 "--noheader",
                 "--ensembl",
                 "-i",
@@ -100,14 +100,14 @@ class TransvarProcessImpl implements TransvarProcess {
     }
 
     @NotNull
-    private static String toTransvarRefVersion(@NotNull RefGenomeVersion refGenomeVersion) {
-        switch (refGenomeVersion) {
+    private static String toTransvarRefVersion(@NotNull RefGenome refGenome) {
+        switch (refGenome) {
             case V37:
                 return "hg19";
             case V38:
                 return "hg38";
             default:
-                throw new IllegalStateException("Could not convert ref genome version to transvar ref version: " + refGenomeVersion);
+                throw new IllegalStateException("Could not convert ref genome version to transvar ref version: " + refGenome);
         }
     }
 

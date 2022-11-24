@@ -14,7 +14,7 @@ import com.hartwig.serve.common.ensemblcache.EnsemblDataLoader;
 import com.hartwig.serve.common.ensemblcache.GeneData;
 import com.hartwig.serve.common.knownfusion.KnownFusionCache;
 import com.hartwig.serve.common.knownfusion.KnownFusionCacheLoader;
-import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.extraction.hotspot.ProteinResolver;
 import com.hartwig.serve.extraction.hotspot.ProteinResolverFactory;
 
@@ -33,9 +33,9 @@ public final class RefGenomeManagerFactory {
 
     @NotNull
     public static RefGenomeManager createFromServeConfig(@NotNull ServeConfig config) throws IOException {
-        Map<RefGenomeVersion, RefGenomeResource> refGenomeResourceMap = Maps.newHashMap();
-        refGenomeResourceMap.put(RefGenomeVersion.V37, buildRefGenomeResource37(config));
-        refGenomeResourceMap.put(RefGenomeVersion.V38, buildRefGenomeResource38(config));
+        Map<RefGenome, RefGenomeResource> refGenomeResourceMap = Maps.newHashMap();
+        refGenomeResourceMap.put(RefGenome.V37, buildRefGenomeResource37(config));
+        refGenomeResourceMap.put(RefGenome.V38, buildRefGenomeResource38(config));
         return new RefGenomeManager(refGenomeResourceMap);
     }
 
@@ -43,17 +43,17 @@ public final class RefGenomeManagerFactory {
     private static RefGenomeResource buildRefGenomeResource37(@NotNull ServeConfig config) throws IOException {
         String fastaFile37 = config.refGenome37FastaFile();
         LOGGER.info("Creating ref genome resource for V37 using fasta {}", fastaFile37);
-        EnsemblDataCache ensemblDataCache37 = loadEnsemblDataCache(RefGenomeVersion.V37, config.ensemblDataDir37());
+        EnsemblDataCache ensemblDataCache37 = loadEnsemblDataCache(RefGenome.V37, config.ensemblDataDir37());
         ProteinResolver proteinResolver37 = config.skipHotspotResolving()
                 ? ProteinResolverFactory.dummy()
-                : ProteinResolverFactory.transvarWithRefGenome(RefGenomeVersion.V37, fastaFile37, ensemblDataCache37);
+                : ProteinResolverFactory.transvarWithRefGenome(RefGenome.V37, fastaFile37, ensemblDataCache37);
 
         return ImmutableRefGenomeResource.builder()
                 .refSequence(new IndexedFastaSequenceFile(new File(fastaFile37)))
                 .driverGenes(readDriverGenesFromFile(config.driverGene37Tsv()))
                 .knownFusionCache(buildKnownFusionCacheFromFile(config.knownFusion37File()))
                 .ensemblDataCache(ensemblDataCache37)
-                .putChainToOtherRefGenomeMap(RefGenomeVersion.V38, config.refGenome37To38Chain())
+                .putChainToOtherRefGenomeMap(RefGenome.V38, config.refGenome37To38Chain())
                 .proteinResolver(proteinResolver37)
                 .build();
     }
@@ -62,17 +62,17 @@ public final class RefGenomeManagerFactory {
     private static RefGenomeResource buildRefGenomeResource38(@NotNull ServeConfig config) throws IOException {
         String fastaFile38 = config.refGenome38FastaFile();
         LOGGER.info("Creating ref genome resource for V38 using fasta {}", fastaFile38);
-        EnsemblDataCache ensemblDataCache38 = loadEnsemblDataCache(RefGenomeVersion.V38, config.ensemblDataDir38());
+        EnsemblDataCache ensemblDataCache38 = loadEnsemblDataCache(RefGenome.V38, config.ensemblDataDir38());
         ProteinResolver proteinResolver38 = config.skipHotspotResolving()
                 ? ProteinResolverFactory.dummy()
-                : ProteinResolverFactory.transvarWithRefGenome(RefGenomeVersion.V38, fastaFile38, ensemblDataCache38);
+                : ProteinResolverFactory.transvarWithRefGenome(RefGenome.V38, fastaFile38, ensemblDataCache38);
 
         return ImmutableRefGenomeResource.builder()
                 .refSequence(new IndexedFastaSequenceFile(new File(fastaFile38)))
                 .driverGenes(readDriverGenesFromFile(config.driverGene38Tsv()))
                 .knownFusionCache(buildKnownFusionCacheFromFile(config.knownFusion38File()))
                 .ensemblDataCache(ensemblDataCache38)
-                .putChainToOtherRefGenomeMap(RefGenomeVersion.V37, config.refGenome38To37Chain())
+                .putChainToOtherRefGenomeMap(RefGenome.V37, config.refGenome38To37Chain())
                 .proteinResolver(proteinResolver38)
                 .build();
     }
@@ -94,10 +94,10 @@ public final class RefGenomeManagerFactory {
     }
 
     @NotNull
-    private static EnsemblDataCache loadEnsemblDataCache(@NotNull RefGenomeVersion refGenomeVersion, @NotNull String ensemblDataDir)
+    private static EnsemblDataCache loadEnsemblDataCache(@NotNull RefGenome refGenome, @NotNull String ensemblDataDir)
             throws IOException {
         LOGGER.info(" Reading ensembl data cache from {}", ensemblDataDir);
-        EnsemblDataCache ensemblDataCache = EnsemblDataLoader.load(ensemblDataDir, refGenomeVersion);
+        EnsemblDataCache ensemblDataCache = EnsemblDataLoader.load(ensemblDataDir, refGenome);
         int geneCount = 0;
         for (List<GeneData> genesPerChromosome : ensemblDataCache.genesPerChromosome().values()) {
             geneCount += genesPerChromosome.size();

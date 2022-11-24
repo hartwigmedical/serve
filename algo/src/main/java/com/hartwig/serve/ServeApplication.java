@@ -5,7 +5,7 @@ import java.util.Map;
 
 import com.hartwig.serve.curation.DoidLookup;
 import com.hartwig.serve.curation.DoidLookupFactory;
-import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.ExtractionResultWriter;
 import com.hartwig.serve.refgenome.RefGenomeManager;
@@ -44,10 +44,10 @@ public class ServeApplication {
         RefGenomeManager refGenomeManager = RefGenomeManagerFactory.createFromServeConfig(config);
 
         ServeAlgo algo = new ServeAlgo(refGenomeManager, buildDoidLookup(config.missingDoidsMappingTsv()));
-        Map<RefGenomeVersion, ExtractionResult> resultMap = algo.run(config);
+        Map<RefGenome, ExtractionResult> resultMap = algo.run(config);
 
-        for (Map.Entry<RefGenomeVersion, ExtractionResult> entry : resultMap.entrySet()) {
-            RefGenomeVersion version = entry.getKey();
+        for (Map.Entry<RefGenome, ExtractionResult> entry : resultMap.entrySet()) {
+            RefGenome version = entry.getKey();
             IndexedFastaSequenceFile refSequence = refGenomeManager.refSequenceForRefGenome(version);
             new ExtractionResultWriter(config.outputDir(), version, refSequence).write(entry.getValue());
         }

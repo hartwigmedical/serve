@@ -2,7 +2,7 @@ package com.hartwig.serve.common;
 
 import static org.junit.Assert.assertEquals;
 
-import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.RefGenome;
 
 import org.junit.Test;
 
@@ -14,13 +14,13 @@ public class RefGenomeFunctionsTest {
         String chr19 = "chr10";
         String chr38 = "chr10";
 
-        assertEquals(chr37, RefGenomeFunctions.versionedChromosome(chr19, RefGenomeVersion.V37));
-        assertEquals(chr37, RefGenomeFunctions.versionedChromosome(chr37, RefGenomeVersion.V37));
-        assertEquals(chr37, RefGenomeFunctions.versionedChromosome(chr38, RefGenomeVersion.V37));
+        assertEquals(chr37, RefGenomeFunctions.versionedChromosome(chr19, RefGenome.V37));
+        assertEquals(chr37, RefGenomeFunctions.versionedChromosome(chr37, RefGenome.V37));
+        assertEquals(chr37, RefGenomeFunctions.versionedChromosome(chr38, RefGenome.V37));
 
-        assertEquals(chr38, RefGenomeFunctions.versionedChromosome(chr19, RefGenomeVersion.V38));
-        assertEquals(chr38, RefGenomeFunctions.versionedChromosome(chr37, RefGenomeVersion.V38));
-        assertEquals(chr38, RefGenomeFunctions.versionedChromosome(chr38, RefGenomeVersion.V38));
+        assertEquals(chr38, RefGenomeFunctions.versionedChromosome(chr19, RefGenome.V38));
+        assertEquals(chr38, RefGenomeFunctions.versionedChromosome(chr37, RefGenome.V38));
+        assertEquals(chr38, RefGenomeFunctions.versionedChromosome(chr38, RefGenome.V38));
     }
 
     @Test

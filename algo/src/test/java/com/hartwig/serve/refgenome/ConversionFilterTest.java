@@ -2,11 +2,11 @@ package com.hartwig.serve.refgenome;
 
 import static org.junit.Assert.assertTrue;
 
+import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.datamodel.fusion.FusionTestFactory;
 import com.hartwig.serve.datamodel.gene.GeneTestFactory;
 import com.hartwig.serve.datamodel.hotspot.HotspotTestFactory;
 import com.hartwig.serve.datamodel.range.RangeTestFactory;
-import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.ImmutableExtractionResult;
 
@@ -36,7 +36,7 @@ public class ConversionFilterTest {
     @NotNull
     private static ExtractionResult createExtractionResultForGene(@NotNull String gene) {
         return ImmutableExtractionResult.builder()
-                .refGenomeVersion(RefGenomeVersion.V38)
+                .refGenomeVersion(RefGenome.V38)
                 .addKnownHotspots(HotspotTestFactory.knownHotspotBuilder().gene(gene).build())
                 .addKnownCodons(RangeTestFactory.knownCodonBuilder().gene(gene).build())
                 .addKnownExons(RangeTestFactory.knownExonBuilder().gene(gene).build())

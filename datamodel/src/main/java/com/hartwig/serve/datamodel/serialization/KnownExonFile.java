@@ -11,12 +11,12 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.MutationType;
+import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.datamodel.common.GeneRole;
 import com.hartwig.serve.datamodel.common.ProteinEffect;
 import com.hartwig.serve.datamodel.range.ImmutableKnownExon;
 import com.hartwig.serve.datamodel.range.KnownExon;
 import com.hartwig.serve.datamodel.range.KnownExonComparator;
-import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
 import org.jetbrains.annotations.NotNull;
@@ -30,8 +30,8 @@ public final class KnownExonFile {
     }
 
     @NotNull
-    public static String knownExonTsvPath(@NotNull String outputDir, @NotNull RefGenomeVersion refGenomeVersion) {
-        return refGenomeVersion.addVersionToFilePath(outputDir + File.separator + KNOWN_EXON_TSV);
+    public static String knownExonTsvPath(@NotNull String outputDir, @NotNull RefGenome refGenome) {
+        return refGenome.addVersionToFilePath(outputDir + File.separator + KNOWN_EXON_TSV);
     }
 
     public static void write(@NotNull String exonTsv, @NotNull Iterable<KnownExon> exons) throws IOException {

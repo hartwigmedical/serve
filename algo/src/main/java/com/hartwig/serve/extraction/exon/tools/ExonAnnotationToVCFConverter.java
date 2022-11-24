@@ -11,8 +11,8 @@ import com.hartwig.serve.ServeConfig;
 import com.hartwig.serve.ServeLocalConfigProvider;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.KnownEvent;
+import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.datamodel.range.KnownExon;
-import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 import com.hartwig.serve.datamodel.serialization.KnownExonFile;
 import com.hartwig.serve.extraction.util.GenerateAltBase;
 import com.hartwig.serve.extraction.util.KeyFormatter;
@@ -48,7 +48,7 @@ public class ExonAnnotationToVCFConverter {
 
         String knownExonsTsv = System.getProperty("user.home") + "/hmf/tmp/KnownExons.SERVE.37.tsv";
         String outputVcf = System.getProperty("user.home") + "/hmf/tmp/exons.vcf.gz";
-        GenerateAltBase altBaseGenerator = new GenerateAltBase(RefGenomeVersion.V37, refSequence37);
+        GenerateAltBase altBaseGenerator = new GenerateAltBase(RefGenome.V37, refSequence37);
 
         List<KnownExon> exons = KnownExonFile.read(knownExonsTsv);
         LOGGER.info("The number of known exons in the known exon file is {}", exons.size());

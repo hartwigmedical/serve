@@ -11,12 +11,12 @@ import com.hartwig.serve.actionability.ActionableGeneUrlConsolidator;
 import com.hartwig.serve.actionability.ActionableHLAUrlConsolidator;
 import com.hartwig.serve.actionability.ActionableHotspotUrlConsolidator;
 import com.hartwig.serve.actionability.ActionableRangeUrlConsolidator;
+import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.datamodel.fusion.KnownFusion;
 import com.hartwig.serve.datamodel.gene.KnownCopyNumber;
 import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.range.KnownCodon;
 import com.hartwig.serve.datamodel.range.KnownExon;
-import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 import com.hartwig.serve.extraction.codon.CodonConsolidation;
 import com.hartwig.serve.extraction.copynumber.CopyNumberConsolidation;
 import com.hartwig.serve.extraction.events.EventInterpretation;
@@ -37,7 +37,7 @@ public final class ExtractionFunctions {
 
     @NotNull
     public static ExtractionResult merge(@NotNull List<ExtractionResult> results) {
-        RefGenomeVersion version = uniqueVersion(results);
+        RefGenome version = uniqueVersion(results);
         ImmutableExtractionResult.Builder mergedBuilder = ImmutableExtractionResult.builder().refGenomeVersion(version);
 
         Set<EventInterpretation> allEventInterpretations = Sets.newHashSet();
@@ -89,14 +89,14 @@ public final class ExtractionFunctions {
     }
 
     @NotNull
-    private static RefGenomeVersion uniqueVersion(@NotNull List<ExtractionResult> results) {
+    private static RefGenome uniqueVersion(@NotNull List<ExtractionResult> results) {
         if (results.isEmpty()) {
-            RefGenomeVersion defaultVersion = RefGenomeVersion.V38;
+            RefGenome defaultVersion = RefGenome.V38;
             LOGGER.warn("Cannot extract ref genome version for empty list of results. Reverting to default {}", defaultVersion);
             return defaultVersion;
         }
 
-        RefGenomeVersion version = results.get(0).refGenomeVersion();
+        RefGenome version = results.get(0).refGenomeVersion();
         for (ExtractionResult result : results) {
             if (result.refGenomeVersion() != version) {
                 throw new IllegalStateException("Ref genome version is not unique amongst list of extraction results");

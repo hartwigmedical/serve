@@ -4,6 +4,7 @@ import java.util.Set;
 
 import com.google.common.collect.Sets;
 import com.hartwig.serve.common.RefGenomeFunctions;
+import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.datamodel.common.GenomeRegion;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
 import com.hartwig.serve.datamodel.hotspot.ImmutableActionableHotspot;
@@ -17,7 +18,6 @@ import com.hartwig.serve.datamodel.range.ImmutableKnownExon;
 import com.hartwig.serve.datamodel.range.KnownCodon;
 import com.hartwig.serve.datamodel.range.KnownExon;
 import com.hartwig.serve.datamodel.range.RangeAnnotation;
-import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 import com.hartwig.serve.extraction.util.ImmutableGenomeRegionImpl;
 import com.hartwig.serve.refgenome.liftover.LiftOverAlgo;
 import com.hartwig.serve.refgenome.liftover.LiftOverChecker;
@@ -35,15 +35,15 @@ class RefGenomeConverter {
     private static final Logger LOGGER = LogManager.getLogger(RefGenomeConverter.class);
 
     @NotNull
-    private final RefGenomeVersion sourceVersion;
+    private final RefGenome sourceVersion;
     @NotNull
-    private final RefGenomeVersion targetVersion;
+    private final RefGenome targetVersion;
     @NotNull
     private final IndexedFastaSequenceFile targetSequence;
     @NotNull
     private final LiftOverAlgo liftOverAlgo;
 
-    public RefGenomeConverter(@NotNull final RefGenomeVersion sourceVersion, @NotNull final RefGenomeVersion targetVersion,
+    public RefGenomeConverter(@NotNull final RefGenome sourceVersion, @NotNull final RefGenome targetVersion,
             @NotNull final IndexedFastaSequenceFile targetSequence, @NotNull final LiftOverAlgo liftOverAlgo) {
         this.sourceVersion = sourceVersion;
         this.targetVersion = targetVersion;

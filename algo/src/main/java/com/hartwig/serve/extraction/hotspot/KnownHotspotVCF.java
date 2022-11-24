@@ -9,13 +9,13 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.datamodel.common.GeneRole;
 import com.hartwig.serve.datamodel.common.ProteinEffect;
 import com.hartwig.serve.datamodel.hotspot.ImmutableKnownHotspot;
 import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspotComparator;
-import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
 import com.hartwig.serve.extraction.util.VCFWriterFactory;
 
 import org.apache.logging.log4j.LogManager;
@@ -42,8 +42,8 @@ public final class KnownHotspotVCF {
     }
 
     @NotNull
-    public static String knownHotspotVcfPath(@NotNull String outputDir, @NotNull RefGenomeVersion refGenomeVersion) {
-        return refGenomeVersion.addVersionToFilePath(outputDir + File.separator + KNOWN_HOTSPOT_VCF);
+    public static String knownHotspotVcfPath(@NotNull String outputDir, @NotNull RefGenome refGenome) {
+        return refGenome.addVersionToFilePath(outputDir + File.separator + KNOWN_HOTSPOT_VCF);
     }
 
     public static void write(@NotNull String hotspotVcf, @NotNull IndexedFastaSequenceFile refSequence,

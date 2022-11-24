@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.io.Resources;
-import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.RefGenome;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
@@ -21,7 +21,7 @@ public class EnsemblDataLoaderTest {
 
     @Test
     public void canLoadEnsemblDataCache() throws IOException {
-        EnsemblDataCache cache = EnsemblDataLoader.load(ENSEMBL_DATA_DIR, RefGenomeVersion.V37);
+        EnsemblDataCache cache = EnsemblDataLoader.load(ENSEMBL_DATA_DIR, RefGenome.V37);
 
         assertEnsemblGenes(cache.genesPerChromosome());
         assertEnsemblTranscripts(cache.transcriptsPerGeneId());

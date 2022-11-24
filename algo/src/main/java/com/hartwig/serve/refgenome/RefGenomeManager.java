@@ -6,7 +6,7 @@ import java.util.Set;
 
 import com.google.common.collect.Maps;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.ImmutableExtractionResult;
 import com.hartwig.serve.refgenome.liftover.LiftOverAlgo;
@@ -24,11 +24,11 @@ public class RefGenomeManager {
     private static final Logger LOGGER = LogManager.getLogger(RefGenomeManager.class);
 
     @NotNull
-    private final Map<RefGenomeVersion, RefGenomeResource> refGenomeResourceMap;
+    private final Map<RefGenome, RefGenomeResource> refGenomeResourceMap;
     @NotNull
     private final ConversionFilter conversionFilter;
 
-    RefGenomeManager(@NotNull final Map<RefGenomeVersion, RefGenomeResource> refGenomeResourceMap) {
+    RefGenomeManager(@NotNull final Map<RefGenome, RefGenomeResource> refGenomeResourceMap) {
         this.refGenomeResourceMap = refGenomeResourceMap;
         this.conversionFilter = new ConversionFilter();
     }
@@ -39,7 +39,7 @@ public class RefGenomeManager {
     }
 
     @NotNull
-    public IndexedFastaSequenceFile refSequenceForRefGenome(@NotNull RefGenomeVersion version) {
+    public IndexedFastaSequenceFile refSequenceForRefGenome(@NotNull RefGenome version) {
         return checkedRetrieve(version).refSequence();
     }
 
@@ -50,10 +50,10 @@ public class RefGenomeManager {
     }
 
     @NotNull
-    public Map<RefGenomeVersion, List<ExtractionResult>> makeVersioned(@NotNull List<ExtractionResult> extractions) {
-        Map<RefGenomeVersion, List<ExtractionResult>> versionedExtractionMap = Maps.newHashMap();
+    public Map<RefGenome, List<ExtractionResult>> makeVersioned(@NotNull List<ExtractionResult> extractions) {
+        Map<RefGenome, List<ExtractionResult>> versionedExtractionMap = Maps.newHashMap();
 
-        for (RefGenomeVersion version : refGenomeResourceMap.keySet()) {
+        for (RefGenome version : refGenomeResourceMap.keySet()) {
             LOGGER.info("Creating extraction results for ref genome version {}", version);
             List<ExtractionResult> targetExtractions = Lists.newArrayList();
             for (ExtractionResult extraction : extractions) {
@@ -66,8 +66,8 @@ public class RefGenomeManager {
     }
 
     @NotNull
-    private ExtractionResult convert(@NotNull ExtractionResult extraction, @NotNull RefGenomeVersion targetVersion) {
-        RefGenomeVersion sourceVersion = extraction.refGenomeVersion();
+    private ExtractionResult convert(@NotNull ExtractionResult extraction, @NotNull RefGenome targetVersion) {
+        RefGenome sourceVersion = extraction.refGenomeVersion();
         if (sourceVersion == targetVersion) {
             return extraction;
         }
@@ -98,7 +98,7 @@ public class RefGenomeManager {
     }
 
     @NotNull
-    private RefGenomeResource checkedRetrieve(@NotNull RefGenomeVersion version) {
+    private RefGenomeResource checkedRetrieve(@NotNull RefGenome version) {
         RefGenomeResource resource = refGenomeResourceMap.get(version);
         if (resource == null) {
             throw new IllegalStateException("No ref genome resources found for ref genome version " + version);
@@ -107,8 +107,8 @@ public class RefGenomeManager {
     }
 
     private void evaluateProteinResolving() {
-        for (Map.Entry<RefGenomeVersion, RefGenomeResource> entry : refGenomeResourceMap.entrySet()) {
-            RefGenomeVersion version = entry.getKey();
+        for (Map.Entry<RefGenome, RefGenomeResource> entry : refGenomeResourceMap.entrySet()) {
+            RefGenome version = entry.getKey();
             RefGenomeResource resource = entry.getValue();
             Set<String> unresolvedProteinAnnotations = resource.proteinResolver().unresolvedProteinAnnotations();
             if (!unresolvedProteinAnnotations.isEmpty()) {

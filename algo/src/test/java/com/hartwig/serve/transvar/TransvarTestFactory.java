@@ -4,7 +4,7 @@ import java.io.FileNotFoundException;
 
 import com.google.common.io.Resources;
 import com.hartwig.serve.EnsemblDataCacheTestFactory;
-import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.RefGenome;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -24,7 +24,7 @@ public final class TransvarTestFactory {
     @NotNull
     static TransvarInterpreter testInterpreter37() {
         try {
-            return TransvarInterpreter.withRefGenome(RefGenomeVersion.V37, REF_GENOME_FASTA_FILE_37);
+            return TransvarInterpreter.withRefGenome(RefGenome.V37, REF_GENOME_FASTA_FILE_37);
         } catch (FileNotFoundException exception) {
             throw new IllegalStateException("Cannot create test interpreter! Message=" + exception.getMessage());
         }
@@ -33,7 +33,7 @@ public final class TransvarTestFactory {
     @NotNull
     static TransvarInterpreter testInterpreter38() {
         try {
-            return TransvarInterpreter.withRefGenome(RefGenomeVersion.V38, REF_GENOME_FASTA_FILE_38);
+            return TransvarInterpreter.withRefGenome(RefGenome.V38, REF_GENOME_FASTA_FILE_38);
         } catch (FileNotFoundException exception) {
             throw new IllegalStateException("Cannot create test interpreter! Message=" + exception.getMessage());
         }

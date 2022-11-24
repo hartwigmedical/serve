@@ -10,7 +10,7 @@ import java.util.Map;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.hartwig.serve.common.RefGenomeFunctions;
-import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
 import org.apache.logging.log4j.LogManager;
@@ -32,16 +32,16 @@ public final class EnsemblDataLoader {
     }
 
     @NotNull
-    public static EnsemblDataCache load(@NotNull String dataPath, @NotNull RefGenomeVersion refGenomeVersion) throws IOException {
+    public static EnsemblDataCache load(@NotNull String dataPath, @NotNull RefGenome refGenome) throws IOException {
         String basePath = dataPath + File.separator;
-        Map<String, List<GeneData>> genesPerChromosome = loadGeneData(basePath + ENSEMBL_GENE_DATA_FILE, refGenomeVersion);
+        Map<String, List<GeneData>> genesPerChromosome = loadGeneData(basePath + ENSEMBL_GENE_DATA_FILE, refGenome);
         Map<String, List<TranscriptData>> transcriptsPerGeneId = loadTranscriptData(basePath + ENSEMBL_TRANS_EXON_DATA_FILE);
 
         return new EnsemblDataCache(genesPerChromosome, transcriptsPerGeneId);
     }
 
     @NotNull
-    private static Map<String, List<GeneData>> loadGeneData(@NotNull String geneDataFile, @NotNull RefGenomeVersion version)
+    private static Map<String, List<GeneData>> loadGeneData(@NotNull String geneDataFile, @NotNull RefGenome version)
             throws IOException {
         BufferedReader fileReader = new BufferedReader(new FileReader(geneDataFile));
 

@@ -13,7 +13,7 @@ import com.hartwig.serve.common.ensemblcache.EnsemblDataCache;
 import com.hartwig.serve.common.ensemblcache.EnsemblDataLoader;
 import com.hartwig.serve.common.ensemblcache.GeneData;
 import com.hartwig.serve.common.ensemblcache.TranscriptData;
-import com.hartwig.serve.datamodel.refgenome.RefGenomeVersion;
+import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.extraction.util.VCFWriterFactory;
 import com.hartwig.serve.snpeff.CanonicalAnnotation;
 import com.hartwig.serve.snpeff.SnpEffAnnotation;
@@ -41,7 +41,7 @@ public class AnnotatedHotspotVCFPrinter {
     }
 
     public void run(@NotNull String annotatedInputVcf, @NotNull String ensemblDataCacheDir) throws IOException {
-        EnsemblDataCache ensemblDataCache = EnsemblDataLoader.load(ensemblDataCacheDir, RefGenomeVersion.V37);
+        EnsemblDataCache ensemblDataCache = EnsemblDataLoader.load(ensemblDataCacheDir, RefGenome.V37);
 
         CanonicalAnnotation factory = new CanonicalAnnotation(Sets.newHashSet(), extractCanonicalTranscripts(ensemblDataCache));
 

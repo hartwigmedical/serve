@@ -129,7 +129,7 @@ public final class EnsemblDataLoader {
         int codingEndIndex = fields.get("CodingEnd");
 
         Map<String, List<TranscriptData>> transcriptsPerGeneId = Maps.newHashMap();
-        String currentGeneId = Strings.EMPTY;
+        String currentGeneId = null;
         int currentTranscriptId = -1;
         TranscriptData previousTranscript = null;
         List<TranscriptData> currentTranscripts = Lists.newArrayList();
@@ -152,7 +152,7 @@ public final class EnsemblDataLoader {
             currentTranscriptId = transcriptId;
 
             String geneId = values[geneIdIndex];
-            if (currentGeneId.isEmpty()) {
+            if (currentGeneId == null) {
                 currentGeneId = geneId;
             }
 
@@ -192,9 +192,11 @@ public final class EnsemblDataLoader {
             line = fileReader.readLine();
         }
 
-        // The final record doesn't get added automatically.
-        currentTranscripts.add(ImmutableTranscriptData.builder().from(previousTranscript).exons(currentExons).build());
-        transcriptsPerGeneId.put(currentGeneId, currentTranscripts);
+        // The final record doesn't get added automatically, if is exists
+        if (previousTranscript != null && currentGeneId != null) {
+            currentTranscripts.add(ImmutableTranscriptData.builder().from(previousTranscript).exons(currentExons).build());
+            transcriptsPerGeneId.put(currentGeneId, currentTranscripts);
+        }
 
         LOGGER.debug("Loaded {} genes with {} transcripts and {} exons from {}",
                 transcriptsPerGeneId.size(),

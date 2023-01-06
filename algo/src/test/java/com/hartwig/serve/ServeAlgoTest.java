@@ -16,8 +16,6 @@ import org.junit.Test;
 public class ServeAlgoTest {
 
     private static final String VICC_JSON = Resources.getResource("vicc/empty.vicc.json").getPath();
-    private static final String ACTIN_TRIAL_TSV = Resources.getResource("actin/example.tsv").getPath();
-    private static final String ACTIN_FILTER_TSV = Resources.getResource("actin/filter.tsv").getPath();
     private static final String ICLUSION_TRIAL_TSV = Resources.getResource("iclusion/empty.iclusion.tsv").getPath();
     private static final String ICLUSION_FILTER_TSV = Resources.getResource("iclusion/filter.tsv").getPath();
 
@@ -55,9 +53,6 @@ public class ServeAlgoTest {
                 .ckbDir(CKB_DIR)
                 .ckbFilterTsv(CKB_FILTER_TSV)
                 .ckbDrugCurationTsv(CKB_DRUG_CLASS_CURATION_TSV)
-                .useActin(true)
-                .actinTrialTsv(ACTIN_TRIAL_TSV)
-                .actinFilterTsv(ACTIN_FILTER_TSV)
                 .useDocm(true)
                 .docmTsv(DOCM_TSV)
                 .useHartwigCohort(true)

@@ -24,7 +24,6 @@ public final class ServeLocalConfigProvider {
                 .useVicc(false)
                 .useIclusion(false)
                 .useCkb(false)
-                .useActin(false)
                 .useDocm(false)
                 .docmTsv(Strings.EMPTY)
                 .useHartwigCurated(false)
@@ -41,8 +40,6 @@ public final class ServeLocalConfigProvider {
             builder.ckbDrugCurationTsv("/data/resources/crunch/serve/curation/ckb_drugs_class_curation.tsv");
             builder.iClusionTrialTsv("/data/resources/crunch/serve/iclusion/iclusion_trials_prod.tsv");
             builder.iClusionFilterTsv("/data/resources/crunch/serve/curation/iclusion_filters.tsv");
-            builder.actinTrialTsv("/data/resources/crunch/serve/actin/actin_knowledgebase.tsv");
-            builder.actinFilterTsv("/data/resources/crunch/serve/curation/actin_filters.tsv");
 
             builder.outputDir(System.getProperty("user.home") + "/tmp/serve");
             builder.missingDoidsMappingTsv("/data/resources/crunch/serve/curation/public_missing_doids_mapping.tsv");
@@ -64,9 +61,7 @@ public final class ServeLocalConfigProvider {
             builder.ckbFilterTsv(baseDir + "actionable/curation/ckb_filters.tsv");
             builder.ckbDrugCurationTsv(baseDir + "actionable/curation/ckb_drugs_class_curation.tsv");
             builder.iClusionTrialTsv(baseDir + "actionable/iclusion/iclusion_trials_prod.tsv");
-            builder.iClusionFilterTsv(baseDir + "actionable/actin/iclusion_filter.tsv");
-            builder.actinTrialTsv(baseDir + "actionable/actin/actin_knowledgebase.tsv");
-            builder.actinFilterTsv(baseDir + "actionable/actin/actin_filter.tsv");
+            builder.iClusionFilterTsv(baseDir + "actionable/iclusion/iclusion_filter.tsv");
 
             builder.outputDir(baseDir + "tmp/serve");
             builder.missingDoidsMappingTsv(baseDir + "actionable/curation/missing_doids_mapping.tsv");

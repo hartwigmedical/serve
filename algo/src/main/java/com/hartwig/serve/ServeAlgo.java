@@ -19,11 +19,6 @@ import com.hartwig.serve.iclusion.classification.IclusionClassificationConfig;
 import com.hartwig.serve.iclusion.datamodel.IclusionTrial;
 import com.hartwig.serve.refgenome.RefGenomeManager;
 import com.hartwig.serve.refgenome.RefGenomeResource;
-import com.hartwig.serve.sources.actin.ActinExtractor;
-import com.hartwig.serve.sources.actin.ActinExtractorFactory;
-import com.hartwig.serve.sources.actin.ActinReader;
-import com.hartwig.serve.sources.actin.classification.ActinClassificationConfig;
-import com.hartwig.serve.sources.actin.reader.ActinEntry;
 import com.hartwig.serve.sources.ckb.CkbExtractor;
 import com.hartwig.serve.sources.ckb.CkbExtractorFactory;
 import com.hartwig.serve.sources.ckb.CkbReader;
@@ -78,10 +73,6 @@ public class ServeAlgo {
 
         if (config.useCkb()) {
             extractions.add(extractCkbKnowledge(config.ckbDir(), config.ckbFilterTsv(), config.ckbDrugCurationTsv()));
-        }
-
-        if (config.useActin()) {
-            extractions.add(extractActinKnowledge(config.actinTrialTsv(), config.actinFilterTsv()));
         }
 
         if (config.useDocm()) {
@@ -152,18 +143,6 @@ public class ServeAlgo {
 
         LOGGER.info("Running CKB knowledge extraction");
         return extractor.extract(ckbEntries);
-    }
-
-    @NotNull
-    private ExtractionResult extractActinKnowledge(@NotNull String actinTrialTsv, @NotNull String actinFilterTsv) throws IOException {
-        List<ActinEntry> actinEntries = ActinReader.read(actinTrialTsv, actinFilterTsv);
-
-        EventClassifierConfig config = ActinClassificationConfig.build();
-        RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.ACTIN);
-        ActinExtractor extractor = ActinExtractorFactory.buildActinExtractor(config, refGenomeResource);
-
-        LOGGER.info("Running ACTIN knowledge extraction");
-        return extractor.extract(actinEntries);
     }
 
     @NotNull

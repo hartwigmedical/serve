@@ -24,9 +24,7 @@ SERVE supports the ingestion of the following knowledgebases:
  - [CKB FLEX](https://ckbhome.jax.org) - The complete CKB clinical database.
  - [OncoKB](https://www.oncokb.org) - general purpose knowledgebase that is supported through [VICC](http://cancervariants.org)
  - [DoCM](http://www.docm.info) - database containing pathogenic mutations in cancer
- - [iClusion](https://iclusion.org) - a database with all actively recruiting clinical trials in the Netherlands 
- - [ACTIN](https://github.com/hartwigmedical/actin/blob/master/treatment/README.md) - a database with all actively recruiting 
- clinical trials in the ACTIN study along with molecular inclusion criteria for these trials.
+ - [iClusion](https://iclusion.org) - a database with all actively recruiting clinical trials in the Netherlands
  - HMF Cohort - a database of recurrent somatic mutations in cancer-related genes from the Hartwig database.
  - HMF Curated - a database of known driver mutations curated by the Hartwig team.
  
@@ -251,40 +249,6 @@ DoCM is used exclusively for known hotspot generation. The filtering is therefor
  
 Also, genes that do not follow HGNC model are renamed to their HGNC name.
 
-### ACTIN Curation
-
-ACTIN ingest the molecular inclusion criteria which are extracted from the ACTIN treatment database (see also [actin](https://github.com/hartwigmedical/actin/blob/master/serve-bridge/README.md)).
-The inclusion criteria in the trials of the ACTIN database are defined in terms of specific rules.
-
-| Rule                                  | When does a patient pass evaluation?                            |
-|---------------------------------------|-----------------------------------------------------------------|
-| ACTIVATION_OR_AMPLIFICATION_OF_GENE_X | Activating mutation or amplification is found in gene X         |
-| ACTIVATING_MUTATION_IN_GENE_X         | Activating mutation is found in gene X                          |
-| FUSION_IN_GENE_X                      | Driver fusion with fusion partner gene X is found               |
-| SPECIFIC_FUSION_OF_X_TO_Y             | Driver fusion with 2 specified fusion partner genes is found    |
-| INACTIVATION_OF_GENE_X                | Inactivating mutation or deletion/disruption is found in gene X |
-| MUTATION_IN_GENE_X_OF_TYPE_Y          | Specific mutation Y is found in gene X                          |
-| AMPLIFICATION_OF_GENE_X               | Amplification is found in gene X                                |
-| DELETION_OF_GENE_X                    | Deletion is found in gene X                                     |
-| WILDTYPE_OF_GENE_X                    | No driver mutation is found in gene X                           |
-| MSI_SIGNATURE                         | MS Status = MSI                                                 |
-| HRD_SIGNATURE                         | HR Status = HRD                                                 |
-| TMB_OF_AT_LEAST_X                     | Tumor Mutational Burden (TMB) should be => X                    |
-| TML_OF_AT_LEAST_X                     | Tumor Mutational Load (TML) should be => X                      |
-| TML_OF_AT_MOST_X                      | TML should be <= X                                              |
-| HAS_HLA_A_TYPE_X                      | Patient should have at least one HLA allele of type X           |
-
-SERVE configures every trial to B-level evidence with `RESPONSIVE` direction in case the rule is involved in inclusion, and `NO_BENEFIT` in
-case the rule is used for exclusion. The filtering is predominantly configurable rather than fixed in SERVE. 
-The following filters can be configured in ACTIN:
-
-| Filter                     | Description                                                                                                        |
-|----------------------------|--------------------------------------------------------------------------------------------------------------------|
-| FILTER_RULE_ON_GENE        | Can be used to remove evidence of a specific rule of a particular gene                                             |
-| FILTER_MUTATION_ON_GENE    | Can be used to remove evidence of a gene with a specific mutation                                                  |
-| FILTER_EVERYTHING_FOR_GENE | Can be used to remove all evidence of a gene (eg. Mutations that are inconsistent with the Hartwig driver catalog) |
-| FILTER_EVERYTHING_FOR_RULE | Can be used to remove all evidence of a specific rule                                                              |
-
 ### iClusion Curation
 
 iClusion contributes to actionability only. SERVE configures every trial to B-level evidence with `RESPONSIVE` direction. 
@@ -366,7 +330,6 @@ A knowledgebase can contribute to known and/or actionable events. Current config
       
 | Knowledgebase   | Ref genome version | Contributes to known events? | Contributes to actionable events? |
 |-----------------|--------------------|------------------------------|-----------------------------------|
-| ACTIN           | v37                | No                           | Yes                               |
 | CKB FLEX        | v38                | Yes                          | Yes                               |
 | DoCM            | v37                | Yes                          | No                                |
 | Hartwig Cohort  | v37                | Yes                          | No                                |

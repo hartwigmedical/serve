@@ -46,6 +46,8 @@ public final class VariantFactory {
                         .associatedWithDrugResistance(variant.associatedWithDrugResistance())
                         .transformingActivity(variant.transformingActivity())
                         .polymorphism(variant.polymorphism())
+                        .hotspotReference(variant.hotspotReference())
+                        .isHotspot(variant.hotspotReference() != null)
                         .gene(resolveGene(ckbJsonDatabase, variant.gene()))
                         .referenceTranscriptCoordinate(convertReferenceTranscriptCoordinate(variant.referenceTranscriptCoordinate()))
                         .allTranscriptCoordinates(convertAllTranscriptCoordinates(variant.allTranscriptCoordinates()))

@@ -63,6 +63,7 @@ public final class CkbTestFactory {
                 .updateDate(TEST_DATE)
                 .fullName(fullName)
                 .variant(variant)
+                .isHotspot(false)
                 .impact(impact)
                 .gene(createGene(geneSymbol, geneSynonyms))
                 .build();

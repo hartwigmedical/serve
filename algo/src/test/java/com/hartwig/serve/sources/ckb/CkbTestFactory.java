@@ -147,6 +147,7 @@ public final class CkbTestFactory {
                 .updateDate(TEST_DATE)
                 .fullName(fullName)
                 .variant(variant)
+                .isHotspot(false)
                 .gene(createGene(geneSymbol))
                 .build();
     }

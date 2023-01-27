@@ -46,6 +46,11 @@ public abstract class Variant {
     public abstract String polymorphism();
 
     @Nullable
+    public abstract String hotspotReference();
+
+    public abstract boolean isHotspot();
+
+    @Nullable
     public abstract Gene gene();
 
     @Nullable

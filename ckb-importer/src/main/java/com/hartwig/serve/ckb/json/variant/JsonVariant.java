@@ -49,7 +49,10 @@ public abstract class JsonVariant implements CkbJsonObject {
 
     @Nullable
     public abstract String polymorphism();
-    
+
+    @Nullable
+    public abstract String hotspotReference();
+
     @NotNull
     public abstract LocalDate createDate();
 

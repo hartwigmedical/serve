@@ -26,6 +26,7 @@ final class VariantDatamodelChecker {
         map.put("associatedWithDrugResistance", true);
         map.put("transformingActivity", true);
         map.put("polymorphism", true);
+        map.put("hotspotReference", true);
         map.put("createDate", true);
         map.put("updateDate", true);
         map.put("referenceTranscriptCoordinates", true);

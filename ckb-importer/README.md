@@ -21,11 +21,16 @@
 | db_pass  | Required: The password needed for the DB user to authenticate on the URL. |
 
 ## Version History and Download Links
+- Upcoming
+  - Added field to variant datamodel
+    - hotspotReference (String)
+    - isHotspot (boolean)
 - [1.4](https://github.com/hartwigmedical/serve/releases/tag/ckb-importer-v1.4)
   - Added fields to variant datamodel: 
     - associatedWithDrugResistance ("Y" or null)
     - transformingActivity ("Y" or null) 
     - polymorphism ("Y" or null)
+  - Move to new repo serve
 - [1.3](https://github.com/hartwigmedical/hmftools/releases/tag/ckb-importer-v1.3)
   - Implementation of treatment approaches into the datamodel
   - Study phase could be nullable 

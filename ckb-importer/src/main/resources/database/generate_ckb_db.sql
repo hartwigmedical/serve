@@ -25,6 +25,8 @@ CREATE TABLE variant
     associatedWithDrugResistance varchar(20),
     transformingActivity varchar(20),
     polymorphism varchar(20),
+    hotspotReference varchar(50),
+    isHotspot BOOLEAN NOT NULL,
     description varchar(2500),
     PRIMARY KEY (id),
     FOREIGN KEY (ckbEntryId) REFERENCES ckbEntry(id)

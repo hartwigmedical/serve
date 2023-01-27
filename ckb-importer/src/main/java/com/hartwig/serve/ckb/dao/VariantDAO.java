@@ -54,7 +54,9 @@ class VariantDAO {
                 Variant.VARIANT.ASSOCIATEDWITHDRUGRESISTANCE,
                 Variant.VARIANT.TRANSFORMINGACTIVITY,
                 Variant.VARIANT.POLYMORPHISM,
-                Variant.VARIANT.DESCRIPTION)
+                        Variant.VARIANT.HOTSPOTREFERENCE,
+                        Variant.VARIANT.ISHOTSPOT,
+                        Variant.VARIANT.DESCRIPTION)
                 .values(ckbEntryId,
                         variant.id(),
                         variant.createDate(),
@@ -67,6 +69,8 @@ class VariantDAO {
                         variant.associatedWithDrugResistance(),
                         variant.transformingActivity(),
                         variant.polymorphism(),
+                        variant.hotspotReference(),
+                        Util.toByte(variant.isHotspot()),
                         variant.description())
                 .returning(Variant.VARIANT.ID)
                 .fetchOne()

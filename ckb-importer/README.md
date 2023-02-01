@@ -21,7 +21,7 @@
 | db_pass  | Required: The password needed for the DB user to authenticate on the URL. |
 
 ## Version History and Download Links
-- Upcoming
+- (2.0)
   - Added field to variant datamodel
     - hotspotReference (String)
     - isHotspot (boolean)

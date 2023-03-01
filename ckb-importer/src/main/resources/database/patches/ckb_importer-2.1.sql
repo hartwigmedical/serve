@@ -1,0 +1,1 @@
+ALTER TABLE location MODIFY COLUMN state varchar(100);

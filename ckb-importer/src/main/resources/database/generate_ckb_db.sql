@@ -392,7 +392,7 @@ CREATE TABLE location
     status varchar(50),
     facility varchar(500),
     city varchar(50) NOT NULL,
-    state varchar(50),
+    state varchar(100),
     zip varchar(50),
     country varchar(50) NOT NULL,
     PRIMARY KEY (id),

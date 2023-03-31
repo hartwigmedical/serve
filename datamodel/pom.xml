@@ -10,7 +10,7 @@
 
     <artifactId>datamodel</artifactId>
     <packaging>jar</packaging>
-    <version>${serve.version}</version>
+    <version>local-SNAPSHOT</version>
     <name>HMF SERVE - Datamodel</name>
 
     <dependencies>

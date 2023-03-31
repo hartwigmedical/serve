@@ -13,3 +13,7 @@ In addition, this repo provides a number of utility applications to ingest and a
 | [CKB-Importer](ckb-importer)           | Importer of CKB FLEX datamodel.           |
 | [iClusion-Importer](iclusion-importer) | Importer of iClusion datamodel.           |
 | [VICC-Importer](algo)                  | Importer of VICC datamodel.               |
+
+## Releasing serve-datamodel
+
+The `serve-datamodel` module is used by external projects and is 

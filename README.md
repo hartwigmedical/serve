@@ -29,6 +29,6 @@ When complete you can roll back the changes to the pom.xmls. These are meant to 
 transient. 
 
 Note the new version should be of the format `major.minor.patch` where:
-- Major indicates an non-backward compatible change (avoid these!)
+- Major indicates a non-backward compatible change (avoid these!)
 - Minor indicates a new feature
 - Patch indicates a bug fix

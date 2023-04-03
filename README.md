@@ -23,6 +23,8 @@ To release a new version of the datamodel artifact, perform the following:
 gcloud auth application-default login
 mvn versions:set -DnewVersion={new_version}
 mvn -pl \!ckb-importer,\!iclusion-importer,\!vicc-importer deploy
+git tag serve-v{new_version}
+git push origin serve-v{new_version}
 ```
 
 When complete you can roll back the changes to the pom.xmls. These are meant to be

@@ -10,7 +10,7 @@
 
     <artifactId>algo</artifactId>
     <packaging>jar</packaging>
-    <version>${serve.version}</version>
+    <version>local-SNAPSHOT</version>
     <name>HMF SERVE - Algo</name>
 
     <dependencies>

@@ -15,6 +15,7 @@ public final class CancerTypeConstants {
     public static final String JAX_SQUAMOUS_CELL_CARCINOMA_OF_UNKNOWN_PRIMARY = "10000009";
     public static final String JAX_ADENOCARCINOMA_OF_UNKNOWN_PRIMARY = "10000008";
     public static final String JAX_NOT_CANCER = "10000005";
+    public static final String JAX_CANCER_OF_UNKNOWN_PRIMARY = "10000006";
 
     // Cancer types which should be blacklisted for solid tumors
     public static final CancerType CANCER_TYPE = ImmutableCancerType.builder().name("Cancer").doid(CANCER_DOID).build();

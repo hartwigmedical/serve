@@ -53,7 +53,7 @@ public final class KnownEventsLoader {
 
         String knownGenesTsv = KnownGenesFile.knownGeneTsvPath(knownEventDir, refGenome);
         List<KnownGene> genes = KnownGenesFile.read(knownGenesTsv);
-        LOGGER.info(" Loaded {} known fusions from {}", fusions.size(), knownFusionTsv);
+        LOGGER.info(" Loaded {} known genes from {}", fusions.size(), knownGenesTsv);
 
         return ImmutableKnownEvents.builder()
                 .hotspots(hotspots)

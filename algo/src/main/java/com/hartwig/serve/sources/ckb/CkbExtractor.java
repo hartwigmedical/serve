@@ -181,6 +181,7 @@ public class CkbExtractor {
                 .knownHotspots(convertToKnownHotspots(output.hotspots(), variant, transcript))
                 .knownCodons(convertToKnownCodons(codons))
                 .knownExons(convertToKnownExons(output.exons()))
+                // TODO (ACTIN-4): Add conversion for known genes. Does require proper handling of entries that are currently filtered.
                 .knownCopyNumbers(convertToKnownAmpsDels(output.copyNumber()))
                 .knownFusions(convertToKnownFusions(output.fusionPair()))
                 .actionableHotspots(actionableHotspots)

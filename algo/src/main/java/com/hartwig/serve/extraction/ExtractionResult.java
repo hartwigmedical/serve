@@ -39,6 +39,8 @@ public abstract class ExtractionResult {
     @NotNull
     public abstract Set<KnownExon> knownExons();
 
+    // TODO (ACTIN-4) Add KnownGenes
+
     @NotNull
     public abstract Set<KnownCopyNumber> knownCopyNumbers();
 

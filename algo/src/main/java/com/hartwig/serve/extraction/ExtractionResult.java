@@ -8,6 +8,7 @@ import com.hartwig.serve.datamodel.fusion.ActionableFusion;
 import com.hartwig.serve.datamodel.fusion.KnownFusion;
 import com.hartwig.serve.datamodel.gene.ActionableGene;
 import com.hartwig.serve.datamodel.gene.KnownCopyNumber;
+import com.hartwig.serve.datamodel.gene.KnownGene;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
 import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.immuno.ActionableHLA;
@@ -39,7 +40,8 @@ public abstract class ExtractionResult {
     @NotNull
     public abstract Set<KnownExon> knownExons();
 
-    // TODO (ACTIN-4) Add KnownGenes
+    @NotNull
+    public abstract Set<KnownGene> knownGenes();
 
     @NotNull
     public abstract Set<KnownCopyNumber> knownCopyNumbers();

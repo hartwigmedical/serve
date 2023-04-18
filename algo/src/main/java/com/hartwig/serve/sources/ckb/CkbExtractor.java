@@ -1,8 +1,12 @@
 package com.hartwig.serve.sources.ckb;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.StringJoiner;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
@@ -25,7 +29,9 @@ import com.hartwig.serve.datamodel.fusion.KnownFusion;
 import com.hartwig.serve.datamodel.gene.ActionableGene;
 import com.hartwig.serve.datamodel.gene.GeneAnnotation;
 import com.hartwig.serve.datamodel.gene.ImmutableKnownCopyNumber;
+import com.hartwig.serve.datamodel.gene.ImmutableKnownGene;
 import com.hartwig.serve.datamodel.gene.KnownCopyNumber;
+import com.hartwig.serve.datamodel.gene.KnownGene;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
 import com.hartwig.serve.datamodel.hotspot.ImmutableKnownHotspot;
 import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
@@ -36,6 +42,7 @@ import com.hartwig.serve.datamodel.range.ImmutableKnownCodon;
 import com.hartwig.serve.datamodel.range.ImmutableKnownExon;
 import com.hartwig.serve.datamodel.range.KnownCodon;
 import com.hartwig.serve.datamodel.range.KnownExon;
+import com.hartwig.serve.datamodel.range.RangeAnnotation;
 import com.hartwig.serve.extraction.ActionableEventFactory;
 import com.hartwig.serve.extraction.EventExtractor;
 import com.hartwig.serve.extraction.EventExtractorOutput;
@@ -181,7 +188,7 @@ public class CkbExtractor {
                 .knownHotspots(convertToKnownHotspots(output.hotspots(), variant, transcript))
                 .knownCodons(convertToKnownCodons(codons))
                 .knownExons(convertToKnownExons(output.exons()))
-                // TODO (ACTIN-4): Add conversion for known genes. Does require proper handling of entries that are currently filtered.
+                .knownGenes(convertToKnownGenes(output))
                 .knownCopyNumbers(convertToKnownAmpsDels(output.copyNumber()))
                 .knownFusions(convertToKnownFusions(output.fusionPair()))
                 .actionableHotspots(actionableHotspots)
@@ -307,5 +314,17 @@ public class CkbExtractor {
         }
 
         return FusionConsolidation.consolidate(fusions);
+    }
+
+    @NotNull
+    private static Set<KnownGene> convertToKnownGenes(@NotNull EventExtractorOutput output) {
+        return Stream.of(Optional.ofNullable(output.geneLevel()).map(GeneAnnotation::gene).stream(),
+                        Optional.ofNullable(output.copyNumber()).map(GeneAnnotation::gene).stream(),
+                        Optional.ofNullable(output.codons()).orElse(Collections.emptyList()).stream().map(RangeAnnotation::gene),
+                        Optional.ofNullable(output.exons()).orElse(Collections.emptyList()).stream().map(RangeAnnotation::gene),
+                        Optional.ofNullable(output.hotspots()).orElse(Collections.emptyList()).stream().map(VariantHotspot::gene))
+                .flatMap(s -> s)
+                .map(gene -> ImmutableKnownGene.builder().geneRole(GeneRole.UNKNOWN).gene(gene).addSources(Knowledgebase.CKB).build())
+                .collect(Collectors.toSet());
     }
 }

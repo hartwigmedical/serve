@@ -14,6 +14,7 @@ import com.hartwig.serve.actionability.ActionableRangeUrlConsolidator;
 import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.datamodel.fusion.KnownFusion;
 import com.hartwig.serve.datamodel.gene.KnownCopyNumber;
+import com.hartwig.serve.datamodel.gene.KnownGene;
 import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.range.KnownCodon;
 import com.hartwig.serve.datamodel.range.KnownExon;
@@ -22,6 +23,7 @@ import com.hartwig.serve.extraction.copynumber.CopyNumberConsolidation;
 import com.hartwig.serve.extraction.events.EventInterpretation;
 import com.hartwig.serve.extraction.exon.ExonConsolidation;
 import com.hartwig.serve.extraction.fusion.FusionConsolidation;
+import com.hartwig.serve.extraction.gene.GeneConsolidation;
 import com.hartwig.serve.extraction.hotspot.HotspotConsolidation;
 
 import org.apache.logging.log4j.LogManager;
@@ -46,6 +48,7 @@ public final class ExtractionFunctions {
         Set<KnownExon> allExons = Sets.newHashSet();
         Set<KnownCopyNumber> allCopyNumbers = Sets.newHashSet();
         Set<KnownFusion> allFusions = Sets.newHashSet();
+        Set<KnownGene> allGenes = Sets.newHashSet();
 
         for (ExtractionResult result : results) {
             allEventInterpretations.addAll(result.eventInterpretations());
@@ -54,6 +57,7 @@ public final class ExtractionFunctions {
             allExons.addAll(result.knownExons());
             allCopyNumbers.addAll(result.knownCopyNumbers());
             allFusions.addAll(result.knownFusions());
+            allGenes.addAll(result.knownGenes());
 
             mergedBuilder.addAllActionableHotspots(result.actionableHotspots());
             mergedBuilder.addAllActionableRanges(result.actionableRanges());
@@ -69,6 +73,7 @@ public final class ExtractionFunctions {
                 .knownExons(ExonConsolidation.consolidate(allExons))
                 .knownCopyNumbers(CopyNumberConsolidation.consolidate(allCopyNumbers))
                 .knownFusions(FusionConsolidation.consolidate(allFusions))
+                .knownGenes(GeneConsolidation.consolidate(allGenes))
                 .build();
 
         return consolidateActionableEvents(mergedResult);

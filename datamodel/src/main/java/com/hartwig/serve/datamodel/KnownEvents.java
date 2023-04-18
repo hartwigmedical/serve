@@ -4,6 +4,7 @@ import java.util.Set;
 
 import com.hartwig.serve.datamodel.fusion.KnownFusion;
 import com.hartwig.serve.datamodel.gene.KnownCopyNumber;
+import com.hartwig.serve.datamodel.gene.KnownGene;
 import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.range.KnownCodon;
 import com.hartwig.serve.datamodel.range.KnownExon;
@@ -24,6 +25,9 @@ public abstract class KnownEvents {
 
     @NotNull
     public abstract Set<KnownExon> exons();
+
+    @NotNull
+    public abstract Set<KnownGene> genes();
 
     @NotNull
     public abstract Set<KnownCopyNumber> copyNumbers();

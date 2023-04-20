@@ -1,4 +1,4 @@
-package com.hartwig.serve.sources.hartwig;
+package com.hartwig.serve.sources.hartwig.hotspot;
 
 import java.util.List;
 import java.util.Set;
@@ -23,9 +23,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
-public class HartwigExtractor {
+public class HartwigHotspotExtractor {
 
-    private static final Logger LOGGER = LogManager.getLogger(HartwigExtractor.class);
+    private static final Logger LOGGER = LogManager.getLogger(HartwigHotspotExtractor.class);
 
     @NotNull
     private final Knowledgebase source;
@@ -33,7 +33,7 @@ public class HartwigExtractor {
     private final ProteinResolver proteinResolver;
     private final boolean addExplicitHotspots;
 
-    public HartwigExtractor(@NotNull final Knowledgebase source, @NotNull final ProteinResolver proteinResolver,
+    public HartwigHotspotExtractor(@NotNull final Knowledgebase source, @NotNull final ProteinResolver proteinResolver,
             final boolean addExplicitHotspots) {
         this.source = source;
         this.proteinResolver = proteinResolver;
@@ -41,10 +41,10 @@ public class HartwigExtractor {
     }
 
     @NotNull
-    public ExtractionResult extract(@NotNull List<HartwigEntry> entries) {
+    public ExtractionResult extract(@NotNull List<HartwigHotspotEntry> entries) {
         Set<KnownHotspot> knownHotspots = Sets.newHashSet();
         ProgressTracker tracker = new ProgressTracker("Hartwig", entries.size());
-        for (HartwigEntry entry : entries) {
+        for (HartwigHotspotEntry entry : entries) {
             List<Hotspot> hotspots = Lists.newArrayList();
             if (!entry.proteinAnnotation().isEmpty()) {
                 hotspots = proteinResolver.resolve(entry.gene(), entry.transcript(), entry.proteinAnnotation());
@@ -89,7 +89,7 @@ public class HartwigExtractor {
     }
 
     @NotNull
-    private static Hotspot toHotspot(@NotNull HartwigEntry entry) {
+    private static Hotspot toHotspot(@NotNull HartwigHotspotEntry entry) {
         return ImmutableHotspot.builder()
                 .chromosome(entry.chromosome())
                 .position(entry.position())

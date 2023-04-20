@@ -26,6 +26,7 @@ public class ServeAlgoTest {
 
     private static final String DOCM_TSV = Resources.getResource("docm/example.tsv").getPath();
     private static final String HARTWIG_CURATED_TSV = Resources.getResource("hartwig/example.tsv").getPath();
+    private static final String HARTWIG_CURATED_GENES_TSV = Resources.getResource("hartwig/example.tsv").getPath();
     private static final String HARTWIG_COHORT_TSV = Resources.getResource("hartwig/example.tsv").getPath();
 
     private static final String ENSEMBL_DATA_DIR_37 = Resources.getResource("ensembl_data_cache/v37").getPath();
@@ -59,6 +60,9 @@ public class ServeAlgoTest {
                 .hartwigCohortTsv(HARTWIG_COHORT_TSV)
                 .useHartwigCurated(true)
                 .hartwigCuratedTsv(HARTWIG_CURATED_TSV)
+                .useHartwigDriverGenes(true)
+                .useHartwigCuratedGenes(true)
+                .hartwigCuratedGeneTsv(HARTWIG_CURATED_GENES_TSV)
                 .ensemblDataDir37(ENSEMBL_DATA_DIR_37)
                 .ensemblDataDir38(ENSEMBL_DATA_DIR_38)
                 .refGenome37FastaFile(REF_GENOME_37_FASTA_FILE)

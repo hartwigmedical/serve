@@ -29,9 +29,12 @@ import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurator;
 import com.hartwig.serve.sources.docm.DocmEntry;
 import com.hartwig.serve.sources.docm.DocmExtractor;
 import com.hartwig.serve.sources.docm.DocmReader;
-import com.hartwig.serve.sources.hartwig.HartwigEntry;
-import com.hartwig.serve.sources.hartwig.HartwigExtractor;
-import com.hartwig.serve.sources.hartwig.HartwigFileReader;
+import com.hartwig.serve.sources.hartwig.gene.HartwigGeneEntry;
+import com.hartwig.serve.sources.hartwig.gene.HartwigGeneExtractor;
+import com.hartwig.serve.sources.hartwig.gene.HartwigGeneFileReader;
+import com.hartwig.serve.sources.hartwig.hotspot.HartwigHotspotEntry;
+import com.hartwig.serve.sources.hartwig.hotspot.HartwigHotspotExtractor;
+import com.hartwig.serve.sources.hartwig.hotspot.HartwigHotspotFileReader;
 import com.hartwig.serve.sources.iclusion.IclusionExtractor;
 import com.hartwig.serve.sources.iclusion.IclusionExtractorFactory;
 import com.hartwig.serve.sources.iclusion.IclusionReader;
@@ -85,6 +88,14 @@ public class ServeAlgo {
 
         if (config.useHartwigCurated()) {
             extractions.add(extractHartwigCuratedKnowledge(config.hartwigCuratedTsv(), !config.skipHotspotResolving()));
+        }
+
+        if (config.useHartwigDriverGenes()) {
+            extractions.add(extractHartwigDriverGeneKnowledge(config.driverGene37Tsv()));
+        }
+
+        if (config.useHartwigCuratedGenes()) {
+            extractions.add(extractHartwigDriverGeneKnowledge(config.hartwigCuratedGeneTsv()));
         }
 
         Map<RefGenome, List<ExtractionResult>> versionedMap = refGenomeManager.makeVersioned(extractions);
@@ -159,12 +170,12 @@ public class ServeAlgo {
     private ExtractionResult extractHartwigCohortKnowledge(@NotNull String hartwigCohortTsv, boolean addExplicitHotspots)
             throws IOException {
         LOGGER.info("Reading Hartwig Cohort TSV from '{}'", hartwigCohortTsv);
-        List<HartwigEntry> entries = HartwigFileReader.read(hartwigCohortTsv);
+        List<HartwigHotspotEntry> entries = HartwigHotspotFileReader.read(hartwigCohortTsv);
         LOGGER.info(" Read {} entries", entries.size());
 
         RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.HARTWIG_COHORT);
-        HartwigExtractor extractor =
-                new HartwigExtractor(Knowledgebase.HARTWIG_COHORT, refGenomeResource.proteinResolver(), addExplicitHotspots);
+        HartwigHotspotExtractor extractor =
+                new HartwigHotspotExtractor(Knowledgebase.HARTWIG_COHORT, refGenomeResource.proteinResolver(), addExplicitHotspots);
         LOGGER.info("Running Hartwig Cohort knowledge extraction");
         return extractor.extract(entries);
     }
@@ -173,13 +184,35 @@ public class ServeAlgo {
     private ExtractionResult extractHartwigCuratedKnowledge(@NotNull String hartwigCuratedTsv, boolean addExplicitHotspots)
             throws IOException {
         LOGGER.info("Reading Hartwig Curated TSV from '{}'", hartwigCuratedTsv);
-        List<HartwigEntry> entries = HartwigFileReader.read(hartwigCuratedTsv);
+        List<HartwigHotspotEntry> entries = HartwigHotspotFileReader.read(hartwigCuratedTsv);
         LOGGER.info(" Read {} entries", entries.size());
 
         RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.HARTWIG_CURATED);
-        HartwigExtractor extractor =
-                new HartwigExtractor(Knowledgebase.HARTWIG_CURATED, refGenomeResource.proteinResolver(), addExplicitHotspots);
+        HartwigHotspotExtractor extractor =
+                new HartwigHotspotExtractor(Knowledgebase.HARTWIG_CURATED, refGenomeResource.proteinResolver(), addExplicitHotspots);
         LOGGER.info("Running Hartwig Curated knowledge extraction");
+        return extractor.extract(entries);
+    }
+
+    @NotNull
+    private ExtractionResult extractHartwigDriverGeneKnowledge(@NotNull String driverGeneFileTsv) throws IOException {
+        LOGGER.info("Reading Hartwig Drive Genes TSV from '{}'", driverGeneFileTsv);
+        List<HartwigGeneEntry> entries = HartwigGeneFileReader.read(driverGeneFileTsv);
+        LOGGER.info(" Read {} entries", entries.size());
+
+        HartwigGeneExtractor extractor = new HartwigGeneExtractor(Knowledgebase.HARTWIG_DRIVER_GENE);
+        LOGGER.info("Running Hartwig Driver Gene knowledge extraction");
+        return extractor.extract(entries);
+    }
+
+    @NotNull
+    private ExtractionResult extractHartwigCuratedGeneKnowledge(@NotNull String curatedGeneFileTsv) throws IOException {
+        LOGGER.info("Reading Hartwig Curated Genes TSV from '{}'", curatedGeneFileTsv);
+        List<HartwigGeneEntry> entries = HartwigGeneFileReader.read(curatedGeneFileTsv);
+        LOGGER.info(" Read {} entries", entries.size());
+
+        HartwigGeneExtractor extractor = new HartwigGeneExtractor(Knowledgebase.HARTWIG_CURATED_GENE);
+        LOGGER.info("Running Hartwig Curated Gene knowledge extraction");
         return extractor.extract(entries);
     }
 }

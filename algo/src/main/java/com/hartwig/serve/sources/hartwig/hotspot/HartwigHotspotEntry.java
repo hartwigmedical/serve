@@ -1,4 +1,4 @@
-package com.hartwig.serve.sources.hartwig;
+package com.hartwig.serve.sources.hartwig.hotspot;
 
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;
@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 @Value.Immutable
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class })
-public abstract class HartwigEntry {
+public abstract class HartwigHotspotEntry {
 
     @NotNull
     public abstract String chromosome();

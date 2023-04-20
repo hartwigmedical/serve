@@ -149,6 +149,12 @@ public interface ServeConfig {
     @NotNull
     String hartwigCuratedTsv();
 
+    boolean useHartwigDriverGenes();
+
+    boolean useHartwigCuratedGenes();
+
+    String hartwigCuratedGeneTsv();
+
     @NotNull
     String missingDoidsMappingTsv();
 

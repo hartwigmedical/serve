@@ -15,6 +15,8 @@ public enum Knowledgebase {
     DOCM(RefGenome.V37, "DoCM", EvidenceLevel.A, EvidenceLevel.A),
     HARTWIG_COHORT(RefGenome.V37, "HMF Cohort", EvidenceLevel.A, EvidenceLevel.A),
     HARTWIG_CURATED(RefGenome.V37, "HMF Curated", EvidenceLevel.A, EvidenceLevel.A),
+    HARTWIG_DRIVER_GENE(RefGenome.V37, "HMF Driver Gene", EvidenceLevel.A, EvidenceLevel.A),
+    HARTWIG_CURATED_GENE(RefGenome.V37, "HMF Curated Gene", EvidenceLevel.A, EvidenceLevel.A),
     ICLUSION(RefGenome.V37, "iClusion", EvidenceLevel.B, EvidenceLevel.B),
     VICC_CGI(RefGenome.V37, "CGI", EvidenceLevel.B, EvidenceLevel.B),
     VICC_CIVIC(RefGenome.V37, "CIViC", EvidenceLevel.B, EvidenceLevel.B),

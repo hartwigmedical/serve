@@ -25,12 +25,7 @@ public class CkbVariantAnnotatorTest {
     private static final Gene TSG_GENE = geneWith("tumor suppressor");
     private static final Gene BOTH_GENE = geneWith("both");
     private static final Gene UNKNOWN_GENE = geneWith("na");
-    public static final String GENE_NAME = "gene";
-
-    @NotNull
-    private static ImmutableGene geneWith(String role) {
-        return ImmutableGene.builder().id(0).createDate(TEST_DATE).updateDate(TEST_DATE).geneSymbol(GENE_NAME).geneRole(role).build();
-    }
+    private static final String GENE_NAME = "gene";
 
     @Test
     public void shouldAnnotateKnownGenesWithRoleFromVariant() {
@@ -38,6 +33,11 @@ public class CkbVariantAnnotatorTest {
         verifyKnownGeneAnnotatedWith(TSG_GENE, GeneRole.TSG);
         verifyKnownGeneAnnotatedWith(BOTH_GENE, GeneRole.BOTH);
         verifyKnownGeneAnnotatedWith(UNKNOWN_GENE, GeneRole.UNKNOWN);
+    }
+
+    @NotNull
+    private static ImmutableGene geneWith(String role) {
+        return ImmutableGene.builder().id(0).createDate(TEST_DATE).updateDate(TEST_DATE).geneSymbol(GENE_NAME).geneRole(role).build();
     }
 
     private static void verifyKnownGeneAnnotatedWith(Gene gene, GeneRole expectedRole) {

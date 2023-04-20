@@ -196,7 +196,7 @@ public class ServeAlgo {
 
     @NotNull
     private ExtractionResult extractHartwigDriverGeneKnowledge(@NotNull String driverGeneFileTsv) throws IOException {
-        LOGGER.info("Reading Hartwig Drive Genes TSV from '{}'", driverGeneFileTsv);
+        LOGGER.info("Reading Hartwig Driver Genes TSV from '{}'", driverGeneFileTsv);
         List<HartwigGeneEntry> entries = HartwigGeneFileReader.read(driverGeneFileTsv);
         LOGGER.info(" Read {} entries", entries.size());
 

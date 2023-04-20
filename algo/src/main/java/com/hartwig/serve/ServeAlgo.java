@@ -95,7 +95,7 @@ public class ServeAlgo {
         }
 
         if (config.useHartwigCuratedGenes()) {
-            extractions.add(extractHartwigDriverGeneKnowledge(config.hartwigCuratedGeneTsv()));
+            extractions.add(extractHartwigCuratedGeneKnowledge(config.hartwigCuratedGeneTsv()));
         }
 
         Map<RefGenome, List<ExtractionResult>> versionedMap = refGenomeManager.makeVersioned(extractions);

@@ -55,9 +55,9 @@ public final class ExtractionFunctions {
             allHotspots.addAll(result.knownHotspots());
             allCodons.addAll(result.knownCodons());
             allExons.addAll(result.knownExons());
+            allGenes.addAll(result.knownGenes());
             allCopyNumbers.addAll(result.knownCopyNumbers());
             allFusions.addAll(result.knownFusions());
-            allGenes.addAll(result.knownGenes());
 
             mergedBuilder.addAllActionableHotspots(result.actionableHotspots());
             mergedBuilder.addAllActionableRanges(result.actionableRanges());

@@ -13,7 +13,7 @@ import com.hartwig.serve.datamodel.serialization.KnownCodonFile;
 import com.hartwig.serve.datamodel.serialization.KnownCopyNumberFile;
 import com.hartwig.serve.datamodel.serialization.KnownExonFile;
 import com.hartwig.serve.datamodel.serialization.KnownFusionFile;
-import com.hartwig.serve.datamodel.serialization.KnownGenesFile;
+import com.hartwig.serve.datamodel.serialization.KnownGeneFile;
 import com.hartwig.serve.datamodel.serialization.KnownHotspotFile;
 
 import org.apache.logging.log4j.LogManager;
@@ -51,17 +51,17 @@ public final class KnownEventsLoader {
         List<KnownFusion> fusions = KnownFusionFile.read(knownFusionTsv);
         LOGGER.info(" Loaded {} known fusions from {}", fusions.size(), knownFusionTsv);
 
-        String knownGenesTsv = KnownGenesFile.knownGeneTsvPath(knownEventDir, refGenome);
-        List<KnownGene> genes = KnownGenesFile.read(knownGenesTsv);
-        LOGGER.info(" Loaded {} known genes from {}", fusions.size(), knownGenesTsv);
+        String knownGeneTsv = KnownGeneFile.knownGeneTsvPath(knownEventDir, refGenome);
+        List<KnownGene> genes = KnownGeneFile.read(knownGeneTsv);
+        LOGGER.info(" Loaded {} known genes from {}", fusions.size(), knownGeneTsv);
 
         return ImmutableKnownEvents.builder()
                 .hotspots(hotspots)
                 .codons(codons)
                 .exons(exons)
+                .genes(genes)
                 .copyNumbers(copyNumbers)
                 .fusions(fusions)
-                .genes(genes)
                 .build();
     }
 }

@@ -22,17 +22,17 @@ import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
 import org.jetbrains.annotations.NotNull;
 
-public class KnownGenesFile {
+public final class KnownGeneFile {
 
     static final String FIELD_DELIMITER = "\t";
-    private static final String KNOWN_GENES_TSV = "KnownGenes.SERVE.tsv";
+    private static final String KNOWN_GENE_TSV = "KnownGenes.SERVE.tsv";
 
-    private KnownGenesFile() {
+    private KnownGeneFile() {
     }
 
     @NotNull
     public static String knownGeneTsvPath(@NotNull String outputDir, @NotNull RefGenome refGenome) {
-        return refGenome.addVersionToFilePath(outputDir + File.separator + KNOWN_GENES_TSV);
+        return refGenome.addVersionToFilePath(outputDir + File.separator + KNOWN_GENE_TSV);
     }
 
     public static void write(@NotNull String genesTsv, @NotNull Iterable<KnownGene> genes) throws IOException {
@@ -79,7 +79,7 @@ public class KnownGenesFile {
     static List<String> toLines(@NotNull Iterable<KnownGene> genes) {
         return StreamSupport.stream(genes.spliterator(), false)
                 .sorted(comparing(KnownGene::gene))
-                .map(KnownGenesFile::toLine)
+                .map(KnownGeneFile::toLine)
                 .collect(Collectors.toList());
     }
 

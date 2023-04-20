@@ -21,7 +21,7 @@ public class KnownGeneFileTest {
 
     @Test
     public void canReadFromFileAndConvert() throws IOException {
-        List<KnownGene> genes = KnownGenesFile.read(KNOWN_GENE_TSV);
+        List<KnownGene> genes = KnownGeneFile.read(KNOWN_GENE_TSV);
 
         assertEquals(genes.size(), 1);
         KnownGene knownGene = genes.get(0);
@@ -29,8 +29,8 @@ public class KnownGeneFileTest {
         assertEquals(knownGene.geneRole(), GeneRole.ONCO);
         assertEquals(knownGene.sources(), Set.of(Knowledgebase.VICC_CIVIC));
 
-        Map<String, Integer> fields = SerializationUtil.createFields(KnownGenesFile.header(), KnownGenesFile.FIELD_DELIMITER);
-        List<KnownGene> regeneratedGenes = KnownGenesFile.fromLines(KnownGenesFile.toLines(genes), fields);
+        Map<String, Integer> fields = SerializationUtil.createFields(KnownGeneFile.header(), KnownGeneFile.FIELD_DELIMITER);
+        List<KnownGene> regeneratedGenes = KnownGeneFile.fromLines(KnownGeneFile.toLines(genes), fields);
 
         assertEquals(genes, regeneratedGenes);
     }

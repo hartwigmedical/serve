@@ -13,7 +13,7 @@ import com.hartwig.serve.datamodel.serialization.KnownCodonFile;
 import com.hartwig.serve.datamodel.serialization.KnownCopyNumberFile;
 import com.hartwig.serve.datamodel.serialization.KnownExonFile;
 import com.hartwig.serve.datamodel.serialization.KnownFusionFile;
-import com.hartwig.serve.datamodel.serialization.KnownGenesFile;
+import com.hartwig.serve.datamodel.serialization.KnownGeneFile;
 import com.hartwig.serve.datamodel.serialization.KnownHotspotFile;
 import com.hartwig.serve.extraction.events.EventInterpretationFile;
 import com.hartwig.serve.extraction.hotspot.KnownHotspotVCF;
@@ -70,9 +70,9 @@ public class ExtractionResultWriter {
         LOGGER.info(" Writing {} known fusions to {}", result.knownFusions().size(), fusionTsv);
         KnownFusionFile.write(fusionTsv, result.knownFusions());
 
-        String genesTsv = KnownGenesFile.knownGeneTsvPath(outputDir, refGenome);
+        String geneTsv = KnownGeneFile.knownGeneTsvPath(outputDir, refGenome);
         LOGGER.info(" Writing {} known genes to {}", result.knownGenes().size(), fusionTsv);
-        KnownGenesFile.write(genesTsv, result.knownGenes());
+        KnownGeneFile.write(geneTsv, result.knownGenes());
 
         String actionableHotspotTsv = ActionableHotspotFile.actionableHotspotTsvPath(outputDir, refGenome);
         LOGGER.info(" Writing {} actionable hotspots to {}", result.actionableHotspots().size(), actionableHotspotTsv);

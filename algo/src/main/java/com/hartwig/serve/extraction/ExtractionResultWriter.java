@@ -62,6 +62,10 @@ public class ExtractionResultWriter {
         LOGGER.info(" Writing {} known exons to {}", result.knownExons().size(), exonTsv);
         KnownExonFile.write(exonTsv, result.knownExons());
 
+        String geneTsv = KnownGeneFile.knownGeneTsvPath(outputDir, refGenome);
+        LOGGER.info(" Writing {} known genes to {}", result.knownGenes().size(), geneTsv);
+        KnownGeneFile.write(geneTsv, result.knownGenes());
+
         String copyNumberTsv = KnownCopyNumberFile.knownCopyNumberTsvPath(outputDir, refGenome);
         LOGGER.info(" Writing {} known copy numbers to {}", result.knownCopyNumbers().size(), copyNumberTsv);
         KnownCopyNumberFile.write(copyNumberTsv, result.knownCopyNumbers());
@@ -69,10 +73,6 @@ public class ExtractionResultWriter {
         String fusionTsv = KnownFusionFile.knownFusionTsvPath(outputDir, refGenome);
         LOGGER.info(" Writing {} known fusions to {}", result.knownFusions().size(), fusionTsv);
         KnownFusionFile.write(fusionTsv, result.knownFusions());
-
-        String geneTsv = KnownGeneFile.knownGeneTsvPath(outputDir, refGenome);
-        LOGGER.info(" Writing {} known genes to {}", result.knownGenes().size(), fusionTsv);
-        KnownGeneFile.write(geneTsv, result.knownGenes());
 
         String actionableHotspotTsv = ActionableHotspotFile.actionableHotspotTsvPath(outputDir, refGenome);
         LOGGER.info(" Writing {} actionable hotspots to {}", result.actionableHotspots().size(), actionableHotspotTsv);

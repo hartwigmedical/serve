@@ -313,6 +313,6 @@ public class CkbExtractor {
 
     @NotNull
     private static Set<KnownGene> convertToKnownGene(@NotNull String gene) {
-        return Set.of(ImmutableKnownGene.builder().gene(gene).geneRole(GeneRole.UNKNOWN).build());
+        return Set.of(ImmutableKnownGene.builder().gene(gene).geneRole(GeneRole.UNKNOWN).addSources(Knowledgebase.CKB).build());
     }
 }

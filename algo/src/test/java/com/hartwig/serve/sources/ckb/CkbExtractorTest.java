@@ -24,7 +24,8 @@ public class CkbExtractorTest {
     @Test
     public void canExtractFromCkbEntries() {
         EventClassifierConfig config = CkbClassificationConfig.build();
-        CkbExtractor extractor = CkbExtractorFactory.buildCkbExtractor(config, RefGenomeResourceTestFactory.buildTestResource37(),
+        CkbExtractor extractor = CkbExtractorFactory.buildCkbExtractor(config,
+                RefGenomeResourceTestFactory.buildTestResource37(),
                 TreatmentApproachTestFactory.createEmptyCurator());
 
         List<CkbEntry> ckbEntries = Lists.newArrayList();
@@ -38,6 +39,7 @@ public class CkbExtractorTest {
 
         ExtractionResult result = extractor.extract(ckbEntries);
         assertEquals(1, result.knownHotspots().size());
+        assertEquals(5, result.knownGenes().size());
         assertEquals(1, result.knownCopyNumbers().size());
         assertEquals(1, result.knownFusions().size());
         assertEquals(1, result.actionableHotspots().size());

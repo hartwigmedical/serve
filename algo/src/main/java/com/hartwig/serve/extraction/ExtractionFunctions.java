@@ -46,9 +46,9 @@ public final class ExtractionFunctions {
         Set<KnownHotspot> allHotspots = Sets.newHashSet();
         Set<KnownCodon> allCodons = Sets.newHashSet();
         Set<KnownExon> allExons = Sets.newHashSet();
+        Set<KnownGene> allGenes = Sets.newHashSet();
         Set<KnownCopyNumber> allCopyNumbers = Sets.newHashSet();
         Set<KnownFusion> allFusions = Sets.newHashSet();
-        Set<KnownGene> allGenes = Sets.newHashSet();
 
         for (ExtractionResult result : results) {
             allEventInterpretations.addAll(result.eventInterpretations());

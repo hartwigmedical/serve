@@ -200,7 +200,7 @@ public class ServeAlgo {
         List<HartwigGeneEntry> entries = HartwigGeneFileReader.read(driverGeneFileTsv);
         LOGGER.info(" Read {} entries", entries.size());
 
-        HartwigGeneExtractor extractor = new HartwigGeneExtractor(Knowledgebase.HARTWIG_DRIVER_GENE);
+        HartwigGeneExtractor extractor = new HartwigGeneExtractor(Knowledgebase.HARTWIG_GENE_DRIVER_PANEL);
         LOGGER.info("Running Hartwig Driver Gene knowledge extraction");
         return extractor.extract(entries);
     }
@@ -211,7 +211,7 @@ public class ServeAlgo {
         List<HartwigGeneEntry> entries = HartwigGeneFileReader.read(curatedGeneFileTsv);
         LOGGER.info(" Read {} entries", entries.size());
 
-        HartwigGeneExtractor extractor = new HartwigGeneExtractor(Knowledgebase.HARTWIG_CURATED_GENE);
+        HartwigGeneExtractor extractor = new HartwigGeneExtractor(Knowledgebase.HARTWIG_GENE_CURATED);
         LOGGER.info("Running Hartwig Curated Gene knowledge extraction");
         return extractor.extract(entries);
     }

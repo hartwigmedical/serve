@@ -82,12 +82,12 @@ public class ServeAlgo {
             extractions.add(extractDocmKnowledge(config.docmTsv()));
         }
 
-        if (config.useHartwigCohort()) {
-            extractions.add(extractHartwigCohortKnowledge(config.hartwigCohortTsv(), !config.skipHotspotResolving()));
+        if (config.useHartwigCohortHotspots()) {
+            extractions.add(extractHartwigCohortKnowledge(config.hartwigCohortHotspotTsv(), !config.skipHotspotResolving()));
         }
 
-        if (config.useHartwigCurated()) {
-            extractions.add(extractHartwigCuratedKnowledge(config.hartwigCuratedTsv(), !config.skipHotspotResolving()));
+        if (config.useHartwigCuratedHotspots()) {
+            extractions.add(extractHartwigCuratedKnowledge(config.hartwigCuratedHotspotTsv(), !config.skipHotspotResolving()));
         }
 
         if (config.useHartwigDriverGenes()) {
@@ -173,9 +173,9 @@ public class ServeAlgo {
         List<HartwigHotspotEntry> entries = HartwigHotspotFileReader.read(hartwigCohortTsv);
         LOGGER.info(" Read {} entries", entries.size());
 
-        RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.HARTWIG_COHORT);
+        RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.HARTWIG_HOTSPOT_COHORT);
         HartwigHotspotExtractor extractor =
-                new HartwigHotspotExtractor(Knowledgebase.HARTWIG_COHORT, refGenomeResource.proteinResolver(), addExplicitHotspots);
+                new HartwigHotspotExtractor(Knowledgebase.HARTWIG_HOTSPOT_COHORT, refGenomeResource.proteinResolver(), addExplicitHotspots);
         LOGGER.info("Running Hartwig Cohort knowledge extraction");
         return extractor.extract(entries);
     }
@@ -187,9 +187,9 @@ public class ServeAlgo {
         List<HartwigHotspotEntry> entries = HartwigHotspotFileReader.read(hartwigCuratedTsv);
         LOGGER.info(" Read {} entries", entries.size());
 
-        RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.HARTWIG_CURATED);
+        RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.HARTWIG_HOTSPOT_CURATED);
         HartwigHotspotExtractor extractor =
-                new HartwigHotspotExtractor(Knowledgebase.HARTWIG_CURATED, refGenomeResource.proteinResolver(), addExplicitHotspots);
+                new HartwigHotspotExtractor(Knowledgebase.HARTWIG_HOTSPOT_CURATED, refGenomeResource.proteinResolver(), addExplicitHotspots);
         LOGGER.info("Running Hartwig Curated knowledge extraction");
         return extractor.extract(entries);
     }

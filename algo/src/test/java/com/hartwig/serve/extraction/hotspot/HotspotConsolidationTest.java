@@ -25,7 +25,7 @@ public class HotspotConsolidationTest {
 
     @Test
     public void canConsolidateHotspotsFromOneSource() {
-        Knowledgebase source = Knowledgebase.HARTWIG_CURATED;
+        Knowledgebase source = Knowledgebase.HARTWIG_HOTSPOT_CURATED;
         Set<KnownHotspot> knownHotspots = Sets.newHashSet();
         knownHotspots.add(HotspotTestFactory.knownHotspotBuilder()
                 .from(hotspot1())
@@ -71,8 +71,8 @@ public class HotspotConsolidationTest {
     @Test
     public void canConsolidateHotspotsFromTwoSources() {
         String gene = "gene1";
-        Knowledgebase source1 = Knowledgebase.HARTWIG_CURATED;
-        Knowledgebase source2 = Knowledgebase.HARTWIG_COHORT;
+        Knowledgebase source1 = Knowledgebase.HARTWIG_HOTSPOT_CURATED;
+        Knowledgebase source2 = Knowledgebase.HARTWIG_HOTSPOT_COHORT;
         Set<KnownHotspot> knownHotspots = Sets.newHashSet();
         knownHotspots.add(HotspotTestFactory.knownHotspotBuilder()
                 .from(hotspot1())

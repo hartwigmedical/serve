@@ -6,15 +6,13 @@ import java.io.IOException;
 import java.util.List;
 
 import com.google.common.io.Resources;
-import com.hartwig.serve.sources.hartwig.hotspot.HartwigHotspotEntry;
-import com.hartwig.serve.sources.hartwig.hotspot.HartwigHotspotFileReader;
 
 import org.apache.logging.log4j.util.Strings;
 import org.junit.Test;
 
 public class HartwigHotspotFileReaderTest {
 
-    private static final String EXAMPLE_TSV = Resources.getResource("hartwig/example.tsv").getPath();
+    private static final String EXAMPLE_TSV = Resources.getResource("hartwig/hartwig_hotspots_cohort.tsv").getPath();
 
     @Test
     public void canReadHartwigFile() throws IOException {

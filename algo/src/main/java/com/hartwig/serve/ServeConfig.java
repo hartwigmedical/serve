@@ -38,11 +38,13 @@ public interface ServeConfig {
     String CKB_DRUG_CURATION_TSV = "ckb_drug_curation_tsv";
     String USE_DOCM = "use_docm";
     String DOCM_TSV = "docm_tsv";
-    String USE_HARTWIG_COHORT = "use_hartwig_cohort";
-    String HARTWIG_COHORT_TSV = "hartwig_cohort_tsv";
-    String USE_HARTWIG_CURATED = "use_hartwig_curated";
-    String HARTWIG_CURATED_TSV = "hartwig_curated_tsv";
-
+    String USE_HARTWIG_COHORT_HOTSPOTS = "use_hartwig_cohort_hotspots";
+    String HARTWIG_COHORT_HOTSPOT_TSV = "hartwig_cohort_hotspot_tsv";
+    String USE_HARTWIG_CURATED_HOTSPOTS = "use_hartwig_curated_hotspots";
+    String HARTWIG_CURATED_HOTSPOT_TSV = "hartwig_curated_hotspot_tsv";
+    String USE_HARTWIG_DRIVER_GENES = "use_hartwig_driver_genes";
+    String USE_HARTWIG_CURATED_GENES = "use_hartwig_curated_genes";
+    String HARTWIG_CURATED_GENE_TSV = "hartwig_curated_gene_tsv";
     // Config for curation of evidence
     String MISSING_DOIDS_MAPPING_TSV = "missing_doids_mapping_tsv";
 
@@ -81,10 +83,13 @@ public interface ServeConfig {
         options.addOption(CKB_DRUG_CURATION_TSV, true, "Path to the CKB drug curation tsv");
         options.addOption(USE_DOCM, false, "If provided, DoCM will be used as a source in SERVE");
         options.addOption(DOCM_TSV, true, "Path to the DoCM knowledgebase input TSV");
-        options.addOption(USE_HARTWIG_COHORT, false, "If provided, Hartwig Cohort will be used as a source in SERVE");
-        options.addOption(HARTWIG_COHORT_TSV, true, "Path to the Hartwig Cohort input TSV");
-        options.addOption(USE_HARTWIG_CURATED, false, "If provided, Hartwig Curated will be used as a source in SERVE");
-        options.addOption(HARTWIG_CURATED_TSV, true, "Path to the Hartwig Curated input TSV");
+        options.addOption(USE_HARTWIG_COHORT_HOTSPOTS, false, "If provided, Hartwig Cohort Hotspots will be used as a source in SERVE");
+        options.addOption(HARTWIG_COHORT_HOTSPOT_TSV, true, "Path to the Hartwig Cohort Hotspots input TSV");
+        options.addOption(USE_HARTWIG_CURATED_HOTSPOTS, false, "If provided, Hartwig Curated Hotspots will be used as a source in SERVE");
+        options.addOption(HARTWIG_CURATED_HOTSPOT_TSV, true, "Path to the Hartwig Curated Hotspots input TSV");
+        options.addOption(USE_HARTWIG_DRIVER_GENES, false, "If provided, Hartwig Driver Genes will be used as a source in SERVE");
+        options.addOption(USE_HARTWIG_CURATED_GENES, false, "If provided, Hartwig Curated Genes will be used as a source in SERVE");
+        options.addOption(HARTWIG_CURATED_GENE_TSV, true, "Path to the Hartwig Curated Genes input TSV");
 
         options.addOption(MISSING_DOIDS_MAPPING_TSV, true, "Path to the mapping TSV containing entries for missing DOIDs");
 
@@ -139,15 +144,15 @@ public interface ServeConfig {
     @NotNull
     String docmTsv();
 
-    boolean useHartwigCohort();
+    boolean useHartwigCohortHotspots();
 
     @NotNull
-    String hartwigCohortTsv();
+    String hartwigCohortHotspotTsv();
 
-    boolean useHartwigCurated();
+    boolean useHartwigCuratedHotspots();
 
     @NotNull
-    String hartwigCuratedTsv();
+    String hartwigCuratedHotspotTsv();
 
     boolean useHartwigDriverGenes();
 
@@ -204,8 +209,10 @@ public interface ServeConfig {
         boolean useIclusion = cmd.hasOption(USE_ICLUSION);
         boolean useCkb = cmd.hasOption(USE_CKB);
         boolean useDocm = cmd.hasOption(USE_DOCM);
-        boolean useHartwigCohort = cmd.hasOption(USE_HARTWIG_COHORT);
-        boolean useHartwigCurated = cmd.hasOption(USE_HARTWIG_CURATED);
+        boolean useHartwigCohortHotspots = cmd.hasOption(USE_HARTWIG_COHORT_HOTSPOTS);
+        boolean useHartwigCuratedHotspots = cmd.hasOption(USE_HARTWIG_CURATED_HOTSPOTS);
+        boolean useHartwigDriverGenes = cmd.hasOption(USE_HARTWIG_DRIVER_GENES);
+        boolean useHartwigCuratedGenes = cmd.hasOption(USE_HARTWIG_CURATED_GENES);
 
         return ImmutableServeConfig.builder()
                 .useVicc(useVicc)
@@ -220,10 +227,13 @@ public interface ServeConfig {
                 .ckbDrugCurationTsv(useCkb ? nonOptionalFile(cmd, CKB_DRUG_CURATION_TSV) : NOT_APPLICABLE)
                 .useDocm(useDocm)
                 .docmTsv(useDocm ? nonOptionalFile(cmd, DOCM_TSV) : NOT_APPLICABLE)
-                .useHartwigCohort(useHartwigCohort)
-                .hartwigCohortTsv(useHartwigCohort ? nonOptionalFile(cmd, HARTWIG_COHORT_TSV) : NOT_APPLICABLE)
-                .useHartwigCurated(useHartwigCurated)
-                .hartwigCuratedTsv(useHartwigCurated ? nonOptionalFile(cmd, HARTWIG_CURATED_TSV) : NOT_APPLICABLE)
+                .useHartwigCohortHotspots(useHartwigCohortHotspots)
+                .hartwigCohortHotspotTsv(useHartwigCohortHotspots ? nonOptionalFile(cmd, HARTWIG_COHORT_HOTSPOT_TSV) : NOT_APPLICABLE)
+                .useHartwigCuratedHotspots(useHartwigCuratedHotspots)
+                .hartwigCuratedHotspotTsv(useHartwigCuratedHotspots ? nonOptionalFile(cmd, HARTWIG_CURATED_HOTSPOT_TSV) : NOT_APPLICABLE)
+                .useHartwigDriverGenes(useHartwigDriverGenes)
+                .useHartwigCuratedGenes(useHartwigCuratedGenes)
+                .hartwigCuratedGeneTsv(useHartwigCuratedGenes ? nonOptionalFile(cmd, HARTWIG_CURATED_HOTSPOT_TSV) : NOT_APPLICABLE)
                 .missingDoidsMappingTsv(nonOptionalFile(cmd, MISSING_DOIDS_MAPPING_TSV))
                 .ensemblDataDir37(nonOptionalDir(cmd, ENSEMBL_DATA_DIR_37))
                 .ensemblDataDir38(nonOptionalDir(cmd, ENSEMBL_DATA_DIR_38))

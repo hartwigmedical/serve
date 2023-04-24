@@ -16,7 +16,7 @@ public class KnownFusionCacheLoaderTest {
     public void canLoadKnownFusionCache() throws IOException {
         KnownFusionCache cache = KnownFusionCacheLoader.load(KNOWN_FUSION_FILE);
 
-        assertEquals(2, cache.knownFusions().size());
+        assertEquals(3, cache.knownFusions().size());
         // TODO Expand test to cover all fields.
     }
 }

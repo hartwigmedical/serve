@@ -11,11 +11,11 @@ import org.junit.Test;
 
 public class HartwigGeneFileReaderTest {
 
-    private static final String HARTWIG_GENES_CURATED = Resources.getResource("hartwig/hartwig_curated_genes.tsv").getPath();
+    private static final String EXAMPLE_TSV = Resources.getResource("hartwig/hartwig_curated_genes.tsv").getPath();
 
     @Test
     public void canReadHartwigCuratedGenesFile() throws IOException {
-        List<HartwigGeneEntry> entries = HartwigGeneFileReader.read(HARTWIG_GENES_CURATED);
+        List<HartwigGeneEntry> entries = HartwigGeneFileReader.read(EXAMPLE_TSV);
 
         assertEquals(2, entries.size());
 

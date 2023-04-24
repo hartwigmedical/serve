@@ -1,4 +1,4 @@
-package com.hartwig.serve.sources.hartwig;
+package com.hartwig.serve.sources.hartwig.hotspot;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.hartwig.serve.util.AminoAcids;
@@ -15,7 +15,7 @@ final class HartwigProteinInterpreter {
     }
 
     @NotNull
-    public static String interpretProtein(@NotNull String proteinAnnotation) {
+    static String interpretProtein(@NotNull String proteinAnnotation) {
         if (proteinAnnotation.equals(IGNORE_PROTEIN_ANNOTATION)) {
             return Strings.EMPTY;
         }

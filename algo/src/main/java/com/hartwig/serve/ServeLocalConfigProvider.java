@@ -26,10 +26,13 @@ public final class ServeLocalConfigProvider {
                 .useCkb(false)
                 .useDocm(false)
                 .docmTsv(Strings.EMPTY)
-                .useHartwigCurated(false)
-                .hartwigCuratedTsv(Strings.EMPTY)
-                .useHartwigCohort(false)
-                .hartwigCohortTsv(Strings.EMPTY)
+                .useHartwigCuratedHotspots(false)
+                .hartwigCuratedHotspotTsv(Strings.EMPTY)
+                .useHartwigCohortHotspots(false)
+                .hartwigCohortHotspotTsv(Strings.EMPTY)
+                .useHartwigDriverGenes(false)
+                .useHartwigCuratedGenes(false)
+                .hartwigCuratedGeneTsv(Strings.EMPTY)
                 .skipHotspotResolving(true);
 
         // SERVE-VM is a shared vm tailored for running SERVE on GCP.

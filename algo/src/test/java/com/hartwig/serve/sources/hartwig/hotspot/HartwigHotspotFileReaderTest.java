@@ -1,4 +1,4 @@
-package com.hartwig.serve.sources.hartwig;
+package com.hartwig.serve.sources.hartwig.hotspot;
 
 import static org.junit.Assert.assertEquals;
 
@@ -10,13 +10,13 @@ import com.google.common.io.Resources;
 import org.apache.logging.log4j.util.Strings;
 import org.junit.Test;
 
-public class HartwigFileReaderTest {
+public class HartwigHotspotFileReaderTest {
 
-    private static final String EXAMPLE_TSV = Resources.getResource("hartwig/example.tsv").getPath();
+    private static final String EXAMPLE_TSV = Resources.getResource("hartwig/hartwig_cohort_hotspots.tsv").getPath();
 
     @Test
     public void canReadHartwigFile() throws IOException {
-        List<HartwigEntry> entries = HartwigFileReader.read(EXAMPLE_TSV);
+        List<HartwigHotspotEntry> entries = HartwigHotspotFileReader.read(EXAMPLE_TSV);
 
         assertEquals(3, entries.size());
 

@@ -13,6 +13,7 @@ import com.hartwig.serve.datamodel.serialization.KnownCodonFile;
 import com.hartwig.serve.datamodel.serialization.KnownCopyNumberFile;
 import com.hartwig.serve.datamodel.serialization.KnownExonFile;
 import com.hartwig.serve.datamodel.serialization.KnownFusionFile;
+import com.hartwig.serve.datamodel.serialization.KnownGeneFile;
 import com.hartwig.serve.datamodel.serialization.KnownHotspotFile;
 import com.hartwig.serve.extraction.events.EventInterpretationFile;
 import com.hartwig.serve.extraction.hotspot.KnownHotspotVCF;
@@ -60,6 +61,10 @@ public class ExtractionResultWriter {
         String exonTsv = KnownExonFile.knownExonTsvPath(outputDir, refGenome);
         LOGGER.info(" Writing {} known exons to {}", result.knownExons().size(), exonTsv);
         KnownExonFile.write(exonTsv, result.knownExons());
+
+        String geneTsv = KnownGeneFile.knownGeneTsvPath(outputDir, refGenome);
+        LOGGER.info(" Writing {} known genes to {}", result.knownGenes().size(), geneTsv);
+        KnownGeneFile.write(geneTsv, result.knownGenes());
 
         String copyNumberTsv = KnownCopyNumberFile.knownCopyNumberTsvPath(outputDir, refGenome);
         LOGGER.info(" Writing {} known copy numbers to {}", result.knownCopyNumbers().size(), copyNumberTsv);

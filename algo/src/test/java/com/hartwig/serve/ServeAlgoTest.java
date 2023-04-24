@@ -25,8 +25,9 @@ public class ServeAlgoTest {
             Resources.getResource("ckb_curation/ckb_treatment_approach_curation.tsv").getPath();
 
     private static final String DOCM_TSV = Resources.getResource("docm/example.tsv").getPath();
-    private static final String HARTWIG_CURATED_TSV = Resources.getResource("hartwig/example.tsv").getPath();
-    private static final String HARTWIG_COHORT_TSV = Resources.getResource("hartwig/example.tsv").getPath();
+    private static final String HARTWIG_CURATED_HOTSPOT_TSV = Resources.getResource("hartwig/hartwig_curated_hotspots.tsv").getPath();
+    private static final String HARTWIG_COHORT_HOTSPOT_TSV = Resources.getResource("hartwig/hartwig_cohort_hotspots.tsv").getPath();
+    private static final String HARTWIG_CURATED_GENE_TSV = Resources.getResource("hartwig/hartwig_curated_genes.tsv").getPath();
 
     private static final String ENSEMBL_DATA_DIR_37 = Resources.getResource("ensembl_data_cache/v37").getPath();
     private static final String ENSEMBL_DATA_DIR_38 = Resources.getResource("ensembl_data_cache/v38").getPath();
@@ -55,10 +56,13 @@ public class ServeAlgoTest {
                 .ckbDrugCurationTsv(CKB_DRUG_CLASS_CURATION_TSV)
                 .useDocm(true)
                 .docmTsv(DOCM_TSV)
-                .useHartwigCohort(true)
-                .hartwigCohortTsv(HARTWIG_COHORT_TSV)
-                .useHartwigCurated(true)
-                .hartwigCuratedTsv(HARTWIG_CURATED_TSV)
+                .useHartwigCohortHotspots(true)
+                .hartwigCohortHotspotTsv(HARTWIG_COHORT_HOTSPOT_TSV)
+                .useHartwigCuratedHotspots(true)
+                .hartwigCuratedHotspotTsv(HARTWIG_CURATED_HOTSPOT_TSV)
+                .useHartwigDriverGenes(true)
+                .useHartwigCuratedGenes(true)
+                .hartwigCuratedGeneTsv(HARTWIG_CURATED_GENE_TSV)
                 .ensemblDataDir37(ENSEMBL_DATA_DIR_37)
                 .ensemblDataDir38(ENSEMBL_DATA_DIR_38)
                 .refGenome37FastaFile(REF_GENOME_37_FASTA_FILE)

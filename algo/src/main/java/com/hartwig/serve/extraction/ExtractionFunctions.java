@@ -14,6 +14,7 @@ import com.hartwig.serve.actionability.ActionableRangeUrlConsolidator;
 import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.datamodel.fusion.KnownFusion;
 import com.hartwig.serve.datamodel.gene.KnownCopyNumber;
+import com.hartwig.serve.datamodel.gene.KnownGene;
 import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.range.KnownCodon;
 import com.hartwig.serve.datamodel.range.KnownExon;
@@ -22,6 +23,7 @@ import com.hartwig.serve.extraction.copynumber.CopyNumberConsolidation;
 import com.hartwig.serve.extraction.events.EventInterpretation;
 import com.hartwig.serve.extraction.exon.ExonConsolidation;
 import com.hartwig.serve.extraction.fusion.FusionConsolidation;
+import com.hartwig.serve.extraction.gene.GeneConsolidation;
 import com.hartwig.serve.extraction.hotspot.HotspotConsolidation;
 
 import org.apache.logging.log4j.LogManager;
@@ -44,6 +46,7 @@ public final class ExtractionFunctions {
         Set<KnownHotspot> allHotspots = Sets.newHashSet();
         Set<KnownCodon> allCodons = Sets.newHashSet();
         Set<KnownExon> allExons = Sets.newHashSet();
+        Set<KnownGene> allGenes = Sets.newHashSet();
         Set<KnownCopyNumber> allCopyNumbers = Sets.newHashSet();
         Set<KnownFusion> allFusions = Sets.newHashSet();
 
@@ -52,6 +55,7 @@ public final class ExtractionFunctions {
             allHotspots.addAll(result.knownHotspots());
             allCodons.addAll(result.knownCodons());
             allExons.addAll(result.knownExons());
+            allGenes.addAll(result.knownGenes());
             allCopyNumbers.addAll(result.knownCopyNumbers());
             allFusions.addAll(result.knownFusions());
 
@@ -69,6 +73,7 @@ public final class ExtractionFunctions {
                 .knownExons(ExonConsolidation.consolidate(allExons))
                 .knownCopyNumbers(CopyNumberConsolidation.consolidate(allCopyNumbers))
                 .knownFusions(FusionConsolidation.consolidate(allFusions))
+                .knownGenes(GeneConsolidation.consolidate(allGenes))
                 .build();
 
         return consolidateActionableEvents(mergedResult);

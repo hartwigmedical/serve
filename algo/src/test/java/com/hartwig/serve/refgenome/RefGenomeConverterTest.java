@@ -39,7 +39,7 @@ public class RefGenomeConverterTest {
                 .position(1)
                 .ref("G")
                 .alt("T")
-                .addSources(Knowledgebase.HARTWIG_CURATED)
+                .addSources(Knowledgebase.HARTWIG_HOTSPOT_CURATED)
                 .build();
 
         Set<KnownHotspot> convertedHotspots = DUMMY_CONVERTER.convertKnownHotspots(Sets.newHashSet(hotspot));
@@ -55,7 +55,7 @@ public class RefGenomeConverterTest {
                 .chromosome(TEST_CHROMOSOME)
                 .start(1)
                 .end(3)
-                .addSources(Knowledgebase.HARTWIG_CURATED)
+                .addSources(Knowledgebase.HARTWIG_HOTSPOT_CURATED)
                 .build();
 
         Set<KnownCodon> convertedCodons = DUMMY_CONVERTER.convertKnownCodons(Sets.newHashSet(codon));
@@ -71,7 +71,7 @@ public class RefGenomeConverterTest {
                 .chromosome(TEST_CHROMOSOME)
                 .start(1)
                 .end(7)
-                .addSources(Knowledgebase.HARTWIG_CURATED)
+                .addSources(Knowledgebase.HARTWIG_HOTSPOT_CURATED)
                 .build();
 
         Set<KnownExon> convertedExons = DUMMY_CONVERTER.convertKnownExons(Sets.newHashSet(exon));
@@ -88,7 +88,7 @@ public class RefGenomeConverterTest {
                 .position(1)
                 .ref("G")
                 .alt("C")
-                .source(Knowledgebase.HARTWIG_CURATED)
+                .source(Knowledgebase.HARTWIG_HOTSPOT_CURATED)
                 .build();
 
         Set<ActionableHotspot> convertedActionableHotspots = DUMMY_CONVERTER.convertActionableHotspots(Sets.newHashSet(actionableHotspot));
@@ -102,7 +102,7 @@ public class RefGenomeConverterTest {
                 .chromosome(TEST_CHROMOSOME)
                 .start(3)
                 .end(4)
-                .source(Knowledgebase.HARTWIG_CURATED)
+                .source(Knowledgebase.HARTWIG_HOTSPOT_CURATED)
                 .build();
 
         Set<ActionableRange> convertedActionableRanges = DUMMY_CONVERTER.convertActionableRanges(Sets.newHashSet(actionableRange));

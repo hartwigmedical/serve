@@ -1,6 +1,7 @@
 package com.hartwig.serve.sources.ckb;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.google.common.collect.Sets;
 import com.hartwig.serve.ckb.datamodel.variant.Gene;
@@ -10,7 +11,9 @@ import com.hartwig.serve.datamodel.common.ProteinEffect;
 import com.hartwig.serve.datamodel.fusion.ImmutableKnownFusion;
 import com.hartwig.serve.datamodel.fusion.KnownFusion;
 import com.hartwig.serve.datamodel.gene.ImmutableKnownCopyNumber;
+import com.hartwig.serve.datamodel.gene.ImmutableKnownGene;
 import com.hartwig.serve.datamodel.gene.KnownCopyNumber;
+import com.hartwig.serve.datamodel.gene.KnownGene;
 import com.hartwig.serve.datamodel.hotspot.ImmutableKnownHotspot;
 import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.range.ImmutableKnownCodon;
@@ -39,6 +42,7 @@ final class CkbVariantAnnotator {
                 .knownHotspots(annotateHotspots(result.knownHotspots(), variant))
                 .knownCodons(annotateCodons(result.knownCodons(), variant))
                 .knownExons(annotateExons(result.knownExons(), variant))
+                .knownGenes(annotateGenes(result, variant))
                 .knownCopyNumbers(annotateCopyNumbers(result.knownCopyNumbers(), variant))
                 .knownFusions(annotateFusions(result.knownFusions(), variant))
                 .build();
@@ -84,6 +88,14 @@ final class CkbVariantAnnotator {
                     .build());
         }
         return annotated;
+    }
+
+    @NotNull
+    private static Set<KnownGene> annotateGenes(@NotNull ExtractionResult result, @NotNull Variant variant) {
+        return result.knownGenes()
+                .stream()
+                .map(gene -> ImmutableKnownGene.copyOf(gene).withGeneRole(resolveGeneRole(variant)))
+                .collect(Collectors.toSet());
     }
 
     @NotNull

@@ -11,7 +11,7 @@ import org.junit.Test;
 
 public class HartwigGeneFileReaderTest {
 
-    private static final String HARTWIG_GENES_CURATED = Resources.getResource("hartwig/hartwig_genes_curated.tsv").getPath();
+    private static final String HARTWIG_GENES_CURATED = Resources.getResource("hartwig/hartwig_curated_genes.tsv").getPath();
 
     @Test
     public void canReadHartwigCuratedGenesFile() throws IOException {

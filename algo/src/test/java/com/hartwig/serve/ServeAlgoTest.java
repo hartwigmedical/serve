@@ -25,9 +25,9 @@ public class ServeAlgoTest {
             Resources.getResource("ckb_curation/ckb_treatment_approach_curation.tsv").getPath();
 
     private static final String DOCM_TSV = Resources.getResource("docm/example.tsv").getPath();
-    private static final String HARTWIG_CURATED_TSV = Resources.getResource("hartwig/hartwig_hotspots_curated.tsv").getPath();
-    private static final String HARTWIG_COHORT_TSV = Resources.getResource("hartwig/hartwig_hotspots_cohort.tsv").getPath();
-    private static final String HARTWIG_CURATED_GENES_TSV = Resources.getResource("hartwig/hartwig_genes_curated.tsv").getPath();
+    private static final String HARTWIG_CURATED_TSV = Resources.getResource("hartwig/hartwig_curated_hotspots.tsv").getPath();
+    private static final String HARTWIG_COHORT_TSV = Resources.getResource("hartwig/hartwig_cohort_hotspots.tsv").getPath();
+    private static final String HARTWIG_CURATED_GENES_TSV = Resources.getResource("hartwig/hartwig_curated_genes.tsv").getPath();
 
     private static final String ENSEMBL_DATA_DIR_37 = Resources.getResource("ensembl_data_cache/v37").getPath();
     private static final String ENSEMBL_DATA_DIR_38 = Resources.getResource("ensembl_data_cache/v38").getPath();

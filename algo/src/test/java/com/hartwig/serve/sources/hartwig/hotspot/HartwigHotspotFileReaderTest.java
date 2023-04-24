@@ -12,7 +12,7 @@ import org.junit.Test;
 
 public class HartwigHotspotFileReaderTest {
 
-    private static final String EXAMPLE_TSV = Resources.getResource("hartwig/hartwig_hotspots_cohort.tsv").getPath();
+    private static final String EXAMPLE_TSV = Resources.getResource("hartwig/hartwig_cohort_hotspots.tsv").getPath();
 
     @Test
     public void canReadHartwigFile() throws IOException {

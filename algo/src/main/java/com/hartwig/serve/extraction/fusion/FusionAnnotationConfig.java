@@ -75,10 +75,12 @@ final class FusionAnnotationConfig {
     private static Map<String, ExonicDelDupType> exonicDelDupTypes() {
         Map<String, ExonicDelDupType> exonicDelDupTypeMap = Maps.newHashMap();
         exonicDelDupTypeMap.put("KIT", ExonicDelDupType.PARTIAL_EXONIC_DELETION);
-        exonicDelDupTypeMap.put("MET", ExonicDelDupType.FULL_EXONIC_DELETION);
         exonicDelDupTypeMap.put("BRAF", ExonicDelDupType.FULL_EXONIC_DELETION);
-        exonicDelDupTypeMap.put("EGFR", ExonicDelDupType.FULL_EXONIC_DELETION);
         exonicDelDupTypeMap.put("CBL", ExonicDelDupType.FULL_EXONIC_DELETION);
+        exonicDelDupTypeMap.put("EGFR", ExonicDelDupType.FULL_EXONIC_DELETION);
+        exonicDelDupTypeMap.put("ERBB2", ExonicDelDupType.FULL_EXONIC_DELETION);
+        exonicDelDupTypeMap.put("MET", ExonicDelDupType.FULL_EXONIC_DELETION);
+        exonicDelDupTypeMap.put("MLH1", ExonicDelDupType.FULL_EXONIC_DELETION);
         return exonicDelDupTypeMap;
     }
 

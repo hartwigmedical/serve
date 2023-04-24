@@ -83,11 +83,11 @@ public class ServeAlgo {
         }
 
         if (config.useHartwigCohortHotspots()) {
-            extractions.add(extractHartwigCohortKnowledge(config.hartwigCohortHotspotTsv(), !config.skipHotspotResolving()));
+            extractions.add(extractHartwigCohortHotspotKnowledge(config.hartwigCohortHotspotTsv(), !config.skipHotspotResolving()));
         }
 
         if (config.useHartwigCuratedHotspots()) {
-            extractions.add(extractHartwigCuratedKnowledge(config.hartwigCuratedHotspotTsv(), !config.skipHotspotResolving()));
+            extractions.add(extractHartwigCuratedHotspotKnowledge(config.hartwigCuratedHotspotTsv(), !config.skipHotspotResolving()));
         }
 
         if (config.useHartwigDriverGenes()) {
@@ -167,30 +167,31 @@ public class ServeAlgo {
     }
 
     @NotNull
-    private ExtractionResult extractHartwigCohortKnowledge(@NotNull String hartwigCohortTsv, boolean addExplicitHotspots)
+    private ExtractionResult extractHartwigCohortHotspotKnowledge(@NotNull String hartwigCohortHotspotTsv, boolean addExplicitHotspots)
             throws IOException {
-        LOGGER.info("Reading Hartwig Cohort TSV from '{}'", hartwigCohortTsv);
-        List<HartwigHotspotEntry> entries = HartwigHotspotFileReader.read(hartwigCohortTsv);
+        LOGGER.info("Reading Hartwig Cohort Hotspot TSV from '{}'", hartwigCohortHotspotTsv);
+        List<HartwigHotspotEntry> entries = HartwigHotspotFileReader.read(hartwigCohortHotspotTsv);
         LOGGER.info(" Read {} entries", entries.size());
 
         RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.HARTWIG_HOTSPOT_COHORT);
         HartwigHotspotExtractor extractor =
                 new HartwigHotspotExtractor(Knowledgebase.HARTWIG_HOTSPOT_COHORT, refGenomeResource.proteinResolver(), addExplicitHotspots);
-        LOGGER.info("Running Hartwig Cohort knowledge extraction");
+        LOGGER.info("Running Hartwig cohort hotspot knowledge extraction");
         return extractor.extract(entries);
     }
 
     @NotNull
-    private ExtractionResult extractHartwigCuratedKnowledge(@NotNull String hartwigCuratedTsv, boolean addExplicitHotspots)
+    private ExtractionResult extractHartwigCuratedHotspotKnowledge(@NotNull String hartwigCuratedHotspotTsv, boolean addExplicitHotspots)
             throws IOException {
-        LOGGER.info("Reading Hartwig Curated TSV from '{}'", hartwigCuratedTsv);
-        List<HartwigHotspotEntry> entries = HartwigHotspotFileReader.read(hartwigCuratedTsv);
+        LOGGER.info("Reading Hartwig Curated Hotspot TSV from '{}'", hartwigCuratedHotspotTsv);
+        List<HartwigHotspotEntry> entries = HartwigHotspotFileReader.read(hartwigCuratedHotspotTsv);
         LOGGER.info(" Read {} entries", entries.size());
 
         RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.HARTWIG_HOTSPOT_CURATED);
-        HartwigHotspotExtractor extractor =
-                new HartwigHotspotExtractor(Knowledgebase.HARTWIG_HOTSPOT_CURATED, refGenomeResource.proteinResolver(), addExplicitHotspots);
-        LOGGER.info("Running Hartwig Curated knowledge extraction");
+        HartwigHotspotExtractor extractor = new HartwigHotspotExtractor(Knowledgebase.HARTWIG_HOTSPOT_CURATED,
+                refGenomeResource.proteinResolver(),
+                addExplicitHotspots);
+        LOGGER.info("Running Hartwig curated hotspot knowledge extraction");
         return extractor.extract(entries);
     }
 
@@ -201,7 +202,7 @@ public class ServeAlgo {
         LOGGER.info(" Read {} entries", entries.size());
 
         HartwigGeneExtractor extractor = new HartwigGeneExtractor(Knowledgebase.HARTWIG_GENE_DRIVER_PANEL);
-        LOGGER.info("Running Hartwig Driver Gene knowledge extraction");
+        LOGGER.info("Running Hartwig driver gene knowledge extraction");
         return extractor.extract(entries);
     }
 
@@ -212,7 +213,7 @@ public class ServeAlgo {
         LOGGER.info(" Read {} entries", entries.size());
 
         HartwigGeneExtractor extractor = new HartwigGeneExtractor(Knowledgebase.HARTWIG_GENE_CURATED);
-        LOGGER.info("Running Hartwig Curated Gene knowledge extraction");
+        LOGGER.info("Running Hartwig curated gene knowledge extraction");
         return extractor.extract(entries);
     }
 }

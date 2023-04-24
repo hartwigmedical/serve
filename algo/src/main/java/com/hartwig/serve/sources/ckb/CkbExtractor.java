@@ -1,5 +1,6 @@
 package com.hartwig.serve.sources.ckb;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.StringJoiner;
@@ -313,6 +314,10 @@ public class CkbExtractor {
 
     @NotNull
     private static Set<KnownGene> convertToKnownGene(@NotNull String gene) {
-        return Set.of(ImmutableKnownGene.builder().gene(gene).geneRole(GeneRole.UNKNOWN).addSources(Knowledgebase.CKB).build());
+        return !CkbConstants.NO_GENE.equals(gene) ? Set.of(ImmutableKnownGene.builder()
+                .gene(gene)
+                .geneRole(GeneRole.UNKNOWN)
+                .addSources(Knowledgebase.CKB)
+                .build()) : Collections.emptySet();
     }
 }

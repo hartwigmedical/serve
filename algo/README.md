@@ -348,6 +348,12 @@ Knowledge extraction is performed on a per-knowledgebase level after which all e
   - The actionable output is the database that [PROTECT](https://github.com/hartwigmedical/hmftools/tree/master/protect) bases its clinical evidence matching on.
   
 ## Version History and Download Links
+- Upcoming
+  - Known genes have been added to the known events in serve-datamodel. CKB is the only existing source contributing to known genes.
+  - Two new sources have been added which are used to populate known genes: Hartwig driver genes and Hartwig curated genes
+  - A bug was fixed in reading the fusion knowledgebase. SERVE is now more resilient for formatting changes in the fusion knowledgebase.
+  - Various minor changes in handling recent changes on CKB side: Support for CKB's "CUP" definition and support for exonic dels and dups 
+  in various genes where this type of evidence is found. 
 - [2.0.1](https://github.com/hartwigmedical/serve/releases/tag/serve-v2.0.1)
   - Setup POM to support new way of versioning and releasing. 
   - Rename of RefGenomeVersion to RefGenome and move into main datamodel package

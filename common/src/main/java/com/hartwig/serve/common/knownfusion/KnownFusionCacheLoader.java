@@ -5,14 +5,19 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 public final class KnownFusionCacheLoader {
+
+    private static final Logger LOGGER = LogManager.getLogger(KnownFusionCacheLoader.class);
 
     private static final String FIELD_DELIMITER = ",";
 
@@ -58,15 +63,22 @@ public final class KnownFusionCacheLoader {
 
     @NotNull
     private static KnownFusionData fromLine(@NotNull String line, @NotNull Map<String, Integer> fields) {
-        String[] values = line.split(FIELD_DELIMITER);
+        String[] values = line.split(FIELD_DELIMITER, -1);
 
-        return ImmutableKnownFusionData.builder()
-                .type(KnownFusionType.valueOf(values[fields.get(FLD_TYPE)]))
-                .fiveGene(values[fields.get(FLD_FIVE_GENE)])
-                .threeGene(values[fields.get(FLD_THREE_GENE)])
-                .cancerTypes(values[fields.get(FLD_CANCER_TYPES)])
-                .pubMedId(values[fields.get(FLD_PUB_MED)])
-                .highImpactPromiscuous(values[fields.get(FLD_HIGH_IMPACT_PROM)].equalsIgnoreCase("TRUE"))
-                .build();
+        try {
+            return ImmutableKnownFusionData.builder()
+                    .type(KnownFusionType.valueOf(values[fields.get(FLD_TYPE)]))
+                    .fiveGene(values[fields.get(FLD_FIVE_GENE)])
+                    .threeGene(values[fields.get(FLD_THREE_GENE)])
+                    .cancerTypes(values[fields.get(FLD_CANCER_TYPES)])
+                    .pubMedId(values[fields.get(FLD_PUB_MED)])
+                    .highImpactPromiscuous(values[fields.get(FLD_HIGH_IMPACT_PROM)].equalsIgnoreCase("TRUE"))
+                    .build();
+        } catch (ArrayIndexOutOfBoundsException e) {
+            LOGGER.error("Unable to parse line [{}] with fiels [{}]. Check the known_fusions CSV",
+                    line,
+                    fields.entrySet().stream().map(entry -> entry.getKey() + ":" + entry.getValue()).collect(Collectors.joining(",")));
+            throw new RuntimeException(e);
+        }
     }
 }

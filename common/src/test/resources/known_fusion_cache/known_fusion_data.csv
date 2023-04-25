@@ -1,4 +1,4 @@
 Type,FiveGene,ThreeGene,CancerTypes,PubMedId,KnownExonTranscript,KnownExonUpRange,KnownExonDownRange,HighImpactPromiscuous,Overrides
-PROMISCUOUS_3,,NTRK3,<multiple>,,,,,TRUE,
-KNOWN_PAIR,EML4,ALK,<multiple>,,,,,TRUE,
-EXON_DEL_DUP,AHR,AHR,<multiple>,,,,,,
+PROMISCUOUS_3,,NTRK3,<multiple>,pubmed1,,,,TRUE,
+KNOWN_PAIR,EML4,ALK,<multiple>,pubmed2,,,,TRUE,
+EXON_DEL_DUP,AHR,AHR,bladder,,,,,,

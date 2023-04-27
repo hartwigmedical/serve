@@ -7,6 +7,7 @@ import com.hartwig.serve.datamodel.fusion.ActionableFusion;
 import com.hartwig.serve.datamodel.fusion.KnownFusion;
 import com.hartwig.serve.datamodel.gene.ActionableGene;
 import com.hartwig.serve.datamodel.gene.KnownCopyNumber;
+import com.hartwig.serve.datamodel.gene.KnownGene;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
 import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.range.ActionableRange;
@@ -28,10 +29,12 @@ class ConversionFilter {
 
     @NotNull
     public ExtractionResult filter(@NotNull ExtractionResult extractionResult) {
-        return ImmutableExtractionResult.builder().from(extractionResult)
+        return ImmutableExtractionResult.builder()
+                .from(extractionResult)
                 .knownHotspots(filterHotspots(extractionResult.knownHotspots()))
                 .knownCodons(filterCodons(extractionResult.knownCodons()))
                 .knownExons(filterExons(extractionResult.knownExons()))
+                .knownGenes(filterGenes(extractionResult.knownGenes()))
                 .knownCopyNumbers(filterCopyNumbers(extractionResult.knownCopyNumbers()))
                 .knownFusions(filterFusions(extractionResult.knownFusions()))
                 .actionableHotspots(filterActionableHotspots(extractionResult.actionableHotspots()))
@@ -90,6 +93,19 @@ class ConversionFilter {
             }
         }
         return filteredExons;
+    }
+
+    @NotNull
+    private Set<KnownGene> filterGenes(@NotNull Set<KnownGene> genes) {
+        Set<KnownGene> filteredGenes = Sets.newHashSet();
+        for (KnownGene gene : genes) {
+            if (!isBlacklistedGene(gene.gene())) {
+                filteredGenes.add(gene);
+            } else {
+                LOGGER.debug("Filtered known gene for ref genome conversion: {}", gene);
+            }
+        }
+        return filteredGenes;
     }
 
     @NotNull

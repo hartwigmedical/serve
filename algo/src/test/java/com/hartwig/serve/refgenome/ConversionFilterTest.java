@@ -25,6 +25,7 @@ public class ConversionFilterTest {
         assertTrue(filtered.knownHotspots().isEmpty());
         assertTrue(filtered.knownCodons().isEmpty());
         assertTrue(filtered.knownExons().isEmpty());
+        assertTrue(filtered.knownGenes().isEmpty());
         assertTrue(filtered.knownCopyNumbers().isEmpty());
         assertTrue(filtered.knownFusions().isEmpty());
         assertTrue(filtered.actionableGenes().isEmpty());
@@ -40,6 +41,7 @@ public class ConversionFilterTest {
                 .addKnownHotspots(HotspotTestFactory.knownHotspotBuilder().gene(gene).build())
                 .addKnownCodons(RangeTestFactory.knownCodonBuilder().gene(gene).build())
                 .addKnownExons(RangeTestFactory.knownExonBuilder().gene(gene).build())
+                .addKnownGenes(GeneTestFactory.knownGeneBuilder().gene(gene).build())
                 .addKnownCopyNumbers(GeneTestFactory.knownCopyNumberBuilder().gene(gene).build())
                 .addKnownFusions(FusionTestFactory.knownFusionBuilder().geneUp(gene).build())
                 .addKnownFusions(FusionTestFactory.knownFusionBuilder().geneDown(gene).build())

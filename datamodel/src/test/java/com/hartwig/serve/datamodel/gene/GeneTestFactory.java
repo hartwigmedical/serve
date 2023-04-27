@@ -5,6 +5,7 @@ import java.util.Objects;
 import com.hartwig.serve.datamodel.DatamodelTestFactory;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.common.CommonTestFactory;
+import com.hartwig.serve.datamodel.common.GeneRole;
 
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
@@ -22,6 +23,11 @@ public final class GeneTestFactory {
     @NotNull
     public static GeneAnnotation createGeneAnnotation(@NotNull String gene, @NotNull GeneEvent event) {
         return new GeneAnnotationImpl(gene, event);
+    }
+
+    @NotNull
+    public static ImmutableKnownGene.Builder knownGeneBuilder() {
+        return ImmutableKnownGene.builder().geneRole(GeneRole.UNKNOWN);
     }
 
     @NotNull

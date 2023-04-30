@@ -27,8 +27,7 @@ git tag serve-v{new_version}
 git push origin serve-v{new_version}
 ```
 
-When complete you can roll back the changes to the pom.xmls. These are meant to be
-transient. 
+When complete you can roll back the changes to the pom.xmls. These are meant to be transient. 
 
 Note the new version should be of the format `major.minor.patch` where:
 - Major indicates a non-backward compatible change (avoid these!)

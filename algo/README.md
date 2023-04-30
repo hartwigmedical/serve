@@ -348,6 +348,10 @@ Knowledge extraction is performed on a per-knowledgebase level after which all e
   - The actionable output is the database that [PROTECT](https://github.com/hartwigmedical/hmftools/tree/master/protect) bases its clinical evidence matching on.
   
 ## Version History and Download Links
+- Upcoming
+  - Known genes are supported in the SERVE SQL database
+  - Solved a bug where a known gene was inferred from a fusion in CKB
+  - Solved a wrong log message when loading known genes.
 - [2.1.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v2.1.0)
   - Known genes have been added to the known events in serve-datamodel. CKB is the only existing source contributing to known genes.
   - Two new sources have been added which are used to populate known genes: Hartwig driver genes and Hartwig curated genes

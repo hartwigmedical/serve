@@ -348,7 +348,7 @@ Knowledge extraction is performed on a per-knowledgebase level after which all e
   - The actionable output is the database that [PROTECT](https://github.com/hartwigmedical/hmftools/tree/master/protect) bases its clinical evidence matching on.
   
 ## Version History and Download Links
-- Upcoming
+- [2.2.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v2.2.0)
   - Known genes are supported in the SERVE SQL database
   - Solved a bug where a known gene was inferred from a fusion in CKB
   - Solved a wrong log message when loading known genes.

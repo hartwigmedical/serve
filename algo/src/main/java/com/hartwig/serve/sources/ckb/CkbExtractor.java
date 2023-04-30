@@ -184,7 +184,7 @@ public class CkbExtractor {
                 .knownHotspots(convertToKnownHotspots(output.hotspots(), variant, transcript))
                 .knownCodons(convertToKnownCodons(codons))
                 .knownExons(convertToKnownExons(output.exons()))
-                .knownGenes(convertToKnownGene(gene))
+                .knownGenes(output.fusionPair() == null ? convertToKnownGenes(gene) : Collections.emptySet())
                 .knownCopyNumbers(convertToKnownAmpsDels(output.copyNumber()))
                 .knownFusions(convertToKnownFusions(output.fusionPair()))
                 .actionableHotspots(actionableHotspots)
@@ -282,6 +282,19 @@ public class CkbExtractor {
     }
 
     @NotNull
+    private static Set<KnownGene> convertToKnownGenes(@NotNull String gene) {
+        if (!gene.equals(CkbConstants.NO_GENE)) {
+            return Set.of(ImmutableKnownGene.builder()
+                    .gene(gene)
+                    .geneRole(GeneRole.UNKNOWN)
+                    .addSources(Knowledgebase.CKB)
+                    .build());
+        }
+
+        return Collections.emptySet();
+    }
+
+    @NotNull
     private static Set<KnownCopyNumber> convertToKnownAmpsDels(@Nullable GeneAnnotation copyNumber) {
         Set<KnownCopyNumber> copyNumbers = Sets.newHashSet();
 
@@ -310,14 +323,5 @@ public class CkbExtractor {
         }
 
         return FusionConsolidation.consolidate(fusions);
-    }
-
-    @NotNull
-    private static Set<KnownGene> convertToKnownGene(@NotNull String gene) {
-        return !CkbConstants.NO_GENE.equals(gene) ? Set.of(ImmutableKnownGene.builder()
-                .gene(gene)
-                .geneRole(GeneRole.UNKNOWN)
-                .addSources(Knowledgebase.CKB)
-                .build()) : Collections.emptySet();
     }
 }

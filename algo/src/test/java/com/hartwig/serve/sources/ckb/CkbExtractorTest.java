@@ -39,7 +39,7 @@ public class CkbExtractorTest {
 
         ExtractionResult result = extractor.extract(ckbEntries);
         assertEquals(1, result.knownHotspots().size());
-        assertEquals(4, result.knownGenes().size());
+        assertEquals(3, result.knownGenes().size());
         assertEquals(1, result.knownCopyNumbers().size());
         assertEquals(1, result.knownFusions().size());
         assertEquals(1, result.actionableHotspots().size());

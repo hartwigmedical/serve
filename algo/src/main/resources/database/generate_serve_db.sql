@@ -190,6 +190,16 @@ CREATE TABLE knownExon
     PRIMARY KEY (id)
 );
 
+DROP TABLE IF EXISTS knownGene;
+CREATE TABLE knownGene
+(   id int NOT NULL AUTO_INCREMENT,
+    modified DATETIME NOT NULL,
+    gene varchar(50) NOT NULL,
+    geneRole varchar(50) NOT NULL,
+    sources varchar(100) NOT NULL,
+    PRIMARY KEY (id)
+);
+
 DROP TABLE IF EXISTS knownCopyNumber;
 CREATE TABLE knownCopyNumber
 (   id int NOT NULL AUTO_INCREMENT,

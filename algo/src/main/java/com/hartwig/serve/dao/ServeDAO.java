@@ -11,6 +11,7 @@ import static com.hartwig.serve.database.Tables.KNOWNCODON;
 import static com.hartwig.serve.database.Tables.KNOWNCOPYNUMBER;
 import static com.hartwig.serve.database.Tables.KNOWNEXON;
 import static com.hartwig.serve.database.Tables.KNOWNFUSION;
+import static com.hartwig.serve.database.Tables.KNOWNGENE;
 import static com.hartwig.serve.database.Tables.KNOWNHOTSPOT;
 
 import java.sql.Timestamp;
@@ -30,6 +31,7 @@ import com.hartwig.serve.datamodel.fusion.ActionableFusion;
 import com.hartwig.serve.datamodel.fusion.KnownFusion;
 import com.hartwig.serve.datamodel.gene.ActionableGene;
 import com.hartwig.serve.datamodel.gene.KnownCopyNumber;
+import com.hartwig.serve.datamodel.gene.KnownGene;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
 import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.immuno.ActionableHLA;
@@ -49,6 +51,7 @@ import org.jooq.InsertValuesStep15;
 import org.jooq.InsertValuesStep16;
 import org.jooq.InsertValuesStep18;
 import org.jooq.InsertValuesStep19;
+import org.jooq.InsertValuesStep4;
 import org.jooq.InsertValuesStep6;
 import org.jooq.InsertValuesStep7;
 
@@ -78,8 +81,9 @@ public class ServeDAO {
         context.deleteFrom(KNOWNHOTSPOT).execute();
         context.deleteFrom(KNOWNCODON).execute();
         context.deleteFrom(KNOWNEXON).execute();
-        context.deleteFrom(KNOWNFUSION).execute();
+        context.deleteFrom(KNOWNGENE).execute();
         context.deleteFrom(KNOWNCOPYNUMBER).execute();
+        context.deleteFrom(KNOWNFUSION).execute();
         context.deleteFrom(EVENTINTERPRETATION).execute();
     }
 
@@ -99,8 +103,9 @@ public class ServeDAO {
         writeKnownHotspots(timestamp, knownEvents.hotspots());
         writeKnownCodons(timestamp, knownEvents.codons());
         writeKnownExons(timestamp, knownEvents.exons());
-        writeKnownFusions(timestamp, knownEvents.fusions());
+        writeKnownGenes(timestamp, knownEvents.genes());
         writeKnownCopyNumbers(timestamp, knownEvents.copyNumbers());
+        writeKnownFusions(timestamp, knownEvents.fusions());
 
         writeEventInterpretations(timestamp, eventInterpretations);
     }
@@ -485,6 +490,52 @@ public class ServeDAO {
                 Knowledgebase.toCommaSeparatedSourceString(knownExon.sources()));
     }
 
+    private void writeKnownGenes(@NotNull Timestamp timestamp, @NotNull Set<KnownGene> genes) {
+        for (List<KnownGene> batch : Iterables.partition(genes, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
+            InsertValuesStep4 inserter = context.insertInto(KNOWNGENE,
+                    KNOWNGENE.MODIFIED,
+                    KNOWNGENE.GENE,
+                    KNOWNGENE.GENEROLE,
+                    KNOWNGENE.SOURCES);
+            batch.forEach(entry -> writeKnownGeneBatch(timestamp, inserter, entry));
+            inserter.execute();
+        }
+    }
+
+    private static void writeKnownGeneBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep4 inserter,
+            @NotNull KnownGene knownGene) {
+        inserter.values(timestamp,
+                knownGene.gene(),
+                knownGene.geneRole().toString(),
+                Knowledgebase.toCommaSeparatedSourceString(knownGene.sources()));
+    }
+
+    private void writeKnownCopyNumbers(@NotNull Timestamp timestamp, @NotNull Set<KnownCopyNumber> copyNumbers) {
+        for (List<KnownCopyNumber> batch : Iterables.partition(copyNumbers, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
+            InsertValuesStep7 inserter = context.insertInto(KNOWNCOPYNUMBER,
+                    KNOWNCOPYNUMBER.MODIFIED,
+                    KNOWNCOPYNUMBER.GENE,
+                    KNOWNCOPYNUMBER.GENEROLE,
+                    KNOWNCOPYNUMBER.PROTEINEFFECT,
+                    KNOWNCOPYNUMBER.ASSOCIATEDWITHDRUGRESISTANCE,
+                    KNOWNCOPYNUMBER.EVENT,
+                    KNOWNCOPYNUMBER.SOURCES);
+            batch.forEach(entry -> writeKnownCopyNumberBatch(timestamp, inserter, entry));
+            inserter.execute();
+        }
+    }
+
+    private static void writeKnownCopyNumberBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep7 inserter,
+            @NotNull KnownCopyNumber knownCopyNumber) {
+        inserter.values(timestamp,
+                knownCopyNumber.gene(),
+                knownCopyNumber.geneRole().toString(),
+                knownCopyNumber.proteinEffect().toString(),
+                DatabaseUtil.toByte(knownCopyNumber.associatedWithDrugResistance()),
+                knownCopyNumber.event().toString(),
+                Knowledgebase.toCommaSeparatedSourceString(knownCopyNumber.sources()));
+    }
+
     private void writeKnownFusions(@NotNull Timestamp timestamp, @NotNull Set<KnownFusion> fusions) {
         for (List<KnownFusion> batch : Iterables.partition(fusions, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
             InsertValuesStep10 inserter = context.insertInto(KNOWNFUSION,
@@ -515,32 +566,6 @@ public class ServeDAO {
                 fusion.proteinEffect().toString(),
                 DatabaseUtil.toByte(fusion.associatedWithDrugResistance()),
                 Knowledgebase.toCommaSeparatedSourceString(fusion.sources()));
-    }
-
-    private void writeKnownCopyNumbers(@NotNull Timestamp timestamp, @NotNull Set<KnownCopyNumber> copyNumbers) {
-        for (List<KnownCopyNumber> batch : Iterables.partition(copyNumbers, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
-            InsertValuesStep7 inserter = context.insertInto(KNOWNCOPYNUMBER,
-                    KNOWNCOPYNUMBER.MODIFIED,
-                    KNOWNCOPYNUMBER.GENE,
-                    KNOWNCOPYNUMBER.GENEROLE,
-                    KNOWNCOPYNUMBER.PROTEINEFFECT,
-                    KNOWNCOPYNUMBER.ASSOCIATEDWITHDRUGRESISTANCE,
-                    KNOWNCOPYNUMBER.EVENT,
-                    KNOWNCOPYNUMBER.SOURCES);
-            batch.forEach(entry -> writeKnownCopyNumberBatch(timestamp, inserter, entry));
-            inserter.execute();
-        }
-    }
-
-    private static void writeKnownCopyNumberBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep7 inserter,
-            @NotNull KnownCopyNumber knownCopyNumber) {
-        inserter.values(timestamp,
-                knownCopyNumber.gene(),
-                knownCopyNumber.geneRole().toString(),
-                knownCopyNumber.proteinEffect().toString(),
-                DatabaseUtil.toByte(knownCopyNumber.associatedWithDrugResistance()),
-                knownCopyNumber.event().toString(),
-                Knowledgebase.toCommaSeparatedSourceString(knownCopyNumber.sources()));
     }
 
     private void writeEventInterpretations(@NotNull Timestamp timestamp, @NotNull List<EventInterpretation> eventInterpretations) {

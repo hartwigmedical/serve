@@ -43,6 +43,10 @@ public final class KnownEventsLoader {
         List<KnownExon> exons = KnownExonFile.read(knownExonTsv);
         LOGGER.info(" Loaded {} known exons from {}", exons.size(), knownExonTsv);
 
+        String knownGeneTsv = KnownGeneFile.knownGeneTsvPath(knownEventDir, refGenome);
+        List<KnownGene> genes = KnownGeneFile.read(knownGeneTsv);
+        LOGGER.info(" Loaded {} known genes from {}", genes.size(), knownGeneTsv);
+
         String knownCopyNumberTsv = KnownCopyNumberFile.knownCopyNumberTsvPath(knownEventDir, refGenome);
         List<KnownCopyNumber> copyNumbers = KnownCopyNumberFile.read(knownCopyNumberTsv);
         LOGGER.info(" Loaded {} known gene copy numbers from {}", copyNumbers.size(), knownCopyNumberTsv);
@@ -50,10 +54,6 @@ public final class KnownEventsLoader {
         String knownFusionTsv = KnownFusionFile.knownFusionTsvPath(knownEventDir, refGenome);
         List<KnownFusion> fusions = KnownFusionFile.read(knownFusionTsv);
         LOGGER.info(" Loaded {} known fusions from {}", fusions.size(), knownFusionTsv);
-
-        String knownGeneTsv = KnownGeneFile.knownGeneTsvPath(knownEventDir, refGenome);
-        List<KnownGene> genes = KnownGeneFile.read(knownGeneTsv);
-        LOGGER.info(" Loaded {} known genes from {}", fusions.size(), knownGeneTsv);
 
         return ImmutableKnownEvents.builder()
                 .hotspots(hotspots)

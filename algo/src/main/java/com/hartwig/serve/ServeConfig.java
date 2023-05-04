@@ -233,7 +233,7 @@ public interface ServeConfig {
                 .hartwigCuratedHotspotTsv(useHartwigCuratedHotspots ? nonOptionalFile(cmd, HARTWIG_CURATED_HOTSPOT_TSV) : NOT_APPLICABLE)
                 .useHartwigDriverGenes(useHartwigDriverGenes)
                 .useHartwigCuratedGenes(useHartwigCuratedGenes)
-                .hartwigCuratedGeneTsv(useHartwigCuratedGenes ? nonOptionalFile(cmd, HARTWIG_CURATED_HOTSPOT_TSV) : NOT_APPLICABLE)
+                .hartwigCuratedGeneTsv(useHartwigCuratedGenes ? nonOptionalFile(cmd, HARTWIG_CURATED_GENE_TSV) : NOT_APPLICABLE)
                 .missingDoidsMappingTsv(nonOptionalFile(cmd, MISSING_DOIDS_MAPPING_TSV))
                 .ensemblDataDir37(nonOptionalDir(cmd, ENSEMBL_DATA_DIR_37))
                 .ensemblDataDir38(nonOptionalDir(cmd, ENSEMBL_DATA_DIR_38))

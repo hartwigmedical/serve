@@ -348,6 +348,8 @@ Knowledge extraction is performed on a per-knowledgebase level after which all e
   - The actionable output is the database that [PROTECT](https://github.com/hartwigmedical/hmftools/tree/master/protect) bases its clinical evidence matching on.
   
 ## Version History and Download Links
+- Upcoming
+  - Map JAX carcinoma of unknown primary to DOID 305
 - [2.2.1](https://github.com/hartwigmedical/serve/releases/tag/serve-v2.2.1)
   - Fix bug reading the hartwig curated hotspot tsv instead of the genes tsv when extracting known genes. 
 - [2.2.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v2.2.0)

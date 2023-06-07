@@ -267,17 +267,14 @@ class ActionableEntryFactory {
         } else if (source.equalsIgnoreCase("jax")) {
             switch (id) {
                 case CancerTypeConstants.JAX_ADVANCES_SOLID_TUMORS:
-                    // CKB uses this as Advanced Solid Tumor
-                    return CancerTypeConstants.CANCER_DOID;
-                case CancerTypeConstants.JAX_SQUAMOUS_CELL_CARCINOMA_OF_UNKNOWN_PRIMARY:
-                    // CKB uses this as Squamous Cell Carcinoma of Unknown Primary
-                    return CancerTypeConstants.SQUAMOUS_CELL_CARCINOMA_OF_UNKNOWN_PRIMARY;
-                case CancerTypeConstants.JAX_ADENOCARCINOMA_OF_UNKNOWN_PRIMARY:
-                    // CKB uses this as Adenocarcinoma of Unknown Primary
-                    return CancerTypeConstants.ADENOCARCINOMA_OF_UNKNOWN_PRIMARY;
                 case CancerTypeConstants.JAX_CANCER_OF_UNKNOWN_PRIMARY:
-                    // CKB uses this as Cancer of Unknown Primary
                     return CancerTypeConstants.CANCER_DOID;
+                case CancerTypeConstants.JAX_CARCINOMA_OF_UNKNOWN_PRIMARY:
+                    return CancerTypeConstants.CARCINOMA_OF_UNKNOWN_PRIMARY;
+                case CancerTypeConstants.JAX_ADENOCARCINOMA_OF_UNKNOWN_PRIMARY:
+                    return CancerTypeConstants.ADENOCARCINOMA_OF_UNKNOWN_PRIMARY;
+                case CancerTypeConstants.JAX_SQUAMOUS_CELL_CARCINOMA_OF_UNKNOWN_PRIMARY:
+                    return CancerTypeConstants.SQUAMOUS_CELL_CARCINOMA_OF_UNKNOWN_PRIMARY;
                 default:
                     // CKB uses 10000005 for configuring "Not a cancer". We can ignore these.
                     if (!id.equals(CancerTypeConstants.JAX_NOT_CANCER)) {

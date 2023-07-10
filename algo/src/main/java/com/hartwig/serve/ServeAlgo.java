@@ -145,6 +145,7 @@ public class ServeAlgo {
         EventClassifierConfig config = CkbClassificationConfig.build();
         RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.CKB);
 
+        // TODO; Decide if treatment approach curation is needed
         Map<TreatmentApproachCurationEntryKey, TreatmentApproachCurationEntry> treatmentApproachMap =
                 TreatmentApproachCurationFile.read(ckbDrugCurationTsv);
 

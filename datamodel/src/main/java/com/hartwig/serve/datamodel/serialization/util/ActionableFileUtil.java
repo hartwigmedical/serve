@@ -33,7 +33,6 @@ public final class ActionableFileUtil {
                 .add("sourceEvent")
                 .add("sourceUrls")
                 .add("treatment")
-                .add("sourceRelevantTreatmentApproaches")
                 .add("relevantTreatmentApproaches")
                 .add("applicableCancerType")
                 .add("applicableDoid")
@@ -71,7 +70,6 @@ public final class ActionableFileUtil {
             public Treatment treatment() {
                 return ImmutableTreatment.builder()
                         .name(values[fields.get("treatment")])
-                        .sourceRelevantTreatmentApproaches(fieldToSet(values[fields.get("sourceRelevantTreatmentApproaches")]))
                         .relevantTreatmentApproaches(fieldToSet(values[fields.get("relevantTreatmentApproaches")]))
                         .build();
             }
@@ -118,7 +116,6 @@ public final class ActionableFileUtil {
                 .add(event.sourceEvent())
                 .add(setToField(event.sourceUrls()))
                 .add(event.treatment().name())
-                .add(setToField(event.treatment().sourceRelevantTreatmentApproaches()))
                 .add(setToField(event.treatment().relevantTreatmentApproaches()))
                 .add(event.applicableCancerType().name())
                 .add(event.applicableCancerType().doid())

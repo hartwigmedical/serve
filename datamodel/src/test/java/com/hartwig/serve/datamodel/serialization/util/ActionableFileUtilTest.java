@@ -25,7 +25,6 @@ public class ActionableFileUtilTest {
                 Sets.newHashSet(),
                 DatamodelTestFactory.treatmentBuilder()
                         .name("treatment")
-                        .addSourceRelevantTreatmentApproaches("drug classes")
                         .addRelevantTreatmentApproaches("drug classes")
                         .build(),
                 DatamodelTestFactory.cancerTypeBuilder().name("applicable name").doid("applicable doid").build(),

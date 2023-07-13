@@ -51,7 +51,8 @@ public class ExtractionFunctionsTest {
         assertTrue(fusion.sources().contains(source2));
 
         assertEquals(2, merged.actionableHotspots().size());
-        assertEquals(2, merged.actionableRanges().size());
+        assertEquals(2, merged.actionableCodons().size());
+        assertEquals(2, merged.actionableExons().size());
         assertEquals(2, merged.actionableGenes().size());
         assertEquals(2, merged.actionableFusions().size());
         assertEquals(2, merged.actionableCharacteristics().size());

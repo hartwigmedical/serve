@@ -35,9 +35,7 @@ import com.hartwig.serve.datamodel.gene.KnownGene;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
 import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.immuno.ActionableHLA;
-import com.hartwig.serve.datamodel.range.ActionableRange;
-import com.hartwig.serve.datamodel.range.KnownCodon;
-import com.hartwig.serve.datamodel.range.KnownExon;
+import com.hartwig.serve.datamodel.range.*;
 import com.hartwig.serve.extraction.events.EventInterpretation;
 
 import org.apache.logging.log4j.LogManager;
@@ -94,7 +92,8 @@ public class ServeDAO {
         Timestamp timestamp = new Timestamp(new Date().getTime());
 
         writeActionableHotspots(timestamp, actionableEvents.hotspots());
-        writeActionableRanges(timestamp, actionableEvents.ranges());
+        writeActionableCodons(timestamp, actionableEvents.codons()); //TODO
+        writeActionableExons(timestamp, actionableEvents.exons()); //TODO
         writeActionableGenes(timestamp, actionableEvents.genes());
         writeActionableFusions(timestamp, actionableEvents.fusions());
         writeActionableCharacteristics(timestamp, actionableEvents.characteristics());
@@ -158,8 +157,8 @@ public class ServeDAO {
                 concat(actionableHotspot.evidenceUrls()).isEmpty());
     }
 
-    private void writeActionableRanges(@NotNull Timestamp timestamp, @NotNull List<ActionableRange> ranges) {
-        for (List<ActionableRange> batch : Iterables.partition(ranges, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
+    private void writeActionableCodons(@NotNull Timestamp timestamp, @NotNull List<ActionableCodon> codons) {
+        for (List<ActionableCodon> batch : Iterables.partition(codons, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
             InsertValuesStep18 inserter = context.insertInto(ACTIONABLERANGE,
                     ACTIONABLERANGE.MODIFIED,
                     ACTIONABLERANGE.GENE,
@@ -179,31 +178,79 @@ public class ServeDAO {
                     ACTIONABLERANGE.LEVEL,
                     ACTIONABLERANGE.DIRECTION,
                     ACTIONABLERANGE.EVIDENCEURLS);
-            batch.forEach(entry -> writeActionableRangeBatch(timestamp, inserter, entry));
+            batch.forEach(entry -> writeActionableCodonsBatch(timestamp, inserter, entry));
             inserter.execute();
         }
     }
 
-    private static void writeActionableRangeBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep18 inserter,
-            @NotNull ActionableRange actionableRange) {
+    private static void writeActionableCodonsBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep18 inserter,
+            @NotNull ActionableCodon actionableCodon) {
         inserter.values(timestamp,
-                actionableRange.gene(),
-                actionableRange.chromosome(),
-                actionableRange.start(),
-                actionableRange.end(),
-                actionableRange.applicableMutationType(),
-                actionableRange.source(),
-                actionableRange.sourceEvent(),
-                concat(actionableRange.sourceUrls()),
-                actionableRange.treatment().name(),
-                concat(actionableRange.treatment().sourceRelevantTreatmentApproaches()),
-                concat(actionableRange.treatment().relevantTreatmentApproaches()),
-                actionableRange.applicableCancerType().name(),
-                actionableRange.applicableCancerType().doid(),
-                concat(toStrings(actionableRange.blacklistCancerTypes())),
-                actionableRange.level(),
-                actionableRange.direction(),
-                concat(actionableRange.evidenceUrls()));
+                actionableCodon.gene(),
+                actionableCodon.chromosome(),
+                actionableCodon.start(),
+                actionableCodon.end(),
+                actionableCodon.applicableMutationType(),
+                actionableCodon.source(),
+                actionableCodon.sourceEvent(),
+                concat(actionableCodon.sourceUrls()),
+                actionableCodon.treatment().name(),
+                concat(actionableCodon.treatment().sourceRelevantTreatmentApproaches()),
+                concat(actionableCodon.treatment().relevantTreatmentApproaches()),
+                actionableCodon.applicableCancerType().name(),
+                actionableCodon.applicableCancerType().doid(),
+                concat(toStrings(actionableCodon.blacklistCancerTypes())),
+                actionableCodon.level(),
+                actionableCodon.direction(),
+                concat(actionableCodon.evidenceUrls()));
+    }
+
+    private void writeActionableExons(@NotNull Timestamp timestamp, @NotNull List<ActionableExon> exons) {
+        for (List<ActionableExon> batch : Iterables.partition(exons, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
+            InsertValuesStep18 inserter = context.insertInto(ACTIONABLERANGE,
+                    ACTIONABLERANGE.MODIFIED,
+                    ACTIONABLERANGE.GENE,
+                    ACTIONABLERANGE.CHROMOSOME,
+                    ACTIONABLERANGE.START,
+                    ACTIONABLERANGE.END,
+                    ACTIONABLERANGE.APPLICABLEMUTATIONTYPE,
+                    ACTIONABLERANGE.SOURCE,
+                    ACTIONABLERANGE.SOURCEEVENT,
+                    ACTIONABLERANGE.SOURCEURLS,
+                    ACTIONABLERANGE.TREATMENT,
+                    ACTIONABLERANGE.SOURCETREATMENTAPPROACH,
+                    ACTIONABLERANGE.TREATMENTAPPROACH,
+                    ACTIONABLERANGE.APPLICABLECANCERTYPE,
+                    ACTIONABLERANGE.APPLICABLEDOID,
+                    ACTIONABLERANGE.BLACKLISTCANCERTYPES,
+                    ACTIONABLERANGE.LEVEL,
+                    ACTIONABLERANGE.DIRECTION,
+                    ACTIONABLERANGE.EVIDENCEURLS);
+            batch.forEach(entry -> writeActionableExonsBatch(timestamp, inserter, entry));
+            inserter.execute();
+        }
+    }
+
+    private static void writeActionableExonsBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep18 inserter,
+                                                   @NotNull ActionableExon actionableExon) {
+        inserter.values(timestamp,
+                actionableExon.gene(),
+                actionableExon.chromosome(),
+                actionableExon.start(),
+                actionableExon.end(),
+                actionableExon.applicableMutationType(),
+                actionableExon.source(),
+                actionableExon.sourceEvent(),
+                concat(actionableExon.sourceUrls()),
+                actionableExon.treatment().name(),
+                concat(actionableExon.treatment().sourceRelevantTreatmentApproaches()),
+                concat(actionableExon.treatment().relevantTreatmentApproaches()),
+                actionableExon.applicableCancerType().name(),
+                actionableExon.applicableCancerType().doid(),
+                concat(toStrings(actionableExon.blacklistCancerTypes())),
+                actionableExon.level(),
+                actionableExon.direction(),
+                concat(actionableExon.evidenceUrls()));
     }
 
     private void writeActionableGenes(@NotNull Timestamp timestamp, @NotNull List<ActionableGene> genes) {

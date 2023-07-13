@@ -4,13 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
-import com.hartwig.serve.actionability.ActionableCharacteristicUrlConsolidator;
-import com.hartwig.serve.actionability.ActionableEventUrlMerger;
-import com.hartwig.serve.actionability.ActionableFusionUrlConsolidator;
-import com.hartwig.serve.actionability.ActionableGeneUrlConsolidator;
-import com.hartwig.serve.actionability.ActionableHLAUrlConsolidator;
-import com.hartwig.serve.actionability.ActionableHotspotUrlConsolidator;
-import com.hartwig.serve.actionability.ActionableRangeUrlConsolidator;
+import com.hartwig.serve.actionability.*;
 import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.datamodel.fusion.KnownFusion;
 import com.hartwig.serve.datamodel.gene.KnownCopyNumber;
@@ -60,7 +54,8 @@ public final class ExtractionFunctions {
             allFusions.addAll(result.knownFusions());
 
             mergedBuilder.addAllActionableHotspots(result.actionableHotspots());
-            mergedBuilder.addAllActionableRanges(result.actionableRanges());
+            mergedBuilder.addAllActionableCodons(result.actionableCodons());
+            mergedBuilder.addAllActionableExons(result.actionableExons());
             mergedBuilder.addAllActionableGenes(result.actionableGenes());
             mergedBuilder.addAllActionableFusions(result.actionableFusions());
             mergedBuilder.addAllActionableCharacteristics(result.actionableCharacteristics());
@@ -84,7 +79,8 @@ public final class ExtractionFunctions {
         return ImmutableExtractionResult.builder()
                 .from(result)
                 .actionableHotspots(ActionableEventUrlMerger.merge(result.actionableHotspots(), new ActionableHotspotUrlConsolidator()))
-                .actionableRanges(ActionableEventUrlMerger.merge(result.actionableRanges(), new ActionableRangeUrlConsolidator()))
+                .actionableCodons(ActionableEventUrlMerger.merge(result.actionableCodons(), new ActionableCodonUrlConsolidator()))
+                .actionableExons(ActionableEventUrlMerger.merge(result.actionableExons(), new ActionableExonUrlConsolidator()))
                 .actionableGenes(ActionableEventUrlMerger.merge(result.actionableGenes(), new ActionableGeneUrlConsolidator()))
                 .actionableFusions(ActionableEventUrlMerger.merge(result.actionableFusions(), new ActionableFusionUrlConsolidator()))
                 .actionableCharacteristics(ActionableEventUrlMerger.merge(result.actionableCharacteristics(),

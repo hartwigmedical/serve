@@ -3,18 +3,7 @@ package com.hartwig.serve.extraction;
 import java.io.IOException;
 
 import com.hartwig.serve.datamodel.RefGenome;
-import com.hartwig.serve.datamodel.serialization.ActionableCharacteristicFile;
-import com.hartwig.serve.datamodel.serialization.ActionableFusionFile;
-import com.hartwig.serve.datamodel.serialization.ActionableGeneFile;
-import com.hartwig.serve.datamodel.serialization.ActionableHLAFile;
-import com.hartwig.serve.datamodel.serialization.ActionableHotspotFile;
-import com.hartwig.serve.datamodel.serialization.ActionableRangeFile;
-import com.hartwig.serve.datamodel.serialization.KnownCodonFile;
-import com.hartwig.serve.datamodel.serialization.KnownCopyNumberFile;
-import com.hartwig.serve.datamodel.serialization.KnownExonFile;
-import com.hartwig.serve.datamodel.serialization.KnownFusionFile;
-import com.hartwig.serve.datamodel.serialization.KnownGeneFile;
-import com.hartwig.serve.datamodel.serialization.KnownHotspotFile;
+import com.hartwig.serve.datamodel.serialization.*;
 import com.hartwig.serve.extraction.events.EventInterpretationFile;
 import com.hartwig.serve.extraction.hotspot.KnownHotspotVCF;
 
@@ -78,9 +67,13 @@ public class ExtractionResultWriter {
         LOGGER.info(" Writing {} actionable hotspots to {}", result.actionableHotspots().size(), actionableHotspotTsv);
         ActionableHotspotFile.write(actionableHotspotTsv, result.actionableHotspots());
 
-        String actionableRangeTsv = ActionableRangeFile.actionableRangeTsvPath(outputDir, refGenome);
-        LOGGER.info(" Writing {} actionable ranges to {}", result.actionableRanges().size(), actionableRangeTsv);
-        ActionableRangeFile.write(actionableRangeTsv, result.actionableRanges());
+        String actionableCodonTsv = ActionableCodonFile.actionableCodonTsvPath(outputDir, refGenome);
+        LOGGER.info(" Writing {} actionable codons to {}", result.actionableCodons().size(), actionableCodonTsv);
+        ActionableCodonFile.write(actionableCodonTsv, result.actionableCodons());
+
+        String actionableExonTsv = ActionableExonFile.actionableExonTsvPath(outputDir, refGenome);
+        LOGGER.info(" Writing {} actionable exons to {}", result.actionableExons().size(), actionableExonTsv);
+        ActionableExonFile.write(actionableExonTsv, result.actionableExons());
 
         String actionableGeneTsv = ActionableGeneFile.actionableGeneTsvPath(outputDir, refGenome);
         LOGGER.info(" Writing {} actionable genes to {}", result.actionableGenes().size(), actionableGeneTsv);

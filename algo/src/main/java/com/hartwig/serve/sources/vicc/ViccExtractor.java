@@ -24,12 +24,7 @@ import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
 import com.hartwig.serve.datamodel.hotspot.ImmutableKnownHotspot;
 import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
-import com.hartwig.serve.datamodel.range.ActionableRange;
-import com.hartwig.serve.datamodel.range.ImmutableKnownCodon;
-import com.hartwig.serve.datamodel.range.ImmutableKnownExon;
-import com.hartwig.serve.datamodel.range.KnownCodon;
-import com.hartwig.serve.datamodel.range.KnownExon;
-import com.hartwig.serve.datamodel.range.RangeAnnotation;
+import com.hartwig.serve.datamodel.range.*;
 import com.hartwig.serve.extraction.ActionableEventFactory;
 import com.hartwig.serve.extraction.EventExtractor;
 import com.hartwig.serve.extraction.EventExtractorOutput;
@@ -277,21 +272,23 @@ public final class ViccExtractor {
     private static void addActionability(@NotNull ImmutableExtractionResult.Builder outputBuilder,
             @NotNull ViccExtractionResult extraction) {
         Set<ActionableHotspot> actionableHotspots = Sets.newHashSet();
-        Set<ActionableRange> actionableRanges = Sets.newHashSet();
+        Set<ActionableCodon> actionableCodons = Sets.newHashSet();
+        Set<ActionableExon> actionableExons = Sets.newHashSet();
         Set<ActionableGene> actionableGenes = Sets.newHashSet();
         Set<ActionableFusion> actionableFusions = Sets.newHashSet();
         Set<ActionableCharacteristic> actionableCharacteristics = Sets.newHashSet();
 
         actionableHotspots.addAll(extractActionableHotspots(extraction, extraction.hotspotsPerFeature()));
-        actionableRanges.addAll(extractActionableRanges(extraction, extraction.codonsPerFeature()));
-        actionableRanges.addAll(extractActionableRanges(extraction, extraction.exonsPerFeature()));
+        actionableCodons.addAll(extractActionableCodons(extraction, extraction.codonsPerFeature()));
+        actionableExons.addAll(extractActionableExons(extraction, extraction.exonsPerFeature()));
         actionableGenes.addAll(extractActionableAmpsDels(extraction, extraction.ampsDelsPerFeature()));
         actionableGenes.addAll(extractActionableGenes(extraction, extraction.geneLevelEventsPerFeature()));
         actionableFusions.addAll(extractActionableFusions(extraction, extraction.fusionsPerFeature()));
         actionableCharacteristics.addAll(extractActionableCharacteristics(extraction, extraction.characteristicsPerFeature()));
 
         outputBuilder.actionableHotspots(actionableHotspots);
-        outputBuilder.actionableRanges(actionableRanges);
+        outputBuilder.actionableCodons(actionableCodons);
+        outputBuilder.actionableExons(actionableExons);
         outputBuilder.actionableGenes(actionableGenes);
         outputBuilder.actionableFusions(actionableFusions);
         outputBuilder.actionableCharacteristics(actionableCharacteristics);
@@ -314,19 +311,35 @@ public final class ViccExtractor {
     }
 
     @NotNull
-    private static <T extends RangeAnnotation> Set<ActionableRange> extractActionableRanges(@NotNull ViccExtractionResult extraction,
+    private static <T extends RangeAnnotation> Set<ActionableCodon> extractActionableCodons(@NotNull ViccExtractionResult extraction,
             @NotNull Map<Feature, List<T>> rangesPerFeature) {
-        Set<ActionableRange> actionableRanges = Sets.newHashSet();
+        Set<ActionableCodon> actionableCodons = Sets.newHashSet();
         for (Map.Entry<Feature, List<T>> entry : rangesPerFeature.entrySet()) {
-            List<T> ranges = entry.getValue();
-            if (ranges != null) {
+            List<T> codons = entry.getValue();
+            if (codons != null) {
                 for (ActionableEvidence evidence : extraction.actionableEvidence()) {
                     ActionableEvidence modified = withSourceEvent(evidence, extraction.eventInterpretationPerFeature().get(entry.getKey()));
-                    actionableRanges.addAll(ActionableEventFactory.toActionableRanges(modified, ranges));
+                    actionableCodons.addAll(ActionableEventFactory.toActionableCodons(modified, codons));
                 }
             }
         }
-        return actionableRanges;
+        return actionableCodons;
+    }
+
+    @NotNull
+    private static <T extends RangeAnnotation> Set<ActionableExon> extractActionableExons(@NotNull ViccExtractionResult extraction,
+                                                                                            @NotNull Map<Feature, List<T>> rangesPerFeature) {
+        Set<ActionableExon> actionableExons = Sets.newHashSet();
+        for (Map.Entry<Feature, List<T>> entry : rangesPerFeature.entrySet()) {
+            List<T> exons = entry.getValue();
+            if (exons != null) {
+                for (ActionableEvidence evidence : extraction.actionableEvidence()) {
+                    ActionableEvidence modified = withSourceEvent(evidence, extraction.eventInterpretationPerFeature().get(entry.getKey()));
+                    actionableExons.addAll(ActionableEventFactory.toActionableExons(modified, exons));
+                }
+            }
+        }
+        return actionableExons;
     }
 
     @NotNull

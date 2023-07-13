@@ -19,9 +19,7 @@ import com.hartwig.serve.datamodel.hotspot.ImmutableActionableHotspot;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
 import com.hartwig.serve.datamodel.immuno.ActionableHLA;
 import com.hartwig.serve.datamodel.immuno.ImmutableActionableHLA;
-import com.hartwig.serve.datamodel.range.ActionableRange;
-import com.hartwig.serve.datamodel.range.ImmutableActionableRange;
-import com.hartwig.serve.datamodel.range.RangeAnnotation;
+import com.hartwig.serve.datamodel.range.*;
 import com.hartwig.serve.extraction.immuno.ImmunoHLA;
 
 import org.jetbrains.annotations.NotNull;
@@ -48,18 +46,33 @@ public final class ActionableEventFactory {
     }
 
     @NotNull
-    public static Set<ActionableRange> toActionableRanges(@NotNull ActionableEvent actionableEvent,
-            @Nullable List<? extends RangeAnnotation> ranges) {
-        if (ranges == null) {
+    public static Set<ActionableCodon> toActionableCodons(@NotNull ActionableEvent actionableEvent,
+                                                          @Nullable List<? extends RangeAnnotation> codons) {
+        if (codons == null) {
             return Sets.newHashSet();
         }
 
-        Set<ActionableRange> actionableRanges = Sets.newHashSet();
-        for (RangeAnnotation range : ranges) {
-            actionableRanges.add(ImmutableActionableRange.builder().from(actionableEvent).from(range).build());
+        Set<ActionableCodon> actionableCodons = Sets.newHashSet();
+        for (RangeAnnotation codon : codons) {
+            actionableCodons.add(ImmutableActionableCodon.builder().from(actionableEvent).from(codon).build());
         }
 
-        return actionableRanges;
+        return actionableCodons;
+    }
+
+    @NotNull
+    public static Set<ActionableExon> toActionableExons(@NotNull ActionableEvent actionableEvent,
+                                                          @Nullable List<? extends RangeAnnotation> exons) {
+        if (exons == null) {
+            return Sets.newHashSet();
+        }
+
+        Set<ActionableExon> actionableExons = Sets.newHashSet();
+        for (RangeAnnotation exon : exons) {
+            actionableExons.add(ImmutableActionableExon.builder().from(actionableEvent).from(exon).build());
+        }
+
+        return actionableExons;
     }
 
     @NotNull

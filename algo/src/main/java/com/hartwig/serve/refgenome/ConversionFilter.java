@@ -10,9 +10,7 @@ import com.hartwig.serve.datamodel.gene.KnownCopyNumber;
 import com.hartwig.serve.datamodel.gene.KnownGene;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
 import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
-import com.hartwig.serve.datamodel.range.ActionableRange;
-import com.hartwig.serve.datamodel.range.KnownCodon;
-import com.hartwig.serve.datamodel.range.KnownExon;
+import com.hartwig.serve.datamodel.range.*;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.ImmutableExtractionResult;
 
@@ -38,7 +36,8 @@ class ConversionFilter {
                 .knownCopyNumbers(filterCopyNumbers(extractionResult.knownCopyNumbers()))
                 .knownFusions(filterFusions(extractionResult.knownFusions()))
                 .actionableHotspots(filterActionableHotspots(extractionResult.actionableHotspots()))
-                .actionableRanges(filterActionableRanges(extractionResult.actionableRanges()))
+                .actionableCodons(filterActionableCodons(extractionResult.actionableCodons()))
+                .actionableExons(filterActionableExons(extractionResult.actionableExons()))
                 .actionableGenes(filterActionableGenes(extractionResult.actionableGenes()))
                 .actionableFusions(filterActionableFusions(extractionResult.actionableFusions()))
                 .build();
@@ -140,8 +139,13 @@ class ConversionFilter {
     }
 
     @NotNull
-    private Set<ActionableRange> filterActionableRanges(@NotNull Set<ActionableRange> actionableRanges) {
-        return actionableRanges;
+    private Set<ActionableCodon> filterActionableCodons(@NotNull Set<ActionableCodon> actionableCodons) {
+        return actionableCodons;
+    }
+
+    @NotNull
+    private Set<ActionableExon> filterActionableExons(@NotNull Set<ActionableExon> actionableExons) {
+        return actionableExons;
     }
 
     @NotNull

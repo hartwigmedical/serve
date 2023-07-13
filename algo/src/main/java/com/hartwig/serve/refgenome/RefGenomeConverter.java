@@ -11,13 +11,8 @@ import com.hartwig.serve.datamodel.hotspot.ImmutableActionableHotspot;
 import com.hartwig.serve.datamodel.hotspot.ImmutableKnownHotspot;
 import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
-import com.hartwig.serve.datamodel.range.ActionableRange;
-import com.hartwig.serve.datamodel.range.ImmutableActionableRange;
-import com.hartwig.serve.datamodel.range.ImmutableKnownCodon;
-import com.hartwig.serve.datamodel.range.ImmutableKnownExon;
-import com.hartwig.serve.datamodel.range.KnownCodon;
-import com.hartwig.serve.datamodel.range.KnownExon;
-import com.hartwig.serve.datamodel.range.RangeAnnotation;
+import com.hartwig.serve.datamodel.range.*;
+import com.hartwig.serve.datamodel.serialization.ActionableExonFile;
 import com.hartwig.serve.extraction.util.ImmutableGenomeRegionImpl;
 import com.hartwig.serve.refgenome.liftover.LiftOverAlgo;
 import com.hartwig.serve.refgenome.liftover.LiftOverChecker;
@@ -112,15 +107,27 @@ class RefGenomeConverter {
     }
 
     @NotNull
-    public Set<ActionableRange> convertActionableRanges(@NotNull Set<ActionableRange> actionableRanges) {
-        Set<ActionableRange> convertedActionableRanges = Sets.newHashSet();
-        for (ActionableRange actionableRange : actionableRanges) {
-            ActionableRange lifted = liftOverActionableRange(actionableRange);
+    public Set<ActionableCodon> convertActionableCodons(@NotNull Set<ActionableCodon> actionableCodons) {
+        Set<ActionableCodon> convertedActionableCodons = Sets.newHashSet();
+        for (ActionableCodon actionableCodon : actionableCodons) {
+            ActionableCodon lifted = liftOverActionableCodon(actionableCodon);
             if (lifted != null) {
-                convertedActionableRanges.add(lifted);
+                convertedActionableCodons.add(lifted);
             }
         }
-        return convertedActionableRanges;
+        return convertedActionableCodons;
+    }
+
+    @NotNull
+    public Set<ActionableExon> convertActionableExons(@NotNull Set<ActionableExon> actionableExons) {
+        Set<ActionableExon> convertedActionableExons = Sets.newHashSet();
+        for (ActionableExon actionableExon : actionableExons) {
+            ActionableExon lifted = liftOverActionableExons(actionableExon);
+            if (lifted != null) {
+                convertedActionableExons.add(lifted);
+            }
+        }
+        return convertedActionableExons;
     }
 
     @Nullable
@@ -202,15 +209,31 @@ class RefGenomeConverter {
     }
 
     @Nullable
-    private ActionableRange liftOverActionableRange(@NotNull ActionableRange actionableRange) {
-        GenomeRegion lifted = liftOverRange(actionableRange);
+    private ActionableCodon liftOverActionableCodon(@NotNull ActionableCodon actionableCodon) {
+        GenomeRegion lifted = liftOverRange(actionableCodon);
 
         if (lifted == null) {
             return null;
         }
 
-        return ImmutableActionableRange.builder()
-                .from(actionableRange)
+        return ImmutableActionableCodon.builder()
+                .from(actionableCodon)
+                .chromosome(lifted.chromosome())
+                .start(lifted.start())
+                .end(lifted.end())
+                .build();
+    }
+
+    @Nullable
+    private ActionableExon liftOverActionableExons(@NotNull ActionableExon actionableExon) {
+        GenomeRegion lifted = liftOverRange(actionableExon);
+
+        if (lifted == null) {
+            return null;
+        }
+
+        return ImmutableActionableExon.builder()
+                .from(actionableExon)
                 .chromosome(lifted.chromosome())
                 .start(lifted.start())
                 .end(lifted.end())
@@ -235,6 +258,7 @@ class RefGenomeConverter {
                 .end(liftedEnd.position())
                 .build();
     }
+
 
     private void verifyNoChromosomeChange(@NotNull String prevChromosome, @NotNull LiftOverResult lifted, @NotNull Object object) {
         String versionedChromosome = RefGenomeFunctions.versionedChromosome(prevChromosome, targetVersion);

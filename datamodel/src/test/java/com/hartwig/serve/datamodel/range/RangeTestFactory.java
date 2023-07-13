@@ -55,15 +55,27 @@ public final class RangeTestFactory {
     }
 
     @NotNull
-    public static ImmutableActionableRange.Builder actionableRangeBuilder() {
-        return ImmutableActionableRange.builder()
+    public static ActionableCodon createTestActionableCodonForSource(@NotNull Knowledgebase source) {
+        return actionableCodonBuilder().source(source).build();
+    }
+
+    @NotNull
+    public static ImmutableActionableCodon.Builder actionableCodonBuilder() {
+        return ImmutableActionableCodon.builder()
                 .from(createTestRangeAnnotation())
                 .from(DatamodelTestFactory.createTestActionableEvent());
     }
 
     @NotNull
-    public static ActionableRange createTestActionableRangeForSource(@NotNull Knowledgebase source) {
-        return actionableRangeBuilder().source(source).build();
+    public static ActionableExon createTestActionableExonForSource(@NotNull Knowledgebase source) {
+        return actionableExonBuilder().source(source).build();
+    }
+
+    @NotNull
+    public static ImmutableActionableExon.Builder actionableExonBuilder() {
+        return ImmutableActionableExon.builder()
+                .from(createTestRangeAnnotation())
+                .from(DatamodelTestFactory.createTestActionableEvent());
     }
 
     private static class RangeAnnotationImpl implements RangeAnnotation {

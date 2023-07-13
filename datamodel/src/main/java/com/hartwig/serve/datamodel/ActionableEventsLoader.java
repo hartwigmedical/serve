@@ -8,13 +8,9 @@ import com.hartwig.serve.datamodel.fusion.ActionableFusion;
 import com.hartwig.serve.datamodel.gene.ActionableGene;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
 import com.hartwig.serve.datamodel.immuno.ActionableHLA;
-import com.hartwig.serve.datamodel.range.ActionableRange;
-import com.hartwig.serve.datamodel.serialization.ActionableCharacteristicFile;
-import com.hartwig.serve.datamodel.serialization.ActionableFusionFile;
-import com.hartwig.serve.datamodel.serialization.ActionableGeneFile;
-import com.hartwig.serve.datamodel.serialization.ActionableHLAFile;
-import com.hartwig.serve.datamodel.serialization.ActionableHotspotFile;
-import com.hartwig.serve.datamodel.serialization.ActionableRangeFile;
+import com.hartwig.serve.datamodel.range.ActionableCodon;
+import com.hartwig.serve.datamodel.range.ActionableExon;
+import com.hartwig.serve.datamodel.serialization.*;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -36,9 +32,13 @@ public final class ActionableEventsLoader {
         List<ActionableHotspot> hotspots = ActionableHotspotFile.read(actionableHotspotTsv);
         LOGGER.info(" Loaded {} actionable hotspots from {}", hotspots.size(), actionableHotspotTsv);
 
-        String actionableRangeTsv = ActionableRangeFile.actionableRangeTsvPath(actionabilityDir, refGenome);
-        List<ActionableRange> ranges = ActionableRangeFile.read(actionableRangeTsv);
-        LOGGER.info(" Loaded {} actionable ranges from {}", ranges.size(), actionableRangeTsv);
+        String actionableCodonTsv = ActionableCodonFile.actionableCodonTsvPath(actionabilityDir, refGenome);
+        List<ActionableCodon> codons = ActionableCodonFile.read(actionableCodonTsv);
+        LOGGER.info(" Loaded {} actionable codons from {}", codons.size(), actionableCodonTsv);
+
+        String actionableExonTsv = ActionableExonFile.actionableExonTsvPath(actionabilityDir, refGenome);
+        List<ActionableExon> exons = ActionableExonFile.read(actionableExonTsv);
+        LOGGER.info(" Loaded {} actionable exons from {}", exons.size(), actionableExonTsv);
 
         String actionableGeneTsv = ActionableGeneFile.actionableGeneTsvPath(actionabilityDir, refGenome);
         List<ActionableGene> genes = ActionableGeneFile.read(actionableGeneTsv);
@@ -59,7 +59,8 @@ public final class ActionableEventsLoader {
 
         return ImmutableActionableEvents.builder()
                 .hotspots(hotspots)
-                .ranges(ranges)
+                .codons(codons)
+                .exons(exons)
                 .genes(genes)
                 .fusions(fusions)
                 .characteristics(characteristics)

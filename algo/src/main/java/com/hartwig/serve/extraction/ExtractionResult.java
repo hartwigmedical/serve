@@ -51,10 +51,10 @@ public abstract class ExtractionResult {
     public abstract Set<ActionableHotspot> actionableHotspots();
 
     @NotNull
-    public abstract Set<ActionableCodon> actionableCodons();
+    public abstract Set<ActionableRange> actionableCodons();
 
     @NotNull
-    public abstract Set<ActionableExon> actionableExons();
+    public abstract Set<ActionableRange> actionableExons();
 
     @NotNull
     public abstract Set<ActionableGene> actionableGenes();

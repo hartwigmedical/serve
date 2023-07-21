@@ -7,5 +7,5 @@ import org.jetbrains.annotations.Nullable;
 
 @Value.Immutable
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class })
-public abstract class ActionableExon implements RangeAnnotation, ActionableEvent {
+public abstract class ActionableRange implements RangeAnnotation, ActionableEvent {
 }

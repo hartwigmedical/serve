@@ -272,15 +272,15 @@ public final class ViccExtractor {
     private static void addActionability(@NotNull ImmutableExtractionResult.Builder outputBuilder,
             @NotNull ViccExtractionResult extraction) {
         Set<ActionableHotspot> actionableHotspots = Sets.newHashSet();
-        Set<ActionableCodon> actionableCodons = Sets.newHashSet();
-        Set<ActionableExon> actionableExons = Sets.newHashSet();
+        Set<ActionableRange> actionableCodons = Sets.newHashSet();
+        Set<ActionableRange> actionableExons = Sets.newHashSet();
         Set<ActionableGene> actionableGenes = Sets.newHashSet();
         Set<ActionableFusion> actionableFusions = Sets.newHashSet();
         Set<ActionableCharacteristic> actionableCharacteristics = Sets.newHashSet();
 
         actionableHotspots.addAll(extractActionableHotspots(extraction, extraction.hotspotsPerFeature()));
-        actionableCodons.addAll(extractActionableCodons(extraction, extraction.codonsPerFeature()));
-        actionableExons.addAll(extractActionableExons(extraction, extraction.exonsPerFeature()));
+        actionableCodons.addAll(extractActionableRange(extraction, extraction.codonsPerFeature()));
+        actionableExons.addAll(extractActionableRange(extraction, extraction.exonsPerFeature()));
         actionableGenes.addAll(extractActionableAmpsDels(extraction, extraction.ampsDelsPerFeature()));
         actionableGenes.addAll(extractActionableGenes(extraction, extraction.geneLevelEventsPerFeature()));
         actionableFusions.addAll(extractActionableFusions(extraction, extraction.fusionsPerFeature()));
@@ -311,35 +311,19 @@ public final class ViccExtractor {
     }
 
     @NotNull
-    private static <T extends RangeAnnotation> Set<ActionableCodon> extractActionableCodons(@NotNull ViccExtractionResult extraction,
-            @NotNull Map<Feature, List<T>> rangesPerFeature) {
-        Set<ActionableCodon> actionableCodons = Sets.newHashSet();
-        for (Map.Entry<Feature, List<T>> entry : rangesPerFeature.entrySet()) {
-            List<T> codons = entry.getValue();
-            if (codons != null) {
-                for (ActionableEvidence evidence : extraction.actionableEvidence()) {
-                    ActionableEvidence modified = withSourceEvent(evidence, extraction.eventInterpretationPerFeature().get(entry.getKey()));
-                    actionableCodons.addAll(ActionableEventFactory.toActionableCodons(modified, codons));
-                }
-            }
-        }
-        return actionableCodons;
-    }
-
-    @NotNull
-    private static <T extends RangeAnnotation> Set<ActionableExon> extractActionableExons(@NotNull ViccExtractionResult extraction,
+    private static <T extends RangeAnnotation> Set<ActionableRange> extractActionableRange(@NotNull ViccExtractionResult extraction,
                                                                                             @NotNull Map<Feature, List<T>> rangesPerFeature) {
-        Set<ActionableExon> actionableExons = Sets.newHashSet();
+        Set<ActionableRange> actionableRanges = Sets.newHashSet();
         for (Map.Entry<Feature, List<T>> entry : rangesPerFeature.entrySet()) {
             List<T> exons = entry.getValue();
             if (exons != null) {
                 for (ActionableEvidence evidence : extraction.actionableEvidence()) {
                     ActionableEvidence modified = withSourceEvent(evidence, extraction.eventInterpretationPerFeature().get(entry.getKey()));
-                    actionableExons.addAll(ActionableEventFactory.toActionableExons(modified, exons));
+                    actionableRanges.addAll(ActionableEventFactory.toActionableRanges(modified, exons));
                 }
             }
         }
-        return actionableExons;
+        return actionableRanges;
     }
 
     @NotNull

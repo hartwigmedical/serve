@@ -146,8 +146,8 @@ public class ServeDAO {
                 concat(actionableHotspot.evidenceUrls()).isEmpty());
     }
 
-    private void writeActionableCodons(@NotNull Timestamp timestamp, @NotNull List<ActionableCodon> codons) {
-        for (List<ActionableCodon> batch : Iterables.partition(codons, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
+    private void writeActionableCodons(@NotNull Timestamp timestamp, @NotNull List<ActionableRange> codons) {
+        for (List<ActionableRange> batch : Iterables.partition(codons, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
             InsertValuesStep18 inserter = context.insertInto(ACTIONABLECODON,
                     ACTIONABLECODON.MODIFIED,
                     ACTIONABLECODON.GENE,
@@ -173,7 +173,7 @@ public class ServeDAO {
     }
 
     private static void writeActionableCodonsBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep18 inserter,
-            @NotNull ActionableCodon actionableCodon) {
+            @NotNull ActionableRange actionableCodon) {
         inserter.values(timestamp,
                 actionableCodon.gene(),
                 actionableCodon.chromosome(),
@@ -194,8 +194,8 @@ public class ServeDAO {
                 concat(actionableCodon.evidenceUrls()));
     }
 
-    private void writeActionableExons(@NotNull Timestamp timestamp, @NotNull List<ActionableExon> exons) {
-        for (List<ActionableExon> batch : Iterables.partition(exons, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
+    private void writeActionableExons(@NotNull Timestamp timestamp, @NotNull List<ActionableRange> exons) {
+        for (List<ActionableRange> batch : Iterables.partition(exons, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
             InsertValuesStep18 inserter = context.insertInto(ACTIONABLEEXON,
                     ACTIONABLEEXON.MODIFIED,
                     ACTIONABLEEXON.GENE,
@@ -221,7 +221,7 @@ public class ServeDAO {
     }
 
     private static void writeActionableExonsBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep18 inserter,
-                                                   @NotNull ActionableExon actionableExon) {
+                                                   @NotNull ActionableRange actionableExon) {
         inserter.values(timestamp,
                 actionableExon.gene(),
                 actionableExon.chromosome(),

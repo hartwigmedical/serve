@@ -7,9 +7,8 @@ import com.hartwig.serve.datamodel.fusion.ActionableFusion;
 import com.hartwig.serve.datamodel.gene.ActionableGene;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
 import com.hartwig.serve.datamodel.immuno.ActionableHLA;
-import com.hartwig.serve.datamodel.range.ActionableCodon;
-import com.hartwig.serve.datamodel.range.ActionableExon;
 
+import com.hartwig.serve.datamodel.range.ActionableRange;
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -22,10 +21,10 @@ public abstract class ActionableEvents {
     public abstract List<ActionableHotspot> hotspots();
 
     @NotNull
-    public abstract List<ActionableCodon> codons();
+    public abstract List<ActionableRange> codons();
 
     @NotNull
-    public abstract List<ActionableExon> exons();
+    public abstract List<ActionableRange> exons();
 
     @NotNull
     public abstract List<ActionableGene> genes();

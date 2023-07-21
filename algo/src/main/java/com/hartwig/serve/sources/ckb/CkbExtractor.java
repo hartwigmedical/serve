@@ -138,8 +138,8 @@ public class CkbExtractor {
             @NotNull EventExtractorOutput output, @NotNull Set<ActionableEntry> actionableEntries,
             @NotNull EventInterpretation interpretation) {
         Set<ActionableHotspot> actionableHotspots = Sets.newHashSet();
-        Set<ActionableCodon> actionableCodons = Sets.newHashSet();
-        Set<ActionableExon> actionableExons = Sets.newHashSet();
+        Set<ActionableRange> actionableCodons = Sets.newHashSet();
+        Set<ActionableRange> actionableExons = Sets.newHashSet();
         Set<ActionableGene> actionableGenes = Sets.newHashSet();
         Set<ActionableFusion> actionableFusions = Sets.newHashSet();
         Set<ActionableCharacteristic> actionableCharacteristics = Sets.newHashSet();
@@ -151,8 +151,8 @@ public class CkbExtractor {
             codons = curateCodons(output.codons());
 
             actionableHotspots.addAll(ActionableEventFactory.toActionableHotspots(event, output.hotspots()));
-            actionableCodons.addAll(ActionableEventFactory.toActionableCodons(event, codons));
-            actionableExons.addAll(ActionableEventFactory.toActionableExons(event, output.exons()));
+            actionableCodons.addAll(ActionableEventFactory.toActionableRanges(event, codons));
+            actionableExons.addAll(ActionableEventFactory.toActionableRanges(event, output.exons()));
 
             if (output.geneLevel() != null) {
                 actionableGenes.add(ActionableEventFactory.geneAnnotationToActionableGene(event, output.geneLevel()));

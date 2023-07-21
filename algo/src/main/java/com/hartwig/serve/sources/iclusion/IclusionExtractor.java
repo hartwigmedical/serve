@@ -12,8 +12,7 @@ import com.hartwig.serve.datamodel.fusion.ActionableFusion;
 import com.hartwig.serve.datamodel.gene.ActionableGene;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
 import com.hartwig.serve.datamodel.immuno.ActionableHLA;
-import com.hartwig.serve.datamodel.range.ActionableCodon;
-import com.hartwig.serve.datamodel.range.ActionableExon;
+import com.hartwig.serve.datamodel.range.ActionableRange;
 import com.hartwig.serve.extraction.ActionableEventFactory;
 import com.hartwig.serve.extraction.EventExtractor;
 import com.hartwig.serve.extraction.EventExtractorOutput;
@@ -102,8 +101,8 @@ public class IclusionExtractor {
     private static ExtractionResult toExtractionResult(@NotNull List<ActionableTrial> actionableTrials,
             @NotNull EventExtractorOutput extraction, @NotNull EventInterpretation interpretation) {
         Set<ActionableHotspot> actionableHotspots = Sets.newHashSet();
-        Set<ActionableCodon> actionableCodons = Sets.newHashSet();
-        Set<ActionableExon> actionableExons = Sets.newHashSet();
+        Set<ActionableRange> actionableCodons = Sets.newHashSet();
+        Set<ActionableRange> actionableExons = Sets.newHashSet();
         Set<ActionableGene> actionableGenes = Sets.newHashSet();
         Set<ActionableFusion> actionableFusions = Sets.newHashSet();
         Set<ActionableCharacteristic> actionableCharacteristics = Sets.newHashSet();
@@ -111,8 +110,8 @@ public class IclusionExtractor {
 
         for (ActionableTrial trial : actionableTrials) {
             actionableHotspots.addAll(ActionableEventFactory.toActionableHotspots(trial, extraction.hotspots()));
-            actionableCodons.addAll(ActionableEventFactory.toActionableCodons(trial, extraction.codons()));
-            actionableExons.addAll(ActionableEventFactory.toActionableExons(trial, extraction.exons()));
+            actionableCodons.addAll(ActionableEventFactory.toActionableRanges(trial, extraction.codons()));
+            actionableExons.addAll(ActionableEventFactory.toActionableRanges(trial, extraction.exons()));
 
             if (extraction.geneLevel() != null) {
                 actionableGenes.add(ActionableEventFactory.geneAnnotationToActionableGene(trial, extraction.geneLevel()));

@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
 
-public class ActionableCodonComparator implements Comparator<ActionableCodon> {
+public class ActionableRangeComparator implements Comparator<ActionableRange> {
 
     @NotNull
     private final Comparator<RangeAnnotation> rangeAnnotationComparator = new RangeAnnotationComparator();
@@ -14,12 +14,12 @@ public class ActionableCodonComparator implements Comparator<ActionableCodon> {
     private final Comparator<ActionableEvent> actionableEventComparator = new ActionableEventComparator();
 
     @Override
-    public int compare(@NotNull ActionableCodon codon1, @NotNull ActionableCodon codon2) {
-        int rangeCompare = rangeAnnotationComparator.compare(codon1, codon2);
+    public int compare(@NotNull ActionableRange range1, @NotNull ActionableRange range2) {
+        int rangeCompare = rangeAnnotationComparator.compare(range1, range2);
         if (rangeCompare != 0) {
             return rangeCompare;
         }
 
-        return actionableEventComparator.compare(codon1, codon2);
+        return actionableEventComparator.compare(range1, range2);
     }
 }

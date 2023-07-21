@@ -36,8 +36,8 @@ class ConversionFilter {
                 .knownCopyNumbers(filterCopyNumbers(extractionResult.knownCopyNumbers()))
                 .knownFusions(filterFusions(extractionResult.knownFusions()))
                 .actionableHotspots(filterActionableHotspots(extractionResult.actionableHotspots()))
-                .actionableCodons(filterActionableCodons(extractionResult.actionableCodons()))
-                .actionableExons(filterActionableExons(extractionResult.actionableExons()))
+                .actionableCodons(filterActionableRange(extractionResult.actionableCodons()))
+                .actionableExons(filterActionableRange(extractionResult.actionableExons()))
                 .actionableGenes(filterActionableGenes(extractionResult.actionableGenes()))
                 .actionableFusions(filterActionableFusions(extractionResult.actionableFusions()))
                 .build();
@@ -139,13 +139,8 @@ class ConversionFilter {
     }
 
     @NotNull
-    private Set<ActionableCodon> filterActionableCodons(@NotNull Set<ActionableCodon> actionableCodons) {
-        return actionableCodons;
-    }
-
-    @NotNull
-    private Set<ActionableExon> filterActionableExons(@NotNull Set<ActionableExon> actionableExons) {
-        return actionableExons;
+    private Set<ActionableRange> filterActionableRange(@NotNull Set<ActionableRange> actionableRange) {
+        return actionableRange;
     }
 
     @NotNull

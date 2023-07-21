@@ -67,13 +67,13 @@ public class ExtractionResultWriter {
         LOGGER.info(" Writing {} actionable hotspots to {}", result.actionableHotspots().size(), actionableHotspotTsv);
         ActionableHotspotFile.write(actionableHotspotTsv, result.actionableHotspots());
 
-        String actionableCodonTsv = ActionableCodonFile.actionableCodonTsvPath(outputDir, refGenome);
+        String actionableCodonTsv = ActionableRangeFile.actionableCodonTsvPath(outputDir, refGenome);
         LOGGER.info(" Writing {} actionable codons to {}", result.actionableCodons().size(), actionableCodonTsv);
-        ActionableCodonFile.write(actionableCodonTsv, result.actionableCodons());
+        ActionableRangeFile.write(actionableCodonTsv, result.actionableCodons());
 
-        String actionableExonTsv = ActionableExonFile.actionableExonTsvPath(outputDir, refGenome);
+        String actionableExonTsv = ActionableRangeFile.actionableExonTsvPath(outputDir, refGenome);
         LOGGER.info(" Writing {} actionable exons to {}", result.actionableExons().size(), actionableExonTsv);
-        ActionableExonFile.write(actionableExonTsv, result.actionableExons());
+        ActionableRangeFile.write(actionableExonTsv, result.actionableExons());
 
         String actionableGeneTsv = ActionableGeneFile.actionableGeneTsvPath(outputDir, refGenome);
         LOGGER.info(" Writing {} actionable genes to {}", result.actionableGenes().size(), actionableGeneTsv);

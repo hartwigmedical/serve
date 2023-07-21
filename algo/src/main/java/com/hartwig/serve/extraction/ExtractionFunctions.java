@@ -79,8 +79,8 @@ public final class ExtractionFunctions {
         return ImmutableExtractionResult.builder()
                 .from(result)
                 .actionableHotspots(ActionableEventUrlMerger.merge(result.actionableHotspots(), new ActionableHotspotUrlConsolidator()))
-                .actionableCodons(ActionableEventUrlMerger.merge(result.actionableCodons(), new ActionableCodonUrlConsolidator()))
-                .actionableExons(ActionableEventUrlMerger.merge(result.actionableExons(), new ActionableExonUrlConsolidator()))
+                .actionableCodons(ActionableEventUrlMerger.merge(result.actionableCodons(), new ActionableRangeUrlConsolidator()))
+                .actionableExons(ActionableEventUrlMerger.merge(result.actionableExons(), new ActionableRangeUrlConsolidator()))
                 .actionableGenes(ActionableEventUrlMerger.merge(result.actionableGenes(), new ActionableGeneUrlConsolidator()))
                 .actionableFusions(ActionableEventUrlMerger.merge(result.actionableFusions(), new ActionableFusionUrlConsolidator()))
                 .actionableCharacteristics(ActionableEventUrlMerger.merge(result.actionableCharacteristics(),

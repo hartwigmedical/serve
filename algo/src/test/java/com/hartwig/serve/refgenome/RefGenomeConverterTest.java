@@ -94,7 +94,7 @@ public class RefGenomeConverterTest {
 
     @Test
     public void canConvertActionableCodon() {
-        ActionableCodon actionableCodon = RangeTestFactory.actionableCodonBuilder()
+        ActionableRange actionableCodon = RangeTestFactory.actionableRangeBuilder()
                 .gene(TEST_GENE)
                 .chromosome(TEST_CHROMOSOME)
                 .start(3)
@@ -102,13 +102,13 @@ public class RefGenomeConverterTest {
                 .source(Knowledgebase.HARTWIG_HOTSPOT_CURATED)
                 .build();
 
-        Set<ActionableCodon> convertedActionableCodon = DUMMY_CONVERTER.convertActionableCodons(Sets.newHashSet(actionableCodon));
+        Set<ActionableRange> convertedActionableCodon = DUMMY_CONVERTER.convertActionableRanges(Sets.newHashSet(actionableCodon));
         assertEquals(actionableCodon, convertedActionableCodon.iterator().next());
     }
 
     @Test
     public void canConvertActionableExons() {
-        ActionableExon actionableExon = RangeTestFactory.actionableExonBuilder()
+        ActionableRange actionableExon = RangeTestFactory.actionableRangeBuilder()
                 .gene(TEST_GENE)
                 .chromosome(TEST_CHROMOSOME)
                 .start(3)
@@ -116,7 +116,7 @@ public class RefGenomeConverterTest {
                 .source(Knowledgebase.HARTWIG_HOTSPOT_CURATED)
                 .build();
 
-        Set<ActionableExon> convertedActionableExon = DUMMY_CONVERTER.convertActionableExons(Sets.newHashSet(actionableExon));
+        Set<ActionableRange> convertedActionableExon = DUMMY_CONVERTER.convertActionableRanges(Sets.newHashSet(actionableExon));
         assertEquals(actionableExon, convertedActionableExon.iterator().next());
     }
 

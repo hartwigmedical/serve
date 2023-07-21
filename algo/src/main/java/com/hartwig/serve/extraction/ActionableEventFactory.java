@@ -46,33 +46,18 @@ public final class ActionableEventFactory {
     }
 
     @NotNull
-    public static Set<ActionableCodon> toActionableCodons(@NotNull ActionableEvent actionableEvent,
-                                                          @Nullable List<? extends RangeAnnotation> codons) {
-        if (codons == null) {
+    public static Set<ActionableRange> toActionableRanges(@NotNull ActionableEvent actionableEvent,
+                                                          @Nullable List<? extends RangeAnnotation> ranges) {
+        if (ranges == null) {
             return Sets.newHashSet();
         }
 
-        Set<ActionableCodon> actionableCodons = Sets.newHashSet();
-        for (RangeAnnotation codon : codons) {
-            actionableCodons.add(ImmutableActionableCodon.builder().from(actionableEvent).from(codon).build());
+        Set<ActionableRange> actionableRange = Sets.newHashSet();
+        for (RangeAnnotation range : ranges) {
+            actionableRange.add(ImmutableActionableRange.builder().from(actionableEvent).from(range).build());
         }
 
-        return actionableCodons;
-    }
-
-    @NotNull
-    public static Set<ActionableExon> toActionableExons(@NotNull ActionableEvent actionableEvent,
-                                                          @Nullable List<? extends RangeAnnotation> exons) {
-        if (exons == null) {
-            return Sets.newHashSet();
-        }
-
-        Set<ActionableExon> actionableExons = Sets.newHashSet();
-        for (RangeAnnotation exon : exons) {
-            actionableExons.add(ImmutableActionableExon.builder().from(actionableEvent).from(exon).build());
-        }
-
-        return actionableExons;
+        return actionableRange;
     }
 
     @NotNull

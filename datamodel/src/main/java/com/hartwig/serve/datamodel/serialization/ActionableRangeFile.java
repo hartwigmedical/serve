@@ -16,12 +16,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
 
-public class ActionableExonFile {
+public class ActionableRangeFile {
 
-
+    private static final String ACTIONABLE_CODON_TSV = "ActionableCodons.tsv";
     private static final String ACTIONABLE_EXON_TSV = "ActionableExons.tsv";
 
-    private ActionableExonFile() {
+    private ActionableRangeFile() {
+    }
+
+    @NotNull
+    public static String actionableCodonTsvPath(@NotNull String serveActionabilityDir, @NotNull RefGenome refGenome) {
+        return refGenome.addVersionToFilePath(serveActionabilityDir + File.separator + ACTIONABLE_CODON_TSV);
     }
 
     @NotNull
@@ -29,17 +34,17 @@ public class ActionableExonFile {
         return refGenome.addVersionToFilePath(serveActionabilityDir + File.separator + ACTIONABLE_EXON_TSV);
     }
 
-    public static void write(@NotNull String actionableExonTsv, @NotNull Iterable<ActionableExon> actionableExons) throws IOException {
+    public static void write(@NotNull String actionableRangeTsv, @NotNull Iterable<ActionableRange> actionableRanges) throws IOException {
         List<String> lines = Lists.newArrayList();
         lines.add(header());
-        lines.addAll(toLines(actionableExons));
+        lines.addAll(toLines(actionableRanges));
 
-        Files.write(new File(actionableExonTsv).toPath(), lines);
+        Files.write(new File(actionableRangeTsv).toPath(), lines);
     }
 
     @NotNull
-    public static List<ActionableExon> read(@NotNull String actionableExonTsv) throws IOException {
-        List<String> lines = Files.readAllLines(new File(actionableExonTsv).toPath());
+    public static List<ActionableRange> read(@NotNull String actionableTsv) throws IOException {
+        List<String> lines = Files.readAllLines(new File(actionableTsv).toPath());
         Map<String, Integer> fields = SerializationUtil.createFields(lines.get(0), ActionableFileUtil.FIELD_DELIMITER);
 
         return fromLines(lines.subList(1, lines.size()), fields);
@@ -59,19 +64,19 @@ public class ActionableExonFile {
 
     @NotNull
     @VisibleForTesting
-    static List<ActionableExon> fromLines(@NotNull List<String> lines, @NotNull Map<String, Integer> fields) {
-        List<ActionableExon> actionableExons = Lists.newArrayList();
+    static List<ActionableRange> fromLines(@NotNull List<String> lines, @NotNull Map<String, Integer> fields) {
+        List<ActionableRange> actionableRanges = Lists.newArrayList();
         for (String line : lines) {
-            actionableExons.add(fromLine(line, fields));
+            actionableRanges.add(fromLine(line, fields));
         }
-        return actionableExons;
+        return actionableRanges;
     }
 
     @NotNull
-    private static ActionableExon fromLine(@NotNull String line, @NotNull Map<String, Integer> fields) {
+    private static ActionableRange fromLine(@NotNull String line, @NotNull Map<String, Integer> fields) {
         String[] values = line.split(ActionableFileUtil.FIELD_DELIMITER);
 
-        return ImmutableActionableExon.builder()
+        return ImmutableActionableRange.builder()
                 .from(ActionableFileUtil.fromLine(values, fields))
                 .gene(values[fields.get("gene")])
                 .chromosome(values[fields.get("chromosome")])
@@ -83,31 +88,31 @@ public class ActionableExonFile {
 
     @NotNull
     @VisibleForTesting
-    static List<String> toLines(@NotNull Iterable<ActionableExon> actionableExons) {
+    static List<String> toLines(@NotNull Iterable<ActionableRange> actionableRanges) {
         List<String> lines = Lists.newArrayList();
-        for (ActionableExon actionableExon : sort(actionableExons)) {
-            lines.add(toLine(actionableExon));
+        for (ActionableRange actionableRange : sort(actionableRanges)) {
+            lines.add(toLine(actionableRange));
         }
         return lines;
     }
 
     @NotNull
-    public static List<ActionableExon> sort(@NotNull Iterable<ActionableExon> actionableExons) {
+    public static List<ActionableRange> sort(@NotNull Iterable<ActionableRange> actionableRanges) {
         // Need to make a copy since the input may be immutable and cannot be sorted!
-        List<ActionableExon> sorted = Lists.newArrayList(actionableExons);
-        sorted.sort(new ActionableExonComparator());
+        List<ActionableRange> sorted = Lists.newArrayList(actionableRanges);
+        sorted.sort(new ActionableRangeComparator());
 
         return sorted;
     }
 
     @NotNull
-    private static String toLine(@NotNull ActionableExon exon) {
-        return new StringJoiner(ActionableFileUtil.FIELD_DELIMITER).add(exon.gene())
-                .add(exon.chromosome())
-                .add(Long.toString(exon.start()))
-                .add(Long.toString(exon.end()))
-                .add(exon.applicableMutationType().toString())
-                .add(ActionableFileUtil.toLine(exon))
+    private static String toLine(@NotNull ActionableRange range) {
+        return new StringJoiner(ActionableFileUtil.FIELD_DELIMITER).add(range.gene())
+                .add(range.chromosome())
+                .add(Long.toString(range.start()))
+                .add(Long.toString(range.end()))
+                .add(range.applicableMutationType().toString())
+                .add(ActionableFileUtil.toLine(range))
                 .toString();
     }
 }

@@ -13,7 +13,7 @@ public class ActionableGeneUrlConsolidator implements UrlConsolidator<Actionable
     @NotNull
     @Override
     public ActionableGene stripUrls(@NotNull final ActionableGene instance) {
-        return ImmutableActionableGene.builder().from(instance).evidenceUrls(Sets.newHashSet()).build();
+        return buildWithUrls(instance, Sets.newHashSet());
     }
 
     @NotNull

@@ -13,7 +13,7 @@ public class ActionableCharacteristicUrlConsolidator implements UrlConsolidator<
     @NotNull
     @Override
     public ActionableCharacteristic stripUrls(@NotNull final ActionableCharacteristic instance) {
-        return ImmutableActionableCharacteristic.builder().from(instance).evidenceUrls(Sets.newHashSet()).build();
+        return buildWithUrls(instance, Sets.newHashSet());
     }
 
     @NotNull

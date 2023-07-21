@@ -13,7 +13,7 @@ public class ActionableHLAUrlConsolidator implements UrlConsolidator<ActionableH
     @NotNull
     @Override
     public ActionableHLA stripUrls(@NotNull final ActionableHLA instance) {
-        return ImmutableActionableHLA.builder().from(instance).evidenceUrls(Sets.newHashSet()).build();
+        return buildWithUrls(instance, Sets.newHashSet());
     }
 
     @NotNull

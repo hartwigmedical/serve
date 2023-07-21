@@ -167,31 +167,9 @@ public class ServeDAO {
                     ACTIONABLECODON.LEVEL,
                     ACTIONABLECODON.DIRECTION,
                     ACTIONABLECODON.EVIDENCEURLS);
-            batch.forEach(entry -> writeActionableCodonsBatch(timestamp, inserter, entry));
+            batch.forEach(entry -> writeActionableRangeBatch(timestamp, inserter, entry));
             inserter.execute();
         }
-    }
-
-    private static void writeActionableCodonsBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep18 inserter,
-            @NotNull ActionableRange actionableCodon) {
-        inserter.values(timestamp,
-                actionableCodon.gene(),
-                actionableCodon.chromosome(),
-                actionableCodon.start(),
-                actionableCodon.end(),
-                actionableCodon.applicableMutationType(),
-                actionableCodon.source(),
-                actionableCodon.sourceEvent(),
-                concat(actionableCodon.sourceUrls()),
-                actionableCodon.treatment().name(),
-                concat(actionableCodon.treatment().sourceRelevantTreatmentApproaches()),
-                concat(actionableCodon.treatment().relevantTreatmentApproaches()),
-                actionableCodon.applicableCancerType().name(),
-                actionableCodon.applicableCancerType().doid(),
-                concat(toStrings(actionableCodon.blacklistCancerTypes())),
-                actionableCodon.level(),
-                actionableCodon.direction(),
-                concat(actionableCodon.evidenceUrls()));
     }
 
     private void writeActionableExons(@NotNull Timestamp timestamp, @NotNull List<ActionableRange> exons) {
@@ -215,31 +193,31 @@ public class ServeDAO {
                     ACTIONABLEEXON.LEVEL,
                     ACTIONABLEEXON.DIRECTION,
                     ACTIONABLEEXON.EVIDENCEURLS);
-            batch.forEach(entry -> writeActionableExonsBatch(timestamp, inserter, entry));
+            batch.forEach(entry -> writeActionableRangeBatch(timestamp, inserter, entry));
             inserter.execute();
         }
     }
 
-    private static void writeActionableExonsBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep18 inserter,
-                                                   @NotNull ActionableRange actionableExon) {
+    private static void writeActionableRangeBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep18 inserter,
+                                                   @NotNull ActionableRange actionableRange) {
         inserter.values(timestamp,
-                actionableExon.gene(),
-                actionableExon.chromosome(),
-                actionableExon.start(),
-                actionableExon.end(),
-                actionableExon.applicableMutationType(),
-                actionableExon.source(),
-                actionableExon.sourceEvent(),
-                concat(actionableExon.sourceUrls()),
-                actionableExon.treatment().name(),
-                concat(actionableExon.treatment().sourceRelevantTreatmentApproaches()),
-                concat(actionableExon.treatment().relevantTreatmentApproaches()),
-                actionableExon.applicableCancerType().name(),
-                actionableExon.applicableCancerType().doid(),
-                concat(toStrings(actionableExon.blacklistCancerTypes())),
-                actionableExon.level(),
-                actionableExon.direction(),
-                concat(actionableExon.evidenceUrls()));
+                actionableRange.gene(),
+                actionableRange.chromosome(),
+                actionableRange.start(),
+                actionableRange.end(),
+                actionableRange.applicableMutationType(),
+                actionableRange.source(),
+                actionableRange.sourceEvent(),
+                concat(actionableRange.sourceUrls()),
+                actionableRange.treatment().name(),
+                concat(actionableRange.treatment().sourceRelevantTreatmentApproaches()),
+                concat(actionableRange.treatment().relevantTreatmentApproaches()),
+                actionableRange.applicableCancerType().name(),
+                actionableRange.applicableCancerType().doid(),
+                concat(toStrings(actionableRange.blacklistCancerTypes())),
+                actionableRange.level(),
+                actionableRange.direction(),
+                concat(actionableRange.evidenceUrls()));
     }
 
     private void writeActionableGenes(@NotNull Timestamp timestamp, @NotNull List<ActionableGene> genes) {

@@ -315,11 +315,11 @@ public final class ViccExtractor {
                                                                                             @NotNull Map<Feature, List<T>> rangesPerFeature) {
         Set<ActionableRange> actionableRanges = Sets.newHashSet();
         for (Map.Entry<Feature, List<T>> entry : rangesPerFeature.entrySet()) {
-            List<T> exons = entry.getValue();
-            if (exons != null) {
+            List<T> ranges = entry.getValue();
+            if (ranges != null) {
                 for (ActionableEvidence evidence : extraction.actionableEvidence()) {
                     ActionableEvidence modified = withSourceEvent(evidence, extraction.eventInterpretationPerFeature().get(entry.getKey()));
-                    actionableRanges.addAll(ActionableEventFactory.toActionableRanges(modified, exons));
+                    actionableRanges.addAll(ActionableEventFactory.toActionableRanges(modified, ranges));
                 }
             }
         }

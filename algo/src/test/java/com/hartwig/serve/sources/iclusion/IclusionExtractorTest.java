@@ -78,6 +78,13 @@ public class IclusionExtractorTest {
                         .negation(true)
                         .build()))),
                 Lists.newArrayList(loc1)));
+        entries.add(IclusionTestFactory.trialWithMutationsAndTumorLocation("trial",
+                Lists.newArrayList(IclusionTestFactory.or(Lists.newArrayList(ImmutableIclusionMutation.builder()
+                        .gene("-")
+                        .name("TumMutLoad_HIGH")
+                        .negation(true)
+                        .build()))),
+                Lists.newArrayList(loc1)));
 
         ExtractionResult result = extractor.extract(entries);
 
@@ -92,6 +99,6 @@ public class IclusionExtractorTest {
 
         assertEquals(2, result.actionableGenes().size());
         assertEquals(1, result.actionableFusions().size());
-        assertEquals(1, result.actionableCharacteristics().size());
+        assertEquals(2, result.actionableCharacteristics().size());
     }
 }

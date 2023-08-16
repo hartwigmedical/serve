@@ -25,6 +25,7 @@ final class CurationFactory {
 
         MUTATION_MAPPINGS.put(new CurationEntry("MSI", "HIGH"), new CurationEntry(IclusionConstants.NO_GENE, "MSI_HIGH"));
         MUTATION_MAPPINGS.put(new CurationEntry("TumMutLoad", "HIGH"), new CurationEntry(IclusionConstants.NO_GENE, "TumMutLoad_HIGH"));
+        MUTATION_MAPPINGS.put(new CurationEntry("TumMutBurden", "HIGH"), new CurationEntry(IclusionConstants.NO_GENE, "TumMutBurden_HIGH"));
         MUTATION_MAPPINGS.put(new CurationEntry("HRD", "POSITIVE"), new CurationEntry(IclusionConstants.NO_GENE, "HRD_POSITIVE"));
         MUTATION_MAPPINGS.put(new CurationEntry("HPV", "POSITIVE"), new CurationEntry(IclusionConstants.NO_GENE, "HPV_POSITIVE"));
         MUTATION_MAPPINGS.put(new CurationEntry("EBV", "POSITIVE"), new CurationEntry(IclusionConstants.NO_GENE, "EBV_POSITIVE"));

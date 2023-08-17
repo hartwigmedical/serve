@@ -1,5 +1,14 @@
 package com.hartwig.serve.datamodel.serialization;
 
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.collect.Lists;
+import com.hartwig.serve.datamodel.MutationType;
+import com.hartwig.serve.datamodel.RefGenome;
+import com.hartwig.serve.datamodel.range.*;
+import com.hartwig.serve.datamodel.serialization.util.ActionableFileUtil;
+import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -7,28 +16,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
 
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.collect.Lists;
-import com.hartwig.serve.datamodel.MutationType;
-import com.hartwig.serve.datamodel.RefGenome;
-import com.hartwig.serve.datamodel.range.ActionableRange;
-import com.hartwig.serve.datamodel.range.ActionableRangeComparator;
-import com.hartwig.serve.datamodel.range.ImmutableActionableRange;
-import com.hartwig.serve.datamodel.serialization.util.ActionableFileUtil;
-import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
+public class ActionableRangeFile {
 
-import org.jetbrains.annotations.NotNull;
-
-public final class ActionableRangeFile {
-
-    private static final String ACTIONABLE_RANGE_TSV = "ActionableRanges.tsv";
+    private static final String ACTIONABLE_CODON_TSV = "ActionableCodons.tsv";
+    private static final String ACTIONABLE_EXON_TSV = "ActionableExons.tsv";
 
     private ActionableRangeFile() {
     }
 
     @NotNull
-    public static String actionableRangeTsvPath(@NotNull String serveActionabilityDir, @NotNull RefGenome refGenome) {
-        return refGenome.addVersionToFilePath(serveActionabilityDir + File.separator + ACTIONABLE_RANGE_TSV);
+    public static String actionableCodonTsvPath(@NotNull String serveActionabilityDir, @NotNull RefGenome refGenome) {
+        return refGenome.addVersionToFilePath(serveActionabilityDir + File.separator + ACTIONABLE_CODON_TSV);
+    }
+
+    @NotNull
+    public static String actionableExonTsvPath(@NotNull String serveActionabilityDir, @NotNull RefGenome refGenome) {
+        return refGenome.addVersionToFilePath(serveActionabilityDir + File.separator + ACTIONABLE_EXON_TSV);
     }
 
     public static void write(@NotNull String actionableRangeTsv, @NotNull Iterable<ActionableRange> actionableRanges) throws IOException {
@@ -40,8 +43,8 @@ public final class ActionableRangeFile {
     }
 
     @NotNull
-    public static List<ActionableRange> read(@NotNull String actionableRangeTsv) throws IOException {
-        List<String> lines = Files.readAllLines(new File(actionableRangeTsv).toPath());
+    public static List<ActionableRange> read(@NotNull String actionableTsv) throws IOException {
+        List<String> lines = Files.readAllLines(new File(actionableTsv).toPath());
         Map<String, Integer> fields = SerializationUtil.createFields(lines.get(0), ActionableFileUtil.FIELD_DELIMITER);
 
         return fromLines(lines.subList(1, lines.size()), fields);

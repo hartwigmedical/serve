@@ -1,14 +1,13 @@
 package com.hartwig.serve.iclusion.classification;
 
-import java.util.Map;
-import java.util.Set;
-
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.common.classification.EventClassifierConfig;
 import com.hartwig.serve.common.classification.ImmutableEventClassifierConfig;
-
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Map;
+import java.util.Set;
 
 public final class IclusionClassificationConfig {
 
@@ -277,9 +276,7 @@ public final class IclusionClassificationConfig {
 
     @NotNull
     private static Set<String> highTumorMutationalLoadKeyPhrases() {
-        Set<String> set = Sets.newHashSet();
-        set.add("TumMutLoad_HIGH");
-        return set;
+        return Sets.newHashSet();
     }
 
     @NotNull
@@ -294,7 +291,10 @@ public final class IclusionClassificationConfig {
 
     @NotNull
     private static Set<String> highTumorMutationalBurdenKeyPhrases() {
-        return Sets.newHashSet();
+        Set<String> set = Sets.newHashSet();
+        set.add("TumMutLoad_HIGH");
+        set.add("TumMutBurden_HIGH");
+        return set;
     }
 
     @NotNull

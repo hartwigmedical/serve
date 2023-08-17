@@ -19,9 +19,7 @@ import com.hartwig.serve.datamodel.hotspot.ImmutableActionableHotspot;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
 import com.hartwig.serve.datamodel.immuno.ActionableHLA;
 import com.hartwig.serve.datamodel.immuno.ImmutableActionableHLA;
-import com.hartwig.serve.datamodel.range.ActionableRange;
-import com.hartwig.serve.datamodel.range.ImmutableActionableRange;
-import com.hartwig.serve.datamodel.range.RangeAnnotation;
+import com.hartwig.serve.datamodel.range.*;
 import com.hartwig.serve.extraction.immuno.ImmunoHLA;
 
 import org.jetbrains.annotations.NotNull;
@@ -49,17 +47,17 @@ public final class ActionableEventFactory {
 
     @NotNull
     public static Set<ActionableRange> toActionableRanges(@NotNull ActionableEvent actionableEvent,
-            @Nullable List<? extends RangeAnnotation> ranges) {
+                                                          @Nullable List<? extends RangeAnnotation> ranges) {
         if (ranges == null) {
             return Sets.newHashSet();
         }
 
-        Set<ActionableRange> actionableRanges = Sets.newHashSet();
+        Set<ActionableRange> actionableRange = Sets.newHashSet();
         for (RangeAnnotation range : ranges) {
-            actionableRanges.add(ImmutableActionableRange.builder().from(actionableEvent).from(range).build());
+            actionableRange.add(ImmutableActionableRange.builder().from(actionableEvent).from(range).build());
         }
 
-        return actionableRanges;
+        return actionableRange;
     }
 
     @NotNull

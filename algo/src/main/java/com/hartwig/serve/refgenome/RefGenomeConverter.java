@@ -11,13 +11,7 @@ import com.hartwig.serve.datamodel.hotspot.ImmutableActionableHotspot;
 import com.hartwig.serve.datamodel.hotspot.ImmutableKnownHotspot;
 import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
-import com.hartwig.serve.datamodel.range.ActionableRange;
-import com.hartwig.serve.datamodel.range.ImmutableActionableRange;
-import com.hartwig.serve.datamodel.range.ImmutableKnownCodon;
-import com.hartwig.serve.datamodel.range.ImmutableKnownExon;
-import com.hartwig.serve.datamodel.range.KnownCodon;
-import com.hartwig.serve.datamodel.range.KnownExon;
-import com.hartwig.serve.datamodel.range.RangeAnnotation;
+import com.hartwig.serve.datamodel.range.*;
 import com.hartwig.serve.extraction.util.ImmutableGenomeRegionImpl;
 import com.hartwig.serve.refgenome.liftover.LiftOverAlgo;
 import com.hartwig.serve.refgenome.liftover.LiftOverChecker;
@@ -235,6 +229,7 @@ class RefGenomeConverter {
                 .end(liftedEnd.position())
                 .build();
     }
+
 
     private void verifyNoChromosomeChange(@NotNull String prevChromosome, @NotNull LiftOverResult lifted, @NotNull Object object) {
         String versionedChromosome = RefGenomeFunctions.versionedChromosome(prevChromosome, targetVersion);

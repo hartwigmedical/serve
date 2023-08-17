@@ -24,12 +24,7 @@ import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
 import com.hartwig.serve.datamodel.hotspot.ImmutableKnownHotspot;
 import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
-import com.hartwig.serve.datamodel.range.ActionableRange;
-import com.hartwig.serve.datamodel.range.ImmutableKnownCodon;
-import com.hartwig.serve.datamodel.range.ImmutableKnownExon;
-import com.hartwig.serve.datamodel.range.KnownCodon;
-import com.hartwig.serve.datamodel.range.KnownExon;
-import com.hartwig.serve.datamodel.range.RangeAnnotation;
+import com.hartwig.serve.datamodel.range.*;
 import com.hartwig.serve.extraction.ActionableEventFactory;
 import com.hartwig.serve.extraction.EventExtractor;
 import com.hartwig.serve.extraction.EventExtractorOutput;
@@ -277,21 +272,23 @@ public final class ViccExtractor {
     private static void addActionability(@NotNull ImmutableExtractionResult.Builder outputBuilder,
             @NotNull ViccExtractionResult extraction) {
         Set<ActionableHotspot> actionableHotspots = Sets.newHashSet();
-        Set<ActionableRange> actionableRanges = Sets.newHashSet();
+        Set<ActionableRange> actionableCodons = Sets.newHashSet();
+        Set<ActionableRange> actionableExons = Sets.newHashSet();
         Set<ActionableGene> actionableGenes = Sets.newHashSet();
         Set<ActionableFusion> actionableFusions = Sets.newHashSet();
         Set<ActionableCharacteristic> actionableCharacteristics = Sets.newHashSet();
 
         actionableHotspots.addAll(extractActionableHotspots(extraction, extraction.hotspotsPerFeature()));
-        actionableRanges.addAll(extractActionableRanges(extraction, extraction.codonsPerFeature()));
-        actionableRanges.addAll(extractActionableRanges(extraction, extraction.exonsPerFeature()));
+        actionableCodons.addAll(extractActionableRange(extraction, extraction.codonsPerFeature()));
+        actionableExons.addAll(extractActionableRange(extraction, extraction.exonsPerFeature()));
         actionableGenes.addAll(extractActionableAmpsDels(extraction, extraction.ampsDelsPerFeature()));
         actionableGenes.addAll(extractActionableGenes(extraction, extraction.geneLevelEventsPerFeature()));
         actionableFusions.addAll(extractActionableFusions(extraction, extraction.fusionsPerFeature()));
         actionableCharacteristics.addAll(extractActionableCharacteristics(extraction, extraction.characteristicsPerFeature()));
 
         outputBuilder.actionableHotspots(actionableHotspots);
-        outputBuilder.actionableRanges(actionableRanges);
+        outputBuilder.actionableCodons(actionableCodons);
+        outputBuilder.actionableExons(actionableExons);
         outputBuilder.actionableGenes(actionableGenes);
         outputBuilder.actionableFusions(actionableFusions);
         outputBuilder.actionableCharacteristics(actionableCharacteristics);
@@ -314,8 +311,8 @@ public final class ViccExtractor {
     }
 
     @NotNull
-    private static <T extends RangeAnnotation> Set<ActionableRange> extractActionableRanges(@NotNull ViccExtractionResult extraction,
-            @NotNull Map<Feature, List<T>> rangesPerFeature) {
+    private static <T extends RangeAnnotation> Set<ActionableRange> extractActionableRange(@NotNull ViccExtractionResult extraction,
+                                                                                            @NotNull Map<Feature, List<T>> rangesPerFeature) {
         Set<ActionableRange> actionableRanges = Sets.newHashSet();
         for (Map.Entry<Feature, List<T>> entry : rangesPerFeature.entrySet()) {
             List<T> ranges = entry.getValue();

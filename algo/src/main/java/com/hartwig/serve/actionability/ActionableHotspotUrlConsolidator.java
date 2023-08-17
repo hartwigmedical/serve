@@ -13,7 +13,7 @@ public class ActionableHotspotUrlConsolidator implements UrlConsolidator<Actiona
     @NotNull
     @Override
     public ActionableHotspot stripUrls(@NotNull final ActionableHotspot instance) {
-        return ImmutableActionableHotspot.builder().from(instance).evidenceUrls(Sets.newHashSet()).build();
+        return buildWithUrls(instance, Sets.newHashSet());
     }
 
     @NotNull

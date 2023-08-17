@@ -34,11 +34,7 @@ import com.hartwig.serve.datamodel.hotspot.ImmutableKnownHotspot;
 import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
 import com.hartwig.serve.datamodel.immuno.ActionableHLA;
-import com.hartwig.serve.datamodel.range.ActionableRange;
-import com.hartwig.serve.datamodel.range.ImmutableKnownCodon;
-import com.hartwig.serve.datamodel.range.ImmutableKnownExon;
-import com.hartwig.serve.datamodel.range.KnownCodon;
-import com.hartwig.serve.datamodel.range.KnownExon;
+import com.hartwig.serve.datamodel.range.*;
 import com.hartwig.serve.extraction.ActionableEventFactory;
 import com.hartwig.serve.extraction.EventExtractor;
 import com.hartwig.serve.extraction.EventExtractorOutput;
@@ -142,7 +138,8 @@ public class CkbExtractor {
             @NotNull EventExtractorOutput output, @NotNull Set<ActionableEntry> actionableEntries,
             @NotNull EventInterpretation interpretation) {
         Set<ActionableHotspot> actionableHotspots = Sets.newHashSet();
-        Set<ActionableRange> actionableRanges = Sets.newHashSet();
+        Set<ActionableRange> actionableCodons = Sets.newHashSet();
+        Set<ActionableRange> actionableExons = Sets.newHashSet();
         Set<ActionableGene> actionableGenes = Sets.newHashSet();
         Set<ActionableFusion> actionableFusions = Sets.newHashSet();
         Set<ActionableCharacteristic> actionableCharacteristics = Sets.newHashSet();
@@ -154,8 +151,8 @@ public class CkbExtractor {
             codons = curateCodons(output.codons());
 
             actionableHotspots.addAll(ActionableEventFactory.toActionableHotspots(event, output.hotspots()));
-            actionableRanges.addAll(ActionableEventFactory.toActionableRanges(event, codons));
-            actionableRanges.addAll(ActionableEventFactory.toActionableRanges(event, output.exons()));
+            actionableCodons.addAll(ActionableEventFactory.toActionableRanges(event, codons));
+            actionableExons.addAll(ActionableEventFactory.toActionableRanges(event, output.exons()));
 
             if (output.geneLevel() != null) {
                 actionableGenes.add(ActionableEventFactory.geneAnnotationToActionableGene(event, output.geneLevel()));
@@ -188,7 +185,8 @@ public class CkbExtractor {
                 .knownCopyNumbers(convertToKnownAmpsDels(output.copyNumber()))
                 .knownFusions(convertToKnownFusions(output.fusionPair()))
                 .actionableHotspots(actionableHotspots)
-                .actionableRanges(actionableRanges)
+                .actionableCodons(actionableCodons)
+                .actionableExons(actionableExons)
                 .actionableGenes(actionableGenes)
                 .actionableFusions(actionableFusions)
                 .actionableCharacteristics(actionableCharacteristics)

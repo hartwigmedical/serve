@@ -1,19 +1,5 @@
 package com.hartwig.serve.dao;
 
-import static com.hartwig.serve.database.Tables.ACTIONABLECHARACTERISTIC;
-import static com.hartwig.serve.database.Tables.ACTIONABLEFUSION;
-import static com.hartwig.serve.database.Tables.ACTIONABLEGENE;
-import static com.hartwig.serve.database.Tables.ACTIONABLEHLA;
-import static com.hartwig.serve.database.Tables.ACTIONABLEHOTSPOT;
-import static com.hartwig.serve.database.Tables.ACTIONABLERANGE;
-import static com.hartwig.serve.database.Tables.EVENTINTERPRETATION;
-import static com.hartwig.serve.database.Tables.KNOWNCODON;
-import static com.hartwig.serve.database.Tables.KNOWNCOPYNUMBER;
-import static com.hartwig.serve.database.Tables.KNOWNEXON;
-import static com.hartwig.serve.database.Tables.KNOWNFUSION;
-import static com.hartwig.serve.database.Tables.KNOWNGENE;
-import static com.hartwig.serve.database.Tables.KNOWNHOTSPOT;
-
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
@@ -35,9 +21,7 @@ import com.hartwig.serve.datamodel.gene.KnownGene;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
 import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.immuno.ActionableHLA;
-import com.hartwig.serve.datamodel.range.ActionableRange;
-import com.hartwig.serve.datamodel.range.KnownCodon;
-import com.hartwig.serve.datamodel.range.KnownExon;
+import com.hartwig.serve.datamodel.range.*;
 import com.hartwig.serve.extraction.events.EventInterpretation;
 
 import org.apache.logging.log4j.LogManager;
@@ -54,6 +38,8 @@ import org.jooq.InsertValuesStep19;
 import org.jooq.InsertValuesStep4;
 import org.jooq.InsertValuesStep6;
 import org.jooq.InsertValuesStep7;
+
+import static com.hartwig.serve.database.Tables.*;
 
 @SuppressWarnings({ "unchecked", "ResultOfMethodCallIgnored" })
 public class ServeDAO {
@@ -73,7 +59,8 @@ public class ServeDAO {
     public void deleteAll() {
         LOGGER.info("Deleting all data from SERVE database");
         context.deleteFrom(ACTIONABLEHOTSPOT).execute();
-        context.deleteFrom(ACTIONABLERANGE).execute();
+        context.deleteFrom(ACTIONABLECODON).execute();
+        context.deleteFrom(ACTIONABLEEXON).execute();
         context.deleteFrom(ACTIONABLEGENE).execute();
         context.deleteFrom(ACTIONABLEFUSION).execute();
         context.deleteFrom(ACTIONABLECHARACTERISTIC).execute();
@@ -94,7 +81,8 @@ public class ServeDAO {
         Timestamp timestamp = new Timestamp(new Date().getTime());
 
         writeActionableHotspots(timestamp, actionableEvents.hotspots());
-        writeActionableRanges(timestamp, actionableEvents.ranges());
+        writeActionableCodons(timestamp, actionableEvents.codons());
+        writeActionableExons(timestamp, actionableEvents.exons());
         writeActionableGenes(timestamp, actionableEvents.genes());
         writeActionableFusions(timestamp, actionableEvents.fusions());
         writeActionableCharacteristics(timestamp, actionableEvents.characteristics());
@@ -158,34 +146,60 @@ public class ServeDAO {
                 concat(actionableHotspot.evidenceUrls()).isEmpty());
     }
 
-    private void writeActionableRanges(@NotNull Timestamp timestamp, @NotNull List<ActionableRange> ranges) {
-        for (List<ActionableRange> batch : Iterables.partition(ranges, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
-            InsertValuesStep18 inserter = context.insertInto(ACTIONABLERANGE,
-                    ACTIONABLERANGE.MODIFIED,
-                    ACTIONABLERANGE.GENE,
-                    ACTIONABLERANGE.CHROMOSOME,
-                    ACTIONABLERANGE.START,
-                    ACTIONABLERANGE.END,
-                    ACTIONABLERANGE.APPLICABLEMUTATIONTYPE,
-                    ACTIONABLERANGE.SOURCE,
-                    ACTIONABLERANGE.SOURCEEVENT,
-                    ACTIONABLERANGE.SOURCEURLS,
-                    ACTIONABLERANGE.TREATMENT,
-                    ACTIONABLERANGE.SOURCETREATMENTAPPROACH,
-                    ACTIONABLERANGE.TREATMENTAPPROACH,
-                    ACTIONABLERANGE.APPLICABLECANCERTYPE,
-                    ACTIONABLERANGE.APPLICABLEDOID,
-                    ACTIONABLERANGE.BLACKLISTCANCERTYPES,
-                    ACTIONABLERANGE.LEVEL,
-                    ACTIONABLERANGE.DIRECTION,
-                    ACTIONABLERANGE.EVIDENCEURLS);
+    private void writeActionableCodons(@NotNull Timestamp timestamp, @NotNull List<ActionableRange> codons) {
+        for (List<ActionableRange> batch : Iterables.partition(codons, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
+            InsertValuesStep18 inserter = context.insertInto(ACTIONABLECODON,
+                    ACTIONABLECODON.MODIFIED,
+                    ACTIONABLECODON.GENE,
+                    ACTIONABLECODON.CHROMOSOME,
+                    ACTIONABLECODON.START,
+                    ACTIONABLECODON.END,
+                    ACTIONABLECODON.APPLICABLEMUTATIONTYPE,
+                    ACTIONABLECODON.SOURCE,
+                    ACTIONABLECODON.SOURCEEVENT,
+                    ACTIONABLECODON.SOURCEURLS,
+                    ACTIONABLECODON.TREATMENT,
+                    ACTIONABLECODON.SOURCETREATMENTAPPROACH,
+                    ACTIONABLECODON.TREATMENTAPPROACH,
+                    ACTIONABLECODON.APPLICABLECANCERTYPE,
+                    ACTIONABLECODON.APPLICABLEDOID,
+                    ACTIONABLECODON.BLACKLISTCANCERTYPES,
+                    ACTIONABLECODON.LEVEL,
+                    ACTIONABLECODON.DIRECTION,
+                    ACTIONABLECODON.EVIDENCEURLS);
+            batch.forEach(entry -> writeActionableRangeBatch(timestamp, inserter, entry));
+            inserter.execute();
+        }
+    }
+
+    private void writeActionableExons(@NotNull Timestamp timestamp, @NotNull List<ActionableRange> exons) {
+        for (List<ActionableRange> batch : Iterables.partition(exons, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
+            InsertValuesStep18 inserter = context.insertInto(ACTIONABLEEXON,
+                    ACTIONABLEEXON.MODIFIED,
+                    ACTIONABLEEXON.GENE,
+                    ACTIONABLEEXON.CHROMOSOME,
+                    ACTIONABLEEXON.START,
+                    ACTIONABLEEXON.END,
+                    ACTIONABLEEXON.APPLICABLEMUTATIONTYPE,
+                    ACTIONABLEEXON.SOURCE,
+                    ACTIONABLEEXON.SOURCEEVENT,
+                    ACTIONABLEEXON.SOURCEURLS,
+                    ACTIONABLEEXON.TREATMENT,
+                    ACTIONABLEEXON.SOURCETREATMENTAPPROACH,
+                    ACTIONABLEEXON.TREATMENTAPPROACH,
+                    ACTIONABLEEXON.APPLICABLECANCERTYPE,
+                    ACTIONABLEEXON.APPLICABLEDOID,
+                    ACTIONABLEEXON.BLACKLISTCANCERTYPES,
+                    ACTIONABLEEXON.LEVEL,
+                    ACTIONABLEEXON.DIRECTION,
+                    ACTIONABLEEXON.EVIDENCEURLS);
             batch.forEach(entry -> writeActionableRangeBatch(timestamp, inserter, entry));
             inserter.execute();
         }
     }
 
     private static void writeActionableRangeBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep18 inserter,
-            @NotNull ActionableRange actionableRange) {
+                                                   @NotNull ActionableRange actionableRange) {
         inserter.values(timestamp,
                 actionableRange.gene(),
                 actionableRange.chromosome(),

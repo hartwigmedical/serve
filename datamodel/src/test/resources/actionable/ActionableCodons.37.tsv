@@ -1,3 +1,2 @@
 gene	chromosome	start	end	applicableMutationType	source	sourceEvent	sourceUrls	treatment	sourceRelevantTreatmentApproaches	relevantTreatmentApproaches	applicableCancerType	applicableDoid	blacklistCancerTypes	level	direction	evidenceUrls
-EGFR	7	55241707	55279321	INFRAME	VICC_CGI	exon 21		Erlotinib			Lung Adeno	X		B	RESISTANT	http
 BRAF	7	140453136	140453137	MISSENSE	VICC_CGI	600X		Vemurafenib			Skin Melanoma	X		A	RESPONSIVE	http

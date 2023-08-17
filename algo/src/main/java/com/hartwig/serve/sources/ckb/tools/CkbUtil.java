@@ -31,7 +31,8 @@ final class CkbUtil {
     public static void printExtractionResults(@NotNull ExtractionResult result) {
         LOGGER.info("Analysis performed on CKB extraction result");
         LOGGER.info(" {} actionable hotspot records generated", result.actionableHotspots().size());
-        LOGGER.info(" {} actionable range records generated", result.actionableRanges().size());
+        LOGGER.info(" {} actionable codon records generated", result.actionableCodons().size());
+        LOGGER.info(" {} actionable exon records generated", result.actionableExons().size());
         LOGGER.info(" {} actionable gene records generated", result.actionableGenes().size());
         LOGGER.info(" {} actionable fusion records generated", result.actionableFusions().size());
         LOGGER.info(" {} actionable tumor characteristics records generated", result.actionableCharacteristics().size());

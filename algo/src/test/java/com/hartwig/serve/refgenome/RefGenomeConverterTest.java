@@ -11,10 +11,7 @@ import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
 import com.hartwig.serve.datamodel.hotspot.HotspotTestFactory;
 import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
-import com.hartwig.serve.datamodel.range.ActionableRange;
-import com.hartwig.serve.datamodel.range.KnownCodon;
-import com.hartwig.serve.datamodel.range.KnownExon;
-import com.hartwig.serve.datamodel.range.RangeTestFactory;
+import com.hartwig.serve.datamodel.range.*;
 import com.hartwig.serve.refgenome.liftover.ImmutableLiftOverResult;
 import com.hartwig.serve.refgenome.liftover.LiftOverAlgo;
 import com.hartwig.serve.refgenome.liftover.LiftOverResult;
@@ -96,8 +93,8 @@ public class RefGenomeConverterTest {
     }
 
     @Test
-    public void canConvertActionableRanges() {
-        ActionableRange actionableRange = RangeTestFactory.actionableRangeBuilder()
+    public void canConvertActionableCodon() {
+        ActionableRange actionableCodon = RangeTestFactory.actionableRangeBuilder()
                 .gene(TEST_GENE)
                 .chromosome(TEST_CHROMOSOME)
                 .start(3)
@@ -105,8 +102,22 @@ public class RefGenomeConverterTest {
                 .source(Knowledgebase.HARTWIG_HOTSPOT_CURATED)
                 .build();
 
-        Set<ActionableRange> convertedActionableRanges = DUMMY_CONVERTER.convertActionableRanges(Sets.newHashSet(actionableRange));
-        assertEquals(actionableRange, convertedActionableRanges.iterator().next());
+        Set<ActionableRange> convertedActionableCodon = DUMMY_CONVERTER.convertActionableRanges(Sets.newHashSet(actionableCodon));
+        assertEquals(actionableCodon, convertedActionableCodon.iterator().next());
+    }
+
+    @Test
+    public void canConvertActionableExons() {
+        ActionableRange actionableExon = RangeTestFactory.actionableRangeBuilder()
+                .gene(TEST_GENE)
+                .chromosome(TEST_CHROMOSOME)
+                .start(3)
+                .end(4)
+                .source(Knowledgebase.HARTWIG_HOTSPOT_CURATED)
+                .build();
+
+        Set<ActionableRange> convertedActionableExon = DUMMY_CONVERTER.convertActionableRanges(Sets.newHashSet(actionableExon));
+        assertEquals(actionableExon, convertedActionableExon.iterator().next());
     }
 
     @NotNull

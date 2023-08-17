@@ -12,9 +12,7 @@ import com.hartwig.serve.datamodel.gene.KnownGene;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
 import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.immuno.ActionableHLA;
-import com.hartwig.serve.datamodel.range.ActionableRange;
-import com.hartwig.serve.datamodel.range.KnownCodon;
-import com.hartwig.serve.datamodel.range.KnownExon;
+import com.hartwig.serve.datamodel.range.*;
 import com.hartwig.serve.extraction.events.EventInterpretation;
 
 import org.immutables.value.Value;
@@ -53,7 +51,10 @@ public abstract class ExtractionResult {
     public abstract Set<ActionableHotspot> actionableHotspots();
 
     @NotNull
-    public abstract Set<ActionableRange> actionableRanges();
+    public abstract Set<ActionableRange> actionableCodons();
+
+    @NotNull
+    public abstract Set<ActionableRange> actionableExons();
 
     @NotNull
     public abstract Set<ActionableGene> actionableGenes();

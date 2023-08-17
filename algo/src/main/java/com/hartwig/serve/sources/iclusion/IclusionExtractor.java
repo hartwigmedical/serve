@@ -101,7 +101,8 @@ public class IclusionExtractor {
     private static ExtractionResult toExtractionResult(@NotNull List<ActionableTrial> actionableTrials,
             @NotNull EventExtractorOutput extraction, @NotNull EventInterpretation interpretation) {
         Set<ActionableHotspot> actionableHotspots = Sets.newHashSet();
-        Set<ActionableRange> actionableRanges = Sets.newHashSet();
+        Set<ActionableRange> actionableCodons = Sets.newHashSet();
+        Set<ActionableRange> actionableExons = Sets.newHashSet();
         Set<ActionableGene> actionableGenes = Sets.newHashSet();
         Set<ActionableFusion> actionableFusions = Sets.newHashSet();
         Set<ActionableCharacteristic> actionableCharacteristics = Sets.newHashSet();
@@ -109,8 +110,8 @@ public class IclusionExtractor {
 
         for (ActionableTrial trial : actionableTrials) {
             actionableHotspots.addAll(ActionableEventFactory.toActionableHotspots(trial, extraction.hotspots()));
-            actionableRanges.addAll(ActionableEventFactory.toActionableRanges(trial, extraction.codons()));
-            actionableRanges.addAll(ActionableEventFactory.toActionableRanges(trial, extraction.exons()));
+            actionableCodons.addAll(ActionableEventFactory.toActionableRanges(trial, extraction.codons()));
+            actionableExons.addAll(ActionableEventFactory.toActionableRanges(trial, extraction.exons()));
 
             if (extraction.geneLevel() != null) {
                 actionableGenes.add(ActionableEventFactory.geneAnnotationToActionableGene(trial, extraction.geneLevel()));
@@ -137,7 +138,8 @@ public class IclusionExtractor {
                 .refGenomeVersion(Knowledgebase.ICLUSION.refGenomeVersion())
                 .addEventInterpretations(interpretation)
                 .actionableHotspots(actionableHotspots)
-                .actionableRanges(actionableRanges)
+                .actionableCodons(actionableCodons)
+                .actionableExons(actionableExons)
                 .actionableGenes(actionableGenes)
                 .actionableFusions(actionableFusions)
                 .actionableCharacteristics(actionableCharacteristics)

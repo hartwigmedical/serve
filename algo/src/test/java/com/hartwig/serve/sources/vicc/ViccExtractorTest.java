@@ -41,7 +41,8 @@ public class ViccExtractorTest {
         assertEquals(1, result.knownCopyNumbers().size());
         assertEquals(1, result.knownFusions().size());
         assertEquals(1, result.actionableHotspots().size());
-        assertEquals(2, result.actionableRanges().size());
+        assertEquals(1, result.actionableCodons().size());
+        assertEquals(1, result.actionableExons().size());
         assertEquals(2, result.actionableGenes().size());
         assertEquals(1, result.actionableFusions().size());
         assertEquals(1, result.actionableCharacteristics().size());

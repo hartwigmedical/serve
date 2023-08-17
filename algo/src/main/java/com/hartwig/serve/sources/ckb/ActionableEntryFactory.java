@@ -89,23 +89,8 @@ class ActionableEntryFactory {
                     }
                 }
 
-                String sourceCancerTypeId;
-                if (extractSourceCancerTypeId(evidence.indication().termId()) == null) {
-                    sourceCancerTypeId = null;
-                } else {
-                    assert extractSourceCancerTypeId(evidence.indication().termId()) != null;
-                    assert extractSourceCancerTypeId(evidence.indication().termId()).length == 2;
-                    sourceCancerTypeId = extractSourceCancerTypeId(evidence.indication().termId())[1];
-                }
-
-                String responseType = toUrlString(evidence.responseType());
-
                 Set<String> sourceUrls = Sets.newHashSet();
-                for (Drug drug : evidence.therapy().drugs()) {
-                    sourceUrls.add("https://ckbhome.jax.org/profileResponse/advancedEvidenceFind?molecularProfileId=" + entry.profileId()
-                            + "&drugId=" + drug.id() + "&doId=" + sourceCancerTypeId + "&responseType=" + responseType + "&evidenceType="
-                            + evidence.evidenceType());
-                }
+                sourceUrls.add("https://ckbhome.jax.org/profileResponse/advancedEvidenceFind?molecularProfileId=" + entry.profileId());
 
                 Set<CancerType> blacklistedCancerTypes = Sets.newHashSet();
                 if (doid.equals(CancerTypeConstants.CANCER_DOID)) {

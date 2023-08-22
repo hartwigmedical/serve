@@ -350,6 +350,7 @@ Knowledge extraction is performed on a per-knowledgebase level after which all e
 ## Version History and Download Links
 - Upcoming
   - Split actionableRange into actionable codon and range
+  - Switch TML to TMl  
 - [2.3.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v2.3.0)
   - Map JAX carcinoma of unknown primary to DOID 305
 - [2.2.1](https://github.com/hartwigmedical/serve/releases/tag/serve-v2.2.1)

@@ -90,11 +90,12 @@ public final class CkbDAO {
     }
 
     public void write(@NotNull CkbEntry ckbEntry) {
-        int id = context.insertInto(Ckbentry.CKBENTRY, Ckbentry.CKBENTRY.CKBPROFILEID, Ckbentry.CKBENTRY.CREATEDATE, Ckbentry.CKBENTRY.UPDATEDATE, Ckbentry.CKBENTRY.PROFILENAME)
-                .values(ckbEntry.profileId(),
-                        ckbEntry.createDate(),
-                        ckbEntry.updateDate(),
-                        ckbEntry.profileName())
+        int id = context.insertInto(Ckbentry.CKBENTRY,
+                        Ckbentry.CKBENTRY.CKBPROFILEID,
+                        Ckbentry.CKBENTRY.CREATEDATE,
+                        Ckbentry.CKBENTRY.UPDATEDATE,
+                        Ckbentry.CKBENTRY.PROFILENAME)
+                .values(ckbEntry.profileId(), ckbEntry.createDate(), ckbEntry.updateDate(), ckbEntry.profileName())
                 .returning(Ckbentry.CKBENTRY.ID)
                 .fetchOne()
                 .getValue(Ckbentry.CKBENTRY.ID);

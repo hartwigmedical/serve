@@ -349,7 +349,7 @@ Knowledge extraction is performed on a per-knowledgebase level after which all e
   
 ## Version History and Download Links
 - Upcoming
-  - Split actionableRange into actionable codon and range
+  - Split actionableRange into actionable codon and exon
   - iClusion entries that were previously mapped to TML are now mapped to TMB
 - [2.3.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v2.3.0)
   - Map JAX carcinoma of unknown primary to DOID 305

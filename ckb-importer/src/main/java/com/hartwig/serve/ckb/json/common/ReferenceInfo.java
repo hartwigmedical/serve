@@ -17,6 +17,12 @@ public abstract class ReferenceInfo {
     public abstract String title();
 
     @Nullable
+    public abstract String shortJournalTitle();
+
+    @Nullable
+    public abstract String pages();
+
+    @Nullable
     public abstract String url();
 
     @Nullable

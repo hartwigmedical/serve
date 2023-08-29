@@ -48,6 +48,8 @@ final class DrugDatamodelChecker {
         map.put("id", true);
         map.put("pubMedId", true);
         map.put("title", true);
+        map.put("shortJournalTitle",true);
+        map.put("pages",true);
         map.put("url", true);
         map.put("authors", true);
         map.put("journal", true);

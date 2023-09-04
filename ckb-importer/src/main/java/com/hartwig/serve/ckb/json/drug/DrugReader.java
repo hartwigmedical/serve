@@ -91,7 +91,7 @@ public class DrugReader extends CkbJsonDirectoryReader<JsonDrug> {
                     .id(Json.integer(referenceObject, "id"))
                     .pubMedId(Json.nullableString(referenceObject, "pubMedId"))
                     .title(Json.nullableString(referenceObject, "title"))
-                    .shortJournalTitle(Json.nullableString(referenceObject,"shortJournalTitle"))
+                    .shortJournalTitle(Json.nullableString(referenceObject, "shortJournalTitle"))
                     .pages(Json.nullableString(referenceObject, "pages"))
                     .url(Json.nullableString(referenceObject, "url"))
                     .authors(Json.nullableString(referenceObject, "authors"))

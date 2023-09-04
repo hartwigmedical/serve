@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 final class ReferenceDatamodelChecker {
 
-    private ReferenceDatamodelChecker(){
+    private ReferenceDatamodelChecker() {
     }
 
     @NotNull
@@ -18,8 +18,8 @@ final class ReferenceDatamodelChecker {
         map.put("id", true);
         map.put("pubMedId", true);
         map.put("title", true);
-        map.put("shortJournalTitle",true);
-        map.put("pages",true);
+        map.put("shortJournalTitle", true);
+        map.put("pages", true);
         map.put("url", true);
         map.put("authors", true);
         map.put("journal", true);

@@ -57,8 +57,6 @@ public class ReferenceReader extends CkbJsonDirectoryReader<JsonReference> {
                 .date(Json.nullableString(object, "date"))
                 .abstractText(Json.nullableString(object, "abstractText"))
                 .year(Json.nullableString(object, "year"))
-                .shortJournalTitle(Json.nullableString(object, "shortJournalTitle"))
-                .pages(Json.nullableString(object, "pages"))
                 .drugs(extractDrugs(object.getAsJsonArray("drugs")))
                 .genes(extractGenes(object.getAsJsonArray("genes")))
                 .evidence(extractEvidence(object.getAsJsonArray("evidence")))

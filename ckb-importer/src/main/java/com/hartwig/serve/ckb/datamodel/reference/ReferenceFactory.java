@@ -64,6 +64,8 @@ public final class ReferenceFactory {
                         .id(reference.id())
                         .pubMedId(reference.pubMedId())
                         .title(reference.title())
+                        .shortJournalTitle(reference.shortJournalTitle())
+                        .pages(reference.pages())
                         .abstractText(reference.abstractText())
                         .url(reference.url())
                         .journal(reference.journal())

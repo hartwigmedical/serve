@@ -47,6 +47,8 @@ public class ReferenceReader extends CkbJsonDirectoryReader<JsonReference> {
                 .id(Json.integer(object, "id"))
                 .pubMedId(Json.nullableString(object, "pubMedId"))
                 .title(Json.nullableString(object, "title"))
+                .shortJournalTitle(Json.nullableString(object, "shortJournalTitle"))
+                .pages(Json.nullableString(object, "pages"))
                 .url(Json.nullableString(object, "url"))
                 .authors(Json.nullableString(object, "authors"))
                 .journal(Json.nullableString(object, "journal"))

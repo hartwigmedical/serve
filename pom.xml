@@ -28,7 +28,7 @@
         <maven.jar.plugin.version>2.4</maven.jar.plugin.version>
         <maven.exec.plugin.version>1.6.0</maven.exec.plugin.version>
 
-        <ckb-importer.version>2.1</ckb-importer.version>
+        <ckb-importer.version>2.2.0</ckb-importer.version>
         <iclusion-importer.version>1.6</iclusion-importer.version>
         <vicc-importer.version>1.2</vicc-importer.version>
 

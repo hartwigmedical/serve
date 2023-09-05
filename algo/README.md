@@ -348,7 +348,7 @@ Knowledge extraction is performed on a per-knowledgebase level after which all e
   - The actionable output is the database that [PROTECT](https://github.com/hartwigmedical/hmftools/tree/master/protect) bases its clinical evidence matching on.
   
 ## Version History and Download Links
-- Upcoming
+- [2.4.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v2.4.0)
   - Split actionableRange into actionable codon and exon
   - iClusion entries that were previously mapped to TML are now mapped to TMB
 - [2.3.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v2.3.0)

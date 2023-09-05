@@ -21,6 +21,8 @@
 | db_pass  | Required: The password needed for the DB user to authenticate on the URL. |
 
 ## Version History and Download Links
+- [2.2.0](https://github.com/hartwigmedical/serve/releases/tag/ckb-importer-v2.2.0)
+  - Added "shortJournalTitle" and "pages" to reference json in ckb
 - [2.1](https://github.com/hartwigmedical/serve/releases/tag/ckb-importer-v2.1)
   - Update size of column 'state' in table 'location'
 - [2.0](https://github.com/hartwigmedical/serve/releases/tag/ckb-importer-v2.0)

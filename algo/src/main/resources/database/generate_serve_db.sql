@@ -1,8 +1,5 @@
 SET FOREIGN_KEY_CHECKS = 0;
 
--- TODO Remove per 1st of sep 2023
-DROP TABLE IF EXISTS actionableRange;
-
 DROP TABLE IF EXISTS actionableHotspot;
 CREATE TABLE actionableHotspot
 (   id int NOT NULL AUTO_INCREMENT,

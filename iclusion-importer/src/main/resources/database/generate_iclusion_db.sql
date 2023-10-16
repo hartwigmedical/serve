@@ -1,9 +1,5 @@
 SET FOREIGN_KEY_CHECKS = 0;
 
-DROP TABLE IF EXISTS tumorLocations;
-DROP TABLE IF EXISTS blacklistedTumorLocations;
-DROP TABLE IF EXISTS mutationConditions;
-
 DROP TABLE IF EXISTS study;
 CREATE TABLE study
 (   id int NOT NULL AUTO_INCREMENT,

@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 public enum Knowledgebase {
     CKB(RefGenome.V38, "CKB", EvidenceLevel.C, EvidenceLevel.B),
+    CKB_TRIAL(RefGenome.V38, "CKB trial", EvidenceLevel.B, EvidenceLevel.B),
     DOCM(RefGenome.V37, "DoCM", EvidenceLevel.A, EvidenceLevel.A),
     HARTWIG_HOTSPOT_COHORT(RefGenome.V37, "HMF Hotspot Cohort", EvidenceLevel.A, EvidenceLevel.A),
     HARTWIG_HOTSPOT_CURATED(RefGenome.V37, "HMF Hotspot Curated", EvidenceLevel.A, EvidenceLevel.A),

@@ -21,6 +21,7 @@ import com.hartwig.serve.refgenome.RefGenomeManager;
 import com.hartwig.serve.refgenome.RefGenomeResource;
 import com.hartwig.serve.sources.ckb.CkbExtractor;
 import com.hartwig.serve.sources.ckb.CkbExtractorFactory;
+import com.hartwig.serve.sources.ckbtrial.*;
 import com.hartwig.serve.sources.ckb.CkbReader;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurationEntry;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurationEntryKey;
@@ -76,6 +77,10 @@ public class ServeAlgo {
 
         if (config.useCkb()) {
             extractions.add(extractCkbKnowledge(config.ckbDir(), config.ckbFilterTsv(), config.ckbDrugCurationTsv()));
+        }
+
+        if (config.useCkbTrials()) {
+            extractions.add(extractCkbTrialKnowledge(config.ckbDir(), config.ckbFilterTsv(), config.ckbDrugCurationTsv()));
         }
 
         if (config.useDocm()) {
@@ -153,6 +158,20 @@ public class ServeAlgo {
         CkbExtractor extractor = CkbExtractorFactory.buildCkbExtractor(config, refGenomeResource, curator);
 
         LOGGER.info("Running CKB knowledge extraction");
+        return extractor.extract(ckbEntries);
+    }
+
+    @NotNull
+    private ExtractionResult extractCkbTrialKnowledge(@NotNull String ckbDir, @NotNull String ckbFilterTsv, @NotNull String ckbDrugCurationTsv)
+            throws IOException {
+        List<CkbEntry> ckbEntries = CkbReader.readAndCurate(ckbDir, ckbFilterTsv);
+
+        EventClassifierConfig config = CkbClassificationConfig.build();
+        RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.CKB);
+
+        CkbTrialExtractor extractor = CkbTrialExtractorFactory.buildCkbTrialsExtractor(config, refGenomeResource);
+
+        LOGGER.info("Running CKB trial knowledge extraction");
         return extractor.extract(ckbEntries);
     }
 

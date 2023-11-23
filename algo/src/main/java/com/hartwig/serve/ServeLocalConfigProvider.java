@@ -24,6 +24,7 @@ public final class ServeLocalConfigProvider {
                 .useVicc(false)
                 .useIclusion(false)
                 .useCkb(false)
+                .useCkbTrials(false)
                 .useDocm(false)
                 .docmTsv(Strings.EMPTY)
                 .useHartwigCuratedHotspots(false)

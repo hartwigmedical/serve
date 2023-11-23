@@ -51,6 +51,7 @@ public class ServeAlgoTest {
                 .iClusionTrialTsv(ICLUSION_TRIAL_TSV)
                 .iClusionFilterTsv(ICLUSION_FILTER_TSV)
                 .useCkb(true)
+                .useCkbTrials(true)
                 .ckbDir(CKB_DIR)
                 .ckbFilterTsv(CKB_FILTER_TSV)
                 .ckbDrugCurationTsv(CKB_DRUG_CLASS_CURATION_TSV)

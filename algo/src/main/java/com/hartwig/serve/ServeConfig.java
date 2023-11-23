@@ -33,6 +33,7 @@ public interface ServeConfig {
     String ICLUSION_TRIAL_TSV = "iclusion_trial_tsv";
     String ICLUSION_FILTER_TSV = "iclusion_filter_tsv";
     String USE_CKB = "use_ckb";
+    String USE_CKB_TRIALS = "use_ckb_trials";
     String CKB_DIR = "ckb_dir";
     String CKB_FILTER_TSV = "ckb_filter_tsv";
     String CKB_DRUG_CURATION_TSV = "ckb_drug_curation_tsv";
@@ -78,6 +79,7 @@ public interface ServeConfig {
         options.addOption(ICLUSION_TRIAL_TSV, true, "Path to the iClusion input trial TSV");
         options.addOption(ICLUSION_FILTER_TSV, true, "Path to the iClusion filter tsv");
         options.addOption(USE_CKB, false, "If provided, CKB FLEX will be used as a source in SERVE");
+        options.addOption(USE_CKB_TRIALS, false, "If provided, clinical trials from CKB FLEX will be used as a source in SERVE");
         options.addOption(CKB_DIR, true, "Path to the CKB FLEX json input dir");
         options.addOption(CKB_FILTER_TSV, true, "Path to the CKB filter tsv");
         options.addOption(CKB_DRUG_CURATION_TSV, true, "Path to the CKB drug curation tsv");
@@ -129,6 +131,8 @@ public interface ServeConfig {
     String iClusionFilterTsv();
 
     boolean useCkb();
+
+    boolean useCkbTrials();
 
     @NotNull
     String ckbDir();
@@ -208,6 +212,7 @@ public interface ServeConfig {
         boolean useVicc = cmd.hasOption(USE_VICC);
         boolean useIclusion = cmd.hasOption(USE_ICLUSION);
         boolean useCkb = cmd.hasOption(USE_CKB);
+        boolean useCkbTrials = cmd.hasOption(USE_CKB_TRIALS);
         boolean useDocm = cmd.hasOption(USE_DOCM);
         boolean useHartwigCohortHotspots = cmd.hasOption(USE_HARTWIG_COHORT_HOTSPOTS);
         boolean useHartwigCuratedHotspots = cmd.hasOption(USE_HARTWIG_CURATED_HOTSPOTS);
@@ -222,6 +227,7 @@ public interface ServeConfig {
                 .iClusionTrialTsv(useIclusion ? nonOptionalFile(cmd, ICLUSION_TRIAL_TSV) : NOT_APPLICABLE)
                 .iClusionFilterTsv(useIclusion ? nonOptionalFile(cmd, ICLUSION_FILTER_TSV) : NOT_APPLICABLE)
                 .useCkb(useCkb)
+                .useCkbTrials(useCkbTrials)
                 .ckbDir(useCkb ? nonOptionalDir(cmd, CKB_DIR) : NOT_APPLICABLE)
                 .ckbFilterTsv(useCkb ? nonOptionalFile(cmd, CKB_FILTER_TSV) : NOT_APPLICABLE)
                 .ckbDrugCurationTsv(useCkb ? nonOptionalFile(cmd, CKB_DRUG_CURATION_TSV) : NOT_APPLICABLE)

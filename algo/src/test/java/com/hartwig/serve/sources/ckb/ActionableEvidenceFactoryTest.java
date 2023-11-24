@@ -20,7 +20,7 @@ import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachTestFact
 import org.apache.logging.log4j.util.Strings;
 import org.junit.Test;
 
-public class ActionableEntryFactoryTest {
+public class ActionableEvidenceFactoryTest {
 
     @Test
     public void canCreateActionableEntries() {
@@ -28,16 +28,16 @@ public class ActionableEntryFactoryTest {
 
         CkbEntry entryDeletion =
                 CkbTestFactory.createEntry("KRAS", "deletion", "KRAS deletion", "sensitive", "Emerging", "AB", "AB", "A", "DOID:162");
-        Set<ActionableEntry> entryDeletionSet =
-                ActionableEntryFactory.toActionableEntries(entryDeletion, "KRAS", curator, "gene", entryDeletion.type());
+        Set<ActionableEvidence> entryDeletionSet =
+                ActionableEvidenceFactory.toActionableEvidence(entryDeletion, "KRAS", curator, "gene", entryDeletion.type());
         assertEquals(0, entryDeletionSet.size());
 
         CkbEntry entryCharacteristics =
                 CkbTestFactory.createEntry("-", "MSI neg", "MSI neg", "sensitive", "Actionable", "AB", "AB", "A", "DOID:162");
-        Set<ActionableEntry> entryCharacteristicsSet =
-                ActionableEntryFactory.toActionableEntries(entryCharacteristics, Strings.EMPTY, curator, "-", entryCharacteristics.type());
+        Set<ActionableEvidence> entryCharacteristicsSet =
+                ActionableEvidenceFactory.toActionableEvidence(entryCharacteristics, Strings.EMPTY, curator, "-", entryCharacteristics.type());
         assertEquals(1, entryCharacteristicsSet.size());
-        ActionableEntry characteristics = entryCharacteristicsSet.iterator().next();
+        ActionableEvidence characteristics = entryCharacteristicsSet.iterator().next();
         assertEquals(Strings.EMPTY, characteristics.sourceEvent());
         assertEquals(Knowledgebase.CKB_EVIDENCE, characteristics.source());
         assertEquals("AB", characteristics.treatment().name());
@@ -58,10 +58,10 @@ public class ActionableEntryFactoryTest {
                 "AB",
                 "A",
                 "DOID:163");
-        Set<ActionableEntry> entryAmplificationSet =
-                ActionableEntryFactory.toActionableEntries(entryAmplification, "KRAS", curator, "KRAS", entryAmplification.type());
+        Set<ActionableEvidence> entryAmplificationSet =
+                ActionableEvidenceFactory.toActionableEvidence(entryAmplification, "KRAS", curator, "KRAS", entryAmplification.type());
         assertEquals(1, entryAmplificationSet.size());
-        ActionableEntry amplification = entryAmplificationSet.iterator().next();
+        ActionableEvidence amplification = entryAmplificationSet.iterator().next();
         assertEquals("KRAS", amplification.sourceEvent());
         assertEquals(Knowledgebase.CKB_EVIDENCE, amplification.source());
         assertEquals("AB", amplification.treatment().name());
@@ -73,10 +73,10 @@ public class ActionableEntryFactoryTest {
 
         CkbEntry entryHotspot =
                 CkbTestFactory.createEntry("BRAF", "BRAF V600E", "BRAF V600E", "sensitive", "Actionable", "AB", "AB", "A", "DOID:162");
-        Set<ActionableEntry> entryHotspotSet =
-                ActionableEntryFactory.toActionableEntries(entryHotspot, "BRAF", curator, "BRAF", entryHotspot.type());
+        Set<ActionableEvidence> entryHotspotSet =
+                ActionableEvidenceFactory.toActionableEvidence(entryHotspot, "BRAF", curator, "BRAF", entryHotspot.type());
         assertEquals(1, entryHotspotSet.size());
-        ActionableEntry hotspot = entryHotspotSet.iterator().next();
+        ActionableEvidence hotspot = entryHotspotSet.iterator().next();
         assertEquals("BRAF", hotspot.sourceEvent());
         assertEquals(Knowledgebase.CKB_EVIDENCE, hotspot.source());
         assertEquals("AB", hotspot.treatment().name());
@@ -91,67 +91,67 @@ public class ActionableEntryFactoryTest {
 
     @Test
     public void canExtractAndCurateDoid() {
-        assertNull(ActionableEntryFactory.extractAndCurateDoid(null));
-        assertNull(ActionableEntryFactory.extractAndCurateDoid(new String[] { "jax", "not a doid" }));
+        assertNull(ActionableEvidenceFactory.extractAndCurateDoid(null));
+        assertNull(ActionableEvidenceFactory.extractAndCurateDoid(new String[] { "jax", "not a doid" }));
 
-        assertEquals("0060463", ActionableEntryFactory.extractAndCurateDoid(new String[] { "DOID", "0060463" }));
-        assertEquals(CancerTypeConstants.CANCER_DOID, ActionableEntryFactory.extractAndCurateDoid(new String[] { "JAX", "10000003" }));
+        assertEquals("0060463", ActionableEvidenceFactory.extractAndCurateDoid(new String[] { "DOID", "0060463" }));
+        assertEquals(CancerTypeConstants.CANCER_DOID, ActionableEvidenceFactory.extractAndCurateDoid(new String[] { "JAX", "10000003" }));
         assertEquals(CancerTypeConstants.SQUAMOUS_CELL_CARCINOMA_OF_UNKNOWN_PRIMARY,
-                ActionableEntryFactory.extractAndCurateDoid(new String[] { "JAX", "10000009" }));
+                ActionableEvidenceFactory.extractAndCurateDoid(new String[] { "JAX", "10000009" }));
         assertEquals(CancerTypeConstants.ADENOCARCINOMA_OF_UNKNOWN_PRIMARY,
-                ActionableEntryFactory.extractAndCurateDoid(new String[] { "JAX", "10000008" }));
-        assertNull(ActionableEntryFactory.extractAndCurateDoid(new String[] { "JAX", "10000004" }));
+                ActionableEvidenceFactory.extractAndCurateDoid(new String[] { "JAX", "10000008" }));
+        assertNull(ActionableEvidenceFactory.extractAndCurateDoid(new String[] { "JAX", "10000004" }));
     }
 
     @Test
     public void canExtractSourceCancerTypeID() {
-        assertNull(ActionableEntryFactory.extractSourceCancerTypeId(null));
-        assertNull(ActionableEntryFactory.extractSourceCancerTypeId("not a doid"));
+        assertNull(ActionableEvidenceFactory.extractSourceCancerTypeId(null));
+        assertNull(ActionableEvidenceFactory.extractSourceCancerTypeId("not a doid"));
 
-        assertNotNull(ActionableEntryFactory.extractSourceCancerTypeId("DOID:0060463"));
-        assertEquals("0060463", ActionableEntryFactory.extractSourceCancerTypeId("DOID:0060463")[1]);
-        assertEquals("10000003", ActionableEntryFactory.extractSourceCancerTypeId("JAX:10000003")[1]);
+        assertNotNull(ActionableEvidenceFactory.extractSourceCancerTypeId("DOID:0060463"));
+        assertEquals("0060463", ActionableEvidenceFactory.extractSourceCancerTypeId("DOID:0060463")[1]);
+        assertEquals("10000003", ActionableEvidenceFactory.extractSourceCancerTypeId("JAX:10000003")[1]);
     }
 
     @Test
     public void canConvertToUrlString() {
-        assertEquals("predicted+-+sensitive", ActionableEntryFactory.toUrlString("predicted - sensitive"));
-        assertEquals("predicted+-+resistant", ActionableEntryFactory.toUrlString("predicted - resistant"));
-        assertEquals("resistant", ActionableEntryFactory.toUrlString("resistant"));
-        assertEquals("sensitive", ActionableEntryFactory.toUrlString("sensitive"));
+        assertEquals("predicted+-+sensitive", ActionableEvidenceFactory.toUrlString("predicted - sensitive"));
+        assertEquals("predicted+-+resistant", ActionableEvidenceFactory.toUrlString("predicted - resistant"));
+        assertEquals("resistant", ActionableEvidenceFactory.toUrlString("resistant"));
+        assertEquals("sensitive", ActionableEvidenceFactory.toUrlString("sensitive"));
     }
 
     @Test
     public void canDetermineIfHasUsableEvidenceType() {
-        assertTrue(ActionableEntryFactory.hasUsableEvidenceType("Actionable"));
-        assertFalse(ActionableEntryFactory.hasUsableEvidenceType("Prognostic"));
-        assertFalse(ActionableEntryFactory.hasUsableEvidenceType("Emerging"));
-        assertFalse(ActionableEntryFactory.hasUsableEvidenceType("Risk Factor"));
-        assertFalse(ActionableEntryFactory.hasUsableEvidenceType("Diagnostic"));
+        assertTrue(ActionableEvidenceFactory.hasUsableEvidenceType("Actionable"));
+        assertFalse(ActionableEvidenceFactory.hasUsableEvidenceType("Prognostic"));
+        assertFalse(ActionableEvidenceFactory.hasUsableEvidenceType("Emerging"));
+        assertFalse(ActionableEvidenceFactory.hasUsableEvidenceType("Risk Factor"));
+        assertFalse(ActionableEvidenceFactory.hasUsableEvidenceType("Diagnostic"));
     }
 
     @Test
     public void canResolveLevels() {
-        assertNull(ActionableEntryFactory.resolveLevel("NA"));
-        assertEquals(EvidenceLevel.A, ActionableEntryFactory.resolveLevel("A"));
-        assertEquals(EvidenceLevel.B, ActionableEntryFactory.resolveLevel("B"));
-        assertEquals(EvidenceLevel.C, ActionableEntryFactory.resolveLevel("C"));
-        assertEquals(EvidenceLevel.D, ActionableEntryFactory.resolveLevel("D"));
+        assertNull(ActionableEvidenceFactory.resolveLevel("NA"));
+        assertEquals(EvidenceLevel.A, ActionableEvidenceFactory.resolveLevel("A"));
+        assertEquals(EvidenceLevel.B, ActionableEvidenceFactory.resolveLevel("B"));
+        assertEquals(EvidenceLevel.C, ActionableEvidenceFactory.resolveLevel("C"));
+        assertEquals(EvidenceLevel.D, ActionableEvidenceFactory.resolveLevel("D"));
     }
 
     @Test
     public void canResolveDirections() {
-        assertNull(ActionableEntryFactory.resolveDirection(null));
-        assertNull(ActionableEntryFactory.resolveDirection("unknown"));
-        assertNull(ActionableEntryFactory.resolveDirection("not applicable"));
-        assertNull(ActionableEntryFactory.resolveDirection("conflicting"));
-        assertNull(ActionableEntryFactory.resolveDirection("no benefit"));
-        assertNull(ActionableEntryFactory.resolveDirection("not predictive"));
-        assertNull(ActionableEntryFactory.resolveDirection("decreased response"));
+        assertNull(ActionableEvidenceFactory.resolveDirection(null));
+        assertNull(ActionableEvidenceFactory.resolveDirection("unknown"));
+        assertNull(ActionableEvidenceFactory.resolveDirection("not applicable"));
+        assertNull(ActionableEvidenceFactory.resolveDirection("conflicting"));
+        assertNull(ActionableEvidenceFactory.resolveDirection("no benefit"));
+        assertNull(ActionableEvidenceFactory.resolveDirection("not predictive"));
+        assertNull(ActionableEvidenceFactory.resolveDirection("decreased response"));
 
-        assertEquals(EvidenceDirection.RESPONSIVE, ActionableEntryFactory.resolveDirection("sensitive"));
-        assertEquals(EvidenceDirection.PREDICTED_RESPONSIVE, ActionableEntryFactory.resolveDirection("predicted - sensitive"));
-        assertEquals(EvidenceDirection.RESISTANT, ActionableEntryFactory.resolveDirection("resistant"));
-        assertEquals(EvidenceDirection.PREDICTED_RESISTANT, ActionableEntryFactory.resolveDirection("predicted - resistant"));
+        assertEquals(EvidenceDirection.RESPONSIVE, ActionableEvidenceFactory.resolveDirection("sensitive"));
+        assertEquals(EvidenceDirection.PREDICTED_RESPONSIVE, ActionableEvidenceFactory.resolveDirection("predicted - sensitive"));
+        assertEquals(EvidenceDirection.RESISTANT, ActionableEvidenceFactory.resolveDirection("resistant"));
+        assertEquals(EvidenceDirection.PREDICTED_RESISTANT, ActionableEvidenceFactory.resolveDirection("predicted - resistant"));
     }
 }

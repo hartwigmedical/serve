@@ -63,9 +63,9 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class CkbExtractor {
+public class CkbEvidenceExtractor {
 
-    private static final Logger LOGGER = LogManager.getLogger(CkbExtractor.class);
+    private static final Logger LOGGER = LogManager.getLogger(CkbEvidenceExtractor.class);
     private static final String DELIMITER = ",";
 
     @NotNull
@@ -73,7 +73,8 @@ public class CkbExtractor {
     @NotNull
     private final TreatmentApproachCurator treatmentApproachCurator;
 
-    public CkbExtractor(@NotNull final EventExtractor eventExtractor, @NotNull final TreatmentApproachCurator treatmentApproachCurator) {
+    public CkbEvidenceExtractor(@NotNull final EventExtractor eventExtractor,
+            @NotNull final TreatmentApproachCurator treatmentApproachCurator) {
         this.eventExtractor = eventExtractor;
         this.treatmentApproachCurator = treatmentApproachCurator;
     }
@@ -105,8 +106,8 @@ public class CkbExtractor {
                     sourceEvent = event;
                 }
 
-                Set<ActionableEntry> actionableEntries =
-                        ActionableEntryFactory.toActionableEntries(entry, sourceEvent, treatmentApproachCurator, gene, entry.type());
+                Set<ActionableEvidence> actionableEntries =
+                        ActionableEvidenceFactory.toActionableEvidence(entry, sourceEvent, treatmentApproachCurator, gene, entry.type());
 
                 EventInterpretation interpretation = ImmutableEventInterpretation.builder()
                         .source(Knowledgebase.CKB_EVIDENCE)
@@ -139,7 +140,7 @@ public class CkbExtractor {
 
     @NotNull
     private static ExtractionResult toExtractionResult(@NotNull String variant, @NotNull String gene, @Nullable String transcript,
-            @NotNull EventExtractorOutput output, @NotNull Set<ActionableEntry> actionableEntries,
+            @NotNull EventExtractorOutput output, @NotNull Set<ActionableEvidence> actionableEntries,
             @NotNull EventInterpretation interpretation) {
         Set<ActionableHotspot> actionableHotspots = Sets.newHashSet();
         Set<ActionableRange> actionableCodons = Sets.newHashSet();

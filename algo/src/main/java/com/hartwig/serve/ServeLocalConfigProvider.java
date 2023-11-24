@@ -23,7 +23,7 @@ public final class ServeLocalConfigProvider {
         ImmutableServeConfig.Builder builder = ImmutableServeConfig.builder()
                 .useVicc(false)
                 .useIclusion(false)
-                .useCkb(false)
+                .useCkbEvidence(false)
                 .useCkbTrials(false)
                 .useDocm(false)
                 .docmTsv(Strings.EMPTY)

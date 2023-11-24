@@ -8,6 +8,6 @@ import org.jetbrains.annotations.Nullable;
 
 @Value.Immutable
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class })
-abstract class ActionableEntry implements ActionableEvent {
+abstract class ActionableEvidence implements ActionableEvent {
 
 }

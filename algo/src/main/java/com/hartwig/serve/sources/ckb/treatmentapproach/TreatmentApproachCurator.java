@@ -19,8 +19,7 @@ public class TreatmentApproachCurator {
     @NotNull
     private final Set<TreatmentApproachCurationEntryKey> usedCurations = Sets.newHashSet();
 
-    public TreatmentApproachCurator(
-            @NotNull final Map<TreatmentApproachCurationEntryKey, TreatmentApproachCurationEntry> curations) {
+    public TreatmentApproachCurator(@NotNull final Map<TreatmentApproachCurationEntryKey, TreatmentApproachCurationEntry> curations) {
         this.curations = curations;
     }
 
@@ -31,7 +30,7 @@ public class TreatmentApproachCurator {
             if (!usedCurations.contains(entrySet)) {
                 unusedCuratedEntryCount++;
                 // TODO Enable warning once treatment approaches are properly curated.
-//                LOGGER.warn(" Curation entry '{}' hasn't been used for treatment approach curation", entrySet);
+                //                LOGGER.warn(" Curation entry '{}' hasn't been used for treatment approach curation", entrySet);
             }
         }
 
@@ -44,12 +43,12 @@ public class TreatmentApproachCurator {
 
         if (curationEntry == null) {
             // TODO Enable or disable once treatment approaches are properly curated.
-//            LOGGER.warn("The treatment '{}' with relevant treatment approach '{}' of event '{}' "
-//                            + "with direction '{}' isn't curated because missing in curation resource",
-//                    key.treatment(),
-//                    key.treatmentApproach() == null ? Strings.EMPTY : key.treatmentApproach(),
-//                    key.event(),
-//                    key.direction());
+            //            LOGGER.warn("The treatment '{}' with relevant treatment approach '{}' of event '{}' "
+            //                            + "with direction '{}' isn't curated because missing in curation resource",
+            //                    key.treatment(),
+            //                    key.treatmentApproach() == null ? Strings.EMPTY : key.treatmentApproach(),
+            //                    key.event(),
+            //                    key.direction());
             return Strings.EMPTY;
         }
 

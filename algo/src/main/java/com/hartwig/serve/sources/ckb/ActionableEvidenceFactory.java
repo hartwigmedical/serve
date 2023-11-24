@@ -28,9 +28,9 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-class ActionableEntryFactory {
+class ActionableEvidenceFactory {
 
-    private static final Logger LOGGER = LogManager.getLogger(ActionableEntryFactory.class);
+    private static final Logger LOGGER = LogManager.getLogger(ActionableEvidenceFactory.class);
 
     private static final Set<String> RESPONSIVE_DIRECTIONS = Sets.newHashSet();
     private static final Set<String> PREDICTED_RESPONSIVE_DIRECTIONS = Sets.newHashSet();
@@ -63,13 +63,13 @@ class ActionableEntryFactory {
         EVIDENCE_TYPES_TO_IGNORE.add("Diagnostic");
     }
 
-    ActionableEntryFactory() {
+    ActionableEvidenceFactory() {
     }
 
     @NotNull
-    public static Set<ActionableEntry> toActionableEntries(@NotNull CkbEntry entry, @NotNull String sourceEvent,
+    public static Set<ActionableEvidence> toActionableEvidence(@NotNull CkbEntry entry, @NotNull String sourceEvent,
             @NotNull TreatmentApproachCurator curator, @NotNull String gene, @NotNull EventType eventType) {
-        Set<ActionableEntry> actionableEntries = Sets.newHashSet();
+        Set<ActionableEvidence> actionableEntries = Sets.newHashSet();
 
         for (Evidence evidence : evidencesWithUsableType(entry.evidences())) {
             EvidenceLevel level = resolveLevel(evidence.ampCapAscoEvidenceLevel());
@@ -128,7 +128,7 @@ class ActionableEntryFactory {
 
                 Set<String> curatedRelevantTreatmentApproaches = Sets.newHashSet(curator.isMatch(key));
 
-                actionableEntries.add(ImmutableActionableEntry.builder()
+                actionableEntries.add(ImmutableActionableEvidence.builder()
                         .source(Knowledgebase.CKB_EVIDENCE)
                         .sourceEvent(sourceEvent)
                         .sourceUrls(sourceUrls)

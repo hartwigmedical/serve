@@ -19,12 +19,12 @@ import org.apache.commons.compress.utils.Lists;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
-public class CkbExtractorTest {
+public class CkbEvidenceExtractorTest {
 
     @Test
     public void canExtractFromCkbEntries() {
         EventClassifierConfig config = CkbClassificationConfig.build();
-        CkbExtractor extractor = CkbExtractorFactory.buildCkbExtractor(config,
+        CkbEvidenceExtractor extractor = CkbEvidenceExtractorFactory.buildCkbExtractor(config,
                 RefGenomeResourceTestFactory.buildTestResource37(),
                 TreatmentApproachTestFactory.createEmptyCurator());
 
@@ -84,7 +84,7 @@ public class CkbExtractorTest {
         codonAnnotations.add(codonAnnotation1);
         codonAnnotations.add(codonAnnotation2);
 
-        List<CodonAnnotation> curatedCodons = CkbExtractor.curateCodons(codonAnnotations);
+        List<CodonAnnotation> curatedCodons = CkbEvidenceExtractor.curateCodons(codonAnnotations);
 
         CodonAnnotation codon1 = findByGene(curatedCodons, "BRAF");
         assertEquals(140753335, codon1.start());

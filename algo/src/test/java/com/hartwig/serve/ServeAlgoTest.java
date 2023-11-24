@@ -50,7 +50,7 @@ public class ServeAlgoTest {
                 .useIclusion(true)
                 .iClusionTrialTsv(ICLUSION_TRIAL_TSV)
                 .iClusionFilterTsv(ICLUSION_FILTER_TSV)
-                .useCkb(true)
+                .useCkbEvidence(true)
                 .useCkbTrials(true)
                 .ckbDir(CKB_DIR)
                 .ckbFilterTsv(CKB_FILTER_TSV)

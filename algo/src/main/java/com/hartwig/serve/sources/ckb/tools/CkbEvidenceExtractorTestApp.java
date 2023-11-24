@@ -23,8 +23,8 @@ import com.hartwig.serve.extraction.ExtractionResultWriter;
 import com.hartwig.serve.extraction.hotspot.ProteinResolverFactory;
 import com.hartwig.serve.refgenome.ImmutableRefGenomeResource;
 import com.hartwig.serve.refgenome.RefGenomeResource;
-import com.hartwig.serve.sources.ckb.CkbExtractor;
-import com.hartwig.serve.sources.ckb.CkbExtractorFactory;
+import com.hartwig.serve.sources.ckb.CkbEvidenceExtractor;
+import com.hartwig.serve.sources.ckb.CkbEvidenceExtractorFactory;
 import com.hartwig.serve.sources.ckb.CkbReader;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurationFile;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurator;
@@ -37,9 +37,9 @@ import org.jetbrains.annotations.NotNull;
 
 import htsjdk.samtools.reference.IndexedFastaSequenceFile;
 
-public class CkbExtractorTestApp {
+public class CkbEvidenceExtractorTestApp {
 
-    private static final Logger LOGGER = LogManager.getLogger(CkbExtractorTestApp.class);
+    private static final Logger LOGGER = LogManager.getLogger(CkbEvidenceExtractorTestApp.class);
 
     public static void main(String[] args) throws IOException {
         Configurator.setRootLevel(Level.DEBUG);
@@ -54,7 +54,8 @@ public class CkbExtractorTestApp {
 
         RefGenomeResource refGenomeResource = buildRefGenomeResource(config);
         TreatmentApproachCurator curator = new TreatmentApproachCurator(TreatmentApproachCurationFile.read(config.ckbDrugCurationTsv()));
-        CkbExtractor extractor = CkbExtractorFactory.buildCkbExtractor(CkbClassificationConfig.build(), refGenomeResource, curator);
+        CkbEvidenceExtractor extractor =
+                CkbEvidenceExtractorFactory.buildCkbExtractor(CkbClassificationConfig.build(), refGenomeResource, curator);
 
         List<CkbEntry> entries = CkbReader.readAndCurate(config.ckbDir(), config.ckbFilterTsv());
 
@@ -64,7 +65,9 @@ public class CkbExtractorTestApp {
         CkbUtil.writeEventsToTsv(eventsTsv, entries);
         CkbUtil.printExtractionResults(result);
 
-        new ExtractionResultWriter(config.outputDir(), Knowledgebase.CKB_EVIDENCE.refGenomeVersion(), refGenomeResource.refSequence()).write(result);
+        new ExtractionResultWriter(config.outputDir(),
+                Knowledgebase.CKB_EVIDENCE.refGenomeVersion(),
+                refGenomeResource.refSequence()).write(result);
     }
 
     @NotNull

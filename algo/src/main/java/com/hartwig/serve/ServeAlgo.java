@@ -19,8 +19,8 @@ import com.hartwig.serve.iclusion.classification.IclusionClassificationConfig;
 import com.hartwig.serve.iclusion.datamodel.IclusionTrial;
 import com.hartwig.serve.refgenome.RefGenomeManager;
 import com.hartwig.serve.refgenome.RefGenomeResource;
-import com.hartwig.serve.sources.ckb.CkbExtractor;
-import com.hartwig.serve.sources.ckb.CkbExtractorFactory;
+import com.hartwig.serve.sources.ckb.CkbEvidenceExtractor;
+import com.hartwig.serve.sources.ckb.CkbEvidenceExtractorFactory;
 import com.hartwig.serve.sources.ckb.CkbReader;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurationEntry;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurationEntryKey;
@@ -76,8 +76,8 @@ public class ServeAlgo {
             extractions.add(extractIclusionKnowledge(config.iClusionTrialTsv(), config.iClusionFilterTsv()));
         }
 
-        if (config.useCkb()) {
-            extractions.add(extractCkbKnowledge(config.ckbDir(), config.ckbFilterTsv(), config.ckbDrugCurationTsv()));
+        if (config.useCkbEvidence()) {
+            extractions.add(extractCkbEvidenceKnowledge(config.ckbDir(), config.ckbFilterTsv(), config.ckbDrugCurationTsv()));
         }
 
         if (config.useCkbTrials()) {
@@ -144,8 +144,8 @@ public class ServeAlgo {
     }
 
     @NotNull
-    private ExtractionResult extractCkbKnowledge(@NotNull String ckbDir, @NotNull String ckbFilterTsv, @NotNull String ckbDrugCurationTsv)
-            throws IOException {
+    private ExtractionResult extractCkbEvidenceKnowledge(@NotNull String ckbDir, @NotNull String ckbFilterTsv,
+            @NotNull String ckbDrugCurationTsv) throws IOException {
         List<CkbEntry> ckbEntries = CkbReader.readAndCurate(ckbDir, ckbFilterTsv);
 
         EventClassifierConfig config = CkbClassificationConfig.build();
@@ -156,9 +156,9 @@ public class ServeAlgo {
 
         TreatmentApproachCurator curator = new TreatmentApproachCurator(treatmentApproachMap);
 
-        CkbExtractor extractor = CkbExtractorFactory.buildCkbExtractor(config, refGenomeResource, curator);
+        CkbEvidenceExtractor extractor = CkbEvidenceExtractorFactory.buildCkbExtractor(config, refGenomeResource, curator);
 
-        LOGGER.info("Running CKB knowledge extraction");
+        LOGGER.info("Running CKB evidence knowledge extraction");
         return extractor.extract(ckbEntries);
     }
 

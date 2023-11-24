@@ -11,9 +11,12 @@ import com.hartwig.serve.datamodel.EvidenceDirection;
 
 import org.jetbrains.annotations.NotNull;
 
-public class TreatmentApproachCurationFile {
+public final class TreatmentApproachCurationFile {
 
     private static final String FIELD_DELIMITER = "\t";
+
+    private TreatmentApproachCurationFile() {
+    }
 
     @NotNull
     public static Map<TreatmentApproachCurationEntryKey, TreatmentApproachCurationEntry> read(

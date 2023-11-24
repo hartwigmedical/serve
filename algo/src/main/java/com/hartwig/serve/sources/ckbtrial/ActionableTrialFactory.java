@@ -1,12 +1,16 @@
 package com.hartwig.serve.sources.ckbtrial;
 
+import java.util.List;
 import java.util.Set;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.cancertype.CancerTypeConstants;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.ClinicalTrial;
+import com.hartwig.serve.ckb.datamodel.clinicaltrial.Location;
+import com.hartwig.serve.ckb.datamodel.clinicaltrial.VariantRequirementDetail;
 import com.hartwig.serve.ckb.datamodel.indication.Indication;
 import com.hartwig.serve.datamodel.CancerType;
 import com.hartwig.serve.datamodel.EvidenceDirection;
@@ -23,6 +27,21 @@ import org.jetbrains.annotations.Nullable;
 class ActionableTrialFactory {
 
     private static final Logger LOGGER = LogManager.getLogger(ActionableTrialFactory.class);
+    private static final Set<String> USABLE_RECRUITMENT = Sets.newHashSet();
+    private static final Set<String> USABLE_LOCATIONS = Sets.newHashSet();
+    private static final Set<String> USABLE_REQUIREMENT_TYPE = Sets.newHashSet();
+    private static final Set<CancerType> blacklistedCancerTypes = Sets.newHashSet();
+
+    static {
+        USABLE_RECRUITMENT.add("Recruiting");
+        USABLE_RECRUITMENT.add("Active, not recruiting");
+        USABLE_RECRUITMENT.add("Unknown status");
+
+        USABLE_LOCATIONS.add("Netherlands");
+
+        USABLE_REQUIREMENT_TYPE.add("partial - required");
+        USABLE_REQUIREMENT_TYPE.add("required");
+    }
 
     ActionableTrialFactory() {
     }
@@ -31,20 +50,13 @@ class ActionableTrialFactory {
     public static Set<ActionableTrial> toActionableTrials(@NotNull CkbEntry entry, @NotNull String sourceEvent) {
         Set<ActionableTrial> actionableTrials = Sets.newHashSet();
 
-        for (ClinicalTrial trial : entry.clinicalTrials()) {
+        for (ClinicalTrial trial : trialsWithUsableCountryAndRecruitmentAndRequirement(entry.clinicalTrials(), entry)) {
             for (Indication indication : trial.indications()) {
                 String[] sourceCancerTypes = extractSourceCancerTypeId(indication.termId());
                 String doid = extractAndCurateDoid(sourceCancerTypes);
 
                 if (doid != null) {
                     String cancerType = indication.name();
-
-                    Set<CancerType> blacklistedCancerTypes = Sets.newHashSet();
-                    if (doid.equals(CancerTypeConstants.CANCER_DOID)) {
-                        blacklistedCancerTypes.add(CancerTypeConstants.LEUKEMIA_TYPE);
-                        blacklistedCancerTypes.add(CancerTypeConstants.REFRACTORY_HEMATOLOGIC_TYPE);
-                        blacklistedCancerTypes.add(CancerTypeConstants.BONE_MARROW_TYPE);
-                    }
 
                     actionableTrials.add(ImmutableActionableTrial.builder()
                             .source(Knowledgebase.CKB_TRIAL)
@@ -100,6 +112,10 @@ class ActionableTrialFactory {
         } else if (source.equalsIgnoreCase("jax")) {
             switch (id) {
                 case CancerTypeConstants.JAX_ADVANCED_SOLID_TUMOR:
+                    blacklistedCancerTypes.add(CancerTypeConstants.LEUKEMIA_TYPE);
+                    blacklistedCancerTypes.add(CancerTypeConstants.REFRACTORY_HEMATOLOGIC_TYPE);
+                    blacklistedCancerTypes.add(CancerTypeConstants.BONE_MARROW_TYPE);
+                    return CancerTypeConstants.CANCER_DOID;
                 case CancerTypeConstants.JAX_CANCER_OF_UNKNOWN_PRIMARY:
                     return CancerTypeConstants.CANCER_DOID;
                 case CancerTypeConstants.JAX_CARCINOMA_OF_UNKNOWN_PRIMARY:
@@ -119,5 +135,41 @@ class ActionableTrialFactory {
             LOGGER.warn("Unexpected source '{}'", source);
             return null;
         }
+    }
+
+    @NotNull
+    private static List<ClinicalTrial> trialsWithUsableCountryAndRecruitmentAndRequirement(@NotNull List<ClinicalTrial> trials, CkbEntry entry) {
+        List<ClinicalTrial> filtered = Lists.newArrayList();
+        for (ClinicalTrial trial : trials) {
+            if (hasUsableRecruitment(trial.recruitment()) && hasUsableCountry(trial.locations()) && hasUsableRequirementType(trial.variantRequirementDetails(), entry)) {
+                filtered.add(trial);
+            }
+        }
+        return filtered;
+    }
+
+    @VisibleForTesting
+    static boolean hasUsableRecruitment(@NotNull String recruitmentType) {
+        return USABLE_RECRUITMENT.contains(recruitmentType);
+    }
+
+    @VisibleForTesting
+    static boolean hasUsableCountry(@NotNull List<Location> locations) {
+        for (Location location : locations) {
+            if (USABLE_LOCATIONS.contains(location.country())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @VisibleForTesting
+    static boolean hasUsableRequirementType(@NotNull List<VariantRequirementDetail> variantRequirementDetails, CkbEntry entry) {
+        for (VariantRequirementDetail variantRequirementDetail : variantRequirementDetails) {
+            if (entry.profileId() == variantRequirementDetail.profileId() && USABLE_REQUIREMENT_TYPE.contains(variantRequirementDetail.requirementType())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

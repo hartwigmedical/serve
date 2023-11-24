@@ -282,7 +282,7 @@ Finally, cancer types for which no DOIDs have been specified get a DOID assigned
 ### CKB FLEX Curation
 
 For CKB FLEX curation and filtering is predominantly configurable rather than fixed in SERVE. The only fixed curation done in SERVE
-is mapping evidence for tumor characteristics (such as MSI or High TMB) to actual characteristics since CKB FLEX models this as "genes".
+is mapping evidence for tumor characteristics (such as MSI or High TMB) to actual characteristics since CKB FLEX models this as "genes". SERVE configures every trial to B-level evidence with `RESPONSIVE` direction. SERVE only considers trials with one or more molecular inclusion criterion.
 
 The following filters can be configured for CKB FLEX, along with an example of how this is used by Hartwig:
 

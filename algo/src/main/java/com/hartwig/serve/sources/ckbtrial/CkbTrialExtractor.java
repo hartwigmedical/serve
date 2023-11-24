@@ -1,6 +1,5 @@
 package com.hartwig.serve.sources.ckbtrial;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.StringJoiner;
@@ -10,34 +9,16 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.ckb.classification.CkbConstants;
 import com.hartwig.serve.ckb.classification.CkbEventAndGeneExtractor;
-import com.hartwig.serve.ckb.classification.CkbProteinAnnotationExtractor;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.ckb.datamodel.variant.Variant;
 import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.characteristic.ActionableCharacteristic;
-import com.hartwig.serve.datamodel.common.GeneRole;
-import com.hartwig.serve.datamodel.common.ProteinEffect;
 import com.hartwig.serve.datamodel.fusion.ActionableFusion;
-import com.hartwig.serve.datamodel.fusion.FusionPair;
-import com.hartwig.serve.datamodel.fusion.ImmutableKnownFusion;
-import com.hartwig.serve.datamodel.fusion.KnownFusion;
 import com.hartwig.serve.datamodel.gene.ActionableGene;
-import com.hartwig.serve.datamodel.gene.GeneAnnotation;
-import com.hartwig.serve.datamodel.gene.ImmutableKnownCopyNumber;
-import com.hartwig.serve.datamodel.gene.ImmutableKnownGene;
-import com.hartwig.serve.datamodel.gene.KnownCopyNumber;
-import com.hartwig.serve.datamodel.gene.KnownGene;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
-import com.hartwig.serve.datamodel.hotspot.ImmutableKnownHotspot;
-import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
-import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
 import com.hartwig.serve.datamodel.immuno.ActionableHLA;
 import com.hartwig.serve.datamodel.range.ActionableRange;
-import com.hartwig.serve.datamodel.range.ImmutableKnownCodon;
-import com.hartwig.serve.datamodel.range.ImmutableKnownExon;
-import com.hartwig.serve.datamodel.range.KnownCodon;
-import com.hartwig.serve.datamodel.range.KnownExon;
 import com.hartwig.serve.extraction.ActionableEventFactory;
 import com.hartwig.serve.extraction.EventExtractor;
 import com.hartwig.serve.extraction.EventExtractorOutput;
@@ -45,15 +26,9 @@ import com.hartwig.serve.extraction.ExtractionFunctions;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.ImmutableExtractionResult;
 import com.hartwig.serve.extraction.codon.CodonAnnotation;
-import com.hartwig.serve.extraction.codon.CodonConsolidation;
 import com.hartwig.serve.extraction.codon.ImmutableCodonAnnotation;
-import com.hartwig.serve.extraction.copynumber.CopyNumberConsolidation;
 import com.hartwig.serve.extraction.events.EventInterpretation;
 import com.hartwig.serve.extraction.events.ImmutableEventInterpretation;
-import com.hartwig.serve.extraction.exon.ExonAnnotation;
-import com.hartwig.serve.extraction.exon.ExonConsolidation;
-import com.hartwig.serve.extraction.fusion.FusionConsolidation;
-import com.hartwig.serve.extraction.hotspot.HotspotConsolidation;
 import com.hartwig.serve.util.ProgressTracker;
 
 import org.apache.logging.log4j.LogManager;
@@ -175,12 +150,6 @@ public class CkbTrialExtractor {
         return ImmutableExtractionResult.builder()
                 .refGenomeVersion(Knowledgebase.CKB_EVIDENCE.refGenomeVersion())
                 .addEventInterpretations(interpretation)
-                .knownHotspots(convertToKnownHotspots(output.hotspots(), variant, transcript))
-                .knownCodons(convertToKnownCodons(codons))
-                .knownExons(convertToKnownExons(output.exons()))
-                .knownGenes(output.fusionPair() == null ? convertToKnownGenes(gene) : Collections.emptySet())
-                .knownCopyNumbers(convertToKnownAmpsDels(output.copyNumber()))
-                .knownFusions(convertToKnownFusions(output.fusionPair()))
                 .actionableHotspots(actionableHotspots)
                 .actionableCodons(actionableCodons)
                 .actionableExons(actionableExons)
@@ -212,111 +181,5 @@ public class CkbTrialExtractor {
             }
         }
         return curatedCodons;
-    }
-
-    @NotNull
-    private static Set<KnownHotspot> convertToKnownHotspots(@Nullable List<VariantHotspot> hotspots, @NotNull String variant,
-            @Nullable String transcript) {
-        Set<KnownHotspot> knownHotspots = Sets.newHashSet();
-
-        if (hotspots != null) {
-            CkbProteinAnnotationExtractor proteinExtractor = new CkbProteinAnnotationExtractor();
-            for (VariantHotspot hotspot : hotspots) {
-                knownHotspots.add(ImmutableKnownHotspot.builder()
-                        .from(hotspot)
-                        .geneRole(GeneRole.UNKNOWN)
-                        .proteinEffect(ProteinEffect.UNKNOWN)
-                        .addSources(Knowledgebase.CKB_EVIDENCE)
-                        .inputTranscript(transcript)
-                        .inputProteinAnnotation(proteinExtractor.apply(variant))
-                        .build());
-            }
-        }
-
-        return HotspotConsolidation.consolidate(knownHotspots);
-    }
-
-    @NotNull
-    private static Set<KnownCodon> convertToKnownCodons(@Nullable List<CodonAnnotation> codonAnnotations) {
-        Set<KnownCodon> codons = Sets.newHashSet();
-
-        if (codonAnnotations != null) {
-            for (CodonAnnotation codonAnnotation : codonAnnotations) {
-                codons.add(ImmutableKnownCodon.builder()
-                        .from(codonAnnotation)
-                        .geneRole(GeneRole.UNKNOWN)
-                        .proteinEffect(ProteinEffect.UNKNOWN)
-                        .inputTranscript(codonAnnotation.inputTranscript())
-                        .inputCodonRank(codonAnnotation.inputCodonRank())
-                        .addSources(Knowledgebase.CKB_EVIDENCE)
-                        .build());
-            }
-        }
-
-        return CodonConsolidation.consolidate(codons);
-    }
-
-    @NotNull
-    private static Set<KnownExon> convertToKnownExons(@Nullable List<ExonAnnotation> exonAnnotations) {
-        Set<KnownExon> exons = Sets.newHashSet();
-
-        if (exonAnnotations != null) {
-            for (ExonAnnotation exonAnnotation : exonAnnotations) {
-                exons.add(ImmutableKnownExon.builder()
-                        .from(exonAnnotation)
-                        .geneRole(GeneRole.UNKNOWN)
-                        .proteinEffect(ProteinEffect.UNKNOWN)
-                        .inputTranscript(exonAnnotation.inputTranscript())
-                        .inputExonRank(exonAnnotation.inputExonRank())
-                        .addSources(Knowledgebase.CKB_EVIDENCE)
-                        .build());
-            }
-        }
-
-        return ExonConsolidation.consolidate(exons);
-    }
-
-    @NotNull
-    private static Set<KnownGene> convertToKnownGenes(@NotNull String gene) {
-        if (!gene.equals(CkbConstants.NO_GENE)) {
-            return Set.of(ImmutableKnownGene.builder()
-                    .gene(gene)
-                    .geneRole(GeneRole.UNKNOWN)
-                    .addSources(Knowledgebase.CKB_EVIDENCE)
-                    .build());
-        }
-
-        return Collections.emptySet();
-    }
-
-    @NotNull
-    private static Set<KnownCopyNumber> convertToKnownAmpsDels(@Nullable GeneAnnotation copyNumber) {
-        Set<KnownCopyNumber> copyNumbers = Sets.newHashSet();
-
-        if (copyNumber != null) {
-            copyNumbers.add(ImmutableKnownCopyNumber.builder()
-                    .from(copyNumber)
-                    .geneRole(GeneRole.UNKNOWN)
-                    .proteinEffect(ProteinEffect.UNKNOWN)
-                    .addSources(Knowledgebase.CKB_EVIDENCE)
-                    .build());
-        }
-
-        return CopyNumberConsolidation.consolidate(copyNumbers);
-    }
-
-    @NotNull
-    private static Set<KnownFusion> convertToKnownFusions(@Nullable FusionPair fusion) {
-        Set<KnownFusion> fusions = Sets.newHashSet();
-
-        if (fusion != null) {
-            fusions.add(ImmutableKnownFusion.builder()
-                    .from(fusion)
-                    .proteinEffect(ProteinEffect.UNKNOWN)
-                    .addSources(Knowledgebase.CKB_EVIDENCE)
-                    .build());
-        }
-
-        return FusionConsolidation.consolidate(fusions);
     }
 }

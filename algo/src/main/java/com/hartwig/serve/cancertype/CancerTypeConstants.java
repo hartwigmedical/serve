@@ -12,7 +12,7 @@ public final class CancerTypeConstants {
     public static final String ADENOCARCINOMA_OF_UNKNOWN_PRIMARY = "299";
 
     // JAX defined some cancer types in a topology other than doid
-    public static final String JAX_ADVANCES_SOLID_TUMORS = "10000003";
+    public static final String JAX_ADVANCED_SOLID_TUMORS = "10000003";
     public static final String JAX_NOT_CANCER = "10000005";
     public static final String JAX_CANCER_OF_UNKNOWN_PRIMARY = "10000006";
     public static final String JAX_CARCINOMA_OF_UNKNOWN_PRIMARY = "10000007";

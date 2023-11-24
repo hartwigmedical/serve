@@ -30,7 +30,6 @@ class ActionableTrialFactory {
     private static final Set<String> USABLE_RECRUITMENT = Sets.newHashSet();
     private static final Set<String> USABLE_LOCATIONS = Sets.newHashSet();
     private static final Set<String> USABLE_REQUIREMENT_TYPE = Sets.newHashSet();
-    private static final Set<CancerType> blacklistedCancerTypes = Sets.newHashSet();
 
     static {
         USABLE_RECRUITMENT.add("Recruiting");
@@ -57,6 +56,13 @@ class ActionableTrialFactory {
 
                 if (doid != null) {
                     String cancerType = indication.name();
+
+                    Set<CancerType> blacklistedCancerTypes = Sets.newHashSet();
+                    if (doid.equals(CancerTypeConstants.CANCER_DOID)) {
+                        blacklistedCancerTypes.add(CancerTypeConstants.LEUKEMIA_TYPE);
+                        blacklistedCancerTypes.add(CancerTypeConstants.REFRACTORY_HEMATOLOGIC_TYPE);
+                        blacklistedCancerTypes.add(CancerTypeConstants.BONE_MARROW_TYPE);
+                    }
 
                     actionableTrials.add(ImmutableActionableTrial.builder()
                             .source(Knowledgebase.CKB_TRIAL)
@@ -112,10 +118,6 @@ class ActionableTrialFactory {
         } else if (source.equalsIgnoreCase("jax")) {
             switch (id) {
                 case CancerTypeConstants.JAX_ADVANCED_SOLID_TUMOR:
-                    blacklistedCancerTypes.add(CancerTypeConstants.LEUKEMIA_TYPE);
-                    blacklistedCancerTypes.add(CancerTypeConstants.REFRACTORY_HEMATOLOGIC_TYPE);
-                    blacklistedCancerTypes.add(CancerTypeConstants.BONE_MARROW_TYPE);
-                    return CancerTypeConstants.CANCER_DOID;
                 case CancerTypeConstants.JAX_CANCER_OF_UNKNOWN_PRIMARY:
                     return CancerTypeConstants.CANCER_DOID;
                 case CancerTypeConstants.JAX_CARCINOMA_OF_UNKNOWN_PRIMARY:

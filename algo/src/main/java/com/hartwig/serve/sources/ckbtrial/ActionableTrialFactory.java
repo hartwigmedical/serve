@@ -99,7 +99,7 @@ class ActionableTrialFactory {
             return id;
         } else if (source.equalsIgnoreCase("jax")) {
             switch (id) {
-                case CancerTypeConstants.JAX_ADVANCED_SOLID_TUMORS:
+                case CancerTypeConstants.JAX_ADVANCED_SOLID_TUMOR:
                 case CancerTypeConstants.JAX_CANCER_OF_UNKNOWN_PRIMARY:
                     return CancerTypeConstants.CANCER_DOID;
                 case CancerTypeConstants.JAX_CARCINOMA_OF_UNKNOWN_PRIMARY:

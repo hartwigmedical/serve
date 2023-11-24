@@ -22,7 +22,7 @@ public class IclusionExtractorTest {
     @Test
     public void canExtractFromIclusionEntries() {
         EventClassifierConfig config = IclusionClassificationConfig.build();
-        IclusionExtractor extractor = IclusionExtractorFactory.buildIclusionExtractor(config,
+        IclusionExtractor extractor = IclusionExtractorFactory.create(config,
                 RefGenomeResourceTestFactory.buildTestResource37(),
                 DoidLookupTestFactory.dummy());
 

@@ -14,7 +14,7 @@ public final class CkbEvidenceExtractorFactory {
     }
 
     @NotNull
-    public static CkbEvidenceExtractor buildCkbExtractor(@NotNull EventClassifierConfig config, @NotNull RefGenomeResource refGenomeResource,
+    public static CkbEvidenceExtractor create(@NotNull EventClassifierConfig config, @NotNull RefGenomeResource refGenomeResource,
             @NotNull TreatmentApproachCurator treatmentApproachCurator) {
         // We want to capture all events from CKB, so ignore driver inconsistencies
         return new CkbEvidenceExtractor(EventExtractorFactory.create(config, refGenomeResource, DriverInconsistencyMode.IGNORE),

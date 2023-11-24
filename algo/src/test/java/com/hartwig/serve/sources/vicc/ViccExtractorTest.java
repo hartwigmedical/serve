@@ -20,7 +20,7 @@ public class ViccExtractorTest {
     @Test
     public void canExtractFromViccEntries() {
         EventClassifierConfig config = ViccClassificationConfig.build();
-        ViccExtractor extractor = ViccExtractorFactory.buildViccExtractor(config,
+        ViccExtractor extractor = ViccExtractorFactory.create(config,
                 RefGenomeResourceTestFactory.buildTestResource37(),
                 DoidLookupTestFactory.dummy());
 

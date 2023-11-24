@@ -54,8 +54,7 @@ public class CkbEvidenceExtractorTestApp {
 
         RefGenomeResource refGenomeResource = buildRefGenomeResource(config);
         TreatmentApproachCurator curator = new TreatmentApproachCurator(TreatmentApproachCurationFile.read(config.ckbDrugCurationTsv()));
-        CkbEvidenceExtractor extractor =
-                CkbEvidenceExtractorFactory.buildCkbExtractor(CkbClassificationConfig.build(), refGenomeResource, curator);
+        CkbEvidenceExtractor extractor = CkbEvidenceExtractorFactory.create(CkbClassificationConfig.build(), refGenomeResource, curator);
 
         List<CkbEntry> entries = CkbReader.readAndCurate(config.ckbDir(), config.ckbFilterTsv());
 

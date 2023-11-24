@@ -124,7 +124,7 @@ public class ServeAlgo {
         EventClassifierConfig config = ViccClassificationConfig.build();
         // Assume all VICC sources share the same ref genome version
         RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.VICC_CIVIC);
-        ViccExtractor extractor = ViccExtractorFactory.buildViccExtractor(config, refGenomeResource, missingDoidLookup);
+        ViccExtractor extractor = ViccExtractorFactory.create(config, refGenomeResource, missingDoidLookup);
 
         LOGGER.info("Running VICC knowledge extraction");
         return extractor.extract(entries);
@@ -137,7 +137,7 @@ public class ServeAlgo {
 
         EventClassifierConfig config = IclusionClassificationConfig.build();
         RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.ICLUSION);
-        IclusionExtractor extractor = IclusionExtractorFactory.buildIclusionExtractor(config, refGenomeResource, missingDoidLookup);
+        IclusionExtractor extractor = IclusionExtractorFactory.create(config, refGenomeResource, missingDoidLookup);
 
         LOGGER.info("Running iClusion knowledge extraction");
         return extractor.extract(trials);
@@ -156,7 +156,7 @@ public class ServeAlgo {
 
         TreatmentApproachCurator curator = new TreatmentApproachCurator(treatmentApproachMap);
 
-        CkbEvidenceExtractor extractor = CkbEvidenceExtractorFactory.buildCkbExtractor(config, refGenomeResource, curator);
+        CkbEvidenceExtractor extractor = CkbEvidenceExtractorFactory.create(config, refGenomeResource, curator);
 
         LOGGER.info("Running CKB evidence knowledge extraction");
         return extractor.extract(ckbEntries);
@@ -167,9 +167,9 @@ public class ServeAlgo {
         List<CkbEntry> ckbEntries = CkbReader.readAndCurate(ckbDir, ckbFilterTsv);
 
         EventClassifierConfig config = CkbClassificationConfig.build();
-        RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.CKB_EVIDENCE);
+        RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.CKB_TRIAL);
 
-        CkbTrialExtractor extractor = CkbTrialExtractorFactory.buildCkbTrialsExtractor(config, refGenomeResource);
+        CkbTrialExtractor extractor = CkbTrialExtractorFactory.create(config, refGenomeResource);
 
         LOGGER.info("Running CKB trial knowledge extraction");
         return extractor.extract(ckbEntries);

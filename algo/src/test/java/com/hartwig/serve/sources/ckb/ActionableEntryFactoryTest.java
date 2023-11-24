@@ -39,7 +39,7 @@ public class ActionableEntryFactoryTest {
         assertEquals(1, entryCharacteristicsSet.size());
         ActionableEntry characteristics = entryCharacteristicsSet.iterator().next();
         assertEquals(Strings.EMPTY, characteristics.sourceEvent());
-        assertEquals(Knowledgebase.CKB, characteristics.source());
+        assertEquals(Knowledgebase.CKB_EVIDENCE, characteristics.source());
         assertEquals("AB", characteristics.treatment().name());
         assertEquals("AB", characteristics.applicableCancerType().name());
         assertEquals("162", characteristics.applicableCancerType().doid());
@@ -63,7 +63,7 @@ public class ActionableEntryFactoryTest {
         assertEquals(1, entryAmplificationSet.size());
         ActionableEntry amplification = entryAmplificationSet.iterator().next();
         assertEquals("KRAS", amplification.sourceEvent());
-        assertEquals(Knowledgebase.CKB, amplification.source());
+        assertEquals(Knowledgebase.CKB_EVIDENCE, amplification.source());
         assertEquals("AB", amplification.treatment().name());
         assertEquals("AB", amplification.applicableCancerType().name());
         assertEquals("163", amplification.applicableCancerType().doid());
@@ -78,7 +78,7 @@ public class ActionableEntryFactoryTest {
         assertEquals(1, entryHotspotSet.size());
         ActionableEntry hotspot = entryHotspotSet.iterator().next();
         assertEquals("BRAF", hotspot.sourceEvent());
-        assertEquals(Knowledgebase.CKB, hotspot.source());
+        assertEquals(Knowledgebase.CKB_EVIDENCE, hotspot.source());
         assertEquals("AB", hotspot.treatment().name());
         assertEquals("AB", hotspot.applicableCancerType().name());
         assertEquals("162", hotspot.applicableCancerType().doid());

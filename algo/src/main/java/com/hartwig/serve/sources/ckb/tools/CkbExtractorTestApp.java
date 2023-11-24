@@ -64,7 +64,7 @@ public class CkbExtractorTestApp {
         CkbUtil.writeEventsToTsv(eventsTsv, entries);
         CkbUtil.printExtractionResults(result);
 
-        new ExtractionResultWriter(config.outputDir(), Knowledgebase.CKB.refGenomeVersion(), refGenomeResource.refSequence()).write(result);
+        new ExtractionResultWriter(config.outputDir(), Knowledgebase.CKB_EVIDENCE.refGenomeVersion(), refGenomeResource.refSequence()).write(result);
     }
 
     @NotNull

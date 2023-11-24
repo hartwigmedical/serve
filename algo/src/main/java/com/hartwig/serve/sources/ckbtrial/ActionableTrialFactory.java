@@ -47,7 +47,7 @@ class ActionableTrialFactory {
                     }
 
                     actionableTrials.add(ImmutableActionableTrial.builder()
-                            .source(Knowledgebase.CKB)
+                            .source(Knowledgebase.CKB_TRIAL)
                             .sourceEvent(sourceEvent)
                             .sourceUrls(Sets.newHashSet("https://clinicaltrials.gov/study/" + trial.nctId()))
                             .treatment(ImmutableTreatment.builder().name(trial.nctId()).build())

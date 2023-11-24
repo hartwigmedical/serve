@@ -34,7 +34,11 @@ import com.hartwig.serve.datamodel.hotspot.ImmutableKnownHotspot;
 import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
 import com.hartwig.serve.datamodel.immuno.ActionableHLA;
-import com.hartwig.serve.datamodel.range.*;
+import com.hartwig.serve.datamodel.range.ActionableRange;
+import com.hartwig.serve.datamodel.range.ImmutableKnownCodon;
+import com.hartwig.serve.datamodel.range.ImmutableKnownExon;
+import com.hartwig.serve.datamodel.range.KnownCodon;
+import com.hartwig.serve.datamodel.range.KnownExon;
 import com.hartwig.serve.extraction.ActionableEventFactory;
 import com.hartwig.serve.extraction.EventExtractor;
 import com.hartwig.serve.extraction.EventExtractorOutput;
@@ -105,7 +109,7 @@ public class CkbExtractor {
                         ActionableEntryFactory.toActionableEntries(entry, sourceEvent, treatmentApproachCurator, gene, entry.type());
 
                 EventInterpretation interpretation = ImmutableEventInterpretation.builder()
-                        .source(Knowledgebase.CKB)
+                        .source(Knowledgebase.CKB_EVIDENCE)
                         .sourceEvent(sourceEvent)
                         .interpretedGene(gene)
                         .interpretedEvent(event)
@@ -176,7 +180,7 @@ public class CkbExtractor {
         }
 
         return ImmutableExtractionResult.builder()
-                .refGenomeVersion(Knowledgebase.CKB.refGenomeVersion())
+                .refGenomeVersion(Knowledgebase.CKB_EVIDENCE.refGenomeVersion())
                 .addEventInterpretations(interpretation)
                 .knownHotspots(convertToKnownHotspots(output.hotspots(), variant, transcript))
                 .knownCodons(convertToKnownCodons(codons))
@@ -229,7 +233,7 @@ public class CkbExtractor {
                         .from(hotspot)
                         .geneRole(GeneRole.UNKNOWN)
                         .proteinEffect(ProteinEffect.UNKNOWN)
-                        .addSources(Knowledgebase.CKB)
+                        .addSources(Knowledgebase.CKB_EVIDENCE)
                         .inputTranscript(transcript)
                         .inputProteinAnnotation(proteinExtractor.apply(variant))
                         .build());
@@ -251,7 +255,7 @@ public class CkbExtractor {
                         .proteinEffect(ProteinEffect.UNKNOWN)
                         .inputTranscript(codonAnnotation.inputTranscript())
                         .inputCodonRank(codonAnnotation.inputCodonRank())
-                        .addSources(Knowledgebase.CKB)
+                        .addSources(Knowledgebase.CKB_EVIDENCE)
                         .build());
             }
         }
@@ -271,7 +275,7 @@ public class CkbExtractor {
                         .proteinEffect(ProteinEffect.UNKNOWN)
                         .inputTranscript(exonAnnotation.inputTranscript())
                         .inputExonRank(exonAnnotation.inputExonRank())
-                        .addSources(Knowledgebase.CKB)
+                        .addSources(Knowledgebase.CKB_EVIDENCE)
                         .build());
             }
         }
@@ -285,7 +289,7 @@ public class CkbExtractor {
             return Set.of(ImmutableKnownGene.builder()
                     .gene(gene)
                     .geneRole(GeneRole.UNKNOWN)
-                    .addSources(Knowledgebase.CKB)
+                    .addSources(Knowledgebase.CKB_EVIDENCE)
                     .build());
         }
 
@@ -301,7 +305,7 @@ public class CkbExtractor {
                     .from(copyNumber)
                     .geneRole(GeneRole.UNKNOWN)
                     .proteinEffect(ProteinEffect.UNKNOWN)
-                    .addSources(Knowledgebase.CKB)
+                    .addSources(Knowledgebase.CKB_EVIDENCE)
                     .build());
         }
 
@@ -316,7 +320,7 @@ public class CkbExtractor {
             fusions.add(ImmutableKnownFusion.builder()
                     .from(fusion)
                     .proteinEffect(ProteinEffect.UNKNOWN)
-                    .addSources(Knowledgebase.CKB)
+                    .addSources(Knowledgebase.CKB_EVIDENCE)
                     .build());
         }
 

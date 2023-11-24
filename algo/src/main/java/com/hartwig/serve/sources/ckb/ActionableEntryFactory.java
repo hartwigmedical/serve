@@ -8,7 +8,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.cancertype.CancerTypeConstants;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
-import com.hartwig.serve.ckb.datamodel.drug.Drug;
 import com.hartwig.serve.ckb.datamodel.drug.DrugClass;
 import com.hartwig.serve.ckb.datamodel.evidence.Evidence;
 import com.hartwig.serve.ckb.datamodel.reference.Reference;
@@ -130,7 +129,7 @@ class ActionableEntryFactory {
                 Set<String> curatedRelevantTreatmentApproaches = Sets.newHashSet(curator.isMatch(key));
 
                 actionableEntries.add(ImmutableActionableEntry.builder()
-                        .source(Knowledgebase.CKB)
+                        .source(Knowledgebase.CKB_EVIDENCE)
                         .sourceEvent(sourceEvent)
                         .sourceUrls(sourceUrls)
                         .treatment(ImmutableTreatment.builder()

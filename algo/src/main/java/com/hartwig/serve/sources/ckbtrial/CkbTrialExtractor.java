@@ -104,7 +104,7 @@ public class CkbTrialExtractor {
                         ActionableTrialFactory.toActionableTrials(entry, sourceEvent);
 
                 EventInterpretation interpretation = ImmutableEventInterpretation.builder()
-                        .source(Knowledgebase.CKB)
+                        .source(Knowledgebase.CKB_TRIAL)
                         .sourceEvent(sourceEvent)
                         .interpretedGene(gene)
                         .interpretedEvent(event)
@@ -173,7 +173,7 @@ public class CkbTrialExtractor {
         }
 
         return ImmutableExtractionResult.builder()
-                .refGenomeVersion(Knowledgebase.CKB.refGenomeVersion())
+                .refGenomeVersion(Knowledgebase.CKB_EVIDENCE.refGenomeVersion())
                 .addEventInterpretations(interpretation)
                 .knownHotspots(convertToKnownHotspots(output.hotspots(), variant, transcript))
                 .knownCodons(convertToKnownCodons(codons))
@@ -226,7 +226,7 @@ public class CkbTrialExtractor {
                         .from(hotspot)
                         .geneRole(GeneRole.UNKNOWN)
                         .proteinEffect(ProteinEffect.UNKNOWN)
-                        .addSources(Knowledgebase.CKB)
+                        .addSources(Knowledgebase.CKB_EVIDENCE)
                         .inputTranscript(transcript)
                         .inputProteinAnnotation(proteinExtractor.apply(variant))
                         .build());
@@ -248,7 +248,7 @@ public class CkbTrialExtractor {
                         .proteinEffect(ProteinEffect.UNKNOWN)
                         .inputTranscript(codonAnnotation.inputTranscript())
                         .inputCodonRank(codonAnnotation.inputCodonRank())
-                        .addSources(Knowledgebase.CKB)
+                        .addSources(Knowledgebase.CKB_EVIDENCE)
                         .build());
             }
         }
@@ -268,7 +268,7 @@ public class CkbTrialExtractor {
                         .proteinEffect(ProteinEffect.UNKNOWN)
                         .inputTranscript(exonAnnotation.inputTranscript())
                         .inputExonRank(exonAnnotation.inputExonRank())
-                        .addSources(Knowledgebase.CKB)
+                        .addSources(Knowledgebase.CKB_EVIDENCE)
                         .build());
             }
         }
@@ -282,7 +282,7 @@ public class CkbTrialExtractor {
             return Set.of(ImmutableKnownGene.builder()
                     .gene(gene)
                     .geneRole(GeneRole.UNKNOWN)
-                    .addSources(Knowledgebase.CKB)
+                    .addSources(Knowledgebase.CKB_EVIDENCE)
                     .build());
         }
 
@@ -298,7 +298,7 @@ public class CkbTrialExtractor {
                     .from(copyNumber)
                     .geneRole(GeneRole.UNKNOWN)
                     .proteinEffect(ProteinEffect.UNKNOWN)
-                    .addSources(Knowledgebase.CKB)
+                    .addSources(Knowledgebase.CKB_EVIDENCE)
                     .build());
         }
 
@@ -313,7 +313,7 @@ public class CkbTrialExtractor {
             fusions.add(ImmutableKnownFusion.builder()
                     .from(fusion)
                     .proteinEffect(ProteinEffect.UNKNOWN)
-                    .addSources(Knowledgebase.CKB)
+                    .addSources(Knowledgebase.CKB_EVIDENCE)
                     .build());
         }
 

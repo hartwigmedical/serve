@@ -45,7 +45,7 @@ public final class CkbTrialTestFactory {
     }
 
     @NotNull
-    public static ClinicalTrial trialWithRequirementTypeAndCountryAndRecruitment(@NotNull String therapyName, @NotNull String indicationName, @NotNull String termId) {
+    public static ClinicalTrial trialWithTherapyNameIndicationNameAndTermId(@NotNull String therapyName, @NotNull String indicationName, @NotNull String termId) {
         return createTrial(therapyName, "Recruiting", indicationName, termId, Lists.newArrayList(
                 ImmutableVariantRequirementDetail.builder().profileId(0).requirementType("required").build()), Lists.newArrayList(
                 ImmutableLocation.builder().nctId("").city("").country("Netherlands").build()));
@@ -79,12 +79,12 @@ public final class CkbTrialTestFactory {
                 .profileName(Strings.EMPTY)
                 .addVariants(createVariant(geneSymbol, variant, fullName))
                 .addEvidences(createEvidence(responseType, evidenceType, therapyName, indicationName, level, termId))
-                .clinicalTrials(List.of(trialWithRequirementTypeAndCountryAndRecruitment(therapyName, indicationName, termId)))
+                .clinicalTrials(List.of(trialWithTherapyNameIndicationNameAndTermId(therapyName, indicationName, termId)))
                 .build();
     }
 
     @NotNull
-    private static Variant createVariant(@NotNull String geneSymbol, @NotNull String variant, @NotNull String fullName) {
+    static Variant createVariant(@NotNull String geneSymbol, @NotNull String variant, @NotNull String fullName) {
         return ImmutableVariant.builder()
                 .id(0)
                 .createDate(TEST_DATE)
@@ -97,7 +97,7 @@ public final class CkbTrialTestFactory {
     }
 
     @NotNull
-    private static Evidence createEvidence(@NotNull String responseType, @NotNull String evidenceType, @NotNull String therapyName,
+    static Evidence createEvidence(@NotNull String responseType, @NotNull String evidenceType, @NotNull String therapyName,
             @NotNull String indicationName, @NotNull String level, @NotNull String termId) {
         return ImmutableEvidence.builder()
                 .id(0)
@@ -115,7 +115,7 @@ public final class CkbTrialTestFactory {
     }
 
     @NotNull
-    private static Therapy createTherapy(@NotNull String therapyName) {
+    static Therapy createTherapy(@NotNull String therapyName) {
         return ImmutableTherapy.builder()
                 .id(0)
                 .createDate(TEST_DATE)
@@ -130,7 +130,7 @@ public final class CkbTrialTestFactory {
     }
 
     @NotNull
-    private static Indication createIndication(@NotNull String name, @NotNull String termId) {
+    static Indication createIndication(@NotNull String name, @NotNull String termId) {
         return ImmutableIndication.builder()
                 .id(0)
                 .name(name)
@@ -144,7 +144,7 @@ public final class CkbTrialTestFactory {
     }
 
     @NotNull
-    private static Gene createGene(@NotNull String geneSymbol) {
+    static Gene createGene(@NotNull String geneSymbol) {
         return ImmutableGene.builder()
                 .id(0)
                 .createDate(TEST_DATE)

@@ -1,4 +1,4 @@
-package com.hartwig.serve.sources.ckbtrial;
+package com.hartwig.serve.sources.ckb;
 
 import java.util.List;
 import java.util.Set;

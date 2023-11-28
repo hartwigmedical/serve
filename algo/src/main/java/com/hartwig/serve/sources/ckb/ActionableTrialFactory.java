@@ -1,4 +1,4 @@
-package com.hartwig.serve.sources.ckbtrial;
+package com.hartwig.serve.sources.ckb;
 
 import java.util.List;
 import java.util.Set;
@@ -160,7 +160,7 @@ class ActionableTrialFactory {
             CkbEntry entry) {
         List<ClinicalTrial> filtered = Lists.newArrayList();
         for (ClinicalTrial trial : trials) {
-            if (hasCountryToIncludeWithPotentiallyOpenRecruitmentType(trial.locations())
+            if (hasCountryToIncludeWithPotentiallyOpenRecruitmentType(trial)
                     && hasVariantRequirementTypeToInclude(trial.variantRequirementDetails(), entry)) {
                 filtered.add(trial);
             }
@@ -169,9 +169,9 @@ class ActionableTrialFactory {
     }
 
     @VisibleForTesting
-    static boolean hasCountryToIncludeWithPotentiallyOpenRecruitmentType(@NotNull List<Location> locations) {
-        for (Location location : locations) {
-            if (COUNTRIES_TO_INCLUDE.contains(location.country()) && (POTENTIALLY_OPEN_RECRUITMENT_TYPES.contains(location.status()) || location.status() == null)) {
+    static boolean hasCountryToIncludeWithPotentiallyOpenRecruitmentType(ClinicalTrial trial) {
+        for (Location location : trial.locations()) {
+            if (COUNTRIES_TO_INCLUDE.contains(location.country()) && POTENTIALLY_OPEN_RECRUITMENT_TYPES.contains(trial.recruitment()) && (POTENTIALLY_OPEN_RECRUITMENT_TYPES.contains(location.status()) || location.status() == null)) {
                 return true;
             }
         }

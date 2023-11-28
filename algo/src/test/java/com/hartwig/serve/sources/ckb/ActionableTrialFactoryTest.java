@@ -1,4 +1,4 @@
-package com.hartwig.serve.sources.ckbtrial;
+package com.hartwig.serve.sources.ckb;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -84,10 +84,10 @@ public class ActionableTrialFactoryTest {
 
     @Test
     public void canExtractCancerTypeDetails() {
-        assertNull(com.hartwig.serve.sources.ckbtrial.ActionableTrialFactory.extractCancerTypeDetails(CkbTrialTestFactory.createIndication( "test", "JAX:not a doid")));
+        assertNull(ActionableTrialFactory.extractCancerTypeDetails(CkbTrialTestFactory.createIndication( "test", "JAX:not a doid")));
 
         assertEquals("0060463",
-                com.hartwig.serve.sources.ckbtrial.ActionableTrialFactory.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "DOID:0060463")).applicableCancerType().doid());
+                ActionableTrialFactory.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "DOID:0060463")).applicableCancerType().doid());
         assertEquals(CancerTypeConstants.CANCER_DOID,
                 ActionableTrialFactory.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "JAX:10000003" )).applicableCancerType().doid());
         assertEquals(CancerTypeConstants.SQUAMOUS_CELL_CARCINOMA_OF_UNKNOWN_PRIMARY,
@@ -128,11 +128,11 @@ public class ActionableTrialFactoryTest {
 
     @Test
     public void canDetermineIfHasCountryToIncludeWithPotentiallyOpenRecruitmentType() {
-        ClinicalTrial notOpenDutchTrial = CkbTrialTestFactory.trialWithCountry(Lists.newArrayList(ImmutableLocation.builder().nctId("").city("").country("Netherlands").status("Not yet recruiting").build()));
-        ClinicalTrial OpenDutchTrial = CkbTrialTestFactory.trialWithCountry(Lists.newArrayList(ImmutableLocation.builder().nctId("").city("").country("Netherlands").status("Recruiting").build()));
-        ClinicalTrial americanTrial = CkbTrialTestFactory.trialWithCountry(Lists.newArrayList(ImmutableLocation.builder().nctId("").city("").country("United States").status("Recruiting").build()));
-        assertFalse(ActionableTrialFactory.hasCountryToIncludeWithPotentiallyOpenRecruitmentType(notOpenDutchTrial.locations()));
-        assertTrue(ActionableTrialFactory.hasCountryToIncludeWithPotentiallyOpenRecruitmentType(OpenDutchTrial.locations()));
-        assertFalse(ActionableTrialFactory.hasCountryToIncludeWithPotentiallyOpenRecruitmentType(americanTrial.locations()));
+        ClinicalTrial notOpenDutchTrial = CkbTrialTestFactory.trialWithCountryAndRecruitmentType(Lists.newArrayList(ImmutableLocation.builder().nctId("").city("").country("Netherlands").status("Not yet recruiting").build()), "Recruiting");
+        ClinicalTrial OpenDutchTrial = CkbTrialTestFactory.trialWithCountryAndRecruitmentType(Lists.newArrayList(ImmutableLocation.builder().nctId("").city("").country("Netherlands").status("Recruiting").build()), "Recruiting");
+        ClinicalTrial americanTrial = CkbTrialTestFactory.trialWithCountryAndRecruitmentType(Lists.newArrayList(ImmutableLocation.builder().nctId("").city("").country("United States").status("Recruiting").build()), "Recruiting");
+        assertFalse(ActionableTrialFactory.hasCountryToIncludeWithPotentiallyOpenRecruitmentType(notOpenDutchTrial));
+        assertTrue(ActionableTrialFactory.hasCountryToIncludeWithPotentiallyOpenRecruitmentType(OpenDutchTrial));
+        assertFalse(ActionableTrialFactory.hasCountryToIncludeWithPotentiallyOpenRecruitmentType(americanTrial));
     }
 }

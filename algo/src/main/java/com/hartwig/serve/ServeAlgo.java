@@ -26,8 +26,8 @@ import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCuration
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurationEntryKey;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurationFile;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurator;
-import com.hartwig.serve.sources.ckbtrial.CkbTrialExtractor;
-import com.hartwig.serve.sources.ckbtrial.CkbTrialExtractorFactory;
+import com.hartwig.serve.sources.ckb.CkbTrialExtractor;
+import com.hartwig.serve.sources.ckb.CkbTrialExtractorFactory;
 import com.hartwig.serve.sources.docm.DocmEntry;
 import com.hartwig.serve.sources.docm.DocmExtractor;
 import com.hartwig.serve.sources.docm.DocmReader;

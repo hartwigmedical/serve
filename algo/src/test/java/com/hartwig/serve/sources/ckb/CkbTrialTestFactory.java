@@ -1,4 +1,4 @@
-package com.hartwig.serve.sources.ckbtrial;
+package com.hartwig.serve.sources.ckb;
 
 import java.time.LocalDate;
 
@@ -35,8 +35,8 @@ public final class CkbTrialTestFactory {
     }
 
     @NotNull
-    public static ClinicalTrial trialWithCountry(@NotNull List<Location> locations) {
-        return createTrial(Strings.EMPTY, Strings.EMPTY, Strings.EMPTY, Strings.EMPTY, Lists.newArrayList(), locations);
+    public static ClinicalTrial trialWithCountryAndRecruitmentType(@NotNull List<Location> locations, String recruitmentType) {
+        return createTrial(Strings.EMPTY, recruitmentType, Strings.EMPTY, Strings.EMPTY, Lists.newArrayList(), locations);
     }
 
     @NotNull

@@ -1,4 +1,4 @@
-package com.hartwig.serve.sources.ckbtrial;
+package com.hartwig.serve.sources.ckb;
 
 import static org.junit.Assert.assertEquals;
 
@@ -13,8 +13,6 @@ import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.codon.CodonAnnotation;
 import com.hartwig.serve.extraction.codon.ImmutableCodonAnnotation;
 import com.hartwig.serve.refgenome.RefGenomeResourceTestFactory;
-import com.hartwig.serve.sources.ckb.CkbEvidenceExtractor;
-import com.hartwig.serve.sources.ckb.CkbEvidenceExtractorFactory;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachTestFactory;
 
 import org.apache.commons.compress.utils.Lists;

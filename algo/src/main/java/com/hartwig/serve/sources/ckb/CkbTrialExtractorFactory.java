@@ -1,4 +1,4 @@
-package com.hartwig.serve.sources.ckbtrial;
+package com.hartwig.serve.sources.ckb;
 
 import com.hartwig.serve.common.classification.EventClassifierConfig;
 import com.hartwig.serve.extraction.EventExtractorFactory;

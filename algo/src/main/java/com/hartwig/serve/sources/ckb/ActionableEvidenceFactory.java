@@ -10,6 +10,7 @@ import com.hartwig.serve.cancertype.CancerTypeConstants;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.ckb.datamodel.drug.DrugClass;
 import com.hartwig.serve.ckb.datamodel.evidence.Evidence;
+import com.hartwig.serve.ckb.datamodel.indication.Indication;
 import com.hartwig.serve.ckb.datamodel.reference.Reference;
 import com.hartwig.serve.ckb.datamodel.treatmentapproaches.RelevantTreatmentApproaches;
 import com.hartwig.serve.common.classification.EventType;
@@ -74,12 +75,10 @@ class ActionableEvidenceFactory {
         for (Evidence evidence : evidencesWithUsableType(entry.evidences())) {
             EvidenceLevel level = resolveLevel(evidence.ampCapAscoEvidenceLevel());
             EvidenceDirection direction = resolveDirection(evidence.responseType());
-            String[] sourceCancerTypes = extractSourceCancerTypeId(evidence.indication().termId());
-            String doid = extractAndCurateDoid(sourceCancerTypes);
+            CancerTypeExtraction cancerTypeExtraction = extractCancerTypeDetails(evidence.indication());
 
-            if (level != null && direction != null && doid != null) {
+            if (level != null && direction != null && cancerTypeExtraction != null) {
                 String treatment = evidence.therapy().therapyName();
-                String cancerType = evidence.indication().name();
 
                 Set<String> evidenceUrls = Sets.newHashSet();
                 for (Reference reference : evidence.references()) {
@@ -90,13 +89,6 @@ class ActionableEvidenceFactory {
 
                 Set<String> sourceUrls = Sets.newHashSet();
                 sourceUrls.add("https://ckbhome.jax.org/profileResponse/advancedEvidenceFind?molecularProfileId=" + entry.profileId());
-
-                Set<CancerType> blacklistedCancerTypes = Sets.newHashSet();
-                if (doid.equals(CancerTypeConstants.CANCER_DOID)) {
-                    blacklistedCancerTypes.add(CancerTypeConstants.LEUKEMIA_TYPE);
-                    blacklistedCancerTypes.add(CancerTypeConstants.REFRACTORY_HEMATOLOGIC_TYPE);
-                    blacklistedCancerTypes.add(CancerTypeConstants.BONE_MARROW_TYPE);
-                }
 
                 Set<String> sourceRelevantTreatmentApproaches = Sets.newHashSet();
                 for (RelevantTreatmentApproaches relevantTreatmentApproaches : evidence.relevantTreatmentApproaches()) {
@@ -137,8 +129,8 @@ class ActionableEvidenceFactory {
                                 .sourceRelevantTreatmentApproaches(sourceRelevantTreatmentApproaches)
                                 .relevantTreatmentApproaches(curatedRelevantTreatmentApproaches)
                                 .build())
-                        .applicableCancerType(ImmutableCancerType.builder().name(cancerType).doid(doid).build())
-                        .blacklistCancerTypes(blacklistedCancerTypes)
+                        .applicableCancerType(cancerTypeExtraction.applicableCancerType())
+                        .blacklistCancerTypes(cancerTypeExtraction.blacklistedCancerTypes())
                         .level(level)
                         .direction(direction)
                         .evidenceUrls(evidenceUrls)
@@ -238,37 +230,82 @@ class ActionableEvidenceFactory {
 
     @Nullable
     @VisibleForTesting
-    static String extractAndCurateDoid(@Nullable String[] doidString) {
-        if (doidString == null) {
+    static CancerTypeExtraction extractCancerTypeDetails(@NotNull Indication indication) {
+        String[] sourceCancerTypeDetails = extractSourceCancerTypeId(indication.termId());
+
+        if (sourceCancerTypeDetails == null) {
             return null;
         }
 
-        assert doidString.length == 2;
-        String source = doidString[0];
-        String id = doidString[1];
+        ImmutableCancerType.Builder applicableCancerTypeBuilder = ImmutableCancerType.builder().name(indication.name());
+        Set<CancerType> blacklistedCancerTypes = Sets.newHashSet();
+
+        assert sourceCancerTypeDetails.length == 2;
+        String source = sourceCancerTypeDetails[0];
+        String id = sourceCancerTypeDetails[1];
         if (source.equalsIgnoreCase("doid")) {
-            return id;
+            applicableCancerTypeBuilder.doid(id);
         } else if (source.equalsIgnoreCase("jax")) {
             switch (id) {
-                case CancerTypeConstants.JAX_ADVANCED_SOLID_TUMOR:
-                case CancerTypeConstants.JAX_CANCER_OF_UNKNOWN_PRIMARY:
-                    return CancerTypeConstants.CANCER_DOID;
-                case CancerTypeConstants.JAX_CARCINOMA_OF_UNKNOWN_PRIMARY:
-                    return CancerTypeConstants.CARCINOMA_OF_UNKNOWN_PRIMARY;
-                case CancerTypeConstants.JAX_ADENOCARCINOMA_OF_UNKNOWN_PRIMARY:
-                    return CancerTypeConstants.ADENOCARCINOMA_OF_UNKNOWN_PRIMARY;
-                case CancerTypeConstants.JAX_SQUAMOUS_CELL_CARCINOMA_OF_UNKNOWN_PRIMARY:
-                    return CancerTypeConstants.SQUAMOUS_CELL_CARCINOMA_OF_UNKNOWN_PRIMARY;
-                default:
+                case CancerTypeConstants.JAX_ADVANCED_SOLID_TUMOR: {
+                    applicableCancerTypeBuilder.doid(CancerTypeConstants.CANCER_DOID);
+                    blacklistedCancerTypes.add(CancerTypeConstants.LEUKEMIA_TYPE);
+                    blacklistedCancerTypes.add(CancerTypeConstants.REFRACTORY_HEMATOLOGIC_TYPE);
+                    blacklistedCancerTypes.add(CancerTypeConstants.BONE_MARROW_TYPE);
+                    break;
+                }
+                case CancerTypeConstants.JAX_CANCER_OF_UNKNOWN_PRIMARY: {
+                    applicableCancerTypeBuilder.doid(CancerTypeConstants.CANCER_DOID);
+                    break;
+                }
+                case CancerTypeConstants.JAX_CARCINOMA_OF_UNKNOWN_PRIMARY: {
+                    applicableCancerTypeBuilder.doid(CancerTypeConstants.CARCINOMA_OF_UNKNOWN_PRIMARY);
+                    break;
+                }
+                case CancerTypeConstants.JAX_ADENOCARCINOMA_OF_UNKNOWN_PRIMARY: {
+                    applicableCancerTypeBuilder.doid(CancerTypeConstants.ADENOCARCINOMA_OF_UNKNOWN_PRIMARY);
+                    break;
+                }
+                case CancerTypeConstants.JAX_SQUAMOUS_CELL_CARCINOMA_OF_UNKNOWN_PRIMARY: {
+                    applicableCancerTypeBuilder.doid(CancerTypeConstants.SQUAMOUS_CELL_CARCINOMA_OF_UNKNOWN_PRIMARY);
+                    break;
+                }
+                default: {
                     // CKB uses 10000005 for configuring "Not a cancer". We can ignore these.
                     if (!id.equals(CancerTypeConstants.JAX_NOT_CANCER)) {
                         LOGGER.warn("Unexpected DOID string annotated by CKB: '{}'", source + ":" + id);
                     }
                     return null;
+                }
             }
         } else {
             LOGGER.warn("Unexpected source '{}'", source);
             return null;
+        }
+
+        return new CancerTypeExtraction(applicableCancerTypeBuilder.build(), blacklistedCancerTypes);
+    }
+
+    static class CancerTypeExtraction {
+
+        @NotNull
+        private final CancerType applicableCancerType;
+        @NotNull
+        private final Set<CancerType> blacklistedCancerTypes;
+
+        public CancerTypeExtraction(@NotNull CancerType applicableCancerType, @NotNull Set<CancerType> blacklistedCancerTypes) {
+            this.applicableCancerType = applicableCancerType;
+            this.blacklistedCancerTypes = blacklistedCancerTypes;
+        }
+
+        @NotNull
+        public CancerType applicableCancerType() {
+            return applicableCancerType;
+        }
+
+        @NotNull
+        public Set<CancerType> blacklistedCancerTypes() {
+            return blacklistedCancerTypes;
         }
     }
 }

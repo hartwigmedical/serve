@@ -87,35 +87,35 @@ public class ActionableEvidenceFactoryTest {
 
     @Test
     public void canExtractCancerTypeDetails() {
-        assertNull(ActionableTrialFactory.extractCancerTypeDetails(CkbTrialTestFactory.createIndication( "test", "JAX:not a doid")));
+        assertNull(ActionableFunctions.extractCancerTypeDetails(CkbTrialTestFactory.createIndication( "test", "JAX:not a doid")));
 
         assertEquals("0060463",
-                ActionableTrialFactory.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "DOID:0060463")).applicableCancerType().doid());
+                ActionableFunctions.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "DOID:0060463")).applicableCancerType().doid());
         assertEquals(CancerTypeConstants.CANCER_DOID,
-                ActionableTrialFactory.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "JAX:10000003" )).applicableCancerType().doid());
+                ActionableFunctions.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "JAX:10000003" )).applicableCancerType().doid());
         assertEquals(CancerTypeConstants.SQUAMOUS_CELL_CARCINOMA_OF_UNKNOWN_PRIMARY,
-                ActionableTrialFactory.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "JAX:10000009")).applicableCancerType().doid());
+                ActionableFunctions.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "JAX:10000009")).applicableCancerType().doid());
         assertEquals(CancerTypeConstants.ADENOCARCINOMA_OF_UNKNOWN_PRIMARY,
-                ActionableTrialFactory.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "JAX:10000008")).applicableCancerType().doid());
-        assertNull(ActionableTrialFactory.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "JAX:10000004")));
+                ActionableFunctions.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "JAX:10000008")).applicableCancerType().doid());
+        assertNull(ActionableFunctions.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "JAX:10000004")));
 
         assertEquals(Sets.newHashSet(CancerTypeConstants.REFRACTORY_HEMATOLOGIC_TYPE,
                         CancerTypeConstants.BONE_MARROW_TYPE,
                         CancerTypeConstants.LEUKEMIA_TYPE),
-                ActionableTrialFactory.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "JAX:10000003" )).blacklistedCancerTypes());
+                ActionableFunctions.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "JAX:10000003" )).blacklistedCancerTypes());
         assertEquals(Sets.newHashSet(),
-                ActionableTrialFactory.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "JAX:10000009")).blacklistedCancerTypes());
+                ActionableFunctions.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "JAX:10000009")).blacklistedCancerTypes());
 
     }
 
     @Test
     public void canExtractSourceCancerTypeID() {
-        assertNull(ActionableEvidenceFactory.extractSourceCancerTypeId(null));
-        assertNull(ActionableEvidenceFactory.extractSourceCancerTypeId("not a doid"));
+        assertNull(ActionableFunctions.extractSourceCancerTypeId(null));
+        assertNull(ActionableFunctions.extractSourceCancerTypeId("not a doid"));
 
-        assertNotNull(ActionableEvidenceFactory.extractSourceCancerTypeId("DOID:0060463"));
-        assertEquals("0060463", ActionableEvidenceFactory.extractSourceCancerTypeId("DOID:0060463")[1]);
-        assertEquals("10000003", ActionableEvidenceFactory.extractSourceCancerTypeId("JAX:10000003")[1]);
+        assertNotNull(ActionableFunctions.extractSourceCancerTypeId("DOID:0060463"));
+        assertEquals("0060463", ActionableFunctions.extractSourceCancerTypeId("DOID:0060463")[1]);
+        assertEquals("10000003", ActionableFunctions.extractSourceCancerTypeId("JAX:10000003")[1]);
     }
 
     @Test

@@ -16,13 +16,10 @@ import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.ImmutableTreatment;
 import com.hartwig.serve.datamodel.Knowledgebase;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 class ActionableTrialFactory {
 
-    private static final Logger LOGGER = LogManager.getLogger(ActionableTrialFactory.class);
     private static final Set<String> POTENTIALLY_OPEN_RECRUITMENT_TYPES = Sets.newHashSet();
     private static final Set<String> COUNTRIES_TO_INCLUDE = Sets.newHashSet();
     private static final Set<String> VARIANT_REQUIREMENT_TYPES_TO_INCLUDE = Sets.newHashSet();
@@ -44,8 +41,8 @@ class ActionableTrialFactory {
     }
 
     @NotNull
-    public static Set<ActionableTrial> toActionableTrials(@NotNull CkbEntry entry, @NotNull String sourceEvent) {
-        Set<ActionableTrial> actionableTrials = Sets.newHashSet();
+    public static Set<ActionableEntry> toActionableTrials(@NotNull CkbEntry entry, @NotNull String sourceEvent) {
+        Set<ActionableEntry> actionableTrials = Sets.newHashSet();
 
         for (ClinicalTrial trial : trialsToInclude(entry.clinicalTrials(), entry)) {
             for (Indication indication : trial.indications()) {
@@ -54,7 +51,7 @@ class ActionableTrialFactory {
                 if (cancerTypeExtraction != null) {
                     Set<String> countries = trialsWithCountriesToInclude(trial);
 
-                    actionableTrials.add(ImmutableActionableTrial.builder()
+                    actionableTrials.add(ImmutableActionableEntry.builder()
                             .source(Knowledgebase.CKB_TRIAL)
                             .sourceEvent(sourceEvent)
                             .sourceUrls(Sets.newHashSet("https://clinicaltrials.gov/study/" + trial.nctId()))

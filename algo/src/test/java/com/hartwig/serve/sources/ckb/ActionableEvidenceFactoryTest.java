@@ -28,16 +28,19 @@ public class ActionableEvidenceFactoryTest {
 
         CkbEntry entryDeletion =
                 CkbTestFactory.createEntry("KRAS", "deletion", "KRAS deletion", "sensitive", "Emerging", "AB", "AB", "A", "DOID:162");
-        Set<ActionableEvidence> entryDeletionSet =
+        Set<ActionableEntry> entryDeletionSet =
                 ActionableEvidenceFactory.toActionableEvidence(entryDeletion, "KRAS", curator, "gene", entryDeletion.type());
         assertEquals(0, entryDeletionSet.size());
 
         CkbEntry entryCharacteristics =
                 CkbTestFactory.createEntry("-", "MSI neg", "MSI neg", "sensitive", "Actionable", "AB", "AB", "A", "DOID:162");
-        Set<ActionableEvidence> entryCharacteristicsSet =
-                ActionableEvidenceFactory.toActionableEvidence(entryCharacteristics, Strings.EMPTY, curator, "-", entryCharacteristics.type());
+        Set<ActionableEntry> entryCharacteristicsSet = ActionableEvidenceFactory.toActionableEvidence(entryCharacteristics,
+                Strings.EMPTY,
+                curator,
+                "-",
+                entryCharacteristics.type());
         assertEquals(1, entryCharacteristicsSet.size());
-        ActionableEvidence characteristics = entryCharacteristicsSet.iterator().next();
+        ActionableEntry characteristics = entryCharacteristicsSet.iterator().next();
         assertEquals(Strings.EMPTY, characteristics.sourceEvent());
         assertEquals(Knowledgebase.CKB_EVIDENCE, characteristics.source());
         assertEquals("AB", characteristics.treatment().name());
@@ -56,10 +59,10 @@ public class ActionableEvidenceFactoryTest {
                 "AB",
                 "A",
                 "DOID:163");
-        Set<ActionableEvidence> entryAmplificationSet =
+        Set<ActionableEntry> entryAmplificationSet =
                 ActionableEvidenceFactory.toActionableEvidence(entryAmplification, "KRAS", curator, "KRAS", entryAmplification.type());
         assertEquals(1, entryAmplificationSet.size());
-        ActionableEvidence amplification = entryAmplificationSet.iterator().next();
+        ActionableEntry amplification = entryAmplificationSet.iterator().next();
         assertEquals("KRAS", amplification.sourceEvent());
         assertEquals(Knowledgebase.CKB_EVIDENCE, amplification.source());
         assertEquals("AB", amplification.treatment().name());
@@ -71,10 +74,10 @@ public class ActionableEvidenceFactoryTest {
 
         CkbEntry entryHotspot =
                 CkbTestFactory.createEntry("BRAF", "BRAF V600E", "BRAF V600E", "sensitive", "Actionable", "AB", "AB", "A", "DOID:162");
-        Set<ActionableEvidence> entryHotspotSet =
+        Set<ActionableEntry> entryHotspotSet =
                 ActionableEvidenceFactory.toActionableEvidence(entryHotspot, "BRAF", curator, "BRAF", entryHotspot.type());
         assertEquals(1, entryHotspotSet.size());
-        ActionableEvidence hotspot = entryHotspotSet.iterator().next();
+        ActionableEntry hotspot = entryHotspotSet.iterator().next();
         assertEquals("BRAF", hotspot.sourceEvent());
         assertEquals(Knowledgebase.CKB_EVIDENCE, hotspot.source());
         assertEquals("AB", hotspot.treatment().name());
@@ -87,24 +90,34 @@ public class ActionableEvidenceFactoryTest {
 
     @Test
     public void canExtractCancerTypeDetails() {
-        assertNull(ActionableFunctions.extractCancerTypeDetails(CkbTrialTestFactory.createIndication( "test", "JAX:not a doid")));
+        assertNull(ActionableFunctions.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "JAX:not a doid")));
 
         assertEquals("0060463",
-                ActionableFunctions.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "DOID:0060463")).applicableCancerType().doid());
+                ActionableFunctions.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "DOID:0060463"))
+                        .applicableCancerType()
+                        .doid());
         assertEquals(CancerTypeConstants.CANCER_DOID,
-                ActionableFunctions.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "JAX:10000003" )).applicableCancerType().doid());
+                ActionableFunctions.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "JAX:10000003"))
+                        .applicableCancerType()
+                        .doid());
         assertEquals(CancerTypeConstants.SQUAMOUS_CELL_CARCINOMA_OF_UNKNOWN_PRIMARY,
-                ActionableFunctions.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "JAX:10000009")).applicableCancerType().doid());
+                ActionableFunctions.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "JAX:10000009"))
+                        .applicableCancerType()
+                        .doid());
         assertEquals(CancerTypeConstants.ADENOCARCINOMA_OF_UNKNOWN_PRIMARY,
-                ActionableFunctions.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "JAX:10000008")).applicableCancerType().doid());
+                ActionableFunctions.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "JAX:10000008"))
+                        .applicableCancerType()
+                        .doid());
         assertNull(ActionableFunctions.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "JAX:10000004")));
 
         assertEquals(Sets.newHashSet(CancerTypeConstants.REFRACTORY_HEMATOLOGIC_TYPE,
                         CancerTypeConstants.BONE_MARROW_TYPE,
                         CancerTypeConstants.LEUKEMIA_TYPE),
-                ActionableFunctions.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "JAX:10000003" )).blacklistedCancerTypes());
+                ActionableFunctions.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "JAX:10000003"))
+                        .blacklistedCancerTypes());
         assertEquals(Sets.newHashSet(),
-                ActionableFunctions.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "JAX:10000009")).blacklistedCancerTypes());
+                ActionableFunctions.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "JAX:10000009"))
+                        .blacklistedCancerTypes());
 
     }
 

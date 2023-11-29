@@ -64,9 +64,9 @@ class ActionableEvidenceFactory {
     }
 
     @NotNull
-    public static Set<ActionableEvidence> toActionableEvidence(@NotNull CkbEntry entry, @NotNull String sourceEvent,
+    public static Set<ActionableEntry> toActionableEvidence(@NotNull CkbEntry entry, @NotNull String sourceEvent,
             @NotNull TreatmentApproachCurator curator, @NotNull String gene, @NotNull EventType eventType) {
-        Set<ActionableEvidence> actionableEntries = Sets.newHashSet();
+        Set<ActionableEntry> actionableEntries = Sets.newHashSet();
 
         for (Evidence evidence : evidencesWithUsableType(entry.evidences())) {
             EvidenceLevel level = resolveLevel(evidence.ampCapAscoEvidenceLevel());
@@ -116,7 +116,7 @@ class ActionableEvidenceFactory {
 
                 Set<String> curatedRelevantTreatmentApproaches = Sets.newHashSet(curator.isMatch(key));
 
-                actionableEntries.add(ImmutableActionableEvidence.builder()
+                actionableEntries.add(ImmutableActionableEntry.builder()
                         .source(Knowledgebase.CKB_EVIDENCE)
                         .sourceEvent(sourceEvent)
                         .sourceUrls(sourceUrls)

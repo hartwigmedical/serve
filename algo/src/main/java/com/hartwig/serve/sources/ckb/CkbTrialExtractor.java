@@ -75,7 +75,7 @@ public class CkbTrialExtractor {
                     sourceEvent = event;
                 }
 
-                Set<ActionableTrial> actionableTrials =
+                Set<ActionableEntry> actionableTrials =
                         ActionableTrialFactory.toActionableTrials(entry, sourceEvent);
 
                 EventInterpretation interpretation = ImmutableEventInterpretation.builder()
@@ -107,7 +107,7 @@ public class CkbTrialExtractor {
 
     @NotNull
     private static ExtractionResult toExtractionResult(@NotNull String variant, @NotNull String gene, @Nullable String transcript,
-            @NotNull EventExtractorOutput output, @NotNull Set<ActionableTrial> actionableTrials,
+            @NotNull EventExtractorOutput output, @NotNull Set<ActionableEntry> actionableTrials,
             @NotNull EventInterpretation interpretation) {
         Set<ActionableHotspot> actionableHotspots = Sets.newHashSet();
         Set<ActionableRange> actionableCodons = Sets.newHashSet();
@@ -119,7 +119,7 @@ public class CkbTrialExtractor {
 
         List<CodonAnnotation> codons = Lists.newArrayList();
 
-        for (ActionableTrial trial : actionableTrials) {
+        for (ActionableEntry trial : actionableTrials) {
             codons = curateCodons(output.codons());
 
             actionableHotspots.addAll(ActionableEventFactory.toActionableHotspots(trial, output.hotspots()));

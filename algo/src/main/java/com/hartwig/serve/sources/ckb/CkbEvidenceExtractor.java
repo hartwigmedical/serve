@@ -106,7 +106,7 @@ public class CkbEvidenceExtractor {
                     sourceEvent = event;
                 }
 
-                Set<ActionableEvidence> actionableEntries =
+                Set<ActionableEntry> actionableEntries =
                         ActionableEvidenceFactory.toActionableEvidence(entry, sourceEvent, treatmentApproachCurator, gene, entry.type());
 
                 EventInterpretation interpretation = ImmutableEventInterpretation.builder()
@@ -140,7 +140,7 @@ public class CkbEvidenceExtractor {
 
     @NotNull
     private static ExtractionResult toExtractionResult(@NotNull String variant, @NotNull String gene, @Nullable String transcript,
-            @NotNull EventExtractorOutput output, @NotNull Set<ActionableEvidence> actionableEntries,
+            @NotNull EventExtractorOutput output, @NotNull Set<ActionableEntry> actionableEntries,
             @NotNull EventInterpretation interpretation) {
         Set<ActionableHotspot> actionableHotspots = Sets.newHashSet();
         Set<ActionableRange> actionableCodons = Sets.newHashSet();

@@ -28,10 +28,9 @@ public class ActionableTrialFactoryTest {
     public void canCreateActionableTrials() {
         CkbEntry entryCharacteristics =
                 CkbTrialTestFactory.createEntry("-", "MSI neg", "MSI neg", "sensitive", "Actionable", "AB", "AB", "A", "DOID:162");
-        Set<ActionableTrial> entryCharacteristicsSet =
-                ActionableTrialFactory.toActionableTrials(entryCharacteristics, Strings.EMPTY);
+        Set<ActionableEntry> entryCharacteristicsSet = ActionableTrialFactory.toActionableTrials(entryCharacteristics, Strings.EMPTY);
         assertEquals(1, entryCharacteristicsSet.size());
-        ActionableTrial characteristics = entryCharacteristicsSet.iterator().next();
+        ActionableEntry characteristics = entryCharacteristicsSet.iterator().next();
         assertEquals(Strings.EMPTY, characteristics.sourceEvent());
         assertEquals(Knowledgebase.CKB_TRIAL, characteristics.source());
         assertEquals("nctid", characteristics.treatment().name());
@@ -51,10 +50,9 @@ public class ActionableTrialFactoryTest {
                 "AB",
                 "A",
                 "DOID:163");
-        Set<ActionableTrial> trialAmplificationSet =
-                ActionableTrialFactory.toActionableTrials(entryAmplification, "KRAS");
+        Set<ActionableEntry> trialAmplificationSet = ActionableTrialFactory.toActionableTrials(entryAmplification, "KRAS");
         assertEquals(1, trialAmplificationSet.size());
-        ActionableTrial amplification = trialAmplificationSet.iterator().next();
+        ActionableEntry amplification = trialAmplificationSet.iterator().next();
         assertEquals("KRAS", amplification.sourceEvent());
         assertEquals(Knowledgebase.CKB_TRIAL, amplification.source());
         assertEquals("nctid", amplification.treatment().name());
@@ -67,10 +65,9 @@ public class ActionableTrialFactoryTest {
 
         CkbEntry entryHotspot =
                 CkbTrialTestFactory.createEntry("BRAF", "BRAF V600E", "BRAF V600E", "sensitive", "Actionable", "AB", "AB", "A", "DOID:162");
-        Set<ActionableTrial> entryHotspotSet =
-                ActionableTrialFactory.toActionableTrials(entryHotspot, "BRAF");
+        Set<ActionableEntry> entryHotspotSet = ActionableTrialFactory.toActionableTrials(entryHotspot, "BRAF");
         assertEquals(1, entryHotspotSet.size());
-        ActionableTrial hotspot = entryHotspotSet.iterator().next();
+        ActionableEntry hotspot = entryHotspotSet.iterator().next();
         assertEquals("BRAF", hotspot.sourceEvent());
         assertEquals(Knowledgebase.CKB_TRIAL, hotspot.source());
         assertEquals("nctid", hotspot.treatment().name());
@@ -84,24 +81,34 @@ public class ActionableTrialFactoryTest {
 
     @Test
     public void canExtractCancerTypeDetails() {
-        assertNull(ActionableFunctions.extractCancerTypeDetails(CkbTrialTestFactory.createIndication( "test", "JAX:not a doid")));
+        assertNull(ActionableFunctions.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "JAX:not a doid")));
 
         assertEquals("0060463",
-                ActionableFunctions.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "DOID:0060463")).applicableCancerType().doid());
+                ActionableFunctions.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "DOID:0060463"))
+                        .applicableCancerType()
+                        .doid());
         assertEquals(CancerTypeConstants.CANCER_DOID,
-                ActionableFunctions.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "JAX:10000003" )).applicableCancerType().doid());
+                ActionableFunctions.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "JAX:10000003"))
+                        .applicableCancerType()
+                        .doid());
         assertEquals(CancerTypeConstants.SQUAMOUS_CELL_CARCINOMA_OF_UNKNOWN_PRIMARY,
-                ActionableFunctions.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "JAX:10000009")).applicableCancerType().doid());
+                ActionableFunctions.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "JAX:10000009"))
+                        .applicableCancerType()
+                        .doid());
         assertEquals(CancerTypeConstants.ADENOCARCINOMA_OF_UNKNOWN_PRIMARY,
-                ActionableFunctions.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "JAX:10000008")).applicableCancerType().doid());
+                ActionableFunctions.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "JAX:10000008"))
+                        .applicableCancerType()
+                        .doid());
         assertNull(ActionableFunctions.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "JAX:10000004")));
 
         assertEquals(Sets.newHashSet(CancerTypeConstants.REFRACTORY_HEMATOLOGIC_TYPE,
                         CancerTypeConstants.BONE_MARROW_TYPE,
                         CancerTypeConstants.LEUKEMIA_TYPE),
-                ActionableFunctions.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "JAX:10000003" )).blacklistedCancerTypes());
+                ActionableFunctions.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "JAX:10000003"))
+                        .blacklistedCancerTypes());
         assertEquals(Sets.newHashSet(),
-                ActionableFunctions.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "JAX:10000009")).blacklistedCancerTypes());
+                ActionableFunctions.extractCancerTypeDetails(CkbTrialTestFactory.createIndication("test", "JAX:10000009"))
+                        .blacklistedCancerTypes());
 
     }
 
@@ -117,20 +124,43 @@ public class ActionableTrialFactoryTest {
 
     @Test
     public void canDetermineIfHasVariantRequirementTypeToInclude() {
-        ClinicalTrial trialWithRequiredType = CkbTrialTestFactory.trialWithRequirementType(Lists.newArrayList(
-                ImmutableVariantRequirementDetail.builder().profileId(0).requirementType("required").build()));
-        ClinicalTrial trialWithExcludedType = CkbTrialTestFactory.trialWithRequirementType(Lists.newArrayList(
-                ImmutableVariantRequirementDetail.builder().profileId(0).requirementType("excluded").build()));
-        CkbEntry entry = CkbTrialTestFactory.createEntry("BRAF", "BRAF V600E", "BRAF V600E", "sensitive", "Actionable", "AB", "AB", "A", "DOID:162");
+        ClinicalTrial trialWithRequiredType =
+                CkbTrialTestFactory.trialWithRequirementType(Lists.newArrayList(ImmutableVariantRequirementDetail.builder()
+                        .profileId(0)
+                        .requirementType("required")
+                        .build()));
+        ClinicalTrial trialWithExcludedType =
+                CkbTrialTestFactory.trialWithRequirementType(Lists.newArrayList(ImmutableVariantRequirementDetail.builder()
+                        .profileId(0)
+                        .requirementType("excluded")
+                        .build()));
+        CkbEntry entry =
+                CkbTrialTestFactory.createEntry("BRAF", "BRAF V600E", "BRAF V600E", "sensitive", "Actionable", "AB", "AB", "A", "DOID:162");
         assertTrue(ActionableTrialFactory.hasVariantRequirementTypeToInclude(trialWithRequiredType.variantRequirementDetails(), entry));
         assertFalse(ActionableTrialFactory.hasVariantRequirementTypeToInclude(trialWithExcludedType.variantRequirementDetails(), entry));
     }
 
     @Test
     public void canDetermineIfHasCountryToIncludeWithPotentiallyOpenRecruitmentType() {
-        ClinicalTrial notOpenDutchTrial = CkbTrialTestFactory.trialWithCountryAndRecruitmentType(Lists.newArrayList(ImmutableLocation.builder().nctId("").city("").country("Netherlands").status("Not yet recruiting").build()), "Recruiting");
-        ClinicalTrial OpenDutchTrial = CkbTrialTestFactory.trialWithCountryAndRecruitmentType(Lists.newArrayList(ImmutableLocation.builder().nctId("").city("").country("Netherlands").status("Recruiting").build()), "Recruiting");
-        ClinicalTrial americanTrial = CkbTrialTestFactory.trialWithCountryAndRecruitmentType(Lists.newArrayList(ImmutableLocation.builder().nctId("").city("").country("United States").status("Recruiting").build()), "Recruiting");
+        ClinicalTrial notOpenDutchTrial =
+                CkbTrialTestFactory.trialWithCountryAndRecruitmentType(Lists.newArrayList(ImmutableLocation.builder()
+                        .nctId("")
+                        .city("")
+                        .country("Netherlands")
+                        .status("Not yet recruiting")
+                        .build()), "Recruiting");
+        ClinicalTrial OpenDutchTrial = CkbTrialTestFactory.trialWithCountryAndRecruitmentType(Lists.newArrayList(ImmutableLocation.builder()
+                .nctId("")
+                .city("")
+                .country("Netherlands")
+                .status("Recruiting")
+                .build()), "Recruiting");
+        ClinicalTrial americanTrial = CkbTrialTestFactory.trialWithCountryAndRecruitmentType(Lists.newArrayList(ImmutableLocation.builder()
+                .nctId("")
+                .city("")
+                .country("United States")
+                .status("Recruiting")
+                .build()), "Recruiting");
         assertFalse(ActionableTrialFactory.hasCountryToIncludeWithPotentiallyOpenRecruitmentType(notOpenDutchTrial));
         assertTrue(ActionableTrialFactory.hasCountryToIncludeWithPotentiallyOpenRecruitmentType(OpenDutchTrial));
         assertFalse(ActionableTrialFactory.hasCountryToIncludeWithPotentiallyOpenRecruitmentType(americanTrial));

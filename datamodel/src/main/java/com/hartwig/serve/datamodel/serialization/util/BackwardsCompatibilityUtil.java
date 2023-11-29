@@ -49,6 +49,9 @@ import org.jetbrains.annotations.NotNull;
 
 public final class BackwardsCompatibilityUtil {
 
+    // TODO This class is tied to deprecated CKB knowledgebase, and can be removed (included usages)
+    //  once all downstream users switched from "CKB" to "CKB_EVIDENCE"
+
     private BackwardsCompatibilityUtil() {
     }
 

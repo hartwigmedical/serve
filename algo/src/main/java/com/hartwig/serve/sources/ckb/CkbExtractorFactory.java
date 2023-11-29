@@ -8,16 +8,22 @@ import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurator;
 
 import org.jetbrains.annotations.NotNull;
 
-public final class CkbEvidenceExtractorFactory {
+public final class CkbExtractorFactory {
 
-    private CkbEvidenceExtractorFactory() {
+    private CkbExtractorFactory() {
     }
 
     @NotNull
-    public static CkbEvidenceExtractor create(@NotNull EventClassifierConfig config, @NotNull RefGenomeResource refGenomeResource,
-            @NotNull TreatmentApproachCurator treatmentApproachCurator) {
+    public static CkbEvidenceExtractor createEvidenceExtractor(@NotNull EventClassifierConfig config,
+            @NotNull RefGenomeResource refGenomeResource, @NotNull TreatmentApproachCurator treatmentApproachCurator) {
         // We want to capture all events from CKB, so ignore driver inconsistencies
         return new CkbEvidenceExtractor(EventExtractorFactory.create(config, refGenomeResource, DriverInconsistencyMode.IGNORE),
                 treatmentApproachCurator);
+    }
+
+    @NotNull
+    public static CkbTrialExtractor createTrialExtractor(@NotNull EventClassifierConfig config,
+            @NotNull RefGenomeResource refGenomeResource) {
+        return new CkbTrialExtractor(EventExtractorFactory.create(config, refGenomeResource, DriverInconsistencyMode.IGNORE));
     }
 }

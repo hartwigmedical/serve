@@ -69,8 +69,7 @@ class ActionableTrialFactory {
     }
 
     @NotNull
-    private static List<ClinicalTrial> trialsToInclude(@NotNull List<ClinicalTrial> trials,
-            CkbEntry entry) {
+    private static List<ClinicalTrial> trialsToInclude(@NotNull List<ClinicalTrial> trials, CkbEntry entry) {
         List<ClinicalTrial> filtered = Lists.newArrayList();
         for (ClinicalTrial trial : trials) {
             if (hasCountryToIncludeWithPotentiallyOpenRecruitmentType(trial)
@@ -84,7 +83,8 @@ class ActionableTrialFactory {
     @VisibleForTesting
     static boolean hasCountryToIncludeWithPotentiallyOpenRecruitmentType(ClinicalTrial trial) {
         for (Location location : trial.locations()) {
-            if (COUNTRIES_TO_INCLUDE.contains(location.country()) && POTENTIALLY_OPEN_RECRUITMENT_TYPES.contains(trial.recruitment()) && (POTENTIALLY_OPEN_RECRUITMENT_TYPES.contains(location.status()) || location.status() == null)) {
+            if (COUNTRIES_TO_INCLUDE.contains(location.country()) && POTENTIALLY_OPEN_RECRUITMENT_TYPES.contains(trial.recruitment()) && (
+                    POTENTIALLY_OPEN_RECRUITMENT_TYPES.contains(location.status()) || location.status() == null)) {
                 return true;
             }
         }
@@ -106,7 +106,8 @@ class ActionableTrialFactory {
     private static Set<String> trialsWithCountriesToInclude(ClinicalTrial trial) {
         Set<String> countries = Sets.newHashSet();
         for (Location location : trial.locations()) {
-            if (COUNTRIES_TO_INCLUDE.contains(location.country()) && POTENTIALLY_OPEN_RECRUITMENT_TYPES.contains(trial.recruitment()) && (POTENTIALLY_OPEN_RECRUITMENT_TYPES.contains(location.status()) || location.status() == null)) {
+            if (COUNTRIES_TO_INCLUDE.contains(location.country()) && POTENTIALLY_OPEN_RECRUITMENT_TYPES.contains(trial.recruitment()) && (
+                    POTENTIALLY_OPEN_RECRUITMENT_TYPES.contains(location.status()) || location.status() == null)) {
                 countries.add(location.country());
             }
         }

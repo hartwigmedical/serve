@@ -24,7 +24,7 @@ import com.hartwig.serve.extraction.hotspot.ProteinResolverFactory;
 import com.hartwig.serve.refgenome.ImmutableRefGenomeResource;
 import com.hartwig.serve.refgenome.RefGenomeResource;
 import com.hartwig.serve.sources.ckb.CkbEvidenceExtractor;
-import com.hartwig.serve.sources.ckb.CkbEvidenceExtractorFactory;
+import com.hartwig.serve.sources.ckb.CkbExtractorFactory;
 import com.hartwig.serve.sources.ckb.CkbReader;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurationFile;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurator;
@@ -54,7 +54,7 @@ public class CkbEvidenceExtractorTestApp {
 
         RefGenomeResource refGenomeResource = buildRefGenomeResource(config);
         TreatmentApproachCurator curator = new TreatmentApproachCurator(TreatmentApproachCurationFile.read(config.ckbDrugCurationTsv()));
-        CkbEvidenceExtractor extractor = CkbEvidenceExtractorFactory.create(CkbClassificationConfig.build(), refGenomeResource, curator);
+        CkbEvidenceExtractor extractor = CkbExtractorFactory.createEvidenceExtractor(CkbClassificationConfig.build(), refGenomeResource, curator);
 
         List<CkbEntry> entries = CkbReader.readAndCurate(config.ckbDir(), config.ckbFilterTsv());
 

@@ -24,7 +24,7 @@ public class CkbEvidenceExtractorTest {
     @Test
     public void canExtractFromCkbEntries() {
         EventClassifierConfig config = CkbClassificationConfig.build();
-        CkbEvidenceExtractor extractor = CkbEvidenceExtractorFactory.create(config,
+        CkbEvidenceExtractor extractor = CkbExtractorFactory.createEvidenceExtractor(config,
                 RefGenomeResourceTestFactory.buildTestResource37(),
                 TreatmentApproachTestFactory.createEmptyCurator());
 

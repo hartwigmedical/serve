@@ -20,14 +20,13 @@ import com.hartwig.serve.iclusion.datamodel.IclusionTrial;
 import com.hartwig.serve.refgenome.RefGenomeManager;
 import com.hartwig.serve.refgenome.RefGenomeResource;
 import com.hartwig.serve.sources.ckb.CkbEvidenceExtractor;
-import com.hartwig.serve.sources.ckb.CkbEvidenceExtractorFactory;
+import com.hartwig.serve.sources.ckb.CkbExtractorFactory;
 import com.hartwig.serve.sources.ckb.CkbReader;
+import com.hartwig.serve.sources.ckb.CkbTrialExtractor;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurationEntry;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurationEntryKey;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurationFile;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurator;
-import com.hartwig.serve.sources.ckb.CkbTrialExtractor;
-import com.hartwig.serve.sources.ckb.CkbTrialExtractorFactory;
 import com.hartwig.serve.sources.docm.DocmEntry;
 import com.hartwig.serve.sources.docm.DocmExtractor;
 import com.hartwig.serve.sources.docm.DocmReader;
@@ -156,7 +155,7 @@ public class ServeAlgo {
 
         TreatmentApproachCurator curator = new TreatmentApproachCurator(treatmentApproachMap);
 
-        CkbEvidenceExtractor extractor = CkbEvidenceExtractorFactory.create(config, refGenomeResource, curator);
+        CkbEvidenceExtractor extractor = CkbExtractorFactory.createEvidenceExtractor(config, refGenomeResource, curator);
 
         LOGGER.info("Running CKB evidence knowledge extraction");
         return extractor.extract(ckbEntries);
@@ -169,7 +168,7 @@ public class ServeAlgo {
         EventClassifierConfig config = CkbClassificationConfig.build();
         RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.CKB_TRIAL);
 
-        CkbTrialExtractor extractor = CkbTrialExtractorFactory.create(config, refGenomeResource);
+        CkbTrialExtractor extractor = CkbExtractorFactory.createTrialExtractor(config, refGenomeResource);
 
         LOGGER.info("Running CKB trial knowledge extraction");
         return extractor.extract(ckbEntries);

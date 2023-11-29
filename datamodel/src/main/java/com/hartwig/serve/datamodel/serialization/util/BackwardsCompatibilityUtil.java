@@ -72,34 +72,6 @@ public final class BackwardsCompatibilityUtil {
     }
 
     @NotNull
-    public static List<ActionableCharacteristic> expandActionableCharacteristics(@NotNull List<ActionableCharacteristic> characteristics) {
-        return expandActionableEvents(characteristics,
-                characteristic -> ImmutableActionableCharacteristic.builder().from(characteristic).source(Knowledgebase.CKB).build(),
-                new ActionableCharacteristicComparator());
-    }
-
-    @NotNull
-    public static List<ActionableFusion> expandActionableFusions(@NotNull List<ActionableFusion> fusions) {
-        return expandActionableEvents(fusions,
-                fusion -> ImmutableActionableFusion.builder().from(fusion).source(Knowledgebase.CKB).build(),
-                new ActionableFusionComparator());
-    }
-
-    @NotNull
-    public static List<ActionableGene> expandActionableGenes(@NotNull List<ActionableGene> genes) {
-        return expandActionableEvents(genes,
-                gene -> ImmutableActionableGene.builder().from(gene).source(Knowledgebase.CKB).build(),
-                new ActionableGeneComparator());
-    }
-
-    @NotNull
-    public static List<ActionableHLA> expandActionableHLA(@NotNull List<ActionableHLA> hla) {
-        return expandActionableEvents(hla,
-                event -> ImmutableActionableHLA.builder().from(event).source(Knowledgebase.CKB).build(),
-                new ActionableHLAComparator());
-    }
-
-    @NotNull
     public static List<ActionableHotspot> expandActionableHotspots(@NotNull List<ActionableHotspot> hotspots) {
         return expandActionableEvents(hotspots,
                 hotspot -> ImmutableActionableHotspot.builder().from(hotspot).source(Knowledgebase.CKB).build(),
@@ -114,17 +86,46 @@ public final class BackwardsCompatibilityUtil {
     }
 
     @NotNull
+    public static List<ActionableGene> expandActionableGenes(@NotNull List<ActionableGene> genes) {
+        return expandActionableEvents(genes,
+                gene -> ImmutableActionableGene.builder().from(gene).source(Knowledgebase.CKB).build(),
+                new ActionableGeneComparator());
+    }
+
+    @NotNull
+    public static List<ActionableFusion> expandActionableFusions(@NotNull List<ActionableFusion> fusions) {
+        return expandActionableEvents(fusions,
+                fusion -> ImmutableActionableFusion.builder().from(fusion).source(Knowledgebase.CKB).build(),
+                new ActionableFusionComparator());
+    }
+
+    @NotNull
+    public static List<ActionableCharacteristic> expandActionableCharacteristics(@NotNull List<ActionableCharacteristic> characteristics) {
+        return expandActionableEvents(characteristics,
+                characteristic -> ImmutableActionableCharacteristic.builder().from(characteristic).source(Knowledgebase.CKB).build(),
+                new ActionableCharacteristicComparator());
+    }
+
+    @NotNull
+    public static List<ActionableHLA> expandActionableHLA(@NotNull List<ActionableHLA> hla) {
+        return expandActionableEvents(hla,
+                event -> ImmutableActionableHLA.builder().from(event).source(Knowledgebase.CKB).build(),
+                new ActionableHLAComparator());
+    }
+
+
+    @NotNull
+    public static List<KnownHotspot> patchKnownHotspots(@NotNull List<KnownHotspot> hotspots) {
+        return patchKnownEvents(hotspots,
+                hotspot -> ImmutableKnownHotspot.builder().from(hotspot).addSources(Knowledgebase.CKB).build(),
+                new KnownHotspotComparator());
+    }
+
+    @NotNull
     public static List<KnownCodon> patchKnownCodons(@NotNull List<KnownCodon> codons) {
         return patchKnownEvents(codons,
                 codon -> ImmutableKnownCodon.builder().from(codon).addSources(Knowledgebase.CKB).build(),
                 new KnownCodonComparator());
-    }
-
-    @NotNull
-    public static List<KnownCopyNumber> patchKnownCopyNumbers(@NotNull List<KnownCopyNumber> copyNumbers) {
-        return patchKnownEvents(copyNumbers,
-                copyNumber -> ImmutableKnownCopyNumber.builder().from(copyNumber).addSources(Knowledgebase.CKB).build(),
-                new KnownCopyNumberComparator());
     }
 
     @NotNull
@@ -135,13 +136,6 @@ public final class BackwardsCompatibilityUtil {
     }
 
     @NotNull
-    public static List<KnownFusion> patchKnownFusions(@NotNull List<KnownFusion> fusions) {
-        return patchKnownEvents(fusions,
-                fusion -> ImmutableKnownFusion.builder().from(fusion).addSources(Knowledgebase.CKB).build(),
-                new KnownFusionComparator());
-    }
-
-    @NotNull
     public static List<KnownGene> patchKnownGenes(@NotNull List<KnownGene> genes) {
         return patchKnownEvents(genes,
                 gene -> ImmutableKnownGene.builder().from(gene).addSources(Knowledgebase.CKB).build(),
@@ -149,10 +143,17 @@ public final class BackwardsCompatibilityUtil {
     }
 
     @NotNull
-    public static List<KnownHotspot> patchKnownHotspots(@NotNull List<KnownHotspot> hotspots) {
-        return patchKnownEvents(hotspots,
-                hotspot -> ImmutableKnownHotspot.builder().from(hotspot).addSources(Knowledgebase.CKB).build(),
-                new KnownHotspotComparator());
+    public static List<KnownCopyNumber> patchKnownCopyNumbers(@NotNull List<KnownCopyNumber> copyNumbers) {
+        return patchKnownEvents(copyNumbers,
+                copyNumber -> ImmutableKnownCopyNumber.builder().from(copyNumber).addSources(Knowledgebase.CKB).build(),
+                new KnownCopyNumberComparator());
+    }
+
+    @NotNull
+    public static List<KnownFusion> patchKnownFusions(@NotNull List<KnownFusion> fusions) {
+        return patchKnownEvents(fusions,
+                fusion -> ImmutableKnownFusion.builder().from(fusion).addSources(Knowledgebase.CKB).build(),
+                new KnownFusionComparator());
     }
 
     @NotNull
@@ -182,5 +183,4 @@ public final class BackwardsCompatibilityUtil {
         patched.sort(comparator);
         return patched;
     }
-
 }

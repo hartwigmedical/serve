@@ -1,7 +1,5 @@
 package com.hartwig.serve.datamodel.serialization;
 
-import static java.util.Comparator.comparing;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -18,6 +16,8 @@ import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.datamodel.common.GeneRole;
 import com.hartwig.serve.datamodel.gene.ImmutableKnownGene;
 import com.hartwig.serve.datamodel.gene.KnownGene;
+import com.hartwig.serve.datamodel.gene.KnownGeneComparator;
+import com.hartwig.serve.datamodel.serialization.util.BackwardsCompatibilityUtil;
 import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
 import org.jetbrains.annotations.NotNull;
@@ -36,6 +36,8 @@ public final class KnownGeneFile {
     }
 
     public static void write(@NotNull String genesTsv, @NotNull Iterable<KnownGene> genes) throws IOException {
+        BackwardsCompatibilityUtil.verifyKnownEventsBeforeWrite(genes);
+
         List<String> lines = Lists.newArrayList();
         lines.add(header());
         lines.addAll(toLines(genes));
@@ -48,7 +50,7 @@ public final class KnownGeneFile {
         List<String> lines = Files.readAllLines(new File(file).toPath());
         Map<String, Integer> fields = SerializationUtil.createFields(lines.get(0), FIELD_DELIMITER);
 
-        return fromLines(lines.subList(1, lines.size()), fields);
+        return BackwardsCompatibilityUtil.patchKnownGenes(fromLines(lines.subList(1, lines.size()), fields));
     }
 
     @NotNull
@@ -78,7 +80,7 @@ public final class KnownGeneFile {
     @VisibleForTesting
     static List<String> toLines(@NotNull Iterable<KnownGene> genes) {
         return StreamSupport.stream(genes.spliterator(), false)
-                .sorted(comparing(KnownGene::gene))
+                .sorted(new KnownGeneComparator())
                 .map(KnownGeneFile::toLine)
                 .collect(Collectors.toList());
     }

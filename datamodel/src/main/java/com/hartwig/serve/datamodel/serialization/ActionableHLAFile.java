@@ -14,6 +14,7 @@ import com.hartwig.serve.datamodel.immuno.ActionableHLA;
 import com.hartwig.serve.datamodel.immuno.ActionableHLAComparator;
 import com.hartwig.serve.datamodel.immuno.ImmutableActionableHLA;
 import com.hartwig.serve.datamodel.serialization.util.ActionableFileUtil;
+import com.hartwig.serve.datamodel.serialization.util.BackwardsCompatibilityUtil;
 import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
 import org.jetbrains.annotations.NotNull;
@@ -31,6 +32,8 @@ public final class ActionableHLAFile {
     }
 
     public static void write(@NotNull String actionableHLATsv, @NotNull Iterable<ActionableHLA> actionableHLA) throws IOException {
+        BackwardsCompatibilityUtil.verifyActionableEventsBeforeWrite(actionableHLA);
+
         List<String> lines = Lists.newArrayList();
         lines.add(header());
         lines.addAll(toLines(actionableHLA));
@@ -43,7 +46,7 @@ public final class ActionableHLAFile {
         List<String> lines = Files.readAllLines(new File(actionableHLATsv).toPath());
         Map<String, Integer> fields = SerializationUtil.createFields(lines.get(0), ActionableFileUtil.FIELD_DELIMITER);
 
-        return fromLines(lines.subList(1, lines.size()), fields);
+        return BackwardsCompatibilityUtil.expandActionableHLA(fromLines(lines.subList(1, lines.size()), fields));
     }
 
     @NotNull

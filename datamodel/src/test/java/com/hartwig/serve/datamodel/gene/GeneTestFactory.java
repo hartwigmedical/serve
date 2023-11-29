@@ -27,7 +27,7 @@ public final class GeneTestFactory {
 
     @NotNull
     public static ImmutableKnownGene.Builder knownGeneBuilder() {
-        return ImmutableKnownGene.builder().geneRole(GeneRole.UNKNOWN);
+        return ImmutableKnownGene.builder().gene(Strings.EMPTY).geneRole(GeneRole.UNKNOWN);
     }
 
     @NotNull
@@ -38,6 +38,11 @@ public final class GeneTestFactory {
     @NotNull
     public static KnownCopyNumber createTestKnownCopyNumberForSource(@NotNull Knowledgebase source) {
         return knownCopyNumberBuilder().addSources(source).build();
+    }
+
+    @NotNull
+    public static KnownGene createTestKnownGeneForSource(@NotNull Knowledgebase source) {
+        return knownGeneBuilder().addSources(source).build();
     }
 
     @NotNull

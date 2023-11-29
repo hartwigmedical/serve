@@ -14,6 +14,7 @@ import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspotComparator;
 import com.hartwig.serve.datamodel.hotspot.ImmutableActionableHotspot;
 import com.hartwig.serve.datamodel.serialization.util.ActionableFileUtil;
+import com.hartwig.serve.datamodel.serialization.util.BackwardsCompatibilityUtil;
 import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
 import org.jetbrains.annotations.NotNull;
@@ -32,6 +33,8 @@ public final class ActionableHotspotFile {
 
     public static void write(@NotNull String actionableHotspotTsv, @NotNull Iterable<ActionableHotspot> actionableHotspots)
             throws IOException {
+        BackwardsCompatibilityUtil.verifyActionableEventsBeforeWrite(actionableHotspots);
+
         List<String> lines = Lists.newArrayList();
         lines.add(header());
         lines.addAll(toLines(actionableHotspots));
@@ -44,7 +47,7 @@ public final class ActionableHotspotFile {
         List<String> lines = Files.readAllLines(new File(actionableHotspotTsv).toPath());
         Map<String, Integer> fields = SerializationUtil.createFields(lines.get(0), ActionableFileUtil.FIELD_DELIMITER);
 
-        return fromLines(lines.subList(1, lines.size()), fields);
+        return BackwardsCompatibilityUtil.expandActionableHotspots(fromLines(lines.subList(1, lines.size()), fields));
     }
 
     @NotNull

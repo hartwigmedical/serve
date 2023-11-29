@@ -14,6 +14,7 @@ import com.hartwig.serve.datamodel.fusion.ActionableFusion;
 import com.hartwig.serve.datamodel.fusion.ActionableFusionComparator;
 import com.hartwig.serve.datamodel.fusion.ImmutableActionableFusion;
 import com.hartwig.serve.datamodel.serialization.util.ActionableFileUtil;
+import com.hartwig.serve.datamodel.serialization.util.BackwardsCompatibilityUtil;
 import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
 import org.jetbrains.annotations.NotNull;
@@ -32,6 +33,8 @@ public final class ActionableFusionFile {
 
     public static void write(@NotNull String actionableFusionTsv, @NotNull Iterable<ActionableFusion> actionableFusions)
             throws IOException {
+        BackwardsCompatibilityUtil.verifyActionableEventsBeforeWrite(actionableFusions);
+
         List<String> lines = Lists.newArrayList();
         lines.add(header());
         lines.addAll(toLines(actionableFusions));
@@ -44,7 +47,7 @@ public final class ActionableFusionFile {
         List<String> lines = Files.readAllLines(new File(actionableFusionTsv).toPath());
         Map<String, Integer> fields = SerializationUtil.createFields(lines.get(0), ActionableFileUtil.FIELD_DELIMITER);
 
-        return fromLines(lines.subList(1, lines.size()), fields);
+        return BackwardsCompatibilityUtil.expandActionableFusions(fromLines(lines.subList(1, lines.size()), fields));
     }
 
     @NotNull

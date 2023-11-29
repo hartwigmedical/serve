@@ -17,6 +17,7 @@ import com.hartwig.serve.datamodel.common.ProteinEffect;
 import com.hartwig.serve.datamodel.range.ImmutableKnownExon;
 import com.hartwig.serve.datamodel.range.KnownExon;
 import com.hartwig.serve.datamodel.range.KnownExonComparator;
+import com.hartwig.serve.datamodel.serialization.util.BackwardsCompatibilityUtil;
 import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
 import org.jetbrains.annotations.NotNull;
@@ -35,6 +36,8 @@ public final class KnownExonFile {
     }
 
     public static void write(@NotNull String exonTsv, @NotNull Iterable<KnownExon> exons) throws IOException {
+        BackwardsCompatibilityUtil.verifyKnownEventsBeforeWrite(exons);
+
         List<String> lines = Lists.newArrayList();
         lines.add(header());
         lines.addAll(toLines(exons));
@@ -47,7 +50,7 @@ public final class KnownExonFile {
         List<String> lines = Files.readAllLines(new File(file).toPath());
         Map<String, Integer> fields = SerializationUtil.createFields(lines.get(0), FIELD_DELIMITER);
 
-        return fromLines(lines.subList(1, lines.size()), fields);
+        return BackwardsCompatibilityUtil.patchKnownExons(fromLines(lines.subList(1, lines.size()), fields));
     }
 
     @NotNull

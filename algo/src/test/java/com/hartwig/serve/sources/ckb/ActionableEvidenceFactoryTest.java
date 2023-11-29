@@ -123,12 +123,12 @@ public class ActionableEvidenceFactoryTest {
 
     @Test
     public void canExtractSourceCancerTypeID() {
-        assertNull(ActionableFunctions.extractSourceCancerTypeId(null));
-        assertNull(ActionableFunctions.extractSourceCancerTypeId("not a doid"));
+        assertNull(ActionableFunctions.extractSourceCancerTypeDetails(null));
+        assertNull(ActionableFunctions.extractSourceCancerTypeDetails("not a doid"));
 
-        assertNotNull(ActionableFunctions.extractSourceCancerTypeId("DOID:0060463"));
-        assertEquals("0060463", ActionableFunctions.extractSourceCancerTypeId("DOID:0060463")[1]);
-        assertEquals("10000003", ActionableFunctions.extractSourceCancerTypeId("JAX:10000003")[1]);
+        assertNotNull(ActionableFunctions.extractSourceCancerTypeDetails("DOID:0060463"));
+        assertEquals("0060463", ActionableFunctions.extractSourceCancerTypeDetails("DOID:0060463")[1]);
+        assertEquals("10000003", ActionableFunctions.extractSourceCancerTypeDetails("JAX:10000003")[1]);
     }
 
     @Test

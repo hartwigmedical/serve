@@ -71,7 +71,7 @@ class ActionableEvidenceFactory {
         for (Evidence evidence : evidencesWithUsableType(entry.evidences())) {
             EvidenceLevel level = resolveLevel(evidence.ampCapAscoEvidenceLevel());
             EvidenceDirection direction = resolveDirection(evidence.responseType());
-            ActionableFunctions.CancerTypeExtraction cancerTypeExtraction = ActionableFunctions.extractCancerTypeDetails(evidence.indication());
+            CancerTypeExtraction cancerTypeExtraction = ActionableFunctions.extractCancerTypeDetails(evidence.indication());
 
             if (level != null && direction != null && cancerTypeExtraction != null) {
                 String treatment = evidence.therapy().therapyName();

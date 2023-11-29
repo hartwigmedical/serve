@@ -46,7 +46,7 @@ class ActionableTrialFactory {
 
         for (ClinicalTrial trial : trialsToInclude(entry.clinicalTrials(), entry)) {
             for (Indication indication : trial.indications()) {
-                ActionableFunctions.CancerTypeExtraction cancerTypeExtraction = ActionableFunctions.extractCancerTypeDetails(indication);
+                CancerTypeExtraction cancerTypeExtraction = ActionableFunctions.extractCancerTypeDetails(indication);
 
                 if (cancerTypeExtraction != null) {
                     Set<String> countries = trialsWithCountriesToInclude(trial);

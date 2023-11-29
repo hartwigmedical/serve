@@ -19,8 +19,8 @@ class ActionableFunctions {
     private static final Logger LOGGER = LogManager.getLogger(ActionableFunctions.class);
 
     @Nullable
-    static CancerTypeExtraction extractCancerTypeDetails(@NotNull Indication indication) {
-        String[] sourceCancerTypeDetails = extractSourceCancerTypeId(indication.termId());
+    public static CancerTypeExtraction extractCancerTypeDetails(@NotNull Indication indication) {
+        String[] sourceCancerTypeDetails = extractSourceCancerTypeDetails(indication.termId());
 
         if (sourceCancerTypeDetails == null) {
             return null;
@@ -72,12 +72,15 @@ class ActionableFunctions {
             return null;
         }
 
-        return new CancerTypeExtraction(applicableCancerTypeBuilder.build(), blacklistedCancerTypes);
+        return ImmutableCancerTypeExtraction.builder()
+                .applicableCancerType(applicableCancerTypeBuilder.build())
+                .blacklistedCancerTypes(blacklistedCancerTypes)
+                .build();
     }
 
     @Nullable
     @VisibleForTesting
-    static String[] extractSourceCancerTypeId(@Nullable String doidString) {
+    static String[] extractSourceCancerTypeDetails(@Nullable String doidString) {
         if (doidString == null) {
             return null;
         }
@@ -94,29 +97,6 @@ class ActionableFunctions {
         } else {
             LOGGER.warn("Unexpected DOID string in CKB: '{}'", doidString);
             return null;
-        }
-    }
-
-    static class CancerTypeExtraction {
-
-        @NotNull
-        private final CancerType applicableCancerType;
-        @NotNull
-        private final Set<CancerType> blacklistedCancerTypes;
-
-        public CancerTypeExtraction(@NotNull CancerType applicableCancerType, @NotNull Set<CancerType> blacklistedCancerTypes) {
-            this.applicableCancerType = applicableCancerType;
-            this.blacklistedCancerTypes = blacklistedCancerTypes;
-        }
-
-        @NotNull
-        public CancerType applicableCancerType() {
-            return applicableCancerType;
-        }
-
-        @NotNull
-        public Set<CancerType> blacklistedCancerTypes() {
-            return blacklistedCancerTypes;
         }
     }
 }

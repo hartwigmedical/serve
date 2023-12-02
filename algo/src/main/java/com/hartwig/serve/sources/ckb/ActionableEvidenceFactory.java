@@ -11,7 +11,6 @@ import com.hartwig.serve.ckb.datamodel.drug.DrugClass;
 import com.hartwig.serve.ckb.datamodel.evidence.Evidence;
 import com.hartwig.serve.ckb.datamodel.reference.Reference;
 import com.hartwig.serve.ckb.datamodel.treatmentapproaches.RelevantTreatmentApproaches;
-import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.ImmutableTreatment;
@@ -25,7 +24,10 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-class ActionableEvidenceFactory {
+class ActionableEvidenceFactory implements ActionableEntryFactory {
+
+    @NotNull
+    private final TreatmentApproachCurator curator;
 
     private static final Logger LOGGER = LogManager.getLogger(ActionableEvidenceFactory.class);
 
@@ -60,12 +62,13 @@ class ActionableEvidenceFactory {
         EVIDENCE_TYPES_TO_IGNORE.add("Diagnostic");
     }
 
-    ActionableEvidenceFactory() {
+    public ActionableEvidenceFactory(@NotNull TreatmentApproachCurator curator) {
+        this.curator = curator;
     }
 
     @NotNull
-    public static Set<ActionableEntry> toActionableEvidence(@NotNull CkbEntry entry, @NotNull String sourceEvent,
-            @NotNull TreatmentApproachCurator curator, @NotNull String gene, @NotNull EventType eventType) {
+    @Override
+    public Set<ActionableEntry> create(@NotNull CkbEntry entry, @NotNull String sourceEvent, @NotNull String gene) {
         Set<ActionableEntry> actionableEntries = Sets.newHashSet();
 
         for (Evidence evidence : evidencesWithUsableType(entry.evidences())) {
@@ -110,7 +113,7 @@ class ActionableEvidenceFactory {
                         .treatmentApproach(treatmentApproachInterpret == null || treatmentApproachInterpret.isEmpty()
                                 ? null
                                 : treatmentApproachInterpret)
-                        .event(gene + " " + eventType)
+                        .event(gene + " " + entry.type())
                         .direction(direction)
                         .build();
 

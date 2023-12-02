@@ -26,17 +26,15 @@ public class ActionableEvidenceFactoryTest {
 
         CkbEntry entryDeletion =
                 CkbTestFactory.createEntry("KRAS", "deletion", "KRAS deletion", "sensitive", "Emerging", "AB", "AB", "A", "DOID:162");
-        Set<ActionableEntry> entryDeletionSet =
-                ActionableEvidenceFactory.toActionableEvidence(entryDeletion, "KRAS", curator, "gene", entryDeletion.type());
+        ActionableEvidenceFactory actionableEvidenceFactory = new ActionableEvidenceFactory(curator);
+        Set<ActionableEntry> entryDeletionSet = actionableEvidenceFactory.create(entryDeletion, "KRAS", "gene");
         assertEquals(0, entryDeletionSet.size());
 
         CkbEntry entryCharacteristics =
                 CkbTestFactory.createEntry("-", "MSI neg", "MSI neg", "sensitive", "Actionable", "AB", "AB", "A", "DOID:162");
-        Set<ActionableEntry> entryCharacteristicsSet = ActionableEvidenceFactory.toActionableEvidence(entryCharacteristics,
-                Strings.EMPTY,
-                curator,
-                "-",
-                entryCharacteristics.type());
+        ActionableEvidenceFactory actionableEvidenceFactoryCharacteristic = new ActionableEvidenceFactory(curator);
+        Set<ActionableEntry> entryCharacteristicsSet =
+                actionableEvidenceFactoryCharacteristic.create(entryCharacteristics, Strings.EMPTY, "-");
         assertEquals(1, entryCharacteristicsSet.size());
         ActionableEntry characteristics = entryCharacteristicsSet.iterator().next();
         assertEquals(Strings.EMPTY, characteristics.sourceEvent());
@@ -57,8 +55,8 @@ public class ActionableEvidenceFactoryTest {
                 "AB",
                 "A",
                 "DOID:163");
-        Set<ActionableEntry> entryAmplificationSet =
-                ActionableEvidenceFactory.toActionableEvidence(entryAmplification, "KRAS", curator, "KRAS", entryAmplification.type());
+        ActionableEvidenceFactory actionableEvidenceFactoryAmplification = new ActionableEvidenceFactory(curator);
+        Set<ActionableEntry> entryAmplificationSet = actionableEvidenceFactoryAmplification.create(entryAmplification, "KRAS", "KRAS");
         assertEquals(1, entryAmplificationSet.size());
         ActionableEntry amplification = entryAmplificationSet.iterator().next();
         assertEquals("KRAS", amplification.sourceEvent());
@@ -72,8 +70,8 @@ public class ActionableEvidenceFactoryTest {
 
         CkbEntry entryHotspot =
                 CkbTestFactory.createEntry("BRAF", "BRAF V600E", "BRAF V600E", "sensitive", "Actionable", "AB", "AB", "A", "DOID:162");
-        Set<ActionableEntry> entryHotspotSet =
-                ActionableEvidenceFactory.toActionableEvidence(entryHotspot, "BRAF", curator, "BRAF", entryHotspot.type());
+        ActionableEvidenceFactory actionableEvidenceFactoryHotspot = new ActionableEvidenceFactory(curator);
+        Set<ActionableEntry> entryHotspotSet = actionableEvidenceFactoryHotspot.create(entryHotspot, "BRAF", "BRAF");
         assertEquals(1, entryHotspotSet.size());
         ActionableEntry hotspot = entryHotspotSet.iterator().next();
         assertEquals("BRAF", hotspot.sourceEvent());

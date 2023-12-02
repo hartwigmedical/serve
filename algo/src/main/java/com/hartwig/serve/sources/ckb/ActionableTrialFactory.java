@@ -18,7 +18,7 @@ import com.hartwig.serve.datamodel.Knowledgebase;
 
 import org.jetbrains.annotations.NotNull;
 
-class ActionableTrialFactory {
+class ActionableTrialFactory implements ActionableEntryFactory {
 
     private static final Set<String> POTENTIALLY_OPEN_RECRUITMENT_TYPES = Sets.newHashSet();
     private static final Set<String> COUNTRIES_TO_INCLUDE = Sets.newHashSet();
@@ -37,11 +37,12 @@ class ActionableTrialFactory {
         VARIANT_REQUIREMENT_TYPES_TO_INCLUDE.add("required");
     }
 
-    ActionableTrialFactory() {
+    public ActionableTrialFactory() {
     }
 
     @NotNull
-    public static Set<ActionableEntry> toActionableTrials(@NotNull CkbEntry entry, @NotNull String sourceEvent) {
+    @Override
+    public Set<ActionableEntry> create(@NotNull CkbEntry entry, @NotNull String sourceEvent, @NotNull String gene) {
         Set<ActionableEntry> actionableTrials = Sets.newHashSet();
 
         for (ClinicalTrial trial : trialsToInclude(entry.clinicalTrials(), entry)) {

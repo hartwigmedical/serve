@@ -11,6 +11,8 @@ import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.ClinicalTrial;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.ImmutableLocation;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.ImmutableVariantRequirementDetail;
+import com.hartwig.serve.ckb.datamodel.clinicaltrial.Location;
+import com.hartwig.serve.ckb.datamodel.clinicaltrial.VariantRequirementDetail;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.Knowledgebase;
@@ -22,9 +24,30 @@ public class ActionableTrialFactoryTest {
 
     @Test
     public void canCreateActionableTrials() {
+        Location location = ImmutableLocation.builder().nctId("").city("").country("United States").status("Recruiting").build();
+        VariantRequirementDetail requirementType =
+                ImmutableVariantRequirementDetail.builder().profileId(0).requirementType("required").build();
+        CkbEntry entryDeletion = CkbTestFactory.createEntryWithClinicalTrial("KRAS",
+                "deletion",
+                "KRAS deletion",
+                "sensitive",
+                "Emerging",
+                "AB",
+                "AB",
+                "A",
+                "DOID:162",
+                location,
+                "Recruiting",
+                requirementType);
+        ActionableTrialFactory actionableTrialFactory = new ActionableTrialFactory();
+        Set<ActionableEntry> entryDeletionSet = actionableTrialFactory.create(entryDeletion, "KRAS", "gene");
+        assertEquals(0, entryDeletionSet.size());
+
         CkbEntry entryCharacteristics =
-                CkbTrialTestFactory.createEntry("-", "MSI neg", "MSI neg", "sensitive", "Actionable", "AB", "AB", "A", "DOID:162");
-        Set<ActionableEntry> entryCharacteristicsSet = ActionableTrialFactory.toActionableTrials(entryCharacteristics, Strings.EMPTY);
+                CkbTestFactory.createEntry("-", "MSI neg", "MSI neg", "sensitive", "Actionable", "AB", "AB", "A", "DOID:162");
+        ActionableTrialFactory actionableTrialFactoryCharacteristic = new ActionableTrialFactory();
+        Set<ActionableEntry> entryCharacteristicsSet =
+                actionableTrialFactoryCharacteristic.create(entryCharacteristics, Strings.EMPTY, "-");
         assertEquals(1, entryCharacteristicsSet.size());
         ActionableEntry characteristics = entryCharacteristicsSet.iterator().next();
         assertEquals(Strings.EMPTY, characteristics.sourceEvent());
@@ -37,7 +60,7 @@ public class ActionableTrialFactoryTest {
         assertEquals(EvidenceDirection.RESPONSIVE, characteristics.direction());
         assertEquals("Netherlands", characteristics.evidenceUrls().iterator().next());
 
-        CkbEntry entryAmplification = CkbTrialTestFactory.createEntry("KRAS",
+        CkbEntry entryAmplification = CkbTestFactory.createEntry("KRAS",
                 "KRAS amplification",
                 "KRAS amplification",
                 "sensitive",
@@ -46,7 +69,8 @@ public class ActionableTrialFactoryTest {
                 "AB",
                 "A",
                 "DOID:163");
-        Set<ActionableEntry> trialAmplificationSet = ActionableTrialFactory.toActionableTrials(entryAmplification, "KRAS");
+        ActionableTrialFactory actionableTrialFactoryAmplification = new ActionableTrialFactory();
+        Set<ActionableEntry> trialAmplificationSet = actionableTrialFactoryAmplification.create(entryAmplification, "KRAS", "KRAS");
         assertEquals(1, trialAmplificationSet.size());
         ActionableEntry amplification = trialAmplificationSet.iterator().next();
         assertEquals("KRAS", amplification.sourceEvent());
@@ -60,8 +84,9 @@ public class ActionableTrialFactoryTest {
         assertEquals("Netherlands", characteristics.evidenceUrls().iterator().next());
 
         CkbEntry entryHotspot =
-                CkbTrialTestFactory.createEntry("BRAF", "BRAF V600E", "BRAF V600E", "sensitive", "Actionable", "AB", "AB", "A", "DOID:162");
-        Set<ActionableEntry> entryHotspotSet = ActionableTrialFactory.toActionableTrials(entryHotspot, "BRAF");
+                CkbTestFactory.createEntry("BRAF", "BRAF V600E", "BRAF V600E", "sensitive", "Actionable", "AB", "AB", "A", "DOID:162");
+        ActionableTrialFactory actionableTrialFactoryHotspot = new ActionableTrialFactory();
+        Set<ActionableEntry> entryHotspotSet = actionableTrialFactoryHotspot.create(entryHotspot, "BRAF", "BRAF");
         assertEquals(1, entryHotspotSet.size());
         ActionableEntry hotspot = entryHotspotSet.iterator().next();
         assertEquals("BRAF", hotspot.sourceEvent());
@@ -78,17 +103,17 @@ public class ActionableTrialFactoryTest {
     @Test
     public void canDetermineIfHasVariantRequirementTypeToInclude() {
         ClinicalTrial trialWithRequiredType =
-                CkbTrialTestFactory.trialWithRequirementType(Lists.newArrayList(ImmutableVariantRequirementDetail.builder()
+                CkbTestFactory.createTrialWithRequirementType(Lists.newArrayList(ImmutableVariantRequirementDetail.builder()
                         .profileId(0)
                         .requirementType("required")
                         .build()));
         ClinicalTrial trialWithExcludedType =
-                CkbTrialTestFactory.trialWithRequirementType(Lists.newArrayList(ImmutableVariantRequirementDetail.builder()
+                CkbTestFactory.createTrialWithRequirementType(Lists.newArrayList(ImmutableVariantRequirementDetail.builder()
                         .profileId(0)
                         .requirementType("excluded")
                         .build()));
         CkbEntry entry =
-                CkbTrialTestFactory.createEntry("BRAF", "BRAF V600E", "BRAF V600E", "sensitive", "Actionable", "AB", "AB", "A", "DOID:162");
+                CkbTestFactory.createEntry("BRAF", "BRAF V600E", "BRAF V600E", "sensitive", "Actionable", "AB", "AB", "A", "DOID:162");
         assertTrue(ActionableTrialFactory.hasVariantRequirementTypeToInclude(trialWithRequiredType.variantRequirementDetails(), entry));
         assertFalse(ActionableTrialFactory.hasVariantRequirementTypeToInclude(trialWithExcludedType.variantRequirementDetails(), entry));
     }
@@ -96,19 +121,20 @@ public class ActionableTrialFactoryTest {
     @Test
     public void canDetermineIfHasCountryToIncludeWithPotentiallyOpenRecruitmentType() {
         ClinicalTrial notOpenDutchTrial =
-                CkbTrialTestFactory.trialWithCountryAndRecruitmentType(Lists.newArrayList(ImmutableLocation.builder()
+                CkbTestFactory.createTrialWithCountryAndRecruitmentType(Lists.newArrayList(ImmutableLocation.builder()
                         .nctId("")
                         .city("")
                         .country("Netherlands")
                         .status("Not yet recruiting")
                         .build()), "Recruiting");
-        ClinicalTrial OpenDutchTrial = CkbTrialTestFactory.trialWithCountryAndRecruitmentType(Lists.newArrayList(ImmutableLocation.builder()
-                .nctId("")
-                .city("")
-                .country("Netherlands")
-                .status("Recruiting")
-                .build()), "Recruiting");
-        ClinicalTrial americanTrial = CkbTrialTestFactory.trialWithCountryAndRecruitmentType(Lists.newArrayList(ImmutableLocation.builder()
+        ClinicalTrial OpenDutchTrial =
+                CkbTestFactory.createTrialWithCountryAndRecruitmentType(Lists.newArrayList(ImmutableLocation.builder()
+                        .nctId("")
+                        .city("")
+                        .country("Netherlands")
+                        .status("Recruiting")
+                        .build()), "Recruiting");
+        ClinicalTrial americanTrial = CkbTestFactory.createTrialWithCountryAndRecruitmentType(Lists.newArrayList(ImmutableLocation.builder()
                 .nctId("")
                 .city("")
                 .country("United States")

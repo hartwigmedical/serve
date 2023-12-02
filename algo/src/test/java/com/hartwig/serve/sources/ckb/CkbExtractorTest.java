@@ -19,12 +19,12 @@ import org.apache.commons.compress.utils.Lists;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
-public class CkbTrialExtractorTest {
+public class CkbExtractorTest {
 
     @Test
     public void canExtractFromCkbEntries() {
         EventClassifierConfig config = CkbClassificationConfig.build();
-        CkbEvidenceExtractor extractor = CkbExtractorFactory.createEvidenceExtractor(config,
+        CkbExtractor extractor = CkbExtractorFactory.createEvidenceExtractor(config,
                 RefGenomeResourceTestFactory.buildTestResource37(),
                 TreatmentApproachTestFactory.createEmptyCurator());
 
@@ -38,6 +38,10 @@ public class CkbTrialExtractorTest {
         ckbEntries.add(create("ALk", "EML4-ALK", "EML4-ALK Fusion", "sensitive", "Actionable"));
 
         ExtractionResult result = extractor.extract(ckbEntries);
+        assertEquals(1, result.knownHotspots().size());
+        assertEquals(3, result.knownGenes().size());
+        assertEquals(1, result.knownCopyNumbers().size());
+        assertEquals(1, result.knownFusions().size());
         assertEquals(1, result.actionableHotspots().size());
         assertEquals(1, result.actionableCodons().size());
         assertEquals(1, result.actionableExons().size());
@@ -49,7 +53,7 @@ public class CkbTrialExtractorTest {
     @NotNull
     private static CkbEntry create(@NotNull String gene, @NotNull String variant, @NotNull String fullName, @NotNull String evidenceType,
             @NotNull String responseType) {
-        return CkbTrialTestFactory.createEntry(gene, variant, fullName, evidenceType, responseType, "AB", "cancer", "A", "DOID:162");
+        return CkbTestFactory.createEntry(gene, variant, fullName, evidenceType, responseType, "AB", "cancer", "A", "DOID:162");
     }
 
     @Test
@@ -80,7 +84,7 @@ public class CkbTrialExtractorTest {
         codonAnnotations.add(codonAnnotation1);
         codonAnnotations.add(codonAnnotation2);
 
-        List<CodonAnnotation> curatedCodons = CkbTrialExtractor.curateCodons(codonAnnotations);
+        List<CodonAnnotation> curatedCodons = CkbExtractor.curateCodons(codonAnnotations);
 
         CodonAnnotation codon1 = findByGene(curatedCodons, "BRAF");
         assertEquals(140753335, codon1.start());

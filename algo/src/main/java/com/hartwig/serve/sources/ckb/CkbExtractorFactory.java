@@ -1,6 +1,7 @@
 package com.hartwig.serve.sources.ckb;
 
 import com.hartwig.serve.common.classification.EventClassifierConfig;
+import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.extraction.EventExtractorFactory;
 import com.hartwig.serve.extraction.util.DriverInconsistencyMode;
 import com.hartwig.serve.refgenome.RefGenomeResource;
@@ -14,16 +15,20 @@ public final class CkbExtractorFactory {
     }
 
     @NotNull
-    public static CkbEvidenceExtractor createEvidenceExtractor(@NotNull EventClassifierConfig config,
-            @NotNull RefGenomeResource refGenomeResource, @NotNull TreatmentApproachCurator treatmentApproachCurator) {
+    public static CkbExtractor createEvidenceExtractor(@NotNull EventClassifierConfig config, @NotNull RefGenomeResource refGenomeResource,
+            @NotNull TreatmentApproachCurator treatmentApproachCurator) {
         // We want to capture all events from CKB, so ignore driver inconsistencies
-        return new CkbEvidenceExtractor(EventExtractorFactory.create(config, refGenomeResource, DriverInconsistencyMode.IGNORE),
-                treatmentApproachCurator);
+        return new CkbExtractor(Knowledgebase.CKB_EVIDENCE,
+                EventExtractorFactory.create(config, refGenomeResource, DriverInconsistencyMode.IGNORE),
+                new ActionableEvidenceFactory(treatmentApproachCurator),
+                true);
     }
 
     @NotNull
-    public static CkbTrialExtractor createTrialExtractor(@NotNull EventClassifierConfig config,
-            @NotNull RefGenomeResource refGenomeResource) {
-        return new CkbTrialExtractor(EventExtractorFactory.create(config, refGenomeResource, DriverInconsistencyMode.IGNORE));
+    public static CkbExtractor createTrialExtractor(@NotNull EventClassifierConfig config, @NotNull RefGenomeResource refGenomeResource) {
+        return new CkbExtractor(Knowledgebase.CKB_TRIAL,
+                EventExtractorFactory.create(config, refGenomeResource, DriverInconsistencyMode.IGNORE),
+                new ActionableTrialFactory(),
+                false);
     }
 }

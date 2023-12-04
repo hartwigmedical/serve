@@ -140,8 +140,8 @@ public class ActionableTrialFactoryTest {
                 .country("United States")
                 .status("Recruiting")
                 .build()), "Recruiting");
-        assertFalse(ActionableTrialFactory.hasCountryToIncludeWithPotentiallyOpenRecruitmentType(notOpenDutchTrial));
-        assertTrue(ActionableTrialFactory.hasCountryToIncludeWithPotentiallyOpenRecruitmentType(OpenDutchTrial));
-        assertFalse(ActionableTrialFactory.hasCountryToIncludeWithPotentiallyOpenRecruitmentType(americanTrial));
+        assertEquals(0, ActionableTrialFactory.countriesToInclude(notOpenDutchTrial).size());
+        assertEquals(1, ActionableTrialFactory.countriesToInclude(OpenDutchTrial).size());
+        assertEquals(0, ActionableTrialFactory.countriesToInclude(americanTrial).size());
     }
 }

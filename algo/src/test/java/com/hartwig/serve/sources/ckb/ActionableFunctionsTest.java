@@ -24,22 +24,10 @@ public class ActionableFunctionsTest {
     public void canExtractCancerTypeDetails() {
         assertNull(ActionableFunctions.extractCancerTypeDetails(CkbTestFactory.createIndication("test", "JAX:not a doid")));
 
-        assertEquals("0060463",
-                ActionableFunctions.extractCancerTypeDetails(CkbTestFactory.createIndication("test", "DOID:0060463"))
-                        .applicableCancerType()
-                        .doid());
-        assertEquals(CancerTypeConstants.CANCER_DOID,
-                ActionableFunctions.extractCancerTypeDetails(CkbTestFactory.createIndication("test", "JAX:10000003"))
-                        .applicableCancerType()
-                        .doid());
-        assertEquals(CancerTypeConstants.SQUAMOUS_CELL_CARCINOMA_OF_UNKNOWN_PRIMARY,
-                ActionableFunctions.extractCancerTypeDetails(CkbTestFactory.createIndication("test", "JAX:10000009"))
-                        .applicableCancerType()
-                        .doid());
-        assertEquals(CancerTypeConstants.ADENOCARCINOMA_OF_UNKNOWN_PRIMARY,
-                ActionableFunctions.extractCancerTypeDetails(CkbTestFactory.createIndication("test", "JAX:10000008"))
-                        .applicableCancerType()
-                        .doid());
+        assertEquals("0060463", createCancerTypeDetails("DOID:0060463"));
+        assertEquals(CancerTypeConstants.CANCER_DOID, createCancerTypeDetails("JAX:10000003"));
+        assertEquals(CancerTypeConstants.SQUAMOUS_CELL_CARCINOMA_OF_UNKNOWN_PRIMARY, createCancerTypeDetails("JAX:10000009"));
+        assertEquals(CancerTypeConstants.ADENOCARCINOMA_OF_UNKNOWN_PRIMARY, createCancerTypeDetails("JAX:10000008"));
         assertNull(ActionableFunctions.extractCancerTypeDetails(CkbTestFactory.createIndication("test", "JAX:10000004")));
 
         assertEquals(Sets.newHashSet(CancerTypeConstants.REFRACTORY_HEMATOLOGIC_TYPE,
@@ -51,5 +39,11 @@ public class ActionableFunctionsTest {
                 ActionableFunctions.extractCancerTypeDetails(CkbTestFactory.createIndication("test", "JAX:10000009"))
                         .blacklistedCancerTypes());
 
+    }
+
+    private String createCancerTypeDetails(String termId) {
+        return ActionableFunctions.extractCancerTypeDetails(CkbTestFactory.createIndication("test", termId))
+                .applicableCancerType()
+                .doid();
     }
 }

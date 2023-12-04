@@ -84,7 +84,7 @@ class ActionableTrialFactory implements ActionableEntryFactory {
     }
 
     @VisibleForTesting
-    private static Set<String> countriesToInclude(ClinicalTrial trial) {
+    static Set<String> countriesToInclude(ClinicalTrial trial) {
         Set<String> countries = Sets.newHashSet();
         for (Location location : trial.locations()) {
             if (COUNTRIES_TO_INCLUDE.contains(location.country()) && POTENTIALLY_OPEN_RECRUITMENT_TYPES.contains(trial.recruitment()) && (

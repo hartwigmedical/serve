@@ -87,27 +87,23 @@ public final class CkbTestFactory {
 
     @NotNull
     public static CkbEntry createEntryWithClinicalTrial(@NotNull String geneSymbol, @NotNull String variant, @NotNull String fullName,
-            @NotNull String responseType, @NotNull String evidenceType, @NotNull String therapyName, @NotNull String indicationName,
-            @NotNull String level, @NotNull String termId, @NotNull Location location, @NotNull String recruitmentType,
-            @NotNull VariantRequirementDetail requirementType) {
+            @NotNull String therapyName, @NotNull String indicationName, @NotNull String termId, @NotNull Location location,
+            @NotNull String recruitmentType, @NotNull VariantRequirementDetail requirementType) {
         return ImmutableCkbEntry.builder()
                 .profileId(0)
                 .createDate(TEST_DATE)
                 .updateDate(TEST_DATE)
                 .profileName(Strings.EMPTY)
                 .addVariants(createVariant(geneSymbol, variant, fullName))
-                .addEvidences(createEvidence(responseType, evidenceType, therapyName, indicationName, level, termId))
-                .clinicalTrials(List.of(createTrial(therapyName,
-                        recruitmentType,
-                        indicationName,
-                        termId,
+                .clinicalTrials(List.of(createTrial(therapyName, recruitmentType, indicationName, termId,
                         List.of(requirementType),
                         List.of(location))))
                 .build();
     }
 
     @NotNull
-    public static ClinicalTrial createTrialWithCountryAndRecruitmentType(@NotNull List<Location> locations, String recruitmentType) {
+    public static ClinicalTrial createTrialWithCountryAndRecruitmentType(@NotNull List<Location> locations,
+            @NotNull String recruitmentType) {
         return createTrial(Strings.EMPTY, recruitmentType, Strings.EMPTY, Strings.EMPTY, Lists.newArrayList(), locations);
     }
 

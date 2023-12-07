@@ -14,7 +14,7 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-class ActionableFunctions {
+final class ActionableFunctions {
 
     private static final Logger LOGGER = LogManager.getLogger(ActionableFunctions.class);
 
@@ -29,7 +29,10 @@ class ActionableFunctions {
         ImmutableCancerType.Builder applicableCancerTypeBuilder = ImmutableCancerType.builder().name(indication.name());
         Set<CancerType> blacklistedCancerTypes = Sets.newHashSet();
 
-        assert sourceCancerTypeDetails.length == 2;
+        if (!(sourceCancerTypeDetails.length == 2)) {
+            throw new IllegalStateException("Unexpected termId" + indication.termId() + " for indication " + indication.name());
+        }
+
         String source = sourceCancerTypeDetails[0];
         String id = sourceCancerTypeDetails[1];
         if (source.equalsIgnoreCase("doid")) {

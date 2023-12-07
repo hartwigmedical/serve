@@ -26,9 +26,6 @@ import org.jetbrains.annotations.Nullable;
 
 class ActionableEvidenceFactory implements ActionableEntryFactory {
 
-    @NotNull
-    private final TreatmentApproachCurator curator;
-
     private static final Logger LOGGER = LogManager.getLogger(ActionableEvidenceFactory.class);
 
     private static final Set<String> RESPONSIVE_DIRECTIONS = Sets.newHashSet();
@@ -62,13 +59,16 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
         EVIDENCE_TYPES_TO_IGNORE.add("Diagnostic");
     }
 
+    @NotNull
+    private final TreatmentApproachCurator curator;
+
     public ActionableEvidenceFactory(@NotNull TreatmentApproachCurator curator) {
         this.curator = curator;
     }
 
     @NotNull
     @Override
-    public Set<ActionableEntry> create(@NotNull CkbEntry entry, @NotNull String sourceEvent, @NotNull String gene) {
+    public Set<ActionableEntry> create(@NotNull CkbEntry entry, @NotNull String sourceEvent, @NotNull String sourceGene) {
         Set<ActionableEntry> actionableEntries = Sets.newHashSet();
 
         for (Evidence evidence : evidencesWithUsableType(entry.evidences())) {
@@ -113,7 +113,7 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
                         .treatmentApproach(treatmentApproachInterpret == null || treatmentApproachInterpret.isEmpty()
                                 ? null
                                 : treatmentApproachInterpret)
-                        .event(gene + " " + entry.type())
+                        .event(sourceGene + " " + entry.type())
                         .direction(direction)
                         .build();
 

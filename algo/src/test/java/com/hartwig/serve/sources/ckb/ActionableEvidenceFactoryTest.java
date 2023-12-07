@@ -19,17 +19,19 @@ import org.apache.logging.log4j.util.Strings;
 import org.junit.Test;
 
 public class ActionableEvidenceFactoryTest {
+    private static final TreatmentApproachCurator curator = TreatmentApproachTestFactory.createTestCurator();
 
     @Test
-    public void canCreateActionableEntries() {
-        TreatmentApproachCurator curator = TreatmentApproachTestFactory.createTestCurator();
-
+    public void shouldIgnoreNonActionableKrasDeletion() {
         CkbEntry entryDeletion =
                 CkbTestFactory.createEntry("KRAS", "deletion", "KRAS deletion", "sensitive", "Emerging", "AB", "AB", "A", "DOID:162");
         ActionableEvidenceFactory actionableEvidenceFactory = new ActionableEvidenceFactory(curator);
         Set<ActionableEntry> entryDeletionSet = actionableEvidenceFactory.create(entryDeletion, "KRAS", "gene");
         assertEquals(0, entryDeletionSet.size());
+    }
 
+    @Test
+    public void shouldCreateActionableMSIEntry() {
         CkbEntry entryCharacteristics =
                 CkbTestFactory.createEntry("-", "MSI neg", "MSI neg", "sensitive", "Actionable", "AB", "AB", "A", "DOID:162");
         ActionableEvidenceFactory actionableEvidenceFactoryCharacteristic = new ActionableEvidenceFactory(curator);
@@ -45,7 +47,10 @@ public class ActionableEvidenceFactoryTest {
         assertEquals(Sets.newHashSet(), characteristics.blacklistCancerTypes());
         assertEquals(EvidenceLevel.A, characteristics.level());
         assertEquals(EvidenceDirection.RESPONSIVE, characteristics.direction());
+    }
 
+    @Test
+    public void shouldCreateActionableKrasAmplificationEntry() {
         CkbEntry entryAmplification = CkbTestFactory.createEntry("KRAS",
                 "KRAS amplification",
                 "KRAS amplification",
@@ -67,7 +72,10 @@ public class ActionableEvidenceFactoryTest {
         assertTrue(amplification.blacklistCancerTypes().isEmpty());
         assertEquals(EvidenceLevel.A, amplification.level());
         assertEquals(EvidenceDirection.RESPONSIVE, amplification.direction());
+    }
 
+    @Test
+    public void shouldCreateActionableBrafHotspotEntry() {
         CkbEntry entryHotspot =
                 CkbTestFactory.createEntry("BRAF", "BRAF V600E", "BRAF V600E", "sensitive", "Actionable", "AB", "AB", "A", "DOID:162");
         ActionableEvidenceFactory actionableEvidenceFactoryHotspot = new ActionableEvidenceFactory(curator);
@@ -80,8 +88,8 @@ public class ActionableEvidenceFactoryTest {
         assertEquals("AB", hotspot.applicableCancerType().name());
         assertEquals("162", hotspot.applicableCancerType().doid());
         assertEquals(Sets.newHashSet(), hotspot.blacklistCancerTypes());
-        assertEquals(EvidenceLevel.A, characteristics.level());
-        assertEquals(EvidenceDirection.RESPONSIVE, characteristics.direction());
+        assertEquals(EvidenceLevel.A, hotspot.level());
+        assertEquals(EvidenceDirection.RESPONSIVE, hotspot.direction());
     }
 
     @Test

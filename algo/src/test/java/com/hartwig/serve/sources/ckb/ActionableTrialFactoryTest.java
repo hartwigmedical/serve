@@ -23,18 +23,15 @@ import org.junit.Test;
 public class ActionableTrialFactoryTest {
 
     @Test
-    public void canCreateActionableTrials() {
+    public void shouldIgnoreNonActionableKrasDeletionTrial() {
         Location location = ImmutableLocation.builder().nctId("").city("").country("United States").status("Recruiting").build();
         VariantRequirementDetail requirementType =
                 ImmutableVariantRequirementDetail.builder().profileId(0).requirementType("required").build();
         CkbEntry entryDeletion = CkbTestFactory.createEntryWithClinicalTrial("KRAS",
                 "deletion",
                 "KRAS deletion",
-                "sensitive",
-                "Emerging",
                 "AB",
                 "AB",
-                "A",
                 "DOID:162",
                 location,
                 "Recruiting",
@@ -42,7 +39,10 @@ public class ActionableTrialFactoryTest {
         ActionableTrialFactory actionableTrialFactory = new ActionableTrialFactory();
         Set<ActionableEntry> entryDeletionSet = actionableTrialFactory.create(entryDeletion, "KRAS", "gene");
         assertEquals(0, entryDeletionSet.size());
+    }
 
+    @Test
+    public void shouldCreateActionableMSITrial() {
         CkbEntry entryCharacteristics =
                 CkbTestFactory.createEntry("-", "MSI neg", "MSI neg", "sensitive", "Actionable", "AB", "AB", "A", "DOID:162");
         ActionableTrialFactory actionableTrialFactoryCharacteristic = new ActionableTrialFactory();
@@ -59,7 +59,10 @@ public class ActionableTrialFactoryTest {
         assertEquals(EvidenceLevel.B, characteristics.level());
         assertEquals(EvidenceDirection.RESPONSIVE, characteristics.direction());
         assertEquals("Netherlands", characteristics.evidenceUrls().iterator().next());
+    }
 
+    @Test
+    public void shouldCreateActionableKrasAmplificationTrial() {
         CkbEntry entryAmplification = CkbTestFactory.createEntry("KRAS",
                 "KRAS amplification",
                 "KRAS amplification",
@@ -81,8 +84,11 @@ public class ActionableTrialFactoryTest {
         assertTrue(amplification.blacklistCancerTypes().isEmpty());
         assertEquals(EvidenceLevel.B, amplification.level());
         assertEquals(EvidenceDirection.RESPONSIVE, amplification.direction());
-        assertEquals("Netherlands", characteristics.evidenceUrls().iterator().next());
+        assertEquals("Netherlands", amplification.evidenceUrls().iterator().next());
+    }
 
+    @Test
+    public void shouldCreateActionableBrafHotspotTrial() {
         CkbEntry entryHotspot =
                 CkbTestFactory.createEntry("BRAF", "BRAF V600E", "BRAF V600E", "sensitive", "Actionable", "AB", "AB", "A", "DOID:162");
         ActionableTrialFactory actionableTrialFactoryHotspot = new ActionableTrialFactory();
@@ -95,9 +101,9 @@ public class ActionableTrialFactoryTest {
         assertEquals("AB", hotspot.applicableCancerType().name());
         assertEquals("162", hotspot.applicableCancerType().doid());
         assertTrue(hotspot.blacklistCancerTypes().isEmpty());
-        assertEquals(EvidenceLevel.B, characteristics.level());
-        assertEquals(EvidenceDirection.RESPONSIVE, characteristics.direction());
-        assertEquals("Netherlands", characteristics.evidenceUrls().iterator().next());
+        assertEquals(EvidenceLevel.B, hotspot.level());
+        assertEquals(EvidenceDirection.RESPONSIVE, hotspot.direction());
+        assertEquals("Netherlands", hotspot.evidenceUrls().iterator().next());
     }
 
     @Test
@@ -127,7 +133,7 @@ public class ActionableTrialFactoryTest {
                         .country("Netherlands")
                         .status("Not yet recruiting")
                         .build()), "Recruiting");
-        ClinicalTrial OpenDutchTrial =
+        ClinicalTrial openDutchTrial =
                 CkbTestFactory.createTrialWithCountryAndRecruitmentType(Lists.newArrayList(ImmutableLocation.builder()
                         .nctId("")
                         .city("")
@@ -141,7 +147,7 @@ public class ActionableTrialFactoryTest {
                 .status("Recruiting")
                 .build()), "Recruiting");
         assertEquals(0, ActionableTrialFactory.countriesToInclude(notOpenDutchTrial).size());
-        assertEquals(1, ActionableTrialFactory.countriesToInclude(OpenDutchTrial).size());
+        assertEquals(1, ActionableTrialFactory.countriesToInclude(openDutchTrial).size());
         assertEquals(0, ActionableTrialFactory.countriesToInclude(americanTrial).size());
     }
 }

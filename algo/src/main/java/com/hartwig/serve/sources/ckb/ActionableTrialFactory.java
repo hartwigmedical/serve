@@ -25,15 +25,14 @@ class ActionableTrialFactory implements ActionableEntryFactory {
     private static final Set<String> VARIANT_REQUIREMENT_TYPES_TO_INCLUDE = Sets.newHashSet();
 
     static {
-        POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("Recruiting");
-        POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("Active, not recruiting");
-        POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("Unknown status");
-        POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("RECRUITING");
-        POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("ACTIVE_NOT_RECRUITING");
+        POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("recruiting");
+        POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("active, not recruiting");
+        POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("unknown status");
+        POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("active_not_recruiting");
 
-        COUNTRIES_TO_INCLUDE.add("Netherlands");
-        COUNTRIES_TO_INCLUDE.add("Belgium");
-        COUNTRIES_TO_INCLUDE.add("Germany");
+        COUNTRIES_TO_INCLUDE.add("netherlands");
+        COUNTRIES_TO_INCLUDE.add("belgium");
+        COUNTRIES_TO_INCLUDE.add("germany");
 
         VARIANT_REQUIREMENT_TYPES_TO_INCLUDE.add("partial - required");
         VARIANT_REQUIREMENT_TYPES_TO_INCLUDE.add("required");
@@ -45,27 +44,29 @@ class ActionableTrialFactory implements ActionableEntryFactory {
 
     @NotNull
     @Override
-    public Set<ActionableEntry> create(@NotNull CkbEntry entry, @NotNull String sourceEvent, @NotNull String gene) {
+    public Set<ActionableEntry> create(@NotNull CkbEntry entry, @NotNull String sourceEvent, @NotNull String sourceGene) {
         Set<ActionableEntry> actionableTrials = Sets.newHashSet();
 
         for (ClinicalTrial trial : trialsToInclude(entry)) {
-            for (Indication indication : trial.indications()) {
-                CancerTypeExtraction cancerTypeExtraction = ActionableFunctions.extractCancerTypeDetails(indication);
+            Set<String> countries = countriesToInclude(trial);
 
-                if (cancerTypeExtraction != null) {
-                    Set<String> countries = countriesToInclude(trial);
+            if (!countries.isEmpty()) {
+                for (Indication indication : trial.indications()) {
+                    CancerTypeExtraction cancerTypeExtraction = ActionableFunctions.extractCancerTypeDetails(indication);
 
-                    actionableTrials.add(ImmutableActionableEntry.builder()
-                            .source(Knowledgebase.CKB_TRIAL)
-                            .sourceEvent(sourceEvent)
-                            .sourceUrls(Sets.newHashSet("https://clinicaltrials.gov/study/" + trial.nctId()))
-                            .treatment(ImmutableTreatment.builder().name(trial.nctId()).build())
-                            .applicableCancerType(cancerTypeExtraction.applicableCancerType())
-                            .blacklistCancerTypes(cancerTypeExtraction.blacklistedCancerTypes())
-                            .level(EvidenceLevel.B)
-                            .direction(EvidenceDirection.RESPONSIVE)
-                            .evidenceUrls(countries)
-                            .build());
+                    if (cancerTypeExtraction != null) {
+                        actionableTrials.add(ImmutableActionableEntry.builder()
+                                .source(Knowledgebase.CKB_TRIAL)
+                                .sourceEvent(sourceEvent)
+                                .sourceUrls(Sets.newHashSet("https://clinicaltrials.gov/study/" + trial.nctId()))
+                                .treatment(ImmutableTreatment.builder().name(trial.nctId()).build())
+                                .applicableCancerType(cancerTypeExtraction.applicableCancerType())
+                                .blacklistCancerTypes(cancerTypeExtraction.blacklistedCancerTypes())
+                                .level(EvidenceLevel.B)
+                                .direction(EvidenceDirection.RESPONSIVE)
+                                .evidenceUrls(countries)
+                                .build());
+                    }
                 }
             }
         }
@@ -76,20 +77,21 @@ class ActionableTrialFactory implements ActionableEntryFactory {
     private static List<ClinicalTrial> trialsToInclude(@NotNull CkbEntry entry) {
         List<ClinicalTrial> filtered = Lists.newArrayList();
         for (ClinicalTrial trial : entry.clinicalTrials()) {
-            if (!countriesToInclude(trial).isEmpty()
-                    && hasVariantRequirementTypeToInclude(trial.variantRequirementDetails(), entry)) {
+            if (hasVariantRequirementTypeToInclude(trial.variantRequirementDetails(), entry) && POTENTIALLY_OPEN_RECRUITMENT_TYPES.contains(
+                    trial.recruitment().toLowerCase())) {
                 filtered.add(trial);
             }
         }
         return filtered;
     }
 
+    @NotNull
     @VisibleForTesting
-    static Set<String> countriesToInclude(ClinicalTrial trial) {
+    static Set<String> countriesToInclude(@NotNull ClinicalTrial trial) {
         Set<String> countries = Sets.newHashSet();
         for (Location location : trial.locations()) {
-            if (COUNTRIES_TO_INCLUDE.contains(location.country()) && POTENTIALLY_OPEN_RECRUITMENT_TYPES.contains(trial.recruitment()) && (
-                    POTENTIALLY_OPEN_RECRUITMENT_TYPES.contains(location.status()) || location.status() == null)) {
+            if (COUNTRIES_TO_INCLUDE.contains(location.country().toLowerCase()) && (
+                    POTENTIALLY_OPEN_RECRUITMENT_TYPES.contains(location.status().toLowerCase()) || location.status() == null)) {
                 countries.add(location.country());
             }
         }
@@ -97,10 +99,11 @@ class ActionableTrialFactory implements ActionableEntryFactory {
     }
 
     @VisibleForTesting
-    static boolean hasVariantRequirementTypeToInclude(@NotNull List<VariantRequirementDetail> variantRequirementDetails, CkbEntry entry) {
+    static boolean hasVariantRequirementTypeToInclude(@NotNull List<VariantRequirementDetail> variantRequirementDetails,
+            @NotNull CkbEntry entry) {
         for (VariantRequirementDetail variantRequirementDetail : variantRequirementDetails) {
             if (entry.profileId() == variantRequirementDetail.profileId() && VARIANT_REQUIREMENT_TYPES_TO_INCLUDE.contains(
-                    variantRequirementDetail.requirementType())) {
+                    variantRequirementDetail.requirementType().toLowerCase())) {
                 return true;
             }
         }

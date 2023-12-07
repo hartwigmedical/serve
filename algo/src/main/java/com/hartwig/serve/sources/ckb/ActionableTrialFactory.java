@@ -90,11 +90,13 @@ class ActionableTrialFactory implements ActionableEntryFactory {
     static Set<String> countriesToInclude(@NotNull ClinicalTrial trial) {
         Set<String> countries = Sets.newHashSet();
         for (Location location : trial.locations()) {
-            if (COUNTRIES_TO_INCLUDE.contains(location.country().toLowerCase()) && (
-                    POTENTIALLY_OPEN_RECRUITMENT_TYPES.contains(location.status().toLowerCase()) || location.status() == null)) {
+            if (COUNTRIES_TO_INCLUDE.contains(location.country().toLowerCase()) && (location.status() == null
+                    ? true
+                    : POTENTIALLY_OPEN_RECRUITMENT_TYPES.contains(location.status().toLowerCase()))) {
                 countries.add(location.country());
             }
         }
+
         return countries;
     }
 

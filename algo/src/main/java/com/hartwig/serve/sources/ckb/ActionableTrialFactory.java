@@ -103,6 +103,7 @@ class ActionableTrialFactory implements ActionableEntryFactory {
     static boolean hasVariantRequirementTypeToInclude(@NotNull List<VariantRequirementDetail> variantRequirementDetails,
             @NotNull CkbEntry entry) {
         for (VariantRequirementDetail variantRequirementDetail : variantRequirementDetails) {
+            // Check if trial should be included based on the molecular profile of the current entry (trial can be linked to multiple molecular profiles)
             if (entry.profileId() == variantRequirementDetail.profileId() && VARIANT_REQUIREMENT_TYPES_TO_INCLUDE.contains(
                     variantRequirementDetail.requirementType().toLowerCase())) {
                 return true;

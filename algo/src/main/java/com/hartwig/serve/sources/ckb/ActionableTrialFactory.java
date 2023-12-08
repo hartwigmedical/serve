@@ -91,8 +91,7 @@ class ActionableTrialFactory implements ActionableEntryFactory {
         Set<String> countries = Sets.newHashSet();
         for (Location location : trial.locations()) {
             if (COUNTRIES_TO_INCLUDE.contains(location.country().toLowerCase()) && (location.status() == null
-                    ? true
-                    : POTENTIALLY_OPEN_RECRUITMENT_TYPES.contains(location.status().toLowerCase()))) {
+                    || POTENTIALLY_OPEN_RECRUITMENT_TYPES.contains(location.status().toLowerCase()))) {
                 countries.add(location.country());
             }
         }

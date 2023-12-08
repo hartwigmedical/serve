@@ -95,7 +95,10 @@ public final class CkbTestFactory {
                 .updateDate(TEST_DATE)
                 .profileName(Strings.EMPTY)
                 .addVariants(createVariant(geneSymbol, variant, fullName))
-                .clinicalTrials(List.of(createTrial(therapyName, recruitmentType, indicationName, termId,
+                .clinicalTrials(List.of(createTrial(therapyName,
+                        recruitmentType,
+                        indicationName,
+                        termId,
                         List.of(requirementType),
                         List.of(location))))
                 .build();

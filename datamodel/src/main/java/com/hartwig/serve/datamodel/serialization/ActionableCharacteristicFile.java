@@ -16,7 +16,6 @@ import com.hartwig.serve.datamodel.characteristic.ImmutableActionableCharacteris
 import com.hartwig.serve.datamodel.characteristic.TumorCharacteristicCutoffType;
 import com.hartwig.serve.datamodel.characteristic.TumorCharacteristicType;
 import com.hartwig.serve.datamodel.serialization.util.ActionableFileUtil;
-import com.hartwig.serve.datamodel.serialization.util.BackwardsCompatibilityUtil;
 import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
 import org.apache.logging.log4j.util.Strings;
@@ -38,8 +37,6 @@ public final class ActionableCharacteristicFile {
 
     public static void write(@NotNull String actionableCharacteristicTsv,
             @NotNull Iterable<ActionableCharacteristic> actionableCharacteristics) throws IOException {
-        BackwardsCompatibilityUtil.verifyActionableEventsBeforeWrite(actionableCharacteristics);
-
         List<String> lines = Lists.newArrayList();
         lines.add(header());
         lines.addAll(toLines(actionableCharacteristics));
@@ -52,7 +49,7 @@ public final class ActionableCharacteristicFile {
         List<String> lines = Files.readAllLines(new File(actionableCharacteristicTsv).toPath());
         Map<String, Integer> fields = SerializationUtil.createFields(lines.get(0), ActionableFileUtil.FIELD_DELIMITER);
 
-        return BackwardsCompatibilityUtil.expandActionableCharacteristics(fromLines(lines.subList(1, lines.size()), fields));
+        return fromLines(lines.subList(1, lines.size()), fields);
     }
 
     @NotNull

@@ -15,7 +15,6 @@ import com.hartwig.serve.datamodel.common.ProteinEffect;
 import com.hartwig.serve.datamodel.fusion.ImmutableKnownFusion;
 import com.hartwig.serve.datamodel.fusion.KnownFusion;
 import com.hartwig.serve.datamodel.fusion.KnownFusionComparator;
-import com.hartwig.serve.datamodel.serialization.util.BackwardsCompatibilityUtil;
 import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
 import org.jetbrains.annotations.NotNull;
@@ -34,8 +33,6 @@ public final class KnownFusionFile {
     }
 
     public static void write(@NotNull String fusionTsv, @NotNull Iterable<KnownFusion> fusions) throws IOException {
-        BackwardsCompatibilityUtil.verifyKnownEventsBeforeWrite(fusions);
-
         List<String> lines = Lists.newArrayList();
         lines.add(header());
         lines.addAll(toLines(fusions));
@@ -48,7 +45,7 @@ public final class KnownFusionFile {
         List<String> lines = Files.readAllLines(new File(file).toPath());
         Map<String, Integer> fields = SerializationUtil.createFields(lines.get(0), FIELD_DELIMITER);
 
-        return BackwardsCompatibilityUtil.patchKnownFusions(fromLines(lines.subList(1, lines.size()), fields));
+        return fromLines(lines.subList(1, lines.size()), fields);
     }
 
     @NotNull

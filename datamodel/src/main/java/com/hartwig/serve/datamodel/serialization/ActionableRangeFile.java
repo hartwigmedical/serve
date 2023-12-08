@@ -15,7 +15,6 @@ import com.hartwig.serve.datamodel.range.ActionableRange;
 import com.hartwig.serve.datamodel.range.ActionableRangeComparator;
 import com.hartwig.serve.datamodel.range.ImmutableActionableRange;
 import com.hartwig.serve.datamodel.serialization.util.ActionableFileUtil;
-import com.hartwig.serve.datamodel.serialization.util.BackwardsCompatibilityUtil;
 import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
 import org.jetbrains.annotations.NotNull;
@@ -39,8 +38,6 @@ public class ActionableRangeFile {
     }
 
     public static void write(@NotNull String actionableRangeTsv, @NotNull Iterable<ActionableRange> actionableRanges) throws IOException {
-        BackwardsCompatibilityUtil.verifyActionableEventsBeforeWrite(actionableRanges);
-
         List<String> lines = Lists.newArrayList();
         lines.add(header());
         lines.addAll(toLines(actionableRanges));
@@ -53,7 +50,7 @@ public class ActionableRangeFile {
         List<String> lines = Files.readAllLines(new File(actionableTsv).toPath());
         Map<String, Integer> fields = SerializationUtil.createFields(lines.get(0), ActionableFileUtil.FIELD_DELIMITER);
 
-        return BackwardsCompatibilityUtil.expandActionableRanges(fromLines(lines.subList(1, lines.size()), fields));
+        return fromLines(lines.subList(1, lines.size()), fields);
     }
 
     @NotNull

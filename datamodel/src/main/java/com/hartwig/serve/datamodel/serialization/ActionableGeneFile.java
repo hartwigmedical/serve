@@ -15,7 +15,6 @@ import com.hartwig.serve.datamodel.gene.ActionableGeneComparator;
 import com.hartwig.serve.datamodel.gene.GeneEvent;
 import com.hartwig.serve.datamodel.gene.ImmutableActionableGene;
 import com.hartwig.serve.datamodel.serialization.util.ActionableFileUtil;
-import com.hartwig.serve.datamodel.serialization.util.BackwardsCompatibilityUtil;
 import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
 import org.jetbrains.annotations.NotNull;
@@ -33,8 +32,6 @@ public final class ActionableGeneFile {
     }
 
     public static void write(@NotNull String actionableGeneTsv, @NotNull Iterable<ActionableGene> actionableGenes) throws IOException {
-        BackwardsCompatibilityUtil.verifyActionableEventsBeforeWrite(actionableGenes);
-
         List<String> lines = Lists.newArrayList();
         lines.add(header());
         lines.addAll(toLines(actionableGenes));
@@ -47,7 +44,7 @@ public final class ActionableGeneFile {
         List<String> lines = Files.readAllLines(new File(actionableGeneTsv).toPath());
         Map<String, Integer> fields = SerializationUtil.createFields(lines.get(0), ActionableFileUtil.FIELD_DELIMITER);
 
-        return BackwardsCompatibilityUtil.expandActionableGenes(fromLines(lines.subList(1, lines.size()), fields));
+        return fromLines(lines.subList(1, lines.size()), fields);
     }
 
     @NotNull

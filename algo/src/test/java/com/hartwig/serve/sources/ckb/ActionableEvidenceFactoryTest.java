@@ -19,6 +19,7 @@ import org.apache.logging.log4j.util.Strings;
 import org.junit.Test;
 
 public class ActionableEvidenceFactoryTest {
+
     private static final TreatmentApproachCurator curator = TreatmentApproachTestFactory.createTestCurator();
 
     @Test

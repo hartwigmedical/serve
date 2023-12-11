@@ -32,7 +32,7 @@ final class ActionableFunctions {
         ImmutableCancerType.Builder applicableCancerTypeBuilder = ImmutableCancerType.builder().name(indication.name());
         Set<CancerType> blacklistedCancerTypes = Sets.newHashSet();
 
-        if (!(sourceCancerTypeDetails.length == 2)) {
+        if (sourceCancerTypeDetails.length != 2) {
             throw new IllegalStateException("Unexpected termId" + indication.termId() + " for indication " + indication.name());
         }
 

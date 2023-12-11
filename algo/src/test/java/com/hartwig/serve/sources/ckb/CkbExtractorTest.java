@@ -52,6 +52,15 @@ public class CkbExtractorTest {
 
         ExtractionResult trialResult = trialExtractor.extract(ckbEntries);
         assertEquals(0, trialResult.knownHotspots().size());
+        assertEquals(0, trialResult.knownGenes().size());
+        assertEquals(0, trialResult.knownCopyNumbers().size());
+        assertEquals(0, trialResult.knownFusions().size());
+        assertEquals(1, trialResult.actionableHotspots().size());
+        assertEquals(1, trialResult.actionableCodons().size());
+        assertEquals(1, trialResult.actionableExons().size());
+        assertEquals(2, trialResult.actionableGenes().size());
+        assertEquals(1, trialResult.actionableFusions().size());
+        assertEquals(1, trialResult.actionableCharacteristics().size());
     }
 
     @NotNull

@@ -11,7 +11,6 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 public enum Knowledgebase {
-    @Deprecated CKB(RefGenome.V38, "CKB", EvidenceLevel.C, EvidenceLevel.B),
     CKB_EVIDENCE(RefGenome.V38, "CKB", EvidenceLevel.C, EvidenceLevel.B),
     CKB_TRIAL(RefGenome.V38, "CKB", EvidenceLevel.B, EvidenceLevel.B),
     DOCM(RefGenome.V37, "DoCM", EvidenceLevel.A, EvidenceLevel.A),

@@ -17,7 +17,6 @@ import com.hartwig.serve.datamodel.common.GeneRole;
 import com.hartwig.serve.datamodel.gene.ImmutableKnownGene;
 import com.hartwig.serve.datamodel.gene.KnownGene;
 import com.hartwig.serve.datamodel.gene.KnownGeneComparator;
-import com.hartwig.serve.datamodel.serialization.util.BackwardsCompatibilityUtil;
 import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
 import org.jetbrains.annotations.NotNull;
@@ -36,8 +35,6 @@ public final class KnownGeneFile {
     }
 
     public static void write(@NotNull String genesTsv, @NotNull Iterable<KnownGene> genes) throws IOException {
-        BackwardsCompatibilityUtil.verifyKnownEventsBeforeWrite(genes);
-
         List<String> lines = Lists.newArrayList();
         lines.add(header());
         lines.addAll(toLines(genes));
@@ -50,7 +47,7 @@ public final class KnownGeneFile {
         List<String> lines = Files.readAllLines(new File(file).toPath());
         Map<String, Integer> fields = SerializationUtil.createFields(lines.get(0), FIELD_DELIMITER);
 
-        return BackwardsCompatibilityUtil.patchKnownGenes(fromLines(lines.subList(1, lines.size()), fields));
+        return fromLines(lines.subList(1, lines.size()), fields);
     }
 
     @NotNull

@@ -14,16 +14,6 @@ import org.junit.Test;
 public class ActionableFunctionsTest {
 
     @Test
-    public void canExtractSourceCancerTypeID() {
-        assertNull(ActionableFunctions.extractSourceCancerTypeDetails(null));
-        assertNull(ActionableFunctions.extractSourceCancerTypeDetails("not a doid"));
-
-        assertNotNull(ActionableFunctions.extractSourceCancerTypeDetails("DOID:0060463"));
-        assertEquals("0060463", ActionableFunctions.extractSourceCancerTypeDetails("DOID:0060463")[1]);
-        assertEquals("10000003", ActionableFunctions.extractSourceCancerTypeDetails("JAX:10000003")[1]);
-    }
-
-    @Test
     public void canExtractCancerTypeDetails() {
         assertNull(ActionableFunctions.extractCancerTypeDetails(CkbTestFactory.createIndication("test", "JAX:not a doid")));
 
@@ -44,6 +34,17 @@ public class ActionableFunctionsTest {
 
     }
 
+    @Test
+    public void canExtractSourceCancerTypeID() {
+        assertNull(ActionableFunctions.extractSourceCancerTypeDetails(null));
+        assertNull(ActionableFunctions.extractSourceCancerTypeDetails("not a doid"));
+
+        assertNotNull(ActionableFunctions.extractSourceCancerTypeDetails("DOID:0060463"));
+        assertEquals("0060463", ActionableFunctions.extractSourceCancerTypeDetails("DOID:0060463")[1]);
+        assertEquals("10000003", ActionableFunctions.extractSourceCancerTypeDetails("JAX:10000003")[1]);
+    }
+
+    @NotNull
     private static String extractDoidForApplicableCancerType(@NotNull String termId) {
         return ActionableFunctions.extractCancerTypeDetails(CkbTestFactory.createIndication("test", termId)).applicableCancerType().doid();
     }

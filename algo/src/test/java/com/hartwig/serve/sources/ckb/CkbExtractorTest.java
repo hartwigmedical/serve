@@ -24,9 +24,10 @@ public class CkbExtractorTest {
     @Test
     public void canExtractFromCkbEntries() {
         EventClassifierConfig config = CkbClassificationConfig.build();
-        CkbExtractor extractor = CkbExtractorFactory.createEvidenceExtractor(config,
+        CkbExtractor evidenceExtractor = CkbExtractorFactory.createEvidenceExtractor(config,
                 RefGenomeResourceTestFactory.buildTestResource37(),
                 TreatmentApproachTestFactory.createEmptyCurator());
+        CkbExtractor trialExtractor = CkbExtractorFactory.createTrialExtractor(config, RefGenomeResourceTestFactory.buildTestResource37());
 
         List<CkbEntry> ckbEntries = Lists.newArrayList();
         ckbEntries.add(create("KIT", "amp", "KIT amp", "sensitive", "Actionable"));
@@ -37,17 +38,20 @@ public class CkbExtractorTest {
         ckbEntries.add(create("-", "MSI high", "MSI high", "sensitive", "Actionable"));
         ckbEntries.add(create("ALk", "EML4-ALK", "EML4-ALK Fusion", "sensitive", "Actionable"));
 
-        ExtractionResult result = extractor.extract(ckbEntries);
-        assertEquals(1, result.knownHotspots().size());
-        assertEquals(3, result.knownGenes().size());
-        assertEquals(1, result.knownCopyNumbers().size());
-        assertEquals(1, result.knownFusions().size());
-        assertEquals(1, result.actionableHotspots().size());
-        assertEquals(1, result.actionableCodons().size());
-        assertEquals(1, result.actionableExons().size());
-        assertEquals(2, result.actionableGenes().size());
-        assertEquals(1, result.actionableFusions().size());
-        assertEquals(1, result.actionableCharacteristics().size());
+        ExtractionResult evidenceResult = evidenceExtractor.extract(ckbEntries);
+        assertEquals(1, evidenceResult.knownHotspots().size());
+        assertEquals(3, evidenceResult.knownGenes().size());
+        assertEquals(1, evidenceResult.knownCopyNumbers().size());
+        assertEquals(1, evidenceResult.knownFusions().size());
+        assertEquals(1, evidenceResult.actionableHotspots().size());
+        assertEquals(1, evidenceResult.actionableCodons().size());
+        assertEquals(1, evidenceResult.actionableExons().size());
+        assertEquals(2, evidenceResult.actionableGenes().size());
+        assertEquals(1, evidenceResult.actionableFusions().size());
+        assertEquals(1, evidenceResult.actionableCharacteristics().size());
+
+        ExtractionResult trialResult = trialExtractor.extract(ckbEntries);
+        assertEquals(0, trialResult.knownHotspots().size());
     }
 
     @NotNull

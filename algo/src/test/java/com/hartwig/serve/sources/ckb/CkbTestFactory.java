@@ -86,19 +86,18 @@ public final class CkbTestFactory {
     }
 
     @NotNull
-    public static CkbEntry createEntryWithClinicalTrial(@NotNull String geneSymbol, @NotNull String variant, @NotNull String fullName,
-            @NotNull String therapyName, @NotNull String indicationName, @NotNull String termId, @NotNull Location location,
+    public static CkbEntry createEntryWithClinicalTrial(@NotNull Location location,
             @NotNull String recruitmentType, @NotNull VariantRequirementDetail requirementType) {
         return ImmutableCkbEntry.builder()
                 .profileId(0)
                 .createDate(TEST_DATE)
                 .updateDate(TEST_DATE)
                 .profileName(Strings.EMPTY)
-                .addVariants(createVariant(geneSymbol, variant, fullName))
-                .clinicalTrials(List.of(createTrial(therapyName,
+                .addVariants(createVariant("KRAS", "BRAF V600E", "BRAF V600E"))
+                .clinicalTrials(List.of(createTrial("AB",
                         recruitmentType,
-                        indicationName,
-                        termId,
+                        "AB",
+                        "DOID:162",
                         List.of(requirementType),
                         List.of(location))))
                 .build();

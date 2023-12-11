@@ -18,6 +18,9 @@ final class ActionableFunctions {
 
     private static final Logger LOGGER = LogManager.getLogger(ActionableFunctions.class);
 
+    private ActionableFunctions() {
+    }
+
     @Nullable
     public static CancerTypeExtraction extractCancerTypeDetails(@NotNull Indication indication) {
         String[] sourceCancerTypeDetails = extractSourceCancerTypeDetails(indication.termId());

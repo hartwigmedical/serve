@@ -53,10 +53,14 @@ public class ActionableTrialFactoryTest {
         ClinicalTrial trialNotOpenInNetherlands = createTrial("Recruiting", "Netherlands", "Not yet recruiting");
         ClinicalTrial trialPotentiallyOpenInUnitedStates = createTrial("Recruiting", "United States", "Recruiting");
         ClinicalTrial trialWithdrawnInUnitedStates = createTrial("Recruiting", "United States", "Withdrawn");
-        ClinicalTrial trialPotentiallyOpenInBelgiumAndIndia = createTrialWithMultipleLocations("Recruiting", "Belgium", "Recruiting", "India", "Recruiting");
-        ClinicalTrial trialPotentiallyOpenInBelgiumAndGermany = createTrialWithMultipleLocations("Recruiting", "Belgium", "Recruiting", "Germany", "Active, not recruiting");
-        ClinicalTrial trialPotentiallyOpenInBelgiumSuspendedInGermany = createTrialWithMultipleLocations("Recruiting", "Belgium", "Recruiting", "Germany", "Suspended");
-        ClinicalTrial trialPotentiallyOpenInBelgiumSuspendedInIndia = createTrialWithMultipleLocations("Recruiting", "Belgium", "Recruiting", "India", "Suspended");
+        ClinicalTrial trialPotentiallyOpenInBelgiumAndIndia =
+                createTrialWithMultipleLocations("Recruiting", "Belgium", "Recruiting", "India", "Recruiting");
+        ClinicalTrial trialPotentiallyOpenInBelgiumAndGermany =
+                createTrialWithMultipleLocations("Recruiting", "Belgium", "Recruiting", "Germany", "Active, not recruiting");
+        ClinicalTrial trialPotentiallyOpenInBelgiumSuspendedInGermany =
+                createTrialWithMultipleLocations("Recruiting", "Belgium", "Recruiting", "Germany", "Suspended");
+        ClinicalTrial trialPotentiallyOpenInBelgiumSuspendedInIndia =
+                createTrialWithMultipleLocations("Recruiting", "Belgium", "Recruiting", "India", "Suspended");
         ClinicalTrial terminatedTrial = createTrial("Terminated", "Netherlands", "Suspended");
         assertEquals(1, ActionableTrialFactory.countriesToInclude(trialPotentiallyOpenInBelgium).size());
         assertEquals(0, ActionableTrialFactory.countriesToInclude(trialNotOpenInNetherlands).size());

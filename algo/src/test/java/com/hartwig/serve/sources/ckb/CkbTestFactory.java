@@ -3,6 +3,7 @@ package com.hartwig.serve.sources.ckb;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.google.common.collect.Lists;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.ckb.datamodel.ImmutableCkbEntry;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.ClinicalTrial;
@@ -22,7 +23,6 @@ import com.hartwig.serve.ckb.datamodel.variant.ImmutableGene;
 import com.hartwig.serve.ckb.datamodel.variant.ImmutableVariant;
 import com.hartwig.serve.ckb.datamodel.variant.Variant;
 
-import org.apache.commons.compress.utils.Lists;
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 
@@ -121,11 +121,11 @@ public final class CkbTestFactory {
                 "Recruiting",
                 indicationName,
                 termId,
-                com.google.common.collect.Lists.newArrayList(ImmutableVariantRequirementDetail.builder()
+                Lists.newArrayList(ImmutableVariantRequirementDetail.builder()
                         .profileId(0)
                         .requirementType("required")
                         .build()),
-                com.google.common.collect.Lists.newArrayList(ImmutableLocation.builder()
+                Lists.newArrayList(ImmutableLocation.builder()
                         .nctId("")
                         .city("")
                         .country("Netherlands")

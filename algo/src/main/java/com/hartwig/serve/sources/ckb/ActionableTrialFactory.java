@@ -36,7 +36,6 @@ class ActionableTrialFactory implements ActionableEntryFactory {
 
         VARIANT_REQUIREMENT_TYPES_TO_INCLUDE.add("partial - required");
         VARIANT_REQUIREMENT_TYPES_TO_INCLUDE.add("required");
-        VARIANT_REQUIREMENT_TYPES_TO_INCLUDE.add("partial");
     }
 
     public ActionableTrialFactory() {

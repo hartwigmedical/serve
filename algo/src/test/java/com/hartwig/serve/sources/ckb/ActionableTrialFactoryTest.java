@@ -38,7 +38,7 @@ public class ActionableTrialFactoryTest {
         assertEquals(Knowledgebase.CKB_TRIAL, trial.source());
         assertEquals("KRAS", trial.sourceEvent());
         assertEquals(Sets.newHashSet("https://clinicaltrials.gov/study/nctid"), trial.sourceUrls());
-        assertEquals("nctid", trial.treatment().name());
+        assertEquals("title", trial.treatment().name());
         assertEquals("AB", trial.applicableCancerType().name());
         assertEquals("162", trial.applicableCancerType().doid());
         assertEquals(Sets.newHashSet(), trial.blacklistCancerTypes());

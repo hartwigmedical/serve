@@ -58,7 +58,7 @@ class ActionableTrialFactory implements ActionableEntryFactory {
                                 .source(Knowledgebase.CKB_TRIAL)
                                 .sourceEvent(sourceEvent)
                                 .sourceUrls(Sets.newHashSet("https://clinicaltrials.gov/study/" + trial.nctId()))
-                                .treatment(ImmutableTreatment.builder().name(trial.nctId()).build())
+                                .treatment(ImmutableTreatment.builder().name(trial.title()).build())
                                 .applicableCancerType(cancerTypeExtraction.applicableCancerType())
                                 .blacklistCancerTypes(cancerTypeExtraction.blacklistedCancerTypes())
                                 .level(EvidenceLevel.B)

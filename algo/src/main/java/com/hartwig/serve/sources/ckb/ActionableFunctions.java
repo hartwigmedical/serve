@@ -23,21 +23,21 @@ final class ActionableFunctions {
 
     @Nullable
     public static CancerTypeExtraction extractCancerTypeDetails(@NotNull Indication indication) {
-        String[] sourceCancerTypeDetails = extractSourceCancerTypeDetails(indication.termId());
+        String[] sourceDoidValues = splitSourceDoidString(indication.termId());
 
-        if (sourceCancerTypeDetails == null) {
+        if (sourceDoidValues == null) {
             return null;
+        }
+
+        if (sourceDoidValues.length != 2) {
+            throw new IllegalStateException("Unexpected termId" + indication.termId() + " for indication " + indication.name());
         }
 
         ImmutableCancerType.Builder applicableCancerTypeBuilder = ImmutableCancerType.builder().name(indication.name());
         Set<CancerType> blacklistedCancerTypes = Sets.newHashSet();
 
-        if (sourceCancerTypeDetails.length != 2) {
-            throw new IllegalStateException("Unexpected termId" + indication.termId() + " for indication " + indication.name());
-        }
-
-        String source = sourceCancerTypeDetails[0];
-        String id = sourceCancerTypeDetails[1];
+        String source = sourceDoidValues[0];
+        String id = sourceDoidValues[1];
         if (source.equalsIgnoreCase("doid")) {
             applicableCancerTypeBuilder.doid(id);
         } else if (source.equalsIgnoreCase("jax")) {
@@ -86,7 +86,7 @@ final class ActionableFunctions {
 
     @Nullable
     @VisibleForTesting
-    static String[] extractSourceCancerTypeDetails(@Nullable String doidString) {
+    static String[] splitSourceDoidString(@Nullable String doidString) {
         if (doidString == null) {
             return null;
         }

@@ -148,7 +148,7 @@ public final class CkbTestFactory {
     }
 
     @NotNull
-    public static ClinicalTrial createTrial(@NotNull String therapyName, @NotNull String recruitment, @NotNull String indicationName,
+    private static ClinicalTrial createTrial(@NotNull String therapyName, @NotNull String recruitment, @NotNull String indicationName,
             @NotNull String termId, @NotNull List<VariantRequirementDetail> variantRequirementDetails, @NotNull List<Location> locations) {
         return ImmutableClinicalTrial.builder()
                 .updateDate(TEST_DATE)

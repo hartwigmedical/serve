@@ -25,6 +25,7 @@ import com.hartwig.serve.ckb.datamodel.variant.Variant;
 
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public final class CkbTestFactory {
 
@@ -86,50 +87,31 @@ public final class CkbTestFactory {
     }
 
     @NotNull
-    public static CkbEntry createEntryWithClinicalTrial(@NotNull Location location,
+    public static CkbEntry createEntryWithClinicalTrial(@NotNull Integer profileId, @NotNull Location location,
             @NotNull String recruitmentType, @NotNull VariantRequirementDetail requirementType) {
         return ImmutableCkbEntry.builder()
-                .profileId(0)
+                .profileId(profileId)
                 .createDate(TEST_DATE)
                 .updateDate(TEST_DATE)
                 .profileName(Strings.EMPTY)
                 .addVariants(createVariant("KRAS", "BRAF V600E", "BRAF V600E"))
-                .clinicalTrials(List.of(createTrial("AB",
-                        recruitmentType,
-                        "AB",
-                        "DOID:162",
-                        List.of(requirementType),
-                        List.of(location))))
+                .clinicalTrials(List.of(createTrial(recruitmentType, "AB", "DOID:162", List.of(requirementType), List.of(location))))
                 .build();
     }
 
     @NotNull
     public static ClinicalTrial createTrialWithCountryAndRecruitmentType(@NotNull List<Location> locations,
             @NotNull String recruitmentType) {
-        return createTrial(Strings.EMPTY, recruitmentType, Strings.EMPTY, Strings.EMPTY, Lists.newArrayList(), locations);
+        return createTrial(recruitmentType, Strings.EMPTY, Strings.EMPTY, Lists.newArrayList(), locations);
     }
 
     @NotNull
-    public static ClinicalTrial createTrialWithRequirementType(@NotNull List<VariantRequirementDetail> variantRequirementDetails) {
-        return createTrial(Strings.EMPTY, Strings.EMPTY, Strings.EMPTY, Strings.EMPTY, variantRequirementDetails, Lists.newArrayList());
-    }
-
-    @NotNull
-    public static ClinicalTrial createTrialWithTherapyNameAndIndicationNameAndTermId(@NotNull String therapyName,
-            @NotNull String indicationName, @NotNull String termId) {
-        return createTrial(therapyName,
-                "Recruiting",
+    public static ClinicalTrial createTrialWithIndicationNameAndTermId(@NotNull String indicationName, @NotNull String termId) {
+        return createTrial("Recruiting",
                 indicationName,
                 termId,
-                Lists.newArrayList(ImmutableVariantRequirementDetail.builder()
-                        .profileId(0)
-                        .requirementType("required")
-                        .build()),
-                Lists.newArrayList(ImmutableLocation.builder()
-                        .nctId("")
-                        .city("")
-                        .country("Netherlands")
-                        .build()));
+                Lists.newArrayList(ImmutableVariantRequirementDetail.builder().profileId(0).requirementType("required").build()),
+                Lists.newArrayList(CkbTestFactory.createLocation("Netherlands", null)));
     }
 
     @NotNull
@@ -143,21 +125,21 @@ public final class CkbTestFactory {
                 .profileName(Strings.EMPTY)
                 .addVariants(createVariant(geneSymbol, variant, fullName))
                 .addEvidences(createEvidence(responseType, evidenceType, therapyName, indicationName, level, termId))
-                .clinicalTrials(List.of(createTrialWithTherapyNameAndIndicationNameAndTermId(therapyName, indicationName, termId)))
+                .clinicalTrials(List.of(createTrialWithIndicationNameAndTermId(indicationName, termId)))
                 .build();
     }
 
     @NotNull
-    private static ClinicalTrial createTrial(@NotNull String therapyName, @NotNull String recruitment, @NotNull String indicationName,
-            @NotNull String termId, @NotNull List<VariantRequirementDetail> variantRequirementDetails, @NotNull List<Location> locations) {
+    private static ClinicalTrial createTrial(@NotNull String recruitment, @NotNull String indicationName, @NotNull String termId,
+            @NotNull List<VariantRequirementDetail> variantRequirementDetails, @NotNull List<Location> locations) {
         return ImmutableClinicalTrial.builder()
                 .updateDate(TEST_DATE)
                 .nctId("nctid")
                 .title("title")
-                .therapies(List.of(createTherapy(therapyName)))
+                .therapies(List.of())
                 .indications(List.of(createIndication(indicationName, termId)))
                 .recruitment(recruitment)
-                .ageGroups(List.of("adult"))
+                .ageGroups(List.of())
                 .variantRequirement("yes")
                 .variantRequirementDetails(variantRequirementDetails)
                 .locations(locations)
@@ -233,5 +215,10 @@ public final class CkbTestFactory {
                 .geneSymbol(geneSymbol)
                 .geneRole(Strings.EMPTY)
                 .build();
+    }
+
+    @NotNull
+    public static Location createLocation(@NotNull String country, @Nullable String status) {
+        return ImmutableLocation.builder().nctId("nctid").city("city").country(country).status(status).build();
     }
 }

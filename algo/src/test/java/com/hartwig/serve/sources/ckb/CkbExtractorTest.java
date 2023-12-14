@@ -20,25 +20,15 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
 public class CkbExtractorTest {
+    EventClassifierConfig config = CkbClassificationConfig.build();
 
     @Test
-    public void canExtractFromCkbEntries() {
-        EventClassifierConfig config = CkbClassificationConfig.build();
+    public void canExtractEvidenceFromCkbEntries() {
         CkbExtractor evidenceExtractor = CkbExtractorFactory.createEvidenceExtractor(config,
                 RefGenomeResourceTestFactory.buildTestResource37(),
                 TreatmentApproachTestFactory.createEmptyCurator());
-        CkbExtractor trialExtractor = CkbExtractorFactory.createTrialExtractor(config, RefGenomeResourceTestFactory.buildTestResource37());
 
-        List<CkbEntry> ckbEntries = Lists.newArrayList();
-        ckbEntries.add(create("KIT", "amp", "KIT amp", "sensitive", "Actionable"));
-        ckbEntries.add(create("BRAF", "V600E", "BRAF V600E", "sensitive", "Actionable"));
-        ckbEntries.add(create("NTRK3", "fusion promiscuous", "NTRK3 fusion promiscuous", "sensitive", "Actionable"));
-        ckbEntries.add(create("BRAF", "V600", "BRAF V600", "sensitive", "Actionable"));
-        ckbEntries.add(create("BRAF", "exon 1 deletion", "BRAF exon 1 deletion", "sensitive", "Actionable"));
-        ckbEntries.add(create("-", "MSI high", "MSI high", "sensitive", "Actionable"));
-        ckbEntries.add(create("ALk", "EML4-ALK", "EML4-ALK Fusion", "sensitive", "Actionable"));
-
-        ExtractionResult evidenceResult = evidenceExtractor.extract(ckbEntries);
+        ExtractionResult evidenceResult = evidenceExtractor.extract(createCkbEntryTestDatabase());
         assertEquals(1, evidenceResult.knownHotspots().size());
         assertEquals(3, evidenceResult.knownGenes().size());
         assertEquals(1, evidenceResult.knownCopyNumbers().size());
@@ -49,8 +39,13 @@ public class CkbExtractorTest {
         assertEquals(2, evidenceResult.actionableGenes().size());
         assertEquals(1, evidenceResult.actionableFusions().size());
         assertEquals(1, evidenceResult.actionableCharacteristics().size());
+    }
 
-        ExtractionResult trialResult = trialExtractor.extract(ckbEntries);
+    @Test
+    public void canExtractTrialsFromCkbEntries() {
+        CkbExtractor trialExtractor = CkbExtractorFactory.createTrialExtractor(config, RefGenomeResourceTestFactory.buildTestResource37());
+
+        ExtractionResult trialResult = trialExtractor.extract(createCkbEntryTestDatabase());
         assertEquals(0, trialResult.knownHotspots().size());
         assertEquals(0, trialResult.knownGenes().size());
         assertEquals(0, trialResult.knownCopyNumbers().size());
@@ -120,5 +115,19 @@ public class CkbExtractorTest {
         }
 
         throw new IllegalStateException("Could not find gene " + geneToFind);
+    }
+
+    @NotNull
+    private static List<CkbEntry> createCkbEntryTestDatabase() {
+        List<CkbEntry> ckbEntries = Lists.newArrayList();
+        ckbEntries.add(create("KIT", "amp", "KIT amp", "sensitive", "Actionable"));
+        ckbEntries.add(create("BRAF", "V600E", "BRAF V600E", "sensitive", "Actionable"));
+        ckbEntries.add(create("NTRK3", "fusion promiscuous", "NTRK3 fusion promiscuous", "sensitive", "Actionable"));
+        ckbEntries.add(create("BRAF", "V600", "BRAF V600", "sensitive", "Actionable"));
+        ckbEntries.add(create("BRAF", "exon 1 deletion", "BRAF exon 1 deletion", "sensitive", "Actionable"));
+        ckbEntries.add(create("-", "MSI high", "MSI high", "sensitive", "Actionable"));
+        ckbEntries.add(create("ALk", "EML4-ALK", "EML4-ALK Fusion", "sensitive", "Actionable"));
+
+        return ckbEntries;
     }
 }

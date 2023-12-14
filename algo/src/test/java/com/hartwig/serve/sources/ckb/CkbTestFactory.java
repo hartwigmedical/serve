@@ -87,15 +87,16 @@ public final class CkbTestFactory {
     }
 
     @NotNull
-    public static CkbEntry createEntryWithClinicalTrial(@NotNull Integer profileId, @NotNull Location location,
-            @NotNull String recruitmentType, @NotNull List<VariantRequirementDetail> requirementType) {
+    public static CkbEntry createEntryWithClinicalTrial(@NotNull String geneSymbol, @NotNull String variant, @NotNull String fullName,
+            @NotNull Integer profileId, @NotNull Location location, @NotNull String recruitmentType,
+            @NotNull List<VariantRequirementDetail> requirementType, @NotNull String nctId, @NotNull String title) {
         return ImmutableCkbEntry.builder()
                 .profileId(profileId)
                 .createDate(TEST_DATE)
                 .updateDate(TEST_DATE)
                 .profileName(Strings.EMPTY)
-                .addVariants(createVariant("KRAS", "BRAF V600E", "BRAF V600E"))
-                .clinicalTrials(List.of(createTrial(recruitmentType, requirementType, List.of(location))))
+                .addVariants(createVariant(geneSymbol, variant, fullName))
+                .clinicalTrials(List.of(createTrial(recruitmentType, requirementType, List.of(location), nctId, title)))
                 .build();
     }
 
@@ -112,22 +113,24 @@ public final class CkbTestFactory {
                 .addEvidences(createEvidence(responseType, evidenceType, therapyName, indicationName, level, termId))
                 .clinicalTrials(List.of(createTrial("Recruiting",
                         Lists.newArrayList(ImmutableVariantRequirementDetail.builder().profileId(0).requirementType("required").build()),
-                        Lists.newArrayList(CkbTestFactory.createLocation("Netherlands", null)))))
+                        Lists.newArrayList(CkbTestFactory.createLocation("Netherlands", null)),
+                        "nctid",
+                        "title")))
                 .build();
     }
 
     @NotNull
     public static ClinicalTrial createTrial(@NotNull String recruitment, @NotNull List<VariantRequirementDetail> variantRequirementDetails,
-            @NotNull List<Location> locations) {
+            @NotNull List<Location> locations, @NotNull String nctId, @NotNull String title) {
         return ImmutableClinicalTrial.builder()
                 .updateDate(TEST_DATE)
-                .nctId("nctid")
-                .title("title")
+                .nctId(nctId)
+                .title(title)
                 .therapies(List.of())
                 .indications(List.of(createIndication("AB", "DOID:162")))
                 .recruitment(recruitment)
                 .ageGroups(List.of())
-                .variantRequirement("yes")
+                .variantRequirement(Strings.EMPTY)
                 .variantRequirementDetails(variantRequirementDetails)
                 .locations(locations)
                 .build();

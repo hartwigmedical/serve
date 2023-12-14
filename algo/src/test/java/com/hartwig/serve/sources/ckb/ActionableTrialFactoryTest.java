@@ -26,7 +26,15 @@ public class ActionableTrialFactoryTest {
     public void canCreateActionableEntryForOpenTrialInAllowedCountryWithRequiredMolecularProfile() {
         Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting");
         List<VariantRequirementDetail> requirementType = CkbTestFactory.createVariantRequirementDetails(0, "required");
-        CkbEntry entry = CkbTestFactory.createEntryWithClinicalTrial(0, location, "Recruiting", requirementType);
+        CkbEntry entry = CkbTestFactory.createEntryWithClinicalTrial("KRAS",
+                "BRAF V600E",
+                "BRAF V600E",
+                0,
+                location,
+                "Recruiting",
+                requirementType,
+                "NCT0102",
+                "Phase I trial");
         ActionableTrialFactory actionableTrialFactory = new ActionableTrialFactory();
         Set<ActionableEntry> trials = actionableTrialFactory.create(entry, "KRAS", "gene");
 
@@ -34,8 +42,8 @@ public class ActionableTrialFactoryTest {
         ActionableEntry trial = trials.iterator().next();
         assertEquals(Knowledgebase.CKB_TRIAL, trial.source());
         assertEquals("KRAS", trial.sourceEvent());
-        assertEquals(Sets.newHashSet("https://clinicaltrials.gov/study/nctid"), trial.sourceUrls());
-        assertEquals("title", trial.treatment().name());
+        assertEquals(Sets.newHashSet("https://clinicaltrials.gov/study/NCT0102"), trial.sourceUrls());
+        assertEquals("Phase I trial", trial.treatment().name());
         assertEquals(EvidenceLevel.B, trial.level());
         assertEquals(EvidenceDirection.RESPONSIVE, trial.direction());
         assertEquals(Sets.newHashSet("Netherlands"), trial.evidenceUrls());
@@ -45,7 +53,15 @@ public class ActionableTrialFactoryTest {
     public void shouldNotCreateAnActionableEntryWhenVariantRequirementIsOnADifferentProfile() {
         Location location = CkbTestFactory.createLocation("Belgium", "Recruiting");
         List<VariantRequirementDetail> requirementType = CkbTestFactory.createVariantRequirementDetails(0, "required");
-        CkbEntry entry = CkbTestFactory.createEntryWithClinicalTrial(1, location, "Recruiting", requirementType);
+        CkbEntry entry = CkbTestFactory.createEntryWithClinicalTrial("KRAS",
+                "BRAF V600E",
+                "BRAF V600E",
+                1,
+                location,
+                "Recruiting",
+                requirementType,
+                "NCT0102",
+                "Phase I trial");
         ActionableTrialFactory actionableTrialFactory = new ActionableTrialFactory();
         Set<ActionableEntry> trials = actionableTrialFactory.create(entry, "KRAS", "gene");
 
@@ -102,7 +118,9 @@ public class ActionableTrialFactoryTest {
         return CkbTestFactory.createTrial(recruitmentTrial,
                 CkbTestFactory.createVariantRequirementDetails(0, "required"),
                 Lists.newArrayList(CkbTestFactory.createLocation(country1, recruitmentCountry1),
-                        CkbTestFactory.createLocation(country2, recruitmentCountry2)));
+                        CkbTestFactory.createLocation(country2, recruitmentCountry2)),
+                "ntcid",
+                "title");
     }
 
     @NotNull
@@ -110,7 +128,9 @@ public class ActionableTrialFactoryTest {
             @NotNull String recruitmentCountry) {
         return CkbTestFactory.createTrial(recruitmentTrial,
                 CkbTestFactory.createVariantRequirementDetails(0, "required"),
-                Lists.newArrayList(CkbTestFactory.createLocation(country, recruitmentCountry)));
+                Lists.newArrayList(CkbTestFactory.createLocation(country, recruitmentCountry)),
+                "nctid",
+                "title");
     }
 
 }

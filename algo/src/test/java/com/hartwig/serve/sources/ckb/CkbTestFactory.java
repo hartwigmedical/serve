@@ -88,30 +88,15 @@ public final class CkbTestFactory {
 
     @NotNull
     public static CkbEntry createEntryWithClinicalTrial(@NotNull Integer profileId, @NotNull Location location,
-            @NotNull String recruitmentType, @NotNull VariantRequirementDetail requirementType) {
+            @NotNull String recruitmentType, @NotNull List<VariantRequirementDetail> requirementType) {
         return ImmutableCkbEntry.builder()
                 .profileId(profileId)
                 .createDate(TEST_DATE)
                 .updateDate(TEST_DATE)
                 .profileName(Strings.EMPTY)
                 .addVariants(createVariant("KRAS", "BRAF V600E", "BRAF V600E"))
-                .clinicalTrials(List.of(createTrial(recruitmentType, "AB", "DOID:162", List.of(requirementType), List.of(location))))
+                .clinicalTrials(List.of(createTrial(recruitmentType, requirementType, List.of(location))))
                 .build();
-    }
-
-    @NotNull
-    public static ClinicalTrial createTrialWithCountryAndRecruitmentType(@NotNull List<Location> locations,
-            @NotNull String recruitmentType) {
-        return createTrial(recruitmentType, Strings.EMPTY, Strings.EMPTY, Lists.newArrayList(), locations);
-    }
-
-    @NotNull
-    public static ClinicalTrial createTrialWithIndicationNameAndTermId(@NotNull String indicationName, @NotNull String termId) {
-        return createTrial("Recruiting",
-                indicationName,
-                termId,
-                Lists.newArrayList(ImmutableVariantRequirementDetail.builder().profileId(0).requirementType("required").build()),
-                Lists.newArrayList(CkbTestFactory.createLocation("Netherlands", null)));
     }
 
     @NotNull
@@ -125,19 +110,21 @@ public final class CkbTestFactory {
                 .profileName(Strings.EMPTY)
                 .addVariants(createVariant(geneSymbol, variant, fullName))
                 .addEvidences(createEvidence(responseType, evidenceType, therapyName, indicationName, level, termId))
-                .clinicalTrials(List.of(createTrialWithIndicationNameAndTermId(indicationName, termId)))
+                .clinicalTrials(List.of(createTrial("Recruiting",
+                        Lists.newArrayList(ImmutableVariantRequirementDetail.builder().profileId(0).requirementType("required").build()),
+                        Lists.newArrayList(CkbTestFactory.createLocation("Netherlands", null)))))
                 .build();
     }
 
     @NotNull
-    private static ClinicalTrial createTrial(@NotNull String recruitment, @NotNull String indicationName, @NotNull String termId,
-            @NotNull List<VariantRequirementDetail> variantRequirementDetails, @NotNull List<Location> locations) {
+    public static ClinicalTrial createTrial(@NotNull String recruitment, @NotNull List<VariantRequirementDetail> variantRequirementDetails,
+            @NotNull List<Location> locations) {
         return ImmutableClinicalTrial.builder()
                 .updateDate(TEST_DATE)
                 .nctId("nctid")
                 .title("title")
                 .therapies(List.of())
-                .indications(List.of(createIndication(indicationName, termId)))
+                .indications(List.of(createIndication("AB", "DOID:162")))
                 .recruitment(recruitment)
                 .ageGroups(List.of())
                 .variantRequirement("yes")
@@ -219,6 +206,15 @@ public final class CkbTestFactory {
 
     @NotNull
     public static Location createLocation(@NotNull String country, @Nullable String status) {
-        return ImmutableLocation.builder().nctId("nctid").city("city").country(country).status(status).build();
+        return ImmutableLocation.builder().nctId("").city("").country(country).status(status).build();
+    }
+
+    @NotNull
+    public static List<VariantRequirementDetail> createVariantRequirementDetails(@NotNull Integer profileId,
+            @NotNull String requirementType) {
+        return Lists.newArrayList(ImmutableVariantRequirementDetail.builder()
+                .profileId(profileId)
+                .requirementType(requirementType)
+                .build());
     }
 }

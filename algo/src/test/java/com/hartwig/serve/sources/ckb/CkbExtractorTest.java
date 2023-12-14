@@ -58,12 +58,6 @@ public class CkbExtractorTest {
         assertEquals(1, trialResult.actionableCharacteristics().size());
     }
 
-    @NotNull
-    private static CkbEntry create(@NotNull String gene, @NotNull String variant, @NotNull String fullName, @NotNull String evidenceType,
-            @NotNull String responseType) {
-        return CkbTestFactory.createEntry(gene, variant, fullName, evidenceType, responseType, "AB", "cancer", "A", "DOID:162");
-    }
-
     @Test
     public void canCurateCodons() {
         List<CodonAnnotation> codonAnnotations = Lists.newArrayList();
@@ -118,6 +112,12 @@ public class CkbExtractorTest {
     }
 
     @NotNull
+    private static CkbEntry create(@NotNull String gene, @NotNull String variant, @NotNull String fullName, @NotNull String evidenceType,
+            @NotNull String responseType) {
+        return CkbTestFactory.createEntry(gene, variant, fullName, evidenceType, responseType, "AB", "cancer", "A", "DOID:162");
+    }
+
+    @NotNull
     private static List<CkbEntry> createCkbEntryTestDatabase() {
         List<CkbEntry> ckbEntries = Lists.newArrayList();
         ckbEntries.add(create("KIT", "amp", "KIT amp", "sensitive", "Actionable"));
@@ -126,7 +126,7 @@ public class CkbExtractorTest {
         ckbEntries.add(create("BRAF", "V600", "BRAF V600", "sensitive", "Actionable"));
         ckbEntries.add(create("BRAF", "exon 1 deletion", "BRAF exon 1 deletion", "sensitive", "Actionable"));
         ckbEntries.add(create("-", "MSI high", "MSI high", "sensitive", "Actionable"));
-        ckbEntries.add(create("ALk", "EML4-ALK", "EML4-ALK Fusion", "sensitive", "Actionable"));
+        ckbEntries.add(create("ALK", "EML4-ALK", "EML4-ALK Fusion", "sensitive", "Actionable"));
 
         return ckbEntries;
     }

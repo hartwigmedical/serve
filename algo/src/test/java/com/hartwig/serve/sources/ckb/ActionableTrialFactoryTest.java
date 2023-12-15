@@ -23,17 +23,13 @@ public class ActionableTrialFactoryTest {
 
     @Test
     public void canCreateActionableEntryForOpenTrialInAllowedCountryWithRequiredMolecularProfile() {
+        int profileId = 1;
         Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting");
-        VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(0, "required");
-        CkbEntry entry = CkbTestFactory.createEntryWithClinicalTrialDetails("KRAS",
-                "BRAF V600E",
-                "BRAF V600E",
-                0,
-                location,
-                "Recruiting",
-                requirementDetail,
-                "NCT0102",
-                "Phase I trial");
+        VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(profileId, "required");
+        ClinicalTrial clinicalTrial =
+                CkbTestFactory.createTrial("Recruiting", List.of(requirementDetail), List.of(location), "NCT0102", "Phase I trial");
+        CkbEntry entry = CkbTestFactory.createEntryWithClinicalTrial(profileId, clinicalTrial);
+
         ActionableTrialFactory actionableTrialFactory = new ActionableTrialFactory();
         Set<ActionableEntry> trials = actionableTrialFactory.create(entry, "KRAS", "gene");
 
@@ -52,15 +48,10 @@ public class ActionableTrialFactoryTest {
     public void shouldNotCreateAnActionableEntryWhenVariantRequirementIsOnADifferentProfile() {
         Location location = CkbTestFactory.createLocation("Belgium", "Recruiting");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(0, "required");
-        CkbEntry entry = CkbTestFactory.createEntryWithClinicalTrialDetails("KRAS",
-                "BRAF V600E",
-                "BRAF V600E",
-                1,
-                location,
-                "Recruiting",
-                requirementDetail,
-                "NCT0102",
-                "Phase I trial");
+        ClinicalTrial clinicalTrial =
+                CkbTestFactory.createTrial("Recruiting", List.of(requirementDetail), List.of(location), "NCT0102", "Phase I trial");
+        CkbEntry entry = CkbTestFactory.createEntryWithClinicalTrial(1, clinicalTrial);
+
         ActionableTrialFactory actionableTrialFactory = new ActionableTrialFactory();
         Set<ActionableEntry> trials = actionableTrialFactory.create(entry, "KRAS", "gene");
 
@@ -107,9 +98,10 @@ public class ActionableTrialFactoryTest {
     }
 
     private static boolean hasRequirementTypeToInclude(@NotNull String requirementType) {
-        return ActionableTrialFactory.hasVariantRequirementTypeToInclude(List.of(CkbTestFactory.createVariantRequirementDetail(0,
-                        requirementType)),
-                CkbTestFactory.createEntryWithOpenMolecularTrial("BRAF", "BRAF V600E", "BRAF V600E", "sensitive", "Actionable"));
+        CkbEntry baseEntry = CkbTestFactory.createEntryWithGene("gene");
+        VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(baseEntry.profileId(), requirementType);
+
+        return ActionableTrialFactory.hasVariantRequirementTypeToInclude(List.of(requirementDetail), baseEntry);
     }
 
     @NotNull

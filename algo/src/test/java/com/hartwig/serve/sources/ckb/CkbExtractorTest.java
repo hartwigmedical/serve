@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.hartwig.serve.ckb.classification.CkbClassificationConfig;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
+import com.hartwig.serve.ckb.datamodel.clinicaltrial.ImmutableVariantRequirementDetail;
 import com.hartwig.serve.datamodel.MutationType;
 import com.hartwig.serve.datamodel.range.RangeTestFactory;
 import com.hartwig.serve.extraction.ExtractionResult;
@@ -113,20 +114,40 @@ public class CkbExtractorTest {
     @NotNull
     private static List<CkbEntry> createCkbEntryTestDatabase() {
         List<CkbEntry> ckbEntries = Lists.newArrayList();
-        ckbEntries.add(create("KIT", "amp", "KIT amp", "sensitive", "Actionable"));
-        ckbEntries.add(create("BRAF", "V600E", "BRAF V600E", "sensitive", "Actionable"));
-        ckbEntries.add(create("NTRK3", "fusion promiscuous", "NTRK3 fusion promiscuous", "sensitive", "Actionable"));
-        ckbEntries.add(create("BRAF", "V600", "BRAF V600", "sensitive", "Actionable"));
-        ckbEntries.add(create("BRAF", "exon 1 deletion", "BRAF exon 1 deletion", "sensitive", "Actionable"));
-        ckbEntries.add(create("-", "MSI high", "MSI high", "sensitive", "Actionable"));
-        ckbEntries.add(create("ALK", "EML4-ALK", "EML4-ALK Fusion", "sensitive", "Actionable"));
+        ckbEntries.add(createWithOpenMolecularTrial("KIT", "amp", "KIT amp", "sensitive", "Actionable"));
+        ckbEntries.add(createWithOpenMolecularTrial("BRAF", "V600E", "BRAF V600E", "sensitive", "Actionable"));
+        ckbEntries.add(createWithOpenMolecularTrial("NTRK3", "fusion promiscuous", "NTRK3 fusion promiscuous", "sensitive", "Actionable"));
+        ckbEntries.add(createWithOpenMolecularTrial("BRAF", "V600", "BRAF V600", "sensitive", "Actionable"));
+        ckbEntries.add(createWithOpenMolecularTrial("BRAF", "exon 1 deletion", "BRAF exon 1 deletion", "sensitive", "Actionable"));
+        ckbEntries.add(createWithOpenMolecularTrial("-", "MSI high", "MSI high", "sensitive", "Actionable"));
+        ckbEntries.add(createWithOpenMolecularTrial("ALK", "EML4-ALK", "EML4-ALK Fusion", "sensitive", "Actionable"));
 
         return ckbEntries;
     }
 
     @NotNull
-    private static CkbEntry create(@NotNull String gene, @NotNull String variant, @NotNull String fullName, @NotNull String evidenceType,
-            @NotNull String responseType) {
-        return CkbTestFactory.createEntryWithOpenMolecularTrial(gene, variant, fullName, evidenceType, responseType);
+    private static CkbEntry createWithOpenMolecularTrial(@NotNull String gene, @NotNull String variant, @NotNull String fullName,
+            @NotNull String responseType, @NotNull String evidenceType) {
+        CkbEntry baseEntry = CkbTestFactory.createEntry(gene,
+                variant,
+                fullName,
+                responseType,
+                evidenceType,
+                "any treatment",
+                "any indication",
+                "A",
+                "DOID:162");
+
+        return CkbTestFactory.builder()
+                .from(baseEntry)
+                .clinicalTrials(List.of(CkbTestFactory.createTrial("Recruiting",
+                        List.of(ImmutableVariantRequirementDetail.builder()
+                                .profileId(baseEntry.profileId())
+                                .requirementType("required")
+                                .build()),
+                        List.of(CkbTestFactory.createLocation("Netherlands", null)),
+                        "nctid",
+                        "title")))
+                .build();
     }
 }

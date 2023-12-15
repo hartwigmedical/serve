@@ -35,6 +35,11 @@ public final class CkbTestFactory {
     }
 
     @NotNull
+    public static ImmutableCkbEntry.Builder builder() {
+        return ImmutableCkbEntry.builder().profileId(0).createDate(TEST_DATE).updateDate(TEST_DATE).profileName(Strings.EMPTY);
+    }
+
+    @NotNull
     public static CkbEntry createEntryWithGene(@NotNull String geneSymbol) {
         return createEntry(geneSymbol,
                 Strings.EMPTY,
@@ -87,48 +92,15 @@ public final class CkbTestFactory {
     }
 
     @NotNull
-    public static CkbEntry createEntryWithOpenMolecularTrial(@NotNull String geneSymbol, @NotNull String variant, @NotNull String fullName,
-            @NotNull String responseType, @NotNull String evidenceType) {
-        CkbEntry baseEntry =
-                createEntry(geneSymbol, variant, fullName, responseType, evidenceType, "any treatment", "any indication", "A", "DOID:162");
-
-        return ImmutableCkbEntry.builder()
-                .from(baseEntry)
-                .clinicalTrials(List.of(createTrial("Recruiting",
-                        List.of(ImmutableVariantRequirementDetail.builder()
-                                .profileId(baseEntry.profileId())
-                                .requirementType("required")
-                                .build()),
-                        List.of(CkbTestFactory.createLocation("Netherlands", null)),
-                        "nctid",
-                        "title")))
-                .build();
-    }
-
-    @NotNull
-    public static CkbEntry createEntryWithClinicalTrialDetails(@NotNull String geneSymbol, @NotNull String variant,
-            @NotNull String fullName, @NotNull Integer profileId, @NotNull Location location, @NotNull String recruitmentType,
-            @NotNull VariantRequirementDetail requirementDetail, @NotNull String nctId, @NotNull String title) {
-        return ImmutableCkbEntry.builder()
-                .profileId(profileId)
-                .createDate(TEST_DATE)
-                .updateDate(TEST_DATE)
-                .profileName(Strings.EMPTY)
-                .addVariants(createVariant(geneSymbol, variant, fullName))
-                .clinicalTrials(List.of(createTrial(recruitmentType, List.of(requirementDetail), List.of(location), nctId, title)))
-                .build();
+    public static CkbEntry createEntryWithClinicalTrial(int profileId, @NotNull ClinicalTrial clinicalTrial) {
+        return builder().profileId(profileId).clinicalTrials(List.of(clinicalTrial)).build();
     }
 
     @NotNull
     public static CkbEntry createEntry(@NotNull String geneSymbol, @NotNull String variant, @NotNull String fullName,
             @NotNull String responseType, @NotNull String evidenceType, @NotNull String therapyName, @NotNull String indicationName,
             @NotNull String level, @NotNull String termId) {
-        return ImmutableCkbEntry.builder()
-                .profileId(0)
-                .createDate(TEST_DATE)
-                .updateDate(TEST_DATE)
-                .profileName(Strings.EMPTY)
-                .addVariants(createVariant(geneSymbol, variant, fullName))
+        return builder().addVariants(createVariant(geneSymbol, variant, fullName))
                 .addEvidences(createEvidence(responseType, evidenceType, therapyName, indicationName, level, termId))
                 .build();
     }
@@ -198,6 +170,16 @@ public final class CkbTestFactory {
     }
 
     @NotNull
+    public static Location createLocation(@NotNull String country, @Nullable String status) {
+        return ImmutableLocation.builder().nctId(Strings.EMPTY).city(Strings.EMPTY).country(country).status(status).build();
+    }
+
+    @NotNull
+    public static VariantRequirementDetail createVariantRequirementDetail(int profileId, @NotNull String requirementType) {
+        return ImmutableVariantRequirementDetail.builder().profileId(profileId).requirementType(requirementType).build();
+    }
+
+    @NotNull
     private static Variant createVariant(@NotNull String geneSymbol, @NotNull String variant, @NotNull String fullName) {
         return ImmutableVariant.builder()
                 .id(0)
@@ -218,20 +200,6 @@ public final class CkbTestFactory {
                 .updateDate(TEST_DATE)
                 .geneSymbol(geneSymbol)
                 .geneRole(Strings.EMPTY)
-                .build();
-    }
-
-    @NotNull
-    public static Location createLocation(@NotNull String country, @Nullable String status) {
-        return ImmutableLocation.builder().nctId("").city("").country(country).status(status).build();
-    }
-
-    @NotNull
-    public static VariantRequirementDetail createVariantRequirementDetail(int profileId,
-            @NotNull String requirementType) {
-        return ImmutableVariantRequirementDetail.builder()
-                .profileId(profileId)
-                .requirementType(requirementType)
                 .build();
     }
 }

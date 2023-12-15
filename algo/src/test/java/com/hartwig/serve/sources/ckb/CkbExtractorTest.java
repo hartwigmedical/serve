@@ -6,7 +6,6 @@ import java.util.List;
 
 import com.hartwig.serve.ckb.classification.CkbClassificationConfig;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
-import com.hartwig.serve.common.classification.EventClassifierConfig;
 import com.hartwig.serve.datamodel.MutationType;
 import com.hartwig.serve.datamodel.range.RangeTestFactory;
 import com.hartwig.serve.extraction.ExtractionResult;
@@ -20,11 +19,10 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
 public class CkbExtractorTest {
-    EventClassifierConfig config = CkbClassificationConfig.build();
 
     @Test
     public void canExtractEvidenceFromCkbEntries() {
-        CkbExtractor evidenceExtractor = CkbExtractorFactory.createEvidenceExtractor(config,
+        CkbExtractor evidenceExtractor = CkbExtractorFactory.createEvidenceExtractor(CkbClassificationConfig.build(),
                 RefGenomeResourceTestFactory.buildTestResource37(),
                 TreatmentApproachTestFactory.createEmptyCurator());
 
@@ -43,7 +41,8 @@ public class CkbExtractorTest {
 
     @Test
     public void canExtractTrialsFromCkbEntries() {
-        CkbExtractor trialExtractor = CkbExtractorFactory.createTrialExtractor(config, RefGenomeResourceTestFactory.buildTestResource37());
+        CkbExtractor trialExtractor = CkbExtractorFactory.createTrialExtractor(CkbClassificationConfig.build(),
+                RefGenomeResourceTestFactory.buildTestResource37());
 
         ExtractionResult trialResult = trialExtractor.extract(createCkbEntryTestDatabase());
         assertEquals(0, trialResult.knownHotspots().size());

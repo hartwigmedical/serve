@@ -119,7 +119,7 @@ public class ActionableTrialFactoryTest {
                 CkbTestFactory.createVariantRequirementDetails(0, "required"),
                 Lists.newArrayList(CkbTestFactory.createLocation(country1, recruitmentCountry1),
                         CkbTestFactory.createLocation(country2, recruitmentCountry2)),
-                "ntcid",
+                "nctid",
                 "title");
     }
 

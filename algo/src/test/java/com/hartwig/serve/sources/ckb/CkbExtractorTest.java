@@ -111,12 +111,6 @@ public class CkbExtractorTest {
     }
 
     @NotNull
-    private static CkbEntry create(@NotNull String gene, @NotNull String variant, @NotNull String fullName, @NotNull String evidenceType,
-            @NotNull String responseType) {
-        return CkbTestFactory.createEntry(gene, variant, fullName, evidenceType, responseType, "AB", "cancer", "A", "DOID:162");
-    }
-
-    @NotNull
     private static List<CkbEntry> createCkbEntryTestDatabase() {
         List<CkbEntry> ckbEntries = Lists.newArrayList();
         ckbEntries.add(create("KIT", "amp", "KIT amp", "sensitive", "Actionable"));
@@ -128,5 +122,11 @@ public class CkbExtractorTest {
         ckbEntries.add(create("ALK", "EML4-ALK", "EML4-ALK Fusion", "sensitive", "Actionable"));
 
         return ckbEntries;
+    }
+
+    @NotNull
+    private static CkbEntry create(@NotNull String gene, @NotNull String variant, @NotNull String fullName, @NotNull String evidenceType,
+            @NotNull String responseType) {
+        return CkbTestFactory.createEntry(gene, variant, fullName, evidenceType, responseType, "AB", "cancer", "A", "DOID:162");
     }
 }

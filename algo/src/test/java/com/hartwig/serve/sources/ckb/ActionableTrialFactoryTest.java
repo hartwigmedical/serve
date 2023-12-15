@@ -7,7 +7,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 import java.util.Set;
 
-import com.google.common.collect.Lists;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.ClinicalTrial;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.Location;
@@ -25,14 +24,14 @@ public class ActionableTrialFactoryTest {
     @Test
     public void canCreateActionableEntryForOpenTrialInAllowedCountryWithRequiredMolecularProfile() {
         Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting");
-        List<VariantRequirementDetail> requirementType = CkbTestFactory.createVariantRequirementDetails(0, "required");
+        VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(0, "required");
         CkbEntry entry = CkbTestFactory.createEntryWithClinicalTrialDetails("KRAS",
                 "BRAF V600E",
                 "BRAF V600E",
                 0,
                 location,
                 "Recruiting",
-                requirementType,
+                requirementDetail,
                 "NCT0102",
                 "Phase I trial");
         ActionableTrialFactory actionableTrialFactory = new ActionableTrialFactory();
@@ -52,14 +51,14 @@ public class ActionableTrialFactoryTest {
     @Test
     public void shouldNotCreateAnActionableEntryWhenVariantRequirementIsOnADifferentProfile() {
         Location location = CkbTestFactory.createLocation("Belgium", "Recruiting");
-        List<VariantRequirementDetail> requirementType = CkbTestFactory.createVariantRequirementDetails(0, "required");
+        VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(0, "required");
         CkbEntry entry = CkbTestFactory.createEntryWithClinicalTrialDetails("KRAS",
                 "BRAF V600E",
                 "BRAF V600E",
                 1,
                 location,
                 "Recruiting",
-                requirementType,
+                requirementDetail,
                 "NCT0102",
                 "Phase I trial");
         ActionableTrialFactory actionableTrialFactory = new ActionableTrialFactory();
@@ -108,7 +107,8 @@ public class ActionableTrialFactoryTest {
     }
 
     private static boolean hasRequirementTypeToInclude(@NotNull String requirementType) {
-        return ActionableTrialFactory.hasVariantRequirementTypeToInclude(CkbTestFactory.createVariantRequirementDetails(0, requirementType),
+        return ActionableTrialFactory.hasVariantRequirementTypeToInclude(List.of(CkbTestFactory.createVariantRequirementDetail(0,
+                        requirementType)),
                 CkbTestFactory.createEntryWithOpenMolecularTrial("BRAF", "BRAF V600E", "BRAF V600E", "sensitive", "Actionable"));
     }
 
@@ -116,8 +116,8 @@ public class ActionableTrialFactoryTest {
     private static ClinicalTrial createTrialWithMultipleLocations(@NotNull String recruitmentTrial, @NotNull String country1,
             @NotNull String recruitmentCountry1, @NotNull String country2, @NotNull String recruitmentCountry2) {
         return CkbTestFactory.createTrial(recruitmentTrial,
-                CkbTestFactory.createVariantRequirementDetails(0, "required"),
-                Lists.newArrayList(CkbTestFactory.createLocation(country1, recruitmentCountry1),
+                List.of(CkbTestFactory.createVariantRequirementDetail(0, "required")),
+                List.of(CkbTestFactory.createLocation(country1, recruitmentCountry1),
                         CkbTestFactory.createLocation(country2, recruitmentCountry2)),
                 "nctid",
                 "title");
@@ -127,8 +127,8 @@ public class ActionableTrialFactoryTest {
     private static ClinicalTrial createTrialWithOneLocation(@NotNull String recruitmentTrial, @NotNull String country,
             @NotNull String recruitmentCountry) {
         return CkbTestFactory.createTrial(recruitmentTrial,
-                CkbTestFactory.createVariantRequirementDetails(0, "required"),
-                Lists.newArrayList(CkbTestFactory.createLocation(country, recruitmentCountry)),
+                List.of(CkbTestFactory.createVariantRequirementDetail(0, "required")),
+                List.of(CkbTestFactory.createLocation(country, recruitmentCountry)),
                 "nctid",
                 "title");
     }

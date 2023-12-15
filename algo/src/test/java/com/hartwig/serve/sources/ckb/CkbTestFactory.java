@@ -108,14 +108,14 @@ public final class CkbTestFactory {
     @NotNull
     public static CkbEntry createEntryWithClinicalTrialDetails(@NotNull String geneSymbol, @NotNull String variant,
             @NotNull String fullName, @NotNull Integer profileId, @NotNull Location location, @NotNull String recruitmentType,
-            @NotNull List<VariantRequirementDetail> requirementType, @NotNull String nctId, @NotNull String title) {
+            @NotNull VariantRequirementDetail requirementDetail, @NotNull String nctId, @NotNull String title) {
         return ImmutableCkbEntry.builder()
                 .profileId(profileId)
                 .createDate(TEST_DATE)
                 .updateDate(TEST_DATE)
                 .profileName(Strings.EMPTY)
                 .addVariants(createVariant(geneSymbol, variant, fullName))
-                .clinicalTrials(List.of(createTrial(recruitmentType, requirementType, List.of(location), nctId, title)))
+                .clinicalTrials(List.of(createTrial(recruitmentType, List.of(requirementDetail), List.of(location), nctId, title)))
                 .build();
     }
 
@@ -227,11 +227,11 @@ public final class CkbTestFactory {
     }
 
     @NotNull
-    public static List<VariantRequirementDetail> createVariantRequirementDetails(@NotNull Integer profileId,
+    public static VariantRequirementDetail createVariantRequirementDetail(int profileId,
             @NotNull String requirementType) {
-        return Lists.newArrayList(ImmutableVariantRequirementDetail.builder()
+        return ImmutableVariantRequirementDetail.builder()
                 .profileId(profileId)
                 .requirementType(requirementType)
-                .build());
+                .build();
     }
 }

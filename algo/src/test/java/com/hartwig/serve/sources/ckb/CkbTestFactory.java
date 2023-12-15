@@ -1,9 +1,17 @@
 package com.hartwig.serve.sources.ckb;
 
 import java.time.LocalDate;
+import java.util.List;
 
+import com.google.common.collect.Lists;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.ckb.datamodel.ImmutableCkbEntry;
+import com.hartwig.serve.ckb.datamodel.clinicaltrial.ClinicalTrial;
+import com.hartwig.serve.ckb.datamodel.clinicaltrial.ImmutableClinicalTrial;
+import com.hartwig.serve.ckb.datamodel.clinicaltrial.ImmutableLocation;
+import com.hartwig.serve.ckb.datamodel.clinicaltrial.ImmutableVariantRequirementDetail;
+import com.hartwig.serve.ckb.datamodel.clinicaltrial.Location;
+import com.hartwig.serve.ckb.datamodel.clinicaltrial.VariantRequirementDetail;
 import com.hartwig.serve.ckb.datamodel.evidence.Evidence;
 import com.hartwig.serve.ckb.datamodel.evidence.ImmutableEvidence;
 import com.hartwig.serve.ckb.datamodel.indication.ImmutableIndication;
@@ -15,15 +23,20 @@ import com.hartwig.serve.ckb.datamodel.variant.ImmutableGene;
 import com.hartwig.serve.ckb.datamodel.variant.ImmutableVariant;
 import com.hartwig.serve.ckb.datamodel.variant.Variant;
 
-import org.apache.commons.compress.utils.Lists;
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public final class CkbTestFactory {
 
     private static final LocalDate TEST_DATE = LocalDate.of(2021, 2, 20);
 
     private CkbTestFactory() {
+    }
+
+    @NotNull
+    public static ImmutableCkbEntry.Builder builder() {
+        return ImmutableCkbEntry.builder().profileId(0).createDate(TEST_DATE).updateDate(TEST_DATE).profileName(Strings.EMPTY);
     }
 
     @NotNull
@@ -79,16 +92,31 @@ public final class CkbTestFactory {
     }
 
     @NotNull
+    public static CkbEntry createEntryWithClinicalTrial(int profileId, @NotNull ClinicalTrial clinicalTrial) {
+        return builder().profileId(profileId).clinicalTrials(List.of(clinicalTrial)).build();
+    }
+
+    @NotNull
     public static CkbEntry createEntry(@NotNull String geneSymbol, @NotNull String variant, @NotNull String fullName,
             @NotNull String responseType, @NotNull String evidenceType, @NotNull String therapyName, @NotNull String indicationName,
             @NotNull String level, @NotNull String termId) {
-        return ImmutableCkbEntry.builder()
-                .profileId(0)
-                .createDate(TEST_DATE)
-                .updateDate(TEST_DATE)
-                .profileName(Strings.EMPTY)
-                .addVariants(createVariant(geneSymbol, variant, fullName))
+        return builder().addVariants(createVariant(geneSymbol, variant, fullName))
                 .addEvidences(createEvidence(responseType, evidenceType, therapyName, indicationName, level, termId))
+                .build();
+    }
+
+    @NotNull
+    public static ClinicalTrial createTrial(@NotNull String recruitment, @NotNull List<VariantRequirementDetail> variantRequirementDetails,
+            @NotNull List<Location> locations, @NotNull String nctId, @NotNull String title) {
+        return ImmutableClinicalTrial.builder()
+                .updateDate(TEST_DATE)
+                .nctId(nctId)
+                .title(title)
+                .indications(List.of(createIndication("AB", "DOID:162")))
+                .recruitment(recruitment)
+                .variantRequirement(Strings.EMPTY)
+                .variantRequirementDetails(variantRequirementDetails)
+                .locations(locations)
                 .build();
     }
 
@@ -126,7 +154,7 @@ public final class CkbTestFactory {
     }
 
     @NotNull
-    private static Indication createIndication(@NotNull String name, @NotNull String termId) {
+    public static Indication createIndication(@NotNull String name, @NotNull String termId) {
         return ImmutableIndication.builder()
                 .id(0)
                 .name(name)
@@ -137,6 +165,16 @@ public final class CkbTestFactory {
                 .termId(termId)
                 .altIds(Lists.newArrayList())
                 .build();
+    }
+
+    @NotNull
+    public static Location createLocation(@NotNull String country, @Nullable String status) {
+        return ImmutableLocation.builder().nctId(Strings.EMPTY).city(Strings.EMPTY).country(country).status(status).build();
+    }
+
+    @NotNull
+    public static VariantRequirementDetail createVariantRequirementDetail(int profileId, @NotNull String requirementType) {
+        return ImmutableVariantRequirementDetail.builder().profileId(profileId).requirementType(requirementType).build();
     }
 
     @NotNull

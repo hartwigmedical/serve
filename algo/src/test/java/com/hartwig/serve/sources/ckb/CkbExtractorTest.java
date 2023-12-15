@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.hartwig.serve.ckb.classification.CkbClassificationConfig;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
-import com.hartwig.serve.common.classification.EventClassifierConfig;
+import com.hartwig.serve.ckb.datamodel.clinicaltrial.ImmutableVariantRequirementDetail;
 import com.hartwig.serve.datamodel.MutationType;
 import com.hartwig.serve.datamodel.range.RangeTestFactory;
 import com.hartwig.serve.extraction.ExtractionResult;
@@ -22,38 +22,40 @@ import org.junit.Test;
 public class CkbExtractorTest {
 
     @Test
-    public void canExtractFromCkbEntries() {
-        EventClassifierConfig config = CkbClassificationConfig.build();
-        CkbExtractor extractor = CkbExtractorFactory.buildCkbExtractor(config,
+    public void canExtractEvidenceFromCkbEntries() {
+        CkbExtractor evidenceExtractor = CkbExtractorFactory.createEvidenceExtractor(CkbClassificationConfig.build(),
                 RefGenomeResourceTestFactory.buildTestResource37(),
                 TreatmentApproachTestFactory.createEmptyCurator());
 
-        List<CkbEntry> ckbEntries = Lists.newArrayList();
-        ckbEntries.add(create("KIT", "amp", "KIT amp", "sensitive", "Actionable"));
-        ckbEntries.add(create("BRAF", "V600E", "BRAF V600E", "sensitive", "Actionable"));
-        ckbEntries.add(create("NTRK3", "fusion promiscuous", "NTRK3 fusion promiscuous", "sensitive", "Actionable"));
-        ckbEntries.add(create("BRAF", "V600", "BRAF V600", "sensitive", "Actionable"));
-        ckbEntries.add(create("BRAF", "exon 1 deletion", "BRAF exon 1 deletion", "sensitive", "Actionable"));
-        ckbEntries.add(create("-", "MSI high", "MSI high", "sensitive", "Actionable"));
-        ckbEntries.add(create("ALk", "EML4-ALK", "EML4-ALK Fusion", "sensitive", "Actionable"));
-
-        ExtractionResult result = extractor.extract(ckbEntries);
-        assertEquals(1, result.knownHotspots().size());
-        assertEquals(3, result.knownGenes().size());
-        assertEquals(1, result.knownCopyNumbers().size());
-        assertEquals(1, result.knownFusions().size());
-        assertEquals(1, result.actionableHotspots().size());
-        assertEquals(1, result.actionableCodons().size());
-        assertEquals(1, result.actionableExons().size());
-        assertEquals(2, result.actionableGenes().size());
-        assertEquals(1, result.actionableFusions().size());
-        assertEquals(1, result.actionableCharacteristics().size());
+        ExtractionResult evidenceResult = evidenceExtractor.extract(createCkbEntryTestDatabase());
+        assertEquals(1, evidenceResult.knownHotspots().size());
+        assertEquals(3, evidenceResult.knownGenes().size());
+        assertEquals(1, evidenceResult.knownCopyNumbers().size());
+        assertEquals(1, evidenceResult.knownFusions().size());
+        assertEquals(1, evidenceResult.actionableHotspots().size());
+        assertEquals(1, evidenceResult.actionableCodons().size());
+        assertEquals(1, evidenceResult.actionableExons().size());
+        assertEquals(2, evidenceResult.actionableGenes().size());
+        assertEquals(1, evidenceResult.actionableFusions().size());
+        assertEquals(1, evidenceResult.actionableCharacteristics().size());
     }
 
-    @NotNull
-    private static CkbEntry create(@NotNull String gene, @NotNull String variant, @NotNull String fullName, @NotNull String evidenceType,
-            @NotNull String responseType) {
-        return CkbTestFactory.createEntry(gene, variant, fullName, evidenceType, responseType, "AB", "cancer", "A", "DOID:162");
+    @Test
+    public void canExtractTrialsFromCkbEntries() {
+        CkbExtractor trialExtractor = CkbExtractorFactory.createTrialExtractor(CkbClassificationConfig.build(),
+                RefGenomeResourceTestFactory.buildTestResource37());
+
+        ExtractionResult trialResult = trialExtractor.extract(createCkbEntryTestDatabase());
+        assertEquals(0, trialResult.knownHotspots().size());
+        assertEquals(0, trialResult.knownGenes().size());
+        assertEquals(0, trialResult.knownCopyNumbers().size());
+        assertEquals(0, trialResult.knownFusions().size());
+        assertEquals(1, trialResult.actionableHotspots().size());
+        assertEquals(1, trialResult.actionableCodons().size());
+        assertEquals(1, trialResult.actionableExons().size());
+        assertEquals(2, trialResult.actionableGenes().size());
+        assertEquals(1, trialResult.actionableFusions().size());
+        assertEquals(1, trialResult.actionableCharacteristics().size());
     }
 
     @Test
@@ -107,5 +109,45 @@ public class CkbExtractorTest {
         }
 
         throw new IllegalStateException("Could not find gene " + geneToFind);
+    }
+
+    @NotNull
+    private static List<CkbEntry> createCkbEntryTestDatabase() {
+        List<CkbEntry> ckbEntries = Lists.newArrayList();
+        ckbEntries.add(createWithOpenMolecularTrial("KIT", "amp", "KIT amp", "sensitive", "Actionable"));
+        ckbEntries.add(createWithOpenMolecularTrial("BRAF", "V600E", "BRAF V600E", "sensitive", "Actionable"));
+        ckbEntries.add(createWithOpenMolecularTrial("NTRK3", "fusion promiscuous", "NTRK3 fusion promiscuous", "sensitive", "Actionable"));
+        ckbEntries.add(createWithOpenMolecularTrial("BRAF", "V600", "BRAF V600", "sensitive", "Actionable"));
+        ckbEntries.add(createWithOpenMolecularTrial("BRAF", "exon 1 deletion", "BRAF exon 1 deletion", "sensitive", "Actionable"));
+        ckbEntries.add(createWithOpenMolecularTrial("-", "MSI high", "MSI high", "sensitive", "Actionable"));
+        ckbEntries.add(createWithOpenMolecularTrial("ALK", "EML4-ALK", "EML4-ALK Fusion", "sensitive", "Actionable"));
+
+        return ckbEntries;
+    }
+
+    @NotNull
+    private static CkbEntry createWithOpenMolecularTrial(@NotNull String gene, @NotNull String variant, @NotNull String fullName,
+            @NotNull String responseType, @NotNull String evidenceType) {
+        CkbEntry baseEntry = CkbTestFactory.createEntry(gene,
+                variant,
+                fullName,
+                responseType,
+                evidenceType,
+                "any treatment",
+                "any indication",
+                "A",
+                "DOID:162");
+
+        return CkbTestFactory.builder()
+                .from(baseEntry)
+                .clinicalTrials(List.of(CkbTestFactory.createTrial("Recruiting",
+                        List.of(ImmutableVariantRequirementDetail.builder()
+                                .profileId(baseEntry.profileId())
+                                .requirementType("required")
+                                .build()),
+                        List.of(CkbTestFactory.createLocation("Netherlands", null)),
+                        "nctid",
+                        "title")))
+                .build();
     }
 }

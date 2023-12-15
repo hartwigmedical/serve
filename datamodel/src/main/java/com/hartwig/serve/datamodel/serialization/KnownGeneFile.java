@@ -1,7 +1,5 @@
 package com.hartwig.serve.datamodel.serialization;
 
-import static java.util.Comparator.comparing;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -18,6 +16,7 @@ import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.datamodel.common.GeneRole;
 import com.hartwig.serve.datamodel.gene.ImmutableKnownGene;
 import com.hartwig.serve.datamodel.gene.KnownGene;
+import com.hartwig.serve.datamodel.gene.KnownGeneComparator;
 import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
 import org.jetbrains.annotations.NotNull;
@@ -78,7 +77,7 @@ public final class KnownGeneFile {
     @VisibleForTesting
     static List<String> toLines(@NotNull Iterable<KnownGene> genes) {
         return StreamSupport.stream(genes.spliterator(), false)
-                .sorted(comparing(KnownGene::gene))
+                .sorted(new KnownGeneComparator())
                 .map(KnownGeneFile::toLine)
                 .collect(Collectors.toList());
     }

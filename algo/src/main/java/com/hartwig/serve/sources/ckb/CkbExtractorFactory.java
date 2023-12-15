@@ -1,6 +1,8 @@
 package com.hartwig.serve.sources.ckb;
 
 import com.hartwig.serve.common.classification.EventClassifierConfig;
+import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.extraction.EventExtractor;
 import com.hartwig.serve.extraction.EventExtractorFactory;
 import com.hartwig.serve.extraction.util.DriverInconsistencyMode;
 import com.hartwig.serve.refgenome.RefGenomeResource;
@@ -14,10 +16,25 @@ public final class CkbExtractorFactory {
     }
 
     @NotNull
-    public static CkbExtractor buildCkbExtractor(@NotNull EventClassifierConfig config, @NotNull RefGenomeResource refGenomeResource,
+    public static CkbExtractor createEvidenceExtractor(@NotNull EventClassifierConfig config, @NotNull RefGenomeResource refGenomeResource,
             @NotNull TreatmentApproachCurator treatmentApproachCurator) {
+        return new CkbExtractor(Knowledgebase.CKB_EVIDENCE,
+                createEventExtractor(config, refGenomeResource),
+                new ActionableEvidenceFactory(treatmentApproachCurator),
+                true);
+    }
+
+    @NotNull
+    public static CkbExtractor createTrialExtractor(@NotNull EventClassifierConfig config, @NotNull RefGenomeResource refGenomeResource) {
+        return new CkbExtractor(Knowledgebase.CKB_TRIAL,
+                createEventExtractor(config, refGenomeResource),
+                new ActionableTrialFactory(),
+                false);
+    }
+
+    @NotNull
+    public static EventExtractor createEventExtractor(@NotNull EventClassifierConfig config, @NotNull RefGenomeResource refGenomeResource) {
         // We want to capture all events from CKB, so ignore driver inconsistencies
-        return new CkbExtractor(EventExtractorFactory.create(config, refGenomeResource, DriverInconsistencyMode.IGNORE),
-                treatmentApproachCurator);
+        return EventExtractorFactory.create(config, refGenomeResource, DriverInconsistencyMode.IGNORE);
     }
 }

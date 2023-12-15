@@ -37,9 +37,9 @@ import org.jetbrains.annotations.NotNull;
 
 import htsjdk.samtools.reference.IndexedFastaSequenceFile;
 
-public class CkbExtractorTestApp {
+public class CkbEvidenceExtractorTestApp {
 
-    private static final Logger LOGGER = LogManager.getLogger(CkbExtractorTestApp.class);
+    private static final Logger LOGGER = LogManager.getLogger(CkbEvidenceExtractorTestApp.class);
 
     public static void main(String[] args) throws IOException {
         Configurator.setRootLevel(Level.DEBUG);
@@ -54,7 +54,7 @@ public class CkbExtractorTestApp {
 
         RefGenomeResource refGenomeResource = buildRefGenomeResource(config);
         TreatmentApproachCurator curator = new TreatmentApproachCurator(TreatmentApproachCurationFile.read(config.ckbDrugCurationTsv()));
-        CkbExtractor extractor = CkbExtractorFactory.buildCkbExtractor(CkbClassificationConfig.build(), refGenomeResource, curator);
+        CkbExtractor extractor = CkbExtractorFactory.createEvidenceExtractor(CkbClassificationConfig.build(), refGenomeResource, curator);
 
         List<CkbEntry> entries = CkbReader.readAndCurate(config.ckbDir(), config.ckbFilterTsv());
 
@@ -64,7 +64,9 @@ public class CkbExtractorTestApp {
         CkbUtil.writeEventsToTsv(eventsTsv, entries);
         CkbUtil.printExtractionResults(result);
 
-        new ExtractionResultWriter(config.outputDir(), Knowledgebase.CKB.refGenomeVersion(), refGenomeResource.refSequence()).write(result);
+        new ExtractionResultWriter(config.outputDir(),
+                Knowledgebase.CKB_EVIDENCE.refGenomeVersion(),
+                refGenomeResource.refSequence()).write(result);
     }
 
     @NotNull

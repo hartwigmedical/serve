@@ -17,7 +17,7 @@ public final class RangeTestFactory {
 
     @NotNull
     public static RangeAnnotation createTestRangeAnnotation() {
-        return createRangeAnnotation(Strings.EMPTY, Strings.EMPTY, 0, 0, MutationType.ANY);
+        return createRangeAnnotation(Strings.EMPTY, "1", 0, 0, MutationType.ANY);
     }
 
     @NotNull

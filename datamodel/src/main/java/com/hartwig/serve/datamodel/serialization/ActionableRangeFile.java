@@ -1,20 +1,23 @@
 package com.hartwig.serve.datamodel.serialization;
 
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.collect.Lists;
-import com.hartwig.serve.datamodel.MutationType;
-import com.hartwig.serve.datamodel.RefGenome;
-import com.hartwig.serve.datamodel.range.*;
-import com.hartwig.serve.datamodel.serialization.util.ActionableFileUtil;
-import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
-import org.jetbrains.annotations.NotNull;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
+
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.collect.Lists;
+import com.hartwig.serve.datamodel.MutationType;
+import com.hartwig.serve.datamodel.RefGenome;
+import com.hartwig.serve.datamodel.range.ActionableRange;
+import com.hartwig.serve.datamodel.range.ActionableRangeComparator;
+import com.hartwig.serve.datamodel.range.ImmutableActionableRange;
+import com.hartwig.serve.datamodel.serialization.util.ActionableFileUtil;
+import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
+
+import org.jetbrains.annotations.NotNull;
 
 public class ActionableRangeFile {
 

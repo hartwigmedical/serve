@@ -34,7 +34,11 @@ import com.hartwig.serve.datamodel.hotspot.ImmutableKnownHotspot;
 import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
 import com.hartwig.serve.datamodel.immuno.ActionableHLA;
-import com.hartwig.serve.datamodel.range.*;
+import com.hartwig.serve.datamodel.range.ActionableRange;
+import com.hartwig.serve.datamodel.range.ImmutableKnownCodon;
+import com.hartwig.serve.datamodel.range.ImmutableKnownExon;
+import com.hartwig.serve.datamodel.range.KnownCodon;
+import com.hartwig.serve.datamodel.range.KnownExon;
 import com.hartwig.serve.extraction.ActionableEventFactory;
 import com.hartwig.serve.extraction.EventExtractor;
 import com.hartwig.serve.extraction.EventExtractorOutput;
@@ -51,7 +55,6 @@ import com.hartwig.serve.extraction.exon.ExonAnnotation;
 import com.hartwig.serve.extraction.exon.ExonConsolidation;
 import com.hartwig.serve.extraction.fusion.FusionConsolidation;
 import com.hartwig.serve.extraction.hotspot.HotspotConsolidation;
-import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurator;
 import com.hartwig.serve.util.ProgressTracker;
 
 import org.apache.logging.log4j.LogManager;
@@ -62,23 +65,29 @@ import org.jetbrains.annotations.Nullable;
 public class CkbExtractor {
 
     private static final Logger LOGGER = LogManager.getLogger(CkbExtractor.class);
-    private static final String DELIMITER = ",";
+    private static final String VARIANT_DELIMITER = ",";
 
+    @NotNull
+    private final Knowledgebase source;
     @NotNull
     private final EventExtractor eventExtractor;
     @NotNull
-    private final TreatmentApproachCurator treatmentApproachCurator;
+    private final ActionableEntryFactory actionableEntryFactory;
+    private final boolean generateKnownEvents;
 
-    public CkbExtractor(@NotNull final EventExtractor eventExtractor, @NotNull final TreatmentApproachCurator treatmentApproachCurator) {
+    public CkbExtractor(@NotNull Knowledgebase source, @NotNull EventExtractor eventExtractor,
+            @NotNull ActionableEntryFactory actionableEntryFactory, boolean generateKnownEvents) {
+        this.source = source;
         this.eventExtractor = eventExtractor;
-        this.treatmentApproachCurator = treatmentApproachCurator;
+        this.actionableEntryFactory = actionableEntryFactory;
+        this.generateKnownEvents = generateKnownEvents;
     }
 
     @NotNull
     public ExtractionResult extract(@NotNull List<CkbEntry> entries) {
         List<ExtractionResult> extractions = Lists.newArrayList();
 
-        ProgressTracker tracker = new ProgressTracker("CKB", entries.size());
+        ProgressTracker tracker = new ProgressTracker(source.name(), entries.size());
         for (CkbEntry entry : entries) {
             // Assume entries without variants are filtered out prior to extraction
             if (entry.variants().isEmpty()) {
@@ -101,11 +110,10 @@ public class CkbExtractor {
                     sourceEvent = event;
                 }
 
-                Set<ActionableEntry> actionableEntries =
-                        ActionableEntryFactory.toActionableEntries(entry, sourceEvent, treatmentApproachCurator, gene, entry.type());
+                Set<ActionableEntry> actionableEntries = actionableEntryFactory.create(entry, sourceEvent, gene);
 
                 EventInterpretation interpretation = ImmutableEventInterpretation.builder()
-                        .source(Knowledgebase.CKB)
+                        .source(source)
                         .sourceEvent(sourceEvent)
                         .interpretedGene(gene)
                         .interpretedEvent(event)
@@ -113,20 +121,23 @@ public class CkbExtractor {
                         .build();
 
                 ExtractionResult extraction = toExtractionResult(event, gene, null, extractionOutput, actionableEntries, interpretation);
-                extractions.add(CkbVariantAnnotator.annotate(extraction, variant));
+
+                if (generateKnownEvents) {
+                    extractions.add(CkbVariantAnnotator.annotate(extraction, variant));
+                } else {
+                    extractions.add(extraction);
+                }
             }
 
             tracker.update();
         }
-
-        treatmentApproachCurator.reportUnusedCuratedEntries();
 
         return ExtractionFunctions.merge(extractions);
     }
 
     @NotNull
     private static String concat(@NotNull List<Variant> variants) {
-        StringJoiner joiner = new StringJoiner(DELIMITER);
+        StringJoiner joiner = new StringJoiner(VARIANT_DELIMITER);
         for (Variant variant : variants) {
             joiner.add(variant.variant());
         }
@@ -134,7 +145,7 @@ public class CkbExtractor {
     }
 
     @NotNull
-    private static ExtractionResult toExtractionResult(@NotNull String variant, @NotNull String gene, @Nullable String transcript,
+    private ExtractionResult toExtractionResult(@NotNull String variant, @NotNull String gene, @Nullable String transcript,
             @NotNull EventExtractorOutput output, @NotNull Set<ActionableEntry> actionableEntries,
             @NotNull EventInterpretation interpretation) {
         Set<ActionableHotspot> actionableHotspots = Sets.newHashSet();
@@ -175,23 +186,27 @@ public class CkbExtractor {
             }
         }
 
-        return ImmutableExtractionResult.builder()
-                .refGenomeVersion(Knowledgebase.CKB.refGenomeVersion())
+        ImmutableExtractionResult.Builder extractionResultBuilder = ImmutableExtractionResult.builder()
+                .refGenomeVersion(source.refGenomeVersion())
                 .addEventInterpretations(interpretation)
-                .knownHotspots(convertToKnownHotspots(output.hotspots(), variant, transcript))
-                .knownCodons(convertToKnownCodons(codons))
-                .knownExons(convertToKnownExons(output.exons()))
-                .knownGenes(output.fusionPair() == null ? convertToKnownGenes(gene) : Collections.emptySet())
-                .knownCopyNumbers(convertToKnownAmpsDels(output.copyNumber()))
-                .knownFusions(convertToKnownFusions(output.fusionPair()))
                 .actionableHotspots(actionableHotspots)
                 .actionableCodons(actionableCodons)
                 .actionableExons(actionableExons)
                 .actionableGenes(actionableGenes)
                 .actionableFusions(actionableFusions)
                 .actionableCharacteristics(actionableCharacteristics)
-                .actionableHLA(actionableHLA)
-                .build();
+                .actionableHLA(actionableHLA);
+
+        if (generateKnownEvents) {
+            extractionResultBuilder.knownHotspots(convertToKnownHotspots(output.hotspots(), variant, transcript))
+                    .knownCodons(convertToKnownCodons(codons))
+                    .knownExons(convertToKnownExons(output.exons()))
+                    .knownGenes(output.fusionPair() == null ? convertToKnownGenes(gene) : Collections.emptySet())
+                    .knownCopyNumbers(convertToKnownAmpsDels(output.copyNumber()))
+                    .knownFusions(convertToKnownFusions(output.fusionPair()));
+        }
+
+        return extractionResultBuilder.build();
     }
 
     @VisibleForTesting
@@ -218,7 +233,7 @@ public class CkbExtractor {
     }
 
     @NotNull
-    private static Set<KnownHotspot> convertToKnownHotspots(@Nullable List<VariantHotspot> hotspots, @NotNull String variant,
+    private Set<KnownHotspot> convertToKnownHotspots(@Nullable List<VariantHotspot> hotspots, @NotNull String variant,
             @Nullable String transcript) {
         Set<KnownHotspot> knownHotspots = Sets.newHashSet();
 
@@ -229,7 +244,7 @@ public class CkbExtractor {
                         .from(hotspot)
                         .geneRole(GeneRole.UNKNOWN)
                         .proteinEffect(ProteinEffect.UNKNOWN)
-                        .addSources(Knowledgebase.CKB)
+                        .addSources(source)
                         .inputTranscript(transcript)
                         .inputProteinAnnotation(proteinExtractor.apply(variant))
                         .build());
@@ -240,7 +255,7 @@ public class CkbExtractor {
     }
 
     @NotNull
-    private static Set<KnownCodon> convertToKnownCodons(@Nullable List<CodonAnnotation> codonAnnotations) {
+    private Set<KnownCodon> convertToKnownCodons(@Nullable List<CodonAnnotation> codonAnnotations) {
         Set<KnownCodon> codons = Sets.newHashSet();
 
         if (codonAnnotations != null) {
@@ -251,7 +266,7 @@ public class CkbExtractor {
                         .proteinEffect(ProteinEffect.UNKNOWN)
                         .inputTranscript(codonAnnotation.inputTranscript())
                         .inputCodonRank(codonAnnotation.inputCodonRank())
-                        .addSources(Knowledgebase.CKB)
+                        .addSources(source)
                         .build());
             }
         }
@@ -260,7 +275,7 @@ public class CkbExtractor {
     }
 
     @NotNull
-    private static Set<KnownExon> convertToKnownExons(@Nullable List<ExonAnnotation> exonAnnotations) {
+    private Set<KnownExon> convertToKnownExons(@Nullable List<ExonAnnotation> exonAnnotations) {
         Set<KnownExon> exons = Sets.newHashSet();
 
         if (exonAnnotations != null) {
@@ -271,7 +286,7 @@ public class CkbExtractor {
                         .proteinEffect(ProteinEffect.UNKNOWN)
                         .inputTranscript(exonAnnotation.inputTranscript())
                         .inputExonRank(exonAnnotation.inputExonRank())
-                        .addSources(Knowledgebase.CKB)
+                        .addSources(source)
                         .build());
             }
         }
@@ -280,20 +295,16 @@ public class CkbExtractor {
     }
 
     @NotNull
-    private static Set<KnownGene> convertToKnownGenes(@NotNull String gene) {
+    private Set<KnownGene> convertToKnownGenes(@NotNull String gene) {
         if (!gene.equals(CkbConstants.NO_GENE)) {
-            return Set.of(ImmutableKnownGene.builder()
-                    .gene(gene)
-                    .geneRole(GeneRole.UNKNOWN)
-                    .addSources(Knowledgebase.CKB)
-                    .build());
+            return Set.of(ImmutableKnownGene.builder().gene(gene).geneRole(GeneRole.UNKNOWN).addSources(source).build());
         }
 
         return Collections.emptySet();
     }
 
     @NotNull
-    private static Set<KnownCopyNumber> convertToKnownAmpsDels(@Nullable GeneAnnotation copyNumber) {
+    private Set<KnownCopyNumber> convertToKnownAmpsDels(@Nullable GeneAnnotation copyNumber) {
         Set<KnownCopyNumber> copyNumbers = Sets.newHashSet();
 
         if (copyNumber != null) {
@@ -301,7 +312,7 @@ public class CkbExtractor {
                     .from(copyNumber)
                     .geneRole(GeneRole.UNKNOWN)
                     .proteinEffect(ProteinEffect.UNKNOWN)
-                    .addSources(Knowledgebase.CKB)
+                    .addSources(source)
                     .build());
         }
 
@@ -309,15 +320,11 @@ public class CkbExtractor {
     }
 
     @NotNull
-    private static Set<KnownFusion> convertToKnownFusions(@Nullable FusionPair fusion) {
+    private Set<KnownFusion> convertToKnownFusions(@Nullable FusionPair fusion) {
         Set<KnownFusion> fusions = Sets.newHashSet();
 
         if (fusion != null) {
-            fusions.add(ImmutableKnownFusion.builder()
-                    .from(fusion)
-                    .proteinEffect(ProteinEffect.UNKNOWN)
-                    .addSources(Knowledgebase.CKB)
-                    .build());
+            fusions.add(ImmutableKnownFusion.builder().from(fusion).proteinEffect(ProteinEffect.UNKNOWN).addSources(source).build());
         }
 
         return FusionConsolidation.consolidate(fusions);

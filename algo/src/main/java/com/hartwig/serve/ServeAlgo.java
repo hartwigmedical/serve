@@ -74,8 +74,12 @@ public class ServeAlgo {
             extractions.add(extractIclusionKnowledge(config.iClusionTrialTsv(), config.iClusionFilterTsv()));
         }
 
-        if (config.useCkb()) {
-            extractions.add(extractCkbKnowledge(config.ckbDir(), config.ckbFilterTsv(), config.ckbDrugCurationTsv()));
+        if (config.useCkbEvidence()) {
+            extractions.add(extractCkbEvidenceKnowledge(config.ckbDir(), config.ckbFilterTsv(), config.ckbDrugCurationTsv()));
+        }
+
+        if (config.useCkbTrials()) {
+            extractions.add(extractCkbTrialKnowledge(config.ckbDir(), config.ckbFilterTsv()));
         }
 
         if (config.useDocm()) {
@@ -118,7 +122,7 @@ public class ServeAlgo {
         EventClassifierConfig config = ViccClassificationConfig.build();
         // Assume all VICC sources share the same ref genome version
         RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.VICC_CIVIC);
-        ViccExtractor extractor = ViccExtractorFactory.buildViccExtractor(config, refGenomeResource, missingDoidLookup);
+        ViccExtractor extractor = ViccExtractorFactory.create(config, refGenomeResource, missingDoidLookup);
 
         LOGGER.info("Running VICC knowledge extraction");
         return extractor.extract(entries);
@@ -131,28 +135,45 @@ public class ServeAlgo {
 
         EventClassifierConfig config = IclusionClassificationConfig.build();
         RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.ICLUSION);
-        IclusionExtractor extractor = IclusionExtractorFactory.buildIclusionExtractor(config, refGenomeResource, missingDoidLookup);
+        IclusionExtractor extractor = IclusionExtractorFactory.create(config, refGenomeResource, missingDoidLookup);
 
         LOGGER.info("Running iClusion knowledge extraction");
         return extractor.extract(trials);
     }
 
     @NotNull
-    private ExtractionResult extractCkbKnowledge(@NotNull String ckbDir, @NotNull String ckbFilterTsv, @NotNull String ckbDrugCurationTsv)
-            throws IOException {
+    private ExtractionResult extractCkbEvidenceKnowledge(@NotNull String ckbDir, @NotNull String ckbFilterTsv,
+            @NotNull String ckbDrugCurationTsv) throws IOException {
         List<CkbEntry> ckbEntries = CkbReader.readAndCurate(ckbDir, ckbFilterTsv);
 
         EventClassifierConfig config = CkbClassificationConfig.build();
-        RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.CKB);
+        RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.CKB_EVIDENCE);
 
         Map<TreatmentApproachCurationEntryKey, TreatmentApproachCurationEntry> treatmentApproachMap =
                 TreatmentApproachCurationFile.read(ckbDrugCurationTsv);
 
         TreatmentApproachCurator curator = new TreatmentApproachCurator(treatmentApproachMap);
 
-        CkbExtractor extractor = CkbExtractorFactory.buildCkbExtractor(config, refGenomeResource, curator);
+        CkbExtractor extractor = CkbExtractorFactory.createEvidenceExtractor(config, refGenomeResource, curator);
 
-        LOGGER.info("Running CKB knowledge extraction");
+        LOGGER.info("Running CKB evidence knowledge extraction");
+        ExtractionResult result = extractor.extract(ckbEntries);
+
+        curator.reportUnusedCuratedEntries();
+
+        return result;
+    }
+
+    @NotNull
+    private ExtractionResult extractCkbTrialKnowledge(@NotNull String ckbDir, @NotNull String ckbFilterTsv) throws IOException {
+        List<CkbEntry> ckbEntries = CkbReader.readAndCurate(ckbDir, ckbFilterTsv);
+
+        EventClassifierConfig config = CkbClassificationConfig.build();
+        RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.CKB_TRIAL);
+
+        CkbExtractor extractor = CkbExtractorFactory.createTrialExtractor(config, refGenomeResource);
+
+        LOGGER.info("Running CKB trial knowledge extraction");
         return extractor.extract(ckbEntries);
     }
 

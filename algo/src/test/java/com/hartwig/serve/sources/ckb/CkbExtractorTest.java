@@ -127,6 +127,6 @@ public class CkbExtractorTest {
     @NotNull
     private static CkbEntry create(@NotNull String gene, @NotNull String variant, @NotNull String fullName, @NotNull String evidenceType,
             @NotNull String responseType) {
-        return CkbTestFactory.createEntry(gene, variant, fullName, evidenceType, responseType, "AB", "cancer", "A", "DOID:162");
+        return CkbTestFactory.createEntryWithOpenMolecularTrial(gene, variant, fullName, evidenceType, responseType);
     }
 }

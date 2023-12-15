@@ -26,7 +26,7 @@ public class ActionableTrialFactoryTest {
     public void canCreateActionableEntryForOpenTrialInAllowedCountryWithRequiredMolecularProfile() {
         Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting");
         List<VariantRequirementDetail> requirementType = CkbTestFactory.createVariantRequirementDetails(0, "required");
-        CkbEntry entry = CkbTestFactory.createEntryWithClinicalTrial("KRAS",
+        CkbEntry entry = CkbTestFactory.createEntryWithClinicalTrialDetails("KRAS",
                 "BRAF V600E",
                 "BRAF V600E",
                 0,
@@ -53,7 +53,7 @@ public class ActionableTrialFactoryTest {
     public void shouldNotCreateAnActionableEntryWhenVariantRequirementIsOnADifferentProfile() {
         Location location = CkbTestFactory.createLocation("Belgium", "Recruiting");
         List<VariantRequirementDetail> requirementType = CkbTestFactory.createVariantRequirementDetails(0, "required");
-        CkbEntry entry = CkbTestFactory.createEntryWithClinicalTrial("KRAS",
+        CkbEntry entry = CkbTestFactory.createEntryWithClinicalTrialDetails("KRAS",
                 "BRAF V600E",
                 "BRAF V600E",
                 1,
@@ -109,7 +109,7 @@ public class ActionableTrialFactoryTest {
 
     private static boolean hasRequirementTypeToInclude(@NotNull String requirementType) {
         return ActionableTrialFactory.hasVariantRequirementTypeToInclude(CkbTestFactory.createVariantRequirementDetails(0, requirementType),
-                CkbTestFactory.createEntry("BRAF", "BRAF V600E", "BRAF V600E", "sensitive", "Actionable", "AB", "AB", "A", "DOID:162"));
+                CkbTestFactory.createEntryWithOpenMolecularTrial("BRAF", "BRAF V600E", "BRAF V600E", "sensitive", "Actionable"));
     }
 
     @NotNull
@@ -132,5 +132,4 @@ public class ActionableTrialFactoryTest {
                 "nctid",
                 "title");
     }
-
 }

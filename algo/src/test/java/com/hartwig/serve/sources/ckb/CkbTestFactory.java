@@ -87,8 +87,27 @@ public final class CkbTestFactory {
     }
 
     @NotNull
-    public static CkbEntry createEntryWithClinicalTrial(@NotNull String geneSymbol, @NotNull String variant, @NotNull String fullName,
-            @NotNull Integer profileId, @NotNull Location location, @NotNull String recruitmentType,
+    public static CkbEntry createEntryWithOpenMolecularTrial(@NotNull String geneSymbol, @NotNull String variant, @NotNull String fullName,
+            @NotNull String responseType, @NotNull String evidenceType) {
+        CkbEntry baseEntry =
+                createEntry(geneSymbol, variant, fullName, responseType, evidenceType, "any treatment", "any indication", "A", "DOID:162");
+
+        return ImmutableCkbEntry.builder()
+                .from(baseEntry)
+                .clinicalTrials(List.of(createTrial("Recruiting",
+                        List.of(ImmutableVariantRequirementDetail.builder()
+                                .profileId(baseEntry.profileId())
+                                .requirementType("required")
+                                .build()),
+                        List.of(CkbTestFactory.createLocation("Netherlands", null)),
+                        "nctid",
+                        "title")))
+                .build();
+    }
+
+    @NotNull
+    public static CkbEntry createEntryWithClinicalTrialDetails(@NotNull String geneSymbol, @NotNull String variant,
+            @NotNull String fullName, @NotNull Integer profileId, @NotNull Location location, @NotNull String recruitmentType,
             @NotNull List<VariantRequirementDetail> requirementType, @NotNull String nctId, @NotNull String title) {
         return ImmutableCkbEntry.builder()
                 .profileId(profileId)
@@ -111,11 +130,6 @@ public final class CkbTestFactory {
                 .profileName(Strings.EMPTY)
                 .addVariants(createVariant(geneSymbol, variant, fullName))
                 .addEvidences(createEvidence(responseType, evidenceType, therapyName, indicationName, level, termId))
-                .clinicalTrials(List.of(createTrial("Recruiting",
-                        Lists.newArrayList(ImmutableVariantRequirementDetail.builder().profileId(0).requirementType("required").build()),
-                        Lists.newArrayList(CkbTestFactory.createLocation("Netherlands", null)),
-                        "nctid",
-                        "title")))
                 .build();
     }
 

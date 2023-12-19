@@ -44,7 +44,9 @@ The `serve-algo` module contains the algo producing the `serve-datamodel`. The f
 1. Set the version in the pom.xml file in serve-algo (typically identical to the version of serve-datamodel)
 2. Compile and package locally using `mvn clean package`
 3. Update the `deploy_serve_prod` script and run this script to copy the algo jar with the correct name in the common-tools bucket.
+4. Roll back the change in the pom.xml file in serve-algo
 4. Create a release using the GitHub website and attach the same jar (and serve sql) as additional resources.
+5. Add release notes to README.md in serve-algo
 
 The VMs used to run SERVE automatically sync the common-tools bucket so will eventually have the new algo jar.
 

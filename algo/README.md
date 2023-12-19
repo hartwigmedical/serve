@@ -51,8 +51,8 @@ they are compliant with the usage of the data itself.
 SERVE generates clinical evidence in the following datamodel:
 
 - Treatment (name of trial or drug(s))
-- Relevant treatment approaches of the knowledgebase (the drug classes of the treatment related to the event)
-- Curated treatment approaches of the knowledgebase (the curated drug classes of the treatment related to the event)
+    - Relevant treatment approach underlying the treatment.
+    - Curated treatment approach underlying the treatment.
 - Cancer type (annotated with DOID) for which the treatment is considered on-label.
 - Blacklist cancer types (annotated with DOID) that should be children of the main cancer type and are used for blacklisting
   specific types of the main cancer type.
@@ -300,7 +300,7 @@ The following filters can be configured for CKB FLEX, along with an example of h
 
 ## Relevant treatment approaches of the evidence
 
-External knowledgebases can be annotated evidence (treatment/event) with the relevant treatment approach. For making this usable
+External knowledgebases can annotate evidence for a treatment with a treatment approach. For making this usable
 downstream, this is curated for harmonize the knowledge. The following filters can be configured:
 
 | Filter                                       | Description                                                                                             |

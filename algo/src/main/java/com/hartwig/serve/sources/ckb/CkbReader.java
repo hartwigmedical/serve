@@ -1,18 +1,19 @@
 package com.hartwig.serve.sources.ckb;
 
-import java.io.IOException;
-import java.util.List;
-
 import com.hartwig.serve.ckb.CkbEntryReader;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
+import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudy;
+import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudyEntry;
 import com.hartwig.serve.sources.ckb.curation.CkbCurator;
 import com.hartwig.serve.sources.ckb.filter.CkbFilter;
 import com.hartwig.serve.sources.ckb.filter.CkbFilterEntry;
 import com.hartwig.serve.sources.ckb.filter.CkbFilterFile;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
+import java.util.List;
 
 public final class CkbReader {
 
@@ -59,5 +60,21 @@ public final class CkbReader {
         filter.reportUnusedFilterEntries();
 
         return filteredEntries;
+    }
+
+    @NotNull
+    private static List<CkbEntry> blacklist(@NotNull List<CkbEntry> entries,
+                                                 @NotNull List<CkbBlacklistStudyEntry> ckbBlacklistStudyEntries) {
+        CkbBlacklistStudy blacklistStudy = new CkbBlacklistStudy(ckbBlacklistStudyEntries);
+
+        LOGGER.info("Blacklisting {} CKB studies entries", entries.size());
+        List<CkbEntry> filteredStudiesEntries = blacklistStudy.run(entries);
+        LOGGER.info(" Finished CKB filtering studies. {} entries remaining, {} entries have been removed",
+                filteredStudiesEntries.size(),
+                entries.size() - filteredStudiesEntries.size());
+
+        //   blacklistStudy.reportUnusedFilterEntries();
+
+        return filteredStudiesEntries;
     }
 }

@@ -21,6 +21,7 @@ public class ServeAlgoTest {
 
     private static final String CKB_DIR = Resources.getResource("ckb_data").getPath();
     private static final String CKB_FILTER_TSV = Resources.getResource("ckb_filter/ckb_filters.tsv").getPath();
+    private static final String CKB_BLACKLIST_STUDY_TSV = Resources.getResource("ckb_filter/ckb_blacklist_studies.tsv").getPath();
     private static final String CKB_DRUG_CLASS_CURATION_TSV =
             Resources.getResource("ckb_curation/ckb_treatment_approach_curation.tsv").getPath();
 
@@ -54,6 +55,7 @@ public class ServeAlgoTest {
                 .useCkbTrials(true)
                 .ckbDir(CKB_DIR)
                 .ckbFilterTsv(CKB_FILTER_TSV)
+                .ckbBlacklistStudyTsv(CKB_BLACKLIST_STUDY_TSV)
                 .ckbDrugCurationTsv(CKB_DRUG_CLASS_CURATION_TSV)
                 .useDocm(true)
                 .docmTsv(DOCM_TSV)

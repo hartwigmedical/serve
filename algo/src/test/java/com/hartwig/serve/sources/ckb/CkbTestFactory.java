@@ -1,17 +1,9 @@
 package com.hartwig.serve.sources.ckb;
 
-import java.time.LocalDate;
-import java.util.List;
-
 import com.google.common.collect.Lists;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.ckb.datamodel.ImmutableCkbEntry;
-import com.hartwig.serve.ckb.datamodel.clinicaltrial.ClinicalTrial;
-import com.hartwig.serve.ckb.datamodel.clinicaltrial.ImmutableClinicalTrial;
-import com.hartwig.serve.ckb.datamodel.clinicaltrial.ImmutableLocation;
-import com.hartwig.serve.ckb.datamodel.clinicaltrial.ImmutableVariantRequirementDetail;
-import com.hartwig.serve.ckb.datamodel.clinicaltrial.Location;
-import com.hartwig.serve.ckb.datamodel.clinicaltrial.VariantRequirementDetail;
+import com.hartwig.serve.ckb.datamodel.clinicaltrial.*;
 import com.hartwig.serve.ckb.datamodel.evidence.Evidence;
 import com.hartwig.serve.ckb.datamodel.evidence.ImmutableEvidence;
 import com.hartwig.serve.ckb.datamodel.indication.ImmutableIndication;
@@ -22,10 +14,12 @@ import com.hartwig.serve.ckb.datamodel.variant.Gene;
 import com.hartwig.serve.ckb.datamodel.variant.ImmutableGene;
 import com.hartwig.serve.ckb.datamodel.variant.ImmutableVariant;
 import com.hartwig.serve.ckb.datamodel.variant.Variant;
-
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.time.LocalDate;
+import java.util.List;
 
 public final class CkbTestFactory {
 
@@ -92,14 +86,14 @@ public final class CkbTestFactory {
     }
 
     @NotNull
-    public static CkbEntry createEntryWithClinicalTrial(int profileId, @NotNull ClinicalTrial clinicalTrial) {
-        return builder().profileId(profileId).clinicalTrials(List.of(clinicalTrial)).build();
+    public static CkbEntry createEntryWithClinicalTrial(int profileId, @NotNull String profileName, @NotNull ClinicalTrial clinicalTrial) {
+        return builder().profileId(profileId).profileName(profileName).clinicalTrials(List.of(clinicalTrial)).build();
     }
 
     @NotNull
     public static CkbEntry createEntry(@NotNull String geneSymbol, @NotNull String variant, @NotNull String fullName,
-            @NotNull String responseType, @NotNull String evidenceType, @NotNull String therapyName, @NotNull String indicationName,
-            @NotNull String level, @NotNull String termId) {
+                                       @NotNull String responseType, @NotNull String evidenceType, @NotNull String therapyName, @NotNull String indicationName,
+                                       @NotNull String level, @NotNull String termId) {
         return builder().addVariants(createVariant(geneSymbol, variant, fullName))
                 .addEvidences(createEvidence(responseType, evidenceType, therapyName, indicationName, level, termId))
                 .build();
@@ -107,7 +101,7 @@ public final class CkbTestFactory {
 
     @NotNull
     public static ClinicalTrial createTrial(@NotNull String recruitment, @NotNull List<VariantRequirementDetail> variantRequirementDetails,
-            @NotNull List<Location> locations, @NotNull String nctId, @NotNull String title) {
+                                            @NotNull List<Location> locations, @NotNull String nctId, @NotNull String title) {
         return ImmutableClinicalTrial.builder()
                 .updateDate(TEST_DATE)
                 .nctId(nctId)
@@ -121,8 +115,24 @@ public final class CkbTestFactory {
     }
 
     @NotNull
+    public static ClinicalTrial createTrialWithTerapy(@NotNull String recruitment, @NotNull List<VariantRequirementDetail> variantRequirementDetails,
+                                                      @NotNull List<Location> locations, @NotNull String nctId, @NotNull String title, @NotNull List<Therapy> therapies, @NotNull List<Indication> indication) {
+        return ImmutableClinicalTrial.builder()
+                .updateDate(TEST_DATE)
+                .nctId(nctId)
+                .title(title)
+                .therapies(therapies)
+                .indications(indication)
+                .recruitment(recruitment)
+                .variantRequirement(Strings.EMPTY)
+                .variantRequirementDetails(variantRequirementDetails)
+                .locations(locations)
+                .build();
+    }
+
+    @NotNull
     private static Evidence createEvidence(@NotNull String responseType, @NotNull String evidenceType, @NotNull String therapyName,
-            @NotNull String indicationName, @NotNull String level, @NotNull String termId) {
+                                           @NotNull String indicationName, @NotNull String level, @NotNull String termId) {
         return ImmutableEvidence.builder()
                 .id(0)
                 .therapy(createTherapy(therapyName))
@@ -139,7 +149,7 @@ public final class CkbTestFactory {
     }
 
     @NotNull
-    private static Therapy createTherapy(@NotNull String therapyName) {
+    public static Therapy createTherapy(@NotNull String therapyName) {
         return ImmutableTherapy.builder()
                 .id(0)
                 .createDate(TEST_DATE)

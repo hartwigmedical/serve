@@ -16,6 +16,7 @@ import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.Knowledgebase;
 
 import org.apache.commons.compress.utils.Sets;
+import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
@@ -24,11 +25,12 @@ public class ActionableTrialFactoryTest {
     @Test
     public void canCreateActionableEntryForOpenTrialInAllowedCountryWithRequiredMolecularProfile() {
         int profileId = 1;
+        String profileName = Strings.EMPTY;
         Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(profileId, "required");
         ClinicalTrial clinicalTrial =
                 CkbTestFactory.createTrial("Recruiting", List.of(requirementDetail), List.of(location), "NCT0102", "Phase I trial");
-        CkbEntry entry = CkbTestFactory.createEntryWithClinicalTrial(profileId, clinicalTrial);
+        CkbEntry entry = CkbTestFactory.createEntryWithClinicalTrial(profileId, profileName, clinicalTrial);
 
         ActionableTrialFactory actionableTrialFactory = new ActionableTrialFactory();
         Set<ActionableEntry> trials = actionableTrialFactory.create(entry, "KRAS", "gene");
@@ -50,7 +52,7 @@ public class ActionableTrialFactoryTest {
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(0, "required");
         ClinicalTrial clinicalTrial =
                 CkbTestFactory.createTrial("Recruiting", List.of(requirementDetail), List.of(location), "NCT0102", "Phase I trial");
-        CkbEntry entry = CkbTestFactory.createEntryWithClinicalTrial(1, clinicalTrial);
+        CkbEntry entry = CkbTestFactory.createEntryWithClinicalTrial(1, Strings.EMPTY, clinicalTrial);
 
         ActionableTrialFactory actionableTrialFactory = new ActionableTrialFactory();
         Set<ActionableEntry> trials = actionableTrialFactory.create(entry, "KRAS", "gene");

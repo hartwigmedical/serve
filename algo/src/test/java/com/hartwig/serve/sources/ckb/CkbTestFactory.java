@@ -86,6 +86,11 @@ public final class CkbTestFactory {
     }
 
     @NotNull
+    public static CkbEntry createEntryWithMultipleClinicalTrial(int profileId, @NotNull String profileName, @NotNull List<ClinicalTrial> clinicalTrial) {
+        return builder().profileId(profileId).profileName(profileName).clinicalTrials(clinicalTrial).build();
+    }
+
+    @NotNull
     public static CkbEntry createEntryWithClinicalTrial(int profileId, @NotNull String profileName, @NotNull ClinicalTrial clinicalTrial) {
         return builder().profileId(profileId).profileName(profileName).clinicalTrials(List.of(clinicalTrial)).build();
     }

@@ -1,10 +1,5 @@
 package com.hartwig.serve;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.hartwig.serve.ckb.classification.CkbClassificationConfig;
@@ -44,10 +39,14 @@ import com.hartwig.serve.sources.vicc.ViccReader;
 import com.hartwig.serve.vicc.annotation.ViccClassificationConfig;
 import com.hartwig.serve.vicc.datamodel.ViccEntry;
 import com.hartwig.serve.vicc.datamodel.ViccSource;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class ServeAlgo {
 
@@ -79,7 +78,7 @@ public class ServeAlgo {
         }
 
         if (config.useCkbTrials()) {
-            extractions.add(extractCkbTrialKnowledge(config.ckbDir(), config.ckbFilterTsv()));
+            extractions.add(extractCkbTrialKnowledge(config.ckbDir(), config.ckbFilterTsv(), config.ckbBlacklistStudyTsv()));
         }
 
         if (config.useDocm()) {
@@ -143,7 +142,7 @@ public class ServeAlgo {
 
     @NotNull
     private ExtractionResult extractCkbEvidenceKnowledge(@NotNull String ckbDir, @NotNull String ckbFilterTsv,
-            @NotNull String ckbDrugCurationTsv) throws IOException {
+                                                         @NotNull String ckbDrugCurationTsv) throws IOException {
         List<CkbEntry> ckbEntries = CkbReader.readAndCurate(ckbDir, ckbFilterTsv);
 
         EventClassifierConfig config = CkbClassificationConfig.build();
@@ -165,8 +164,9 @@ public class ServeAlgo {
     }
 
     @NotNull
-    private ExtractionResult extractCkbTrialKnowledge(@NotNull String ckbDir, @NotNull String ckbFilterTsv) throws IOException {
+    private ExtractionResult extractCkbTrialKnowledge(@NotNull String ckbDir, @NotNull String ckbFilterTsv, @NotNull String ckbBlacklistStudyTsv) throws IOException {
         List<CkbEntry> ckbEntries = CkbReader.readAndCurate(ckbDir, ckbFilterTsv);
+        List<CkbEntry> nonBlacklistCkbStudiesEntries = CkbReader.blacklist(ckbEntries, ckbBlacklistStudyTsv);
 
         EventClassifierConfig config = CkbClassificationConfig.build();
         RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.CKB_TRIAL);
@@ -174,7 +174,7 @@ public class ServeAlgo {
         CkbExtractor extractor = CkbExtractorFactory.createTrialExtractor(config, refGenomeResource);
 
         LOGGER.info("Running CKB trial knowledge extraction");
-        return extractor.extract(ckbEntries);
+        return extractor.extract(nonBlacklistCkbStudiesEntries);
     }
 
     @NotNull

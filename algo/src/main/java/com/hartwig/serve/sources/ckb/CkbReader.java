@@ -4,6 +4,7 @@ import com.hartwig.serve.ckb.CkbEntryReader;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudy;
 import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudyEntry;
+import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudyFile;
 import com.hartwig.serve.sources.ckb.curation.CkbCurator;
 import com.hartwig.serve.sources.ckb.filter.CkbFilter;
 import com.hartwig.serve.sources.ckb.filter.CkbFilterEntry;
@@ -63,9 +64,13 @@ public final class CkbReader {
     }
 
     @NotNull
-    private static List<CkbEntry> blacklist(@NotNull List<CkbEntry> entries,
-                                                 @NotNull List<CkbBlacklistStudyEntry> ckbBlacklistStudyEntries) {
-        CkbBlacklistStudy blacklistStudy = new CkbBlacklistStudy(ckbBlacklistStudyEntries);
+    public static List<CkbEntry> blacklist(@NotNull List<CkbEntry> entries,
+                                                 @NotNull String ckbBlacklistStudyTsv) throws IOException{
+        LOGGER.info("Reading CBK blacklist studies entries from {}", ckbBlacklistStudyTsv);
+        List<CkbBlacklistStudyEntry> ckbBlacklistStudyEntriesEntries = CkbBlacklistStudyFile.read(ckbBlacklistStudyTsv);
+        LOGGER.info(" Read {} filter entries", ckbBlacklistStudyEntriesEntries.size());
+
+        CkbBlacklistStudy blacklistStudy = new CkbBlacklistStudy(ckbBlacklistStudyEntriesEntries);
 
         LOGGER.info("Blacklisting {} CKB studies entries", entries.size());
         List<CkbEntry> filteredStudiesEntries = blacklistStudy.run(entries);
@@ -73,7 +78,7 @@ public final class CkbReader {
                 filteredStudiesEntries.size(),
                 entries.size() - filteredStudiesEntries.size());
 
-        //   blacklistStudy.reportUnusedFilterEntries();
+        blacklistStudy.reportUnusedBlacklistEntries();
 
         return filteredStudiesEntries;
     }

@@ -45,6 +45,18 @@ public class CkbBlacklistStudy {
         return filteredCkbEntries;
     }
 
+    public void reportUnusedBlacklistEntries() {
+        int unusedBlacklistEntryCount = 0;
+        for (CkbBlacklistStudyEntry entry : blacklistStudiesList) {
+            if (!usedBlacklists.contains(entry)) {
+                unusedBlacklistEntryCount++;
+                LOGGER.warn(" Blacklist entry '{}' hasn't been used for CKB filtering", entry);
+            }
+        }
+
+        LOGGER.debug(" Found {} unused blacklist entries during CKB filtering", unusedBlacklistEntryCount);
+    }
+
     private boolean include(@NotNull ClinicalTrial clinicalTrial, @NotNull String profileName) {
         for (CkbBlacklistStudyEntry blacklistStudyEntry : blacklistStudiesList) {
             boolean filterMatches = isMatch(blacklistStudyEntry, clinicalTrial, profileName);
@@ -102,6 +114,9 @@ public class CkbBlacklistStudy {
                     }
                 }
                 return blacklistStudyEntry.nctId().equals(clinicalTrial.nctId()) && therapyMatch && indicationMatch && blacklistStudyEntry.molecularProfile().equals(profileName);
+            }
+            case ALL_MOLECULAR_PROFILE: {
+                return blacklistStudyEntry.molecularProfile().equals(profileName);
             }
             default: {
                 LOGGER.warn("Blacklist entry found with unrecognized type: {}", blacklistStudyEntry.ckbBlacklistReason());

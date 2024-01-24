@@ -75,6 +75,27 @@ public class CkbBlacklistStudyTest {
         assertTrue(ckbBlacklistStudy.run(Lists.newArrayList(entry)).isEmpty());
     }
 
+    @Test
+    public void canBlacklistAllMolecularProfile() {
+        int profileId = 1;
+        CkbBlacklistStudy ckbBlacklistStudy = new CkbBlacklistStudy(createBlacklistStudyMolecularProfileEntryList(CkbBlacklistReason.ALL_MOLECULAR_PROFILE, "NCT0102", "AB", "Solid tumor", "ERBB2 amp"));
+        Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting");
+        VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(profileId, "required");
+        Therapy therapy = CkbTestFactory.createTherapy("AB");
+        Indication indication = CkbTestFactory.createIndication("Solid tumor", "162");
+        ClinicalTrial clinicalTrial1 =
+                CkbTestFactory.createTrialWithTerapy("Recruiting", List.of(requirementDetail), List.of(location), "NCT0102", "Phase I trial", List.of(therapy), List.of(indication));
+
+        ClinicalTrial clinicalTrial2 =
+                CkbTestFactory.createTrialWithTerapy("Recruiting", List.of(requirementDetail), List.of(location), "NCT0405", "Phase I trial", List.of(therapy), List.of(indication));
+
+
+        List<ClinicalTrial> clinicalTrials = Lists.newArrayList(clinicalTrial1, clinicalTrial2);
+
+        CkbEntry entry = CkbTestFactory.createEntryWithMultipleClinicalTrial(profileId, "ERBB2 amp", clinicalTrials);
+        assertTrue(ckbBlacklistStudy.run(Lists.newArrayList(entry)).isEmpty());
+    }
+
     @NotNull
     private static List<CkbBlacklistStudyEntry> createBlacklistStudyEntryList(@NotNull CkbBlacklistReason reason, @NotNull String nctId) {
         return Lists.newArrayList(ImmutableCkbBlacklistStudyEntry.builder().ckbBlacklistReason(reason).nctId(nctId).build());

@@ -35,8 +35,6 @@ class ActionableTrialFactory implements ActionableEntryFactory {
         POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("active_not_recruiting");
 
         COUNTRIES_TO_INCLUDE.add("netherlands");
-        COUNTRIES_TO_INCLUDE.add("belgium");
-        COUNTRIES_TO_INCLUDE.add("germany");
 
         VARIANT_REQUIREMENT_TYPES_TO_INCLUDE.add("partial - required");
         VARIANT_REQUIREMENT_TYPES_TO_INCLUDE.add("required");
@@ -56,19 +54,18 @@ class ActionableTrialFactory implements ActionableEntryFactory {
             if (!countries.isEmpty()) {
                 for (Indication indication : trial.indications()) {
                     CancerTypeExtraction cancerTypeExtraction = ActionableFunctions.extractCancerTypeDetails(indication);
-                    LOGGER.info(cancerTypeExtraction);
 
                     if (cancerTypeExtraction != null) {
                         actionableTrials.add(ImmutableActionableEntry.builder()
                                 .source(Knowledgebase.CKB_TRIAL)
                                 .sourceEvent(sourceEvent)
-                                .sourceUrls(Sets.newHashSet("https://clinicaltrials.gov/study/" + trial.nctId()))
+                                .sourceUrls(Sets.newHashSet("https://ckbhome.jax.org/clinicalTrial/show?nctId=" + trial.nctId()))
                                 .treatment(ImmutableTreatment.builder().name(trial.title()).build())
                                 .applicableCancerType(cancerTypeExtraction.applicableCancerType())
                                 .blacklistCancerTypes(cancerTypeExtraction.blacklistedCancerTypes())
                                 .level(EvidenceLevel.B)
                                 .direction(EvidenceDirection.RESPONSIVE)
-                                .evidenceUrls(countries)
+                                .evidenceUrls(Sets.newHashSet("https://clinicaltrials.gov/study/" + trial.nctId()))
                                 .build());
                     }
                 }

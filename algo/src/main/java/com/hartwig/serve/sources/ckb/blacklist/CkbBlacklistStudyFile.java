@@ -40,19 +40,19 @@ public class CkbBlacklistStudyFile {
     @NotNull
     private static CkbBlacklistStudyEntry fromLine(@NotNull String line, @NotNull Map<String, Integer> fields) {
         String[] values = line.split(FIELD_DELIMITER);
-        CkbBlacklistReason reason = CkbBlacklistReason.valueOf(values[fields.get("blacklistType")]);
+        CkbBlacklistStudyReason reason = CkbBlacklistStudyReason.valueOf(values[fields.get("blacklistType")]);
 
         String therapy = null;
         String cancerType = null;
         String molecularProfile = null;
 
-        if (Sets.newHashSet(CkbBlacklistReason.STUDY_THERAPY, CkbBlacklistReason.STUDY_CANCER_TYPE, CkbBlacklistReason.STUDY_MOLECULAR_PROFILE).contains(reason)) {
+        if (Sets.newHashSet(CkbBlacklistStudyReason.STUDY_THERAPY, CkbBlacklistStudyReason.STUDY_CANCER_TYPE, CkbBlacklistStudyReason.STUDY_MOLECULAR_PROFILE).contains(reason)) {
             therapy = values[fields.get("therapyName")];
         }
-        if (Sets.newHashSet(CkbBlacklistReason.STUDY_CANCER_TYPE, CkbBlacklistReason.STUDY_MOLECULAR_PROFILE).contains(reason)) {
+        if (Sets.newHashSet(CkbBlacklistStudyReason.STUDY_CANCER_TYPE, CkbBlacklistStudyReason.STUDY_MOLECULAR_PROFILE).contains(reason)) {
             cancerType = values[fields.get("cancerType")];
         }
-        if (Sets.newHashSet(CkbBlacklistReason.STUDY_MOLECULAR_PROFILE).contains(reason)) {
+        if (Sets.newHashSet(CkbBlacklistStudyReason.STUDY_MOLECULAR_PROFILE).contains(reason)) {
             molecularProfile = values[fields.get("molecularProfile")];
         }
         return ImmutableCkbBlacklistStudyEntry.builder()

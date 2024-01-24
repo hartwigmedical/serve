@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 public abstract class CkbBlacklistStudyEntry {
 
     @NotNull
-    public abstract CkbBlacklistReason ckbBlacklistReason();
+    public abstract CkbBlacklistStudyReason ckbBlacklistReason();
 
     @NotNull
     public abstract String nctId();

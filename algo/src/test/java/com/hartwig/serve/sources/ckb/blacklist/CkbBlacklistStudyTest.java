@@ -23,7 +23,7 @@ public class CkbBlacklistStudyTest {
     @Test
     public void canBlacklistWholeStudy() {
         int profileId = 1;
-        CkbBlacklistStudy ckbBlacklistStudy = new CkbBlacklistStudy(createBlacklistStudyEntryList(CkbBlacklistReason.STUDY_WHOLE, "NCT0102"));
+        CkbBlacklistStudy ckbBlacklistStudy = new CkbBlacklistStudy(createBlacklistStudyEntryList(CkbBlacklistStudyReason.STUDY_WHOLE, "NCT0102"));
         Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(profileId, "required");
         ClinicalTrial clinicalTrial =
@@ -35,7 +35,7 @@ public class CkbBlacklistStudyTest {
     @Test
     public void canBlacklistStudyTherapy() {
         int profileId = 1;
-        CkbBlacklistStudy ckbBlacklistStudy = new CkbBlacklistStudy(createBlacklistStudyTherapyEntryList(CkbBlacklistReason.STUDY_THERAPY, "NCT0102", "AB"));
+        CkbBlacklistStudy ckbBlacklistStudy = new CkbBlacklistStudy(createBlacklistStudyTherapyEntryList(CkbBlacklistStudyReason.STUDY_THERAPY, "NCT0102", "AB"));
         Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(profileId, "required");
         Therapy therapy = CkbTestFactory.createTherapy("AB");
@@ -49,7 +49,7 @@ public class CkbBlacklistStudyTest {
     @Test
     public void canBlacklistStudyCancerType() {
         int profileId = 1;
-        CkbBlacklistStudy ckbBlacklistStudy = new CkbBlacklistStudy(createBlacklistStudyCancerTypeEntryList(CkbBlacklistReason.STUDY_CANCER_TYPE, "NCT0102", "AB", "Solid tumor"));
+        CkbBlacklistStudy ckbBlacklistStudy = new CkbBlacklistStudy(createBlacklistStudyCancerTypeEntryList(CkbBlacklistStudyReason.STUDY_CANCER_TYPE, "NCT0102", "AB", "Solid tumor"));
         Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(profileId, "required");
         Therapy therapy = CkbTestFactory.createTherapy("AB");
@@ -63,7 +63,7 @@ public class CkbBlacklistStudyTest {
     @Test
     public void canBlacklistStudyMolecularProfile() {
         int profileId = 1;
-        CkbBlacklistStudy ckbBlacklistStudy = new CkbBlacklistStudy(createBlacklistStudyMolecularProfileEntryList(CkbBlacklistReason.STUDY_MOLECULAR_PROFILE, "NCT0102", "AB", "Solid tumor", "ERBB2 amp"));
+        CkbBlacklistStudy ckbBlacklistStudy = new CkbBlacklistStudy(createBlacklistStudyMolecularProfileEntryList(CkbBlacklistStudyReason.STUDY_MOLECULAR_PROFILE, "NCT0102", "AB", "Solid tumor", "ERBB2 amp"));
         Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(profileId, "required");
         Therapy therapy = CkbTestFactory.createTherapy("AB");
@@ -78,7 +78,7 @@ public class CkbBlacklistStudyTest {
     @Test
     public void canBlacklistAllMolecularProfile() {
         int profileId = 1;
-        CkbBlacklistStudy ckbBlacklistStudy = new CkbBlacklistStudy(createBlacklistStudyMolecularProfileEntryList(CkbBlacklistReason.ALL_MOLECULAR_PROFILE, "NCT0102", "AB", "Solid tumor", "ERBB2 amp"));
+        CkbBlacklistStudy ckbBlacklistStudy = new CkbBlacklistStudy(createBlacklistStudyMolecularProfileEntryList(CkbBlacklistStudyReason.ALL_MOLECULAR_PROFILE, "NCT0102", "AB", "Solid tumor", "ERBB2 amp"));
         Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(profileId, "required");
         Therapy therapy = CkbTestFactory.createTherapy("AB");
@@ -97,22 +97,22 @@ public class CkbBlacklistStudyTest {
     }
 
     @NotNull
-    private static List<CkbBlacklistStudyEntry> createBlacklistStudyEntryList(@NotNull CkbBlacklistReason reason, @NotNull String nctId) {
+    private static List<CkbBlacklistStudyEntry> createBlacklistStudyEntryList(@NotNull CkbBlacklistStudyReason reason, @NotNull String nctId) {
         return Lists.newArrayList(ImmutableCkbBlacklistStudyEntry.builder().ckbBlacklistReason(reason).nctId(nctId).build());
     }
 
     @NotNull
-    private static List<CkbBlacklistStudyEntry> createBlacklistStudyTherapyEntryList(@NotNull CkbBlacklistReason reason, @NotNull String nctId, @Nullable String therapy) {
+    private static List<CkbBlacklistStudyEntry> createBlacklistStudyTherapyEntryList(@NotNull CkbBlacklistStudyReason reason, @NotNull String nctId, @Nullable String therapy) {
         return Lists.newArrayList(ImmutableCkbBlacklistStudyEntry.builder().ckbBlacklistReason(reason).nctId(nctId).therapy(therapy).build());
     }
 
     @NotNull
-    private static List<CkbBlacklistStudyEntry> createBlacklistStudyCancerTypeEntryList(@NotNull CkbBlacklistReason reason, @NotNull String nctId, @Nullable String therapy, @Nullable String cancerType) {
+    private static List<CkbBlacklistStudyEntry> createBlacklistStudyCancerTypeEntryList(@NotNull CkbBlacklistStudyReason reason, @NotNull String nctId, @Nullable String therapy, @Nullable String cancerType) {
         return Lists.newArrayList(ImmutableCkbBlacklistStudyEntry.builder().ckbBlacklistReason(reason).nctId(nctId).therapy(therapy).cancerType(cancerType).build());
     }
 
     @NotNull
-    private static List<CkbBlacklistStudyEntry> createBlacklistStudyMolecularProfileEntryList(@NotNull CkbBlacklistReason reason, @NotNull String nctId, @Nullable String therapy, @Nullable String cancerType, @Nullable String molecularProfile) {
+    private static List<CkbBlacklistStudyEntry> createBlacklistStudyMolecularProfileEntryList(@NotNull CkbBlacklistStudyReason reason, @NotNull String nctId, @Nullable String therapy, @Nullable String cancerType, @Nullable String molecularProfile) {
         return Lists.newArrayList(ImmutableCkbBlacklistStudyEntry.builder().ckbBlacklistReason(reason).nctId(nctId).therapy(therapy).cancerType(cancerType).molecularProfile(molecularProfile).build());
     }
 }

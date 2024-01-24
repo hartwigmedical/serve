@@ -30,6 +30,8 @@ public class CkbBlacklistStudyTest {
                 CkbTestFactory.createTrial("Recruiting", List.of(requirementDetail), List.of(location), "NCT0102", "Phase I trial");
         CkbEntry entry = CkbTestFactory.createEntryWithClinicalTrial(profileId, Strings.EMPTY, clinicalTrial);
         assertTrue(ckbBlacklistStudy.run(Lists.newArrayList(entry)).isEmpty());
+
+        ckbBlacklistStudy.reportUnusedBlacklistEntries();
     }
 
     @Test
@@ -44,6 +46,8 @@ public class CkbBlacklistStudyTest {
                 CkbTestFactory.createTrialWithTerapy("Recruiting", List.of(requirementDetail), List.of(location), "NCT0102", "Phase I trial", List.of(therapy), List.of(indication));
         CkbEntry entry = CkbTestFactory.createEntryWithClinicalTrial(profileId, Strings.EMPTY, clinicalTrial);
         assertTrue(ckbBlacklistStudy.run(Lists.newArrayList(entry)).isEmpty());
+
+        ckbBlacklistStudy.reportUnusedBlacklistEntries();
     }
 
     @Test
@@ -58,6 +62,8 @@ public class CkbBlacklistStudyTest {
                 CkbTestFactory.createTrialWithTerapy("Recruiting", List.of(requirementDetail), List.of(location), "NCT0102", "Phase I trial", List.of(therapy), List.of(indication));
         CkbEntry entry = CkbTestFactory.createEntryWithClinicalTrial(profileId, Strings.EMPTY, clinicalTrial);
         assertTrue(ckbBlacklistStudy.run(Lists.newArrayList(entry)).isEmpty());
+
+        ckbBlacklistStudy.reportUnusedBlacklistEntries();
     }
 
     @Test
@@ -73,6 +79,8 @@ public class CkbBlacklistStudyTest {
 
         CkbEntry entry = CkbTestFactory.createEntryWithClinicalTrial(profileId, "ERBB2 amp", clinicalTrial);
         assertTrue(ckbBlacklistStudy.run(Lists.newArrayList(entry)).isEmpty());
+
+        ckbBlacklistStudy.reportUnusedBlacklistEntries();
     }
 
     @Test
@@ -94,6 +102,8 @@ public class CkbBlacklistStudyTest {
 
         CkbEntry entry = CkbTestFactory.createEntryWithMultipleClinicalTrial(profileId, "ERBB2 amp", clinicalTrials);
         assertTrue(ckbBlacklistStudy.run(Lists.newArrayList(entry)).isEmpty());
+
+        ckbBlacklistStudy.reportUnusedBlacklistEntries();
     }
 
     @NotNull

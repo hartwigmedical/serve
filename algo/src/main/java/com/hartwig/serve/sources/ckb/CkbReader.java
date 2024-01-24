@@ -2,9 +2,7 @@ package com.hartwig.serve.sources.ckb;
 
 import com.hartwig.serve.ckb.CkbEntryReader;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
-import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudy;
-import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudyEntry;
-import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudyFile;
+import com.hartwig.serve.sources.ckb.blacklist.*;
 import com.hartwig.serve.sources.ckb.curation.CkbCurator;
 import com.hartwig.serve.sources.ckb.filter.CkbFilter;
 import com.hartwig.serve.sources.ckb.filter.CkbFilterEntry;
@@ -64,8 +62,8 @@ public final class CkbReader {
     }
 
     @NotNull
-    public static List<CkbEntry> blacklist(@NotNull List<CkbEntry> entries,
-                                                 @NotNull String ckbBlacklistStudyTsv) throws IOException{
+    public static List<CkbEntry> blacklistStudy(@NotNull List<CkbEntry> entries,
+                                                @NotNull String ckbBlacklistStudyTsv) throws IOException{
         LOGGER.info("Reading CBK blacklist studies entries from {}", ckbBlacklistStudyTsv);
         List<CkbBlacklistStudyEntry> ckbBlacklistStudyEntriesEntries = CkbBlacklistStudyFile.read(ckbBlacklistStudyTsv);
         LOGGER.info(" Read {} filter entries", ckbBlacklistStudyEntriesEntries.size());
@@ -81,5 +79,25 @@ public final class CkbReader {
         blacklistStudy.reportUnusedBlacklistEntries();
 
         return filteredStudiesEntries;
+    }
+
+    @NotNull
+    public static List<CkbEntry> blacklistEvidence(@NotNull List<CkbEntry> entries,
+                                                @NotNull String ckbBlacklistEvidenceTsv) throws IOException{
+        LOGGER.info("Reading CBK blacklist evidence entries from {}", ckbBlacklistEvidenceTsv);
+        List<CkbBlacklistEvidenceEntry> ckbBlacklistEvidenceEntriesEntries = CkbBlacklistEvidenceFile.read(ckbBlacklistEvidenceTsv);
+        LOGGER.info(" Read {} filter entries", ckbBlacklistEvidenceEntriesEntries.size());
+
+        CkbBlacklistEvidence blacklistEvidence = new CkbBlacklistEvidence(ckbBlacklistEvidenceEntriesEntries);
+
+        LOGGER.info("Blacklisting {} CKB evidence entries", entries.size());
+        List<CkbEntry> filteredEvidenceEntries = blacklistEvidence.run(entries);
+        LOGGER.info(" Finished CKB filtering studies. {} entries remaining, {} entries have been removed",
+                filteredEvidenceEntries.size(),
+                entries.size() - filteredEvidenceEntries.size());
+
+        blacklistEvidence.reportUnusedBlacklistEntries();
+
+        return filteredEvidenceEntries;
     }
 }

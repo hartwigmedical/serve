@@ -105,6 +105,15 @@ public final class CkbTestFactory {
     }
 
     @NotNull
+    public static CkbEntry createEntryWithProfileName(@NotNull String geneSymbol, @NotNull String variant, @NotNull String fullName,
+                                       @NotNull String responseType, @NotNull String evidenceType, @NotNull String therapyName, @NotNull String indicationName,
+                                       @NotNull String level, @NotNull String termId, @NotNull String profileName) {
+        return builder().profileName(profileName).addVariants(createVariant(geneSymbol, variant, fullName))
+                .addEvidences(createEvidence(responseType, evidenceType, therapyName, indicationName, level, termId))
+                .build();
+    }
+
+    @NotNull
     public static ClinicalTrial createTrial(@NotNull String recruitment, @NotNull List<VariantRequirementDetail> variantRequirementDetails,
                                             @NotNull List<Location> locations, @NotNull String nctId, @NotNull String title) {
         return ImmutableClinicalTrial.builder()

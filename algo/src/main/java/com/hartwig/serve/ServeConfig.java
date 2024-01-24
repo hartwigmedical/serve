@@ -37,6 +37,7 @@ public interface ServeConfig {
     String CKB_DIR = "ckb_dir";
     String CKB_FILTER_TSV = "ckb_filter_tsv";
     String CKB_BLACKLIST_STUDY_TSV = "ckb_blacklist_studies_tsv";
+    String CKB_BLACKLIST_EVIDENCE_TSV = "ckb_blacklist_evidence_tsv";
     String CKB_DRUG_CURATION_TSV = "ckb_drug_curation_tsv";
     String USE_DOCM = "use_docm";
     String DOCM_TSV = "docm_tsv";
@@ -84,6 +85,7 @@ public interface ServeConfig {
         options.addOption(CKB_DIR, true, "Path to the CKB FLEX json input dir");
         options.addOption(CKB_FILTER_TSV, true, "Path to the CKB filter tsv");
         options.addOption(CKB_BLACKLIST_STUDY_TSV, true, "Path to the CKB blacklist studies tsv");
+        options.addOption(CKB_BLACKLIST_EVIDENCE_TSV, true, "Path to the CKB blacklist evidence tsv");
         options.addOption(CKB_DRUG_CURATION_TSV, true, "Path to the CKB drug curation tsv");
         options.addOption(USE_DOCM, false, "If provided, DoCM will be used as a source in SERVE");
         options.addOption(DOCM_TSV, true, "Path to the DoCM knowledgebase input TSV");
@@ -143,6 +145,8 @@ public interface ServeConfig {
     String ckbFilterTsv();
     @NotNull
     String ckbBlacklistStudyTsv();
+    @NotNull
+    String ckbBlacklistEvidenceTsv();
     @NotNull
     String ckbDrugCurationTsv();
 
@@ -234,7 +238,8 @@ public interface ServeConfig {
                 .ckbDir(useCkbEvidence || useCkbTrials ? nonOptionalDir(cmd, CKB_DIR) : NOT_APPLICABLE)
                 .ckbFilterTsv(useCkbEvidence || useCkbTrials ? nonOptionalFile(cmd, CKB_FILTER_TSV) : NOT_APPLICABLE)
                 .ckbBlacklistStudyTsv(useCkbTrials ? nonOptionalFile(cmd, CKB_BLACKLIST_STUDY_TSV) : NOT_APPLICABLE)
-                .ckbDrugCurationTsv(useCkbEvidence ? nonOptionalFile(cmd, CKB_DRUG_CURATION_TSV) : NOT_APPLICABLE)
+                .ckbBlacklistEvidenceTsv(useCkbTrials ? nonOptionalFile(cmd, CKB_BLACKLIST_STUDY_TSV) : NOT_APPLICABLE)
+                .ckbDrugCurationTsv(useCkbEvidence ? nonOptionalFile(cmd, CKB_BLACKLIST_EVIDENCE_TSV) : NOT_APPLICABLE)
                 .useDocm(useDocm)
                 .docmTsv(useDocm ? nonOptionalFile(cmd, DOCM_TSV) : NOT_APPLICABLE)
                 .useHartwigCohortHotspots(useHartwigCohortHotspots)

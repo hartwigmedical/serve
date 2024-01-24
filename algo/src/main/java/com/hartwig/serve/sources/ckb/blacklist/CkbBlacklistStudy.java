@@ -71,7 +71,6 @@ public class CkbBlacklistStudy {
     private boolean isMatch(@NotNull CkbBlacklistStudyEntry blacklistStudyEntry, @NotNull ClinicalTrial clinicalTrial, @NotNull String profileName) {
         switch (blacklistStudyEntry.ckbBlacklistReason()) {
             case STUDY_WHOLE: {
-                LOGGER.info(blacklistStudyEntry.nctId().equals(clinicalTrial.nctId()));
                 return blacklistStudyEntry.nctId().equals(clinicalTrial.nctId());
             }
             case STUDY_THERAPY: {

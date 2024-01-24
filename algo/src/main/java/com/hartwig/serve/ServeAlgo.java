@@ -74,7 +74,7 @@ public class ServeAlgo {
         }
 
         if (config.useCkbEvidence()) {
-            extractions.add(extractCkbEvidenceKnowledge(config.ckbDir(), config.ckbFilterTsv(), config.ckbDrugCurationTsv()));
+            extractions.add(extractCkbEvidenceKnowledge(config.ckbDir(), config.ckbFilterTsv(), config.ckbDrugCurationTsv(), config.ckbBlacklistEvidenceTsv()));
         }
 
         if (config.useCkbTrials()) {
@@ -142,8 +142,9 @@ public class ServeAlgo {
 
     @NotNull
     private ExtractionResult extractCkbEvidenceKnowledge(@NotNull String ckbDir, @NotNull String ckbFilterTsv,
-                                                         @NotNull String ckbDrugCurationTsv) throws IOException {
+                                                         @NotNull String ckbDrugCurationTsv, @NotNull String ckbBlacklistEvidenceTsv) throws IOException {
         List<CkbEntry> ckbEntries = CkbReader.readAndCurate(ckbDir, ckbFilterTsv);
+        List<CkbEntry> nonBlacklistCkbEvidenceEntries = CkbReader.blacklistEvidence(ckbEntries, ckbBlacklistEvidenceTsv);
 
         EventClassifierConfig config = CkbClassificationConfig.build();
         RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.CKB_EVIDENCE);
@@ -156,7 +157,7 @@ public class ServeAlgo {
         CkbExtractor extractor = CkbExtractorFactory.createEvidenceExtractor(config, refGenomeResource, curator);
 
         LOGGER.info("Running CKB evidence knowledge extraction");
-        ExtractionResult result = extractor.extract(ckbEntries);
+        ExtractionResult result = extractor.extract(nonBlacklistCkbEvidenceEntries);
 
         curator.reportUnusedCuratedEntries();
 
@@ -166,7 +167,7 @@ public class ServeAlgo {
     @NotNull
     private ExtractionResult extractCkbTrialKnowledge(@NotNull String ckbDir, @NotNull String ckbFilterTsv, @NotNull String ckbBlacklistStudyTsv) throws IOException {
         List<CkbEntry> ckbEntries = CkbReader.readAndCurate(ckbDir, ckbFilterTsv);
-        List<CkbEntry> nonBlacklistCkbStudiesEntries = CkbReader.blacklist(ckbEntries, ckbBlacklistStudyTsv);
+        List<CkbEntry> nonBlacklistCkbStudiesEntries = CkbReader.blacklistStudy(ckbEntries, ckbBlacklistStudyTsv);
 
         EventClassifierConfig config = CkbClassificationConfig.build();
         RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.CKB_TRIAL);

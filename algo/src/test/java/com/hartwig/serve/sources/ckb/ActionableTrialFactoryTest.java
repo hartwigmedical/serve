@@ -68,7 +68,7 @@ public class ActionableTrialFactoryTest {
         assertEquals(1, ActionableTrialFactory.countriesToInclude(trialPotentiallyOpenInBelgium).size());
 
         ClinicalTrial trialNotOpenInNetherlands = createTrialWithOneLocation("Recruiting", "Netherlands", "Not yet recruiting");
-        assertEquals(0, ActionableTrialFactory.countriesToInclude(trialNotOpenInNetherlands).size());
+        assertEquals(1, ActionableTrialFactory.countriesToInclude(trialNotOpenInNetherlands).size());
 
         ClinicalTrial trialPotentiallyOpenInUnitedStates = createTrialWithOneLocation("Recruiting", "United States", "Recruiting");
         assertEquals(0, ActionableTrialFactory.countriesToInclude(trialPotentiallyOpenInUnitedStates).size());

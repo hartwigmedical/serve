@@ -17,6 +17,7 @@
         <dependency>
             <groupId>com.hartwig.serve</groupId>
             <artifactId>datamodel</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>

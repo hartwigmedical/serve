@@ -17,18 +17,22 @@
         <dependency>
             <groupId>com.hartwig.serve</groupId>
             <artifactId>common</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.hartwig.serve</groupId>
             <artifactId>ckb-importer</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.hartwig.serve</groupId>
             <artifactId>iclusion-importer</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.hartwig.serve</groupId>
             <artifactId>vicc-importer</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>

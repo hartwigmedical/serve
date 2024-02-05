@@ -26,7 +26,7 @@ CREATE TABLE variant
     transformingActivity varchar(20),
     polymorphism varchar(20),
     hotspotReference varchar(50),
-    isHotspot BOOLEAN NOT NULL,
+    isHotspot tinyint(1) NOT NULL,
     description varchar(2500),
     PRIMARY KEY (id),
     FOREIGN KEY (ckbEntryId) REFERENCES ckbEntry(id)
@@ -114,7 +114,7 @@ DROP TABLE IF EXISTS transcriptCoordinate;
 CREATE TABLE transcriptCoordinate
 (   id int NOT NULL AUTO_INCREMENT,
     variantId int NOT NULL,
-    isReferenceTranscriptCoordinate BOOLEAN NOT NULL,
+    isReferenceTranscriptCoordinate tinyint(1) NOT NULL,
     transcript varchar(50) NOT NULL,
     gDna varchar(500) NOT NULL,
     cDna varchar(500) NOT NULL,

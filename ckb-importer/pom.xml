@@ -10,7 +10,7 @@
 
     <artifactId>ckb-importer</artifactId>
     <packaging>jar</packaging>
-    <version>${ckb-importer.version}</version>
+    <version>local-SNAPSHOT</version>
     <name>HMF SERVE - CKB Importer</name>
 
     <dependencies>
@@ -56,25 +56,6 @@
 
     <build>
         <plugins>
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>Generate CKB DB</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <workingDirectory>${basedir}/src/main/resources/database</workingDirectory>
-                            <executable>${basedir}/src/main/resources/database/regenerate_local_ckb_db</executable>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -114,17 +95,15 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <jdbc>
-                        <driver>com.mysql.cj.jdbc.Driver</driver>
-                        <url>jdbc:mysql://localhost:3306/ckb_test?useSSL=false&amp;serverTimezone=CET</url>
-                        <user>build</user>
-                        <password>build</password>
-                    </jdbc>
                     <generator>
                         <database>
-                            <name>org.jooq.meta.mysql.MySQLDatabase</name>
-                            <includes>.*</includes>
-                            <inputSchema>ckb_test</inputSchema>
+                            <name>org.jooq.meta.extensions.ddl.DDLDatabase</name>
+                            <properties>
+                                <property>
+                                    <key>scripts</key>
+                                    <value>src/main/resources/database/generate_ckb_db.sql</value>
+                                </property>
+                            </properties>
                         </database>
                         <target>
                             <packageName>com.hartwig.serve.ckb.database</packageName>
@@ -132,6 +111,13 @@
                         </target>
                     </generator>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.jooq</groupId>
+                        <artifactId>jooq-meta-extensions</artifactId>
+                        <version>${jooq.version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
 
             <plugin>

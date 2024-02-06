@@ -22,14 +22,11 @@ The `serve-datamodel` module is used by external projects and is deployed to GCP
 To release a new version of the datamodel artifact, perform the following:
 
 ```shell
-gcloud auth application-default login
-mvn versions:set -DnewVersion={new_version}
-mvn -pl \!ckb-importer,\!iclusion-importer,\!vicc-importer deploy
-git tag serve-v{new_version}
-git push origin serve-v{new_version}
+git tag {new_version}
+git push origin {new_version}
 ```
 
-When complete you can roll back the changes to the pom.xmls. These are meant to be transient.
+This will automatically trigger a cloud build instance which will deploy the artifacts to artifact registry.
 
 Note the new version should be of the format `major.minor.patch` where:
 

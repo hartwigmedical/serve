@@ -119,29 +119,28 @@
             <dependency>
                 <groupId>com.hartwig.serve</groupId>
                 <artifactId>common</artifactId>
-                <version>local-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.hartwig.serve</groupId>
                 <artifactId>datamodel</artifactId>
-                <version>local-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.hartwig.serve</groupId>
                 <artifactId>ckb-importer</artifactId>
-                <version>${ckb-importer.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.hartwig.serve</groupId>
                 <artifactId>iclusion-importer</artifactId>
-                <version>${iclusion-importer.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.hartwig.serve</groupId>
                 <artifactId>vicc-importer</artifactId>
-                <version>${vicc-importer.version}</version>
+                <version>${project.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>com.github.samtools</groupId>
                 <artifactId>htsjdk</artifactId>

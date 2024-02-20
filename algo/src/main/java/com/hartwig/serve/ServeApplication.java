@@ -3,6 +3,7 @@ package com.hartwig.serve;
 import java.io.IOException;
 import java.util.Map;
 
+import com.hartwig.serve.common.commandline.CliAndPropertyParser;
 import com.hartwig.serve.curation.DoidLookup;
 import com.hartwig.serve.curation.DoidLookupFactory;
 import com.hartwig.serve.datamodel.RefGenome;
@@ -11,7 +12,6 @@ import com.hartwig.serve.extraction.ExtractionResultWriter;
 import com.hartwig.serve.refgenome.RefGenomeManager;
 import com.hartwig.serve.refgenome.RefGenomeManagerFactory;
 
-import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
@@ -34,7 +34,7 @@ public class ServeApplication {
 
         ServeConfig config = null;
         try {
-            config = ServeConfig.createConfig(new DefaultParser().parse(options, args));
+            config = ServeConfig.createConfig(new CliAndPropertyParser().parse(options, args));
         } catch (ParseException exception) {
             LOGGER.warn(exception);
             new HelpFormatter().printHelp("SERVE", options);

@@ -5,6 +5,8 @@ import com.google.common.collect.Sets;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.ckb.datamodel.ImmutableCkbEntry;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.ClinicalTrial;
+import com.hartwig.serve.ckb.datamodel.indication.Indication;
+import com.hartwig.serve.ckb.datamodel.therapy.Therapy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -26,22 +28,22 @@ public class CkbBlacklistStudy {
     }
 
     @NotNull
-    public List<CkbEntry> run(@NotNull List<CkbEntry> ckbEntries) {
+    public List<CkbEntry> run(@NotNull CkbEntry ckbEntries) {
         List<CkbEntry> filteredCkbEntries = Lists.newArrayList();
         List<ClinicalTrial> filteredCkbStudiesEntries = Lists.newArrayList();
-        for (CkbEntry entry : ckbEntries) {
-            for (ClinicalTrial clinicalTrial : entry.clinicalTrials()) {
-                if (include(clinicalTrial, entry.profileName())) {
-                    filteredCkbStudiesEntries.add(clinicalTrial);
-                } else {
-                    LOGGER.debug("Blacklisting study '{}'", clinicalTrial.nctId());
-                }
-                if (!filteredCkbStudiesEntries.isEmpty()) {
-                    filteredCkbEntries.add(ImmutableCkbEntry.builder().from(entry).clinicalTrials(filteredCkbStudiesEntries).build());
-                }
-            }
 
+        for (ClinicalTrial clinicalTrial : ckbEntries.clinicalTrials()) {
+            if (include(clinicalTrial, ckbEntries.profileName())) {
+                filteredCkbStudiesEntries.add(clinicalTrial);
+            } else {
+                LOGGER.debug("Blacklisting study '{}'", clinicalTrial.nctId());
+            }
+            if (!filteredCkbStudiesEntries.isEmpty()) {
+                filteredCkbEntries.add(ImmutableCkbEntry.builder().from(ckbEntries).clinicalTrials(filteredCkbStudiesEntries).build());
+            }
         }
+
+
         return filteredCkbEntries;
     }
 
@@ -73,8 +75,8 @@ public class CkbBlacklistStudy {
             case STUDY_WHOLE: {
                 return blacklistStudyEntry.nctId().equals(clinicalTrial.nctId());
             }
-            case STUDY_THERAPY: {
-                for (com.hartwig.serve.ckb.datamodel.therapy.Therapy therapy : clinicalTrial.therapies()) {
+            case STUDY_BASED_ON_THERAPY: {
+                for (Therapy therapy : clinicalTrial.therapies()) {
                     boolean therapyMatch = false;
                     if (blacklistStudyEntry.therapy().equals(therapy.therapyName())) {
                         therapyMatch = true;
@@ -82,14 +84,14 @@ public class CkbBlacklistStudy {
                     return blacklistStudyEntry.nctId().equals(clinicalTrial.nctId()) && therapyMatch;
                 }
             }
-            case STUDY_CANCER_TYPE: {
+            case STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE: {
                 boolean therapyMatch = false;
                 boolean indicationMatch = false;
 
-                for (com.hartwig.serve.ckb.datamodel.therapy.Therapy therapy : clinicalTrial.therapies()) {
+                for (Therapy therapy : clinicalTrial.therapies()) {
                     if (blacklistStudyEntry.therapy().equals(therapy.therapyName())) {
                         therapyMatch = true;
-                        for (com.hartwig.serve.ckb.datamodel.indication.Indication indication : clinicalTrial.indications()) {
+                        for (Indication indication : clinicalTrial.indications()) {
                             if (blacklistStudyEntry.cancerType().equals(indication.name())) {
                                 indicationMatch = true;
                             }
@@ -98,14 +100,14 @@ public class CkbBlacklistStudy {
                 }
                 return blacklistStudyEntry.nctId().equals(clinicalTrial.nctId()) && therapyMatch && indicationMatch;
             }
-            case STUDY_MOLECULAR_PROFILE: {
+            case STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_MOLECULAR_PROFILE: {
                 boolean therapyMatch = false;
                 boolean indicationMatch = false;
 
-                for (com.hartwig.serve.ckb.datamodel.therapy.Therapy therapy : clinicalTrial.therapies()) {
+                for (Therapy therapy : clinicalTrial.therapies()) {
                     if (blacklistStudyEntry.therapy().equals(therapy.therapyName())) {
                         therapyMatch = true;
-                        for (com.hartwig.serve.ckb.datamodel.indication.Indication indication : clinicalTrial.indications()) {
+                        for (Indication indication : clinicalTrial.indications()) {
                             if (blacklistStudyEntry.cancerType().equals(indication.name())) {
                                 indicationMatch = true;
                             }
@@ -114,7 +116,7 @@ public class CkbBlacklistStudy {
                 }
                 return blacklistStudyEntry.nctId().equals(clinicalTrial.nctId()) && therapyMatch && indicationMatch && blacklistStudyEntry.molecularProfile().equals(profileName);
             }
-            case ALL_MOLECULAR_PROFILE: {
+            case ALL_STUDIES_BASED_ON_MOLECULAR_PROFILE: {
                 return blacklistStudyEntry.molecularProfile().equals(profileName);
             }
             default: {

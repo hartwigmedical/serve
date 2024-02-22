@@ -17,6 +17,9 @@ import com.hartwig.serve.refgenome.RefGenomeResource;
 import com.hartwig.serve.sources.ckb.CkbExtractor;
 import com.hartwig.serve.sources.ckb.CkbExtractorFactory;
 import com.hartwig.serve.sources.ckb.CkbReader;
+import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudy;
+import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudyEntry;
+import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudyFile;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurationEntry;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurationEntryKey;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurationFile;
@@ -167,15 +170,19 @@ public class ServeAlgo {
     @NotNull
     private ExtractionResult extractCkbTrialKnowledge(@NotNull String ckbDir, @NotNull String ckbFilterTsv, @NotNull String ckbBlacklistStudyTsv) throws IOException {
         List<CkbEntry> ckbEntries = CkbReader.readAndCurate(ckbDir, ckbFilterTsv);
-        List<CkbEntry> nonBlacklistCkbStudiesEntries = CkbReader.blacklistStudy(ckbEntries, ckbBlacklistStudyTsv);
 
         EventClassifierConfig config = CkbClassificationConfig.build();
         RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.CKB_TRIAL);
 
-        CkbExtractor extractor = CkbExtractorFactory.createTrialExtractor(config, refGenomeResource);
+        List<CkbBlacklistStudyEntry> ckbBlacklistStudyEntriesEntries = CkbBlacklistStudyFile.read(ckbBlacklistStudyTsv);
+        LOGGER.info(" Read {} filter entries", ckbBlacklistStudyEntriesEntries.size());
+
+        CkbBlacklistStudy blacklistStudy = new CkbBlacklistStudy(ckbBlacklistStudyEntriesEntries);
+
+        CkbExtractor extractor = CkbExtractorFactory.createTrialExtractor(config, refGenomeResource, blacklistStudy);
 
         LOGGER.info("Running CKB trial knowledge extraction");
-        return extractor.extract(nonBlacklistCkbStudiesEntries);
+        return extractor.extract(ckbEntries);
     }
 
     @NotNull

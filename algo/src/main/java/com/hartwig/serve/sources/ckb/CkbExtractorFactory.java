@@ -6,8 +6,8 @@ import com.hartwig.serve.extraction.EventExtractor;
 import com.hartwig.serve.extraction.EventExtractorFactory;
 import com.hartwig.serve.extraction.util.DriverInconsistencyMode;
 import com.hartwig.serve.refgenome.RefGenomeResource;
+import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudy;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurator;
-
 import org.jetbrains.annotations.NotNull;
 
 public final class CkbExtractorFactory {
@@ -17,7 +17,7 @@ public final class CkbExtractorFactory {
 
     @NotNull
     public static CkbExtractor createEvidenceExtractor(@NotNull EventClassifierConfig config, @NotNull RefGenomeResource refGenomeResource,
-            @NotNull TreatmentApproachCurator treatmentApproachCurator) {
+                                                       @NotNull TreatmentApproachCurator treatmentApproachCurator) {
         return new CkbExtractor(Knowledgebase.CKB_EVIDENCE,
                 createEventExtractor(config, refGenomeResource),
                 new ActionableEvidenceFactory(treatmentApproachCurator),
@@ -25,10 +25,11 @@ public final class CkbExtractorFactory {
     }
 
     @NotNull
-    public static CkbExtractor createTrialExtractor(@NotNull EventClassifierConfig config, @NotNull RefGenomeResource refGenomeResource) {
+    public static CkbExtractor createTrialExtractor(@NotNull EventClassifierConfig config, @NotNull RefGenomeResource refGenomeResource,
+                                                    @NotNull CkbBlacklistStudy blacklistStudy) {
         return new CkbExtractor(Knowledgebase.CKB_TRIAL,
                 createEventExtractor(config, refGenomeResource),
-                new ActionableTrialFactory(),
+                new ActionableTrialFactory(blacklistStudy),
                 false);
     }
 

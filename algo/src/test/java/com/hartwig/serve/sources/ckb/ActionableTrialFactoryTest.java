@@ -15,12 +15,16 @@ import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.Knowledgebase;
 
+import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudy;
+import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudyTest;
 import org.apache.commons.compress.utils.Sets;
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
 public class ActionableTrialFactoryTest {
+
+    private static final CkbBlacklistStudy blacklistStudy = CkbBlacklistStudyTest.createCkbBlacklistStudy();
 
     @Test
     public void canCreateActionableEntryForOpenTrialInAllowedCountryWithRequiredMolecularProfile() {
@@ -32,7 +36,7 @@ public class ActionableTrialFactoryTest {
                 CkbTestFactory.createTrial("Recruiting", List.of(requirementDetail), List.of(location), "NCT0102", "Phase I trial");
         CkbEntry entry = CkbTestFactory.createEntryWithClinicalTrial(profileId, profileName, clinicalTrial);
 
-        ActionableTrialFactory actionableTrialFactory = new ActionableTrialFactory();
+        ActionableTrialFactory actionableTrialFactory = new ActionableTrialFactory(blacklistStudy);
         Set<ActionableEntry> trials = actionableTrialFactory.create(entry, "KRAS", "gene");
 
         assertEquals(1, trials.size());
@@ -56,7 +60,7 @@ public class ActionableTrialFactoryTest {
                 CkbTestFactory.createTrial("Recruiting", List.of(requirementDetail), List.of(location), "NCT0102", "Phase I trial");
         CkbEntry entry = CkbTestFactory.createEntryWithClinicalTrial(1, Strings.EMPTY, clinicalTrial);
 
-        ActionableTrialFactory actionableTrialFactory = new ActionableTrialFactory();
+        ActionableTrialFactory actionableTrialFactory = new ActionableTrialFactory(blacklistStudy);
         Set<ActionableEntry> trials = actionableTrialFactory.create(entry, "KRAS", "gene");
 
         assertEquals(0, trials.size());

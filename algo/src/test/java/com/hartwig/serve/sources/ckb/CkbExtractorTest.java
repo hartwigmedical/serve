@@ -13,6 +13,7 @@ import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.codon.CodonAnnotation;
 import com.hartwig.serve.extraction.codon.ImmutableCodonAnnotation;
 import com.hartwig.serve.refgenome.RefGenomeResourceTestFactory;
+import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudyTest;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachTestFactory;
 
 import org.apache.commons.compress.utils.Lists;
@@ -43,7 +44,7 @@ public class CkbExtractorTest {
     @Test
     public void canExtractTrialsFromCkbEntries() {
         CkbExtractor trialExtractor = CkbExtractorFactory.createTrialExtractor(CkbClassificationConfig.build(),
-                RefGenomeResourceTestFactory.buildTestResource37());
+                RefGenomeResourceTestFactory.buildTestResource37(), CkbBlacklistStudyTest.createCkbBlacklistStudy());
 
         ExtractionResult trialResult = trialExtractor.extract(createCkbEntryTestDatabase());
         assertEquals(0, trialResult.knownHotspots().size());

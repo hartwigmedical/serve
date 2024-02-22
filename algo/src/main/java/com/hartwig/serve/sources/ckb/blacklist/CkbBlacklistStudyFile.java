@@ -1,8 +1,8 @@
 package com.hartwig.serve.sources.ckb.blacklist;
 
-import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 import org.apache.commons.compress.utils.Lists;
+import org.apache.commons.compress.utils.Sets;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -46,13 +46,13 @@ public class CkbBlacklistStudyFile {
         String cancerType = null;
         String molecularProfile = null;
 
-        if (Sets.newHashSet(CkbBlacklistStudyReason.STUDY_THERAPY, CkbBlacklistStudyReason.STUDY_CANCER_TYPE, CkbBlacklistStudyReason.STUDY_MOLECULAR_PROFILE).contains(reason)) {
+        if (Sets.newHashSet(CkbBlacklistStudyReason.STUDY_BASED_ON_THERAPY, CkbBlacklistStudyReason.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE, CkbBlacklistStudyReason.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_MOLECULAR_PROFILE).contains(reason)) {
             therapy = values[fields.get("therapyName")];
         }
-        if (Sets.newHashSet(CkbBlacklistStudyReason.STUDY_CANCER_TYPE, CkbBlacklistStudyReason.STUDY_MOLECULAR_PROFILE).contains(reason)) {
+        if (Sets.newHashSet(CkbBlacklistStudyReason.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE, CkbBlacklistStudyReason.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_MOLECULAR_PROFILE).contains(reason)) {
             cancerType = values[fields.get("cancerType")];
         }
-        if (Sets.newHashSet(CkbBlacklistStudyReason.STUDY_MOLECULAR_PROFILE).contains(reason)) {
+        if (Sets.newHashSet(CkbBlacklistStudyReason.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_MOLECULAR_PROFILE).contains(reason)) {
             molecularProfile = values[fields.get("molecularProfile")];
         }
         return ImmutableCkbBlacklistStudyEntry.builder()

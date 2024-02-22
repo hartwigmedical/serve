@@ -62,26 +62,6 @@ public final class CkbReader {
     }
 
     @NotNull
-    public static List<CkbEntry> blacklistStudy(@NotNull List<CkbEntry> entries,
-                                                @NotNull String ckbBlacklistStudyTsv) throws IOException{
-        LOGGER.info("Reading CBK blacklist studies entries from {}", ckbBlacklistStudyTsv);
-        List<CkbBlacklistStudyEntry> ckbBlacklistStudyEntriesEntries = CkbBlacklistStudyFile.read(ckbBlacklistStudyTsv);
-        LOGGER.info(" Read {} filter entries", ckbBlacklistStudyEntriesEntries.size());
-
-        CkbBlacklistStudy blacklistStudy = new CkbBlacklistStudy(ckbBlacklistStudyEntriesEntries);
-
-        LOGGER.info("Blacklisting {} CKB studies entries", entries.size());
-        List<CkbEntry> filteredStudiesEntries = blacklistStudy.run(entries);
-        LOGGER.info(" Finished CKB filtering studies. {} entries remaining, {} entries have been removed",
-                filteredStudiesEntries.size(),
-                entries.size() - filteredStudiesEntries.size());
-
-        blacklistStudy.reportUnusedBlacklistEntries();
-
-        return filteredStudiesEntries;
-    }
-
-    @NotNull
     public static List<CkbEntry> blacklistEvidence(@NotNull List<CkbEntry> entries,
                                                 @NotNull String ckbBlacklistEvidenceTsv) throws IOException{
         LOGGER.info("Reading CBK blacklist evidence entries from {}", ckbBlacklistEvidenceTsv);

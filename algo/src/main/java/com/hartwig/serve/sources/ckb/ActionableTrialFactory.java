@@ -6,7 +6,6 @@ import java.util.Set;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.hartwig.serve.ServeApplication;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.ClinicalTrial;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.Location;
@@ -17,12 +16,10 @@ import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.ImmutableTreatment;
 import com.hartwig.serve.datamodel.Knowledgebase;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudy;
 import org.jetbrains.annotations.NotNull;
 
 class ActionableTrialFactory implements ActionableEntryFactory {
-    private static final Logger LOGGER = LogManager.getLogger(ActionableTrialFactory.class);
 
     private static final Set<String> POTENTIALLY_OPEN_RECRUITMENT_TYPES = Sets.newHashSet();
     private static final Set<String> COUNTRIES_TO_INCLUDE = Sets.newHashSet();
@@ -42,7 +39,11 @@ class ActionableTrialFactory implements ActionableEntryFactory {
         VARIANT_REQUIREMENT_TYPES_TO_INCLUDE.add("required");
     }
 
-    public ActionableTrialFactory() {
+    @NotNull
+    private final CkbBlacklistStudy blacklistStudy;
+
+    public ActionableTrialFactory(@NotNull CkbBlacklistStudy blacklistStudy) {
+        this.blacklistStudy = blacklistStudy;
     }
 
     @NotNull

@@ -1,6 +1,7 @@
 package com.hartwig.serve.sources.ckb.blacklist;
 
 import com.google.common.collect.Sets;
+import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 import org.apache.commons.compress.utils.Lists;
 import org.jetbrains.annotations.NotNull;
@@ -45,7 +46,7 @@ public class CkbBlacklistEvidenceFile {
         String cancerType = null;
         String gene = null;
         String event = null;
-        String level = null;
+        EvidenceLevel level = null;
 
         if (Sets.newHashSet(CkbBlacklistEvidenceReason.EVIDENCE_BASED_ON_THERAPY,
                 CkbBlacklistEvidenceReason.EVIDENCE_ON_THERAPY_AND_CANCER_TYPE,
@@ -66,6 +67,10 @@ public class CkbBlacklistEvidenceFile {
         if (Sets.newHashSet(CkbBlacklistEvidenceReason.ALL_EVIDENCE_BASED_ON_GENE_AND_EVENT,
                 CkbBlacklistEvidenceReason.EVIDENCE_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE_AND_EVENT).contains(reason)) {
             event = values[fields.get("event")];
+        }
+
+        if (!values[fields.get("level")].isEmpty()) {
+            level = EvidenceLevel.valueOf(values[fields.get("level")]);
         }
 
         return ImmutableCkbBlacklistEvidenceEntry.builder()

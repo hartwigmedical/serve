@@ -1,5 +1,6 @@
 package com.hartwig.serve.sources.ckb.blacklist;
 
+import com.hartwig.serve.datamodel.EvidenceLevel;
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,5 +25,5 @@ public abstract class CkbBlacklistEvidenceEntry {
     public abstract String event();
 
     @Nullable
-    public abstract String level();
+    public abstract EvidenceLevel level();
 }

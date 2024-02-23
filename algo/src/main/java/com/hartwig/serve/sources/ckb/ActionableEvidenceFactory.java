@@ -125,7 +125,7 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
                 Set<String> curatedRelevantTreatmentApproaches = Sets.newHashSet(curator.isMatch(key));
 
                 if (!blacklistEvidence.isBlacklistEvidence(treatment, cancerTypeExtraction.applicableCancerType().name(),
-                        sourceGene, sourceEvent)) {
+                        level, sourceGene, sourceEvent)) {
                     actionableEntries.add(ImmutableActionableEntry.builder()
                             .source(Knowledgebase.CKB_EVIDENCE)
                             .sourceEvent(sourceEvent)

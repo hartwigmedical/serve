@@ -1,6 +1,7 @@
 package com.hartwig.serve.sources.ckb.blacklist;
 
 import com.google.common.collect.Sets;
+import com.hartwig.serve.datamodel.EvidenceLevel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -21,11 +22,11 @@ public class CkbBlacklistEvidence {
         this.blacklistEvidenceEntryList = blacklistEvidenceEntryList;
     }
 
-    public boolean isBlacklistEvidence(@NotNull String therapyName, @NotNull String cancerType, @NotNull String sourceGene,
-                                    @NotNull String event) {
+    public boolean isBlacklistEvidence(@NotNull String therapyName, @NotNull String cancerType, @NotNull EvidenceLevel level, @NotNull String sourceGene,
+                                       @NotNull String event) {
 
         for (CkbBlacklistEvidenceEntry blacklistEvidenceEntry : blacklistEvidenceEntryList) {
-            boolean match = isMatch(therapyName, cancerType, sourceGene, event, blacklistEvidenceEntry);
+            boolean match = isMatch(therapyName, cancerType, level, sourceGene, event, blacklistEvidenceEntry);
             if (match) {
                 usedBlackEvidencelists.add(blacklistEvidenceEntry);
                 return false;
@@ -46,38 +47,75 @@ public class CkbBlacklistEvidence {
         LOGGER.debug(" Found {} unused blacklist entries during CKB filtering", unusedBlacklistEntryCount);
     }
 
-    public boolean isMatch(@NotNull String therapyName, @NotNull String cancerType, @NotNull String sourceGene,
-                            @NotNull String event, @NotNull CkbBlacklistEvidenceEntry blacklistEvidenceEntry) {
+    public boolean isMatch(@NotNull String therapyName, @NotNull String cancerType, @NotNull EvidenceLevel level,  @NotNull String sourceGene,
+                           @NotNull String event, @NotNull CkbBlacklistEvidenceEntry blacklistEvidenceEntry) {
         switch (blacklistEvidenceEntry.ckbBlacklistEvidenceReason()) {
             case ALL_EVIDENCE_BASED_ON_GENE: {
-                return blacklistEvidenceEntry.gene().equals(sourceGene);
+                if (blacklistEvidenceEntry.level() == null) {
+                    return blacklistEvidenceEntry.gene().equals(sourceGene);
+                } else {
+                    return blacklistEvidenceEntry.gene().equals(sourceGene)
+                            && blacklistEvidenceEntry.level() == level;
+                }
             }
 
             case ALL_EVIDENCE_BASED_ON_GENE_AND_EVENT: {
-                return blacklistEvidenceEntry.gene().equals(sourceGene)
-                        && blacklistEvidenceEntry.event().equals(event);
+                if (blacklistEvidenceEntry.level() == null) {
+                    return blacklistEvidenceEntry.gene().equals(sourceGene)
+                            && blacklistEvidenceEntry.event().equals(event);
+                } else {
+                    return blacklistEvidenceEntry.gene().equals(sourceGene)
+                            && blacklistEvidenceEntry.event().equals(event)
+                            && blacklistEvidenceEntry.level() == level;
+                }
             }
 
             case EVIDENCE_BASED_ON_THERAPY: {
-                return blacklistEvidenceEntry.therapy().equals(therapyName);
+                if (blacklistEvidenceEntry.level() == null) {
+                    return blacklistEvidenceEntry.therapy().equals(therapyName);
+                } else {
+                    return blacklistEvidenceEntry.therapy().equals(therapyName)
+                            && blacklistEvidenceEntry.level() == level;
+                }
             }
 
             case EVIDENCE_ON_THERAPY_AND_CANCER_TYPE: {
-                return blacklistEvidenceEntry.therapy().equals(therapyName)
-                        && blacklistEvidenceEntry.cancerType().equals(cancerType);
+                if (blacklistEvidenceEntry.level() == null) {
+                    return blacklistEvidenceEntry.therapy().equals(therapyName)
+                            && blacklistEvidenceEntry.cancerType().equals(cancerType);
+                } else {
+                    return blacklistEvidenceEntry.therapy().equals(therapyName)
+                            && blacklistEvidenceEntry.cancerType().equals(cancerType)
+                            && blacklistEvidenceEntry.level() == level;
+                }
             }
 
             case EVIDENCE_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE: {
-                return blacklistEvidenceEntry.therapy().equals(therapyName)
-                        && blacklistEvidenceEntry.cancerType().equals(cancerType)
-                        && blacklistEvidenceEntry.gene().equals(sourceGene);
+                if (blacklistEvidenceEntry.level() == null) {
+                    return blacklistEvidenceEntry.therapy().equals(therapyName)
+                            && blacklistEvidenceEntry.cancerType().equals(cancerType)
+                            && blacklistEvidenceEntry.gene().equals(sourceGene);
+                } else {
+                    return blacklistEvidenceEntry.therapy().equals(therapyName)
+                            && blacklistEvidenceEntry.cancerType().equals(cancerType)
+                            && blacklistEvidenceEntry.gene().equals(sourceGene)
+                            && blacklistEvidenceEntry.level() == level;
+                }
             }
 
             case EVIDENCE_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE_AND_EVENT: {
-                return blacklistEvidenceEntry.therapy().equals(therapyName)
-                        && blacklistEvidenceEntry.cancerType().equals(cancerType)
-                        && blacklistEvidenceEntry.gene().equals(sourceGene)
-                        && blacklistEvidenceEntry.event().equals(event);
+                if (blacklistEvidenceEntry.level() == null) {
+                    return blacklistEvidenceEntry.therapy().equals(therapyName)
+                            && blacklistEvidenceEntry.cancerType().equals(cancerType)
+                            && blacklistEvidenceEntry.gene().equals(sourceGene)
+                            && blacklistEvidenceEntry.event().equals(event);
+                } else {
+                    return blacklistEvidenceEntry.therapy().equals(therapyName)
+                            && blacklistEvidenceEntry.cancerType().equals(cancerType)
+                            && blacklistEvidenceEntry.gene().equals(sourceGene)
+                            && blacklistEvidenceEntry.event().equals(event)
+                            && blacklistEvidenceEntry.level() == level;
+                }
             }
 
             default: {

@@ -42,7 +42,8 @@ public class CkbBlacklistStudy {
                 return blacklistStudyEntry.nctId().equals(studyName);
             }
             case STUDY_BASED_ON_THERAPY: {
-                return blacklistStudyEntry.nctId().equals(studyName);
+                return blacklistStudyEntry.nctId().equals(studyName)
+                        && blacklistStudyEntry.therapy().equals(therapyName);
             }
             case STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE: {
                 return blacklistStudyEntry.nctId().equals(studyName)

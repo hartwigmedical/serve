@@ -1,2 +1,2 @@
-blacklistType	therapyName	cancerType	molecularProfile	comment
-EVIDENCE_THERAPY	AB			This is a comment
+blacklistType	therapyName	cancerType	gene	event	comment
+EVIDENCE_BASED_ON_THERAPY	AB				This is a comment

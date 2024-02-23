@@ -6,6 +6,7 @@ import com.hartwig.serve.extraction.EventExtractor;
 import com.hartwig.serve.extraction.EventExtractorFactory;
 import com.hartwig.serve.extraction.util.DriverInconsistencyMode;
 import com.hartwig.serve.refgenome.RefGenomeResource;
+import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistEvidence;
 import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudy;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurator;
 import org.jetbrains.annotations.NotNull;
@@ -17,10 +18,10 @@ public final class CkbExtractorFactory {
 
     @NotNull
     public static CkbExtractor createEvidenceExtractor(@NotNull EventClassifierConfig config, @NotNull RefGenomeResource refGenomeResource,
-                                                       @NotNull TreatmentApproachCurator treatmentApproachCurator) {
+                                                       @NotNull TreatmentApproachCurator treatmentApproachCurator, @NotNull CkbBlacklistEvidence blacklistEvidence) {
         return new CkbExtractor(Knowledgebase.CKB_EVIDENCE,
                 createEventExtractor(config, refGenomeResource),
-                new ActionableEvidenceFactory(treatmentApproachCurator),
+                new ActionableEvidenceFactory(treatmentApproachCurator, blacklistEvidence),
                 true);
     }
 

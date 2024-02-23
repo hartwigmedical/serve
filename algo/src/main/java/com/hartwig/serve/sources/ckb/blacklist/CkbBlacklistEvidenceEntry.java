@@ -18,5 +18,11 @@ public abstract class CkbBlacklistEvidenceEntry {
     public abstract String cancerType();
 
     @Nullable
-    public abstract String molecularProfile();
+    public abstract String gene();
+
+    @Nullable
+    public abstract String event();
+
+    @Nullable
+    public abstract String level();
 }

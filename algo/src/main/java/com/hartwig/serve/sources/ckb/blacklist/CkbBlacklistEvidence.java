@@ -1,10 +1,6 @@
 package com.hartwig.serve.sources.ckb.blacklist;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.hartwig.serve.ckb.datamodel.CkbEntry;
-import com.hartwig.serve.ckb.datamodel.ImmutableCkbEntry;
-import com.hartwig.serve.ckb.datamodel.evidence.Evidence;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -25,29 +21,17 @@ public class CkbBlacklistEvidence {
         this.blacklistEvidenceEntryList = blacklistEvidenceEntryList;
     }
 
-    @NotNull
-    public List<CkbEntry> run(@NotNull List<CkbEntry> ckbEntries) {
-        List<CkbEntry> filteredCkbEntries = Lists.newArrayList();
-        List<Evidence> filteredCkbEvidenceEntries = Lists.newArrayList();
+    public boolean isBlacklistEvidence(@NotNull String therapyName, @NotNull String cancerType, @NotNull String sourceGene,
+                                    @NotNull String event) {
 
-        for (CkbEntry entry : ckbEntries) {
-            String molecularProfile = entry.profileName();
-
-            for (Evidence evidence : entry.evidences()) {
-                String therapy = evidence.therapy().therapyName();
-                String indication = evidence.indication().name();
-
-                if (include(molecularProfile, therapy, indication)) {
-                    filteredCkbEvidenceEntries.add(evidence);
-                } else {
-                    LOGGER.debug("Blacklisting evidence on therapy '{}', cancerType '{}', molecular profile '{}'", therapy, indication, molecularProfile);
-                }
-                if (!filteredCkbEvidenceEntries.isEmpty()) {
-                    filteredCkbEntries.add(ImmutableCkbEntry.builder().from(entry).evidences(filteredCkbEvidenceEntries).build());
-                }
+        for (CkbBlacklistEvidenceEntry blacklistEvidenceEntry : blacklistEvidenceEntryList) {
+            boolean match = isMatch(therapyName, cancerType, sourceGene, event, blacklistEvidenceEntry);
+            if (match) {
+                usedBlackEvidencelists.add(blacklistEvidenceEntry);
+                return false;
             }
         }
-        return filteredCkbEntries;
+        return false;
     }
 
     public void reportUnusedBlacklistEntries() {
@@ -62,38 +46,38 @@ public class CkbBlacklistEvidence {
         LOGGER.debug(" Found {} unused blacklist entries during CKB filtering", unusedBlacklistEntryCount);
     }
 
-    private boolean include(@NotNull String molecularProfile, @NotNull String therapy, @NotNull String indication) {
-        for (CkbBlacklistEvidenceEntry blacklistEvidenceEntry : blacklistEvidenceEntryList) {
-            boolean filterMatches = isMatch(blacklistEvidenceEntry, molecularProfile, therapy, indication);
-            if (filterMatches) {
-                usedBlackEvidencelists.add(blacklistEvidenceEntry);
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private boolean isMatch(@NotNull CkbBlacklistEvidenceEntry blacklistEvidenceEntry, @NotNull String molecularProfile, @NotNull String therapy, @NotNull String indication) {
+    private boolean isMatch(@NotNull String therapyName, @NotNull String cancerType, @NotNull String sourceGene,
+                            @NotNull String event, @NotNull CkbBlacklistEvidenceEntry blacklistEvidenceEntry) {
         switch (blacklistEvidenceEntry.ckbBlacklistEvidenceReason()) {
-            case EVIDENCE_THERAPY: {
-                return blacklistEvidenceEntry.therapy().equals(therapy);
+            case ALL_EVIDENCE_BASED_ON_GENE: {
+                return blacklistEvidenceEntry.gene().equals(sourceGene);
             }
 
-            case EVIDENCE_CANCER_TYPE: {
-                return blacklistEvidenceEntry.therapy().equals(therapy) &&
-                        blacklistEvidenceEntry.cancerType().equals(indication);
+            case ALL_EVIDENCE_BASED_ON_GENE_AND_EVENT: {
+                return blacklistEvidenceEntry.gene().equals(sourceGene)
+                        && blacklistEvidenceEntry.event().equals(event);
             }
 
-            case EVIDENCE_MOLECULAR_PROFILE: {
-                LOGGER.info(molecularProfile);
-                LOGGER.info(blacklistEvidenceEntry.molecularProfile());
-                return blacklistEvidenceEntry.therapy().equals(therapy) &&
-                        blacklistEvidenceEntry.cancerType().equals(indication) &&
-                        blacklistEvidenceEntry.molecularProfile().equals(molecularProfile);
+            case EVIDENCE_BASED_ON_THERAPY: {
+                return blacklistEvidenceEntry.therapy().equals(therapyName);
             }
 
-            case ALL_MOLECULAR_PROFILE: {
-                return blacklistEvidenceEntry.molecularProfile().equals(molecularProfile);
+            case EVIDENCE_ON_THERAPY_AND_CANCER_TYPE: {
+                return blacklistEvidenceEntry.therapy().equals(therapyName)
+                        && blacklistEvidenceEntry.cancerType().equals(cancerType);
+            }
+
+            case EVIDENCE_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE: {
+                return blacklistEvidenceEntry.therapy().equals(therapyName)
+                        && blacklistEvidenceEntry.cancerType().equals(cancerType)
+                        && blacklistEvidenceEntry.gene().equals(sourceGene);
+            }
+
+            case EVIDENCE_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE_AND_EVENT: {
+                return blacklistEvidenceEntry.therapy().equals(therapyName)
+                        && blacklistEvidenceEntry.cancerType().equals(cancerType)
+                        && blacklistEvidenceEntry.gene().equals(sourceGene)
+                        && blacklistEvidenceEntry.event().equals(event);
             }
 
             default: {

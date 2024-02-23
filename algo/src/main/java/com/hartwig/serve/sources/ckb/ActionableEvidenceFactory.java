@@ -15,6 +15,7 @@ import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.ImmutableTreatment;
 import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistEvidence;
 import com.hartwig.serve.sources.ckb.treatmentapproach.ImmutableTreatmentApproachCurationEntryKey;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurationEntryKey;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurator;
@@ -62,8 +63,12 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
     @NotNull
     private final TreatmentApproachCurator curator;
 
-    public ActionableEvidenceFactory(@NotNull TreatmentApproachCurator curator) {
+    @NotNull
+    private final CkbBlacklistEvidence blacklistEvidence;
+
+    public ActionableEvidenceFactory(@NotNull TreatmentApproachCurator curator, @NotNull CkbBlacklistEvidence blacklistEvidence) {
         this.curator = curator;
+        this.blacklistEvidence = blacklistEvidence;
     }
 
     @NotNull
@@ -119,21 +124,24 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
 
                 Set<String> curatedRelevantTreatmentApproaches = Sets.newHashSet(curator.isMatch(key));
 
-                actionableEntries.add(ImmutableActionableEntry.builder()
-                        .source(Knowledgebase.CKB_EVIDENCE)
-                        .sourceEvent(sourceEvent)
-                        .sourceUrls(sourceUrls)
-                        .treatment(ImmutableTreatment.builder()
-                                .name(treatment)
-                                .sourceRelevantTreatmentApproaches(sourceRelevantTreatmentApproaches)
-                                .relevantTreatmentApproaches(curatedRelevantTreatmentApproaches)
-                                .build())
-                        .applicableCancerType(cancerTypeExtraction.applicableCancerType())
-                        .blacklistCancerTypes(cancerTypeExtraction.blacklistedCancerTypes())
-                        .level(level)
-                        .direction(direction)
-                        .evidenceUrls(evidenceUrls)
-                        .build());
+                if (!blacklistEvidence.isBlacklistEvidence(treatment, cancerTypeExtraction.applicableCancerType().name(),
+                        sourceGene, sourceEvent)) {
+                    actionableEntries.add(ImmutableActionableEntry.builder()
+                            .source(Knowledgebase.CKB_EVIDENCE)
+                            .sourceEvent(sourceEvent)
+                            .sourceUrls(sourceUrls)
+                            .treatment(ImmutableTreatment.builder()
+                                    .name(treatment)
+                                    .sourceRelevantTreatmentApproaches(sourceRelevantTreatmentApproaches)
+                                    .relevantTreatmentApproaches(curatedRelevantTreatmentApproaches)
+                                    .build())
+                            .applicableCancerType(cancerTypeExtraction.applicableCancerType())
+                            .blacklistCancerTypes(cancerTypeExtraction.blacklistedCancerTypes())
+                            .level(level)
+                            .direction(direction)
+                            .evidenceUrls(evidenceUrls)
+                            .build());
+                }
             }
         }
         return actionableEntries;

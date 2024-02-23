@@ -43,26 +43,38 @@ public class CkbBlacklistEvidenceFile {
 
         String therapy = null;
         String cancerType = null;
-        String molecularProfile = null;
+        String gene = null;
+        String event = null;
+        String level = null;
 
-        if (Sets.newHashSet(CkbBlacklistEvidenceReason.EVIDENCE_THERAPY).contains(reason)) {
+        if (Sets.newHashSet(CkbBlacklistEvidenceReason.EVIDENCE_BASED_ON_THERAPY,
+                CkbBlacklistEvidenceReason.EVIDENCE_ON_THERAPY_AND_CANCER_TYPE,
+                CkbBlacklistEvidenceReason.EVIDENCE_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE,
+                CkbBlacklistEvidenceReason.EVIDENCE_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE_AND_EVENT).contains(reason)) {
             therapy = values[fields.get("therapyName")];
         }
-        if (Sets.newHashSet(CkbBlacklistEvidenceReason.EVIDENCE_THERAPY, CkbBlacklistEvidenceReason.EVIDENCE_CANCER_TYPE).contains(reason)) {
-            therapy = values[fields.get("cancerType")];
+        if (Sets.newHashSet(CkbBlacklistEvidenceReason.EVIDENCE_ON_THERAPY_AND_CANCER_TYPE,
+                CkbBlacklistEvidenceReason.EVIDENCE_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE,
+                CkbBlacklistEvidenceReason.EVIDENCE_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE_AND_EVENT).contains(reason)) {
+            cancerType = values[fields.get("cancerType")];
         }
-        if (Sets.newHashSet(CkbBlacklistEvidenceReason.EVIDENCE_THERAPY,CkbBlacklistEvidenceReason.EVIDENCE_CANCER_TYPE, CkbBlacklistEvidenceReason.EVIDENCE_MOLECULAR_PROFILE).contains(reason)) {
-            cancerType = values[fields.get("molecularProfile")];
+        if (Sets.newHashSet(CkbBlacklistEvidenceReason.EVIDENCE_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE,
+                CkbBlacklistEvidenceReason.EVIDENCE_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE_AND_EVENT,
+                CkbBlacklistEvidenceReason.ALL_EVIDENCE_BASED_ON_GENE, CkbBlacklistEvidenceReason.ALL_EVIDENCE_BASED_ON_GENE_AND_EVENT).contains(reason)) {
+            gene = values[fields.get("gene")];
         }
-        if (Sets.newHashSet(CkbBlacklistEvidenceReason.ALL_MOLECULAR_PROFILE).contains(reason)) {
-            molecularProfile = values[fields.get("molecularProfile")];
+        if (Sets.newHashSet(CkbBlacklistEvidenceReason.ALL_EVIDENCE_BASED_ON_GENE_AND_EVENT,
+                CkbBlacklistEvidenceReason.EVIDENCE_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE_AND_EVENT).contains(reason)) {
+            event = values[fields.get("event")];
         }
 
         return ImmutableCkbBlacklistEvidenceEntry.builder()
                 .ckbBlacklistEvidenceReason(reason)
                 .therapy(therapy)
                 .cancerType(cancerType)
-                .molecularProfile(molecularProfile)
+                .gene(gene)
+                .event(event)
+                .level(level)
                 .build();
     }
 }

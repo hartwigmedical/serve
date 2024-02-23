@@ -17,9 +17,7 @@ import com.hartwig.serve.refgenome.RefGenomeResource;
 import com.hartwig.serve.sources.ckb.CkbExtractor;
 import com.hartwig.serve.sources.ckb.CkbExtractorFactory;
 import com.hartwig.serve.sources.ckb.CkbReader;
-import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudy;
-import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudyEntry;
-import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudyFile;
+import com.hartwig.serve.sources.ckb.blacklist.*;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurationEntry;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurationEntryKey;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurationFile;
@@ -147,7 +145,6 @@ public class ServeAlgo {
     private ExtractionResult extractCkbEvidenceKnowledge(@NotNull String ckbDir, @NotNull String ckbFilterTsv,
                                                          @NotNull String ckbDrugCurationTsv, @NotNull String ckbBlacklistEvidenceTsv) throws IOException {
         List<CkbEntry> ckbEntries = CkbReader.readAndCurate(ckbDir, ckbFilterTsv);
-        List<CkbEntry> nonBlacklistCkbEvidenceEntries = CkbReader.blacklistEvidence(ckbEntries, ckbBlacklistEvidenceTsv);
 
         EventClassifierConfig config = CkbClassificationConfig.build();
         RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.CKB_EVIDENCE);
@@ -157,11 +154,16 @@ public class ServeAlgo {
 
         TreatmentApproachCurator curator = new TreatmentApproachCurator(treatmentApproachMap);
 
-        CkbExtractor extractor = CkbExtractorFactory.createEvidenceExtractor(config, refGenomeResource, curator);
+        List<CkbBlacklistEvidenceEntry> ckbBlacklistEvidenceEntries = CkbBlacklistEvidenceFile.read(ckbBlacklistEvidenceTsv);
+        LOGGER.info(" Read {} filter entries", ckbBlacklistEvidenceEntries.size());
+        CkbBlacklistEvidence blacklistEvidence = new CkbBlacklistEvidence(ckbBlacklistEvidenceEntries);
+
+        CkbExtractor extractor = CkbExtractorFactory.createEvidenceExtractor(config, refGenomeResource, curator, blacklistEvidence);
 
         LOGGER.info("Running CKB evidence knowledge extraction");
-        ExtractionResult result = extractor.extract(nonBlacklistCkbEvidenceEntries);
+        ExtractionResult result = extractor.extract(ckbEntries);
 
+        blacklistEvidence.reportUnusedBlacklistEntries();
         curator.reportUnusedCuratedEntries();
 
         return result;

@@ -12,6 +12,8 @@ import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistEvidence;
+import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistEvidenceTest;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurator;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachTestFactory;
 
@@ -21,12 +23,12 @@ import org.junit.Test;
 public class ActionableEvidenceFactoryTest {
 
     private static final TreatmentApproachCurator curator = TreatmentApproachTestFactory.createTestCurator();
-
+    private static final CkbBlacklistEvidence blacklistEvidence = CkbBlacklistEvidenceTest.createCkbBlacklistEvidence();
     @Test
     public void shouldIgnoreNonActionableKrasDeletion() {
         CkbEntry entryDeletion =
                 CkbTestFactory.createEntry("KRAS", "deletion", "KRAS deletion", "sensitive", "Emerging", "AB", "AB", "A", "DOID:162");
-        ActionableEvidenceFactory actionableEvidenceFactory = new ActionableEvidenceFactory(curator);
+        ActionableEvidenceFactory actionableEvidenceFactory = new ActionableEvidenceFactory(curator, blacklistEvidence);
         Set<ActionableEntry> entryDeletionSet = actionableEvidenceFactory.create(entryDeletion, "KRAS", "gene");
         assertEquals(0, entryDeletionSet.size());
     }
@@ -35,7 +37,7 @@ public class ActionableEvidenceFactoryTest {
     public void shouldCreateActionableMSIEntry() {
         CkbEntry entryCharacteristics =
                 CkbTestFactory.createEntry("-", "MSI neg", "MSI neg", "sensitive", "Actionable", "AB", "AB", "A", "DOID:162");
-        ActionableEvidenceFactory actionableEvidenceFactoryCharacteristic = new ActionableEvidenceFactory(curator);
+        ActionableEvidenceFactory actionableEvidenceFactoryCharacteristic = new ActionableEvidenceFactory(curator, blacklistEvidence);
         Set<ActionableEntry> entryCharacteristicsSet =
                 actionableEvidenceFactoryCharacteristic.create(entryCharacteristics, Strings.EMPTY, "-");
         assertEquals(1, entryCharacteristicsSet.size());
@@ -61,7 +63,7 @@ public class ActionableEvidenceFactoryTest {
                 "AB",
                 "A",
                 "DOID:163");
-        ActionableEvidenceFactory actionableEvidenceFactoryAmplification = new ActionableEvidenceFactory(curator);
+        ActionableEvidenceFactory actionableEvidenceFactoryAmplification = new ActionableEvidenceFactory(curator, blacklistEvidence);
         Set<ActionableEntry> entryAmplificationSet = actionableEvidenceFactoryAmplification.create(entryAmplification, "KRAS", "KRAS");
         assertEquals(1, entryAmplificationSet.size());
         ActionableEntry amplification = entryAmplificationSet.iterator().next();
@@ -79,7 +81,7 @@ public class ActionableEvidenceFactoryTest {
     public void shouldCreateActionableBrafHotspotEntry() {
         CkbEntry entryHotspot =
                 CkbTestFactory.createEntry("BRAF", "BRAF V600E", "BRAF V600E", "sensitive", "Actionable", "AB", "AB", "A", "DOID:162");
-        ActionableEvidenceFactory actionableEvidenceFactoryHotspot = new ActionableEvidenceFactory(curator);
+        ActionableEvidenceFactory actionableEvidenceFactoryHotspot = new ActionableEvidenceFactory(curator, blacklistEvidence);
         Set<ActionableEntry> entryHotspotSet = actionableEvidenceFactoryHotspot.create(entryHotspot, "BRAF", "BRAF");
         assertEquals(1, entryHotspotSet.size());
         ActionableEntry hotspot = entryHotspotSet.iterator().next();

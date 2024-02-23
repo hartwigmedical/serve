@@ -33,7 +33,8 @@ public class ActionableTrialFactoryTest {
         Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(profileId, "required");
         ClinicalTrial clinicalTrial =
-                CkbTestFactory.createTrial("Recruiting", List.of(requirementDetail), List.of(location), "NCT0102", "Phase I trial");
+                CkbTestFactory.createTrialWithTerapy("Recruiting", List.of(requirementDetail), List.of(location), "NCT0102", "Phase I trial",
+                        List.of(CkbTestFactory.createTherapy("Nivolumab")), List.of(CkbTestFactory.createIndication("test", "JAX:10000006")));
         CkbEntry entry = CkbTestFactory.createEntryWithClinicalTrial(profileId, profileName, clinicalTrial);
 
         ActionableTrialFactory actionableTrialFactory = new ActionableTrialFactory(blacklistStudy);

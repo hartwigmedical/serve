@@ -23,8 +23,6 @@ final class ActionableFunctions {
 
     @Nullable
     public static CancerTypeExtraction extractCancerTypeDetails(@NotNull Indication indication) {
-        LOGGER.info("indication");
-        LOGGER.info(indication);
         String[] sourceDoidValues = splitSourceDoidString(indication.termId());
 
         if (sourceDoidValues == null) {

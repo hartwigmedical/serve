@@ -44,23 +44,36 @@ public class CkbBlacklistStudyFile {
 
         String therapy = null;
         String cancerType = null;
-        String molecularProfile = null;
+        String gene = null;
+        String event = null;
 
-        if (Sets.newHashSet(CkbBlacklistStudyReason.STUDY_BASED_ON_THERAPY, CkbBlacklistStudyReason.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE, CkbBlacklistStudyReason.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_MOLECULAR_PROFILE).contains(reason)) {
+        if (Sets.newHashSet(CkbBlacklistStudyReason.STUDY_BASED_ON_THERAPY,
+                CkbBlacklistStudyReason.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE,
+                CkbBlacklistStudyReason.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE,
+                CkbBlacklistStudyReason.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE_AND_EVENT).contains(reason)) {
             therapy = values[fields.get("therapyName")];
         }
-        if (Sets.newHashSet(CkbBlacklistStudyReason.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE, CkbBlacklistStudyReason.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_MOLECULAR_PROFILE).contains(reason)) {
+        if (Sets.newHashSet(CkbBlacklistStudyReason.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE,
+                CkbBlacklistStudyReason.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE,
+                CkbBlacklistStudyReason.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE_AND_EVENT).contains(reason)) {
             cancerType = values[fields.get("cancerType")];
         }
-        if (Sets.newHashSet(CkbBlacklistStudyReason.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_MOLECULAR_PROFILE).contains(reason)) {
-            molecularProfile = values[fields.get("molecularProfile")];
+        if (Sets.newHashSet(CkbBlacklistStudyReason.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE,
+                CkbBlacklistStudyReason.ALL_STUDIES_BASED_ON_GENE).contains(reason)) {
+            gene = values[fields.get("gene")];
+        }
+
+        if (Sets.newHashSet(CkbBlacklistStudyReason.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE_AND_EVENT,
+                CkbBlacklistStudyReason.ALL_STUDIES_BASED_ON_GENE_AND_EVENT).contains(reason)) {
+            event = values[fields.get("event")];
         }
         return ImmutableCkbBlacklistStudyEntry.builder()
                 .ckbBlacklistReason(reason)
                 .nctId(values[fields.get("nctId")])
                 .therapy(therapy)
                 .cancerType(cancerType)
-                .molecularProfile(molecularProfile)
+                .gene(gene)
+                .event(event)
                 .build();
     }
 }

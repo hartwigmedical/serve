@@ -99,8 +99,14 @@ public final class CkbTestFactory {
     public static CkbEntry createEntry(@NotNull String geneSymbol, @NotNull String variant, @NotNull String fullName,
                                        @NotNull String responseType, @NotNull String evidenceType, @NotNull String therapyName, @NotNull String indicationName,
                                        @NotNull String level, @NotNull String termId) {
+        Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting");
+        VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(0, "required");
         return builder().addVariants(createVariant(geneSymbol, variant, fullName))
                 .addEvidences(createEvidence(responseType, evidenceType, therapyName, indicationName, level, termId))
+                .addClinicalTrials(createTrialWithTerapy("Recruiting",
+                        List.of(requirementDetail), List.of(location), "NCT0102", "Phase I trial",
+                        List.of(CkbTestFactory.createTherapy("Nivolumab")),
+                        List.of(CkbTestFactory.createIndication("test", "JAX:10000006"))))
                 .build();
     }
 

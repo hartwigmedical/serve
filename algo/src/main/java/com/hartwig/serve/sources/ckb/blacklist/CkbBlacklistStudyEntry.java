@@ -21,5 +21,8 @@ public abstract class CkbBlacklistStudyEntry {
     public abstract String cancerType();
 
     @Nullable
-    public abstract String molecularProfile();
+    public abstract String gene();
+
+    @Nullable
+    public abstract String event();
 }

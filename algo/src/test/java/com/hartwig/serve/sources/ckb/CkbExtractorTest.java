@@ -141,14 +141,15 @@ public class CkbExtractorTest {
 
         return CkbTestFactory.builder()
                 .from(baseEntry)
-                .clinicalTrials(List.of(CkbTestFactory.createTrial("Recruiting",
+                .clinicalTrials(List.of(CkbTestFactory.createTrialWithTerapy("Recruiting",
                         List.of(ImmutableVariantRequirementDetail.builder()
                                 .profileId(baseEntry.profileId())
                                 .requirementType("required")
                                 .build()),
                         List.of(CkbTestFactory.createLocation("Netherlands", null)),
                         "nctid",
-                        "title")))
+                        "title", List.of(CkbTestFactory.createTherapy("Nivolumab")),
+                        List.of(CkbTestFactory.createIndication("test", "JAX:10000006")))))
                 .build();
     }
 }

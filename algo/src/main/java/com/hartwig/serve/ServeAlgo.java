@@ -182,7 +182,11 @@ public class ServeAlgo {
         CkbExtractor extractor = CkbExtractorFactory.createTrialExtractor(config, refGenomeResource, blacklistStudy);
 
         LOGGER.info("Running CKB trial knowledge extraction");
-        return extractor.extract(ckbEntries);
+        ExtractionResult result = extractor.extract(ckbEntries);
+
+        blacklistStudy.reportUnusedBlacklistEntries();
+
+        return result;
     }
 
     @NotNull

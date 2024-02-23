@@ -46,7 +46,7 @@ public class CkbBlacklistEvidence {
         LOGGER.debug(" Found {} unused blacklist entries during CKB filtering", unusedBlacklistEntryCount);
     }
 
-    private boolean isMatch(@NotNull String therapyName, @NotNull String cancerType, @NotNull String sourceGene,
+    public boolean isMatch(@NotNull String therapyName, @NotNull String cancerType, @NotNull String sourceGene,
                             @NotNull String event, @NotNull CkbBlacklistEvidenceEntry blacklistEvidenceEntry) {
         switch (blacklistEvidenceEntry.ckbBlacklistEvidenceReason()) {
             case ALL_EVIDENCE_BASED_ON_GENE: {

@@ -29,7 +29,7 @@ public class CkbBlacklistEvidence {
             boolean match = isMatch(therapyName, cancerType, level, sourceGene, event, blacklistEvidenceEntry);
             if (match) {
                 usedBlackEvidencelists.add(blacklistEvidenceEntry);
-                return false;
+                return true;
             }
         }
         return false;

@@ -23,7 +23,7 @@ import org.junit.Test;
 public class ActionableEvidenceFactoryTest {
 
     private static final TreatmentApproachCurator curator = TreatmentApproachTestFactory.createTestCurator();
-    private static final CkbBlacklistEvidence blacklistEvidence = CkbBlacklistEvidenceTest.createCkbBlacklistEvidence();
+    private static final CkbBlacklistEvidence blacklistEvidence = CkbBlacklistEvidenceTest.createCkbBlacklistEvidenceEmpty();
     @Test
     public void shouldIgnoreNonActionableKrasDeletion() {
         CkbEntry entryDeletion =

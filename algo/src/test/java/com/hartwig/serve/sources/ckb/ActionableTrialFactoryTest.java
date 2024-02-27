@@ -24,7 +24,7 @@ import org.junit.Test;
 
 public class ActionableTrialFactoryTest {
 
-    private static final CkbBlacklistStudy blacklistStudy = CkbBlacklistStudyTest.createCkbBlacklistStudy();
+    private static final CkbBlacklistStudy blacklistStudy = CkbBlacklistStudyTest.createCkbBlacklistStudyEmpty();
 
     @Test
     public void canCreateActionableEntryForOpenTrialInAllowedCountryWithRequiredMolecularProfile() {

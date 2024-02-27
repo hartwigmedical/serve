@@ -28,7 +28,7 @@ public class CkbBlacklistStudy {
             boolean match = isMatch(studyName, therapyName, cancerType, sourceGene, event, blacklistStudyEntry);
             if (match) {
                 usedBlacklists.add(blacklistStudyEntry);
-                return false;
+                return true;
             }
         }
         return false;
@@ -87,7 +87,6 @@ public class CkbBlacklistStudy {
                 LOGGER.warn(" Blacklist entry '{}' hasn't been used for CKB filtering", entry);
             }
         }
-
         LOGGER.debug(" Found {} unused blacklist entries during CKB filtering", unusedBlacklistEntryCount);
     }
 }

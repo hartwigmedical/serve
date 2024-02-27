@@ -27,7 +27,7 @@ public class CkbExtractorTest {
     public void canExtractEvidenceFromCkbEntries() {
         CkbExtractor evidenceExtractor = CkbExtractorFactory.createEvidenceExtractor(CkbClassificationConfig.build(),
                 RefGenomeResourceTestFactory.buildTestResource37(),
-                TreatmentApproachTestFactory.createEmptyCurator(), CkbBlacklistEvidenceTest.createCkbBlacklistEvidence());
+                TreatmentApproachTestFactory.createEmptyCurator(), CkbBlacklistEvidenceTest.createCkbBlacklistEvidenceEmpty());
 
         ExtractionResult evidenceResult = evidenceExtractor.extract(createCkbEntryTestDatabase());
         assertEquals(1, evidenceResult.knownHotspots().size());
@@ -45,7 +45,7 @@ public class CkbExtractorTest {
     @Test
     public void canExtractTrialsFromCkbEntries() {
         CkbExtractor trialExtractor = CkbExtractorFactory.createTrialExtractor(CkbClassificationConfig.build(),
-                RefGenomeResourceTestFactory.buildTestResource37(), CkbBlacklistStudyTest.createCkbBlacklistStudy());
+                RefGenomeResourceTestFactory.buildTestResource37(), CkbBlacklistStudyTest.createCkbBlacklistStudyEmpty());
 
         ExtractionResult trialResult = trialExtractor.extract(createCkbEntryTestDatabase());
         assertEquals(0, trialResult.knownHotspots().size());

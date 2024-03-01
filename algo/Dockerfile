@@ -7,4 +7,4 @@ ENV TRANSVAR_CFG /opt/app/transvar.cfg
 COPY run_serve.sh /opt/app/run_serve.sh
 COPY ./target/algo-jar-with-dependencies.jar /opt/app/serve.jar
 
-ENTRYPOINT ["java", "-jar", "/opt/app/run_serve.sh"]
+ENTRYPOINT ["/opt/app/run_serve.sh"]

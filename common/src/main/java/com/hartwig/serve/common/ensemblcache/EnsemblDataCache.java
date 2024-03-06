@@ -1,5 +1,6 @@
 package com.hartwig.serve.common.ensemblcache;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,12 +12,22 @@ public class EnsemblDataCache {
     @NotNull
     private final Map<String, List<GeneData>> genesPerChromosome;
     @NotNull
+    private final Map<String, Map<String, GeneData>> genesPerChromosomeAndGeneName;
+    @NotNull
     private final Map<String, List<TranscriptData>> transcriptsPerGeneId;
 
     public EnsemblDataCache(@NotNull final Map<String, List<GeneData>> genesPerChromosome,
             @NotNull final Map<String, List<TranscriptData>> transcriptsPerGeneId) {
         this.genesPerChromosome = genesPerChromosome;
         this.transcriptsPerGeneId = transcriptsPerGeneId;
+        this.genesPerChromosomeAndGeneName = new HashMap<>();
+        for (Map.Entry<String, List<GeneData>> geneByChromosome : this.genesPerChromosome.entrySet()) {
+            Map<String, GeneData> geneMap = new HashMap<>();
+            for (GeneData gene : geneByChromosome.getValue()) {
+                geneMap.put(gene.geneName(), gene);
+            }
+            this.genesPerChromosomeAndGeneName.put(geneByChromosome.getKey(), geneMap);
+        }
     }
 
     @NotNull
@@ -31,11 +42,9 @@ public class EnsemblDataCache {
 
     @Nullable
     public GeneData findGeneDataByName(@NotNull String geneNameToFind) {
-        for (Map.Entry<String, List<GeneData>> entry : genesPerChromosome.entrySet()) {
-            for (GeneData gene : entry.getValue()) {
-                if (gene.geneName().equals(geneNameToFind)) {
-                    return gene;
-                }
+        for (Map<String, GeneData> genesPerChromosome : genesPerChromosomeAndGeneName.values()) {
+            if (genesPerChromosome.containsKey(geneNameToFind)) {
+                return genesPerChromosome.get(geneNameToFind);
             }
         }
 

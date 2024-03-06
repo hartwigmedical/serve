@@ -1,6 +1,7 @@
 package com.hartwig.serve.ckb.json;
 
 import java.util.List;
+import java.util.Map;
 
 import com.hartwig.serve.ckb.json.clinicaltrial.JsonClinicalTrial;
 import com.hartwig.serve.ckb.json.drug.JsonDrug;
@@ -54,4 +55,7 @@ public abstract class CkbJsonDatabase {
 
     @NotNull
     public abstract List<JsonReference> references();
+
+    @NotNull
+    public abstract Map<Integer, JsonReference> referencesById();
 }

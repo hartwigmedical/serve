@@ -12,7 +12,7 @@ public class EnsemblDataCache {
     @NotNull
     private final Map<String, List<GeneData>> genesPerChromosome;
     @NotNull
-    private final Map<String, Map<String, GeneData>> genesPerChromosomeAndGeneName;
+    private final Map<String, GeneData> genesPerName;
     @NotNull
     private final Map<String, List<TranscriptData>> transcriptsPerGeneId;
 
@@ -20,13 +20,11 @@ public class EnsemblDataCache {
             @NotNull final Map<String, List<TranscriptData>> transcriptsPerGeneId) {
         this.genesPerChromosome = genesPerChromosome;
         this.transcriptsPerGeneId = transcriptsPerGeneId;
-        this.genesPerChromosomeAndGeneName = new HashMap<>();
+        this.genesPerName = new HashMap<>();
         for (Map.Entry<String, List<GeneData>> geneByChromosome : this.genesPerChromosome.entrySet()) {
-            Map<String, GeneData> geneMap = new HashMap<>();
             for (GeneData gene : geneByChromosome.getValue()) {
-                geneMap.put(gene.geneName(), gene);
+                genesPerName.putIfAbsent(gene.geneName(), gene);
             }
-            this.genesPerChromosomeAndGeneName.put(geneByChromosome.getKey(), geneMap);
         }
     }
 
@@ -42,13 +40,7 @@ public class EnsemblDataCache {
 
     @Nullable
     public GeneData findGeneDataByName(@NotNull String geneNameToFind) {
-        for (Map<String, GeneData> genesPerChromosome : genesPerChromosomeAndGeneName.values()) {
-            if (genesPerChromosome.containsKey(geneNameToFind)) {
-                return genesPerChromosome.get(geneNameToFind);
-            }
-        }
-
-        return null;
+        return genesPerName.get(geneNameToFind);
     }
 
     @Nullable

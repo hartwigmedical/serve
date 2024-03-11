@@ -13,6 +13,7 @@ SERVE harmonizes various sources of evidence into a single unified model that ca
 * [What is done in terms of curation and harmonization of relevant treatment approaches?](#Relevant-treatment-approaches-of-the-evidence)
 * [How does SERVE deal with multiple reference genome versions?](#handling-of-multiple-reference-genome-versions)
 * [How does everything come together?](#overview-of-the-serve-algorithm)
+* [How to run the docker image](#how-to-run-the-docker-image)
 * [Version history and download links](#version-history-and-download-links)
 
 ## Supported input knowledgebases
@@ -346,6 +347,38 @@ Knowledge extraction is performed on a per-knowledgebase level after which all e
   - The known output is used in various algorithms for various purposes. For example, the known hotspots produced by SERVE are used by 
   [SAGE](https://github.com/hartwigmedical/hmftools/tree/master/sage/README.md) as the definition of the highest tier of calling and HOTSPOT annotation.
   - The actionable output is the database that [PROTECT](https://github.com/hartwigmedical/hmftools/tree/master/protect) bases its clinical evidence matching on.
+
+## How to run the docker image
+
+The docker image has no entrypoint, it requires some extra setup to be functional:
+
+The transvar config file should look something like this:
+```cfg
+[DEFAULT]
+refversion = hg19
+
+[hg19]
+refseq = /data/resources/crunch/transvar_db/hg19.refseq.gff.gz.transvardb
+ccds = /data/resources/crunch/transvar_db/hg19.ccds.txt.transvardb
+ensembl = /data/resources/crunch/transvar_db/hg19.ensembl.gtf.gz.transvardb
+gencode = /data/resources/crunch/transvar_db/hg19.gencode.gtf.gz.transvardb
+ucsc = /data/resources/crunch/transvar_db/hg19.ucsc.txt.gz.transvardb
+aceview = /data/resources/crunch/transvar_db/hg19.aceview.gff.gz.transvardb
+known_gene = /data/resources/crunch/transvar_db/hg19.knowngene.gz.transvardb
+reference = /data/reference_genome/37/Homo_sapiens.GRCh37.GATK.illumina.fasta
+
+[hg38]
+refseq = /data/resources/crunch/transvar_db/hg38.refseq.gff.gz.transvardb
+ccds = /data/resources/crunch/transvar_db/hg38.ccds.txt.transvardb
+ensembl = /data/resources/crunch/transvar_db/hg38.ensembl.gtf.gz.transvardb
+gencode = /data/resources/crunch/transvar_db/hg38.gencode.gtf.gz.transvardb
+ucsc = /data/resources/crunch/transvar_db/hg38.ucsc.txt.gz.transvardb
+reference = /data/reference_genome/38/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna
+```
+
+All transvar DB files can be found in the `crunch-resources` repo and accompanying docker image.
+The big files are the hg19 and hg37 reference genomes. They are too big to store in version control, so they will need to be mounted in from
+elsewhere.
   
 ## Version History and Download Links
 - Upcoming

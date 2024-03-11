@@ -32,7 +32,7 @@ steps:
   - id: 'Publish docker image'
     dir: algo
     name: 'eu.gcr.io/hmf-build/docker-tag'
-    args: [ 'eu.gcr.io/hmf-build/serve', '$TAG_NAME' ]
+    args: [ 'europe-west4-docker.pkg.dev/hmf-build/hmf-docker/serve', '$TAG_NAME' ]
   - id: 'Refresh bucket from local Maven cache after build'
     name: 'gcr.io/cloud-builders/gsutil'
     args:
@@ -49,5 +49,5 @@ timeout: 4800s
 options:
   machineType: 'E2_HIGHCPU_8'
 images:
-  - eu.gcr.io/hmf-build/serve
+  - europe-west4-docker.pkg.dev/hmf-build/hmf-docker/serve
 

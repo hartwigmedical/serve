@@ -34,7 +34,11 @@ import com.hartwig.serve.datamodel.hotspot.ImmutableKnownHotspot;
 import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
 import com.hartwig.serve.datamodel.immuno.ActionableHLA;
-import com.hartwig.serve.datamodel.range.*;
+import com.hartwig.serve.datamodel.range.ActionableRange;
+import com.hartwig.serve.datamodel.range.ImmutableKnownCodon;
+import com.hartwig.serve.datamodel.range.ImmutableKnownExon;
+import com.hartwig.serve.datamodel.range.KnownCodon;
+import com.hartwig.serve.datamodel.range.KnownExon;
 import com.hartwig.serve.extraction.ActionableEventFactory;
 import com.hartwig.serve.extraction.EventExtractor;
 import com.hartwig.serve.extraction.EventExtractorOutput;
@@ -76,52 +80,54 @@ public class CkbExtractor {
 
     @NotNull
     public ExtractionResult extract(@NotNull List<CkbEntry> entries) {
-        List<ExtractionResult> extractions = Lists.newArrayList();
+        List<ExtractionResult> extractions = Collections.synchronizedList(Lists.newArrayList());
 
         ProgressTracker tracker = new ProgressTracker("CKB", entries.size());
-        for (CkbEntry entry : entries) {
-            // Assume entries without variants are filtered out prior to extraction
+        // Assume entries without variants are filtered out prior to extraction
+        entries.parallelStream().forEach(entry -> { // parallel stream to parallelize transvar calls.
             if (entry.variants().isEmpty()) {
                 throw new IllegalStateException("A CKB entry without variants has been provided for extraction: " + entry);
             }
-
             int variantCount = entry.variants().size();
             Variant variant = entry.variants().get(0);
             String event = variantCount > 1 ? concat(entry.variants()) : CkbEventAndGeneExtractor.extractEvent(variant);
             String gene = variantCount > 1 ? "Multiple" : CkbEventAndGeneExtractor.extractGene(variant);
-
             if (entry.type() == EventType.UNKNOWN) {
                 LOGGER.warn("No event type known for '{}' on '{}'", event, gene);
             } else {
-                EventExtractorOutput extractionOutput = eventExtractor.extract(gene, null, entry.type(), event);
-                String sourceEvent;
-                if (!gene.equals(CkbConstants.NO_GENE)) {
-                    sourceEvent = gene + " " + event;
-                } else {
-                    sourceEvent = event;
-                }
-
-                Set<ActionableEntry> actionableEntries =
-                        ActionableEntryFactory.toActionableEntries(entry, sourceEvent, treatmentApproachCurator, gene, entry.type());
-
-                EventInterpretation interpretation = ImmutableEventInterpretation.builder()
-                        .source(Knowledgebase.CKB)
-                        .sourceEvent(sourceEvent)
-                        .interpretedGene(gene)
-                        .interpretedEvent(event)
-                        .interpretedEventType(entry.type())
-                        .build();
-
-                ExtractionResult extraction = toExtractionResult(event, gene, null, extractionOutput, actionableEntries, interpretation);
+                var extraction = getExtractionResult(entry, gene, event);
                 extractions.add(CkbVariantAnnotator.annotate(extraction, variant));
             }
-
             tracker.update();
-        }
+        });
 
         treatmentApproachCurator.reportUnusedCuratedEntries();
 
         return ExtractionFunctions.merge(extractions);
+    }
+
+    @NotNull
+    private ExtractionResult getExtractionResult(CkbEntry entry, String gene, String event) {
+        EventExtractorOutput extractionOutput = eventExtractor.extract(gene, null, entry.type(), event);
+        String sourceEvent;
+        if (!gene.equals(CkbConstants.NO_GENE)) {
+            sourceEvent = gene + " " + event;
+        } else {
+            sourceEvent = event;
+        }
+
+        Set<ActionableEntry> actionableEntries =
+                ActionableEntryFactory.toActionableEntries(entry, sourceEvent, treatmentApproachCurator, gene, entry.type());
+
+        EventInterpretation interpretation = ImmutableEventInterpretation.builder()
+                .source(Knowledgebase.CKB)
+                .sourceEvent(sourceEvent)
+                .interpretedGene(gene)
+                .interpretedEvent(event)
+                .interpretedEventType(entry.type())
+                .build();
+
+        return toExtractionResult(event, gene, null, extractionOutput, actionableEntries, interpretation);
     }
 
     @NotNull
@@ -282,11 +288,7 @@ public class CkbExtractor {
     @NotNull
     private static Set<KnownGene> convertToKnownGenes(@NotNull String gene) {
         if (!gene.equals(CkbConstants.NO_GENE)) {
-            return Set.of(ImmutableKnownGene.builder()
-                    .gene(gene)
-                    .geneRole(GeneRole.UNKNOWN)
-                    .addSources(Knowledgebase.CKB)
-                    .build());
+            return Set.of(ImmutableKnownGene.builder().gene(gene).geneRole(GeneRole.UNKNOWN).addSources(Knowledgebase.CKB).build());
         }
 
         return Collections.emptySet();

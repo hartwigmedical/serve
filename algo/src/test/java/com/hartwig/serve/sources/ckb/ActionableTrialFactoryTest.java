@@ -63,7 +63,7 @@ public class ActionableTrialFactoryTest {
         ClinicalTrial trialPotentiallyOpenInBelgium = createTrialWithOneLocation("Recruiting", "Belgium", "Recruiting");
         assertEquals(1, ActionableTrialFactory.countriesToInclude(trialPotentiallyOpenInBelgium).size());
 
-        ClinicalTrial trialNotOpenInNetherlands = createTrialWithOneLocation("Recruiting", "Netherlands", "Not yet recruiting");
+        ClinicalTrial trialNotOpenInNetherlands = createTrialWithOneLocation("Recruiting", "Netherlands", "Completed");
         assertEquals(0, ActionableTrialFactory.countriesToInclude(trialNotOpenInNetherlands).size());
 
         ClinicalTrial trialPotentiallyOpenInUnitedStates = createTrialWithOneLocation("Recruiting", "United States", "Recruiting");
@@ -77,7 +77,7 @@ public class ActionableTrialFactoryTest {
         assertEquals(1, ActionableTrialFactory.countriesToInclude(trialPotentiallyOpenInBelgiumAndIndia).size());
 
         ClinicalTrial trialPotentiallyOpenInBelgiumAndGermany =
-                createTrialWithMultipleLocations("Recruiting", "Belgium", "Recruiting", "Germany", "Active, not recruiting");
+                createTrialWithMultipleLocations("Recruiting", "Belgium", "Recruiting", "Germany", "Not yet recruiting");
         assertEquals(2, ActionableTrialFactory.countriesToInclude(trialPotentiallyOpenInBelgiumAndGermany).size());
 
         ClinicalTrial trialPotentiallyOpenInBelgiumSuspendedInGermany =
@@ -89,7 +89,7 @@ public class ActionableTrialFactoryTest {
         assertEquals(1, ActionableTrialFactory.countriesToInclude(trialPotentiallyOpenInBelgiumSuspendedInIndia).size());
 
         ClinicalTrial trialSuspendedInBelgiumOpenInIndia =
-                createTrialWithMultipleLocations("Recruiting", "Belgium", "Suspended", "India", "Active, not recruiting");
+                createTrialWithMultipleLocations("Recruiting", "Belgium", "Suspended", "India", "Not yet recruiting");
         assertEquals(0, ActionableTrialFactory.countriesToInclude(trialSuspendedInBelgiumOpenInIndia).size());
 
         ClinicalTrial terminatedTrial = createTrialWithOneLocation("Terminated", "Netherlands", "Suspended");

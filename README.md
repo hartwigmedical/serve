@@ -38,10 +38,11 @@ Note the new version should be of the format `major.minor.patch` where:
 
 The `serve-algo` module contains the algo producing the `serve-datamodel`. The following steps are required to upgrade:
 
-1. Set the version in the pom.xml file in serve-algo (typically identical to the version of serve-datamodel)
+1. Set the version in the pom.xml file in serve-algo (typically identical to the version of serve-datamodel) and set version of common,
+   datamodel, ckb-importer, iclusion-importer and vicc-importer to `local-SNAPSHOT` in main pom.xml
 2. Compile and package locally using `mvn clean package`
 3. Update the `deploy_serve_prod` script and run this script to copy the algo jar with the correct name in the common-tools bucket.
-4. Roll back the change in the pom.xml file in serve-algo
+4. Roll back the change in the pom.xml files
 4. Create a release using the GitHub website and attach the same jar (and serve sql) as additional resources.
 5. Add release notes to README.md in serve-algo
 

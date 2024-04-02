@@ -704,7 +704,6 @@ CREATE TABLE `civicVariantAlias`
     FOREIGN KEY (`civicId`) REFERENCES `civic`(`id`)
 );
 
-
 CREATE TABLE `civicVariantType`
 (   `id` int NOT NULL AUTO_INCREMENT,
     `civicId` int NOT NULL,
@@ -834,7 +833,6 @@ CREATE TABLE `civicDrug`
     PRIMARY KEY (`id`),
     FOREIGN KEY (`civicEvidenceItemId`) REFERENCES `civicEvidenceItem`(`id`)
 );
-
 
 CREATE TABLE `civicDisease`
 (   `id` int NOT NULL AUTO_INCREMENT,

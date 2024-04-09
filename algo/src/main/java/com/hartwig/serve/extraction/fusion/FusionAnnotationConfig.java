@@ -79,6 +79,7 @@ final class FusionAnnotationConfig {
         exonicDelDupTypeMap.put("CBL", ExonicDelDupType.FULL_EXONIC_DELETION);
         exonicDelDupTypeMap.put("EGFR", ExonicDelDupType.FULL_EXONIC_DELETION);
         exonicDelDupTypeMap.put("ERBB2", ExonicDelDupType.FULL_EXONIC_DELETION);
+        exonicDelDupTypeMap.put("FGFR2", ExonicDelDupType.FULL_EXONIC_DELETION);
         exonicDelDupTypeMap.put("MET", ExonicDelDupType.FULL_EXONIC_DELETION);
         exonicDelDupTypeMap.put("MLH1", ExonicDelDupType.FULL_EXONIC_DELETION);
         return exonicDelDupTypeMap;

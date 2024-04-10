@@ -376,7 +376,7 @@ Within the Hartwig pipeline, SERVE output is used in the following manner:
 
 ## Version History and Download Links
 
-- Upcoming
+- [3.2.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v3.2.0)
     - FGFR2 del events are configured as being interpreted as full exonic deletions. 
 - [3.1.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v3.1.0)
     - Remove "Active, not recruiting" and add "Not yet recruiting" from/to potentially open recruitment status list

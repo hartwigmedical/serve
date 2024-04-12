@@ -14,19 +14,22 @@ In addition, this repo provides a number of utility applications to ingest and a
 | [iClusion-Importer](iclusion-importer) | Importer of iClusion datamodel.           |
 | [VICC-Importer](algo)                  | Importer of VICC datamodel.               |
 
-## Releasing serve-datamodel
+## Releasing serve
 
-The `serve-datamodel` module is used by external projects and is deployed to GCP's artifact repository.
-To release a new version of the datamodel artifact, perform the following:
+To release a new version of the `serve`, perform the following:
 
 ```shell
 git tag {new_version}
 git push origin {new_version}
 ```
 
-This will automatically trigger a cloud build instance which will deploy the artifacts to artifact registry.
+This will automatically trigger a cloud build instance which will deploy the artifacts to both artifact registry and container registry.
 
 Note the new version should be of the format `major.minor.patch` where:
+
 - Major indicates a non-backward compatible change (avoid these!)
 - Minor indicates a new feature
 - Patch indicates a bug fix
+
+Currently, the GitHub release is not automatically created, so you need to create a new release on the GitHub website and attach the serve jar as an additional resource.
+The jars can be built using `mvn clean package`.

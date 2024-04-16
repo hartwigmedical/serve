@@ -14,6 +14,12 @@ public final class DatamodelTestFactory {
     }
 
     @NotNull
+    public static ImmutableClinicalTrial.Builder clinicalTrialBuilderBuilder() {
+        return ImmutableClinicalTrial.builder().studyNctId(Strings.EMPTY).
+                studyTitle(Strings.EMPTY).countriesOfStudy(Sets.newHashSet());
+    }
+
+    @NotNull
     public static ImmutableTreatment.Builder treatmentBuilder() {
         return ImmutableTreatment.builder().name(Strings.EMPTY);
     }
@@ -28,6 +34,7 @@ public final class DatamodelTestFactory {
         return createActionableEvent(Knowledgebase.UNKNOWN,
                 Strings.EMPTY,
                 Sets.newHashSet(),
+                DatamodelTestFactory.clinicalTrialBuilderBuilder().build(),
                 DatamodelTestFactory.treatmentBuilder().build(),
                 DatamodelTestFactory.cancerTypeBuilder().build(),
                 Sets.newHashSet(),
@@ -38,12 +45,13 @@ public final class DatamodelTestFactory {
 
     @NotNull
     public static ActionableEvent createActionableEvent(@NotNull Knowledgebase source, @NotNull String sourceEvent,
-            @NotNull Set<String> sourceUrls, @NotNull Treatment treatment, @NotNull CancerType applicableCancerType,
+            @NotNull Set<String> sourceUrls, @NotNull ClinicalTrial clinicalTrial, @NotNull Treatment treatment, @NotNull CancerType applicableCancerType,
             @NotNull Set<CancerType> blacklistCancerTypes, @NotNull EvidenceLevel level, @NotNull EvidenceDirection direction,
             @NotNull Set<String> evidenceUrls) {
         return new ActionableEventImpl(source,
                 sourceEvent,
                 sourceUrls,
+                clinicalTrial,
                 treatment,
                 applicableCancerType,
                 blacklistCancerTypes,
@@ -61,6 +69,8 @@ public final class DatamodelTestFactory {
         @NotNull
         private final Set<String> sourceUrls;
         @NotNull
+        private final ClinicalTrial clinicalTrial;
+        @NotNull
         private final Treatment treatment;
         @NotNull
         private final CancerType applicableCancerType;
@@ -74,11 +84,12 @@ public final class DatamodelTestFactory {
         private final Set<String> evidenceUrls;
 
         public ActionableEventImpl(@NotNull Knowledgebase source, @NotNull String sourceEvent, @NotNull Set<String> sourceUrls,
-                @NotNull Treatment treatment, @NotNull CancerType applicableCancerType, @NotNull Set<CancerType> blacklistCancerTypes,
-                @NotNull EvidenceLevel level, @NotNull EvidenceDirection direction, @NotNull Set<String> evidenceUrls) {
+                                   @NotNull ClinicalTrial clinicalTrial, @NotNull Treatment treatment, @NotNull CancerType applicableCancerType, @NotNull Set<CancerType> blacklistCancerTypes,
+                                   @NotNull EvidenceLevel level, @NotNull EvidenceDirection direction, @NotNull Set<String> evidenceUrls) {
             this.source = source;
             this.sourceEvent = sourceEvent;
             this.sourceUrls = sourceUrls;
+            this.clinicalTrial = clinicalTrial;
             this.treatment = treatment;
             this.applicableCancerType = applicableCancerType;
             this.blacklistCancerTypes = blacklistCancerTypes;
@@ -103,6 +114,12 @@ public final class DatamodelTestFactory {
         @Override
         public Set<String> sourceUrls() {
             return sourceUrls;
+        }
+
+        @NotNull
+        @Override
+        public ClinicalTrial clinicalTrial() {
+            return clinicalTrial;
         }
 
         @NotNull
@@ -142,38 +159,32 @@ public final class DatamodelTestFactory {
         }
 
         @Override
-        public boolean equals(final Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (o == null || getClass() != o.getClass()) {
-                return false;
-            }
-            final ActionableEventImpl that = (ActionableEventImpl) o;
-            return source == that.source && sourceEvent.equals(that.sourceEvent) && sourceUrls.equals(that.sourceUrls) && treatment.equals(
-                    that.treatment) && applicableCancerType.equals(that.applicableCancerType)
-                    && blacklistCancerTypes.equals(that.blacklistCancerTypes) && level == that.level && direction == that.direction
-                    && evidenceUrls.equals(that.evidenceUrls);
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            ActionableEventImpl that = (ActionableEventImpl) o;
+            return source == that.source && Objects.equals(sourceEvent, that.sourceEvent) && Objects.equals(sourceUrls, that.sourceUrls) && Objects.equals(clinicalTrial, that.clinicalTrial) && Objects.equals(treatment, that.treatment) && Objects.equals(applicableCancerType, that.applicableCancerType) && Objects.equals(blacklistCancerTypes, that.blacklistCancerTypes) && level == that.level && direction == that.direction && Objects.equals(evidenceUrls, that.evidenceUrls);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(source,
-                    sourceEvent,
-                    sourceUrls,
-                    treatment,
-                    applicableCancerType,
-                    blacklistCancerTypes,
-                    level,
-                    direction,
-                    evidenceUrls);
+            return Objects.hash(source, sourceEvent, sourceUrls, clinicalTrial, treatment, applicableCancerType, blacklistCancerTypes, level, direction, evidenceUrls);
         }
 
         @Override
         public String toString() {
-            return "ActionableEventImpl{" + "source=" + source + ", sourceEvent='" + sourceEvent + '\'' + ", sourceUrls=" + sourceUrls
-                    + ", treatment=" + treatment + ", applicableCancerType=" + applicableCancerType + ", blacklistCancerTypes="
-                    + blacklistCancerTypes + ", level=" + level + ", direction=" + direction + ", evidenceUrls=" + evidenceUrls + '}';
+            return "ActionableEventImpl{" +
+                    "source=" + source +
+                    ", sourceEvent='" + sourceEvent + '\'' +
+                    ", sourceUrls=" + sourceUrls +
+                    ", clinicalTrial=" + clinicalTrial +
+                    ", treatment=" + treatment +
+                    ", applicableCancerType=" + applicableCancerType +
+                    ", blacklistCancerTypes=" + blacklistCancerTypes +
+                    ", level=" + level +
+                    ", direction=" + direction +
+                    ", evidenceUrls=" + evidenceUrls +
+                    '}';
         }
     }
 }

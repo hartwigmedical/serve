@@ -9,10 +9,7 @@ import com.hartwig.serve.ckb.datamodel.clinicaltrial.Location;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.VariantRequirementDetail;
 import com.hartwig.serve.ckb.datamodel.indication.Indication;
 import com.hartwig.serve.ckb.datamodel.therapy.Therapy;
-import com.hartwig.serve.datamodel.EvidenceDirection;
-import com.hartwig.serve.datamodel.EvidenceLevel;
-import com.hartwig.serve.datamodel.ImmutableTreatment;
-import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.datamodel.*;
 import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudy;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,14 +23,14 @@ class ActionableTrialFactory implements ActionableEntryFactory {
     private static final Set<String> VARIANT_REQUIREMENT_TYPES_TO_INCLUDE = Sets.newHashSet();
 
     static {
-        POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("active, not recruiting");
-        POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("approved for marketing");
-        POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("available");
-        POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("not yet recruiting");
         POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("recruiting");
+        POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("active, not recruiting");
         POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("unknown status");
+        POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("active_not_recruiting");
 
         COUNTRIES_TO_INCLUDE.add("netherlands");
+        COUNTRIES_TO_INCLUDE.add("belgium");
+        COUNTRIES_TO_INCLUDE.add("germany");
 
         VARIANT_REQUIREMENT_TYPES_TO_INCLUDE.add("partial - required");
         VARIANT_REQUIREMENT_TYPES_TO_INCLUDE.add("required");
@@ -66,7 +63,12 @@ class ActionableTrialFactory implements ActionableEntryFactory {
                                         .source(Knowledgebase.CKB_TRIAL)
                                         .sourceEvent(sourceEvent)
                                         .sourceUrls(Sets.newHashSet("https://ckbhome.jax.org/clinicalTrial/show?nctId=" + trial.nctId()))
-                                        .treatment(ImmutableTreatment.builder().name(trial.title()).build())
+                                        .clinicalTrial(ImmutableClinicalTrial.builder()
+                                                        .studyNctId(trial.nctId())
+                                                        .studyTitle(trial.title())
+                                                        .countriesOfStudy(countries)
+                                                .build())
+                                        .treatment(ImmutableTreatment.builder().name(therapyName).build())
                                         .applicableCancerType(cancerTypeExtraction.applicableCancerType())
                                         .blacklistCancerTypes(cancerTypeExtraction.blacklistedCancerTypes())
                                         .level(EvidenceLevel.B)

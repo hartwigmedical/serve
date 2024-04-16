@@ -23,6 +23,10 @@ public class ActionableFileUtilTest {
         ActionableEvent event = DatamodelTestFactory.createActionableEvent(Knowledgebase.VICC_CGI,
                 "source event",
                 Sets.newHashSet(),
+                DatamodelTestFactory.clinicalTrialBuilderBuilder()
+                        .studyNctId("NCT1")
+                        .studyTitle("study")
+                        .countriesOfStudy(Sets.newHashSet("The Netherlands")).build(),
                 DatamodelTestFactory.treatmentBuilder()
                         .name("treatment")
                         .addSourceRelevantTreatmentApproaches("drug classes")

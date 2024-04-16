@@ -11,10 +11,7 @@ import com.hartwig.serve.ckb.datamodel.drug.DrugClass;
 import com.hartwig.serve.ckb.datamodel.evidence.Evidence;
 import com.hartwig.serve.ckb.datamodel.reference.Reference;
 import com.hartwig.serve.ckb.datamodel.treatmentapproaches.RelevantTreatmentApproaches;
-import com.hartwig.serve.datamodel.EvidenceDirection;
-import com.hartwig.serve.datamodel.EvidenceLevel;
-import com.hartwig.serve.datamodel.ImmutableTreatment;
-import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.datamodel.*;
 import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistEvidence;
 import com.hartwig.serve.sources.ckb.treatmentapproach.ImmutableTreatmentApproachCurationEntryKey;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurationEntryKey;
@@ -130,6 +127,7 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
                             .source(Knowledgebase.CKB_EVIDENCE)
                             .sourceEvent(sourceEvent)
                             .sourceUrls(sourceUrls)
+                            .clinicalTrial(null)
                             .treatment(ImmutableTreatment.builder()
                                     .name(treatment)
                                     .sourceRelevantTreatmentApproaches(sourceRelevantTreatmentApproaches)

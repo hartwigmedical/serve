@@ -1,20 +1,15 @@
 package com.hartwig.serve.datamodel.serialization.util;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.StringJoiner;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Sets;
-import com.hartwig.serve.datamodel.ActionableEvent;
-import com.hartwig.serve.datamodel.CancerType;
-import com.hartwig.serve.datamodel.EvidenceDirection;
-import com.hartwig.serve.datamodel.EvidenceLevel;
-import com.hartwig.serve.datamodel.ImmutableCancerType;
-import com.hartwig.serve.datamodel.ImmutableTreatment;
-import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.datamodel.Treatment;
+import com.hartwig.serve.datamodel.*;
 
+import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 
 public final class ActionableFileUtil {
@@ -32,6 +27,9 @@ public final class ActionableFileUtil {
         return new StringJoiner(FIELD_DELIMITER).add("source")
                 .add("sourceEvent")
                 .add("sourceUrls")
+                .add("studyNctId")
+                .add("studyTitle")
+                .add("countriesOfStudy")
                 .add("treatment")
                 .add("sourceRelevantTreatmentApproaches")
                 .add("relevantTreatmentApproaches")
@@ -64,6 +62,16 @@ public final class ActionableFileUtil {
             @Override
             public Set<String> sourceUrls() {
                 return fieldToSet(values[fields.get("sourceUrls")]);
+            }
+
+            @NotNull
+            @Override
+            public ClinicalTrial clinicalTrial() {
+                return ImmutableClinicalTrial.builder()
+                        .studyNctId(values[fields.get("studyNctId")])
+                        .studyTitle(values[fields.get("studyTitle")])
+                        .countriesOfStudy(fieldToSet(values[fields.get("countriesOfStudy")]))
+                        .build();
             }
 
             @NotNull
@@ -117,9 +125,12 @@ public final class ActionableFileUtil {
         return new StringJoiner(FIELD_DELIMITER).add(event.source().toString())
                 .add(event.sourceEvent())
                 .add(setToField(event.sourceUrls()))
-                .add(event.treatment().name())
-                .add(setToField(event.treatment().sourceRelevantTreatmentApproaches()))
-                .add(setToField(event.treatment().relevantTreatmentApproaches()))
+                .add(event.clinicalTrial() == null ? Strings.EMPTY : Objects.requireNonNull(event.clinicalTrial()).studyNctId())
+                .add(event.clinicalTrial() == null ? Strings.EMPTY : Objects.requireNonNull(event.clinicalTrial()).studyTitle())
+                .add(event.clinicalTrial() == null ? Strings.EMPTY : setToField(Objects.requireNonNull(event.clinicalTrial()).countriesOfStudy()))
+                .add(event.treatment() == null ? Strings.EMPTY : Objects.requireNonNull(event.treatment()).name())
+                .add(event.treatment() == null ? Strings.EMPTY : setToField(Objects.requireNonNull(event.treatment()).sourceRelevantTreatmentApproaches()))
+                .add(event.treatment() == null ? Strings.EMPTY : setToField(Objects.requireNonNull(event.treatment()).relevantTreatmentApproaches()))
                 .add(event.applicableCancerType().name())
                 .add(event.applicableCancerType().doid())
                 .add(cancerTypesToField(event.blacklistCancerTypes()))

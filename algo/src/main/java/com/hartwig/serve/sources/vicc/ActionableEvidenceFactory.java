@@ -12,12 +12,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.cancertype.CancerTypeConstants;
 import com.hartwig.serve.curation.DoidLookup;
-import com.hartwig.serve.datamodel.CancerType;
-import com.hartwig.serve.datamodel.EvidenceDirection;
-import com.hartwig.serve.datamodel.EvidenceLevel;
-import com.hartwig.serve.datamodel.ImmutableCancerType;
-import com.hartwig.serve.datamodel.ImmutableTreatment;
-import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.datamodel.*;
 import com.hartwig.serve.sources.vicc.curation.DrugCurator;
 import com.hartwig.serve.sources.vicc.curation.EvidenceLevelCurator;
 import com.hartwig.serve.vicc.datamodel.EvidenceInfo;
@@ -126,7 +121,9 @@ class ActionableEvidenceFactory {
                     }
 
                     for (List<String> drugList : drugLists) {
-                        actionableEvidences.add(builder.treatment(ImmutableTreatment.builder().name(formatDrugList(drugList)).build())
+                        actionableEvidences.add(builder
+                                .clinicalTrial(null)
+                                .treatment(ImmutableTreatment.builder().name(formatDrugList(drugList)).build())
                                 .applicableCancerType(ImmutableCancerType.builder().name(cancerType).doid(doid).build())
                                 .blacklistCancerTypes(blacklistedCancerTypes)
                                 .build());

@@ -1,15 +1,14 @@
 package com.hartwig.serve.datamodel;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.List;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
+
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 public class ActionableEventComparatorTest {
 
@@ -35,10 +34,12 @@ public class ActionableEventComparatorTest {
 
     @NotNull
     private static ActionableEvent create(@NotNull Knowledgebase source, @NotNull String treatment, @NotNull String applicableCancerType,
-            @NotNull EvidenceLevel level, @NotNull EvidenceDirection direction) {
+                                          @NotNull EvidenceLevel level, @NotNull EvidenceDirection direction) {
         return DatamodelTestFactory.createActionableEvent(source,
                 Strings.EMPTY,
                 Sets.newHashSet(),
+                DatamodelTestFactory.clinicalTrialBuilderBuilder().studyNctId("NCT1").studyTitle("study")
+                        .countriesOfStudy(Sets.newHashSet("The Netherlands")).build(),
                 DatamodelTestFactory.treatmentBuilder().name(treatment).build(),
                 DatamodelTestFactory.cancerTypeBuilder().name(applicableCancerType).build(),
                 Sets.newHashSet(),

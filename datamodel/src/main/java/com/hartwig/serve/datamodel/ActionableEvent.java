@@ -3,6 +3,7 @@ package com.hartwig.serve.datamodel;
 import java.util.Set;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public interface ActionableEvent {
 
@@ -15,7 +16,10 @@ public interface ActionableEvent {
     @NotNull
     Set<String> sourceUrls();
 
-    @NotNull
+    @Nullable
+    ClinicalTrial clinicalTrial();
+
+    @Nullable
     Treatment treatment();
 
     @NotNull

@@ -28,10 +28,6 @@
         <maven.jar.plugin.version>2.4</maven.jar.plugin.version>
         <maven.exec.plugin.version>1.6.0</maven.exec.plugin.version>
 
-        <ckb-importer.version>2.2.0</ckb-importer.version>
-        <iclusion-importer.version>1.6</iclusion-importer.version>
-        <vicc-importer.version>1.2</vicc-importer.version>
-
         <commons.cli.version>1.3.1</commons.cli.version>
         <immutables.version>2.5.5</immutables.version>
         <htsjdk.version>2.23.0</htsjdk.version>
@@ -119,29 +115,28 @@
             <dependency>
                 <groupId>com.hartwig.serve</groupId>
                 <artifactId>common</artifactId>
-                <version>local-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.hartwig.serve</groupId>
                 <artifactId>datamodel</artifactId>
-                <version>local-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.hartwig.serve</groupId>
                 <artifactId>ckb-importer</artifactId>
-                <version>${ckb-importer.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.hartwig.serve</groupId>
                 <artifactId>iclusion-importer</artifactId>
-                <version>${iclusion-importer.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.hartwig.serve</groupId>
                 <artifactId>vicc-importer</artifactId>
-                <version>${vicc-importer.version}</version>
+                <version>${project.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>com.github.samtools</groupId>
                 <artifactId>htsjdk</artifactId>

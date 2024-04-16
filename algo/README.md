@@ -51,8 +51,8 @@ they are compliant with the usage of the data itself.
 SERVE generates clinical evidence in the following datamodel:
 
 - Treatment (name of trial or drug(s))
-- Relevant treatment approaches of the knowledgebase (the drug classes of the treatment related to the event)
-- Curated treatment approaches of the knowledgebase (the curated drug classes of the treatment related to the event)
+    - Relevant treatment approach underlying the treatment.
+    - Curated treatment approach underlying the treatment.
 - Cancer type (annotated with DOID) for which the treatment is considered on-label.
 - Blacklist cancer types (annotated with DOID) that should be children of the main cancer type and are used for blacklisting
   specific types of the main cancer type.
@@ -282,7 +282,10 @@ Finally, cancer types for which no DOIDs have been specified get a DOID assigned
 ### CKB FLEX Curation
 
 For CKB FLEX curation and filtering is predominantly configurable rather than fixed in SERVE. The only fixed curation done in SERVE
-is mapping evidence for tumor characteristics (such as MSI or High TMB) to actual characteristics since CKB FLEX models this as "genes". SERVE configures every trial to B-level evidence with `RESPONSIVE` direction. SERVE only considers trials with one or more molecular inclusion criterion.
+is mapping evidence for tumor characteristics (such as MSI or High TMB) to actual characteristics since CKB FLEX models this as "genes".
+SERVE configures every trial to B-level evidence with `RESPONSIVE` direction. SERVE only considers trials with one or more molecular
+inclusion criterion. Furthermore, SERVE only considers Dutch, German and Belgium trials with a potentially open recruitment status ("
+Recruiting", "Not yet recruiting", or "Unknown status") and required requirement type ("partial - required" and "required").
 
 The following filters can be configured for CKB FLEX, along with an example of how this is used by Hartwig:
 
@@ -297,7 +300,7 @@ The following filters can be configured for CKB FLEX, along with an example of h
 
 ## Relevant treatment approaches of the evidence
 
-External knowledgebases can be annotated evidence (treatment/event) with the relevant treatment approach. For making this usable
+External knowledgebases can annotate evidence for a treatment with a treatment approach. For making this usable
 downstream, this is curated for harmonize the knowledge. The following filters can be configured:
 
 | Filter                                       | Description                                                                                             |
@@ -373,7 +376,11 @@ Within the Hartwig pipeline, SERVE output is used in the following manner:
 
 ## Version History and Download Links
 
-- Upcoming
+- [3.2.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v3.2.0)
+    - FGFR2 del events are configured as being interpreted as full exonic deletions. 
+- [3.1.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v3.1.0)
+    - Remove "Active, not recruiting" and add "Not yet recruiting" from/to potentially open recruitment status list
+- [3.0.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v3.0.0)
     - New source `CKB_TRIAL` which interprets the trial data from CKB flex
     - Existing source `CKB` has been renamed to `CKB_EVIDENCE`
 - [2.5.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v2.5.0)

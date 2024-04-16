@@ -24,9 +24,9 @@ class ActionableTrialFactory implements ActionableEntryFactory {
 
     static {
         POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("recruiting");
-        POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("active, not recruiting");
+        POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("not yet recruiting");
         POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("unknown status");
-        POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("active_not_recruiting");
+        POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("not_yet_recruiting");
 
         COUNTRIES_TO_INCLUDE.add("netherlands");
         COUNTRIES_TO_INCLUDE.add("belgium");

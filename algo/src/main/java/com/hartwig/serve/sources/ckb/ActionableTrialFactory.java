@@ -61,7 +61,7 @@ class ActionableTrialFactory implements ActionableEntryFactory {
                     for (Indication indication : trial.indications()) {
                         CancerTypeExtraction cancerTypeExtraction = ActionableFunctions.extractCancerTypeDetails(indication);
                         if (cancerTypeExtraction != null) {
-                            if (!blacklistStudy.isBlacklistStudy(trial.title(), therapyName, cancerTypeExtraction.applicableCancerType().name(),
+                            if (!blacklistStudy.isBlacklistStudy(trial.nctId(), therapyName, cancerTypeExtraction.applicableCancerType().name(),
                                     sourceGene, sourceEvent)) {
                                 actionableTrials.add(ImmutableActionableEntry.builder()
                                         .source(Knowledgebase.CKB_TRIAL)

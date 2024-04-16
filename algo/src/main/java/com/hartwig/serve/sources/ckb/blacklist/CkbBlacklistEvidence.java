@@ -51,69 +51,95 @@ public class CkbBlacklistEvidence {
                            @NotNull String event, @NotNull CkbBlacklistEvidenceEntry blacklistEvidenceEntry) {
         switch (blacklistEvidenceEntry.ckbBlacklistEvidenceReason()) {
             case ALL_EVIDENCE_BASED_ON_GENE: {
+                String blacklistEvidenceGene = blacklistEvidenceEntry.gene();
+                assert blacklistEvidenceGene != null;
                 if (blacklistEvidenceEntry.level() == null) {
-                    return blacklistEvidenceEntry.gene().equals(sourceGene);
+                    return blacklistEvidenceGene.equals(sourceGene);
                 } else {
-                    return blacklistEvidenceEntry.gene().equals(sourceGene)
+                    return blacklistEvidenceGene.equals(sourceGene)
                             && blacklistEvidenceEntry.level() == level;
                 }
             }
 
             case ALL_EVIDENCE_BASED_ON_GENE_AND_EVENT: {
+                String blacklistEvidenceGene = blacklistEvidenceEntry.gene();
+                String blacklistEvidenceEvent = blacklistEvidenceEntry.event();
+                assert blacklistEvidenceGene != null;
+                assert blacklistEvidenceEvent != null;
                 if (blacklistEvidenceEntry.level() == null) {
-                    return blacklistEvidenceEntry.gene().equals(sourceGene)
-                            && blacklistEvidenceEntry.event().equals(event);
+                    return blacklistEvidenceGene.equals(sourceGene)
+                            && blacklistEvidenceEvent.equals(event);
                 } else {
-                    return blacklistEvidenceEntry.gene().equals(sourceGene)
-                            && blacklistEvidenceEntry.event().equals(event)
+                    return blacklistEvidenceGene.equals(sourceGene)
+                            && blacklistEvidenceEvent.equals(event)
                             && blacklistEvidenceEntry.level() == level;
                 }
             }
 
             case EVIDENCE_BASED_ON_THERAPY: {
+                String blacklistEvidenceTherapy = blacklistEvidenceEntry.therapy();
+                assert blacklistEvidenceTherapy != null;
                 if (blacklistEvidenceEntry.level() == null) {
-                    return blacklistEvidenceEntry.therapy().equals(therapyName);
+                    return blacklistEvidenceTherapy.equals(therapyName);
                 } else {
-                    return blacklistEvidenceEntry.therapy().equals(therapyName)
+                    return blacklistEvidenceTherapy.equals(therapyName)
                             && blacklistEvidenceEntry.level() == level;
                 }
             }
 
             case EVIDENCE_ON_THERAPY_AND_CANCER_TYPE: {
+                String blacklistEvidenceTherapy = blacklistEvidenceEntry.therapy();
+                String blacklistEvidenceCancerType = blacklistEvidenceEntry.cancerType();
+                assert blacklistEvidenceTherapy != null;
+                assert blacklistEvidenceCancerType != null;
                 if (blacklistEvidenceEntry.level() == null) {
-                    return blacklistEvidenceEntry.therapy().equals(therapyName)
-                            && blacklistEvidenceEntry.cancerType().equals(cancerType);
+                    return blacklistEvidenceTherapy.equals(therapyName)
+                            && blacklistEvidenceCancerType.equals(cancerType);
                 } else {
-                    return blacklistEvidenceEntry.therapy().equals(therapyName)
-                            && blacklistEvidenceEntry.cancerType().equals(cancerType)
+                    return blacklistEvidenceTherapy.equals(therapyName)
+                            && blacklistEvidenceCancerType.equals(cancerType)
                             && blacklistEvidenceEntry.level() == level;
                 }
             }
 
             case EVIDENCE_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE: {
+                String blacklistEvidenceTherapy = blacklistEvidenceEntry.therapy();
+                String blacklistEvidenceCancerType = blacklistEvidenceEntry.cancerType();
+                String blacklistEvidenceGene = blacklistEvidenceEntry.gene();
+                assert blacklistEvidenceTherapy != null;
+                assert blacklistEvidenceCancerType != null;
+                assert blacklistEvidenceGene != null;
                 if (blacklistEvidenceEntry.level() == null) {
-                    return blacklistEvidenceEntry.therapy().equals(therapyName)
-                            && blacklistEvidenceEntry.cancerType().equals(cancerType)
-                            && blacklistEvidenceEntry.gene().equals(sourceGene);
+                    return blacklistEvidenceTherapy.equals(therapyName)
+                            && blacklistEvidenceCancerType.equals(cancerType)
+                            && blacklistEvidenceGene.equals(sourceGene);
                 } else {
-                    return blacklistEvidenceEntry.therapy().equals(therapyName)
-                            && blacklistEvidenceEntry.cancerType().equals(cancerType)
-                            && blacklistEvidenceEntry.gene().equals(sourceGene)
+                    return blacklistEvidenceTherapy.equals(therapyName)
+                            && blacklistEvidenceCancerType.equals(cancerType)
+                            && blacklistEvidenceGene.equals(sourceGene)
                             && blacklistEvidenceEntry.level() == level;
                 }
             }
 
             case EVIDENCE_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE_AND_EVENT: {
+                String blacklistEvidenceTherapy = blacklistEvidenceEntry.therapy();
+                String blacklistEvidenceCancerType = blacklistEvidenceEntry.cancerType();
+                String blacklistEvidenceGene = blacklistEvidenceEntry.gene();
+                String blacklistEvidenceEvent = blacklistEvidenceEntry.event();
+                assert blacklistEvidenceGene != null;
+                assert blacklistEvidenceTherapy != null;
+                assert blacklistEvidenceCancerType != null;
+                assert blacklistEvidenceEvent != null;
                 if (blacklistEvidenceEntry.level() == null) {
-                    return blacklistEvidenceEntry.therapy().equals(therapyName)
-                            && blacklistEvidenceEntry.cancerType().equals(cancerType)
-                            && blacklistEvidenceEntry.gene().equals(sourceGene)
-                            && blacklistEvidenceEntry.event().equals(event);
+                    return blacklistEvidenceTherapy.equals(therapyName)
+                            && blacklistEvidenceCancerType.equals(cancerType)
+                            && blacklistEvidenceGene.equals(sourceGene)
+                            && blacklistEvidenceEvent.equals(event);
                 } else {
-                    return blacklistEvidenceEntry.therapy().equals(therapyName)
-                            && blacklistEvidenceEntry.cancerType().equals(cancerType)
-                            && blacklistEvidenceEntry.gene().equals(sourceGene)
-                            && blacklistEvidenceEntry.event().equals(event)
+                    return blacklistEvidenceTherapy.equals(therapyName)
+                            && blacklistEvidenceCancerType.equals(cancerType)
+                            && blacklistEvidenceGene.equals(sourceGene)
+                            && blacklistEvidenceEvent.equals(event)
                             && blacklistEvidenceEntry.level() == level;
                 }
             }

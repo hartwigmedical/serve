@@ -155,7 +155,7 @@ public class ServeAlgo {
         TreatmentApproachCurator curator = new TreatmentApproachCurator(treatmentApproachMap);
 
         List<CkbBlacklistEvidenceEntry> ckbBlacklistEvidenceEntries = CkbBlacklistEvidenceFile.read(ckbBlacklistEvidenceTsv);
-        LOGGER.info(" Read {} filter entries", ckbBlacklistEvidenceEntries.size());
+        LOGGER.info(" Read {} blacklisting evidence entries", ckbBlacklistEvidenceEntries.size());
         CkbBlacklistEvidence blacklistEvidence = new CkbBlacklistEvidence(ckbBlacklistEvidenceEntries);
 
         CkbExtractor extractor = CkbExtractorFactory.createEvidenceExtractor(config, refGenomeResource, curator, blacklistEvidence);
@@ -177,7 +177,7 @@ public class ServeAlgo {
         RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.CKB_TRIAL);
 
         List<CkbBlacklistStudyEntry> ckbBlacklistStudyEntriesEntries = CkbBlacklistStudyFile.read(ckbBlacklistStudyTsv);
-        LOGGER.info(" Read {} filter entries", ckbBlacklistStudyEntriesEntries.size());
+        LOGGER.info(" Read {} blacklisting studies entries", ckbBlacklistStudyEntriesEntries.size());
 
         CkbBlacklistStudy blacklistStudy = new CkbBlacklistStudy(ckbBlacklistStudyEntriesEntries);
 

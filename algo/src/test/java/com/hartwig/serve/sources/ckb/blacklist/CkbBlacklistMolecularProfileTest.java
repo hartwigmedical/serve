@@ -18,7 +18,7 @@ public class CkbBlacklistMolecularProfileTest{
         CkbEntry entry = CkbTestFactory.createEntryWithVariant("filter benign me!");
         assertTrue(filter.run(Lists.newArrayList(entry)).isEmpty());
 
-        filter.reportUnusedFilterEntries();
+        filter.reportUnusedBlacklistEntries();
     }
 
     @Test
@@ -26,12 +26,12 @@ public class CkbBlacklistMolecularProfileTest{
         CkbBlacklistMolecularProfile fullFilter = new CkbBlacklistMolecularProfile(createFilterEntryList(CkbBlacklistMolecularProfileType.FILTER_ALL_EVIDENCE_ON_GENE, "gene"));
         CkbEntry filterEntry = CkbTestFactory.createEntryWithGene("gene");
         assertTrue(fullFilter.run(Lists.newArrayList(filterEntry)).isEmpty());
-        fullFilter.reportUnusedFilterEntries();
+        fullFilter.reportUnusedBlacklistEntries();
 
         CkbBlacklistMolecularProfile exonFilter = new CkbBlacklistMolecularProfile(createFilterEntryList(CkbBlacklistMolecularProfileType.FILTER_EVIDENCE_FOR_EXONS_ON_GENE, "gene"));
         CkbEntry filterExonEntry = CkbTestFactory.createEntryWithGeneAndVariant("gene", "exon 1");
         assertTrue(exonFilter.run(Lists.newArrayList(filterExonEntry)).isEmpty());
-        exonFilter.reportUnusedFilterEntries();
+        exonFilter.reportUnusedBlacklistEntries();
     }
 
     @Test

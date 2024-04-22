@@ -10,12 +10,12 @@ import static org.junit.Assert.assertEquals;
 
 public class CkbBlacklistMolecularProfileFileTest  {
 
-    private static final String TEST_CKB_FILTER_FILE = Resources.getResource("ckb_filter/ckb_filters.tsv").getPath();
+    private static final String TEST_CKB_BLACKLIST_MOLECULAR_PROFILE_FILE = Resources.getResource("ckb_blacklist/ckb_blacklist_molecular_profile.tsv").getPath();
 
     @Test
     public void canReadCkbFilterTsv() throws IOException {
-        List<CkbBlacklistMolecularProfileEntry> filterEntries = CkbBlacklistMolecularProfileFile.read(TEST_CKB_FILTER_FILE);
-        assertEquals(2, filterEntries.size());
+        List<CkbBlacklistMolecularProfileEntry> blacklistMolecularProfileEntries = CkbBlacklistMolecularProfileFile.read(TEST_CKB_BLACKLIST_MOLECULAR_PROFILE_FILE);
+        assertEquals(2, blacklistMolecularProfileEntries.size());
     }
 
 }

@@ -10,7 +10,7 @@ import static org.junit.Assert.assertEquals;
 
 public class CkbBlacklistEvidenceFileTest {
 
-    private static final String TEST_CKB_BLACKLIST_EVIDENCE_FILE = Resources.getResource("ckb_filter/ckb_blacklist_evidence.tsv").getPath();
+    private static final String TEST_CKB_BLACKLIST_EVIDENCE_FILE = Resources.getResource("ckb_blacklist/ckb_blacklist_evidence.tsv").getPath();
 
     @Test
     public void canReadCkbBlacklistEvidenceTsv() throws IOException {

@@ -75,11 +75,11 @@ public class ServeAlgo {
         }
 
         if (config.useCkbEvidence()) {
-            extractions.add(extractCkbEvidenceKnowledge(config.ckbDir(), config.ckbFilterTsv(), config.ckbDrugCurationTsv(), config.ckbBlacklistEvidenceTsv()));
+            extractions.add(extractCkbEvidenceKnowledge(config.ckbDir(), config.ckbBlacklistMolecularProfileTsv(), config.ckbDrugCurationTsv(), config.ckbBlacklistEvidenceTsv()));
         }
 
         if (config.useCkbTrials()) {
-            extractions.add(extractCkbTrialKnowledge(config.ckbDir(), config.ckbFilterTsv(), config.ckbBlacklistStudyTsv()));
+            extractions.add(extractCkbTrialKnowledge(config.ckbDir(), config.ckbBlacklistMolecularProfileTsv(), config.ckbBlacklistStudyTsv()));
         }
 
         if (config.useDocm()) {
@@ -142,9 +142,9 @@ public class ServeAlgo {
     }
 
     @NotNull
-    private ExtractionResult extractCkbEvidenceKnowledge(@NotNull String ckbDir, @NotNull String ckbFilterTsv,
+    private ExtractionResult extractCkbEvidenceKnowledge(@NotNull String ckbDir, @NotNull String ckbBlacklistMolecularProfileTsv,
                                                          @NotNull String ckbDrugCurationTsv, @NotNull String ckbBlacklistEvidenceTsv) throws IOException {
-        List<CkbEntry> ckbEntries = CkbReader.readAndCurate(ckbDir, ckbFilterTsv);
+        List<CkbEntry> ckbEntries = CkbReader.readAndCurate(ckbDir, ckbBlacklistMolecularProfileTsv);
 
         EventClassifierConfig config = CkbClassificationConfig.build();
         RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.CKB_EVIDENCE);
@@ -170,8 +170,8 @@ public class ServeAlgo {
     }
 
     @NotNull
-    private ExtractionResult extractCkbTrialKnowledge(@NotNull String ckbDir, @NotNull String ckbFilterTsv, @NotNull String ckbBlacklistStudyTsv) throws IOException {
-        List<CkbEntry> ckbEntries = CkbReader.readAndCurate(ckbDir, ckbFilterTsv);
+    private ExtractionResult extractCkbTrialKnowledge(@NotNull String ckbDir, @NotNull String ckbBlacklistMolecularProfileTsv, @NotNull String ckbBlacklistStudyTsv) throws IOException {
+        List<CkbEntry> ckbEntries = CkbReader.readAndCurate(ckbDir, ckbBlacklistMolecularProfileTsv);
 
         EventClassifierConfig config = CkbClassificationConfig.build();
         RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.CKB_TRIAL);

@@ -21,16 +21,16 @@ public final class CkbReader {
     }
 
     @NotNull
-    public static List<CkbEntry> readAndCurate(@NotNull String ckbDir, @NotNull String ckbFilterTsv) throws IOException {
+    public static List<CkbEntry> readAndCurate(@NotNull String ckbDir, @NotNull String ckbBlacklistMolecularProfileTsv) throws IOException {
         LOGGER.info("Reading CKB database from {}", ckbDir);
         List<CkbEntry> ckbEntries = CkbEntryReader.read(ckbDir);
         LOGGER.info(" Read {} entries", ckbEntries.size());
 
-        LOGGER.info("Reading CBK filter entries from {}", ckbFilterTsv);
-        List<CkbBlacklistMolecularProfileEntry> ckbFilterEntries = CkbBlacklistMolecularProfileFile.read(ckbFilterTsv);
-        LOGGER.info(" Read {} filter entries", ckbFilterEntries.size());
+        LOGGER.info("Reading CBK blacklist molecular profile entries from {}", ckbBlacklistMolecularProfileTsv);
+        List<CkbBlacklistMolecularProfileEntry> ckbBlacklistMolecularProfileEntries = CkbBlacklistMolecularProfileFile.read(ckbBlacklistMolecularProfileTsv);
+        LOGGER.info(" Read {} blacklist molecular profile entries entries", ckbBlacklistMolecularProfileEntries.size());
 
-        return filter(curate(ckbEntries), ckbFilterEntries);
+        return blacklist(curate(ckbEntries), ckbBlacklistMolecularProfileEntries);
     }
 
     @NotNull
@@ -46,17 +46,17 @@ public final class CkbReader {
     }
 
     @NotNull
-    private static List<CkbEntry> filter(@NotNull List<CkbEntry> entries, @NotNull List<CkbBlacklistMolecularProfileEntry> ckbFilterEntries) {
-        CkbBlacklistMolecularProfile filter = new CkbBlacklistMolecularProfile(ckbFilterEntries);
+    private static List<CkbEntry> blacklist(@NotNull List<CkbEntry> entries, @NotNull List<CkbBlacklistMolecularProfileEntry> ckbFilterEntries) {
+        CkbBlacklistMolecularProfile blacklist = new CkbBlacklistMolecularProfile(ckbFilterEntries);
 
-        LOGGER.info("Filtering {} CKB entries", entries.size());
-        List<CkbEntry> filteredEntries = filter.run(entries);
-        LOGGER.info(" Finished CKB filtering. {} entries remaining, {} entries have been removed",
-                filteredEntries.size(),
-                entries.size() - filteredEntries.size());
+        LOGGER.info("Blacklisting {} CKB entries", entries.size());
+        List<CkbEntry> blacklistedEntries = blacklist.run(entries);
+        LOGGER.info(" Finished CKB blacklisting. {} entries remaining, {} entries have been removed",
+                blacklistedEntries.size(),
+                entries.size() - blacklistedEntries.size());
 
-        filter.reportUnusedFilterEntries();
+        blacklist.reportUnusedBlacklistEntries();
 
-        return filteredEntries;
+        return blacklistedEntries;
     }
 }

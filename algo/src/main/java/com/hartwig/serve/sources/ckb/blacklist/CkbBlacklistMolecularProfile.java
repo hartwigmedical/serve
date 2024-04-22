@@ -57,16 +57,16 @@ public class CkbBlacklistMolecularProfile {
         return filteredCkbEntries;
     }
 
-    public void reportUnusedFilterEntries() {
+    public void reportUnusedBlacklistEntries() {
         int unusedFilterEntryCount = 0;
         for (CkbBlacklistMolecularProfileEntry entry : filters) {
             if (!usedFilters.contains(entry)) {
                 unusedFilterEntryCount++;
-                LOGGER.warn(" Filter entry '{}' hasn't been used for CKB filtering", entry);
+                LOGGER.warn(" Blacklist molecular profile entry '{}' hasn't been used for CKB blacklisting", entry);
             }
         }
 
-        LOGGER.debug(" Found {} unused filter entries during CKB filtering", unusedFilterEntryCount);
+        LOGGER.debug(" Found {} unused blacklisting entries during CKB blacklisting", unusedFilterEntryCount);
     }
 
     private boolean include(@NotNull EventType type, @NotNull Variant variant) {

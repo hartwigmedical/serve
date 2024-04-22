@@ -35,7 +35,7 @@ public interface ServeConfig {
     String USE_CKB_EVIDENCE = "use_ckb_evidence";
     String USE_CKB_TRIALS = "use_ckb_trials";
     String CKB_DIR = "ckb_dir";
-    String CKB_FILTER_TSV = "ckb_filter_tsv";
+    String CKB_BLACKLIST_MOLECULAR_PROFILE_TSV = "ckb_blacklist_molecular_profile_tsv";
     String CKB_BLACKLIST_STUDY_TSV = "ckb_blacklist_studies_tsv";
     String CKB_BLACKLIST_EVIDENCE_TSV = "ckb_blacklist_evidence_tsv";
     String CKB_DRUG_CURATION_TSV = "ckb_drug_curation_tsv";
@@ -83,7 +83,7 @@ public interface ServeConfig {
         options.addOption(USE_CKB_EVIDENCE, false, "If provided, evidence from CKB FLEX will be used as a source in SERVE");
         options.addOption(USE_CKB_TRIALS, false, "If provided, clinical trials from CKB FLEX will be used as a source in SERVE");
         options.addOption(CKB_DIR, true, "Path to the CKB FLEX json input dir");
-        options.addOption(CKB_FILTER_TSV, true, "Path to the CKB filter tsv");
+        options.addOption(CKB_BLACKLIST_MOLECULAR_PROFILE_TSV, true, "Path to the CKB blacklist molecular profile tsv");
         options.addOption(CKB_BLACKLIST_STUDY_TSV, true, "Path to the CKB blacklist studies tsv");
         options.addOption(CKB_BLACKLIST_EVIDENCE_TSV, true, "Path to the CKB blacklist evidence tsv");
         options.addOption(CKB_DRUG_CURATION_TSV, true, "Path to the CKB drug curation tsv");
@@ -142,7 +142,7 @@ public interface ServeConfig {
     String ckbDir();
 
     @NotNull
-    String ckbFilterTsv();
+    String ckbBlacklistMolecularProfileTsv();
     @NotNull
     String ckbBlacklistStudyTsv();
     @NotNull
@@ -236,7 +236,7 @@ public interface ServeConfig {
                 .useCkbEvidence(useCkbEvidence)
                 .useCkbTrials(useCkbTrials)
                 .ckbDir(useCkbEvidence || useCkbTrials ? nonOptionalDir(cmd, CKB_DIR) : NOT_APPLICABLE)
-                .ckbFilterTsv(useCkbEvidence || useCkbTrials ? nonOptionalFile(cmd, CKB_FILTER_TSV) : NOT_APPLICABLE)
+                .ckbBlacklistMolecularProfileTsv(useCkbEvidence || useCkbTrials ? nonOptionalFile(cmd, CKB_BLACKLIST_MOLECULAR_PROFILE_TSV) : NOT_APPLICABLE)
                 .ckbBlacklistStudyTsv(useCkbTrials ? nonOptionalFile(cmd, CKB_BLACKLIST_STUDY_TSV) : NOT_APPLICABLE)
                 .ckbBlacklistEvidenceTsv(useCkbTrials ? nonOptionalFile(cmd, CKB_BLACKLIST_EVIDENCE_TSV) : NOT_APPLICABLE)
                 .ckbDrugCurationTsv(useCkbEvidence ? nonOptionalFile(cmd, CKB_DRUG_CURATION_TSV) : NOT_APPLICABLE)

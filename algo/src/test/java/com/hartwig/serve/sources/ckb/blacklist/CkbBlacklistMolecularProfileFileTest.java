@@ -1,4 +1,4 @@
-package com.hartwig.serve.sources.ckb.filter;
+package com.hartwig.serve.sources.ckb.blacklist;
 
 import com.google.common.io.Resources;
 import org.junit.Test;

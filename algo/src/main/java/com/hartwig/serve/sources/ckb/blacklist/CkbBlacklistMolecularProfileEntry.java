@@ -1,4 +1,4 @@
-package com.hartwig.serve.sources.ckb.filter;
+package com.hartwig.serve.sources.ckb.blacklist;
 
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;

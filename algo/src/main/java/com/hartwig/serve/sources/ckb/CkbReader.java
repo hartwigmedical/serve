@@ -3,9 +3,9 @@ package com.hartwig.serve.sources.ckb;
 import com.hartwig.serve.ckb.CkbEntryReader;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.sources.ckb.curation.CkbCurator;
-import com.hartwig.serve.sources.ckb.filter.CkbFilter;
-import com.hartwig.serve.sources.ckb.filter.CkbFilterEntry;
-import com.hartwig.serve.sources.ckb.filter.CkbFilterFile;
+import com.hartwig.serve.sources.ckb.filter.CkbBlacklistMolecularProfile;
+import com.hartwig.serve.sources.ckb.filter.CkbBlacklistMolecularProfileEntry;
+import com.hartwig.serve.sources.ckb.filter.CkbBlacklistMolecularProfileFile;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +27,7 @@ public final class CkbReader {
         LOGGER.info(" Read {} entries", ckbEntries.size());
 
         LOGGER.info("Reading CBK filter entries from {}", ckbFilterTsv);
-        List<CkbFilterEntry> ckbFilterEntries = CkbFilterFile.read(ckbFilterTsv);
+        List<CkbBlacklistMolecularProfileEntry> ckbFilterEntries = CkbBlacklistMolecularProfileFile.read(ckbFilterTsv);
         LOGGER.info(" Read {} filter entries", ckbFilterEntries.size());
 
         return filter(curate(ckbEntries), ckbFilterEntries);
@@ -46,8 +46,8 @@ public final class CkbReader {
     }
 
     @NotNull
-    private static List<CkbEntry> filter(@NotNull List<CkbEntry> entries, @NotNull List<CkbFilterEntry> ckbFilterEntries) {
-        CkbFilter filter = new CkbFilter(ckbFilterEntries);
+    private static List<CkbEntry> filter(@NotNull List<CkbEntry> entries, @NotNull List<CkbBlacklistMolecularProfileEntry> ckbFilterEntries) {
+        CkbBlacklistMolecularProfile filter = new CkbBlacklistMolecularProfile(ckbFilterEntries);
 
         LOGGER.info("Filtering {} CKB entries", entries.size());
         List<CkbEntry> filteredEntries = filter.run(entries);

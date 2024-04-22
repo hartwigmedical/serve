@@ -1,21 +1,21 @@
 package com.hartwig.serve.sources.ckb.filter;
 
-import static org.junit.Assert.assertEquals;
+import com.google.common.io.Resources;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.util.List;
 
-import com.google.common.io.Resources;
+import static org.junit.Assert.assertEquals;
 
-import org.junit.Test;
-
-public class CkbFilterFileTest {
+public class CkbBlacklistMolecularProfileFileTest  {
 
     private static final String TEST_CKB_FILTER_FILE = Resources.getResource("ckb_filter/ckb_filters.tsv").getPath();
 
     @Test
     public void canReadCkbFilterTsv() throws IOException {
-        List<CkbFilterEntry> filterEntries = CkbFilterFile.read(TEST_CKB_FILTER_FILE);
+        List<CkbBlacklistMolecularProfileEntry> filterEntries = CkbBlacklistMolecularProfileFile.read(TEST_CKB_FILTER_FILE);
         assertEquals(2, filterEntries.size());
     }
+
 }

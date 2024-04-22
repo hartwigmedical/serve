@@ -15,16 +15,16 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
-public class CkbFilter {
+public class CkbBlacklistMolecularProfile {
 
-    private static final Logger LOGGER = LogManager.getLogger(CkbFilter.class);
+    private static final Logger LOGGER = LogManager.getLogger(CkbBlacklistMolecularProfile.class);
 
     @NotNull
-    private final List<CkbFilterEntry> filters;
+    private final List<CkbBlacklistMolecularProfileEntry> filters;
     @NotNull
-    private final Set<CkbFilterEntry> usedFilters = Sets.newHashSet();
+    private final Set<CkbBlacklistMolecularProfileEntry> usedFilters = Sets.newHashSet();
 
-    public CkbFilter(@NotNull final List<CkbFilterEntry> filters) {
+    public CkbBlacklistMolecularProfile(@NotNull final List<CkbBlacklistMolecularProfileEntry> filters) {
         this.filters = filters;
     }
 
@@ -59,7 +59,7 @@ public class CkbFilter {
 
     public void reportUnusedFilterEntries() {
         int unusedFilterEntryCount = 0;
-        for (CkbFilterEntry entry : filters) {
+        for (CkbBlacklistMolecularProfileEntry entry : filters) {
             if (!usedFilters.contains(entry)) {
                 unusedFilterEntryCount++;
                 LOGGER.warn(" Filter entry '{}' hasn't been used for CKB filtering", entry);
@@ -73,7 +73,7 @@ public class CkbFilter {
         String gene = CkbEventAndGeneExtractor.extractGene(variant);
         String event = CkbEventAndGeneExtractor.extractEvent(variant);
 
-        for (CkbFilterEntry filterEntry : filters) {
+        for (CkbBlacklistMolecularProfileEntry filterEntry : filters) {
             boolean filterMatches = isMatch(filterEntry, type, gene, event, variant.fullName());
             if (filterMatches) {
                 usedFilters.add(filterEntry);
@@ -84,8 +84,8 @@ public class CkbFilter {
         return true;
     }
 
-    private boolean isMatch(@NotNull CkbFilterEntry filterEntry, @NotNull EventType type, @NotNull String gene,
-            @NotNull String event, @NotNull String fullName) {
+    private boolean isMatch(@NotNull CkbBlacklistMolecularProfileEntry filterEntry, @NotNull EventType type, @NotNull String gene,
+                            @NotNull String event, @NotNull String fullName) {
         switch (filterEntry.type()) {
             case FILTER_EVENT_WITH_KEYWORD: {
                 return event.contains(filterEntry.value());

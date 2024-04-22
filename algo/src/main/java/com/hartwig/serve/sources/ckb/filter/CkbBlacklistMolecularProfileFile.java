@@ -8,23 +8,23 @@ import java.util.List;
 import org.apache.commons.compress.utils.Lists;
 import org.jetbrains.annotations.NotNull;
 
-public final class CkbFilterFile {
+public final class CkbBlacklistMolecularProfileFile {
 
     private static final String FIELD_DELIMITER = "\t";
 
-    private CkbFilterFile() {
+    private CkbBlacklistMolecularProfileFile() {
     }
 
     @NotNull
-    public static List<CkbFilterEntry> read(@NotNull String ckbFilterTsv) throws IOException {
+    public static List<CkbBlacklistMolecularProfileEntry> read(@NotNull String ckbFilterTsv) throws IOException {
         List<String> lines = Files.readAllLines(new File(ckbFilterTsv).toPath());
         // Skip header
         return fromLines(lines.subList(1, lines.size()));
     }
 
     @NotNull
-    private static List<CkbFilterEntry> fromLines(@NotNull List<String> lines) {
-        List<CkbFilterEntry> filterEntries = Lists.newArrayList();
+    private static List<CkbBlacklistMolecularProfileEntry> fromLines(@NotNull List<String> lines) {
+        List<CkbBlacklistMolecularProfileEntry> filterEntries = Lists.newArrayList();
         for (String line : lines) {
             filterEntries.add(fromLine(line));
         }
@@ -32,11 +32,11 @@ public final class CkbFilterFile {
     }
 
     @NotNull
-    private static CkbFilterEntry fromLine(@NotNull String line) {
+    private static CkbBlacklistMolecularProfileEntry fromLine(@NotNull String line) {
         String[] values = line.split(FIELD_DELIMITER);
 
-        return ImmutableCkbFilterEntry.builder()
-                .type(CkbFilterType.valueOf(values[0]))
+        return ImmutableCkbBlacklistMolecularProfileEntry.builder()
+                .type(CkbBlacklistMolecularProfileType.valueOf(values[0]))
                 .value(values[1])
                 .build();
     }

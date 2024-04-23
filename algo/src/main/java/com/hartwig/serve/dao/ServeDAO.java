@@ -1,5 +1,20 @@
 package com.hartwig.serve.dao;
 
+import static com.hartwig.serve.database.Tables.ACTIONABLECHARACTERISTIC;
+import static com.hartwig.serve.database.Tables.ACTIONABLECODON;
+import static com.hartwig.serve.database.Tables.ACTIONABLEEXON;
+import static com.hartwig.serve.database.Tables.ACTIONABLEFUSION;
+import static com.hartwig.serve.database.Tables.ACTIONABLEGENE;
+import static com.hartwig.serve.database.Tables.ACTIONABLEHLA;
+import static com.hartwig.serve.database.Tables.ACTIONABLEHOTSPOT;
+import static com.hartwig.serve.database.Tables.EVENTINTERPRETATION;
+import static com.hartwig.serve.database.Tables.KNOWNCODON;
+import static com.hartwig.serve.database.Tables.KNOWNCOPYNUMBER;
+import static com.hartwig.serve.database.Tables.KNOWNEXON;
+import static com.hartwig.serve.database.Tables.KNOWNFUSION;
+import static com.hartwig.serve.database.Tables.KNOWNGENE;
+import static com.hartwig.serve.database.Tables.KNOWNHOTSPOT;
+
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
@@ -21,7 +36,9 @@ import com.hartwig.serve.datamodel.gene.KnownGene;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
 import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.immuno.ActionableHLA;
-import com.hartwig.serve.datamodel.range.*;
+import com.hartwig.serve.datamodel.range.ActionableRange;
+import com.hartwig.serve.datamodel.range.KnownCodon;
+import com.hartwig.serve.datamodel.range.KnownExon;
 import com.hartwig.serve.extraction.events.EventInterpretation;
 
 import org.apache.logging.log4j.LogManager;
@@ -39,10 +56,10 @@ import org.jooq.InsertValuesStep4;
 import org.jooq.InsertValuesStep6;
 import org.jooq.InsertValuesStep7;
 
-import static com.hartwig.serve.database.Tables.*;
-
 @SuppressWarnings({ "unchecked", "ResultOfMethodCallIgnored" })
 public class ServeDAO {
+
+    // TODO (LS): Consider what to do in case of trial vs treatment!
 
     private static final Logger LOGGER = LogManager.getLogger(ServeDAO.class);
 

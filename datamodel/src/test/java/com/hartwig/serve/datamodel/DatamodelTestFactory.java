@@ -15,13 +15,16 @@ public final class DatamodelTestFactory {
 
     @NotNull
     public static ImmutableClinicalTrial.Builder clinicalTrialBuilderBuilder() {
-        return ImmutableClinicalTrial.builder().studyNctId(Strings.EMPTY).
-                studyTitle(Strings.EMPTY).countriesOfStudy(Sets.newHashSet());
+        return ImmutableClinicalTrial.builder()
+                .studyNctId("studyNctId")
+                .studyTitle("studyTitle")
+                .countriesOfStudy(Sets.newHashSet("countriesOfStudy"))
+                .therapyName("therapyName");
     }
 
     @NotNull
     public static ImmutableTreatment.Builder treatmentBuilder() {
-        return ImmutableTreatment.builder().name(Strings.EMPTY);
+        return ImmutableTreatment.builder().name("name");
     }
 
     @NotNull
@@ -30,12 +33,49 @@ public final class DatamodelTestFactory {
     }
 
     @NotNull
+    public static Treatment treatmentBuilder(ActionableEvent event) {
+        Treatment treatment = null;
+        if (event.intervention() instanceof Treatment) {
+            treatment = (Treatment) event.intervention();
+        }
+
+        if (treatment == null) {
+            throw new IllegalStateException("An actionable event has to contain treatment");
+        }
+        return treatment;
+    }
+
+    @NotNull
+    public static ClinicalTrial clinicalTrialBuilder(ActionableEvent event) {
+        ClinicalTrial clinicalTrial = null;
+        if (event.intervention() instanceof ClinicalTrial) {
+            clinicalTrial = (ClinicalTrial) event.intervention();
+        }
+
+        if (clinicalTrial == null) {
+            throw new IllegalStateException("An actionable event has to contain clinical trial");
+        }
+        return clinicalTrial;
+    }
+
+    @NotNull
+    public static Intervention interventionBuilder(boolean isTrial, boolean isTreatment) {
+        ClinicalTrial clinicalTrial = isTrial ? clinicalTrialBuilderBuilder().build() : null;
+        Treatment treatment = isTreatment ? treatmentBuilder().build() : null;
+
+        if ((clinicalTrial == null && treatment == null) || (clinicalTrial != null && treatment != null)) {
+            throw new IllegalStateException("An actionable event has to contain either treatment or clinical trial");
+        }
+        return isTrial ? clinicalTrial : treatment;
+    }
+
+    @NotNull
     public static ActionableEvent createTestActionableEvent() {
+
         return createActionableEvent(Knowledgebase.UNKNOWN,
                 Strings.EMPTY,
                 Sets.newHashSet(),
-                DatamodelTestFactory.clinicalTrialBuilderBuilder().build(),
-                DatamodelTestFactory.treatmentBuilder().build(),
+                interventionBuilder(false, true),
                 DatamodelTestFactory.cancerTypeBuilder().build(),
                 Sets.newHashSet(),
                 EvidenceLevel.A,
@@ -45,14 +85,13 @@ public final class DatamodelTestFactory {
 
     @NotNull
     public static ActionableEvent createActionableEvent(@NotNull Knowledgebase source, @NotNull String sourceEvent,
-            @NotNull Set<String> sourceUrls, @NotNull ClinicalTrial clinicalTrial, @NotNull Treatment treatment, @NotNull CancerType applicableCancerType,
+            @NotNull Set<String> sourceUrls, @NotNull Intervention intervention, @NotNull CancerType applicableCancerType,
             @NotNull Set<CancerType> blacklistCancerTypes, @NotNull EvidenceLevel level, @NotNull EvidenceDirection direction,
             @NotNull Set<String> evidenceUrls) {
         return new ActionableEventImpl(source,
                 sourceEvent,
                 sourceUrls,
-                clinicalTrial,
-                treatment,
+                intervention,
                 applicableCancerType,
                 blacklistCancerTypes,
                 level,
@@ -69,9 +108,7 @@ public final class DatamodelTestFactory {
         @NotNull
         private final Set<String> sourceUrls;
         @NotNull
-        private final ClinicalTrial clinicalTrial;
-        @NotNull
-        private final Treatment treatment;
+        private final Intervention intervention;
         @NotNull
         private final CancerType applicableCancerType;
         @NotNull
@@ -83,14 +120,14 @@ public final class DatamodelTestFactory {
         @NotNull
         private final Set<String> evidenceUrls;
 
+
         public ActionableEventImpl(@NotNull Knowledgebase source, @NotNull String sourceEvent, @NotNull Set<String> sourceUrls,
-                                   @NotNull ClinicalTrial clinicalTrial, @NotNull Treatment treatment, @NotNull CancerType applicableCancerType, @NotNull Set<CancerType> blacklistCancerTypes,
+                                   @NotNull Intervention intervention, @NotNull CancerType applicableCancerType, @NotNull Set<CancerType> blacklistCancerTypes,
                                    @NotNull EvidenceLevel level, @NotNull EvidenceDirection direction, @NotNull Set<String> evidenceUrls) {
             this.source = source;
             this.sourceEvent = sourceEvent;
             this.sourceUrls = sourceUrls;
-            this.clinicalTrial = clinicalTrial;
-            this.treatment = treatment;
+            this.intervention = intervention;
             this.applicableCancerType = applicableCancerType;
             this.blacklistCancerTypes = blacklistCancerTypes;
             this.level = level;
@@ -118,14 +155,8 @@ public final class DatamodelTestFactory {
 
         @NotNull
         @Override
-        public ClinicalTrial clinicalTrial() {
-            return clinicalTrial;
-        }
-
-        @NotNull
-        @Override
-        public Treatment treatment() {
-            return treatment;
+        public Intervention intervention() {
+            return intervention;
         }
 
         @NotNull
@@ -163,12 +194,12 @@ public final class DatamodelTestFactory {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             ActionableEventImpl that = (ActionableEventImpl) o;
-            return source == that.source && Objects.equals(sourceEvent, that.sourceEvent) && Objects.equals(sourceUrls, that.sourceUrls) && Objects.equals(clinicalTrial, that.clinicalTrial) && Objects.equals(treatment, that.treatment) && Objects.equals(applicableCancerType, that.applicableCancerType) && Objects.equals(blacklistCancerTypes, that.blacklistCancerTypes) && level == that.level && direction == that.direction && Objects.equals(evidenceUrls, that.evidenceUrls);
+            return source == that.source && Objects.equals(sourceEvent, that.sourceEvent) && Objects.equals(sourceUrls, that.sourceUrls) && Objects.equals(intervention, that.intervention) && Objects.equals(applicableCancerType, that.applicableCancerType) && Objects.equals(blacklistCancerTypes, that.blacklistCancerTypes) && level == that.level && direction == that.direction && Objects.equals(evidenceUrls, that.evidenceUrls);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(source, sourceEvent, sourceUrls, clinicalTrial, treatment, applicableCancerType, blacklistCancerTypes, level, direction, evidenceUrls);
+            return Objects.hash(source, sourceEvent, sourceUrls, intervention, applicableCancerType, blacklistCancerTypes, level, direction, evidenceUrls);
         }
 
         @Override
@@ -177,8 +208,7 @@ public final class DatamodelTestFactory {
                     "source=" + source +
                     ", sourceEvent='" + sourceEvent + '\'' +
                     ", sourceUrls=" + sourceUrls +
-                    ", clinicalTrial=" + clinicalTrial +
-                    ", treatment=" + treatment +
+                    ", intervention=" + intervention +
                     ", applicableCancerType=" + applicableCancerType +
                     ", blacklistCancerTypes=" + blacklistCancerTypes +
                     ", level=" + level +
@@ -186,5 +216,6 @@ public final class DatamodelTestFactory {
                     ", evidenceUrls=" + evidenceUrls +
                     '}';
         }
+
     }
 }

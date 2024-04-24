@@ -1,11 +1,5 @@
 package com.hartwig.serve.sources.vicc;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.StringJoiner;
-
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -15,19 +9,16 @@ import com.hartwig.serve.curation.DoidLookup;
 import com.hartwig.serve.datamodel.*;
 import com.hartwig.serve.sources.vicc.curation.DrugCurator;
 import com.hartwig.serve.sources.vicc.curation.EvidenceLevelCurator;
-import com.hartwig.serve.vicc.datamodel.EvidenceInfo;
-import com.hartwig.serve.vicc.datamodel.Phenotype;
-import com.hartwig.serve.vicc.datamodel.PhenotypeType;
-import com.hartwig.serve.vicc.datamodel.ViccEntry;
-import com.hartwig.serve.vicc.datamodel.ViccSource;
+import com.hartwig.serve.vicc.datamodel.*;
 import com.hartwig.serve.vicc.datamodel.civic.Civic;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.util.Strings;
 import org.immutables.value.internal.$guava$.annotations.$VisibleForTesting;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.*;
 
 class ActionableEvidenceFactory {
 
@@ -77,7 +68,7 @@ class ActionableEvidenceFactory {
     private final EvidenceLevelCurator evidenceLevelCurator;
 
     public ActionableEvidenceFactory(@NotNull final DoidLookup missingDoidLookup, @NotNull final DrugCurator drugCurator,
-            @NotNull final EvidenceLevelCurator evidenceLevelCurator) {
+                                     @NotNull final EvidenceLevelCurator evidenceLevelCurator) {
         this.missingDoidLookup = missingDoidLookup;
         this.drugCurator = drugCurator;
         this.evidenceLevelCurator = evidenceLevelCurator;
@@ -122,8 +113,7 @@ class ActionableEvidenceFactory {
 
                     for (List<String> drugList : drugLists) {
                         actionableEvidences.add(builder
-                                .clinicalTrial(null)
-                                .treatment(ImmutableTreatment.builder().name(formatDrugList(drugList)).build())
+                                .intervention(ImmutableTreatment.builder().name(formatDrugList(drugList)).build())
                                 .applicableCancerType(ImmutableCancerType.builder().name(cancerType).doid(doid).build())
                                 .blacklistCancerTypes(blacklistedCancerTypes)
                                 .build());

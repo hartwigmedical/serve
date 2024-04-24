@@ -1,8 +1,8 @@
 package com.hartwig.serve.datamodel;
 
-import java.util.Comparator;
-
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Comparator;
 
 public class ActionableEventComparator implements Comparator<ActionableEvent> {
 
@@ -23,11 +23,38 @@ public class ActionableEventComparator implements Comparator<ActionableEvent> {
             return directionCompare;
         }
 
-        // TODO (LS): Consider comparing intervention instead.
-//        int treatmentCompare = event1.treatment().name().compareTo(event2.treatment().name());
-//        if (treatmentCompare != 0) {
-//            return treatmentCompare;
-//        }
+        ClinicalTrial clinicalTrialEvent1 = null;
+        ClinicalTrial clinicalTrialEvent2 = null;
+        Treatment treatmentEvent1 = null;
+        Treatment treatmentEvent2 = null;
+
+        if (event1.intervention() instanceof ClinicalTrial) {
+            clinicalTrialEvent1 = (ClinicalTrial) event1.intervention();
+        }
+
+        if (event2.intervention() instanceof ClinicalTrial) {
+            clinicalTrialEvent2 = (ClinicalTrial) event2.intervention();
+        }
+        if (event1.intervention() instanceof Treatment) {
+            treatmentEvent1 = (Treatment) event1.intervention();
+        }
+        if (event2.intervention() instanceof Treatment) {
+            treatmentEvent2 = (Treatment) event2.intervention();
+        }
+
+        if (clinicalTrialEvent1 != null && clinicalTrialEvent2 != null) {
+            int trialCompare = clinicalTrialEvent1.studyNctId().compareTo(clinicalTrialEvent2.studyNctId());
+            if (trialCompare != 0) {
+                return trialCompare;
+            }
+        }
+
+        if (treatmentEvent1 != null && treatmentEvent2 != null) {
+            int treatmentCompare = treatmentEvent1.name().compareTo(treatmentEvent2.name());
+            if (treatmentCompare != 0) {
+                return treatmentCompare;
+            }
+        }
 
         return compareCancerTypes(event1.applicableCancerType(), event2.applicableCancerType());
     }

@@ -11,9 +11,7 @@ import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.ClinicalTrial;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.Location;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.VariantRequirementDetail;
-import com.hartwig.serve.datamodel.EvidenceDirection;
-import com.hartwig.serve.datamodel.EvidenceLevel;
-import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.datamodel.*;
 
 import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudy;
 import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudyTest;
@@ -42,15 +40,16 @@ public class ActionableTrialFactoryTest {
 
         assertEquals(1, trials.size());
         ActionableEntry trial = trials.iterator().next();
+        com.hartwig.serve.datamodel.ClinicalTrial clinicalTrial1 = DatamodelTestFactory.clinicalTrialBuilder(trial);
+
         assertEquals(Knowledgebase.CKB_TRIAL, trial.source());
         assertEquals("KRAS", trial.sourceEvent());
         assertEquals(Sets.newHashSet("https://ckbhome.jax.org/clinicalTrial/show?nctId=NCT0102"), trial.sourceUrls());
-
-        assertEquals("Phase I trial", trial.clinicalTrial().studyTitle());
+        assertEquals("Phase I trial", clinicalTrial1.studyTitle());
         assertEquals(EvidenceLevel.B, trial.level());
         assertEquals(EvidenceDirection.RESPONSIVE, trial.direction());
         assertEquals(Sets.newHashSet("https://clinicaltrials.gov/study/NCT0102"), trial.evidenceUrls());
-        assertEquals(Sets.newHashSet("Netherlands"), trial.clinicalTrial().countriesOfStudy());
+        assertEquals(Sets.newHashSet("Netherlands"), clinicalTrial1.countriesOfStudy());
     }
 
     @Test

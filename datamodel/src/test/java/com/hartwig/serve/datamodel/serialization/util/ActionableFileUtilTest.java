@@ -6,12 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
-import com.hartwig.serve.datamodel.ActionableEvent;
-import com.hartwig.serve.datamodel.CancerType;
-import com.hartwig.serve.datamodel.DatamodelTestFactory;
-import com.hartwig.serve.datamodel.EvidenceDirection;
-import com.hartwig.serve.datamodel.EvidenceLevel;
-import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.datamodel.*;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
@@ -23,15 +18,7 @@ public class ActionableFileUtilTest {
         ActionableEvent event = DatamodelTestFactory.createActionableEvent(Knowledgebase.VICC_CGI,
                 "source event",
                 Sets.newHashSet(),
-                DatamodelTestFactory.clinicalTrialBuilderBuilder()
-                        .studyNctId("NCT1")
-                        .studyTitle("study")
-                        .countriesOfStudy(Sets.newHashSet("The Netherlands")).build(),
-                DatamodelTestFactory.treatmentBuilder()
-                        .name("treatment")
-                        .addSourceRelevantTreatmentApproaches("drug classes")
-                        .addRelevantTreatmentApproaches("drug classes")
-                        .build(),
+                DatamodelTestFactory.interventionBuilder(false, true),
                 DatamodelTestFactory.cancerTypeBuilder().name("applicable name").doid("applicable doid").build(),
                 Sets.newHashSet(DatamodelTestFactory.cancerTypeBuilder().name("blacklist name").doid("blacklist doid").build()),
                 EvidenceLevel.C,
@@ -42,10 +29,13 @@ public class ActionableFileUtilTest {
         Map<String, Integer> fields = SerializationUtil.createFields(ActionableFileUtil.header(), ActionableFileUtil.FIELD_DELIMITER);
         ActionableEvent convertedEvent = ActionableFileUtil.fromLine(line.split(ActionableFileUtil.FIELD_DELIMITER), fields);
 
+        Treatment treatmentCovered = DatamodelTestFactory.treatmentBuilder(convertedEvent);
+        Treatment treatmentEvent = DatamodelTestFactory.treatmentBuilder(event);
+
         assertEquals(event.source(), convertedEvent.source());
         assertEquals(event.sourceEvent(), convertedEvent.sourceEvent());
         assertEquals(event.sourceUrls(), convertedEvent.sourceUrls());
-        assertEquals(event.treatment(), convertedEvent.treatment());
+        assertEquals(treatmentEvent, treatmentCovered);
         assertEquals(event.applicableCancerType(), convertedEvent.applicableCancerType());
         assertEquals(event.blacklistCancerTypes(), convertedEvent.blacklistCancerTypes());
         assertEquals(event.level(), convertedEvent.level());

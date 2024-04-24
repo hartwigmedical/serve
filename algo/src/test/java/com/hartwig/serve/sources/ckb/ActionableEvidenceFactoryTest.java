@@ -9,9 +9,7 @@ import java.util.Set;
 
 import com.google.common.collect.Sets;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
-import com.hartwig.serve.datamodel.EvidenceDirection;
-import com.hartwig.serve.datamodel.EvidenceLevel;
-import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.datamodel.*;
 import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistEvidence;
 import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistEvidenceTest;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurator;
@@ -42,9 +40,11 @@ public class ActionableEvidenceFactoryTest {
                 actionableEvidenceFactoryCharacteristic.create(entryCharacteristics, Strings.EMPTY, "-");
         assertEquals(1, entryCharacteristicsSet.size());
         ActionableEntry characteristics = entryCharacteristicsSet.iterator().next();
+        Treatment treatment = DatamodelTestFactory.treatmentBuilder(characteristics);
+
         assertEquals(Strings.EMPTY, characteristics.sourceEvent());
         assertEquals(Knowledgebase.CKB_EVIDENCE, characteristics.source());
-        assertEquals("AB", characteristics.treatment().name());
+        assertEquals("AB", treatment.name());
         assertEquals("AB", characteristics.applicableCancerType().name());
         assertEquals("162", characteristics.applicableCancerType().doid());
         assertEquals(Sets.newHashSet(), characteristics.blacklistCancerTypes());
@@ -67,9 +67,10 @@ public class ActionableEvidenceFactoryTest {
         Set<ActionableEntry> entryAmplificationSet = actionableEvidenceFactoryAmplification.create(entryAmplification, "KRAS", "KRAS");
         assertEquals(1, entryAmplificationSet.size());
         ActionableEntry amplification = entryAmplificationSet.iterator().next();
+        Treatment treatment = DatamodelTestFactory.treatmentBuilder(amplification);
         assertEquals("KRAS", amplification.sourceEvent());
         assertEquals(Knowledgebase.CKB_EVIDENCE, amplification.source());
-        assertEquals("AB", amplification.treatment().name());
+        assertEquals("AB",treatment.name());
         assertEquals("AB", amplification.applicableCancerType().name());
         assertEquals("163", amplification.applicableCancerType().doid());
         assertTrue(amplification.blacklistCancerTypes().isEmpty());
@@ -85,9 +86,10 @@ public class ActionableEvidenceFactoryTest {
         Set<ActionableEntry> entryHotspotSet = actionableEvidenceFactoryHotspot.create(entryHotspot, "BRAF", "BRAF");
         assertEquals(1, entryHotspotSet.size());
         ActionableEntry hotspot = entryHotspotSet.iterator().next();
+        Treatment treatment = DatamodelTestFactory.treatmentBuilder(hotspot);
         assertEquals("BRAF", hotspot.sourceEvent());
         assertEquals(Knowledgebase.CKB_EVIDENCE, hotspot.source());
-        assertEquals("AB", hotspot.treatment().name());
+        assertEquals("AB", treatment.name());
         assertEquals("AB", hotspot.applicableCancerType().name());
         assertEquals("162", hotspot.applicableCancerType().doid());
         assertEquals(Sets.newHashSet(), hotspot.blacklistCancerTypes());

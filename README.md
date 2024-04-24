@@ -16,17 +16,16 @@ In addition, this repo provides a number of utility applications to ingest and a
 | [iClusion-Importer](iclusion-importer) | Importer of iClusion datamodel.           |
 | [VICC-Importer](algo)                  | Importer of VICC datamodel.               |
 
-## Releasing serve-datamodel
+## Releasing serve
 
-The `serve-datamodel` module is used by external projects and is deployed to GCP's artifact repository.
-To release a new version of the datamodel artifact, perform the following:
+To release a new version of the `serve`, perform the following:
 
 ```shell
 git tag {new_version}
 git push origin {new_version}
 ```
 
-This will automatically trigger a cloud build instance which will deploy the artifacts to artifact registry.
+This will automatically trigger a cloud build instance which will deploy the artifacts to both artifact registry and container registry.
 
 Note the new version should be of the format `major.minor.patch` where:
 
@@ -34,21 +33,5 @@ Note the new version should be of the format `major.minor.patch` where:
 - Minor indicates a new feature
 - Patch indicates a bug fix
 
-## Upgrading serve-algo
-
-The `serve-algo` module contains the algo producing the `serve-datamodel`. The following steps are required to upgrade:
-
-1. Set the version in the pom.xml file in serve-algo (typically identical to the version of serve-datamodel) and set version of common,
-   ckb-importer, iclusion-importer and vicc-importer to `local-SNAPSHOT` in main pom.xml. Also include datamodel in this list if it doesn't
-   have the same version as serve-algo. 
-2. Compile and package locally using `mvn clean package`
-3. Update the `deploy_serve_prod` script and run this script to copy the algo jar with the correct name in the common-tools bucket.
-4. Roll back the change in the pom.xml files
-4. Create a release using the GitHub website and attach the same jar (and serve sql) as additional resources.
-5. Add release notes to README.md in serve-algo
-
-The VMs used to run SERVE automatically sync the common-tools bucket so will eventually have the new algo jar.
-
-Note that if you upgrade `serve-algo` without creating an associated `serve-datamodel`, you need to tag the commit used for the `serve-algo`
-release!
-
+Currently, the GitHub release is not automatically created, so you need to create a new release on the GitHub website and attach the serve jar as an additional resource.
+The jars can be built using `mvn clean package`.

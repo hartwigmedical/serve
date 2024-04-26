@@ -171,9 +171,7 @@ public class ServeAlgo {
         EventClassifierConfig config = CkbClassificationConfig.build();
         RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.CKB_TRIAL);
 
-        TreatmentApproachCurator curator = new TreatmentApproachCurator(Maps.newHashMap());
-
-        CkbExtractor extractor = CkbExtractorFactory.createTrialExtractor(config, refGenomeResource, curator);
+        CkbExtractor extractor = CkbExtractorFactory.createTrialExtractor(config, refGenomeResource);
 
         LOGGER.info("Running CKB trial knowledge extraction");
         return extractor.extract(ckbEntries);

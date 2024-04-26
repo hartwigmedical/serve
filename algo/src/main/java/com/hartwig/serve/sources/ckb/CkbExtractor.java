@@ -55,7 +55,6 @@ import com.hartwig.serve.extraction.exon.ExonAnnotation;
 import com.hartwig.serve.extraction.exon.ExonConsolidation;
 import com.hartwig.serve.extraction.fusion.FusionConsolidation;
 import com.hartwig.serve.extraction.hotspot.HotspotConsolidation;
-import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurator;
 import com.hartwig.serve.util.ProgressTracker;
 
 import org.apache.logging.log4j.LogManager;
@@ -73,17 +72,13 @@ public class CkbExtractor {
     @NotNull
     private final EventExtractor eventExtractor;
     @NotNull
-    private final TreatmentApproachCurator treatmentApproachCurator;
-    @NotNull
     private final ActionableEntryFactory actionableEntryFactory;
     private final boolean generateKnownEvents;
 
     public CkbExtractor(@NotNull Knowledgebase source, @NotNull final EventExtractor eventExtractor,
-            @NotNull final TreatmentApproachCurator treatmentApproachCurator, @NotNull ActionableEntryFactory actionableEntryFactory,
-            boolean generateKnownEvents) {
+            @NotNull ActionableEntryFactory actionableEntryFactory, boolean generateKnownEvents) {
         this.source = source;
         this.eventExtractor = eventExtractor;
-        this.treatmentApproachCurator = treatmentApproachCurator;
         this.actionableEntryFactory = actionableEntryFactory;
         this.generateKnownEvents = generateKnownEvents;
     }
@@ -110,8 +105,6 @@ public class CkbExtractor {
             }
             tracker.update();
         }
-
-        treatmentApproachCurator.reportUnusedCuratedEntries();
 
         return ExtractionFunctions.merge(extractions);
     }

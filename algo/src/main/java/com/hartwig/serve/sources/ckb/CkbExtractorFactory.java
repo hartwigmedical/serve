@@ -20,14 +20,17 @@ public final class CkbExtractorFactory {
             @NotNull TreatmentApproachCurator treatmentApproachCurator) {
         return new CkbExtractor(Knowledgebase.CKB_EVIDENCE,
                 createEventExtractor(config, refGenomeResource),
+                treatmentApproachCurator,
                 new ActionableEvidenceFactory(treatmentApproachCurator),
                 true);
     }
 
     @NotNull
-    public static CkbExtractor createTrialExtractor(@NotNull EventClassifierConfig config, @NotNull RefGenomeResource refGenomeResource) {
+    public static CkbExtractor createTrialExtractor(@NotNull EventClassifierConfig config, @NotNull RefGenomeResource refGenomeResource,
+            @NotNull TreatmentApproachCurator treatmentApproachCurator) {
         return new CkbExtractor(Knowledgebase.CKB_TRIAL,
                 createEventExtractor(config, refGenomeResource),
+                treatmentApproachCurator,
                 new ActionableTrialFactory(),
                 false);
     }

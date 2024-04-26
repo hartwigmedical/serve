@@ -1,5 +1,6 @@
 package com.hartwig.serve.common.ensemblcache;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,12 +12,20 @@ public class EnsemblDataCache {
     @NotNull
     private final Map<String, List<GeneData>> genesPerChromosome;
     @NotNull
+    private final Map<String, GeneData> genesPerName;
+    @NotNull
     private final Map<String, List<TranscriptData>> transcriptsPerGeneId;
 
     public EnsemblDataCache(@NotNull final Map<String, List<GeneData>> genesPerChromosome,
             @NotNull final Map<String, List<TranscriptData>> transcriptsPerGeneId) {
         this.genesPerChromosome = genesPerChromosome;
         this.transcriptsPerGeneId = transcriptsPerGeneId;
+        this.genesPerName = new HashMap<>();
+        for (Map.Entry<String, List<GeneData>> geneByChromosome : this.genesPerChromosome.entrySet()) {
+            for (GeneData gene : geneByChromosome.getValue()) {
+                genesPerName.putIfAbsent(gene.geneName(), gene);
+            }
+        }
     }
 
     @NotNull
@@ -31,15 +40,7 @@ public class EnsemblDataCache {
 
     @Nullable
     public GeneData findGeneDataByName(@NotNull String geneNameToFind) {
-        for (Map.Entry<String, List<GeneData>> entry : genesPerChromosome.entrySet()) {
-            for (GeneData gene : entry.getValue()) {
-                if (gene.geneName().equals(geneNameToFind)) {
-                    return gene;
-                }
-            }
-        }
-
-        return null;
+        return genesPerName.get(geneNameToFind);
     }
 
     @Nullable

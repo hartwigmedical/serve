@@ -3,6 +3,9 @@ package com.hartwig.serve.ckb.json;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import com.hartwig.serve.ckb.json.clinicaltrial.ClinicalTrialReader;
 import com.hartwig.serve.ckb.json.clinicaltrial.JsonClinicalTrial;
@@ -70,6 +73,7 @@ public final class CkbJsonReader {
                 new GlobalTherapyApprovalStatusReader(maxFilesToReadPerType).read(
                         ckbDir + File.separator + GLOBAL_THERAPY_APPROVAL_STATUSES_DIR);
         List<JsonReference> references = new ReferenceReader(maxFilesToReadPerType).read(ckbDir + File.separator + REFERENCES_DIR);
+        Map<Integer, JsonReference> referencesById = references.stream().collect(Collectors.toMap(JsonReference::id, Function.identity()));
 
         return ImmutableCkbJsonDatabase.builder()
                 .molecularProfiles(molecularProfiles)
@@ -83,6 +87,7 @@ public final class CkbJsonReader {
                 .clinicalTrials(clinicalTrials)
                 .globalTherapyApprovalStatuses(globalTherapyApprovalStatuses)
                 .references(references)
+                .referencesById(referencesById)
                 .build();
     }
 }

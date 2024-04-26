@@ -87,9 +87,9 @@ public class CkbExtractor {
     public ExtractionResult extract(@NotNull List<CkbEntry> entries) {
         List<ExtractionResult> extractions = Collections.synchronizedList(Lists.newArrayList());
 
-        ProgressTracker tracker = new ProgressTracker(source.name(), entries.size());
-        for (CkbEntry entry : entries) {
-            // Assume entries without variants are filtered out prior to extraction
+        ProgressTracker tracker = new ProgressTracker("CKB", entries.size());
+        // Assume entries without variants are filtered out prior to extraction
+        entries.parallelStream().forEach(entry -> { // parallel stream to parallelize transvar calls.
             if (entry.variants().isEmpty()) {
                 throw new IllegalStateException("A CKB entry without variants has been provided for extraction: " + entry);
             }
@@ -100,17 +100,18 @@ public class CkbExtractor {
             if (entry.type() == EventType.UNKNOWN) {
                 LOGGER.warn("No event type known for '{}' on '{}'", event, gene);
             } else {
-                var extraction = getExtractionResult(entry, gene, event);
+                var extraction = getExtractionResult(entry, gene, event, extractions, variant);
                 extractions.add(CkbVariantAnnotator.annotate(extraction, variant));
             }
             tracker.update();
-        }
+        });
 
         return ExtractionFunctions.merge(extractions);
     }
 
     @NotNull
-    private ExtractionResult getExtractionResult(CkbEntry entry, String gene, String event) {
+    private ExtractionResult getExtractionResult(CkbEntry entry, String gene, String event, List<ExtractionResult> extractions,
+            Variant variant) {
         EventExtractorOutput extractionOutput = eventExtractor.extract(gene, null, entry.type(), event);
         String sourceEvent;
         if (!gene.equals(CkbConstants.NO_GENE)) {
@@ -131,7 +132,13 @@ public class CkbExtractor {
 
         ExtractionResult extraction = toExtractionResult(event, gene, null, extractionOutput, actionableEntries, interpretation);
 
-        return ExtractionFunctions.merge(Collections.emptyList());
+        if (generateKnownEvents) {
+            extractions.add(CkbVariantAnnotator.annotate(extraction, variant));
+        } else {
+            extractions.add(extraction);
+        }
+
+        return toExtractionResult(event, gene, null, extractionOutput, actionableEntries, interpretation);
     }
 
     @NotNull

@@ -81,11 +81,16 @@ public class ServeAlgo {
         }
 
         if (config.useCkbEvidence()) {
-            extractions.add(extractCkbEvidenceKnowledge(config.ckbDir(), config.ckbBlacklistMolecularProfileTsv(), config.ckbDrugCurationTsv(), config.ckbBlacklistEvidenceTsv()));
+            extractions.add(extractCkbEvidenceKnowledge(config.ckbDir(),
+                    config.ckbBlacklistMolecularProfileTsv(),
+                    config.ckbDrugCurationTsv(),
+                    config.ckbBlacklistEvidenceTsv()));
         }
 
         if (config.useCkbTrials()) {
-            extractions.add(extractCkbTrialKnowledge(config.ckbDir(), config.ckbBlacklistMolecularProfileTsv(), config.ckbBlacklistStudyTsv()));
+            extractions.add(extractCkbTrialKnowledge(config.ckbDir(),
+                    config.ckbBlacklistMolecularProfileTsv(),
+                    config.ckbBlacklistStudyTsv()));
         }
 
         if (config.useDocm()) {
@@ -149,7 +154,7 @@ public class ServeAlgo {
 
     @NotNull
     private ExtractionResult extractCkbEvidenceKnowledge(@NotNull String ckbDir, @NotNull String ckbBlacklistMolecularProfileTsv,
-                                                         @NotNull String ckbDrugCurationTsv, @NotNull String ckbBlacklistEvidenceTsv) throws IOException {
+            @NotNull String ckbDrugCurationTsv, @NotNull String ckbBlacklistEvidenceTsv) throws IOException {
         List<CkbEntry> ckbEntries = CkbReader.readAndCurate(ckbDir, ckbBlacklistMolecularProfileTsv);
 
         EventClassifierConfig config = CkbClassificationConfig.build();
@@ -176,7 +181,8 @@ public class ServeAlgo {
     }
 
     @NotNull
-    private ExtractionResult extractCkbTrialKnowledge(@NotNull String ckbDir, @NotNull String ckbBlacklistMolecularProfileTsv, @NotNull String ckbBlacklistStudyTsv) throws IOException {
+    private ExtractionResult extractCkbTrialKnowledge(@NotNull String ckbDir, @NotNull String ckbBlacklistMolecularProfileTsv,
+            @NotNull String ckbBlacklistStudyTsv) throws IOException {
         List<CkbEntry> ckbEntries = CkbReader.readAndCurate(ckbDir, ckbBlacklistMolecularProfileTsv);
 
         EventClassifierConfig config = CkbClassificationConfig.build();

@@ -1,18 +1,18 @@
 package com.hartwig.serve.sources.ckb.blacklist;
 
-import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
-import org.apache.commons.compress.utils.Lists;
-import org.apache.commons.compress.utils.Sets;
-import org.jetbrains.annotations.NotNull;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
 
-public class CkbBlacklistStudyFile {
+import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
+import org.apache.commons.compress.utils.Lists;
+import org.apache.commons.compress.utils.Sets;
+import org.jetbrains.annotations.NotNull;
+
+public class CkbBlacklistStudyFile {
 
     private static final String FIELD_DELIMITER = "\t";
 

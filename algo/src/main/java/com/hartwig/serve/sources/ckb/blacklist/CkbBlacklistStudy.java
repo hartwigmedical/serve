@@ -1,12 +1,13 @@
 package com.hartwig.serve.sources.ckb.blacklist;
 
+import java.util.List;
+import java.util.Set;
+
 import com.google.common.collect.Sets;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
-import java.util.Set;
 
 public class CkbBlacklistStudy {
 
@@ -23,7 +24,6 @@ public class CkbBlacklistStudy {
 
     public boolean isBlacklistStudy(@NotNull String studyName, @NotNull String therapyName, @NotNull String cancerType, @NotNull String sourceGene,
                                     @NotNull String event) {
-
         for (CkbBlacklistStudyEntry blacklistStudyEntry : blacklistStudiesList) {
             boolean match = isMatch(studyName, therapyName, cancerType, sourceGene, event, blacklistStudyEntry);
             if (match) {
@@ -36,7 +36,6 @@ public class CkbBlacklistStudy {
 
     public boolean isMatch(@NotNull String studyName, @NotNull String therapyName, @NotNull String cancerType, @NotNull String sourceGene,
                            @NotNull String event, @NotNull CkbBlacklistStudyEntry blacklistStudyEntry) {
-
         switch (blacklistStudyEntry.ckbBlacklistReason()) {
             case STUDY_WHOLE: {
                 return blacklistStudyEntry.nctId().equals(studyName);

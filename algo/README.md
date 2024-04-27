@@ -50,13 +50,15 @@ they are compliant with the usage of the data itself.
 
 SERVE generates clinical evidence in the following datamodel:
 
-- Treatment (name of drug(s))
-    - Relevant treatment approach underlying the treatment.
-    - Curated treatment approach underlying the treatment.
-- Clinical trial (name of trial)
-  - The NCT ID of the study 
-  - The name of the study 
-  - The countries where the study is active 
+- Either one of the following interventions: 
+  - Treatment (name of drug(s))
+      - Relevant treatment approach underlying the treatment.
+      - Curated treatment approach underlying the treatment.
+  - Clinical trial (name of trial)
+    - The NCT ID of the study 
+    - The title of the study 
+    - The countries where the study is active
+    - The name of the therapy given in the trial
 - Cancer type (annotated with DOID) for which the treatment is considered on-label.
 - Blacklist cancer types (annotated with DOID) that should be children of the main cancer type and are used for blacklisting
   specific types of the main cancer type.

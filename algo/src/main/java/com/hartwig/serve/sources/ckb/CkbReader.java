@@ -1,17 +1,18 @@
 package com.hartwig.serve.sources.ckb;
 
+import java.io.IOException;
+import java.util.List;
+
 import com.hartwig.serve.ckb.CkbEntryReader;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
-import com.hartwig.serve.sources.ckb.curation.CkbCurator;
-import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistMolecularProfile;
 import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistMolecularProfileEntry;
 import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistMolecularProfileFile;
+import com.hartwig.serve.sources.ckb.blacklist.CkbMolecularProfileBlacklistModel;
+import com.hartwig.serve.sources.ckb.curation.CkbCurator;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
-import java.util.List;
 
 public final class CkbReader {
 
@@ -27,7 +28,8 @@ public final class CkbReader {
         LOGGER.info(" Read {} entries", ckbEntries.size());
 
         LOGGER.info("Reading CBK blacklist molecular profile entries from {}", ckbBlacklistMolecularProfileTsv);
-        List<CkbBlacklistMolecularProfileEntry> ckbBlacklistMolecularProfileEntries = CkbBlacklistMolecularProfileFile.read(ckbBlacklistMolecularProfileTsv);
+        List<CkbBlacklistMolecularProfileEntry> ckbBlacklistMolecularProfileEntries =
+                CkbBlacklistMolecularProfileFile.read(ckbBlacklistMolecularProfileTsv);
         LOGGER.info(" Read {} blacklist molecular profile entries entries", ckbBlacklistMolecularProfileEntries.size());
 
         return blacklist(curate(ckbEntries), ckbBlacklistMolecularProfileEntries);
@@ -46,8 +48,9 @@ public final class CkbReader {
     }
 
     @NotNull
-    private static List<CkbEntry> blacklist(@NotNull List<CkbEntry> entries, @NotNull List<CkbBlacklistMolecularProfileEntry> ckbFilterEntries) {
-        CkbBlacklistMolecularProfile blacklist = new CkbBlacklistMolecularProfile(ckbFilterEntries);
+    private static List<CkbEntry> blacklist(@NotNull List<CkbEntry> entries,
+            @NotNull List<CkbBlacklistMolecularProfileEntry> ckbBlacklistEntries) {
+        CkbMolecularProfileBlacklistModel blacklist = new CkbMolecularProfileBlacklistModel(ckbBlacklistEntries);
 
         LOGGER.info("Blacklisting {} CKB entries", entries.size());
         List<CkbEntry> blacklistedEntries = blacklist.run(entries);

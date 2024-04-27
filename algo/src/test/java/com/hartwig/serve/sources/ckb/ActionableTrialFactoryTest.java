@@ -11,10 +11,13 @@ import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.ClinicalTrial;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.Location;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.VariantRequirementDetail;
-import com.hartwig.serve.datamodel.*;
-
-import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudy;
+import com.hartwig.serve.datamodel.DatamodelTestFactory;
+import com.hartwig.serve.datamodel.EvidenceDirection;
+import com.hartwig.serve.datamodel.EvidenceLevel;
+import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudyTest;
+import com.hartwig.serve.sources.ckb.blacklist.CkbStudyBlacklistModel;
+
 import org.apache.commons.compress.utils.Sets;
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +25,7 @@ import org.junit.Test;
 
 public class ActionableTrialFactoryTest {
 
-    private static final CkbBlacklistStudy blacklistStudy = CkbBlacklistStudyTest.createCkbBlacklistStudyEmpty();
+    private static final CkbStudyBlacklistModel blacklistStudy = CkbBlacklistStudyTest.createCkbBlacklistStudyEmpty();
 
     @Test
     public void canCreateActionableEntryForOpenTrialInAllowedCountryWithRequiredMolecularProfile() {

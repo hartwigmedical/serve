@@ -9,16 +9,16 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
-public class CkbBlacklistStudy {
+public class CkbStudyBlacklistModel {
 
-    private static final Logger LOGGER = LogManager.getLogger(CkbBlacklistStudy.class);
+    private static final Logger LOGGER = LogManager.getLogger(CkbStudyBlacklistModel.class);
 
     @NotNull
     private final List<CkbBlacklistStudyEntry> blacklistStudiesList;
     @NotNull
     private final Set<CkbBlacklistStudyEntry> usedBlacklists = Sets.newHashSet();
 
-    public CkbBlacklistStudy(@NotNull final List<CkbBlacklistStudyEntry> blacklistStudiesList) {
+    public CkbStudyBlacklistModel(@NotNull final List<CkbBlacklistStudyEntry> blacklistStudiesList) {
         this.blacklistStudiesList = blacklistStudiesList;
     }
 
@@ -34,9 +34,20 @@ public class CkbBlacklistStudy {
         return false;
     }
 
+    public void reportUnusedBlacklistEntries() {
+        int unusedBlacklistEntryCount = 0;
+        for (CkbBlacklistStudyEntry entry : blacklistStudiesList) {
+            if (!usedBlacklists.contains(entry)) {
+                unusedBlacklistEntryCount++;
+                LOGGER.warn(" Blacklist entry '{}' hasn't been used for CKB filtering", entry);
+            }
+        }
+        LOGGER.debug(" Found {} unused blacklist entries during CKB filtering", unusedBlacklistEntryCount);
+    }
+
     public boolean isMatch(@NotNull String studyName, @NotNull String therapyName, @NotNull String cancerType, @NotNull String sourceGene,
                            @NotNull String event, @NotNull CkbBlacklistStudyEntry blacklistStudyEntry) {
-        switch (blacklistStudyEntry.ckbBlacklistReason()) {
+        switch (blacklistStudyEntry.type()) {
             case STUDY_WHOLE: {
                 return blacklistStudyEntry.nctId().equals(studyName);
             }
@@ -99,20 +110,9 @@ public class CkbBlacklistStudy {
                         && blacklistEvidenceEvent.equals(event);
             }
             default: {
-                LOGGER.warn("Blacklist entry found with unrecognized type: {}", blacklistStudyEntry.ckbBlacklistReason());
+                LOGGER.warn("Blacklist entry found with unrecognized type: {}", blacklistStudyEntry.type());
                 return false;
             }
         }
-    }
-
-    public void reportUnusedBlacklistEntries() {
-        int unusedBlacklistEntryCount = 0;
-        for (CkbBlacklistStudyEntry entry : blacklistStudiesList) {
-            if (!usedBlacklists.contains(entry)) {
-                unusedBlacklistEntryCount++;
-                LOGGER.warn(" Blacklist entry '{}' hasn't been used for CKB filtering", entry);
-            }
-        }
-        LOGGER.debug(" Found {} unused blacklist entries during CKB filtering", unusedBlacklistEntryCount);
     }
 }

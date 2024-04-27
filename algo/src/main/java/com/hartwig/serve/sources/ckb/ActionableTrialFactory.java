@@ -1,5 +1,8 @@
 package com.hartwig.serve.sources.ckb;
 
+import java.util.List;
+import java.util.Set;
+
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -9,12 +12,13 @@ import com.hartwig.serve.ckb.datamodel.clinicaltrial.Location;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.VariantRequirementDetail;
 import com.hartwig.serve.ckb.datamodel.indication.Indication;
 import com.hartwig.serve.ckb.datamodel.therapy.Therapy;
-import com.hartwig.serve.datamodel.*;
-import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudy;
-import org.jetbrains.annotations.NotNull;
+import com.hartwig.serve.datamodel.EvidenceDirection;
+import com.hartwig.serve.datamodel.EvidenceLevel;
+import com.hartwig.serve.datamodel.ImmutableClinicalTrial;
+import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.sources.ckb.blacklist.CkbStudyBlacklistModel;
 
-import java.util.List;
-import java.util.Set;
+import org.jetbrains.annotations.NotNull;
 
 class ActionableTrialFactory implements ActionableEntryFactory {
 
@@ -41,9 +45,9 @@ class ActionableTrialFactory implements ActionableEntryFactory {
     }
 
     @NotNull
-    private final CkbBlacklistStudy blacklistStudy;
+    private final CkbStudyBlacklistModel blacklistStudy;
 
-    public ActionableTrialFactory(@NotNull CkbBlacklistStudy blacklistStudy) {
+    public ActionableTrialFactory(@NotNull CkbStudyBlacklistModel blacklistStudy) {
         this.blacklistStudy = blacklistStudy;
     }
 

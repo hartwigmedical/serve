@@ -40,35 +40,35 @@ public class CkbBlacklistStudyFile {
     @NotNull
     private static CkbBlacklistStudyEntry fromLine(@NotNull String line, @NotNull Map<String, Integer> fields) {
         String[] values = line.split(FIELD_DELIMITER);
-        CkbBlacklistStudyReason reason = CkbBlacklistStudyReason.valueOf(values[fields.get("blacklistType")]);
+        CkbBlacklistStudyType type = CkbBlacklistStudyType.valueOf(values[fields.get("blacklistType")]);
 
         String therapy = null;
         String cancerType = null;
         String gene = null;
         String event = null;
 
-        if (Sets.newHashSet(CkbBlacklistStudyReason.STUDY_BASED_ON_THERAPY,
-                CkbBlacklistStudyReason.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE,
-                CkbBlacklistStudyReason.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE,
-                CkbBlacklistStudyReason.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE_AND_EVENT).contains(reason)) {
+        if (Sets.newHashSet(CkbBlacklistStudyType.STUDY_BASED_ON_THERAPY,
+                CkbBlacklistStudyType.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE,
+                CkbBlacklistStudyType.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE,
+                CkbBlacklistStudyType.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE_AND_EVENT).contains(type)) {
             therapy = values[fields.get("therapyName")];
         }
-        if (Sets.newHashSet(CkbBlacklistStudyReason.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE,
-                CkbBlacklistStudyReason.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE,
-                CkbBlacklistStudyReason.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE_AND_EVENT).contains(reason)) {
+        if (Sets.newHashSet(CkbBlacklistStudyType.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE,
+                CkbBlacklistStudyType.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE,
+                CkbBlacklistStudyType.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE_AND_EVENT).contains(type)) {
             cancerType = values[fields.get("cancerType")];
         }
-        if (Sets.newHashSet(CkbBlacklistStudyReason.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE,
-                CkbBlacklistStudyReason.ALL_STUDIES_BASED_ON_GENE).contains(reason)) {
+        if (Sets.newHashSet(CkbBlacklistStudyType.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE,
+                CkbBlacklistStudyType.ALL_STUDIES_BASED_ON_GENE).contains(type)) {
             gene = values[fields.get("gene")];
         }
 
-        if (Sets.newHashSet(CkbBlacklistStudyReason.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE_AND_EVENT,
-                CkbBlacklistStudyReason.ALL_STUDIES_BASED_ON_GENE_AND_EVENT).contains(reason)) {
+        if (Sets.newHashSet(CkbBlacklistStudyType.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE_AND_EVENT,
+                CkbBlacklistStudyType.ALL_STUDIES_BASED_ON_GENE_AND_EVENT).contains(type)) {
             event = values[fields.get("event")];
         }
         return ImmutableCkbBlacklistStudyEntry.builder()
-                .ckbBlacklistReason(reason)
+                .type(type)
                 .nctId(values[fields.get("nctId")])
                 .therapy(therapy)
                 .cancerType(cancerType)

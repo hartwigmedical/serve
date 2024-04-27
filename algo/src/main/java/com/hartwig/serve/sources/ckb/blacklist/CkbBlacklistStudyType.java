@@ -1,6 +1,6 @@
 package com.hartwig.serve.sources.ckb.blacklist;
 
-public enum CkbBlacklistStudyReason {
+public enum CkbBlacklistStudyType {
     ALL_STUDIES_BASED_ON_GENE,
     ALL_STUDIES_BASED_ON_GENE_AND_EVENT,
     STUDY_WHOLE,

@@ -9,9 +9,13 @@ import java.util.Set;
 
 import com.google.common.collect.Sets;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
-import com.hartwig.serve.datamodel.*;
-import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistEvidence;
+import com.hartwig.serve.datamodel.DatamodelTestFactory;
+import com.hartwig.serve.datamodel.EvidenceDirection;
+import com.hartwig.serve.datamodel.EvidenceLevel;
+import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.datamodel.Treatment;
 import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistEvidenceTest;
+import com.hartwig.serve.sources.ckb.blacklist.CkbEvidenceBlacklistModel;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurator;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachTestFactory;
 
@@ -21,7 +25,7 @@ import org.junit.Test;
 public class ActionableEvidenceFactoryTest {
 
     private static final TreatmentApproachCurator curator = TreatmentApproachTestFactory.createTestCurator();
-    private static final CkbBlacklistEvidence blacklistEvidence = CkbBlacklistEvidenceTest.createCkbBlacklistEvidenceEmpty();
+    private static final CkbEvidenceBlacklistModel blacklistEvidence = CkbBlacklistEvidenceTest.createCkbBlacklistEvidenceEmpty();
     @Test
     public void shouldIgnoreNonActionableKrasDeletion() {
         CkbEntry entryDeletion =

@@ -26,8 +26,8 @@ import com.hartwig.serve.refgenome.RefGenomeResource;
 import com.hartwig.serve.sources.ckb.CkbExtractor;
 import com.hartwig.serve.sources.ckb.CkbExtractorFactory;
 import com.hartwig.serve.sources.ckb.CkbReader;
-import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistEvidence;
 import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistEvidenceFile;
+import com.hartwig.serve.sources.ckb.blacklist.CkbEvidenceBlacklistModel;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurationFile;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurator;
 
@@ -56,7 +56,7 @@ public class CkbEvidenceExtractorTestApp {
 
         RefGenomeResource refGenomeResource = buildRefGenomeResource(config);
         TreatmentApproachCurator curator = new TreatmentApproachCurator(TreatmentApproachCurationFile.read(config.ckbDrugCurationTsv()));
-        CkbBlacklistEvidence blacklistEvidence = new CkbBlacklistEvidence(CkbBlacklistEvidenceFile.read(config.ckbBlacklistEvidenceTsv()));
+        CkbEvidenceBlacklistModel blacklistEvidence = new CkbEvidenceBlacklistModel(CkbBlacklistEvidenceFile.read(config.ckbBlacklistEvidenceTsv()));
 
         CkbExtractor extractor = CkbExtractorFactory.createEvidenceExtractor(CkbClassificationConfig.build(), refGenomeResource, curator, blacklistEvidence);
 

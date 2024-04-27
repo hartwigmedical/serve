@@ -1,34 +1,34 @@
 package com.hartwig.serve.sources.ckb.blacklist;
 
+import java.util.List;
+import java.util.Set;
+
 import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.EvidenceLevel;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-import java.util.Set;
+public class CkbEvidenceBlacklistModel {
 
-public class CkbBlacklistEvidence {
-
-    private static final Logger LOGGER = LogManager.getLogger(CkbBlacklistEvidence.class);
+    private static final Logger LOGGER = LogManager.getLogger(CkbEvidenceBlacklistModel.class);
 
     @NotNull
     private final List<CkbBlacklistEvidenceEntry> blacklistEvidenceEntryList;
     @NotNull
-    private final Set<CkbBlacklistEvidenceEntry> usedBlackEvidencelists = Sets.newHashSet();
+    private final Set<CkbBlacklistEvidenceEntry> usedBlacklistEvidenceEntries = Sets.newHashSet();
 
-    public CkbBlacklistEvidence(@NotNull final List<CkbBlacklistEvidenceEntry> blacklistEvidenceEntryList) {
+    public CkbEvidenceBlacklistModel(@NotNull final List<CkbBlacklistEvidenceEntry> blacklistEvidenceEntryList) {
         this.blacklistEvidenceEntryList = blacklistEvidenceEntryList;
     }
 
-    public boolean isBlacklistEvidence(@NotNull String therapyName, @NotNull String cancerType, @NotNull EvidenceLevel level, @NotNull String sourceGene,
-                                       @NotNull String event) {
-
+    public boolean isBlacklistEvidence(@NotNull String therapyName, @NotNull String cancerType, @NotNull EvidenceLevel level,
+            @NotNull String sourceGene, @NotNull String event) {
         for (CkbBlacklistEvidenceEntry blacklistEvidenceEntry : blacklistEvidenceEntryList) {
             boolean match = isMatch(therapyName, cancerType, level, sourceGene, event, blacklistEvidenceEntry);
             if (match) {
-                usedBlackEvidencelists.add(blacklistEvidenceEntry);
+                usedBlacklistEvidenceEntries.add(blacklistEvidenceEntry);
                 return true;
             }
         }
@@ -38,7 +38,7 @@ public class CkbBlacklistEvidence {
     public void reportUnusedBlacklistEntries() {
         int unusedBlacklistEntryCount = 0;
         for (CkbBlacklistEvidenceEntry entry : blacklistEvidenceEntryList) {
-            if (!blacklistEvidenceEntryList.contains(entry)) {
+            if (!usedBlacklistEvidenceEntries.contains(entry)) {
                 unusedBlacklistEntryCount++;
                 LOGGER.warn(" Blacklist entry '{}' hasn't been used for CKB filtering", entry);
             }
@@ -47,17 +47,16 @@ public class CkbBlacklistEvidence {
         LOGGER.debug(" Found {} unused blacklist entries during CKB filtering", unusedBlacklistEntryCount);
     }
 
-    public boolean isMatch(@NotNull String therapyName, @NotNull String cancerType, @NotNull EvidenceLevel level,  @NotNull String sourceGene,
-                           @NotNull String event, @NotNull CkbBlacklistEvidenceEntry blacklistEvidenceEntry) {
-        switch (blacklistEvidenceEntry.ckbBlacklistEvidenceReason()) {
+    public boolean isMatch(@NotNull String therapyName, @NotNull String cancerType, @NotNull EvidenceLevel level,
+            @NotNull String sourceGene, @NotNull String event, @NotNull CkbBlacklistEvidenceEntry blacklistEvidenceEntry) {
+        switch (blacklistEvidenceEntry.type()) {
             case ALL_EVIDENCE_BASED_ON_GENE: {
                 String blacklistEvidenceGene = blacklistEvidenceEntry.gene();
                 assert blacklistEvidenceGene != null;
                 if (blacklistEvidenceEntry.level() == null) {
                     return blacklistEvidenceGene.equals(sourceGene);
                 } else {
-                    return blacklistEvidenceGene.equals(sourceGene)
-                            && blacklistEvidenceEntry.level() == level;
+                    return blacklistEvidenceGene.equals(sourceGene) && blacklistEvidenceEntry.level() == level;
                 }
             }
 
@@ -67,11 +66,9 @@ public class CkbBlacklistEvidence {
                 assert blacklistEvidenceGene != null;
                 assert blacklistEvidenceEvent != null;
                 if (blacklistEvidenceEntry.level() == null) {
-                    return blacklistEvidenceGene.equals(sourceGene)
-                            && blacklistEvidenceEvent.equals(event);
+                    return blacklistEvidenceGene.equals(sourceGene) && blacklistEvidenceEvent.equals(event);
                 } else {
-                    return blacklistEvidenceGene.equals(sourceGene)
-                            && blacklistEvidenceEvent.equals(event)
+                    return blacklistEvidenceGene.equals(sourceGene) && blacklistEvidenceEvent.equals(event)
                             && blacklistEvidenceEntry.level() == level;
                 }
             }
@@ -82,8 +79,7 @@ public class CkbBlacklistEvidence {
                 if (blacklistEvidenceEntry.level() == null) {
                     return blacklistEvidenceTherapy.equals(therapyName);
                 } else {
-                    return blacklistEvidenceTherapy.equals(therapyName)
-                            && blacklistEvidenceEntry.level() == level;
+                    return blacklistEvidenceTherapy.equals(therapyName) && blacklistEvidenceEntry.level() == level;
                 }
             }
 
@@ -93,11 +89,9 @@ public class CkbBlacklistEvidence {
                 assert blacklistEvidenceTherapy != null;
                 assert blacklistEvidenceCancerType != null;
                 if (blacklistEvidenceEntry.level() == null) {
-                    return blacklistEvidenceTherapy.equals(therapyName)
-                            && blacklistEvidenceCancerType.equals(cancerType);
+                    return blacklistEvidenceTherapy.equals(therapyName) && blacklistEvidenceCancerType.equals(cancerType);
                 } else {
-                    return blacklistEvidenceTherapy.equals(therapyName)
-                            && blacklistEvidenceCancerType.equals(cancerType)
+                    return blacklistEvidenceTherapy.equals(therapyName) && blacklistEvidenceCancerType.equals(cancerType)
                             && blacklistEvidenceEntry.level() == level;
                 }
             }
@@ -110,14 +104,11 @@ public class CkbBlacklistEvidence {
                 assert blacklistEvidenceCancerType != null;
                 assert blacklistEvidenceGene != null;
                 if (blacklistEvidenceEntry.level() == null) {
-                    return blacklistEvidenceTherapy.equals(therapyName)
-                            && blacklistEvidenceCancerType.equals(cancerType)
+                    return blacklistEvidenceTherapy.equals(therapyName) && blacklistEvidenceCancerType.equals(cancerType)
                             && blacklistEvidenceGene.equals(sourceGene);
                 } else {
-                    return blacklistEvidenceTherapy.equals(therapyName)
-                            && blacklistEvidenceCancerType.equals(cancerType)
-                            && blacklistEvidenceGene.equals(sourceGene)
-                            && blacklistEvidenceEntry.level() == level;
+                    return blacklistEvidenceTherapy.equals(therapyName) && blacklistEvidenceCancerType.equals(cancerType)
+                            && blacklistEvidenceGene.equals(sourceGene) && blacklistEvidenceEntry.level() == level;
                 }
             }
 
@@ -131,21 +122,17 @@ public class CkbBlacklistEvidence {
                 assert blacklistEvidenceCancerType != null;
                 assert blacklistEvidenceEvent != null;
                 if (blacklistEvidenceEntry.level() == null) {
-                    return blacklistEvidenceTherapy.equals(therapyName)
-                            && blacklistEvidenceCancerType.equals(cancerType)
-                            && blacklistEvidenceGene.equals(sourceGene)
-                            && blacklistEvidenceEvent.equals(event);
+                    return blacklistEvidenceTherapy.equals(therapyName) && blacklistEvidenceCancerType.equals(cancerType)
+                            && blacklistEvidenceGene.equals(sourceGene) && blacklistEvidenceEvent.equals(event);
                 } else {
-                    return blacklistEvidenceTherapy.equals(therapyName)
-                            && blacklistEvidenceCancerType.equals(cancerType)
-                            && blacklistEvidenceGene.equals(sourceGene)
-                            && blacklistEvidenceEvent.equals(event)
+                    return blacklistEvidenceTherapy.equals(therapyName) && blacklistEvidenceCancerType.equals(cancerType)
+                            && blacklistEvidenceGene.equals(sourceGene) && blacklistEvidenceEvent.equals(event)
                             && blacklistEvidenceEntry.level() == level;
                 }
             }
 
             default: {
-                LOGGER.warn("Blacklist entry found with unrecognized type: {}", blacklistEvidenceEntry.ckbBlacklistEvidenceReason());
+                LOGGER.warn("Blacklist entry found with unrecognized type: {}", blacklistEvidenceEntry.type());
                 return false;
             }
         }

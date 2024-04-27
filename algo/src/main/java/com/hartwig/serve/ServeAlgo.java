@@ -1,5 +1,10 @@
 package com.hartwig.serve;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.hartwig.serve.ckb.classification.CkbClassificationConfig;
@@ -17,7 +22,12 @@ import com.hartwig.serve.refgenome.RefGenomeResource;
 import com.hartwig.serve.sources.ckb.CkbExtractor;
 import com.hartwig.serve.sources.ckb.CkbExtractorFactory;
 import com.hartwig.serve.sources.ckb.CkbReader;
-import com.hartwig.serve.sources.ckb.blacklist.*;
+import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistEvidenceEntry;
+import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistEvidenceFile;
+import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudyEntry;
+import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudyFile;
+import com.hartwig.serve.sources.ckb.blacklist.CkbEvidenceBlacklistModel;
+import com.hartwig.serve.sources.ckb.blacklist.CkbStudyBlacklistModel;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurationEntry;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurationEntryKey;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurationFile;
@@ -40,14 +50,10 @@ import com.hartwig.serve.sources.vicc.ViccReader;
 import com.hartwig.serve.vicc.annotation.ViccClassificationConfig;
 import com.hartwig.serve.vicc.datamodel.ViccEntry;
 import com.hartwig.serve.vicc.datamodel.ViccSource;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public class ServeAlgo {
 
@@ -156,7 +162,7 @@ public class ServeAlgo {
 
         List<CkbBlacklistEvidenceEntry> ckbBlacklistEvidenceEntries = CkbBlacklistEvidenceFile.read(ckbBlacklistEvidenceTsv);
         LOGGER.info(" Read {} blacklisting evidence entries", ckbBlacklistEvidenceEntries.size());
-        CkbBlacklistEvidence blacklistEvidence = new CkbBlacklistEvidence(ckbBlacklistEvidenceEntries);
+        CkbEvidenceBlacklistModel blacklistEvidence = new CkbEvidenceBlacklistModel(ckbBlacklistEvidenceEntries);
 
         CkbExtractor extractor = CkbExtractorFactory.createEvidenceExtractor(config, refGenomeResource, curator, blacklistEvidence);
 
@@ -179,7 +185,7 @@ public class ServeAlgo {
         List<CkbBlacklistStudyEntry> ckbBlacklistStudyEntriesEntries = CkbBlacklistStudyFile.read(ckbBlacklistStudyTsv);
         LOGGER.info(" Read {} blacklisting studies entries", ckbBlacklistStudyEntriesEntries.size());
 
-        CkbBlacklistStudy blacklistStudy = new CkbBlacklistStudy(ckbBlacklistStudyEntriesEntries);
+        CkbStudyBlacklistModel blacklistStudy = new CkbStudyBlacklistModel(ckbBlacklistStudyEntriesEntries);
 
         CkbExtractor extractor = CkbExtractorFactory.createTrialExtractor(config, refGenomeResource, blacklistStudy);
 

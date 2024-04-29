@@ -6,7 +6,6 @@ import com.google.common.collect.Lists;
 import com.hartwig.serve.ckb.json.CkbJsonDatabase;
 import com.hartwig.serve.ckb.json.common.DescriptionInfo;
 import com.hartwig.serve.ckb.json.common.ReferenceInfo;
-import com.hartwig.serve.ckb.json.reference.JsonReference;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -58,26 +57,24 @@ public final class ReferenceFactory {
 
     @NotNull
     private static Reference resolveReference(@NotNull CkbJsonDatabase ckbJsonDatabase, @NotNull ReferenceInfo referenceInfo) {
-        for (JsonReference reference : ckbJsonDatabase.references()) {
-            if (reference.id() == referenceInfo.id()) {
-                return ImmutableReference.builder()
-                        .id(reference.id())
-                        .pubMedId(reference.pubMedId())
-                        .title(reference.title())
-                        .shortJournalTitle(reference.shortJournalTitle())
-                        .pages(reference.pages())
-                        .abstractText(reference.abstractText())
-                        .url(reference.url())
-                        .journal(reference.journal())
-                        .authors(reference.authors())
-                        .volume(reference.volume())
-                        .issue(reference.issue())
-                        .date(reference.date())
-                        .year(reference.year())
-                        .build();
-            }
+        var reference = ckbJsonDatabase.referencesById().get(referenceInfo.id());
+        if (reference == null) {
+            throw new IllegalStateException("Could not resolve CKB reference with id '" + referenceInfo.id() + "'");
         }
-
-        throw new IllegalStateException("Could not resolve CKB reference with id '" + referenceInfo.id() + "'");
+        return ImmutableReference.builder()
+                .id(reference.id())
+                .pubMedId(reference.pubMedId())
+                .title(reference.title())
+                .shortJournalTitle(reference.shortJournalTitle())
+                .pages(reference.pages())
+                .abstractText(reference.abstractText())
+                .url(reference.url())
+                .journal(reference.journal())
+                .authors(reference.authors())
+                .volume(reference.volume())
+                .issue(reference.issue())
+                .date(reference.date())
+                .year(reference.year())
+                .build();
     }
 }

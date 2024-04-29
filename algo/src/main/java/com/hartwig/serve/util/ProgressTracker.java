@@ -1,5 +1,6 @@
 package com.hartwig.serve.util;
 
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,7 +15,7 @@ public class ProgressTracker {
     private final String label;
     private final int totalCount;
 
-    private int counter = 0;
+    private final AtomicInteger counter = new AtomicInteger(0);
 
     public ProgressTracker(@NotNull final String label, final int totalCount) {
         this.label = label;
@@ -22,9 +23,9 @@ public class ProgressTracker {
     }
 
     public void update() {
-        ++counter;
-        if (totalCount >= INTERVAL && counter % (totalCount / INTERVAL) == 0) {
-            LOGGER.info(" Processed {} of {} {} entries", counter, totalCount, label);
+        var count = this.counter.addAndGet(1);
+        if (totalCount >= INTERVAL && count % (totalCount / INTERVAL) == 0) {
+            LOGGER.info(" Processed {} of {} {} entries", this.counter, totalCount, label);
         }
     }
 }

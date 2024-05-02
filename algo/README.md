@@ -409,6 +409,8 @@ elsewhere.
   
 ## Version History and Download Links
 
+- Upcoming
+  - Support for usage acronym of clinical study title from data model 
 - [3.2.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v3.2.0)
     - FGFR2 del events are configured as being interpreted as full exonic deletions. 
 - [3.1.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v3.1.0)

@@ -54,11 +54,14 @@ class ActionableTrialFactory implements ActionableEntryFactory {
                     CancerTypeExtraction cancerTypeExtraction = ActionableFunctions.extractCancerTypeDetails(indication);
 
                     if (cancerTypeExtraction != null) {
+                        String trialName = trial.acronym() != null ? trial.acronym() : trial.title();
+                        assert trialName != null;
+
                         actionableTrials.add(ImmutableActionableEntry.builder()
                                 .source(Knowledgebase.CKB_TRIAL)
                                 .sourceEvent(sourceEvent)
                                 .sourceUrls(Sets.newHashSet("https://clinicaltrials.gov/study/" + trial.nctId()))
-                                .treatment(ImmutableTreatment.builder().name(trial.title()).build())
+                                .treatment(ImmutableTreatment.builder().name(trialName).build())
                                 .applicableCancerType(cancerTypeExtraction.applicableCancerType())
                                 .blacklistCancerTypes(cancerTypeExtraction.blacklistedCancerTypes())
                                 .level(EvidenceLevel.B)

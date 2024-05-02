@@ -23,6 +23,9 @@ public abstract class ClinicalTrial {
     @NotNull
     public abstract String title();
 
+    @Nullable
+    public abstract String acronym();
+
     @NotNull
     public abstract List<Therapy> therapies();
 

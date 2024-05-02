@@ -38,6 +38,7 @@ public final class ClinicalTrialFactory {
                         .updateDate(clinicalTrial.updateDate())
                         .nctId(clinicalTrial.nctId())
                         .title(clinicalTrial.title())
+                        .acronym(clinicalTrial.acronym())
                         .therapies(TherapyFactory.extractTherapies(ckbJsonDatabase, clinicalTrial.therapies()))
                         .indications(IndicationFactory.extractIndications(ckbJsonDatabase, clinicalTrial.indications()))
                         .phase(clinicalTrial.phase())

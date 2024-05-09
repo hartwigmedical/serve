@@ -36,7 +36,7 @@ Currently, the GitHub release is not automatically created, so you need to creat
 respective jar and database generation scripts as additional resources. The jars can be built by running these commands:
 
 - `mvn versions:set -DnewVersion=${new_version}`
-- `mvn clean package`.
+- `mvn clean package`
 - `mvn versions:revert`
 
 In addition, when creating releases on the GitHub website it is convenient to create additional tags with the module prefix (

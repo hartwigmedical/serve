@@ -34,6 +34,10 @@ Note the new version should be of the format `major.minor.patch` where:
 
 Currently, the GitHub release is not automatically created, so you need to create a new release on the GitHub website and attach the serve
 jar as an additional resource. The jars can be built by running these commands:
- - `mvn versions:set -DnewVersion=${new_version}`
- - `mvn clean package`.
- - `mvn versions:revert`
+
+- `mvn versions:set -DnewVersion=${new_version}`
+- `mvn clean package`.
+- `mvn versions:revert`
+
+In addition, when creating releases on the GitHub website it is convenient to create additional tags with the module prefix (
+e.g. `serve-v${new_version}` when releasing algo)

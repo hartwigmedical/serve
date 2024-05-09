@@ -409,8 +409,8 @@ elsewhere.
   
 ## Version History and Download Links
 
-- Upcoming
-  - Support for usage acronym of clinical study title from data model 
+- [3.4.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v3.4.0)
+  - Support for usage of CKB acronym for clinical study title in data model 
 - [3.3.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v3.3.0)
   - Drastically improved performance of transvar calls 
   - Inclusion of all SERVE dependencies in docker image

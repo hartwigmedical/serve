@@ -21,8 +21,8 @@
 | db_pass  | Required: The password needed for the DB user to authenticate on the URL. |
 
 ## Version History and Download Links
-- Upcoming
-  - Support for usage acronym of clinical study title from data model
+- [3.4.0](https://github.com/hartwigmedical/serve/releases/tag/ckb-importer-v3.4.0)
+  - Support for usage of CKB acronym for clinical study title in data model
 - [2.2.0](https://github.com/hartwigmedical/serve/releases/tag/ckb-importer-v2.2.0)
   - Added "shortJournalTitle" and "pages" to reference json in ckb
 - [2.1](https://github.com/hartwigmedical/serve/releases/tag/ckb-importer-v2.1)

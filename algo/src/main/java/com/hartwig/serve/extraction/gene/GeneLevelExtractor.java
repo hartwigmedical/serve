@@ -60,9 +60,9 @@ public class GeneLevelExtractor {
         } else if (type == EventType.PROMISCUOUS_FUSION && fusionGeneChecker.isValidGene(gene)) {
             return extractPromiscuousFusion(gene);
         } else if (type == EventType.NEGATIVE && exomeGeneChecker.isValidGene(gene)) {
-            return extractNegativeEvent(gene, event, type);
+            return extractNegativePositiveEvent(gene, GeneEvent.NEGATIVE, type);
         } else if (type == EventType.POSITIVE && exomeGeneChecker.isValidGene(gene)) {
-            return extractPositiveEvent(gene, event, type);
+            return extractNegativePositiveEvent(gene, GeneEvent.POSITIVE, type);
         }
 
         return null;
@@ -111,39 +111,21 @@ public class GeneLevelExtractor {
 
     @Nullable
     @VisibleForTesting
-    GeneAnnotation extractNegativeEvent(@NotNull String gene, @NotNull String event, @NotNull EventType type) {
+    GeneAnnotation extractNegativePositiveEvent(@NotNull String gene, @NotNull GeneEvent geneEvent, @NotNull EventType type) {
         boolean geneInDriverGenesDatabase = geneInDriverGenes(driverGenes, gene);
         if (!geneInDriverGenesDatabase && driverInconsistencyMode.isActive()) {
             if (driverInconsistencyMode == DriverInconsistencyMode.WARN_ONLY) {
-                LOGGER.warn("Wildtype event {} on {} is not included in driver catalog and won't ever be reported.", type, gene);
+                LOGGER.warn("{} event {} on {} is not included in driver catalog and won't ever be reported.", geneEvent, type, gene);
             } else if (driverInconsistencyMode == DriverInconsistencyMode.FILTER) {
-                LOGGER.info("Wildtype event filtered -- {} on {} is not included in driver catalog and won't ever be reported.",
+                LOGGER.info("{}  event filtered -- {} on {} is not included in driver catalog and won't ever be reported.",
+                        geneEvent,
                         type,
                         gene);
                 return null;
             }
         }
 
-        return ImmutableGeneAnnotationImpl.builder().gene(gene).event(GeneEvent.NEGATIVE).build();
-
-    }
-
-    @Nullable
-    @VisibleForTesting
-    GeneAnnotation extractPositiveEvent(@NotNull String gene, @NotNull String event, @NotNull EventType type) {
-        boolean geneInDriverGenesDatabase = geneInDriverGenes(driverGenes, gene);
-        if (!geneInDriverGenesDatabase && driverInconsistencyMode.isActive()) {
-            if (driverInconsistencyMode == DriverInconsistencyMode.WARN_ONLY) {
-                LOGGER.warn("Wildtype event {} on {} is not included in driver catalog and won't ever be reported.", type, gene);
-            } else if (driverInconsistencyMode == DriverInconsistencyMode.FILTER) {
-                LOGGER.info("Wildtype event filtered -- {} on {} is not included in driver catalog and won't ever be reported.",
-                        type,
-                        gene);
-                return null;
-            }
-        }
-
-        return ImmutableGeneAnnotationImpl.builder().gene(gene).event(GeneEvent.POSITIVE).build();
+        return ImmutableGeneAnnotationImpl.builder().gene(gene).event(geneEvent).build();
 
     }
 

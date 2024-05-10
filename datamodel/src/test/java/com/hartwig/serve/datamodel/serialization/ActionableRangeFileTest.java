@@ -43,7 +43,7 @@ public class ActionableRangeFileTest{
     }
 
     private static void assertActionableExons(@NotNull List<ActionableRange> exons) {
-        assertEquals(1, exons.size());
+        assertEquals(2, exons.size());
 
         ActionableRange exon1 = findByGeneUp(exons, "EGFR");
         assertEquals("EGFR", exon1.gene());
@@ -54,7 +54,7 @@ public class ActionableRangeFileTest{
     }
 
     private static void assertActionableCodons(@NotNull List<ActionableRange> codons) {
-        assertEquals(1, codons.size());
+        assertEquals(2, codons.size());
 
         ActionableRange codon1 = findByGeneUp(codons, "BRAF");
         assertEquals("BRAF", codon1.gene());

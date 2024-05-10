@@ -77,7 +77,7 @@ public final class ActionableFileUtil {
             @Override
             public Intervention intervention() {
                 boolean isClinicalTrial = !values[fields.get("studyNctId")].isEmpty();
-                boolean isTreatment = !values[fields.get("treatment")].isEmpty();
+                boolean isTreatment = values[fields.get("studyNctId")].isEmpty() && !values[fields.get("treatment")].isEmpty();
 
                 if (isClinicalTrial && isTreatment) {
                     throw new IllegalStateException("An actionable event cannot be both a treatment and clinical trial");
@@ -94,6 +94,7 @@ public final class ActionableFileUtil {
                             .studyNctId(values[fields.get("studyNctId")])
                             .studyTitle(values[fields.get("studyTitle")])
                             .countriesOfStudy(fieldToSet(values[fields.get("countriesOfStudy")]))
+                            .therapyName(values[fields.get("treatment")])
                             .build();
                 } else {
                     throw new IllegalStateException("An actionable event has to be either a treatment or a clinical trial!");
@@ -146,17 +147,24 @@ public final class ActionableFileUtil {
             treatment = (Treatment) event.intervention();
         }
 
-        if ((clinicalTrial == null && treatment == null) || (clinicalTrial != null && treatment != null)) {
+        if ((clinicalTrial == null && treatment == null)) {
             throw new IllegalStateException("An actionable event has to contain either treatment or clinical trial: " + event);
         }
 
+
+        String therapy = Strings.EMPTY;
+        if (clinicalTrial != null) {
+            therapy = clinicalTrial.therapyName();
+        } else {
+            therapy = treatment.name();
+        }
         return new StringJoiner(FIELD_DELIMITER).add(event.source().toString())
                 .add(event.sourceEvent())
                 .add(setToField(event.sourceUrls()))
                 .add(clinicalTrial != null ? clinicalTrial.studyNctId() : Strings.EMPTY)
                 .add(clinicalTrial != null ? clinicalTrial.studyTitle() : Strings.EMPTY)
                 .add(clinicalTrial != null ? setToField(clinicalTrial.countriesOfStudy()) : Strings.EMPTY)
-                .add(treatment != null ? treatment.name() : Strings.EMPTY)
+                .add(therapy)
                 .add(treatment != null ? setToField(treatment.sourceRelevantTreatmentApproaches()) : Strings.EMPTY)
                 .add(treatment != null ? setToField(treatment.relevantTreatmentApproaches()) : Strings.EMPTY)
                 .add(event.applicableCancerType().name())

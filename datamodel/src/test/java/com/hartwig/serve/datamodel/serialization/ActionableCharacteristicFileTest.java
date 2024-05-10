@@ -43,7 +43,7 @@ public class ActionableCharacteristicFileTest {
     private static void assertCharacteristics(@NotNull List<ActionableCharacteristic> characteristics) {
         assertEquals(2, characteristics.size());
 
-        ActionableCharacteristic characteristic1 = findBySource(characteristics, Knowledgebase.VICC_CGI);
+        ActionableCharacteristic characteristic1 = findBySource(characteristics, Knowledgebase.CKB_EVIDENCE);
         Treatment treatment1 = DatamodelTestFactory.treatmentBuilder(characteristic1);
         assertEquals(TumorCharacteristicType.MICROSATELLITE_UNSTABLE, characteristic1.type());
         assertEquals(TumorCharacteristicCutoffType.EQUAL_OR_GREATER, characteristic1.cutoffType());
@@ -61,16 +61,14 @@ public class ActionableCharacteristicFileTest {
         assertEquals(EvidenceDirection.RESPONSIVE, characteristic1.direction());
         assertEquals(2, characteristic1.evidenceUrls().size());
 
-        ActionableCharacteristic characteristic2 = findBySource(characteristics, Knowledgebase.VICC_CIVIC);
-        Treatment treatment2 = DatamodelTestFactory.treatmentBuilder(characteristic2);
+        ActionableCharacteristic characteristic2 = findBySource(characteristics, Knowledgebase.CKB_TRIAL);
+        ClinicalTrial trial = DatamodelTestFactory.clinicalTrialBuilder(characteristic2);
         assertEquals(TumorCharacteristicType.MICROSATELLITE_UNSTABLE, characteristic2.type());
         assertNull(characteristic2.cutoffType());
         assertNull(characteristic2.cutoff());
         assertEquals("msi", characteristic2.sourceEvent());
         assertTrue(characteristic2.sourceUrls().contains("http"));
-        assertEquals("Pembro", treatment2.name());
-        assertTrue(treatment2.sourceRelevantTreatmentApproaches().isEmpty());
-        assertTrue(treatment2.relevantTreatmentApproaches().isEmpty());
+        assertEquals("Pembro", trial.therapyName());
         assertEquals("All cancer types", characteristic2.applicableCancerType().name());
         assertEquals("X", characteristic2.applicableCancerType().doid());
         assertTrue(characteristic2.blacklistCancerTypes()

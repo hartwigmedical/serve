@@ -7,6 +7,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.io.Resources;
+import com.hartwig.serve.datamodel.DatamodelTestFactory;
+import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.datamodel.characteristic.ActionableCharacteristic;
+import com.hartwig.serve.datamodel.gene.ActionableGene;
+import com.hartwig.serve.datamodel.gene.GeneEvent;
 import com.hartwig.serve.datamodel.immuno.ActionableHLA;
 import com.hartwig.serve.datamodel.serialization.util.ActionableFileUtil;
 import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
@@ -31,8 +36,28 @@ public class ActionableHLAFileTest {
     }
 
     private static void assertActionableHLAs(@NotNull List<ActionableHLA> hlas) {
-        assertEquals(1, hlas.size());
+        assertEquals(2, hlas.size());
 
-        // TODO Implement (see ActionableFusionFileTest)
+        ActionableHLA hla1 = findBySource(hlas, Knowledgebase.CKB_EVIDENCE);
+        assertEquals("A*02", hla1.hlaAllele());
+        assertEquals("Nivolumab", DatamodelTestFactory.treatmentBuilder(hla1).name());
+        assertEquals("All cancer types", hla1.applicableCancerType().name());
+
+        ActionableHLA hla2 = findBySource(hlas, Knowledgebase.CKB_TRIAL);
+        assertEquals("A*02", hla2.hlaAllele());
+        assertEquals("Nivolumab", DatamodelTestFactory.clinicalTrialBuilder(hla2).therapyName());
+        assertEquals("Skin melanoma", hla2.applicableCancerType().name());
+    }
+
+    @NotNull
+    private static ActionableHLA findBySource(@NotNull List<ActionableHLA> hlas,
+            @NotNull Knowledgebase sourceToFind) {
+        for (ActionableHLA hla : hlas) {
+            if (hla.source() == sourceToFind) {
+                return hla;
+            }
+        }
+
+        throw new IllegalStateException("Could not find actionable characteristic with source: " + sourceToFind);
     }
 }

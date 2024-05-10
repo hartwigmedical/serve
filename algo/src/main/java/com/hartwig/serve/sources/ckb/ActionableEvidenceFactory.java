@@ -84,48 +84,51 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
             if (level != null && direction != null && cancerTypeExtraction != null) {
                 String treatment = evidence.therapy().therapyName();
 
-                Set<String> evidenceUrls = Sets.newHashSet();
-                for (Reference reference : evidence.references()) {
-                    if (reference.url() != null) {
-                        evidenceUrls.add(reference.url());
+                if (!blacklistEvidence.isBlacklistEvidence(treatment,
+                        cancerTypeExtraction.applicableCancerType().name(),
+                        level,
+                        sourceGene,
+                        sourceEvent)) {
+                    Set<String> evidenceUrls = Sets.newHashSet();
+                    for (Reference reference : evidence.references()) {
+                        if (reference.url() != null) {
+                            evidenceUrls.add(reference.url());
+                        }
                     }
-                }
 
-                Set<String> sourceUrls = Sets.newHashSet();
-                sourceUrls.add("https://ckbhome.jax.org/profileResponse/advancedEvidenceFind?molecularProfileId=" + entry.profileId());
+                    Set<String> sourceUrls = Sets.newHashSet();
+                    sourceUrls.add("https://ckbhome.jax.org/profileResponse/advancedEvidenceFind?molecularProfileId=" + entry.profileId());
 
-                Set<String> sourceRelevantTreatmentApproaches = Sets.newHashSet();
-                for (RelevantTreatmentApproaches relevantTreatmentApproaches : evidence.relevantTreatmentApproaches()) {
-                    DrugClass relevantTreatmentApproachesInfo = relevantTreatmentApproaches.drugClass();
+                    Set<String> sourceRelevantTreatmentApproaches = Sets.newHashSet();
+                    for (RelevantTreatmentApproaches relevantTreatmentApproaches : evidence.relevantTreatmentApproaches()) {
+                        DrugClass relevantTreatmentApproachesInfo = relevantTreatmentApproaches.drugClass();
 
-                    if (relevantTreatmentApproachesInfo != null) {
-                        sourceRelevantTreatmentApproaches.add(relevantTreatmentApproachesInfo.drugClass());
+                        if (relevantTreatmentApproachesInfo != null) {
+                            sourceRelevantTreatmentApproaches.add(relevantTreatmentApproachesInfo.drugClass());
+                        }
                     }
-                }
 
-                String treatmentApproachString = String.join(",", sourceRelevantTreatmentApproaches);
-                String treatmentApproachInterpret;
-                if (sourceRelevantTreatmentApproaches.isEmpty()) {
-                    treatmentApproachInterpret = null;
-                } else if (treatmentApproachString.endsWith(",")) {
-                    treatmentApproachInterpret = treatmentApproachString.substring(0, treatmentApproachString.length() - 1);
-                } else {
-                    treatmentApproachInterpret = treatmentApproachString;
-                }
+                    String treatmentApproachString = String.join(",", sourceRelevantTreatmentApproaches);
+                    String treatmentApproachInterpret;
+                    if (sourceRelevantTreatmentApproaches.isEmpty()) {
+                        treatmentApproachInterpret = null;
+                    } else if (treatmentApproachString.endsWith(",")) {
+                        treatmentApproachInterpret = treatmentApproachString.substring(0, treatmentApproachString.length() - 1);
+                    } else {
+                        treatmentApproachInterpret = treatmentApproachString;
+                    }
 
-                TreatmentApproachCurationEntryKey key = ImmutableTreatmentApproachCurationEntryKey.builder()
-                        .treatment(treatment)
-                        .treatmentApproach(treatmentApproachInterpret == null || treatmentApproachInterpret.isEmpty()
-                                ? null
-                                : treatmentApproachInterpret)
-                        .event(sourceGene + " " + entry.type())
-                        .direction(direction)
-                        .build();
+                    TreatmentApproachCurationEntryKey key = ImmutableTreatmentApproachCurationEntryKey.builder()
+                            .treatment(treatment)
+                            .treatmentApproach(treatmentApproachInterpret == null || treatmentApproachInterpret.isEmpty()
+                                    ? null
+                                    : treatmentApproachInterpret)
+                            .event(sourceGene + " " + entry.type())
+                            .direction(direction)
+                            .build();
 
-                Set<String> curatedRelevantTreatmentApproaches = Sets.newHashSet(curator.isMatch(key));
+                    Set<String> curatedRelevantTreatmentApproaches = Sets.newHashSet(curator.isMatch(key));
 
-                if (!blacklistEvidence.isBlacklistEvidence(treatment, cancerTypeExtraction.applicableCancerType().name(),
-                        level, sourceGene, sourceEvent)) {
                     actionableEntries.add(ImmutableActionableEntry.builder()
                             .source(Knowledgebase.CKB_EVIDENCE)
                             .sourceEvent(sourceEvent)

@@ -24,15 +24,15 @@ public final class CkbReader {
     @NotNull
     public static List<CkbEntry> readAndCurate(@NotNull String ckbDir, @NotNull String ckbBlacklistMolecularProfileTsv) throws IOException {
         LOGGER.info("Reading CKB database from {}", ckbDir);
-        List<CkbEntry> ckbEntries = CkbEntryReader.read(ckbDir);
-        LOGGER.info(" Read {} entries", ckbEntries.size());
+        List<CkbEntry> blacklistEntries = CkbEntryReader.read(ckbDir);
+        LOGGER.info(" Read {} entries", blacklistEntries.size());
 
         LOGGER.info("Reading CBK blacklist molecular profile entries from {}", ckbBlacklistMolecularProfileTsv);
         List<CkbBlacklistMolecularProfileEntry> ckbBlacklistMolecularProfileEntries =
                 CkbBlacklistMolecularProfileFile.read(ckbBlacklistMolecularProfileTsv);
         LOGGER.info(" Read {} blacklist molecular profile entries entries", ckbBlacklistMolecularProfileEntries.size());
 
-        return blacklist(curate(ckbEntries), ckbBlacklistMolecularProfileEntries);
+        return whitelist(curate(blacklistEntries), ckbBlacklistMolecularProfileEntries);
     }
 
     @NotNull
@@ -48,18 +48,18 @@ public final class CkbReader {
     }
 
     @NotNull
-    private static List<CkbEntry> blacklist(@NotNull List<CkbEntry> entries,
+    private static List<CkbEntry> whitelist(@NotNull List<CkbEntry> entries,
             @NotNull List<CkbBlacklistMolecularProfileEntry> ckbBlacklistEntries) {
         CkbMolecularProfileBlacklistModel blacklist = new CkbMolecularProfileBlacklistModel(ckbBlacklistEntries);
 
         LOGGER.info("Blacklisting {} CKB entries", entries.size());
-        List<CkbEntry> blacklistedEntries = blacklist.run(entries);
+        List<CkbEntry> whitelistedEntries = blacklist.run(entries);
         LOGGER.info(" Finished CKB blacklisting. {} entries remaining, {} entries have been removed",
-                blacklistedEntries.size(),
-                entries.size() - blacklistedEntries.size());
+                whitelistedEntries.size(),
+                entries.size() - whitelistedEntries.size());
 
         blacklist.reportUnusedBlacklistEntries();
 
-        return blacklistedEntries;
+        return whitelistedEntries;
     }
 }

@@ -13,9 +13,9 @@ import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.codon.CodonAnnotation;
 import com.hartwig.serve.extraction.codon.ImmutableCodonAnnotation;
 import com.hartwig.serve.refgenome.RefGenomeResourceTestFactory;
-import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistEvidenceTest;
+import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistFactory;
 import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudyTest;
-import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachTestFactory;
+import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachFactory;
 
 import org.apache.commons.compress.utils.Lists;
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +27,7 @@ public class CkbExtractorTest {
     public void canExtractEvidenceFromCkbEntries() {
         CkbExtractor evidenceExtractor = CkbExtractorFactory.createEvidenceExtractor(CkbClassificationConfig.build(),
                 RefGenomeResourceTestFactory.buildTestResource37(),
-                TreatmentApproachTestFactory.createEmptyCurator(), CkbBlacklistEvidenceTest.createCkbBlacklistEvidenceEmpty());
+                TreatmentApproachFactory.createEmptyCurator(), CkbBlacklistFactory.createCkbBlacklistEvidenceEmpty());
 
         ExtractionResult evidenceResult = evidenceExtractor.extract(createCkbEntryTestDatabase());
         assertEquals(1, evidenceResult.knownHotspots().size());

@@ -16,15 +16,15 @@ public final class DatamodelTestFactory {
     @NotNull
     public static ImmutableClinicalTrial.Builder clinicalTrialBuilderBuilder() {
         return ImmutableClinicalTrial.builder()
-                .studyNctId("studyNctId")
-                .studyTitle("studyTitle")
-                .countriesOfStudy(Sets.newHashSet("countriesOfStudy"))
-                .therapyName("therapyName");
+                .studyNctId(Strings.EMPTY)
+                .studyTitle(Strings.EMPTY)
+                .countriesOfStudy(Sets.newHashSet())
+                .therapyName(Strings.EMPTY);
     }
 
     @NotNull
     public static ImmutableTreatment.Builder treatmentBuilder() {
-        return ImmutableTreatment.builder().name("name");
+        return ImmutableTreatment.builder().name(Strings.EMPTY);
     }
 
     @NotNull
@@ -61,7 +61,7 @@ public final class DatamodelTestFactory {
     @NotNull
     public static Intervention interventionBuilder(boolean isTrial, boolean isTreatment) {
         ClinicalTrial clinicalTrial = isTrial ? clinicalTrialBuilderBuilder().build() : null;
-        Treatment treatment = isTreatment ? treatmentBuilder().build() : null;
+        Treatment treatment = isTreatment ? treatmentBuilder().name("treatmentA").build() : null;
 
         if ((clinicalTrial == null && treatment == null) || (clinicalTrial != null && treatment != null)) {
             throw new IllegalStateException("An actionable event has to contain either treatment or clinical trial");

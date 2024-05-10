@@ -90,7 +90,7 @@ public class ServeAlgo {
         if (config.useCkbTrials()) {
             extractions.add(extractCkbTrialKnowledge(config.ckbDir(),
                     config.ckbBlacklistMolecularProfileTsv(),
-                    config.ckbBlacklistStudyTsv()));
+                    config.ckbBlacklistTrialTsv()));
         }
 
         if (config.useDocm()) {

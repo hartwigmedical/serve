@@ -132,7 +132,7 @@ public class ServeDAO {
     }
 
     @Nullable
-    private static Treatment createTreatment(@NotNull ActionableEvent event) {
+    private static Treatment extractOptionalTreatment(@NotNull ActionableEvent event) {
         Treatment treatment = null;
          if (event.intervention() instanceof Treatment) {
             treatment = (Treatment) event.intervention();
@@ -141,7 +141,7 @@ public class ServeDAO {
     }
 
     @Nullable
-    private static ClinicalTrial createClinicalTrial(@NotNull ActionableEvent event) {
+    private static ClinicalTrial extractOptionalClinicalTrial(@NotNull ActionableEvent event) {
         ClinicalTrial clinicalTrial = null;
         if (event.intervention() instanceof ClinicalTrial) {
             clinicalTrial = (ClinicalTrial) event.intervention();
@@ -160,20 +160,18 @@ public class ServeDAO {
         }
 
         if (isTreatment) {
-           return treatment.name();
-        } else if (isClinicalTrial) {
-            return clinicalTrial.therapyName();
+            return treatment.name();
         } else {
-            return Strings.EMPTY;
+            assert clinicalTrial != null;
+            return clinicalTrial.therapyName();
         }
     }
 
     private static void writeActionableHotspotBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep21 inserter,
             @NotNull ActionableHotspot actionableHotspot) {
 
-        ClinicalTrial clinicalTrial = createClinicalTrial(actionableHotspot);
-        Treatment treatment = createTreatment(actionableHotspot);
-        String therapy = therapyName(clinicalTrial, treatment);
+        ClinicalTrial clinicalTrial = extractOptionalClinicalTrial(actionableHotspot);
+        Treatment treatment = extractOptionalTreatment(actionableHotspot);
 
         inserter.values(timestamp,
                 actionableHotspot.gene(),
@@ -184,12 +182,12 @@ public class ServeDAO {
                 actionableHotspot.source(),
                 actionableHotspot.sourceEvent(),
                 concat(actionableHotspot.sourceUrls()),
-                clinicalTrial != null ? clinicalTrial.studyNctId() : Strings.EMPTY,
-                clinicalTrial != null ? clinicalTrial.studyTitle() : Strings.EMPTY,
-                clinicalTrial != null ? concat(clinicalTrial.countriesOfStudy()) : Strings.EMPTY,
-                therapy,
-                treatment != null ? concat(treatment.sourceRelevantTreatmentApproaches()) : Strings.EMPTY,
-                treatment != null ? concat(treatment.relevantTreatmentApproaches()) : Strings.EMPTY,
+                clinicalTrial != null ? clinicalTrial.studyNctId() : null,
+                clinicalTrial != null ?  clinicalTrial.studyTitle() : null,
+                clinicalTrial != null ?  concat(clinicalTrial.countriesOfStudy()) : null,
+                therapyName(clinicalTrial, treatment),
+                treatment != null ? concat(treatment.sourceRelevantTreatmentApproaches()) : null,
+                treatment != null ?concat(treatment.relevantTreatmentApproaches()) : null,
                 actionableHotspot.applicableCancerType().name(),
                 actionableHotspot.applicableCancerType().doid(),
                 concat(toStrings(actionableHotspot.blacklistCancerTypes())),
@@ -259,9 +257,8 @@ public class ServeDAO {
     private static void writeActionableRangeBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep21 inserter,
                                                    @NotNull ActionableRange actionableRange) {
 
-        ClinicalTrial clinicalTrial = createClinicalTrial(actionableRange);
-        Treatment treatment = createTreatment(actionableRange);
-        String therapy = therapyName(clinicalTrial, treatment);
+        ClinicalTrial clinicalTrial = extractOptionalClinicalTrial(actionableRange);
+        Treatment treatment = extractOptionalTreatment(actionableRange);
 
         inserter.values(timestamp,
                 actionableRange.gene(),
@@ -272,12 +269,12 @@ public class ServeDAO {
                 actionableRange.source(),
                 actionableRange.sourceEvent(),
                 concat(actionableRange.sourceUrls()),
-                clinicalTrial != null ? clinicalTrial.studyNctId() : Strings.EMPTY,
-                clinicalTrial != null ? clinicalTrial.studyTitle() : Strings.EMPTY,
-                clinicalTrial != null ? concat(clinicalTrial.countriesOfStudy()) : Strings.EMPTY,
-                therapy,
-                treatment != null ? concat(treatment.sourceRelevantTreatmentApproaches()) : Strings.EMPTY,
-                treatment != null ? concat(treatment.relevantTreatmentApproaches()) : Strings.EMPTY,
+                clinicalTrial != null ?  clinicalTrial.studyNctId() : null,
+                clinicalTrial != null ?  clinicalTrial.studyTitle() : null,
+                clinicalTrial != null ?  concat(clinicalTrial.countriesOfStudy()) : null,
+                therapyName(clinicalTrial, treatment),
+                treatment != null ? concat(treatment.sourceRelevantTreatmentApproaches()) : null,
+                treatment != null ? concat(treatment.relevantTreatmentApproaches()) : null,
                 actionableRange.applicableCancerType().name(),
                 actionableRange.applicableCancerType().doid(),
                 concat(toStrings(actionableRange.blacklistCancerTypes())),
@@ -315,9 +312,8 @@ public class ServeDAO {
     private static void writeActionableGeneBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep18 inserter,
             @NotNull ActionableGene actionableGene) {
 
-        ClinicalTrial clinicalTrial = createClinicalTrial(actionableGene);
-        Treatment treatment = createTreatment(actionableGene);
-        String therapy = therapyName(clinicalTrial, treatment);
+        ClinicalTrial clinicalTrial = extractOptionalClinicalTrial(actionableGene);
+        Treatment treatment = extractOptionalTreatment(actionableGene);
 
         inserter.values(timestamp,
                 actionableGene.gene(),
@@ -325,12 +321,12 @@ public class ServeDAO {
                 actionableGene.source(),
                 actionableGene.sourceEvent(),
                 concat(actionableGene.sourceUrls()),
-                clinicalTrial != null ? clinicalTrial.studyNctId() : Strings.EMPTY,
-                clinicalTrial != null ? clinicalTrial.studyTitle() : Strings.EMPTY,
-                clinicalTrial != null ? concat(clinicalTrial.countriesOfStudy()) : Strings.EMPTY,
-                therapy,
-                treatment != null ? concat(treatment.sourceRelevantTreatmentApproaches()) : Strings.EMPTY,
-                treatment != null ? concat(treatment.relevantTreatmentApproaches()) : Strings.EMPTY,
+                clinicalTrial != null ? clinicalTrial.studyNctId() : null,
+                clinicalTrial != null ? clinicalTrial.studyTitle() : null,
+                clinicalTrial != null ? concat(clinicalTrial.countriesOfStudy()) : null,
+                therapyName(clinicalTrial, treatment),
+                treatment != null ? concat(treatment.sourceRelevantTreatmentApproaches()) : null,
+                treatment != null ? concat(treatment.relevantTreatmentApproaches()) : null,
                 actionableGene.applicableCancerType().name(),
                 actionableGene.applicableCancerType().doid(),
                 concat(toStrings(actionableGene.blacklistCancerTypes())),
@@ -372,9 +368,8 @@ public class ServeDAO {
     private static void writeActionableFusionBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep22 inserter,
             @NotNull ActionableFusion actionableFusion) {
 
-        ClinicalTrial clinicalTrial = createClinicalTrial(actionableFusion);
-        Treatment treatment = createTreatment(actionableFusion);
-        String therapy = therapyName(clinicalTrial, treatment);
+        ClinicalTrial clinicalTrial = extractOptionalClinicalTrial(actionableFusion);
+        Treatment treatment = extractOptionalTreatment(actionableFusion);
 
         inserter.values(timestamp,
                 actionableFusion.geneUp(),
@@ -386,12 +381,12 @@ public class ServeDAO {
                 actionableFusion.source(),
                 actionableFusion.sourceEvent(),
                 concat(actionableFusion.sourceUrls()),
-                clinicalTrial != null ? clinicalTrial.studyNctId() : Strings.EMPTY,
-                clinicalTrial != null ? clinicalTrial.studyTitle() : Strings.EMPTY,
-                clinicalTrial != null ? concat(clinicalTrial.countriesOfStudy()) : Strings.EMPTY,
-                therapy,
-                treatment != null ? concat(treatment.sourceRelevantTreatmentApproaches()) : Strings.EMPTY,
-                treatment != null ? concat(treatment.relevantTreatmentApproaches()) : Strings.EMPTY,
+                clinicalTrial != null ? clinicalTrial.studyNctId() : null,
+                clinicalTrial != null ? clinicalTrial.studyTitle() : null,
+                clinicalTrial != null ? concat(clinicalTrial.countriesOfStudy()) : null,
+                therapyName(clinicalTrial, treatment),
+                treatment != null ? concat(treatment.sourceRelevantTreatmentApproaches()) : null,
+                treatment != null ? concat(treatment.relevantTreatmentApproaches()) : null,
                 actionableFusion.applicableCancerType().name(),
                 actionableFusion.applicableCancerType().doid(),
                 concat(toStrings(actionableFusion.blacklistCancerTypes())),
@@ -430,9 +425,8 @@ public class ServeDAO {
     private static void writeActionableCharacteristicBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep19 inserter,
             @NotNull ActionableCharacteristic actionableCharacteristic) {
 
-        ClinicalTrial clinicalTrial = createClinicalTrial(actionableCharacteristic);
-        Treatment treatment = createTreatment(actionableCharacteristic);
-        String therapy = therapyName(clinicalTrial, treatment);
+        ClinicalTrial clinicalTrial = extractOptionalClinicalTrial(actionableCharacteristic);
+        Treatment treatment = extractOptionalTreatment(actionableCharacteristic);
 
         inserter.values(timestamp,
                 actionableCharacteristic.type(),
@@ -441,12 +435,12 @@ public class ServeDAO {
                 actionableCharacteristic.source(),
                 actionableCharacteristic.sourceEvent(),
                 concat(actionableCharacteristic.sourceUrls()),
-                clinicalTrial != null ? clinicalTrial.studyNctId() : Strings.EMPTY,
-                clinicalTrial != null ? clinicalTrial.studyTitle() : Strings.EMPTY,
-                clinicalTrial != null ? concat(clinicalTrial.countriesOfStudy()) : Strings.EMPTY,
-                therapy,
-                treatment != null ? concat(treatment.sourceRelevantTreatmentApproaches()) : Strings.EMPTY,
-                treatment != null ? concat(treatment.relevantTreatmentApproaches()) : Strings.EMPTY,
+                clinicalTrial != null ? clinicalTrial.studyNctId() : null,
+                clinicalTrial != null ? clinicalTrial.studyTitle() : null,
+                clinicalTrial != null ? concat(clinicalTrial.countriesOfStudy()) : null,
+                therapyName(clinicalTrial, treatment),
+                treatment != null ? concat(treatment.sourceRelevantTreatmentApproaches()) : null,
+                treatment != null ? concat(treatment.relevantTreatmentApproaches()) : null,
                 actionableCharacteristic.applicableCancerType().name(),
                 actionableCharacteristic.applicableCancerType().doid(),
                 concat(toStrings(actionableCharacteristic.blacklistCancerTypes())),
@@ -482,21 +476,20 @@ public class ServeDAO {
 
     private static void writeActionableHLABatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep17 inserter,
             @NotNull ActionableHLA actionableHLA) {
-        ClinicalTrial clinicalTrial = createClinicalTrial(actionableHLA);
-        Treatment treatment = createTreatment(actionableHLA);
-        String therapy = therapyName(clinicalTrial, treatment);
+        ClinicalTrial clinicalTrial = extractOptionalClinicalTrial(actionableHLA);
+        Treatment treatment = extractOptionalTreatment(actionableHLA);
 
         inserter.values(timestamp,
                 actionableHLA.hlaAllele(),
                 actionableHLA.source(),
                 actionableHLA.sourceEvent(),
                 concat(actionableHLA.sourceUrls()),
-                clinicalTrial != null ? clinicalTrial.studyNctId() : Strings.EMPTY,
-                clinicalTrial != null ? clinicalTrial.studyTitle() : Strings.EMPTY,
-                clinicalTrial != null ? concat(clinicalTrial.countriesOfStudy()) : Strings.EMPTY,
-                therapy,
-                treatment != null ? concat(treatment.sourceRelevantTreatmentApproaches()) : Strings.EMPTY,
-                treatment != null ? concat(treatment.relevantTreatmentApproaches()) : Strings.EMPTY,
+                clinicalTrial != null ? clinicalTrial.studyNctId() : null,
+                clinicalTrial != null ? clinicalTrial.studyTitle() : null,
+                clinicalTrial != null ? concat(clinicalTrial.countriesOfStudy()) : null,
+                therapyName(clinicalTrial, treatment),
+                treatment != null ? concat(treatment.sourceRelevantTreatmentApproaches()) : null,
+                treatment != null ? concat(treatment.relevantTreatmentApproaches()) : null,
                 actionableHLA.applicableCancerType().name(),
                 actionableHLA.applicableCancerType().doid(),
                 concat(toStrings(actionableHLA.blacklistCancerTypes())),

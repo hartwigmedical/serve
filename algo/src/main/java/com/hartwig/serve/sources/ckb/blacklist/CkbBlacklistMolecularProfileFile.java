@@ -16,19 +16,19 @@ public final class CkbBlacklistMolecularProfileFile {
     }
 
     @NotNull
-    public static List<CkbBlacklistMolecularProfileEntry> read(@NotNull String ckbFilterTsv) throws IOException {
-        List<String> lines = Files.readAllLines(new File(ckbFilterTsv).toPath());
+    public static List<CkbBlacklistMolecularProfileEntry> read(@NotNull String ckbBlacklistMolecularProfileTsv) throws IOException {
+        List<String> lines = Files.readAllLines(new File(ckbBlacklistMolecularProfileTsv).toPath());
         // Skip header
         return fromLines(lines.subList(1, lines.size()));
     }
 
     @NotNull
     private static List<CkbBlacklistMolecularProfileEntry> fromLines(@NotNull List<String> lines) {
-        List<CkbBlacklistMolecularProfileEntry> filterEntries = Lists.newArrayList();
+        List<CkbBlacklistMolecularProfileEntry> blacklistEntries = Lists.newArrayList();
         for (String line : lines) {
-            filterEntries.add(fromLine(line));
+            blacklistEntries.add(fromLine(line));
         }
-        return filterEntries;
+        return blacklistEntries;
     }
 
     @NotNull

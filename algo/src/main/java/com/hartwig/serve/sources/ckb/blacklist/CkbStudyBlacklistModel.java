@@ -22,10 +22,10 @@ public class CkbStudyBlacklistModel {
         this.blacklistStudiesList = blacklistStudiesList;
     }
 
-    public boolean isBlacklistStudy(@NotNull String studyName, @NotNull String therapyName, @NotNull String cancerType, @NotNull String sourceGene,
+    public boolean isBlacklistStudy(@NotNull String nctId, @NotNull String therapyName, @NotNull String cancerType, @NotNull String sourceGene,
                                     @NotNull String event) {
         for (CkbBlacklistStudyEntry blacklistStudyEntry : blacklistStudiesList) {
-            boolean match = isMatch(studyName, therapyName, cancerType, sourceGene, event, blacklistStudyEntry);
+            boolean match = isMatch(nctId, therapyName, cancerType, sourceGene, event, blacklistStudyEntry);
             if (match) {
                 usedBlacklists.add(blacklistStudyEntry);
                 return true;
@@ -39,22 +39,22 @@ public class CkbStudyBlacklistModel {
         for (CkbBlacklistStudyEntry entry : blacklistStudiesList) {
             if (!usedBlacklists.contains(entry)) {
                 unusedBlacklistEntryCount++;
-                LOGGER.warn(" Blacklist entry '{}' hasn't been used for CKB filtering", entry);
+                LOGGER.warn(" Blacklist study entry '{}' hasn't been used for CKB filtering", entry);
             }
         }
-        LOGGER.debug(" Found {} unused blacklist entries during CKB filtering", unusedBlacklistEntryCount);
+        LOGGER.debug(" Found {} unused blacklist study entries during CKB filtering", unusedBlacklistEntryCount);
     }
 
-    public boolean isMatch(@NotNull String studyName, @NotNull String therapyName, @NotNull String cancerType, @NotNull String sourceGene,
+    public boolean isMatch(@NotNull String nctId, @NotNull String therapyName, @NotNull String cancerType, @NotNull String sourceGene,
                            @NotNull String event, @NotNull CkbBlacklistStudyEntry blacklistStudyEntry) {
         switch (blacklistStudyEntry.type()) {
             case STUDY_WHOLE: {
-                return blacklistStudyEntry.nctId().equals(studyName);
+                return blacklistStudyEntry.nctId().equals(nctId);
             }
             case STUDY_BASED_ON_THERAPY: {
                 String blacklistEvidenceTherapy = blacklistStudyEntry.therapy();
                 assert blacklistEvidenceTherapy != null;
-                return blacklistStudyEntry.nctId().equals(studyName)
+                return blacklistStudyEntry.nctId().equals(nctId)
                         && blacklistEvidenceTherapy.equals(therapyName);
             }
             case STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE: {
@@ -62,7 +62,7 @@ public class CkbStudyBlacklistModel {
                 String blacklistEvidenceCancerType = blacklistStudyEntry.cancerType();
                 assert blacklistEvidenceTherapy != null;
                 assert blacklistEvidenceCancerType != null;
-                return blacklistStudyEntry.nctId().equals(studyName)
+                return blacklistStudyEntry.nctId().equals(nctId)
                         && blacklistEvidenceTherapy.equals(therapyName)
                         && blacklistEvidenceCancerType.equals(cancerType);
             }
@@ -73,7 +73,7 @@ public class CkbStudyBlacklistModel {
                 assert blacklistEvidenceGene != null;
                 assert blacklistEvidenceTherapy != null;
                 assert blacklistEvidenceCancerType != null;
-                return blacklistStudyEntry.nctId().equals(studyName)
+                return blacklistStudyEntry.nctId().equals(nctId)
                         && blacklistEvidenceTherapy.equals(therapyName)
                         && blacklistEvidenceCancerType.equals(cancerType)
                         && blacklistEvidenceGene.equals(sourceGene);
@@ -88,7 +88,7 @@ public class CkbStudyBlacklistModel {
                 assert blacklistEvidenceTherapy != null;
                 assert blacklistEvidenceCancerType != null;
 
-                return blacklistStudyEntry.nctId().equals(studyName)
+                return blacklistStudyEntry.nctId().equals(nctId)
                         && blacklistEvidenceTherapy.equals(therapyName)
                         && blacklistEvidenceCancerType.equals(cancerType)
                         && blacklistEvidenceGene.equals(sourceGene)
@@ -97,7 +97,7 @@ public class CkbStudyBlacklistModel {
             case ALL_STUDIES_BASED_ON_GENE: {
                 String blacklistEvidenceGene= blacklistStudyEntry.gene();
                 assert blacklistEvidenceGene != null;
-                return blacklistStudyEntry.nctId().equals(studyName)
+                return blacklistStudyEntry.nctId().equals(nctId)
                         && blacklistEvidenceGene.equals(sourceGene);
             }
             case ALL_STUDIES_BASED_ON_GENE_AND_EVENT: {
@@ -105,12 +105,12 @@ public class CkbStudyBlacklistModel {
                 String blacklistEvidenceEvent= blacklistStudyEntry.event();
                 assert blacklistEvidenceEvent != null;
                 assert blacklistEvidenceGene != null;
-                return blacklistStudyEntry.nctId().equals(studyName)
+                return blacklistStudyEntry.nctId().equals(nctId)
                         && blacklistEvidenceGene.equals(sourceGene)
                         && blacklistEvidenceEvent.equals(event);
             }
             default: {
-                LOGGER.warn("Blacklist entry found with unrecognized type: {}", blacklistStudyEntry.type());
+                LOGGER.warn("Blacklist study entry found with unrecognized type: {}", blacklistStudyEntry.type());
                 return false;
             }
         }

@@ -40,11 +40,11 @@ public class CkbEvidenceBlacklistModel {
         for (CkbBlacklistEvidenceEntry entry : blacklistEvidenceEntryList) {
             if (!usedBlacklistEvidenceEntries.contains(entry)) {
                 unusedBlacklistEntryCount++;
-                LOGGER.warn(" Blacklist entry '{}' hasn't been used for CKB filtering", entry);
+                LOGGER.warn(" Blacklist evidence entry '{}' hasn't been used for CKB blacklisting", entry);
             }
         }
 
-        LOGGER.debug(" Found {} unused blacklist entries during CKB filtering", unusedBlacklistEntryCount);
+        LOGGER.debug(" Found {} unused blacklist evidence entries during CKB blacklisting", unusedBlacklistEntryCount);
     }
 
     public boolean isMatch(@NotNull String therapyName, @NotNull String cancerType, @NotNull EvidenceLevel level,
@@ -132,7 +132,7 @@ public class CkbEvidenceBlacklistModel {
             }
 
             default: {
-                LOGGER.warn("Blacklist entry found with unrecognized type: {}", blacklistEvidenceEntry.type());
+                LOGGER.warn("Blacklist evidence entry found with unrecognized type: {}", blacklistEvidenceEntry.type());
                 return false;
             }
         }

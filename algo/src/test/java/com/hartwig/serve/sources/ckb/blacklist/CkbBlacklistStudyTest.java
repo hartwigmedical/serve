@@ -37,152 +37,152 @@ public class CkbBlacklistStudyTest {
     @Test
     public void canBlacklistAllStudiesBasedOnGene() {
         CkbBlacklistStudyEntry blacklistStudyEntry = createBlacklistStudyEntryList(CkbBlacklistStudyType.ALL_STUDIES_BASED_ON_GENE,
-                "Basket of Baskets",
+                "NCT1",
                 null,
                 null,
                 "KRAS",
                 null);
         CkbStudyBlacklistModel ckbBlacklistStudy = createCkbBlacklistStudy(blacklistStudyEntry);
 
-        assertTrue(ckbBlacklistStudy.isMatch("Basket of Baskets",
+        assertTrue(ckbBlacklistStudy.isMatch("NCT1",
                 "Nivolumab",
                 "Solid tumor",
                 "KRAS",
                 "amplification",
                 blacklistStudyEntry));
-        assertFalse(ckbBlacklistStudy.isMatch("Basket of Baskets",
+        assertFalse(ckbBlacklistStudy.isMatch("NCT1",
                 "Nivolumab",
                 "Solid tumor",
                 "BRAF",
                 "amplification",
                 blacklistStudyEntry));
-        assertTrue(ckbBlacklistStudy.isBlacklistStudy("Basket of Baskets", "Nivolumab", "Solid tumor", "KRAS", "amplification"));
-        assertFalse(ckbBlacklistStudy.isBlacklistStudy("Basket of Baskets", "Nivolumab", "Solid tumor", "BRAF", "amplification"));
+        assertTrue(ckbBlacklistStudy.isBlacklistStudy("NCT1", "Nivolumab", "Solid tumor", "KRAS", "amplification"));
+        assertFalse(ckbBlacklistStudy.isBlacklistStudy("NCT1", "Nivolumab", "Solid tumor", "BRAF", "amplification"));
     }
 
     @Test
     public void canBlacklistAllStudiesBasedOnGeneAndEvent() {
         CkbBlacklistStudyEntry blacklistStudyEntry =
                 createBlacklistStudyEntryList(CkbBlacklistStudyType.ALL_STUDIES_BASED_ON_GENE_AND_EVENT,
-                        "Basket of Baskets",
+                        "NCT1",
                         null,
                         null,
                         "KRAS",
                         "amplification");
         CkbStudyBlacklistModel ckbBlacklistStudy = createCkbBlacklistStudy(blacklistStudyEntry);
 
-        assertTrue(ckbBlacklistStudy.isMatch("Basket of Baskets",
+        assertTrue(ckbBlacklistStudy.isMatch("NCT1",
                 "Nivolumab",
                 "Solid tumor",
                 "KRAS",
                 "amplification",
                 blacklistStudyEntry));
-        assertFalse(ckbBlacklistStudy.isMatch("Basket of Baskets", "Nivolumab", "Solid tumor", "KRAS", "deletion", blacklistStudyEntry));
-        assertTrue(ckbBlacklistStudy.isBlacklistStudy("Basket of Baskets", "Nivolumab", "Solid tumor", "KRAS", "amplification"));
-        assertFalse(ckbBlacklistStudy.isBlacklistStudy("Basket of Baskets", "Nivolumab", "Solid tumor", "KRAS", "deletion"));
+        assertFalse(ckbBlacklistStudy.isMatch("NCT1", "Nivolumab", "Solid tumor", "KRAS", "deletion", blacklistStudyEntry));
+        assertTrue(ckbBlacklistStudy.isBlacklistStudy("NCT1", "Nivolumab", "Solid tumor", "KRAS", "amplification"));
+        assertFalse(ckbBlacklistStudy.isBlacklistStudy("NCT1", "Nivolumab", "Solid tumor", "KRAS", "deletion"));
     }
 
     @Test
     public void canBlacklistWholeStudy() {
         CkbBlacklistStudyEntry blacklistStudyEntry =
-                createBlacklistStudyEntryList(CkbBlacklistStudyType.STUDY_WHOLE, "Basket of Baskets", null, null, null, null);
+                createBlacklistStudyEntryList(CkbBlacklistStudyType.STUDY_WHOLE, "NCT1", null, null, null, null);
         CkbStudyBlacklistModel ckbBlacklistStudy = createCkbBlacklistStudy(blacklistStudyEntry);
 
-        assertTrue(ckbBlacklistStudy.isMatch("Basket of Baskets",
+        assertTrue(ckbBlacklistStudy.isMatch("NCT1",
                 "Nivolumab",
                 "Solid tumor",
                 "KRAS",
                 "amplification",
                 blacklistStudyEntry));
-        assertFalse(ckbBlacklistStudy.isMatch("DRUP", "Nivolumab", "Solid tumor", "KRAS", "deletion", blacklistStudyEntry));
-        assertTrue(ckbBlacklistStudy.isBlacklistStudy("Basket of Baskets", "Nivolumab", "Solid tumor", "KRAS", "amplification"));
-        assertFalse(ckbBlacklistStudy.isBlacklistStudy("DRUP", "Nivolumab", "Solid tumor", "KRAS", "deletion"));
+        assertFalse(ckbBlacklistStudy.isMatch("NCT2", "Nivolumab", "Solid tumor", "KRAS", "deletion", blacklistStudyEntry));
+        assertTrue(ckbBlacklistStudy.isBlacklistStudy("NCT1", "Nivolumab", "Solid tumor", "KRAS", "amplification"));
+        assertFalse(ckbBlacklistStudy.isBlacklistStudy("NCT2", "Nivolumab", "Solid tumor", "KRAS", "deletion"));
     }
 
     @Test
     public void canBlacklistStudyBasedOnTherapy() {
         CkbBlacklistStudyEntry blacklistStudyEntry = createBlacklistStudyEntryList(CkbBlacklistStudyType.STUDY_BASED_ON_THERAPY,
-                "Basket of Baskets",
+                "NCT1",
                 "Nivolumab",
                 null,
                 null,
                 null);
         CkbStudyBlacklistModel ckbBlacklistStudy = createCkbBlacklistStudy(blacklistStudyEntry);
 
-        assertTrue(ckbBlacklistStudy.isMatch("Basket of Baskets",
+        assertTrue(ckbBlacklistStudy.isMatch("NCT1",
                 "Nivolumab",
                 "Solid tumor",
                 "KRAS",
                 "amplification",
                 blacklistStudyEntry));
-        assertFalse(ckbBlacklistStudy.isMatch("Basket of Baskets", "Chemo", "Solid tumor", "KRAS", "deletion", blacklistStudyEntry));
-        assertTrue(ckbBlacklistStudy.isBlacklistStudy("Basket of Baskets", "Nivolumab", "Solid tumor", "KRAS", "amplification"));
-        assertFalse(ckbBlacklistStudy.isBlacklistStudy("Basket of Baskets", "Chemo", "Solid tumor", "KRAS", "deletion"));
+        assertFalse(ckbBlacklistStudy.isMatch("NCT1", "Chemo", "Solid tumor", "KRAS", "deletion", blacklistStudyEntry));
+        assertTrue(ckbBlacklistStudy.isBlacklistStudy("NCT1", "Nivolumab", "Solid tumor", "KRAS", "amplification"));
+        assertFalse(ckbBlacklistStudy.isBlacklistStudy("NCT1", "Chemo", "Solid tumor", "KRAS", "deletion"));
     }
 
     @Test
     public void canBlacklistStudyBasedOnTherapyAndCancerType() {
         CkbBlacklistStudyEntry blacklistStudyEntry =
                 createBlacklistStudyEntryList(CkbBlacklistStudyType.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE,
-                        "Basket of Baskets",
+                        "NCT1",
                         "Nivolumab",
                         "Solid tumor",
                         null,
                         null);
         CkbStudyBlacklistModel ckbBlacklistStudy = createCkbBlacklistStudy(blacklistStudyEntry);
 
-        assertTrue(ckbBlacklistStudy.isMatch("Basket of Baskets",
+        assertTrue(ckbBlacklistStudy.isMatch("NCT1",
                 "Nivolumab",
                 "Solid tumor",
                 "KRAS",
                 "amplification",
                 blacklistStudyEntry));
-        assertFalse(ckbBlacklistStudy.isMatch("Basket of Baskets", "Chemo", "Breast", "KRAS", "deletion", blacklistStudyEntry));
-        assertTrue(ckbBlacklistStudy.isBlacklistStudy("Basket of Baskets", "Nivolumab", "Solid tumor", "KRAS", "amplification"));
-        assertFalse(ckbBlacklistStudy.isBlacklistStudy("Basket of Baskets", "Chemo", "Breast", "KRAS", "deletion"));
+        assertFalse(ckbBlacklistStudy.isMatch("NCT1", "Chemo", "Breast", "KRAS", "deletion", blacklistStudyEntry));
+        assertTrue(ckbBlacklistStudy.isBlacklistStudy("NCT1", "Nivolumab", "Solid tumor", "KRAS", "amplification"));
+        assertFalse(ckbBlacklistStudy.isBlacklistStudy("NCT1", "Chemo", "Breast", "KRAS", "deletion"));
     }
 
     @Test
     public void canBlacklistStudyBasedOnTherapyAndCancerTypeAndGene() {
         CkbBlacklistStudyEntry blacklistStudyEntry =
                 createBlacklistStudyEntryList(CkbBlacklistStudyType.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE,
-                        "Basket of Baskets",
+                        "NCT1",
                         "Nivolumab",
                         "Solid tumor",
                         "KRAS",
                         null);
         CkbStudyBlacklistModel ckbBlacklistStudy = createCkbBlacklistStudy(blacklistStudyEntry);
 
-        assertTrue(ckbBlacklistStudy.isMatch("Basket of Baskets",
+        assertTrue(ckbBlacklistStudy.isMatch("NCT1",
                 "Nivolumab",
                 "Solid tumor",
                 "KRAS",
                 "amplification",
                 blacklistStudyEntry));
-        assertFalse(ckbBlacklistStudy.isMatch("Basket of Baskets", "Chemo", "Breast", "PTEN", "deletion", blacklistStudyEntry));
-        assertTrue(ckbBlacklistStudy.isBlacklistStudy("Basket of Baskets", "Nivolumab", "Solid tumor", "KRAS", "amplification"));
-        assertFalse(ckbBlacklistStudy.isBlacklistStudy("Basket of Baskets", "Chemo", "Breast", "PTEN", "deletion"));
+        assertFalse(ckbBlacklistStudy.isMatch("NCT1", "Chemo", "Breast", "PTEN", "deletion", blacklistStudyEntry));
+        assertTrue(ckbBlacklistStudy.isBlacklistStudy("NCT1", "Nivolumab", "Solid tumor", "KRAS", "amplification"));
+        assertFalse(ckbBlacklistStudy.isBlacklistStudy("NCT1", "Chemo", "Breast", "PTEN", "deletion"));
     }
 
     @Test
     public void canBlacklistStudyBasedOnTherapyAndCancerTypeAndGeneAndEvent() {
         CkbBlacklistStudyEntry blacklistStudyEntry =
                 createBlacklistStudyEntryList(CkbBlacklistStudyType.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE_AND_EVENT,
-                        "Basket of Baskets",
+                        "NCT1",
                         "Nivolumab",
                         "Solid tumor",
                         "KRAS",
                         "amplification");
         CkbStudyBlacklistModel ckbBlacklistStudy = createCkbBlacklistStudy(blacklistStudyEntry);
 
-        assertTrue(ckbBlacklistStudy.isMatch("Basket of Baskets",
+        assertTrue(ckbBlacklistStudy.isMatch("NCT1",
                 "Nivolumab",
                 "Solid tumor",
                 "KRAS",
                 "amplification",
                 blacklistStudyEntry));
-        assertFalse(ckbBlacklistStudy.isMatch("Basket of Baskets", "Chemo", "Breast", "PTEN", "deletion", blacklistStudyEntry));
-        assertTrue(ckbBlacklistStudy.isBlacklistStudy("Basket of Baskets", "Nivolumab", "Solid tumor", "KRAS", "amplification"));
-        assertFalse(ckbBlacklistStudy.isBlacklistStudy("Basket of Baskets", "Chemo", "Breast", "PTEN", "deletion"));
+        assertFalse(ckbBlacklistStudy.isMatch("NCT1", "Chemo", "Breast", "PTEN", "deletion", blacklistStudyEntry));
+        assertTrue(ckbBlacklistStudy.isBlacklistStudy("NCT1", "Nivolumab", "Solid tumor", "KRAS", "amplification"));
+        assertFalse(ckbBlacklistStudy.isBlacklistStudy("NCT1", "Chemo", "Breast", "PTEN", "deletion"));
     }
 }

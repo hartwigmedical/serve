@@ -7,9 +7,9 @@ import com.hartwig.serve.datamodel.EvidenceDirection;
 
 import org.jetbrains.annotations.NotNull;
 
-public final class TreatmentApproachTestFactory {
+public final class TreatmentApproachFactory {
 
-    private TreatmentApproachTestFactory() {
+    private TreatmentApproachFactory() {
     }
 
     @NotNull
@@ -18,7 +18,7 @@ public final class TreatmentApproachTestFactory {
     }
 
     @NotNull
-    public static TreatmentApproachCurator createTestCurator() {
+    public static TreatmentApproachCurator createCurator() {
         Map<TreatmentApproachCurationEntryKey, TreatmentApproachCurationEntry> curationEntries = Maps.newHashMap();
 
         curationEntries.put(createCurationKey("A", "A", "BRAF amplification", EvidenceDirection.RESPONSIVE),

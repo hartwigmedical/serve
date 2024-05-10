@@ -13,7 +13,7 @@ public class CkbBlacklistMolecularProfileFileTest  {
     private static final String TEST_CKB_BLACKLIST_MOLECULAR_PROFILE_FILE = Resources.getResource("ckb_blacklist/ckb_blacklist_molecular_profile.tsv").getPath();
 
     @Test
-    public void canReadCkbFilterTsv() throws IOException {
+    public void canReadCkbBlacklistMolecularProfileTsv() throws IOException {
         List<CkbBlacklistMolecularProfileEntry> blacklistMolecularProfileEntries = CkbBlacklistMolecularProfileFile.read(TEST_CKB_BLACKLIST_MOLECULAR_PROFILE_FILE);
         assertEquals(2, blacklistMolecularProfileEntries.size());
     }

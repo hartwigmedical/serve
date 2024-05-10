@@ -27,20 +27,20 @@ public class ActionableFileUtilTest {
 
         String line = ActionableFileUtil.toLine(event);
         Map<String, Integer> fields = SerializationUtil.createFields(ActionableFileUtil.header(), ActionableFileUtil.FIELD_DELIMITER);
-        ActionableEvent convertedEvent = ActionableFileUtil.fromLine(line.split(ActionableFileUtil.FIELD_DELIMITER), fields);
+        ActionableEvent coveredEvent = ActionableFileUtil.fromLine(line.split(ActionableFileUtil.FIELD_DELIMITER), fields);
 
-        Treatment treatmentCovered = DatamodelTestFactory.treatmentBuilder(convertedEvent);
+        Treatment treatmentCovered = DatamodelTestFactory.treatmentBuilder(coveredEvent);
         Treatment treatmentEvent = DatamodelTestFactory.treatmentBuilder(event);
 
-        assertEquals(event.source(), convertedEvent.source());
-        assertEquals(event.sourceEvent(), convertedEvent.sourceEvent());
-        assertEquals(event.sourceUrls(), convertedEvent.sourceUrls());
+        assertEquals(event.source(), coveredEvent.source());
+        assertEquals(event.sourceEvent(), coveredEvent.sourceEvent());
+        assertEquals(event.sourceUrls(), coveredEvent.sourceUrls());
         assertEquals(treatmentEvent, treatmentCovered);
-        assertEquals(event.applicableCancerType(), convertedEvent.applicableCancerType());
-        assertEquals(event.blacklistCancerTypes(), convertedEvent.blacklistCancerTypes());
-        assertEquals(event.level(), convertedEvent.level());
-        assertEquals(event.direction(), convertedEvent.direction());
-        assertEquals(event.evidenceUrls(), convertedEvent.evidenceUrls());
+        assertEquals(event.applicableCancerType(), coveredEvent.applicableCancerType());
+        assertEquals(event.blacklistCancerTypes(), coveredEvent.blacklistCancerTypes());
+        assertEquals(event.level(), coveredEvent.level());
+        assertEquals(event.direction(), coveredEvent.direction());
+        assertEquals(event.evidenceUrls(), coveredEvent.evidenceUrls());
     }
 
     @Test

@@ -86,11 +86,6 @@ public final class CkbTestFactory {
     }
 
     @NotNull
-    public static CkbEntry createEntryWithMultipleClinicalTrial(int profileId, @NotNull String profileName, @NotNull List<ClinicalTrial> clinicalTrial) {
-        return builder().profileId(profileId).profileName(profileName).clinicalTrials(clinicalTrial).build();
-    }
-
-    @NotNull
     public static CkbEntry createEntryWithClinicalTrial(int profileId, @NotNull String profileName, @NotNull ClinicalTrial clinicalTrial) {
         return builder().profileId(profileId).profileName(profileName).clinicalTrials(List.of(clinicalTrial)).build();
     }
@@ -107,15 +102,6 @@ public final class CkbTestFactory {
                         List.of(requirementDetail), List.of(location), "NCT0102", "Phase I trial",
                         List.of(CkbTestFactory.createTherapy("Nivolumab")),
                         List.of(CkbTestFactory.createIndication("test", "JAX:10000006"))))
-                .build();
-    }
-
-    @NotNull
-    public static CkbEntry createEntryWithProfileName(@NotNull String geneSymbol, @NotNull String variant, @NotNull String fullName,
-                                       @NotNull String responseType, @NotNull String evidenceType, @NotNull String therapyName, @NotNull String indicationName,
-                                       @NotNull String level, @NotNull String termId, @NotNull String profileName) {
-        return builder().profileName(profileName).addVariants(createVariant(geneSymbol, variant, fullName))
-                .addEvidences(createEvidence(responseType, evidenceType, therapyName, indicationName, level, termId))
                 .build();
     }
 

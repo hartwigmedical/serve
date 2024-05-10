@@ -15,6 +15,8 @@ public enum EventType {
     CHARACTERISTIC,
     WILD_TYPE,
     IMMUNO_HLA,
+    NEGATIVE,
+    POSITIVE,
     COMBINED,
     COMPLEX,
     UNKNOWN

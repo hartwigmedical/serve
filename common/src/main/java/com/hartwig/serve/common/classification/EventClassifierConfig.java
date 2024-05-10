@@ -111,6 +111,15 @@ public abstract class EventClassifierConfig {
     public abstract Set<String> ebvPositiveEvents();
 
     @NotNull
+    public abstract Set<String> positiveEvents();
+    @NotNull
+    public abstract Set<String> positiveBlacklistEvents();
+    @NotNull
+    public abstract Set<String> negativeEvents();
+    @NotNull
+    public abstract Set<String> negativeBlacklistEvents();
+
+    @NotNull
     public abstract Map<String, Set<String>> combinedEventsPerGene();
 
     @NotNull

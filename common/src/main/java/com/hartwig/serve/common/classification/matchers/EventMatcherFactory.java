@@ -35,6 +35,8 @@ public final class EventMatcherFactory {
                 config.genericGeneLevelKeyPhrases(),
                 config.activatingGeneLevelKeyPhrases(),
                 config.inactivatingGeneLevelKeyPhrases());
+        NegativeMatcher negativeMatcher = new NegativeMatcher(config.negativeEvents(), config.negativeBlacklistEvents());
+        PositiveMatcher positiveMatcher = new PositiveMatcher(config.positiveEvents(), config.positiveBlacklistEvents());
 
         WildTypeMatcher wildTypeMatcher = new WildTypeMatcher(config.wildTypeKeyPhrases());
 
@@ -75,6 +77,8 @@ public final class EventMatcherFactory {
         map.put(EventType.PROMISCUOUS_FUSION, withFirstTierMatchers(firstTierEventMatchers, promiscuousFusionMatcher));
         map.put(EventType.CHARACTERISTIC, withFirstTierMatchers(firstTierEventMatchers, characteristicMatcher));
         map.put(EventType.IMMUNO_HLA, withFirstTierMatchers(firstTierEventMatchers, hlaMatcher));
+        map.put(EventType.NEGATIVE, withFirstTierMatchers(firstTierEventMatchers, negativeMatcher));
+        map.put(EventType.POSITIVE, withFirstTierMatchers(firstTierEventMatchers, positiveMatcher));
         map.put(EventType.COMBINED, combinedMatcher);
         map.put(EventType.COMPLEX, complexMatcher);
 

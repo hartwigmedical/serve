@@ -48,6 +48,10 @@ public final class IclusionClassificationConfig {
     private static final Set<String> HLA_KEY_PHRASES = hlaKeyPhrases();
     private static final Set<String> HPV_POSITIVE_EVENTS = hpvPositiveEvents();
     private static final Set<String> EBV_POSITIVE_EVENTS = ebvPositiveEvents();
+    private static final Set<String> NEGATIVE_KEYWORDS = negativeEvents();
+    private static final Set<String> NEGATIVE_BLACKLIST_KEYWORDS = negativeBlacklistEvents();
+    private static final Set<String> POSITIVE_KEYWORDS = positiveEvents();
+    private static final Set<String> POSITIVE_BLACKLIST_KEYWORDS = positiveBlacklistEvents();
     private static final Map<String, Set<String>> COMBINED_EVENTS_PER_GENE = combinedEventsPerGene();
     private static final Map<String, Set<String>> COMPLEX_EVENTS_PER_GENE = complexEventsPerGene();
 
@@ -91,6 +95,10 @@ public final class IclusionClassificationConfig {
                 .hlaKeyPhrases(HLA_KEY_PHRASES)
                 .hpvPositiveEvents(HPV_POSITIVE_EVENTS)
                 .ebvPositiveEvents(EBV_POSITIVE_EVENTS)
+                .positiveEvents(POSITIVE_KEYWORDS)
+                .positiveBlacklistEvents(POSITIVE_BLACKLIST_KEYWORDS)
+                .negativeEvents(NEGATIVE_KEYWORDS)
+                .negativeBlacklistEvents(NEGATIVE_BLACKLIST_KEYWORDS)
                 .combinedEventsPerGene(COMBINED_EVENTS_PER_GENE)
                 .complexEventsPerGene(COMPLEX_EVENTS_PER_GENE)
                 .build();
@@ -323,6 +331,26 @@ public final class IclusionClassificationConfig {
         Set<String> set = Sets.newHashSet();
         set.add("EBV_POSITIVE");
         return set;
+    }
+
+    @NotNull
+    private static Set<String> negativeEvents() {
+        return Sets.newHashSet();
+    }
+
+    @NotNull
+    private static Set<String> negativeBlacklistEvents() {
+        return Sets.newHashSet();
+    }
+
+    @NotNull
+    private static Set<String> positiveEvents() {
+        return Sets.newHashSet();
+    }
+
+    @NotNull
+    private static Set<String> positiveBlacklistEvents() {
+        return Sets.newHashSet();
     }
 
     @NotNull

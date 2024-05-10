@@ -9,5 +9,7 @@ public enum GeneEvent {
     INACTIVATION,
     ANY_MUTATION,
     FUSION,
-    WILD_TYPE
+    WILD_TYPE,
+    POSITIVE,
+    NEGATIVE
 }

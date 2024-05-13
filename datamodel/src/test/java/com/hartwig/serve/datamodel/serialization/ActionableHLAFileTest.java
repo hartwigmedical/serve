@@ -9,9 +9,6 @@ import java.util.Map;
 import com.google.common.io.Resources;
 import com.hartwig.serve.datamodel.DatamodelTestFactory;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.datamodel.characteristic.ActionableCharacteristic;
-import com.hartwig.serve.datamodel.gene.ActionableGene;
-import com.hartwig.serve.datamodel.gene.GeneEvent;
 import com.hartwig.serve.datamodel.immuno.ActionableHLA;
 import com.hartwig.serve.datamodel.serialization.util.ActionableFileUtil;
 import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
@@ -45,7 +42,7 @@ public class ActionableHLAFileTest {
 
         ActionableHLA hla2 = findBySource(hlas, Knowledgebase.CKB_TRIAL);
         assertEquals("A*02", hla2.hlaAllele());
-        assertEquals("Nivolumab", DatamodelTestFactory.clinicalTrialBuilder(hla2).therapyName());
+        assertEquals("Nivolumab", DatamodelTestFactory.setToField(DatamodelTestFactory.clinicalTrialBuilder(hla2).therapyNames()));
         assertEquals("Skin melanoma", hla2.applicableCancerType().name());
     }
 

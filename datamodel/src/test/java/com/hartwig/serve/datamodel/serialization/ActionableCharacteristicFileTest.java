@@ -68,7 +68,7 @@ public class ActionableCharacteristicFileTest {
         assertNull(characteristic2.cutoff());
         assertEquals("msi", characteristic2.sourceEvent());
         assertTrue(characteristic2.sourceUrls().contains("http"));
-        assertEquals("Pembro", trial.therapyName());
+        assertEquals("Immuno,Pembro", DatamodelTestFactory.setToField(trial.therapyNames()));
         assertEquals("All cancer types", characteristic2.applicableCancerType().name());
         assertEquals("X", characteristic2.applicableCancerType().doid());
         assertTrue(characteristic2.blacklistCancerTypes()

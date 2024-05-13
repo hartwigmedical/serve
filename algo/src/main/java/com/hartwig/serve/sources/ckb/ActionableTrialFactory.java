@@ -2,6 +2,7 @@ package com.hartwig.serve.sources.ckb;
 
 import java.util.List;
 import java.util.Set;
+import java.util.StringJoiner;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
@@ -22,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 
 class ActionableTrialFactory implements ActionableEntryFactory {
 
+    private static final String SUB_FIELD_DELIMITER = ",";
     private static final Set<String> POTENTIALLY_OPEN_RECRUITMENT_TYPES = Sets.newHashSet();
     private static final Set<String> COUNTRIES_TO_INCLUDE = Sets.newHashSet();
     private static final Set<String> VARIANT_REQUIREMENT_TYPES_TO_INCLUDE = Sets.newHashSet();
@@ -60,36 +62,50 @@ class ActionableTrialFactory implements ActionableEntryFactory {
             Set<String> countries = countriesToInclude(trial);
 
             if (!countries.isEmpty()) {
+                Set<String> therapies = Sets.newHashSet();
                 for (Therapy therapy : trial.therapies()) {
-                    String therapyName = therapy.therapyName();
-                    for (Indication indication : trial.indications()) {
-                        CancerTypeExtraction cancerTypeExtraction = ActionableFunctions.extractCancerTypeDetails(indication);
-                        if (cancerTypeExtraction != null) {
-                            if (!blacklistStudy.isBlacklistStudy(trial.nctId(), therapyName, cancerTypeExtraction.applicableCancerType().name(),
-                                    sourceGene, sourceEvent)) {
-                                actionableTrials.add(ImmutableActionableEntry.builder()
-                                        .source(Knowledgebase.CKB_TRIAL)
-                                        .sourceEvent(sourceEvent)
-                                        .sourceUrls(Sets.newHashSet("https://ckbhome.jax.org/clinicalTrial/show?nctId=" + trial.nctId()))
-                                        .intervention(ImmutableClinicalTrial.builder()
-                                                        .studyNctId(trial.nctId())
-                                                        .studyTitle(trial.title())
-                                                        .countriesOfStudy(countries)
-                                                        .therapyName(therapyName)
-                                                        .build())
-                                        .applicableCancerType(cancerTypeExtraction.applicableCancerType())
-                                        .blacklistCancerTypes(cancerTypeExtraction.blacklistedCancerTypes())
-                                        .level(EvidenceLevel.B)
-                                        .direction(EvidenceDirection.RESPONSIVE)
-                                        .evidenceUrls(Sets.newHashSet("https://clinicaltrials.gov/study/" + trial.nctId()))
-                                        .build());
-                            }
+                    therapies.add(therapy.therapyName());
+                }
+                for (Indication indication : trial.indications()) {
+                    CancerTypeExtraction cancerTypeExtraction = ActionableFunctions.extractCancerTypeDetails(indication);
+                    if (cancerTypeExtraction != null) {
+                        if (!blacklistStudy.isBlacklistStudy(trial.nctId(),
+                                setToField(therapies),
+                                cancerTypeExtraction.applicableCancerType().name(),
+                                sourceGene,
+                                sourceEvent)) {
+                            actionableTrials.add(ImmutableActionableEntry.builder()
+                                    .source(Knowledgebase.CKB_TRIAL)
+                                    .sourceEvent(sourceEvent)
+                                    .sourceUrls(Sets.newHashSet("https://ckbhome.jax.org/clinicalTrial/show?nctId=" + trial.nctId()))
+                                    .intervention(ImmutableClinicalTrial.builder()
+                                            .studyNctId(trial.nctId())
+                                            .studyTitle(trial.title())
+                                            .countriesOfStudy(countries)
+                                            .therapyNames(therapies)
+                                            .build())
+                                    .applicableCancerType(cancerTypeExtraction.applicableCancerType())
+                                    .blacklistCancerTypes(cancerTypeExtraction.blacklistedCancerTypes())
+                                    .level(EvidenceLevel.B)
+                                    .direction(EvidenceDirection.RESPONSIVE)
+                                    .evidenceUrls(Sets.newHashSet("https://clinicaltrials.gov/study/" + trial.nctId()))
+                                    .build());
                         }
                     }
                 }
             }
         }
+
         return actionableTrials;
+    }
+
+    @NotNull
+    private static String setToField(@NotNull Set<String> strings) {
+        StringJoiner joiner = new StringJoiner(SUB_FIELD_DELIMITER);
+        for (String string : strings) {
+            joiner.add(string);
+        }
+        return joiner.toString();
     }
 
     @NotNull
@@ -120,7 +136,7 @@ class ActionableTrialFactory implements ActionableEntryFactory {
 
     @VisibleForTesting
     static boolean hasVariantRequirementTypeToInclude(@NotNull List<VariantRequirementDetail> variantRequirementDetails,
-                                                      @NotNull CkbEntry entry) {
+            @NotNull CkbEntry entry) {
         for (VariantRequirementDetail variantRequirementDetail : variantRequirementDetails) {
             // Check if trial should be included based on the molecular profile of the current entry (trial can be linked to multiple molecular profiles)
             if (entry.profileId() == variantRequirementDetail.profileId() && VARIANT_REQUIREMENT_TYPES_TO_INCLUDE.contains(

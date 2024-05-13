@@ -1,7 +1,6 @@
 package com.hartwig.serve.datamodel.serialization;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 import java.io.IOException;
 import java.util.List;
@@ -9,8 +8,6 @@ import java.util.Map;
 
 import com.google.common.io.Resources;
 import com.hartwig.serve.datamodel.DatamodelTestFactory;
-import com.hartwig.serve.datamodel.Treatment;
-import com.hartwig.serve.datamodel.fusion.ActionableFusion;
 import com.hartwig.serve.datamodel.gene.ActionableGene;
 import com.hartwig.serve.datamodel.gene.GeneEvent;
 import com.hartwig.serve.datamodel.serialization.util.ActionableFileUtil;
@@ -77,7 +74,7 @@ public class ActionableGeneFileTest {
         ActionableGene gene7 = findByGeneAndEvent(genes, "NRAS", GeneEvent.ACTIVATION, "Colorectal Cancer");
         assertEquals("NRAS", gene7.gene());
         assertEquals(GeneEvent.ACTIVATION, gene7.event());
-        assertEquals("Cetuximab", DatamodelTestFactory.clinicalTrialBuilder(gene7).therapyName());
+        assertEquals("Cetuximab", DatamodelTestFactory.setToField(DatamodelTestFactory.clinicalTrialBuilder(gene7).therapyNames()));
         assertEquals("Colorectal Cancer", gene7.applicableCancerType().name());
     }
 

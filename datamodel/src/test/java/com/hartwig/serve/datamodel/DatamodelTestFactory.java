@@ -2,6 +2,7 @@ package com.hartwig.serve.datamodel;
 
 import java.util.Objects;
 import java.util.Set;
+import java.util.StringJoiner;
 
 import com.google.common.collect.Sets;
 
@@ -14,12 +15,21 @@ public final class DatamodelTestFactory {
     }
 
     @NotNull
+    public static String setToField(@NotNull Set<String> strings) {
+        StringJoiner joiner = new StringJoiner(",");
+        for (String string : strings) {
+            joiner.add(string);
+        }
+        return joiner.toString();
+    }
+
+    @NotNull
     public static ImmutableClinicalTrial.Builder clinicalTrialBuilderBuilder() {
         return ImmutableClinicalTrial.builder()
                 .studyNctId(Strings.EMPTY)
                 .studyTitle(Strings.EMPTY)
                 .countriesOfStudy(Sets.newHashSet())
-                .therapyName(Strings.EMPTY);
+                .therapyNames(Sets.newHashSet());
     }
 
     @NotNull
@@ -216,6 +226,5 @@ public final class DatamodelTestFactory {
                     ", evidenceUrls=" + evidenceUrls +
                     '}';
         }
-
     }
 }

@@ -10,7 +10,6 @@ import com.google.common.io.Resources;
 import com.hartwig.serve.datamodel.DatamodelTestFactory;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
-import com.hartwig.serve.datamodel.immuno.ActionableHLA;
 import com.hartwig.serve.datamodel.serialization.util.ActionableFileUtil;
 import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
@@ -51,7 +50,7 @@ public class ActionableHotspotFileTest {
         assertEquals(140453137, hotspot2.position());
         assertEquals("A", hotspot2.ref());
         assertEquals("T", hotspot2.alt());
-        assertEquals("Vemurafenib", DatamodelTestFactory.clinicalTrialBuilder(hotspot2).therapyName());
+        assertEquals("Vemurafenib", DatamodelTestFactory.setToField(DatamodelTestFactory.clinicalTrialBuilder(hotspot2).therapyNames()));
         assertEquals("Solid tumor", hotspot2.applicableCancerType().name());
     }
 

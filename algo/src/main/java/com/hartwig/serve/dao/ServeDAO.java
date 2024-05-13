@@ -163,8 +163,17 @@ public class ServeDAO {
             return treatment.name();
         } else {
             assert clinicalTrial != null;
-            return clinicalTrial.therapyName();
+            return setToField(clinicalTrial.therapyNames());
         }
+    }
+
+    @NotNull
+    private static String setToField(@NotNull Set<String> strings) {
+        StringJoiner joiner = new StringJoiner(",");
+        for (String string : strings) {
+            joiner.add(string);
+        }
+        return joiner.toString();
     }
 
     private static void writeActionableHotspotBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep21 inserter,

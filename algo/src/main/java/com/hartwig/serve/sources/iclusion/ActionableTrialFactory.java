@@ -14,7 +14,6 @@ import com.hartwig.serve.iclusion.datamodel.IclusionTumorLocation;
 import org.apache.commons.compress.utils.Lists;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 
 public class ActionableTrialFactory {
@@ -65,7 +64,7 @@ public class ActionableTrialFactory {
                         .studyNctId(trial.nct())
                         .studyTitle(trial.acronym())
                         .countriesOfStudy(Sets.newHashSet("The Netherlands"))
-                        .therapyName(Strings.EMPTY).build())
+                        .therapyNames(Sets.newHashSet()).build())
                 .level(EvidenceLevel.B)
                 .direction(EvidenceDirection.RESPONSIVE)
                 .evidenceUrls(Sets.newHashSet());

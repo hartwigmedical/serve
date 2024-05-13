@@ -94,7 +94,7 @@ public final class ActionableFileUtil {
                             .studyNctId(values[fields.get("studyNctId")])
                             .studyTitle(values[fields.get("studyTitle")])
                             .countriesOfStudy(fieldToSet(values[fields.get("countriesOfStudy")]))
-                            .therapyName(values[fields.get("treatment")])
+                            .therapyNames(fieldToSet(values[fields.get("treatment")]))
                             .build();
                 } else {
                     throw new IllegalStateException("An actionable event has to be either a treatment or a clinical trial!");
@@ -152,11 +152,11 @@ public final class ActionableFileUtil {
         }
 
 
-        String therapy = Strings.EMPTY;
+        Set<String> therapy = Sets.newHashSet();
         if (clinicalTrial != null) {
-            therapy = clinicalTrial.therapyName();
+            therapy = clinicalTrial.therapyNames();
         } else {
-            therapy = treatment.name();
+            therapy.add(treatment.name());
         }
         return new StringJoiner(FIELD_DELIMITER).add(event.source().toString())
                 .add(event.sourceEvent())
@@ -164,7 +164,7 @@ public final class ActionableFileUtil {
                 .add(clinicalTrial != null ? clinicalTrial.studyNctId() : Strings.EMPTY)
                 .add(clinicalTrial != null ? clinicalTrial.studyTitle() : Strings.EMPTY)
                 .add(clinicalTrial != null ? setToField(clinicalTrial.countriesOfStudy()) : Strings.EMPTY)
-                .add(therapy)
+                .add(setToField(therapy))
                 .add(treatment != null ? setToField(treatment.sourceRelevantTreatmentApproaches()) : Strings.EMPTY)
                 .add(treatment != null ? setToField(treatment.relevantTreatmentApproaches()) : Strings.EMPTY)
                 .add(event.applicableCancerType().name())

@@ -1,7 +1,6 @@
-# SERVE
+# Search External Resources for Variant Evidence
 
-SERVE (Search External Resources for Variant Evidence) harmonizes various sources of evidence into a single unified model that can be
-readily used in genomic analyses:
+SERVE harmonizes various sources of evidence into a single unified model that can be readily used to interpret genomic analyses:
 
 - A model is generated which allows mapping of genomic events to clinical evidence.
 - An overview of mutations that are implied to be potential cancer drivers is generated.
@@ -14,41 +13,31 @@ In addition, this repo provides a number of utility applications to ingest and a
 | [Algo](algo)                           | The actual SERVE algorithm.               |
 | [CKB-Importer](ckb-importer)           | Importer of CKB FLEX datamodel.           |
 | [iClusion-Importer](iclusion-importer) | Importer of iClusion datamodel.           |
-| [VICC-Importer](algo)                  | Importer of VICC datamodel.               |
+| [VICC-Importer](vicc-importer)         | Importer of VICC datamodel.               |
 
-## Releasing serve-datamodel
+## Releasing serve
 
-The `serve-datamodel` module is used by external projects and is deployed to GCP's artifact repository.
-To release a new version of the datamodel artifact, perform the following:
+To release a new version of the `serve` and all submodules, perform the following:
 
 ```shell
-git tag {new_version}
-git push origin {new_version}
+git tag ${new_version}
+git push origin ${new_version}
 ```
 
-This will automatically trigger a cloud build instance which will deploy the artifacts to artifact registry.
+This will automatically trigger a cloud build instance which will deploy the artifacts to both artifact registry and container registry.
 
 Note the new version should be of the format `major.minor.patch` where:
 
-- Major indicates a non-backward compatible change (avoid these!)
+- Major indicates a non-backward compatible change (avoid these if possible!)
 - Minor indicates a new feature
 - Patch indicates a bug fix
 
-## Upgrading serve-algo
+Currently, the GitHub release is not automatically created, so you need to create a new release on the GitHub website and attach the
+respective jar and database generation scripts as additional resources. The jars can be built by running these commands:
 
-The `serve-algo` module contains the algo producing the `serve-datamodel`. The following steps are required to upgrade:
+- `mvn versions:set -DnewVersion=${new_version}`
+- `mvn clean package`
+- `mvn versions:revert`
 
-1. Set the version in the pom.xml file in serve-algo (typically identical to the version of serve-datamodel) and set version of common,
-   ckb-importer, iclusion-importer and vicc-importer to `local-SNAPSHOT` in main pom.xml. Also include datamodel in this list if it doesn't
-   have the same version as serve-algo. 
-2. Compile and package locally using `mvn clean package`
-3. Update the `deploy_serve_prod` script and run this script to copy the algo jar with the correct name in the common-tools bucket.
-4. Roll back the change in the pom.xml files
-4. Create a release using the GitHub website and attach the same jar (and serve sql) as additional resources.
-5. Add release notes to README.md in serve-algo
-
-The VMs used to run SERVE automatically sync the common-tools bucket so will eventually have the new algo jar.
-
-Note that if you upgrade `serve-algo` without creating an associated `serve-datamodel`, you need to tag the commit used for the `serve-algo`
-release!
-
+In addition, when creating releases on the GitHub website it is convenient to create additional tags with the module prefix (
+e.g. `serve-v${new_version}` when releasing algo)

@@ -57,4 +57,7 @@ public abstract class JsonClinicalTrial implements CkbJsonObject {
     @NotNull
     public abstract List<String> coveredCountries();
 
+    @Nullable
+    public abstract String acronym();
+
 }

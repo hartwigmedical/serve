@@ -41,7 +41,6 @@ class ActionableTrialFactory implements ActionableEntryFactory {
         COUNTRIES_TO_INCLUDE.add("belgium");
         COUNTRIES_TO_INCLUDE.add("germany");
 
-        //TODO: determine which types to include
         VARIANT_REQUIREMENT_TYPES_TO_INCLUDE.add("partial - required");
         VARIANT_REQUIREMENT_TYPES_TO_INCLUDE.add("required");
     }
@@ -74,13 +73,16 @@ class ActionableTrialFactory implements ActionableEntryFactory {
                                 cancerTypeExtraction.applicableCancerType().name(),
                                 sourceGene,
                                 sourceEvent)) {
+                            String trialName = trial.acronym() != null ? trial.acronym() : trial.title();
+                            assert trialName != null;
+
                             actionableTrials.add(ImmutableActionableEntry.builder()
                                     .source(Knowledgebase.CKB_TRIAL)
                                     .sourceEvent(sourceEvent)
                                     .sourceUrls(Sets.newHashSet("https://ckbhome.jax.org/clinicalTrial/show?nctId=" + trial.nctId()))
                                     .intervention(ImmutableClinicalTrial.builder()
                                             .studyNctId(trial.nctId())
-                                            .studyTitle(trial.title())
+                                            .studyTitle(trialName)
                                             .countriesOfStudy(countries)
                                             .therapyNames(therapies)
                                             .build())

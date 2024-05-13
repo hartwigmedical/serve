@@ -11,7 +11,7 @@ public abstract class CkbBlacklistStudyEntry {
     @NotNull
     public abstract CkbBlacklistStudyType type();
 
-    @NotNull
+    @Nullable
     public abstract String nctId();
 
     @Nullable

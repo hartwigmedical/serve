@@ -14,20 +14,20 @@ public class CkbStudyBlacklistModel {
     private static final Logger LOGGER = LogManager.getLogger(CkbStudyBlacklistModel.class);
 
     @NotNull
-    private final List<CkbBlacklistStudyEntry> blacklistStudiesList;
+    private final List<CkbBlacklistStudyEntry> BLACKLIST_STUDIES_ENTRIES;
     @NotNull
-    private final Set<CkbBlacklistStudyEntry> usedBlacklists = Sets.newHashSet();
+    private final Set<CkbBlacklistStudyEntry> USED_BLACKLIST_STUDIES_ENTRIES = Sets.newHashSet();
 
     public CkbStudyBlacklistModel(@NotNull final List<CkbBlacklistStudyEntry> blacklistStudiesList) {
-        this.blacklistStudiesList = blacklistStudiesList;
+        this.BLACKLIST_STUDIES_ENTRIES = blacklistStudiesList;
     }
 
     public boolean isBlacklistStudy(@NotNull String nctId, @NotNull String therapyName, @NotNull String cancerType, @NotNull String sourceGene,
                                     @NotNull String event) {
-        for (CkbBlacklistStudyEntry blacklistStudyEntry : blacklistStudiesList) {
+        for (CkbBlacklistStudyEntry blacklistStudyEntry : BLACKLIST_STUDIES_ENTRIES) {
             boolean match = isMatch(nctId, therapyName, cancerType, sourceGene, event, blacklistStudyEntry);
             if (match) {
-                usedBlacklists.add(blacklistStudyEntry);
+                USED_BLACKLIST_STUDIES_ENTRIES.add(blacklistStudyEntry);
                 return true;
             }
         }
@@ -36,8 +36,8 @@ public class CkbStudyBlacklistModel {
 
     public void reportUnusedBlacklistEntries() {
         int unusedBlacklistEntryCount = 0;
-        for (CkbBlacklistStudyEntry entry : blacklistStudiesList) {
-            if (!usedBlacklists.contains(entry)) {
+        for (CkbBlacklistStudyEntry entry : BLACKLIST_STUDIES_ENTRIES) {
+            if (!USED_BLACKLIST_STUDIES_ENTRIES.contains(entry)) {
                 unusedBlacklistEntryCount++;
                 LOGGER.warn(" Blacklist study entry '{}' hasn't been used for CKB filtering", entry);
             }
@@ -97,16 +97,14 @@ public class CkbStudyBlacklistModel {
             case ALL_STUDIES_BASED_ON_GENE: {
                 String blacklistEvidenceGene= blacklistStudyEntry.gene();
                 assert blacklistEvidenceGene != null;
-                return blacklistStudyEntry.nctId().equals(nctId)
-                        && blacklistEvidenceGene.equals(sourceGene);
+                return blacklistEvidenceGene.equals(sourceGene);
             }
             case ALL_STUDIES_BASED_ON_GENE_AND_EVENT: {
                 String blacklistEvidenceGene= blacklistStudyEntry.gene();
                 String blacklistEvidenceEvent= blacklistStudyEntry.event();
                 assert blacklistEvidenceEvent != null;
                 assert blacklistEvidenceGene != null;
-                return blacklistStudyEntry.nctId().equals(nctId)
-                        && blacklistEvidenceGene.equals(sourceGene)
+                return blacklistEvidenceGene.equals(sourceGene)
                         && blacklistEvidenceEvent.equals(event);
             }
             default: {

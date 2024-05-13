@@ -3,6 +3,8 @@ package com.hartwig.serve.sources.ckb.blacklist;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.List;
+
 import com.google.common.collect.Lists;
 
 import org.jetbrains.annotations.NotNull;
@@ -14,6 +16,49 @@ public class CkbBlacklistStudyTest {
     @NotNull
     public static CkbStudyBlacklistModel createCkbBlacklistStudyEmpty() {
         return new CkbStudyBlacklistModel(Lists.newArrayList());
+    }
+
+    @NotNull
+    public static CkbStudyBlacklistModel defineBlacklistStudies(@NotNull CkbBlacklistStudyType type, @Nullable String nctId, @Nullable String therapy,
+            @Nullable String cancerType, @Nullable String gene, @Nullable String event) {
+        List<CkbBlacklistStudyEntry> blacklistStudiesList = Lists.newArrayList();
+        CkbBlacklistStudyEntry entry1 = ImmutableCkbBlacklistStudyEntry.builder()
+                .type(type)
+                .nctId(nctId)
+                .therapy(therapy)
+                .cancerType(cancerType)
+                .gene(gene)
+                .event(event)
+                .build();
+
+        blacklistStudiesList.add(entry1);
+        return new CkbStudyBlacklistModel(blacklistStudiesList);
+    }
+
+    @NotNull
+    public static CkbStudyBlacklistModel createCkbBlacklistStudies() {
+        List<CkbBlacklistStudyEntry> blacklistStudiesList = Lists.newArrayList();
+        CkbBlacklistStudyEntry entry1 = ImmutableCkbBlacklistStudyEntry.builder()
+                .type(CkbBlacklistStudyType.STUDY_WHOLE)
+                .nctId("NCT0456")
+                .therapy(null)
+                .cancerType(null)
+                .gene(null)
+                .event(null)
+                .build();
+
+        CkbBlacklistStudyEntry entry2 = ImmutableCkbBlacklistStudyEntry.builder()
+                .type(CkbBlacklistStudyType.ALL_STUDIES_BASED_ON_GENE)
+                .nctId(null)
+                .therapy(null)
+                .cancerType(null)
+                .gene("EGFR")
+                .event(null)
+                .build();
+
+        blacklistStudiesList.add(entry1);
+        blacklistStudiesList.add(entry2);
+        return new CkbStudyBlacklistModel(blacklistStudiesList);
     }
 
     @NotNull

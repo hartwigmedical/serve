@@ -3,12 +3,70 @@ package com.hartwig.serve.sources.ckb.blacklist;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.List;
+
+import com.google.common.collect.Lists;
 import com.hartwig.serve.datamodel.EvidenceLevel;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.Test;
 
 public class CkbBlacklistEvidenceTest {
 
+
+    @NotNull
+    public static CkbEvidenceBlacklistModel defineEvidenceModel(@NotNull CkbBlacklistEvidenceType type, @Nullable String therapy,
+            @Nullable String cancerType, @Nullable String gene, @Nullable String event, @Nullable EvidenceLevel level) {
+        List<CkbBlacklistEvidenceEntry> blacklistStudiesList = Lists.newArrayList();
+        CkbBlacklistEvidenceEntry entry1 = ImmutableCkbBlacklistEvidenceEntry.builder()
+                .type(type)
+                .therapy(therapy)
+                .cancerType(cancerType)
+                .gene(gene)
+                .event(event)
+                .level(level)
+                .build();
+
+        blacklistStudiesList.add(entry1);
+        return new CkbEvidenceBlacklistModel(blacklistStudiesList);
+    }
+
+    @NotNull
+    public static CkbEvidenceBlacklistModel createCkbBlacklistEvidence() {
+        List<CkbBlacklistEvidenceEntry> blacklistStudiesList = Lists.newArrayList();
+        CkbBlacklistEvidenceEntry entry1 = ImmutableCkbBlacklistEvidenceEntry.builder()
+                .type(CkbBlacklistEvidenceType.EVIDENCE_BASED_ON_THERAPY)
+                .therapy("Nivolumab")
+                .cancerType(null)
+                .gene(null)
+                .event(null)
+                .level(null)
+                .build();
+
+        CkbBlacklistEvidenceEntry entry2 = ImmutableCkbBlacklistEvidenceEntry.builder()
+                .type(CkbBlacklistEvidenceType.ALL_EVIDENCE_BASED_ON_GENE)
+                .therapy(null)
+                .cancerType(null)
+                .gene("ATM")
+                .event(null)
+                .level(null)
+                .build();
+
+        CkbBlacklistEvidenceEntry entry3 = ImmutableCkbBlacklistEvidenceEntry.builder()
+                .type(CkbBlacklistEvidenceType.EVIDENCE_BASED_ON_THERAPY)
+                .therapy("Immuno")
+                .cancerType(null)
+                .gene(null)
+                .event(null)
+                .level(EvidenceLevel.A)
+                .build();
+
+        blacklistStudiesList.add(entry1);
+        blacklistStudiesList.add(entry2);
+        blacklistStudiesList.add(entry3);
+        return new CkbEvidenceBlacklistModel(blacklistStudiesList);
+    }
 
     @Test
     public void canBlacklistAllEvidenceBasedOnGene() {

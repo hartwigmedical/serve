@@ -14,7 +14,8 @@ import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.Treatment;
-import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistFactory;
+import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistEvidenceTest;
+import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistEvidenceType;
 import com.hartwig.serve.sources.ckb.blacklist.CkbEvidenceBlacklistModel;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurator;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachFactory;
@@ -25,7 +26,8 @@ import org.junit.Test;
 public class ActionableEvidenceFactoryTest {
 
     private static final TreatmentApproachCurator TREATMENT_APPROACH_CURATOR = TreatmentApproachFactory.createCurator();
-    private final CkbEvidenceBlacklistModel BLACKLIST_MODEL = CkbBlacklistFactory.createCkbBlacklistEvidenceEmpty();
+    private final CkbEvidenceBlacklistModel BLACKLIST_MODEL = CkbBlacklistEvidenceTest.createCkbBlacklistEvidence();
+
     @Test
     public void shouldIgnoreNonActionableKrasDeletion() {
         CkbEntry entryDeletion =
@@ -141,5 +143,95 @@ public class ActionableEvidenceFactoryTest {
         assertEquals(EvidenceDirection.PREDICTED_RESPONSIVE, ActionableEvidenceFactory.resolveDirection("predicted - sensitive"));
         assertEquals(EvidenceDirection.RESISTANT, ActionableEvidenceFactory.resolveDirection("resistant"));
         assertEquals(EvidenceDirection.PREDICTED_RESISTANT, ActionableEvidenceFactory.resolveDirection("predicted - resistant"));
+    }
+
+    @Test
+    public void canBlacklistEvidenceOnTherapy() {
+       CkbEvidenceBlacklistModel model = CkbBlacklistEvidenceTest.defineEvidenceModel(CkbBlacklistEvidenceType.EVIDENCE_BASED_ON_THERAPY,
+               "Nivolumab", null, null, null, null);
+        CkbEntry entryBlacklist = CkbTestFactory.createEntry("KRAS",
+                "KRAS amplification",
+                "KRAS amplification",
+                "sensitive",
+                "Actionable",
+                "Nivolumab",
+                "AB",
+                "B",
+                "DOID:163");
+        ActionableEvidenceFactory evidence = new ActionableEvidenceFactory(TREATMENT_APPROACH_CURATOR, model);
+        Set<ActionableEntry> interpretEvidenceEntry = evidence.create(entryBlacklist, "KRAS", "KRAS");
+        assertEquals(0, interpretEvidenceEntry.size());
+    }
+
+    @Test
+    public void canNotBlacklistEvidenceOnTherapy() {
+        CkbEvidenceBlacklistModel model = CkbBlacklistEvidenceTest.defineEvidenceModel(CkbBlacklistEvidenceType.EVIDENCE_BASED_ON_THERAPY,
+                "Nivolumab", null, null, null, null);
+        CkbEntry entryBlacklist = CkbTestFactory.createEntry("KRAS",
+                "KRAS amplification",
+                "KRAS amplification",
+                "sensitive",
+                "Actionable",
+                "AB",
+                "AB",
+                "B",
+                "DOID:163");
+        ActionableEvidenceFactory evidence = new ActionableEvidenceFactory(TREATMENT_APPROACH_CURATOR, model);
+        Set<ActionableEntry> interpretEvidenceEntry = evidence.create(entryBlacklist, "BRAF", "BRAF");
+        assertEquals(1, interpretEvidenceEntry.size());
+    }
+
+    @Test
+    public void canBlacklistEvidenceOnTherapyAndLevel() {
+        CkbEvidenceBlacklistModel model = CkbBlacklistEvidenceTest.defineEvidenceModel(CkbBlacklistEvidenceType.EVIDENCE_BASED_ON_THERAPY,
+                "Immuno", null, null, null, EvidenceLevel.A);
+        CkbEntry entry = CkbTestFactory.createEntry("KRAS",
+                "KRAS amplification",
+                "KRAS amplification",
+                "sensitive",
+                "Actionable",
+                "Immuno",
+                "AB",
+                "A",
+                "DOID:163");
+        ActionableEvidenceFactory evidence = new ActionableEvidenceFactory(TREATMENT_APPROACH_CURATOR, model);
+        Set<ActionableEntry> interpretEvidenceEntry = evidence.create(entry, "KRAS", "KRAS");
+        assertEquals(0, interpretEvidenceEntry.size());
+    }
+
+    @Test
+    public void canBlacklistAllEvidenceOnGene() {
+        CkbEvidenceBlacklistModel model = CkbBlacklistEvidenceTest.defineEvidenceModel(CkbBlacklistEvidenceType.ALL_EVIDENCE_BASED_ON_GENE,
+                null, null, "KRAS", null, null);
+        CkbEntry entry = CkbTestFactory.createEntry("KRAS",
+                "KRAS amplification",
+                "KRAS amplification",
+                "sensitive",
+                "Actionable",
+                "Nivolumab",
+                "AB",
+                "B",
+                "DOID:163");
+        ActionableEvidenceFactory evidence = new ActionableEvidenceFactory(TREATMENT_APPROACH_CURATOR, model);
+        Set<ActionableEntry> interpretEvidenceEntry = evidence.create(entry, "KRAS", "KRAS");
+        assertEquals(0, interpretEvidenceEntry.size());
+    }
+
+    @Test
+    public void canNonBlacklistAllEvidenceOnGene() {
+        CkbEvidenceBlacklistModel model = CkbBlacklistEvidenceTest.defineEvidenceModel(CkbBlacklistEvidenceType.ALL_EVIDENCE_BASED_ON_GENE,
+                null, null, "BRAF", null, null);
+        CkbEntry entry = CkbTestFactory.createEntry("KRAS",
+                "KRAS amplification",
+                "KRAS amplification",
+                "sensitive",
+                "Actionable",
+                "Nivolumab",
+                "AB",
+                "B",
+                "DOID:163");
+        ActionableEvidenceFactory evidence = new ActionableEvidenceFactory(TREATMENT_APPROACH_CURATOR, model);
+        Set<ActionableEntry> interpretEvidenceEntry = evidence.create(entry, "KRAS", "KRAS");
+        assertEquals(1, interpretEvidenceEntry.size());
     }
 }

@@ -1,5 +1,8 @@
 package com.hartwig.serve.extraction.gene;
 
+import java.util.List;
+import java.util.Set;
+
 import com.google.common.annotations.VisibleForTesting;
 import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.common.drivergene.DriverCategory;
@@ -9,13 +12,11 @@ import com.hartwig.serve.datamodel.gene.GeneAnnotation;
 import com.hartwig.serve.datamodel.gene.GeneEvent;
 import com.hartwig.serve.extraction.util.DriverInconsistencyMode;
 import com.hartwig.serve.extraction.util.GeneChecker;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
-import java.util.Set;
 
 public class GeneLevelExtractor {
 
@@ -38,9 +39,9 @@ public class GeneLevelExtractor {
     private final DriverInconsistencyMode driverInconsistencyMode;
 
     public GeneLevelExtractor(@NotNull final GeneChecker exomeGeneChecker, @NotNull final GeneChecker fusionGeneChecker,
-                              @NotNull final List<DriverGene> driverGenes, @NotNull final KnownFusionCache knownFusionCache,
-                              @NotNull final Set<String> activationKeyPhrases, @NotNull final Set<String> inactivationKeyPhrases,
-                              @NotNull final Set<String> genericKeyPhrases, @NotNull DriverInconsistencyMode driverInconsistencyMode) {
+            @NotNull final List<DriverGene> driverGenes, @NotNull final KnownFusionCache knownFusionCache,
+            @NotNull final Set<String> activationKeyPhrases, @NotNull final Set<String> inactivationKeyPhrases,
+            @NotNull final Set<String> genericKeyPhrases, @NotNull DriverInconsistencyMode driverInconsistencyMode) {
         this.exomeGeneChecker = exomeGeneChecker;
         this.fusionGeneChecker = fusionGeneChecker;
         this.driverGenes = driverGenes;

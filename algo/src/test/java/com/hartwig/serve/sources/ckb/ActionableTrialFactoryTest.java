@@ -113,6 +113,16 @@ public class ActionableTrialFactoryTest {
         return ActionableTrialFactory.hasVariantRequirementTypeToInclude(List.of(requirementDetail), baseEntry);
     }
 
+    @Test
+    public void hasAgeGroupToInclude() {
+        assertTrue(ActionableTrialFactory.hasAgeGroupToInclude(List.of("senior")));
+        assertTrue(ActionableTrialFactory.hasAgeGroupToInclude(List.of("adult")));
+        assertFalse(ActionableTrialFactory.hasAgeGroupToInclude(List.of("child")));
+        assertTrue(ActionableTrialFactory.hasAgeGroupToInclude(List.of("senior", "adult", "child") ));
+        assertTrue(ActionableTrialFactory.hasAgeGroupToInclude(List.of("senior", "child")));
+        assertTrue(ActionableTrialFactory.hasAgeGroupToInclude(List.of("senior", "adult")));
+    }
+
     @NotNull
     private static ClinicalTrial createTrialWithMultipleLocations(@NotNull String recruitmentTrial, @NotNull String country1,
             @NotNull String recruitmentCountry1, @NotNull String country2, @NotNull String recruitmentCountry2) {

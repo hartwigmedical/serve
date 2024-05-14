@@ -12,5 +12,5 @@ public interface ProteinResolver {
     List<Hotspot> resolve(@NotNull String gene, @Nullable String specificTranscript, @NotNull String proteinAnnotation);
 
     @NotNull
-    Set<String> unresolvedProteinAnnotations();
+    Set<String> unresolvedProteinAnnotation();
 }

@@ -114,10 +114,10 @@ public final class CkbTestFactory {
                 .title(title)
                 .indications(List.of(createIndication("AB", "DOID:162")))
                 .recruitment(recruitment)
+                .ageGroups(ageGroups)
                 .variantRequirement(Strings.EMPTY)
                 .variantRequirementDetails(variantRequirementDetails)
                 .locations(locations)
-                .ageGroups(ageGroups)
                 .build();
     }
 

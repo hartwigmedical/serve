@@ -107,13 +107,14 @@ public final class CkbTestFactory {
 
     @NotNull
     public static ClinicalTrial createTrial(@NotNull String recruitment, @NotNull List<VariantRequirementDetail> variantRequirementDetails,
-            @NotNull List<Location> locations, @NotNull String nctId, @NotNull String title) {
+            @NotNull List<Location> locations, @NotNull String nctId, @NotNull String title, @NotNull List<String> ageGroups) {
         return ImmutableClinicalTrial.builder()
                 .updateDate(TEST_DATE)
                 .nctId(nctId)
                 .title(title)
                 .indications(List.of(createIndication("AB", "DOID:162")))
                 .recruitment(recruitment)
+                .ageGroups(ageGroups)
                 .variantRequirement(Strings.EMPTY)
                 .variantRequirementDetails(variantRequirementDetails)
                 .locations(locations)

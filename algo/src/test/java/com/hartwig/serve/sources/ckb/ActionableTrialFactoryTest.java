@@ -27,7 +27,8 @@ public class ActionableTrialFactoryTest {
         Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(profileId, "required");
         ClinicalTrial clinicalTrial =
-                CkbTestFactory.createTrial("Recruiting", List.of(requirementDetail), List.of(location), "NCT0102", "Phase I trial");
+                CkbTestFactory.createTrial("Recruiting", List.of(requirementDetail), List.of(location), "NCT0102", "Phase I trial",
+                        List.of("senior", "child", "adult"));
         CkbEntry entry = CkbTestFactory.createEntryWithClinicalTrial(profileId, clinicalTrial);
 
         ActionableTrialFactory actionableTrialFactory = new ActionableTrialFactory();
@@ -49,7 +50,7 @@ public class ActionableTrialFactoryTest {
         Location location = CkbTestFactory.createLocation("Belgium", "Recruiting");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(0, "required");
         ClinicalTrial clinicalTrial =
-                CkbTestFactory.createTrial("Recruiting", List.of(requirementDetail), List.of(location), "NCT0102", "Phase I trial");
+                CkbTestFactory.createTrial("Recruiting", List.of(requirementDetail), List.of(location), "NCT0102", "Phase I trial", List.of("senior", "child", "adult"));
         CkbEntry entry = CkbTestFactory.createEntryWithClinicalTrial(1, clinicalTrial);
 
         ActionableTrialFactory actionableTrialFactory = new ActionableTrialFactory();
@@ -121,6 +122,12 @@ public class ActionableTrialFactoryTest {
         assertTrue(ActionableTrialFactory.hasAgeGroupToInclude(List.of("senior", "adult", "child") ));
         assertTrue(ActionableTrialFactory.hasAgeGroupToInclude(List.of("senior", "child")));
         assertTrue(ActionableTrialFactory.hasAgeGroupToInclude(List.of("senior", "adult")));
+        assertTrue(ActionableTrialFactory.hasAgeGroupToInclude(List.of("Senior")));
+        assertTrue(ActionableTrialFactory.hasAgeGroupToInclude(List.of("Adult")));
+        assertFalse(ActionableTrialFactory.hasAgeGroupToInclude(List.of("Child")));
+        assertTrue(ActionableTrialFactory.hasAgeGroupToInclude(List.of("Senior", "Adult", "Child") ));
+        assertTrue(ActionableTrialFactory.hasAgeGroupToInclude(List.of("Senior", "Child")));
+        assertTrue(ActionableTrialFactory.hasAgeGroupToInclude(List.of("Senior", "Adult")));
     }
 
     @NotNull
@@ -131,7 +138,8 @@ public class ActionableTrialFactoryTest {
                 List.of(CkbTestFactory.createLocation(country1, recruitmentCountry1),
                         CkbTestFactory.createLocation(country2, recruitmentCountry2)),
                 "nctid",
-                "title");
+                "title",
+                List.of("senior", "child", "adult"));
     }
 
     @NotNull
@@ -141,6 +149,7 @@ public class ActionableTrialFactoryTest {
                 List.of(CkbTestFactory.createVariantRequirementDetail(0, "required")),
                 List.of(CkbTestFactory.createLocation(country, recruitmentCountry)),
                 "nctid",
-                "title");
+                "title",
+                List.of("senior", "child", "adult"));
     }
 }

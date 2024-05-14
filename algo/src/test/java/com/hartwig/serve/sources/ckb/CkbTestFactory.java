@@ -107,7 +107,7 @@ public final class CkbTestFactory {
 
     @NotNull
     public static ClinicalTrial createTrial(@NotNull String recruitment, @NotNull List<VariantRequirementDetail> variantRequirementDetails,
-            @NotNull List<Location> locations, @NotNull String nctId, @NotNull String title) {
+            @NotNull List<Location> locations, @NotNull String nctId, @NotNull String title, @NotNull List<String> ageGroups) {
         return ImmutableClinicalTrial.builder()
                 .updateDate(TEST_DATE)
                 .nctId(nctId)
@@ -117,6 +117,7 @@ public final class CkbTestFactory {
                 .variantRequirement(Strings.EMPTY)
                 .variantRequirementDetails(variantRequirementDetails)
                 .locations(locations)
+                .ageGroups(ageGroups)
                 .build();
     }
 

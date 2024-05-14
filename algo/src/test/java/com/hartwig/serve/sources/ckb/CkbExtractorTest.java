@@ -147,7 +147,8 @@ public class CkbExtractorTest {
                                 .build()),
                         List.of(CkbTestFactory.createLocation("Netherlands", null)),
                         "nctid",
-                        "title")))
+                        "title",
+                        List.of("senior", "child", "adult"))))
                 .build();
     }
 }

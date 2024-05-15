@@ -3,7 +3,18 @@ package com.hartwig.serve.extraction;
 import java.io.IOException;
 
 import com.hartwig.serve.datamodel.RefGenome;
-import com.hartwig.serve.datamodel.serialization.*;
+import com.hartwig.serve.datamodel.serialization.ActionableCharacteristicFile;
+import com.hartwig.serve.datamodel.serialization.ActionableFusionFile;
+import com.hartwig.serve.datamodel.serialization.ActionableGeneFile;
+import com.hartwig.serve.datamodel.serialization.ActionableHLAFile;
+import com.hartwig.serve.datamodel.serialization.ActionableHotspotFile;
+import com.hartwig.serve.datamodel.serialization.ActionableRangeFile;
+import com.hartwig.serve.datamodel.serialization.KnownCodonFile;
+import com.hartwig.serve.datamodel.serialization.KnownCopyNumberFile;
+import com.hartwig.serve.datamodel.serialization.KnownExonFile;
+import com.hartwig.serve.datamodel.serialization.KnownFusionFile;
+import com.hartwig.serve.datamodel.serialization.KnownGeneFile;
+import com.hartwig.serve.datamodel.serialization.KnownHotspotFile;
 import com.hartwig.serve.extraction.events.EventInterpretationFile;
 import com.hartwig.serve.extraction.hotspot.KnownHotspotVCF;
 

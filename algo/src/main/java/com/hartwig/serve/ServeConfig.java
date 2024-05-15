@@ -149,7 +149,7 @@ public interface ServeConfig {
 
     @NotNull
     String ckbBlacklistEvidenceTsv();
-    
+
     @NotNull
     String ckbDrugCurationTsv();
 
@@ -239,7 +239,8 @@ public interface ServeConfig {
                 .useCkbEvidence(useCkbEvidence)
                 .useCkbTrials(useCkbTrials)
                 .ckbDir(useCkbEvidence || useCkbTrials ? nonOptionalDir(cmd, CKB_DIR) : NOT_APPLICABLE)
-                .ckbBlacklistMolecularProfileTsv(useCkbEvidence || useCkbTrials ? nonOptionalFile(cmd, CKB_BLACKLIST_MOLECULAR_PROFILE_TSV) : NOT_APPLICABLE)
+                .ckbBlacklistMolecularProfileTsv(
+                        useCkbEvidence || useCkbTrials ? nonOptionalFile(cmd, CKB_BLACKLIST_MOLECULAR_PROFILE_TSV) : NOT_APPLICABLE)
                 .ckbBlacklistTrialTsv(useCkbTrials ? nonOptionalFile(cmd, CKB_BLACKLIST_TRIAL_TSV) : NOT_APPLICABLE)
                 .ckbBlacklistEvidenceTsv(useCkbEvidence ? nonOptionalFile(cmd, CKB_BLACKLIST_EVIDENCE_TSV) : NOT_APPLICABLE)
                 .ckbDrugCurationTsv(useCkbEvidence ? nonOptionalFile(cmd, CKB_DRUG_CURATION_TSV) : NOT_APPLICABLE)

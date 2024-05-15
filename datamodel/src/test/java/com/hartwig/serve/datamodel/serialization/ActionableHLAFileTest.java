@@ -47,8 +47,7 @@ public class ActionableHLAFileTest {
     }
 
     @NotNull
-    private static ActionableHLA findBySource(@NotNull List<ActionableHLA> hlas,
-            @NotNull Knowledgebase sourceToFind) {
+    private static ActionableHLA findBySource(@NotNull List<ActionableHLA> hlas, @NotNull Knowledgebase sourceToFind) {
         for (ActionableHLA hla : hlas) {
             if (hla.source() == sourceToFind) {
                 return hla;

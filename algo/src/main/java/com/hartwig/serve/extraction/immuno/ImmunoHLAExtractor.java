@@ -20,7 +20,7 @@ public class ImmunoHLAExtractor {
             String onlyHLAType = event.contains("-") ? event.split("-")[1] : event;
             String mainHlaType = onlyHLAType.contains(":") ? onlyHLAType.split(":")[0] : onlyHLAType;
 
-            if (mainHlaType.length() != 4 ){
+            if (mainHlaType.length() != 4) {
                 LOGGER.warn("Unknown HLA allele {} in knowledgebase", mainHlaType);
             }
             return ImmutableImmunoHLA.builder().hlaAllele(event).build();

@@ -175,29 +175,29 @@ final class MolecularMatchDAOFunctions {
 
     static void write(@NotNull DSLContext context, int viccEntryId, @NotNull MolecularMatch molecularMatch) {
         int id = context.insertInto(MOLECULARMATCH,
-                MOLECULARMATCH.DIRECTION,
-                MOLECULARMATCH.BIOMARKERCLASS,
-                MOLECULARMATCH.SCORE,
-                MOLECULARMATCH.CLINICALSIGNIFICANCE,
-                MOLECULARMATCH.TIER,
-                MOLECULARMATCH.AMPCAP,
-                MOLECULARMATCH.CIVICVALUE,
-                MOLECULARMATCH.REGULATORYBODY,
-                MOLECULARMATCH.REGULATORYBODYAPPROVED,
-                MOLECULARMATCH.GUIDELINEBODY,
-                MOLECULARMATCH.GUIDELINEVERSION,
-                MOLECULARMATCH.NOTHERAPYAVAILABLE,
-                MOLECULARMATCH.SIXTIER,
-                MOLECULARMATCH.MVLD,
-                MOLECULARMATCH.AUTOGENERATENARRATIVE,
-                MOLECULARMATCH.NARRATIVE,
-                MOLECULARMATCH.EXPRESSION,
-                MOLECULARMATCH.CUSTOMER,
-                MOLECULARMATCH.VERSION,
-                MOLECULARMATCH.IDMOLECULARMATCH,
-                MOLECULARMATCH.UNIQUEKEY,
-                MOLECULARMATCH.HASHKEY,
-                MOLECULARMATCH.VICCENTRYID)
+                        MOLECULARMATCH.DIRECTION,
+                        MOLECULARMATCH.BIOMARKERCLASS,
+                        MOLECULARMATCH.SCORE,
+                        MOLECULARMATCH.CLINICALSIGNIFICANCE,
+                        MOLECULARMATCH.TIER,
+                        MOLECULARMATCH.AMPCAP,
+                        MOLECULARMATCH.CIVICVALUE,
+                        MOLECULARMATCH.REGULATORYBODY,
+                        MOLECULARMATCH.REGULATORYBODYAPPROVED,
+                        MOLECULARMATCH.GUIDELINEBODY,
+                        MOLECULARMATCH.GUIDELINEVERSION,
+                        MOLECULARMATCH.NOTHERAPYAVAILABLE,
+                        MOLECULARMATCH.SIXTIER,
+                        MOLECULARMATCH.MVLD,
+                        MOLECULARMATCH.AUTOGENERATENARRATIVE,
+                        MOLECULARMATCH.NARRATIVE,
+                        MOLECULARMATCH.EXPRESSION,
+                        MOLECULARMATCH.CUSTOMER,
+                        MOLECULARMATCH.VERSION,
+                        MOLECULARMATCH.IDMOLECULARMATCH,
+                        MOLECULARMATCH.UNIQUEKEY,
+                        MOLECULARMATCH.HASHKEY,
+                        MOLECULARMATCH.VICCENTRYID)
                 .values(molecularMatch.direction(),
                         molecularMatch.biomarkerClass(),
                         molecularMatch.score(),
@@ -316,21 +316,21 @@ final class MolecularMatchDAOFunctions {
 
         for (MolecularMatchSource source : molecularMatch.sources()) {
             context.insertInto(MOLECULARMATCHSOURCE,
-                    MOLECULARMATCHSOURCE.NAME,
-                    MOLECULARMATCHSOURCE.TYPE,
-                    MOLECULARMATCHSOURCE.SUBTYPE,
-                    MOLECULARMATCHSOURCE.VALID,
-                    MOLECULARMATCHSOURCE.PUBID,
-                    MOLECULARMATCHSOURCE.LINK,
-                    MOLECULARMATCHSOURCE.TRIALID,
-                    MOLECULARMATCHSOURCE.TRIALPHASE,
-                    MOLECULARMATCHSOURCE.YEAR,
-                    MOLECULARMATCHSOURCE.FUNCTIONALCONSEQUENCE,
-                    MOLECULARMATCHSOURCE.INSTITUTION,
-                    MOLECULARMATCHSOURCE.TRUSTRATING,
-                    MOLECULARMATCHSOURCE.SUPPRESS,
-                    MOLECULARMATCHSOURCE.IDSOURCE,
-                    MOLECULARMATCHSOURCE.MOLECULARMATCHID)
+                            MOLECULARMATCHSOURCE.NAME,
+                            MOLECULARMATCHSOURCE.TYPE,
+                            MOLECULARMATCHSOURCE.SUBTYPE,
+                            MOLECULARMATCHSOURCE.VALID,
+                            MOLECULARMATCHSOURCE.PUBID,
+                            MOLECULARMATCHSOURCE.LINK,
+                            MOLECULARMATCHSOURCE.TRIALID,
+                            MOLECULARMATCHSOURCE.TRIALPHASE,
+                            MOLECULARMATCHSOURCE.YEAR,
+                            MOLECULARMATCHSOURCE.FUNCTIONALCONSEQUENCE,
+                            MOLECULARMATCHSOURCE.INSTITUTION,
+                            MOLECULARMATCHSOURCE.TRUSTRATING,
+                            MOLECULARMATCHSOURCE.SUPPRESS,
+                            MOLECULARMATCHSOURCE.IDSOURCE,
+                            MOLECULARMATCHSOURCE.MOLECULARMATCHID)
                     .values(source.name(),
                             source.type(),
                             source.subType(),
@@ -351,22 +351,22 @@ final class MolecularMatchDAOFunctions {
 
         for (MolecularMatchTierExplanation tierExplanation : molecularMatch.tierExplanations()) {
             context.insertInto(MOLECULARMATCHTIEREXPLANATION,
-                    MOLECULARMATCHTIEREXPLANATION.TIER,
-                    MOLECULARMATCHTIEREXPLANATION.STEP,
-                    MOLECULARMATCHTIEREXPLANATION.MESSAGE,
-                    MOLECULARMATCHTIEREXPLANATION.SUCCESS,
-                    MOLECULARMATCHTIEREXPLANATION.MOLECULARMATCHID)
+                            MOLECULARMATCHTIEREXPLANATION.TIER,
+                            MOLECULARMATCHTIEREXPLANATION.STEP,
+                            MOLECULARMATCHTIEREXPLANATION.MESSAGE,
+                            MOLECULARMATCHTIEREXPLANATION.SUCCESS,
+                            MOLECULARMATCHTIEREXPLANATION.MOLECULARMATCHID)
                     .values(tierExplanation.tier(), tierExplanation.step(), tierExplanation.message(), tierExplanation.success(), id)
                     .execute();
         }
 
         for (MolecularMatchTherapeuticContext therapeuticContext : molecularMatch.therapeuticContexts()) {
             context.insertInto(MOLECULARMATCHTHERAPEUTICCONTEXT,
-                    MOLECULARMATCHTHERAPEUTICCONTEXT.NAME,
-                    MOLECULARMATCHTHERAPEUTICCONTEXT.FACET,
-                    MOLECULARMATCHTHERAPEUTICCONTEXT.SUPPRESS,
-                    MOLECULARMATCHTHERAPEUTICCONTEXT.VALID,
-                    MOLECULARMATCHTHERAPEUTICCONTEXT.MOLECULARMATCHID)
+                            MOLECULARMATCHTHERAPEUTICCONTEXT.NAME,
+                            MOLECULARMATCHTHERAPEUTICCONTEXT.FACET,
+                            MOLECULARMATCHTHERAPEUTICCONTEXT.SUPPRESS,
+                            MOLECULARMATCHTHERAPEUTICCONTEXT.VALID,
+                            MOLECULARMATCHTHERAPEUTICCONTEXT.MOLECULARMATCHID)
                     .values(therapeuticContext.name(),
                             therapeuticContext.facet(),
                             therapeuticContext.suppress(),
@@ -377,22 +377,22 @@ final class MolecularMatchDAOFunctions {
 
         for (MolecularMatchTag tag : molecularMatch.tags()) {
             context.insertInto(MOLECULARMATCHTAG,
-                    MOLECULARMATCHTAG.TERM,
-                    MOLECULARMATCHTAG.FACET,
-                    MOLECULARMATCHTAG.FILTERTYPE,
-                    MOLECULARMATCHTAG.PRIORITY,
-                    MOLECULARMATCHTAG.TRANSCRIPT,
-                    MOLECULARMATCHTAG.VALID,
-                    MOLECULARMATCHTAG.GENERATEDBY,
-                    MOLECULARMATCHTAG.GENERATEDBYTERM,
-                    MOLECULARMATCHTAG.ISNEW,
-                    MOLECULARMATCHTAG.PRIMARYVALUE,
-                    MOLECULARMATCHTAG.CUSTOM,
-                    MOLECULARMATCHTAG.SUPPRESS,
-                    MOLECULARMATCHTAG.MANUALSUPPRESS,
-                    MOLECULARMATCHTAG.COMPOSITE,
-                    MOLECULARMATCHTAG.COMPOSITEKEY,
-                    MOLECULARMATCHTAG.MOLECULARMATCHID)
+                            MOLECULARMATCHTAG.TERM,
+                            MOLECULARMATCHTAG.FACET,
+                            MOLECULARMATCHTAG.FILTERTYPE,
+                            MOLECULARMATCHTAG.PRIORITY,
+                            MOLECULARMATCHTAG.TRANSCRIPT,
+                            MOLECULARMATCHTAG.VALID,
+                            MOLECULARMATCHTAG.GENERATEDBY,
+                            MOLECULARMATCHTAG.GENERATEDBYTERM,
+                            MOLECULARMATCHTAG.ISNEW,
+                            MOLECULARMATCHTAG.PRIMARYVALUE,
+                            MOLECULARMATCHTAG.CUSTOM,
+                            MOLECULARMATCHTAG.SUPPRESS,
+                            MOLECULARMATCHTAG.MANUALSUPPRESS,
+                            MOLECULARMATCHTAG.COMPOSITE,
+                            MOLECULARMATCHTAG.COMPOSITEKEY,
+                            MOLECULARMATCHTAG.MOLECULARMATCHID)
                     .values(tag.term(),
                             tag.facet(),
                             tag.filterType(),
@@ -414,21 +414,21 @@ final class MolecularMatchDAOFunctions {
 
         for (MolecularMatchCriteriaUnmet criteriaUnmet : molecularMatch.criteriaUnmets()) {
             context.insertInto(MOLECULARMATCHCRITERIAUNMET,
-                    MOLECULARMATCHCRITERIAUNMET.TERM,
-                    MOLECULARMATCHCRITERIAUNMET.FILTERTYPE,
-                    MOLECULARMATCHCRITERIAUNMET.PRIORITY,
-                    MOLECULARMATCHCRITERIAUNMET.FACET,
-                    MOLECULARMATCHCRITERIAUNMET.VALID,
-                    MOLECULARMATCHCRITERIAUNMET.TRANSCRIPT,
-                    MOLECULARMATCHCRITERIAUNMET.ISNEW,
-                    MOLECULARMATCHCRITERIAUNMET.GENERATEDBY,
-                    MOLECULARMATCHCRITERIAUNMET.GENERATEDBYTERM,
-                    MOLECULARMATCHCRITERIAUNMET.SUPPRESS,
-                    MOLECULARMATCHCRITERIAUNMET.MANUALSUPPRESS,
-                    MOLECULARMATCHCRITERIAUNMET.PRIMARYVALUE,
-                    MOLECULARMATCHCRITERIAUNMET.COMPOSITEKEY,
-                    MOLECULARMATCHCRITERIAUNMET.CUSTOM,
-                    MOLECULARMATCHCRITERIAUNMET.MOLECULARMATCHID)
+                            MOLECULARMATCHCRITERIAUNMET.TERM,
+                            MOLECULARMATCHCRITERIAUNMET.FILTERTYPE,
+                            MOLECULARMATCHCRITERIAUNMET.PRIORITY,
+                            MOLECULARMATCHCRITERIAUNMET.FACET,
+                            MOLECULARMATCHCRITERIAUNMET.VALID,
+                            MOLECULARMATCHCRITERIAUNMET.TRANSCRIPT,
+                            MOLECULARMATCHCRITERIAUNMET.ISNEW,
+                            MOLECULARMATCHCRITERIAUNMET.GENERATEDBY,
+                            MOLECULARMATCHCRITERIAUNMET.GENERATEDBYTERM,
+                            MOLECULARMATCHCRITERIAUNMET.SUPPRESS,
+                            MOLECULARMATCHCRITERIAUNMET.MANUALSUPPRESS,
+                            MOLECULARMATCHCRITERIAUNMET.PRIMARYVALUE,
+                            MOLECULARMATCHCRITERIAUNMET.COMPOSITEKEY,
+                            MOLECULARMATCHCRITERIAUNMET.CUSTOM,
+                            MOLECULARMATCHCRITERIAUNMET.MOLECULARMATCHID)
                     .values(criteriaUnmet.term(),
                             criteriaUnmet.filterType(),
                             criteriaUnmet.priority(),
@@ -449,13 +449,13 @@ final class MolecularMatchDAOFunctions {
 
         for (MolecularMatchPrevalence prevalence : molecularMatch.prevalences()) {
             context.insertInto(MOLECULARMATCHPREVALENCE,
-                    MOLECULARMATCHPREVALENCE.STUDYID,
-                    MOLECULARMATCHPREVALENCE.COUNT,
-                    MOLECULARMATCHPREVALENCE.SAMPLES,
-                    MOLECULARMATCHPREVALENCE.PERCENT,
-                    MOLECULARMATCHPREVALENCE.MOLECULAR,
-                    MOLECULARMATCHPREVALENCE.CONDITIONVALUE,
-                    MOLECULARMATCHPREVALENCE.MOLECULARMATCHID)
+                            MOLECULARMATCHPREVALENCE.STUDYID,
+                            MOLECULARMATCHPREVALENCE.COUNT,
+                            MOLECULARMATCHPREVALENCE.SAMPLES,
+                            MOLECULARMATCHPREVALENCE.PERCENT,
+                            MOLECULARMATCHPREVALENCE.MOLECULAR,
+                            MOLECULARMATCHPREVALENCE.CONDITIONVALUE,
+                            MOLECULARMATCHPREVALENCE.MOLECULARMATCHID)
                     .values(prevalence.studyId(),
                             prevalence.count(),
                             prevalence.samples(),
@@ -469,11 +469,11 @@ final class MolecularMatchDAOFunctions {
 
     private static void insertAst(@NotNull DSLContext context, @NotNull MolecularMatchAst ast, int molecularMatchId) {
         int astId = context.insertInto(MOLECULARMATCHAST,
-                MOLECULARMATCHAST.TYPE,
-                MOLECULARMATCHAST.RAW,
-                MOLECULARMATCHAST.VALUE,
-                MOLECULARMATCHAST.OPERATOR,
-                MOLECULARMATCHAST.MOLECULARMATCHID)
+                        MOLECULARMATCHAST.TYPE,
+                        MOLECULARMATCHAST.RAW,
+                        MOLECULARMATCHAST.VALUE,
+                        MOLECULARMATCHAST.OPERATOR,
+                        MOLECULARMATCHAST.MOLECULARMATCHID)
                 .values(ast.type(), ast.raw(), ast.value(), ast.operator(), molecularMatchId)
                 .returning(MOLECULARMATCHAST.ID)
                 .fetchOne()
@@ -482,11 +482,11 @@ final class MolecularMatchDAOFunctions {
         MolecularMatchAstLeft astLeft = ast.left();
         if (astLeft != null) {
             int astLeftId = context.insertInto(MOLECULARMATCHASTLEFT,
-                    MOLECULARMATCHASTLEFT.TYPE,
-                    MOLECULARMATCHASTLEFT.RAW,
-                    MOLECULARMATCHASTLEFT.VALUE,
-                    MOLECULARMATCHASTLEFT.OPERATOR,
-                    MOLECULARMATCHASTLEFT.MOLECULARMATCHASTID)
+                            MOLECULARMATCHASTLEFT.TYPE,
+                            MOLECULARMATCHASTLEFT.RAW,
+                            MOLECULARMATCHASTLEFT.VALUE,
+                            MOLECULARMATCHASTLEFT.OPERATOR,
+                            MOLECULARMATCHASTLEFT.MOLECULARMATCHASTID)
                     .values(astLeft.type(), astLeft.raw(), astLeft.value(), astLeft.operator(), astId)
                     .returning(MOLECULARMATCHASTLEFT.ID)
                     .fetchOne()
@@ -495,11 +495,11 @@ final class MolecularMatchDAOFunctions {
             MolecularMatchAstLeftLeft astLeftLeft = astLeft.left();
             if (astLeftLeft != null) {
                 context.insertInto(MOLECULARMATCHASTLEFTLEFT,
-                        MOLECULARMATCHASTLEFTLEFT.TYPE,
-                        MOLECULARMATCHASTLEFTLEFT.RAW,
-                        MOLECULARMATCHASTLEFTLEFT.VALUE,
-                        MOLECULARMATCHASTLEFTLEFT.OPERATOR,
-                        MOLECULARMATCHASTLEFTLEFT.MOLECULARMATCHASTLEFTID)
+                                MOLECULARMATCHASTLEFTLEFT.TYPE,
+                                MOLECULARMATCHASTLEFTLEFT.RAW,
+                                MOLECULARMATCHASTLEFTLEFT.VALUE,
+                                MOLECULARMATCHASTLEFTLEFT.OPERATOR,
+                                MOLECULARMATCHASTLEFTLEFT.MOLECULARMATCHASTLEFTID)
                         .values(astLeftLeft.type(), astLeftLeft.raw(), astLeftLeft.value(), astLeftLeft.operator(), astLeftId)
                         .execute();
             }
@@ -507,11 +507,11 @@ final class MolecularMatchDAOFunctions {
             MolecularMatchAstLeftRight astLeftRight = astLeft.right();
             if (astLeftRight != null) {
                 context.insertInto(MOLECULARMATCHASTLEFTRIGHT,
-                        MOLECULARMATCHASTLEFTRIGHT.TYPE,
-                        MOLECULARMATCHASTLEFTRIGHT.RAW,
-                        MOLECULARMATCHASTLEFTRIGHT.VALUE,
-                        MOLECULARMATCHASTLEFTRIGHT.OPERATOR,
-                        MOLECULARMATCHASTLEFTRIGHT.MOLECULARMATCHASTLEFTID)
+                                MOLECULARMATCHASTLEFTRIGHT.TYPE,
+                                MOLECULARMATCHASTLEFTRIGHT.RAW,
+                                MOLECULARMATCHASTLEFTRIGHT.VALUE,
+                                MOLECULARMATCHASTLEFTRIGHT.OPERATOR,
+                                MOLECULARMATCHASTLEFTRIGHT.MOLECULARMATCHASTLEFTID)
                         .values(astLeftRight.type(), astLeftRight.raw(), astLeftRight.value(), astLeftRight.operator(), astLeftId)
                         .execute();
             }
@@ -520,11 +520,11 @@ final class MolecularMatchDAOFunctions {
         MolecularMatchAstRight astRight = ast.right();
         if (astRight != null) {
             int astRightId = context.insertInto(MOLECULARMATCHASTRIGHT,
-                    MOLECULARMATCHASTRIGHT.TYPE,
-                    MOLECULARMATCHASTRIGHT.RAW,
-                    MOLECULARMATCHASTRIGHT.VALUE,
-                    MOLECULARMATCHASTRIGHT.OPERATOR,
-                    MOLECULARMATCHASTRIGHT.MOLECULARMATCHASTID)
+                            MOLECULARMATCHASTRIGHT.TYPE,
+                            MOLECULARMATCHASTRIGHT.RAW,
+                            MOLECULARMATCHASTRIGHT.VALUE,
+                            MOLECULARMATCHASTRIGHT.OPERATOR,
+                            MOLECULARMATCHASTRIGHT.MOLECULARMATCHASTID)
                     .values(astRight.type(), astRight.raw(), astRight.value(), astRight.operator(), astId)
                     .returning(MOLECULARMATCHASTRIGHT.ID)
                     .fetchOne()
@@ -533,11 +533,11 @@ final class MolecularMatchDAOFunctions {
             MolecularMatchAstRightLeft astRightLeft = astRight.left();
             if (astRightLeft != null) {
                 context.insertInto(MOLECULARMATCHASTRIGHTLEFT,
-                        MOLECULARMATCHASTRIGHTLEFT.TYPE,
-                        MOLECULARMATCHASTRIGHTLEFT.RAW,
-                        MOLECULARMATCHASTRIGHTLEFT.VALUE,
-                        MOLECULARMATCHASTRIGHTLEFT.OPERATOR,
-                        MOLECULARMATCHASTRIGHTLEFT.MOLECULARMATCHASTRIGHTID)
+                                MOLECULARMATCHASTRIGHTLEFT.TYPE,
+                                MOLECULARMATCHASTRIGHTLEFT.RAW,
+                                MOLECULARMATCHASTRIGHTLEFT.VALUE,
+                                MOLECULARMATCHASTRIGHTLEFT.OPERATOR,
+                                MOLECULARMATCHASTRIGHTLEFT.MOLECULARMATCHASTRIGHTID)
                         .values(astRightLeft.type(), astRightLeft.raw(), astRightLeft.value(), astRightLeft.operator(), astRightId)
                         .execute();
             }
@@ -545,11 +545,11 @@ final class MolecularMatchDAOFunctions {
             MolecularMatchAstRightRight astRightRight = astRight.right();
             if (astRightRight != null) {
                 context.insertInto(MOLECULARMATCHASTRIGHTRIGHT,
-                        MOLECULARMATCHASTRIGHTRIGHT.TYPE,
-                        MOLECULARMATCHASTRIGHTRIGHT.RAW,
-                        MOLECULARMATCHASTRIGHTRIGHT.VALUE,
-                        MOLECULARMATCHASTRIGHTRIGHT.OPERATOR,
-                        MOLECULARMATCHASTRIGHTRIGHT.MOLECULARMATCHASTRIGHTID)
+                                MOLECULARMATCHASTRIGHTRIGHT.TYPE,
+                                MOLECULARMATCHASTRIGHTRIGHT.RAW,
+                                MOLECULARMATCHASTRIGHTRIGHT.VALUE,
+                                MOLECULARMATCHASTRIGHTRIGHT.OPERATOR,
+                                MOLECULARMATCHASTRIGHTRIGHT.MOLECULARMATCHASTRIGHTID)
                         .values(astRightRight.type(), astRightRight.raw(), astRightRight.value(), astRightRight.operator(), astRightId)
                         .execute();
             }
@@ -561,14 +561,14 @@ final class MolecularMatchDAOFunctions {
             int molecularMatchId) {
         for (MolecularMatchVariantInfo variantInfo : variantInfos) {
             int variantInfoId = context.insertInto(MOLECULARMATCHVARIANTINFO,
-                    MOLECULARMATCHVARIANTINFO.NAME,
-                    MOLECULARMATCHVARIANTINFO.GENE,
-                    MOLECULARMATCHVARIANTINFO.TRANSCRIPT,
-                    MOLECULARMATCHVARIANTINFO.CLASSIFICATION,
-                    MOLECULARMATCHVARIANTINFO.GENEFUSIONPARTNER,
-                    MOLECULARMATCHVARIANTINFO.COSMICID,
-                    MOLECULARMATCHVARIANTINFO.POPFREQMAX,
-                    MOLECULARMATCHVARIANTINFO.MOLECULARMATCHID)
+                            MOLECULARMATCHVARIANTINFO.NAME,
+                            MOLECULARMATCHVARIANTINFO.GENE,
+                            MOLECULARMATCHVARIANTINFO.TRANSCRIPT,
+                            MOLECULARMATCHVARIANTINFO.CLASSIFICATION,
+                            MOLECULARMATCHVARIANTINFO.GENEFUSIONPARTNER,
+                            MOLECULARMATCHVARIANTINFO.COSMICID,
+                            MOLECULARMATCHVARIANTINFO.POPFREQMAX,
+                            MOLECULARMATCHVARIANTINFO.MOLECULARMATCHID)
                     .values(variantInfo.name(),
                             variantInfo.gene(),
                             variantInfo.transcript(),
@@ -589,15 +589,15 @@ final class MolecularMatchDAOFunctions {
 
             for (MolecularMatchFusion fusion : variantInfo.fusions()) {
                 context.insertInto(MOLECULARMATCHVARIANTINFOFUSION,
-                        MOLECULARMATCHVARIANTINFOFUSION.CHR,
-                        MOLECULARMATCHVARIANTINFOFUSION.REFERENCEGENOME,
-                        MOLECULARMATCHVARIANTINFOFUSION.LBPWREP,
-                        MOLECULARMATCHVARIANTINFOFUSION.LBPWLEP,
-                        MOLECULARMATCHVARIANTINFOFUSION.RBPWREP,
-                        MOLECULARMATCHVARIANTINFOFUSION.RBPWLEP,
-                        MOLECULARMATCHVARIANTINFOFUSION.INTRONNUMBER,
-                        MOLECULARMATCHVARIANTINFOFUSION.EXONNUMBER,
-                        MOLECULARMATCHVARIANTINFOFUSION.MOLECULARMATCHVARIANTINFOID)
+                                MOLECULARMATCHVARIANTINFOFUSION.CHR,
+                                MOLECULARMATCHVARIANTINFOFUSION.REFERENCEGENOME,
+                                MOLECULARMATCHVARIANTINFOFUSION.LBPWREP,
+                                MOLECULARMATCHVARIANTINFOFUSION.LBPWLEP,
+                                MOLECULARMATCHVARIANTINFOFUSION.RBPWREP,
+                                MOLECULARMATCHVARIANTINFOFUSION.RBPWLEP,
+                                MOLECULARMATCHVARIANTINFOFUSION.INTRONNUMBER,
+                                MOLECULARMATCHVARIANTINFOFUSION.EXONNUMBER,
+                                MOLECULARMATCHVARIANTINFOFUSION.MOLECULARMATCHVARIANTINFOID)
                         .values(fusion.chr(),
                                 fusion.referenceGenome(),
                                 fusion.LBPWREP(),
@@ -612,17 +612,17 @@ final class MolecularMatchDAOFunctions {
 
             for (MolecularMatchLocation location : variantInfo.locations()) {
                 int locationId = context.insertInto(MOLECULARMATCHVARIANTINFOLOCATION,
-                        MOLECULARMATCHVARIANTINFOLOCATION.CHR,
-                        MOLECULARMATCHVARIANTINFOLOCATION.START,
-                        MOLECULARMATCHVARIANTINFOLOCATION.STOP,
-                        MOLECULARMATCHVARIANTINFOLOCATION.REF,
-                        MOLECULARMATCHVARIANTINFOLOCATION.ALT,
-                        MOLECULARMATCHVARIANTINFOLOCATION.CDNA,
-                        MOLECULARMATCHVARIANTINFOLOCATION.AMINOACIDCHANGE,
-                        MOLECULARMATCHVARIANTINFOLOCATION.REFERENCEGENOME,
-                        MOLECULARMATCHVARIANTINFOLOCATION.STRAND,
-                        MOLECULARMATCHVARIANTINFOLOCATION.INTRONNUMBER,
-                        MOLECULARMATCHVARIANTINFOLOCATION.MOLECULARMATCHVARIANTINFOID)
+                                MOLECULARMATCHVARIANTINFOLOCATION.CHR,
+                                MOLECULARMATCHVARIANTINFOLOCATION.START,
+                                MOLECULARMATCHVARIANTINFOLOCATION.STOP,
+                                MOLECULARMATCHVARIANTINFOLOCATION.REF,
+                                MOLECULARMATCHVARIANTINFOLOCATION.ALT,
+                                MOLECULARMATCHVARIANTINFOLOCATION.CDNA,
+                                MOLECULARMATCHVARIANTINFOLOCATION.AMINOACIDCHANGE,
+                                MOLECULARMATCHVARIANTINFOLOCATION.REFERENCEGENOME,
+                                MOLECULARMATCHVARIANTINFOLOCATION.STRAND,
+                                MOLECULARMATCHVARIANTINFOLOCATION.INTRONNUMBER,
+                                MOLECULARMATCHVARIANTINFOLOCATION.MOLECULARMATCHVARIANTINFOID)
                         .values(location.chr(),
                                 location.start(),
                                 location.stop(),
@@ -640,8 +640,8 @@ final class MolecularMatchDAOFunctions {
 
                 for (String exonNumber : location.exonNumbers()) {
                     context.insertInto(MOLECULARMATCHVARIANTINFOLOCATIONEXONNUMBER,
-                            MOLECULARMATCHVARIANTINFOLOCATIONEXONNUMBER.EXONNUMBER,
-                            MOLECULARMATCHVARIANTINFOLOCATIONEXONNUMBER.MOLECULARMATCHVARIANTINFOLOCATIONID)
+                                    MOLECULARMATCHVARIANTINFOLOCATIONEXONNUMBER.EXONNUMBER,
+                                    MOLECULARMATCHVARIANTINFOLOCATIONEXONNUMBER.MOLECULARMATCHVARIANTINFOLOCATIONID)
                             .values(exonNumber, locationId)
                             .execute();
                 }
@@ -653,23 +653,23 @@ final class MolecularMatchDAOFunctions {
             int molecularMatchId) {
         for (MolecularMatchClassification classification : classifications) {
             int classificationId = context.insertInto(MOLECULARMATCHCLASSIFICATION,
-                    MOLECULARMATCHCLASSIFICATION.NAME,
-                    MOLECULARMATCHCLASSIFICATION.GENESYMBOL,
-                    MOLECULARMATCHCLASSIFICATION.EXPANDGENESEARCH,
-                    MOLECULARMATCHCLASSIFICATION.TRANSCRIPT,
-                    MOLECULARMATCHCLASSIFICATION.CLASSIFICATION,
-                    MOLECULARMATCHCLASSIFICATION.CLASSIFICATIONOVERRIDE,
-                    MOLECULARMATCHCLASSIFICATION.COPYNUMBERTYPE,
-                    MOLECULARMATCHCLASSIFICATION.DRUGSAPPROVEDONLABELCOUNT,
-                    MOLECULARMATCHCLASSIFICATION.DRUGSAPPROVEDOFFLABELCOUNT,
-                    MOLECULARMATCHCLASSIFICATION.DRUGSEXPERIMENTALCOUNT,
-                    MOLECULARMATCHCLASSIFICATION.TRIALCOUNT,
-                    MOLECULARMATCHCLASSIFICATION.PUBLICATIONCOUNT,
-                    MOLECULARMATCHCLASSIFICATION.ROOTTERM,
-                    MOLECULARMATCHCLASSIFICATION.ALIAS,
-                    MOLECULARMATCHCLASSIFICATION.PRIORITY,
-                    MOLECULARMATCHCLASSIFICATION.DESCRIPTION,
-                    MOLECULARMATCHCLASSIFICATION.MOLECULARMATCHID)
+                            MOLECULARMATCHCLASSIFICATION.NAME,
+                            MOLECULARMATCHCLASSIFICATION.GENESYMBOL,
+                            MOLECULARMATCHCLASSIFICATION.EXPANDGENESEARCH,
+                            MOLECULARMATCHCLASSIFICATION.TRANSCRIPT,
+                            MOLECULARMATCHCLASSIFICATION.CLASSIFICATION,
+                            MOLECULARMATCHCLASSIFICATION.CLASSIFICATIONOVERRIDE,
+                            MOLECULARMATCHCLASSIFICATION.COPYNUMBERTYPE,
+                            MOLECULARMATCHCLASSIFICATION.DRUGSAPPROVEDONLABELCOUNT,
+                            MOLECULARMATCHCLASSIFICATION.DRUGSAPPROVEDOFFLABELCOUNT,
+                            MOLECULARMATCHCLASSIFICATION.DRUGSEXPERIMENTALCOUNT,
+                            MOLECULARMATCHCLASSIFICATION.TRIALCOUNT,
+                            MOLECULARMATCHCLASSIFICATION.PUBLICATIONCOUNT,
+                            MOLECULARMATCHCLASSIFICATION.ROOTTERM,
+                            MOLECULARMATCHCLASSIFICATION.ALIAS,
+                            MOLECULARMATCHCLASSIFICATION.PRIORITY,
+                            MOLECULARMATCHCLASSIFICATION.DESCRIPTION,
+                            MOLECULARMATCHCLASSIFICATION.MOLECULARMATCHID)
                     .values(classification.name(),
                             classification.geneSymbol(),
                             classification.expandGeneSearch(),
@@ -693,16 +693,16 @@ final class MolecularMatchDAOFunctions {
 
             for (String transcript : classification.transcripts()) {
                 context.insertInto(MOLECULARMATCHCLASSIFICATIONTRANSCRIPT,
-                        MOLECULARMATCHCLASSIFICATIONTRANSCRIPT.TRANSCRIPT,
-                        MOLECULARMATCHCLASSIFICATIONTRANSCRIPT.MOLECULARMATCHCLASSIFICATIONID)
+                                MOLECULARMATCHCLASSIFICATIONTRANSCRIPT.TRANSCRIPT,
+                                MOLECULARMATCHCLASSIFICATIONTRANSCRIPT.MOLECULARMATCHCLASSIFICATIONID)
                         .values(transcript, classificationId)
                         .execute();
             }
 
             for (String chromosome : classification.chromosomes()) {
                 context.insertInto(MOLECULARMATCHCLASSIFICATIONCHROMOSOME,
-                        MOLECULARMATCHCLASSIFICATIONCHROMOSOME.CHROMOSOME,
-                        MOLECULARMATCHCLASSIFICATIONCHROMOSOME.MOLECULARMATCHCLASSIFICATIONID)
+                                MOLECULARMATCHCLASSIFICATIONCHROMOSOME.CHROMOSOME,
+                                MOLECULARMATCHCLASSIFICATIONCHROMOSOME.MOLECULARMATCHCLASSIFICATIONID)
                         .values(chromosome, classificationId)
                         .execute();
             }
@@ -733,8 +733,8 @@ final class MolecularMatchDAOFunctions {
 
             for (String nucleotideChange : classification.nucleotideChanges()) {
                 context.insertInto(MOLECULARMATCHCLASSIFICATIONNUCLEOTIDECHANGE,
-                        MOLECULARMATCHCLASSIFICATIONNUCLEOTIDECHANGE.NUCLEOTIDECHANGE,
-                        MOLECULARMATCHCLASSIFICATIONNUCLEOTIDECHANGE.MOLECULARMATCHCLASSIFICATIONID)
+                                MOLECULARMATCHCLASSIFICATIONNUCLEOTIDECHANGE.NUCLEOTIDECHANGE,
+                                MOLECULARMATCHCLASSIFICATIONNUCLEOTIDECHANGE.MOLECULARMATCHCLASSIFICATIONID)
                         .values(nucleotideChange, classificationId)
                         .execute();
             }
@@ -747,8 +747,8 @@ final class MolecularMatchDAOFunctions {
 
             for (String exonicFunc : classification.exonicFuncs()) {
                 context.insertInto(MOLECULARMATCHCLASSIFICATIONEXONICFUNC,
-                        MOLECULARMATCHCLASSIFICATIONEXONICFUNC.EXONICFUNC,
-                        MOLECULARMATCHCLASSIFICATIONEXONICFUNC.MOLECULARMATCHCLASSIFICATIONID)
+                                MOLECULARMATCHCLASSIFICATIONEXONICFUNC.EXONICFUNC,
+                                MOLECULARMATCHCLASSIFICATIONEXONICFUNC.MOLECULARMATCHCLASSIFICATIONID)
                         .values(exonicFunc, classificationId)
                         .execute();
             }
@@ -779,18 +779,18 @@ final class MolecularMatchDAOFunctions {
 
             for (String popFreqMax : classification.popFreqMaxes()) {
                 context.insertInto(MOLECULARMATCHCLASSIFICATIONPOPFREQMAX,
-                        MOLECULARMATCHCLASSIFICATIONPOPFREQMAX.POPFREQMAX,
-                        MOLECULARMATCHCLASSIFICATIONPOPFREQMAX.MOLECULARMATCHCLASSIFICATIONID)
+                                MOLECULARMATCHCLASSIFICATIONPOPFREQMAX.POPFREQMAX,
+                                MOLECULARMATCHCLASSIFICATIONPOPFREQMAX.MOLECULARMATCHCLASSIFICATIONID)
                         .values(popFreqMax, classificationId)
                         .execute();
             }
 
             for (MolecularMatchParent parent : classification.parents()) {
                 int parentId = context.insertInto(MOLECULARMATCHCLASSIFICATIONPARENT,
-                        MOLECULARMATCHCLASSIFICATIONPARENT.NAME,
-                        MOLECULARMATCHCLASSIFICATIONPARENT.TYPE,
-                        MOLECULARMATCHCLASSIFICATIONPARENT.ACTIONABLEPARENT,
-                        MOLECULARMATCHCLASSIFICATIONPARENT.MOLECULARMATCHCLASSIFICATIONID)
+                                MOLECULARMATCHCLASSIFICATIONPARENT.NAME,
+                                MOLECULARMATCHCLASSIFICATIONPARENT.TYPE,
+                                MOLECULARMATCHCLASSIFICATIONPARENT.ACTIONABLEPARENT,
+                                MOLECULARMATCHCLASSIFICATIONPARENT.MOLECULARMATCHCLASSIFICATIONID)
                         .values(parent.name(), parent.type(), parent.actionableParent(), classificationId)
                         .returning(MOLECULARMATCHCLASSIFICATIONPARENT.ID)
                         .fetchOne()
@@ -798,8 +798,8 @@ final class MolecularMatchDAOFunctions {
 
                 for (String transcript : parent.transcripts()) {
                     context.insertInto(MOLECULARMATCHCLASSIFICATIONPARENTTRANSCRIPT,
-                            MOLECULARMATCHCLASSIFICATIONPARENTTRANSCRIPT.TRANSCRIPT,
-                            MOLECULARMATCHCLASSIFICATIONPARENTTRANSCRIPT.MOLECULARMATCHCLASSIFICATIONPARENTID)
+                                    MOLECULARMATCHCLASSIFICATIONPARENTTRANSCRIPT.TRANSCRIPT,
+                                    MOLECULARMATCHCLASSIFICATIONPARENTTRANSCRIPT.MOLECULARMATCHCLASSIFICATIONPARENTID)
                             .values(transcript, parentId)
                             .execute();
                 }
@@ -811,16 +811,16 @@ final class MolecularMatchDAOFunctions {
             int molecularMatchId) {
         for (MolecularMatchMutation mutation : mutations) {
             int mutationId = context.insertInto(MOLECULARMATCHMUTATION,
-                    MOLECULARMATCHMUTATION.GENESYMBOL,
-                    MOLECULARMATCHMUTATION.NAME,
-                    MOLECULARMATCHMUTATION.TRANSCRIPTRECOGNIZED,
-                    MOLECULARMATCHMUTATION.TRANSCRIPT,
-                    MOLECULARMATCHMUTATION.LONGESTTRANSCRIPT,
-                    MOLECULARMATCHMUTATION.UNIPROTTRANSCRIPT,
-                    MOLECULARMATCHMUTATION.DESCRIPTION,
-                    MOLECULARMATCHMUTATION.SRC,
-                    MOLECULARMATCHMUTATION.IDMUTATION,
-                    MOLECULARMATCHMUTATION.MOLECULARMATCHID)
+                            MOLECULARMATCHMUTATION.GENESYMBOL,
+                            MOLECULARMATCHMUTATION.NAME,
+                            MOLECULARMATCHMUTATION.TRANSCRIPTRECOGNIZED,
+                            MOLECULARMATCHMUTATION.TRANSCRIPT,
+                            MOLECULARMATCHMUTATION.LONGESTTRANSCRIPT,
+                            MOLECULARMATCHMUTATION.UNIPROTTRANSCRIPT,
+                            MOLECULARMATCHMUTATION.DESCRIPTION,
+                            MOLECULARMATCHMUTATION.SRC,
+                            MOLECULARMATCHMUTATION.IDMUTATION,
+                            MOLECULARMATCHMUTATION.MOLECULARMATCHID)
                     .values(mutation.geneSymbol(),
                             mutation.name(),
                             mutation.transcriptRecognized(),
@@ -867,22 +867,22 @@ final class MolecularMatchDAOFunctions {
 
             for (MolecularMatchTranscriptConsequence transcriptConsequence : mutation.transcriptConsequences()) {
                 int transcriptConsequenceId = context.insertInto(MOLECULARMATCHMUTATIONTRANSCRIPTCONSEQUENCE,
-                        MOLECULARMATCHMUTATIONTRANSCRIPTCONSEQUENCE.CHR,
-                        MOLECULARMATCHMUTATIONTRANSCRIPTCONSEQUENCE.START,
-                        MOLECULARMATCHMUTATIONTRANSCRIPTCONSEQUENCE.STOP,
-                        MOLECULARMATCHMUTATIONTRANSCRIPTCONSEQUENCE.REF,
-                        MOLECULARMATCHMUTATIONTRANSCRIPTCONSEQUENCE.ALT,
-                        MOLECULARMATCHMUTATIONTRANSCRIPTCONSEQUENCE.REFERENCEGENOME,
-                        MOLECULARMATCHMUTATIONTRANSCRIPTCONSEQUENCE.TRANSCRIPT,
-                        MOLECULARMATCHMUTATIONTRANSCRIPTCONSEQUENCE.STRAND,
-                        MOLECULARMATCHMUTATIONTRANSCRIPTCONSEQUENCE.CDNA,
-                        MOLECULARMATCHMUTATIONTRANSCRIPTCONSEQUENCE.AMINOACIDCHANGE,
-                        MOLECULARMATCHMUTATIONTRANSCRIPTCONSEQUENCE.INTRONNUMBER,
-                        MOLECULARMATCHMUTATIONTRANSCRIPTCONSEQUENCE.SUPPRESS,
-                        MOLECULARMATCHMUTATIONTRANSCRIPTCONSEQUENCE.CUSTOM,
-                        MOLECULARMATCHMUTATIONTRANSCRIPTCONSEQUENCE.VALIDATED,
-                        MOLECULARMATCHMUTATIONTRANSCRIPTCONSEQUENCE.COMPOSITEKEY,
-                        MOLECULARMATCHMUTATIONTRANSCRIPTCONSEQUENCE.MOLECULARMATCHMUTATIONID)
+                                MOLECULARMATCHMUTATIONTRANSCRIPTCONSEQUENCE.CHR,
+                                MOLECULARMATCHMUTATIONTRANSCRIPTCONSEQUENCE.START,
+                                MOLECULARMATCHMUTATIONTRANSCRIPTCONSEQUENCE.STOP,
+                                MOLECULARMATCHMUTATIONTRANSCRIPTCONSEQUENCE.REF,
+                                MOLECULARMATCHMUTATIONTRANSCRIPTCONSEQUENCE.ALT,
+                                MOLECULARMATCHMUTATIONTRANSCRIPTCONSEQUENCE.REFERENCEGENOME,
+                                MOLECULARMATCHMUTATIONTRANSCRIPTCONSEQUENCE.TRANSCRIPT,
+                                MOLECULARMATCHMUTATIONTRANSCRIPTCONSEQUENCE.STRAND,
+                                MOLECULARMATCHMUTATIONTRANSCRIPTCONSEQUENCE.CDNA,
+                                MOLECULARMATCHMUTATIONTRANSCRIPTCONSEQUENCE.AMINOACIDCHANGE,
+                                MOLECULARMATCHMUTATIONTRANSCRIPTCONSEQUENCE.INTRONNUMBER,
+                                MOLECULARMATCHMUTATIONTRANSCRIPTCONSEQUENCE.SUPPRESS,
+                                MOLECULARMATCHMUTATIONTRANSCRIPTCONSEQUENCE.CUSTOM,
+                                MOLECULARMATCHMUTATIONTRANSCRIPTCONSEQUENCE.VALIDATED,
+                                MOLECULARMATCHMUTATIONTRANSCRIPTCONSEQUENCE.COMPOSITEKEY,
+                                MOLECULARMATCHMUTATIONTRANSCRIPTCONSEQUENCE.MOLECULARMATCHMUTATIONID)
                         .values(transcriptConsequence.chr(),
                                 transcriptConsequence.start(),
                                 transcriptConsequence.stop(),
@@ -905,8 +905,8 @@ final class MolecularMatchDAOFunctions {
 
                 for (String exonNumber : transcriptConsequence.exonNumbers()) {
                     context.insertInto(MOLECULARMATCHMUTATIONTRANSCRIPTCONSEQUENCEEXONNUMBER,
-                            MOLECULARMATCHMUTATIONTRANSCRIPTCONSEQUENCEEXONNUMBER.EXONNUMBER,
-                            MOLECULARMATCHMUTATIONTRANSCRIPTCONSEQUENCEEXONNUMBER.MOLECULARMATCHMUTATIONTRANSCRIPTCONSEQUENCEID)
+                                    MOLECULARMATCHMUTATIONTRANSCRIPTCONSEQUENCEEXONNUMBER.EXONNUMBER,
+                                    MOLECULARMATCHMUTATIONTRANSCRIPTCONSEQUENCEEXONNUMBER.MOLECULARMATCHMUTATIONTRANSCRIPTCONSEQUENCEID)
                             .values(exonNumber, transcriptConsequenceId)
                             .execute();
                 }
@@ -914,10 +914,10 @@ final class MolecularMatchDAOFunctions {
 
             for (MolecularMatchParent parent : mutation.parents()) {
                 int idParent = context.insertInto(MOLECULARMATCHMUTATIONPARENT,
-                        MOLECULARMATCHMUTATIONPARENT.NAME,
-                        MOLECULARMATCHMUTATIONPARENT.TYPE,
-                        MOLECULARMATCHMUTATIONPARENT.ACTIONABLEPARENT,
-                        MOLECULARMATCHMUTATIONPARENT.MOLECULARMATCHMUTATIONID)
+                                MOLECULARMATCHMUTATIONPARENT.NAME,
+                                MOLECULARMATCHMUTATIONPARENT.TYPE,
+                                MOLECULARMATCHMUTATIONPARENT.ACTIONABLEPARENT,
+                                MOLECULARMATCHMUTATIONPARENT.MOLECULARMATCHMUTATIONID)
                         .values(parent.name(), parent.type(), parent.actionableParent(), mutationId)
                         .returning(MOLECULARMATCHMUTATIONPARENT.ID)
                         .fetchOne()
@@ -946,48 +946,48 @@ final class MolecularMatchDAOFunctions {
             int mutationId) {
         for (MolecularMatchWGSALocation wgsaLocation : wgsaLocations) {
             int wgsaLocationId = context.insertInto(MOLECULARMATCHMUTATIONWGSALOCATION,
-                    MOLECULARMATCHMUTATIONWGSALOCATION.CHR,
-                    MOLECULARMATCHMUTATIONWGSALOCATION.START,
-                    MOLECULARMATCHMUTATIONWGSALOCATION.END,
-                    MOLECULARMATCHMUTATIONWGSALOCATION.REF,
-                    MOLECULARMATCHMUTATIONWGSALOCATION.ALT,
-                    MOLECULARMATCHMUTATIONWGSALOCATION.CHRSTARTREFALT,
-                    MOLECULARMATCHMUTATIONWGSALOCATION.TRANSCRIPT,
-                    MOLECULARMATCHMUTATIONWGSALOCATION.NUCLEOTIDECHANGE,
-                    MOLECULARMATCHMUTATIONWGSALOCATION.AA,
-                    MOLECULARMATCHMUTATIONWGSALOCATION.EXONICFUNC,
-                    MOLECULARMATCHMUTATIONWGSALOCATION.POPFREQMAX,
-                    MOLECULARMATCHMUTATIONWGSALOCATION.EXACAFR,
-                    MOLECULARMATCHMUTATIONWGSALOCATION.EXACAMR,
-                    MOLECULARMATCHMUTATIONWGSALOCATION.EXACEAS,
-                    MOLECULARMATCHMUTATIONWGSALOCATION.EXACFIN,
-                    MOLECULARMATCHMUTATIONWGSALOCATION.EXACNFE,
-                    MOLECULARMATCHMUTATIONWGSALOCATION.EXACSAS,
-                    MOLECULARMATCHMUTATIONWGSALOCATION.EXACFREQ,
-                    MOLECULARMATCHMUTATIONWGSALOCATION.G1000AFR,
-                    MOLECULARMATCHMUTATIONWGSALOCATION.G1000AMR,
-                    MOLECULARMATCHMUTATIONWGSALOCATION.G1000EAS,
-                    MOLECULARMATCHMUTATIONWGSALOCATION.G1000EUR,
-                    MOLECULARMATCHMUTATIONWGSALOCATION.G1000SAS,
-                    MOLECULARMATCHMUTATIONWGSALOCATION.G1000ALL,
-                    MOLECULARMATCHMUTATIONWGSALOCATION.FATHMM,
-                    MOLECULARMATCHMUTATIONWGSALOCATION.FATHMMPRED,
-                    MOLECULARMATCHMUTATIONWGSALOCATION.ESP6500SIAA,
-                    MOLECULARMATCHMUTATIONWGSALOCATION.ESP6500SIEA,
-                    MOLECULARMATCHMUTATIONWGSALOCATION.DBSNP,
-                    MOLECULARMATCHMUTATIONWGSALOCATION.COSMICID,
-                    MOLECULARMATCHMUTATIONWGSALOCATION.PHYLOP46WAYPLACENTAL,
-                    MOLECULARMATCHMUTATIONWGSALOCATION.PHYLOP100WAYVERTEBRATE,
-                    MOLECULARMATCHMUTATIONWGSALOCATION.SIPHY29WAYLOGODDS,
-                    MOLECULARMATCHMUTATIONWGSALOCATION.GWASSNP,
-                    MOLECULARMATCHMUTATIONWGSALOCATION.GWASDIS,
-                    MOLECULARMATCHMUTATIONWGSALOCATION.GWASPUBMED,
-                    MOLECULARMATCHMUTATIONWGSALOCATION.GERPRS,
-                    MOLECULARMATCHMUTATIONWGSALOCATION.FUNC,
-                    MOLECULARMATCHMUTATIONWGSALOCATION.WGRNA,
-                    MOLECULARMATCHMUTATIONWGSALOCATION.TARGETSCANS,
-                    MOLECULARMATCHMUTATIONWGSALOCATION.KEYVALUE,
-                    MOLECULARMATCHMUTATIONWGSALOCATION.MOLECULARMATCHMUTATIONID)
+                            MOLECULARMATCHMUTATIONWGSALOCATION.CHR,
+                            MOLECULARMATCHMUTATIONWGSALOCATION.START,
+                            MOLECULARMATCHMUTATIONWGSALOCATION.END,
+                            MOLECULARMATCHMUTATIONWGSALOCATION.REF,
+                            MOLECULARMATCHMUTATIONWGSALOCATION.ALT,
+                            MOLECULARMATCHMUTATIONWGSALOCATION.CHRSTARTREFALT,
+                            MOLECULARMATCHMUTATIONWGSALOCATION.TRANSCRIPT,
+                            MOLECULARMATCHMUTATIONWGSALOCATION.NUCLEOTIDECHANGE,
+                            MOLECULARMATCHMUTATIONWGSALOCATION.AA,
+                            MOLECULARMATCHMUTATIONWGSALOCATION.EXONICFUNC,
+                            MOLECULARMATCHMUTATIONWGSALOCATION.POPFREQMAX,
+                            MOLECULARMATCHMUTATIONWGSALOCATION.EXACAFR,
+                            MOLECULARMATCHMUTATIONWGSALOCATION.EXACAMR,
+                            MOLECULARMATCHMUTATIONWGSALOCATION.EXACEAS,
+                            MOLECULARMATCHMUTATIONWGSALOCATION.EXACFIN,
+                            MOLECULARMATCHMUTATIONWGSALOCATION.EXACNFE,
+                            MOLECULARMATCHMUTATIONWGSALOCATION.EXACSAS,
+                            MOLECULARMATCHMUTATIONWGSALOCATION.EXACFREQ,
+                            MOLECULARMATCHMUTATIONWGSALOCATION.G1000AFR,
+                            MOLECULARMATCHMUTATIONWGSALOCATION.G1000AMR,
+                            MOLECULARMATCHMUTATIONWGSALOCATION.G1000EAS,
+                            MOLECULARMATCHMUTATIONWGSALOCATION.G1000EUR,
+                            MOLECULARMATCHMUTATIONWGSALOCATION.G1000SAS,
+                            MOLECULARMATCHMUTATIONWGSALOCATION.G1000ALL,
+                            MOLECULARMATCHMUTATIONWGSALOCATION.FATHMM,
+                            MOLECULARMATCHMUTATIONWGSALOCATION.FATHMMPRED,
+                            MOLECULARMATCHMUTATIONWGSALOCATION.ESP6500SIAA,
+                            MOLECULARMATCHMUTATIONWGSALOCATION.ESP6500SIEA,
+                            MOLECULARMATCHMUTATIONWGSALOCATION.DBSNP,
+                            MOLECULARMATCHMUTATIONWGSALOCATION.COSMICID,
+                            MOLECULARMATCHMUTATIONWGSALOCATION.PHYLOP46WAYPLACENTAL,
+                            MOLECULARMATCHMUTATIONWGSALOCATION.PHYLOP100WAYVERTEBRATE,
+                            MOLECULARMATCHMUTATIONWGSALOCATION.SIPHY29WAYLOGODDS,
+                            MOLECULARMATCHMUTATIONWGSALOCATION.GWASSNP,
+                            MOLECULARMATCHMUTATIONWGSALOCATION.GWASDIS,
+                            MOLECULARMATCHMUTATIONWGSALOCATION.GWASPUBMED,
+                            MOLECULARMATCHMUTATIONWGSALOCATION.GERPRS,
+                            MOLECULARMATCHMUTATIONWGSALOCATION.FUNC,
+                            MOLECULARMATCHMUTATIONWGSALOCATION.WGRNA,
+                            MOLECULARMATCHMUTATIONWGSALOCATION.TARGETSCANS,
+                            MOLECULARMATCHMUTATIONWGSALOCATION.KEYVALUE,
+                            MOLECULARMATCHMUTATIONWGSALOCATION.MOLECULARMATCHMUTATIONID)
                     .values(wgsaLocation.chr(),
                             wgsaLocation.start(),
                             wgsaLocation.end(),
@@ -1042,40 +1042,40 @@ final class MolecularMatchDAOFunctions {
 
             for (String fullAA : wgsaLocation.fullAAs()) {
                 context.insertInto(MOLECULARMATCHMUTATIONWGSALOCATIONFULLAA,
-                        MOLECULARMATCHMUTATIONWGSALOCATIONFULLAA.FULLAA,
-                        MOLECULARMATCHMUTATIONWGSALOCATIONFULLAA.MOLECULARMATCHMUTATIONWGSALOCATIONID)
+                                MOLECULARMATCHMUTATIONWGSALOCATIONFULLAA.FULLAA,
+                                MOLECULARMATCHMUTATIONWGSALOCATIONFULLAA.MOLECULARMATCHMUTATIONWGSALOCATIONID)
                         .values(fullAA, wgsaLocationId)
                         .execute();
             }
 
             for (String clinVarDisease : wgsaLocation.clinVarDiseases()) {
                 context.insertInto(MOLECULARMATCHMUTATIONWGSALOCATIONCLINVARDISEASE,
-                        MOLECULARMATCHMUTATIONWGSALOCATIONCLINVARDISEASE.CLINVARDISEASE,
-                        MOLECULARMATCHMUTATIONWGSALOCATIONCLINVARDISEASE.MOLECULARMATCHMUTATIONWGSALOCATIONID)
+                                MOLECULARMATCHMUTATIONWGSALOCATIONCLINVARDISEASE.CLINVARDISEASE,
+                                MOLECULARMATCHMUTATIONWGSALOCATIONCLINVARDISEASE.MOLECULARMATCHMUTATIONWGSALOCATIONID)
                         .values(clinVarDisease, wgsaLocationId)
                         .execute();
             }
 
             for (String clinVarSig : wgsaLocation.clinVarSigs()) {
                 context.insertInto(MOLECULARMATCHMUTATIONWGSALOCATIONCLINVARSIG,
-                        MOLECULARMATCHMUTATIONWGSALOCATIONCLINVARSIG.CLINVARSIG,
-                        MOLECULARMATCHMUTATIONWGSALOCATIONCLINVARSIG.MOLECULARMATCHMUTATIONWGSALOCATIONID)
+                                MOLECULARMATCHMUTATIONWGSALOCATIONCLINVARSIG.CLINVARSIG,
+                                MOLECULARMATCHMUTATIONWGSALOCATIONCLINVARSIG.MOLECULARMATCHMUTATIONWGSALOCATIONID)
                         .values(clinVarSig, wgsaLocationId)
                         .execute();
             }
 
             for (String clinVarStatus : wgsaLocation.clinVarStates()) {
                 context.insertInto(MOLECULARMATCHMUTATIONWGSALOCATIONCLINVARSTATUS,
-                        MOLECULARMATCHMUTATIONWGSALOCATIONCLINVARSTATUS.CLINVARSTATUS,
-                        MOLECULARMATCHMUTATIONWGSALOCATIONCLINVARSTATUS.MOLECULARMATCHMUTATIONWGSALOCATIONID)
+                                MOLECULARMATCHMUTATIONWGSALOCATIONCLINVARSTATUS.CLINVARSTATUS,
+                                MOLECULARMATCHMUTATIONWGSALOCATIONCLINVARSTATUS.MOLECULARMATCHMUTATIONWGSALOCATIONID)
                         .values(clinVarStatus, wgsaLocationId)
                         .execute();
             }
 
             for (String clinVarDbId : wgsaLocation.clinVarDbIds()) {
                 context.insertInto(MOLECULARMATCHMUTATIONWGSALOCATIONCLINVARDBID,
-                        MOLECULARMATCHMUTATIONWGSALOCATIONCLINVARDBID.CLINVARDBID,
-                        MOLECULARMATCHMUTATIONWGSALOCATIONCLINVARDBID.MOLECULARMATCHMUTATIONWGSALOCATIONID)
+                                MOLECULARMATCHMUTATIONWGSALOCATIONCLINVARDBID.CLINVARDBID,
+                                MOLECULARMATCHMUTATIONWGSALOCATIONCLINVARDBID.MOLECULARMATCHMUTATIONWGSALOCATIONID)
                         .values(clinVarDbId, wgsaLocationId)
                         .execute();
             }
@@ -1085,14 +1085,14 @@ final class MolecularMatchDAOFunctions {
     private static void insertMutationWGSAMaps(@NotNull DSLContext context, @NotNull List<MolecularMatchWGSAMap> wgsaMaps, int mutationId) {
         for (MolecularMatchWGSAMap wgsaMap : wgsaMaps) {
             int wgsaMapId = context.insertInto(MOLECULARMATCHMUTATIONWGSAMAP,
-                    MOLECULARMATCHMUTATIONWGSAMAP.NAME,
-                    MOLECULARMATCHMUTATIONWGSAMAP.GENE,
-                    MOLECULARMATCHMUTATIONWGSAMAP.TRANSCRIPT,
-                    MOLECULARMATCHMUTATIONWGSAMAP.EXON,
-                    MOLECULARMATCHMUTATIONWGSAMAP.GRCH37CHRSTARTREFALT,
-                    MOLECULARMATCHMUTATIONWGSAMAP.NUCLEOTIDECHANGE,
-                    MOLECULARMATCHMUTATIONWGSAMAP.AA,
-                    MOLECULARMATCHMUTATIONWGSAMAP.MOLECULARMATCHMUTATIONID)
+                            MOLECULARMATCHMUTATIONWGSAMAP.NAME,
+                            MOLECULARMATCHMUTATIONWGSAMAP.GENE,
+                            MOLECULARMATCHMUTATIONWGSAMAP.TRANSCRIPT,
+                            MOLECULARMATCHMUTATIONWGSAMAP.EXON,
+                            MOLECULARMATCHMUTATIONWGSAMAP.GRCH37CHRSTARTREFALT,
+                            MOLECULARMATCHMUTATIONWGSAMAP.NUCLEOTIDECHANGE,
+                            MOLECULARMATCHMUTATIONWGSAMAP.AA,
+                            MOLECULARMATCHMUTATIONWGSAMAP.MOLECULARMATCHMUTATIONID)
                     .values(wgsaMap.name(),
                             wgsaMap.gene(),
                             wgsaMap.transcript(),
@@ -1123,15 +1123,15 @@ final class MolecularMatchDAOFunctions {
             @NotNull List<MolecularMatchGRCh37Location> grch37Locations, int mutationId) {
         for (MolecularMatchGRCh37Location grch37Location : grch37Locations) {
             int locationId = context.insertInto(MOLECULARMATCHMUTATIONGRCH37LOC,
-                    MOLECULARMATCHMUTATIONGRCH37LOC.CHR,
-                    MOLECULARMATCHMUTATIONGRCH37LOC.START,
-                    MOLECULARMATCHMUTATIONGRCH37LOC.STOP,
-                    MOLECULARMATCHMUTATIONGRCH37LOC.REF,
-                    MOLECULARMATCHMUTATIONGRCH37LOC.ALT,
-                    MOLECULARMATCHMUTATIONGRCH37LOC.STRAND,
-                    MOLECULARMATCHMUTATIONGRCH37LOC.VALIDATED,
-                    MOLECULARMATCHMUTATIONGRCH37LOC.COMPOSITEKEY,
-                    MOLECULARMATCHMUTATIONGRCH37LOC.MOLECULARMATCHMUTATIONID)
+                            MOLECULARMATCHMUTATIONGRCH37LOC.CHR,
+                            MOLECULARMATCHMUTATIONGRCH37LOC.START,
+                            MOLECULARMATCHMUTATIONGRCH37LOC.STOP,
+                            MOLECULARMATCHMUTATIONGRCH37LOC.REF,
+                            MOLECULARMATCHMUTATIONGRCH37LOC.ALT,
+                            MOLECULARMATCHMUTATIONGRCH37LOC.STRAND,
+                            MOLECULARMATCHMUTATIONGRCH37LOC.VALIDATED,
+                            MOLECULARMATCHMUTATIONGRCH37LOC.COMPOSITEKEY,
+                            MOLECULARMATCHMUTATIONGRCH37LOC.MOLECULARMATCHMUTATIONID)
                     .values(grch37Location.chr(),
                             grch37Location.start(),
                             grch37Location.stop(),
@@ -1147,11 +1147,11 @@ final class MolecularMatchDAOFunctions {
 
             for (MolecularMatchGRCh37TranscriptConsequence transcriptConsequence : grch37Location.transcriptConsequences()) {
                 int consequenceId = context.insertInto(MOLECULARMATCHMUTATIONGRCH37LOCCONSEQUENCE,
-                        MOLECULARMATCHMUTATIONGRCH37LOCCONSEQUENCE.TRANSCRIPT,
-                        MOLECULARMATCHMUTATIONGRCH37LOCCONSEQUENCE.CDNA,
-                        MOLECULARMATCHMUTATIONGRCH37LOCCONSEQUENCE.AMINOACIDCHANGE,
-                        MOLECULARMATCHMUTATIONGRCH37LOCCONSEQUENCE.INTRONNUMBER,
-                        MOLECULARMATCHMUTATIONGRCH37LOCCONSEQUENCE.MOLECULARMATCHMUTATIONGRCH37LOCID)
+                                MOLECULARMATCHMUTATIONGRCH37LOCCONSEQUENCE.TRANSCRIPT,
+                                MOLECULARMATCHMUTATIONGRCH37LOCCONSEQUENCE.CDNA,
+                                MOLECULARMATCHMUTATIONGRCH37LOCCONSEQUENCE.AMINOACIDCHANGE,
+                                MOLECULARMATCHMUTATIONGRCH37LOCCONSEQUENCE.INTRONNUMBER,
+                                MOLECULARMATCHMUTATIONGRCH37LOCCONSEQUENCE.MOLECULARMATCHMUTATIONGRCH37LOCID)
                         .values(transcriptConsequence.transcript(),
                                 transcriptConsequence.cdna(),
                                 transcriptConsequence.aminoAcidChange(),
@@ -1163,16 +1163,16 @@ final class MolecularMatchDAOFunctions {
 
                 for (String txSite : transcriptConsequence.txSites()) {
                     context.insertInto(MOLECULARMATCHMUTATIONGRCH37LOCCONSEQUENCETXSITE,
-                            MOLECULARMATCHMUTATIONGRCH37LOCCONSEQUENCETXSITE.TXSITE,
-                            MOLECULARMATCHMUTATIONGRCH37LOCCONSEQUENCETXSITE.MOLECULARMATCHMUTATIONGRCH37LOCCONSEQUENCEID)
+                                    MOLECULARMATCHMUTATIONGRCH37LOCCONSEQUENCETXSITE.TXSITE,
+                                    MOLECULARMATCHMUTATIONGRCH37LOCCONSEQUENCETXSITE.MOLECULARMATCHMUTATIONGRCH37LOCCONSEQUENCEID)
                             .values(txSite, consequenceId)
                             .execute();
                 }
 
                 for (String exonNumber : transcriptConsequence.exonNumbers()) {
                     context.insertInto(MOLECULARMATCHMUTATIONGRCH37LOCCONSEQUENCEEXONNUMBER,
-                            MOLECULARMATCHMUTATIONGRCH37LOCCONSEQUENCEEXONNUMBER.EXONNUMBER,
-                            MOLECULARMATCHMUTATIONGRCH37LOCCONSEQUENCEEXONNUMBER.MOLECULARMATCHMUTATIONGRCH37LOCCONSEQUENCEID)
+                                    MOLECULARMATCHMUTATIONGRCH37LOCCONSEQUENCEEXONNUMBER.EXONNUMBER,
+                                    MOLECULARMATCHMUTATIONGRCH37LOCCONSEQUENCEEXONNUMBER.MOLECULARMATCHMUTATIONGRCH37LOCCONSEQUENCEID)
                             .values(exonNumber, consequenceId)
                             .execute();
                 }
@@ -1184,10 +1184,10 @@ final class MolecularMatchDAOFunctions {
             int mutationId) {
         for (MolecularMatchFusionData fusion : fusions) {
             int fusionId = context.insertInto(MOLECULARMATCHMUTATIONFUSION,
-                    MOLECULARMATCHMUTATIONFUSION.SOURCE,
-                    MOLECULARMATCHMUTATIONFUSION.SYNONYM,
-                    MOLECULARMATCHMUTATIONFUSION.PAPER,
-                    MOLECULARMATCHMUTATIONFUSION.MOLECULARMATCHMUTATIONID)
+                            MOLECULARMATCHMUTATIONFUSION.SOURCE,
+                            MOLECULARMATCHMUTATIONFUSION.SYNONYM,
+                            MOLECULARMATCHMUTATIONFUSION.PAPER,
+                            MOLECULARMATCHMUTATIONFUSION.MOLECULARMATCHMUTATIONID)
                     .values(fusion.source(), fusion.synonym(), fusion.paper(), mutationId)
                     .returning(MOLECULARMATCHMUTATIONFUSION.ID)
                     .fetchOne()
@@ -1231,9 +1231,9 @@ final class MolecularMatchDAOFunctions {
 
             for (MolecularMatchFusionGenomicRegion genomicRegion : fusion.aGenomicRegions()) {
                 context.insertInto(MOLECULARMATCHMUTATIONFUSIONAGENOMICREGION,
-                        MOLECULARMATCHMUTATIONFUSIONAGENOMICREGION.NUM,
-                        MOLECULARMATCHMUTATIONFUSIONAGENOMICREGION.TYPE,
-                        MOLECULARMATCHMUTATIONFUSIONAGENOMICREGION.MOLECULARMATCHMUTATIONFUSIONID)
+                                MOLECULARMATCHMUTATIONFUSIONAGENOMICREGION.NUM,
+                                MOLECULARMATCHMUTATIONFUSIONAGENOMICREGION.TYPE,
+                                MOLECULARMATCHMUTATIONFUSIONAGENOMICREGION.MOLECULARMATCHMUTATIONFUSIONID)
                         .values(genomicRegion.num(), genomicRegion.type(), fusionId)
                         .execute();
             }
@@ -1276,9 +1276,9 @@ final class MolecularMatchDAOFunctions {
 
             for (MolecularMatchFusionGenomicRegion genomicRegion : fusion.bGenomicRegions()) {
                 context.insertInto(MOLECULARMATCHMUTATIONFUSIONBGENOMICREGION,
-                        MOLECULARMATCHMUTATIONFUSIONBGENOMICREGION.NUM,
-                        MOLECULARMATCHMUTATIONFUSIONBGENOMICREGION.TYPE,
-                        MOLECULARMATCHMUTATIONFUSIONBGENOMICREGION.MOLECULARMATCHMUTATIONFUSIONID)
+                                MOLECULARMATCHMUTATIONFUSIONBGENOMICREGION.NUM,
+                                MOLECULARMATCHMUTATIONFUSIONBGENOMICREGION.TYPE,
+                                MOLECULARMATCHMUTATIONFUSIONBGENOMICREGION.MOLECULARMATCHMUTATIONFUSIONID)
                         .values(genomicRegion.num(), genomicRegion.type(), fusionId)
                         .execute();
             }
@@ -1293,13 +1293,13 @@ final class MolecularMatchDAOFunctions {
 
     private static void insertMutationExonsInfo(@NotNull DSLContext context, @NotNull MolecularMatchExonsInfo exonsInfo, int mutationId) {
         int exonInfoId = context.insertInto(MOLECULARMATCHMUTATIONEXONSINFO,
-                MOLECULARMATCHMUTATIONEXONSINFO.CHR,
-                MOLECULARMATCHMUTATIONEXONSINFO.TRANSCRIPT,
-                MOLECULARMATCHMUTATIONEXONSINFO.TXSTART,
-                MOLECULARMATCHMUTATIONEXONSINFO.TXEND,
-                MOLECULARMATCHMUTATIONEXONSINFO.CDSSTART,
-                MOLECULARMATCHMUTATIONEXONSINFO.CDSEND,
-                MOLECULARMATCHMUTATIONEXONSINFO.MOLECULARMATCHMUTATIONID)
+                        MOLECULARMATCHMUTATIONEXONSINFO.CHR,
+                        MOLECULARMATCHMUTATIONEXONSINFO.TRANSCRIPT,
+                        MOLECULARMATCHMUTATIONEXONSINFO.TXSTART,
+                        MOLECULARMATCHMUTATIONEXONSINFO.TXEND,
+                        MOLECULARMATCHMUTATIONEXONSINFO.CDSSTART,
+                        MOLECULARMATCHMUTATIONEXONSINFO.CDSEND,
+                        MOLECULARMATCHMUTATIONEXONSINFO.MOLECULARMATCHMUTATIONID)
                 .values(exonsInfo.chr(),
                         exonsInfo.transcript(),
                         exonsInfo.txStart(),
@@ -1314,9 +1314,9 @@ final class MolecularMatchDAOFunctions {
         MolecularMatchPosition exon1Position = exonsInfo.exonBoundaries().exon1();
         if (exon1Position != null) {
             context.insertInto(MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON1,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON1.START,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON1.END,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON1.MOLECULARMATCHMUTATIONEXONSINFOID)
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON1.START,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON1.END,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON1.MOLECULARMATCHMUTATIONEXONSINFOID)
                     .values(exon1Position.start(), exon1Position.stop(), exonInfoId)
                     .execute();
         }
@@ -1324,9 +1324,9 @@ final class MolecularMatchDAOFunctions {
         MolecularMatchPosition exon2Position = exonsInfo.exonBoundaries().exon2();
         if (exon2Position != null) {
             context.insertInto(MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON2,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON2.START,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON2.END,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON2.MOLECULARMATCHMUTATIONEXONSINFOID)
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON2.START,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON2.END,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON2.MOLECULARMATCHMUTATIONEXONSINFOID)
                     .values(exon2Position.start(), exon2Position.stop(), exonInfoId)
                     .execute();
         }
@@ -1334,9 +1334,9 @@ final class MolecularMatchDAOFunctions {
         MolecularMatchPosition exon3Position = exonsInfo.exonBoundaries().exon3();
         if (exon3Position != null) {
             context.insertInto(MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON3,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON3.START,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON3.END,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON3.MOLECULARMATCHMUTATIONEXONSINFOID)
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON3.START,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON3.END,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON3.MOLECULARMATCHMUTATIONEXONSINFOID)
                     .values(exon3Position.start(), exon3Position.stop(), exonInfoId)
                     .execute();
         }
@@ -1344,9 +1344,9 @@ final class MolecularMatchDAOFunctions {
         MolecularMatchPosition exon4Position = exonsInfo.exonBoundaries().exon4();
         if (exon4Position != null) {
             context.insertInto(MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON4,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON4.START,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON4.END,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON4.MOLECULARMATCHMUTATIONEXONSINFOID)
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON4.START,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON4.END,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON4.MOLECULARMATCHMUTATIONEXONSINFOID)
                     .values(exon4Position.start(), exon4Position.stop(), exonInfoId)
                     .execute();
         }
@@ -1354,9 +1354,9 @@ final class MolecularMatchDAOFunctions {
         MolecularMatchPosition exon5Position = exonsInfo.exonBoundaries().exon5();
         if (exon5Position != null) {
             context.insertInto(MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON5,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON5.START,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON5.END,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON5.MOLECULARMATCHMUTATIONEXONSINFOID)
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON5.START,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON5.END,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON5.MOLECULARMATCHMUTATIONEXONSINFOID)
                     .values(exon5Position.start(), exon5Position.stop(), exonInfoId)
                     .execute();
         }
@@ -1364,9 +1364,9 @@ final class MolecularMatchDAOFunctions {
         MolecularMatchPosition exon6Position = exonsInfo.exonBoundaries().exon6();
         if (exon6Position != null) {
             context.insertInto(MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON6,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON6.START,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON6.END,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON6.MOLECULARMATCHMUTATIONEXONSINFOID)
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON6.START,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON6.END,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON6.MOLECULARMATCHMUTATIONEXONSINFOID)
                     .values(exon6Position.start(), exon6Position.stop(), exonInfoId)
                     .execute();
         }
@@ -1374,9 +1374,9 @@ final class MolecularMatchDAOFunctions {
         MolecularMatchPosition exon7Position = exonsInfo.exonBoundaries().exon7();
         if (exon7Position != null) {
             context.insertInto(MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON7,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON7.START,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON7.END,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON7.MOLECULARMATCHMUTATIONEXONSINFOID)
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON7.START,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON7.END,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON7.MOLECULARMATCHMUTATIONEXONSINFOID)
                     .values(exon7Position.start(), exon7Position.stop(), exonInfoId)
                     .execute();
         }
@@ -1384,9 +1384,9 @@ final class MolecularMatchDAOFunctions {
         MolecularMatchPosition exon8Position = exonsInfo.exonBoundaries().exon8();
         if (exon8Position != null) {
             context.insertInto(MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON8,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON8.START,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON8.END,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON8.MOLECULARMATCHMUTATIONEXONSINFOID)
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON8.START,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON8.END,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON8.MOLECULARMATCHMUTATIONEXONSINFOID)
                     .values(exon8Position.start(), exon8Position.stop(), exonInfoId)
                     .execute();
         }
@@ -1394,9 +1394,9 @@ final class MolecularMatchDAOFunctions {
         MolecularMatchPosition exon9Position = exonsInfo.exonBoundaries().exon9();
         if (exon9Position != null) {
             context.insertInto(MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON9,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON9.START,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON9.END,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON9.MOLECULARMATCHMUTATIONEXONSINFOID)
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON9.START,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON9.END,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON9.MOLECULARMATCHMUTATIONEXONSINFOID)
                     .values(exon9Position.start(), exon9Position.stop(), exonInfoId)
                     .execute();
         }
@@ -1404,9 +1404,9 @@ final class MolecularMatchDAOFunctions {
         MolecularMatchPosition exon10Position = exonsInfo.exonBoundaries().exon10();
         if (exon10Position != null) {
             context.insertInto(MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON10,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON10.START,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON10.END,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON10.MOLECULARMATCHMUTATIONEXONSINFOID)
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON10.START,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON10.END,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON10.MOLECULARMATCHMUTATIONEXONSINFOID)
                     .values(exon10Position.start(), exon10Position.stop(), exonInfoId)
                     .execute();
         }
@@ -1414,9 +1414,9 @@ final class MolecularMatchDAOFunctions {
         MolecularMatchPosition exon11Position = exonsInfo.exonBoundaries().exon11();
         if (exon11Position != null) {
             context.insertInto(MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON11,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON11.START,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON11.END,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON11.MOLECULARMATCHMUTATIONEXONSINFOID)
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON11.START,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON11.END,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON11.MOLECULARMATCHMUTATIONEXONSINFOID)
                     .values(exon11Position.start(), exon11Position.stop(), exonInfoId)
                     .execute();
         }
@@ -1424,9 +1424,9 @@ final class MolecularMatchDAOFunctions {
         MolecularMatchPosition exon12Position = exonsInfo.exonBoundaries().exon12();
         if (exon12Position != null) {
             context.insertInto(MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON12,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON12.START,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON12.END,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON12.MOLECULARMATCHMUTATIONEXONSINFOID)
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON12.START,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON12.END,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON12.MOLECULARMATCHMUTATIONEXONSINFOID)
                     .values(exon12Position.start(), exon12Position.stop(), exonInfoId)
                     .execute();
         }
@@ -1434,9 +1434,9 @@ final class MolecularMatchDAOFunctions {
         MolecularMatchPosition exon13Position = exonsInfo.exonBoundaries().exon13();
         if (exon13Position != null) {
             context.insertInto(MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON13,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON13.START,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON13.END,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON13.MOLECULARMATCHMUTATIONEXONSINFOID)
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON13.START,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON13.END,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON13.MOLECULARMATCHMUTATIONEXONSINFOID)
                     .values(exon13Position.start(), exon13Position.stop(), exonInfoId)
                     .execute();
         }
@@ -1444,9 +1444,9 @@ final class MolecularMatchDAOFunctions {
         MolecularMatchPosition exon14Position = exonsInfo.exonBoundaries().exon14();
         if (exon14Position != null) {
             context.insertInto(MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON14,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON14.START,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON14.END,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON14.MOLECULARMATCHMUTATIONEXONSINFOID)
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON14.START,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON14.END,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON14.MOLECULARMATCHMUTATIONEXONSINFOID)
                     .values(exon14Position.start(), exon14Position.stop(), exonInfoId)
                     .execute();
         }
@@ -1454,9 +1454,9 @@ final class MolecularMatchDAOFunctions {
         MolecularMatchPosition exon15Position = exonsInfo.exonBoundaries().exon15();
         if (exon15Position != null) {
             context.insertInto(MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON15,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON15.START,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON15.END,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON15.MOLECULARMATCHMUTATIONEXONSINFOID)
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON15.START,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON15.END,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON15.MOLECULARMATCHMUTATIONEXONSINFOID)
                     .values(exon15Position.start(), exon15Position.stop(), exonInfoId)
                     .execute();
         }
@@ -1464,9 +1464,9 @@ final class MolecularMatchDAOFunctions {
         MolecularMatchPosition exon16Position = exonsInfo.exonBoundaries().exon16();
         if (exon16Position != null) {
             context.insertInto(MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON16,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON16.START,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON16.END,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON16.MOLECULARMATCHMUTATIONEXONSINFOID)
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON16.START,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON16.END,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON16.MOLECULARMATCHMUTATIONEXONSINFOID)
                     .values(exon16Position.start(), exon16Position.stop(), exonInfoId)
                     .execute();
         }
@@ -1474,9 +1474,9 @@ final class MolecularMatchDAOFunctions {
         MolecularMatchPosition exon17Position = exonsInfo.exonBoundaries().exon17();
         if (exon17Position != null) {
             context.insertInto(MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON17,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON17.START,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON17.END,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON17.MOLECULARMATCHMUTATIONEXONSINFOID)
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON17.START,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON17.END,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON17.MOLECULARMATCHMUTATIONEXONSINFOID)
                     .values(exon17Position.start(), exon17Position.stop(), exonInfoId)
                     .execute();
         }
@@ -1484,9 +1484,9 @@ final class MolecularMatchDAOFunctions {
         MolecularMatchPosition exon18Position = exonsInfo.exonBoundaries().exon18();
         if (exon18Position != null) {
             context.insertInto(MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON18,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON18.START,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON18.END,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON18.MOLECULARMATCHMUTATIONEXONSINFOID)
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON18.START,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON18.END,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON18.MOLECULARMATCHMUTATIONEXONSINFOID)
                     .values(exon18Position.start(), exon18Position.stop(), exonInfoId)
                     .execute();
         }
@@ -1494,9 +1494,9 @@ final class MolecularMatchDAOFunctions {
         MolecularMatchPosition exon19Position = exonsInfo.exonBoundaries().exon19();
         if (exon19Position != null) {
             context.insertInto(MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON19,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON19.START,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON19.END,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON19.MOLECULARMATCHMUTATIONEXONSINFOID)
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON19.START,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON19.END,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON19.MOLECULARMATCHMUTATIONEXONSINFOID)
                     .values(exon19Position.start(), exon19Position.stop(), exonInfoId)
                     .execute();
         }
@@ -1504,9 +1504,9 @@ final class MolecularMatchDAOFunctions {
         MolecularMatchPosition exon20Position = exonsInfo.exonBoundaries().exon20();
         if (exon20Position != null) {
             context.insertInto(MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON20,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON20.START,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON20.END,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON20.MOLECULARMATCHMUTATIONEXONSINFOID)
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON20.START,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON20.END,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON20.MOLECULARMATCHMUTATIONEXONSINFOID)
                     .values(exon20Position.start(), exon20Position.stop(), exonInfoId)
                     .execute();
         }
@@ -1514,9 +1514,9 @@ final class MolecularMatchDAOFunctions {
         MolecularMatchPosition exon21Position = exonsInfo.exonBoundaries().exon21();
         if (exon21Position != null) {
             context.insertInto(MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON21,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON21.START,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON21.END,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON21.MOLECULARMATCHMUTATIONEXONSINFOID)
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON21.START,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON21.END,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON21.MOLECULARMATCHMUTATIONEXONSINFOID)
                     .values(exon21Position.start(), exon21Position.stop(), exonInfoId)
                     .execute();
         }
@@ -1524,9 +1524,9 @@ final class MolecularMatchDAOFunctions {
         MolecularMatchPosition exon22Position = exonsInfo.exonBoundaries().exon22();
         if (exon22Position != null) {
             context.insertInto(MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON22,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON22.START,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON22.END,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON22.MOLECULARMATCHMUTATIONEXONSINFOID)
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON22.START,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON22.END,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON22.MOLECULARMATCHMUTATIONEXONSINFOID)
                     .values(exon22Position.start(), exon22Position.stop(), exonInfoId)
                     .execute();
         }
@@ -1534,9 +1534,9 @@ final class MolecularMatchDAOFunctions {
         MolecularMatchPosition exon23Position = exonsInfo.exonBoundaries().exon23();
         if (exon23Position != null) {
             context.insertInto(MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON23,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON23.START,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON23.END,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON23.MOLECULARMATCHMUTATIONEXONSINFOID)
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON23.START,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON23.END,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON23.MOLECULARMATCHMUTATIONEXONSINFOID)
                     .values(exon23Position.start(), exon23Position.stop(), exonInfoId)
                     .execute();
         }
@@ -1544,9 +1544,9 @@ final class MolecularMatchDAOFunctions {
         MolecularMatchPosition exon24Position = exonsInfo.exonBoundaries().exon24();
         if (exon24Position != null) {
             context.insertInto(MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON24,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON24.START,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON24.END,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON24.MOLECULARMATCHMUTATIONEXONSINFOID)
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON24.START,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON24.END,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON24.MOLECULARMATCHMUTATIONEXONSINFOID)
                     .values(exon24Position.start(), exon24Position.stop(), exonInfoId)
                     .execute();
         }
@@ -1554,9 +1554,9 @@ final class MolecularMatchDAOFunctions {
         MolecularMatchPosition exon25Position = exonsInfo.exonBoundaries().exon25();
         if (exon25Position != null) {
             context.insertInto(MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON25,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON25.START,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON25.END,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON25.MOLECULARMATCHMUTATIONEXONSINFOID)
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON25.START,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON25.END,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON25.MOLECULARMATCHMUTATIONEXONSINFOID)
                     .values(exon25Position.start(), exon25Position.stop(), exonInfoId)
                     .execute();
         }
@@ -1564,9 +1564,9 @@ final class MolecularMatchDAOFunctions {
         MolecularMatchPosition exon26Position = exonsInfo.exonBoundaries().exon26();
         if (exon26Position != null) {
             context.insertInto(MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON26,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON26.START,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON26.END,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON26.MOLECULARMATCHMUTATIONEXONSINFOID)
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON26.START,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON26.END,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON26.MOLECULARMATCHMUTATIONEXONSINFOID)
                     .values(exon26Position.start(), exon26Position.stop(), exonInfoId)
                     .execute();
         }
@@ -1574,9 +1574,9 @@ final class MolecularMatchDAOFunctions {
         MolecularMatchPosition exon27Position = exonsInfo.exonBoundaries().exon27();
         if (exon27Position != null) {
             context.insertInto(MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON27,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON27.START,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON27.END,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON27.MOLECULARMATCHMUTATIONEXONSINFOID)
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON27.START,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON27.END,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON27.MOLECULARMATCHMUTATIONEXONSINFOID)
                     .values(exon27Position.start(), exon27Position.stop(), exonInfoId)
                     .execute();
         }
@@ -1584,9 +1584,9 @@ final class MolecularMatchDAOFunctions {
         MolecularMatchPosition exon28Position = exonsInfo.exonBoundaries().exon28();
         if (exon28Position != null) {
             context.insertInto(MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON28,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON28.START,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON28.END,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON28.MOLECULARMATCHMUTATIONEXONSINFOID)
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON28.START,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON28.END,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON28.MOLECULARMATCHMUTATIONEXONSINFOID)
                     .values(exon28Position.start(), exon28Position.stop(), exonInfoId)
                     .execute();
         }
@@ -1594,9 +1594,9 @@ final class MolecularMatchDAOFunctions {
         MolecularMatchPosition exon29Position = exonsInfo.exonBoundaries().exon29();
         if (exon29Position != null) {
             context.insertInto(MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON29,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON29.START,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON29.END,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON29.MOLECULARMATCHMUTATIONEXONSINFOID)
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON29.START,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON29.END,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON29.MOLECULARMATCHMUTATIONEXONSINFOID)
                     .values(exon29Position.start(), exon29Position.stop(), exonInfoId)
                     .execute();
         }
@@ -1604,9 +1604,9 @@ final class MolecularMatchDAOFunctions {
         MolecularMatchPosition exon30Position = exonsInfo.exonBoundaries().exon30();
         if (exon30Position != null) {
             context.insertInto(MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON30,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON30.START,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON30.END,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON30.MOLECULARMATCHMUTATIONEXONSINFOID)
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON30.START,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON30.END,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON30.MOLECULARMATCHMUTATIONEXONSINFOID)
                     .values(exon30Position.start(), exon30Position.stop(), exonInfoId)
                     .execute();
         }
@@ -1614,9 +1614,9 @@ final class MolecularMatchDAOFunctions {
         MolecularMatchPosition exon31Position = exonsInfo.exonBoundaries().exon31();
         if (exon31Position != null) {
             context.insertInto(MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON31,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON31.START,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON31.END,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON31.MOLECULARMATCHMUTATIONEXONSINFOID)
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON31.START,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON31.END,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON31.MOLECULARMATCHMUTATIONEXONSINFOID)
                     .values(exon31Position.start(), exon31Position.stop(), exonInfoId)
                     .execute();
         }
@@ -1624,9 +1624,9 @@ final class MolecularMatchDAOFunctions {
         MolecularMatchPosition exon32Position = exonsInfo.exonBoundaries().exon32();
         if (exon32Position != null) {
             context.insertInto(MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON32,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON32.START,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON32.END,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON32.MOLECULARMATCHMUTATIONEXONSINFOID)
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON32.START,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON32.END,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON32.MOLECULARMATCHMUTATIONEXONSINFOID)
                     .values(exon32Position.start(), exon32Position.stop(), exonInfoId)
                     .execute();
         }
@@ -1634,9 +1634,9 @@ final class MolecularMatchDAOFunctions {
         MolecularMatchPosition exon33Position = exonsInfo.exonBoundaries().exon33();
         if (exon33Position != null) {
             context.insertInto(MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON33,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON33.START,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON33.END,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON33.MOLECULARMATCHMUTATIONEXONSINFOID)
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON33.START,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON33.END,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON33.MOLECULARMATCHMUTATIONEXONSINFOID)
                     .values(exon33Position.start(), exon33Position.stop(), exonInfoId)
                     .execute();
         }
@@ -1644,9 +1644,9 @@ final class MolecularMatchDAOFunctions {
         MolecularMatchPosition exon34Position = exonsInfo.exonBoundaries().exon34();
         if (exon34Position != null) {
             context.insertInto(MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON34,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON34.START,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON34.END,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON34.MOLECULARMATCHMUTATIONEXONSINFOID)
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON34.START,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON34.END,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON34.MOLECULARMATCHMUTATIONEXONSINFOID)
                     .values(exon34Position.start(), exon34Position.stop(), exonInfoId)
                     .execute();
         }
@@ -1654,9 +1654,9 @@ final class MolecularMatchDAOFunctions {
         MolecularMatchPosition exon35Position = exonsInfo.exonBoundaries().exon35();
         if (exon35Position != null) {
             context.insertInto(MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON35,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON35.START,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON35.END,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON35.MOLECULARMATCHMUTATIONEXONSINFOID)
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON35.START,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON35.END,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON35.MOLECULARMATCHMUTATIONEXONSINFOID)
                     .values(exon35Position.start(), exon35Position.stop(), exonInfoId)
                     .execute();
         }
@@ -1664,9 +1664,9 @@ final class MolecularMatchDAOFunctions {
         MolecularMatchPosition exon36Position = exonsInfo.exonBoundaries().exon36();
         if (exon36Position != null) {
             context.insertInto(MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON36,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON36.START,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON36.END,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON36.MOLECULARMATCHMUTATIONEXONSINFOID)
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON36.START,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON36.END,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON36.MOLECULARMATCHMUTATIONEXONSINFOID)
                     .values(exon36Position.start(), exon36Position.stop(), exonInfoId)
                     .execute();
         }
@@ -1674,9 +1674,9 @@ final class MolecularMatchDAOFunctions {
         MolecularMatchPosition exon37Position = exonsInfo.exonBoundaries().exon37();
         if (exon37Position != null) {
             context.insertInto(MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON37,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON37.START,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON37.END,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON37.MOLECULARMATCHMUTATIONEXONSINFOID)
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON37.START,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON37.END,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON37.MOLECULARMATCHMUTATIONEXONSINFOID)
                     .values(exon37Position.start(), exon37Position.stop(), exonInfoId)
                     .execute();
         }
@@ -1684,9 +1684,9 @@ final class MolecularMatchDAOFunctions {
         MolecularMatchPosition exon38Position = exonsInfo.exonBoundaries().exon38();
         if (exon38Position != null) {
             context.insertInto(MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON38,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON38.START,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON38.END,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON38.MOLECULARMATCHMUTATIONEXONSINFOID)
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON38.START,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON38.END,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON38.MOLECULARMATCHMUTATIONEXONSINFOID)
                     .values(exon38Position.start(), exon38Position.stop(), exonInfoId)
                     .execute();
         }
@@ -1694,9 +1694,9 @@ final class MolecularMatchDAOFunctions {
         MolecularMatchPosition exon39Position = exonsInfo.exonBoundaries().exon39();
         if (exon39Position != null) {
             context.insertInto(MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON39,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON39.START,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON39.END,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON39.MOLECULARMATCHMUTATIONEXONSINFOID)
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON39.START,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON39.END,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON39.MOLECULARMATCHMUTATIONEXONSINFOID)
                     .values(exon39Position.start(), exon39Position.stop(), exonInfoId)
                     .execute();
         }
@@ -1704,9 +1704,9 @@ final class MolecularMatchDAOFunctions {
         MolecularMatchPosition exon40Position = exonsInfo.exonBoundaries().exon40();
         if (exon40Position != null) {
             context.insertInto(MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON40,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON40.START,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON40.END,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON40.MOLECULARMATCHMUTATIONEXONSINFOID)
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON40.START,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON40.END,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON40.MOLECULARMATCHMUTATIONEXONSINFOID)
                     .values(exon40Position.start(), exon40Position.stop(), exonInfoId)
                     .execute();
         }
@@ -1714,9 +1714,9 @@ final class MolecularMatchDAOFunctions {
         MolecularMatchPosition exon41Position = exonsInfo.exonBoundaries().exon41();
         if (exon41Position != null) {
             context.insertInto(MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON41,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON41.START,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON41.END,
-                    MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON41.MOLECULARMATCHMUTATIONEXONSINFOID)
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON41.START,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON41.END,
+                            MOLECULARMATCHMUTATIONEXONSINFOBOUNDARYEXON41.MOLECULARMATCHMUTATIONEXONSINFOID)
                     .values(exon41Position.start(), exon41Position.stop(), exonInfoId)
                     .execute();
         }

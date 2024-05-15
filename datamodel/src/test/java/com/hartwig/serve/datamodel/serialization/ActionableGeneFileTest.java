@@ -79,14 +79,15 @@ public class ActionableGeneFileTest {
     }
 
     @NotNull
-    private static ActionableGene findByGeneAndEvent(@NotNull List<ActionableGene> genes,  @NotNull String geneName, @NotNull GeneEvent event,
-            @NotNull String tumorLocation) {
+    private static ActionableGene findByGeneAndEvent(@NotNull List<ActionableGene> genes, @NotNull String geneName,
+            @NotNull GeneEvent event, @NotNull String tumorLocation) {
         for (ActionableGene gene : genes) {
             if (gene.gene().equals(geneName) && gene.event().equals(event) && gene.applicableCancerType().name().equals(tumorLocation)) {
                 return gene;
             }
         }
 
-        throw new IllegalStateException("Could not find data with gene " + geneName + " and event " + event + "and tumor location " + tumorLocation);
+        throw new IllegalStateException(
+                "Could not find data with gene " + geneName + " and event " + event + "and tumor location " + tumorLocation);
     }
 }

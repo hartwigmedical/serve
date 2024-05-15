@@ -65,7 +65,7 @@ public class TumorCharacteristicExtractor {
 
             return ImmutableTumorCharacteristicImpl.builder().type(characteristicType).cutoffType(cutoffType).cutoff(cutoff).build();
         }
-        
+
         return null;
     }
 

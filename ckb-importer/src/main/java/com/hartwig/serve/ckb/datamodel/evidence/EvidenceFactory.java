@@ -26,7 +26,8 @@ public final class EvidenceFactory {
                     .therapy(TherapyFactory.resolveTherapy(ckbJsonDatabase, evidenceInfo.therapy()))
                     .indication(IndicationFactory.resolveIndication(ckbJsonDatabase, evidenceInfo.indication()))
                     .responseType(evidenceInfo.responseType())
-                    .relevantTreatmentApproaches(RelevantTreatmentApproachesFactory.extractRelevantTreatmentApproaches(ckbJsonDatabase, evidenceInfo.treatmentApproaches()))
+                    .relevantTreatmentApproaches(RelevantTreatmentApproachesFactory.extractRelevantTreatmentApproaches(ckbJsonDatabase,
+                            evidenceInfo.treatmentApproaches()))
                     .evidenceType(evidenceInfo.evidenceType())
                     .efficacyEvidence(evidenceInfo.efficacyEvidence())
                     .approvalStatus(evidenceInfo.approvalStatus())

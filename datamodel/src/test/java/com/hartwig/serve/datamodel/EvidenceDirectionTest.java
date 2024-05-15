@@ -1,11 +1,11 @@
 package com.hartwig.serve.datamodel;
 
-import org.junit.Test;
-
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class EvidenceDirectionTest  {
+import org.junit.Test;
+
+public class EvidenceDirectionTest {
 
     @Test
     public void canCompareEvidenceDirections() {

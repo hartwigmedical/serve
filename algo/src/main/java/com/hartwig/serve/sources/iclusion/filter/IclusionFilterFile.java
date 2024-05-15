@@ -12,7 +12,7 @@ public final class IclusionFilterFile {
 
     private static final String FIELD_DELIMITER = "\t";
 
-    private IclusionFilterFile(){
+    private IclusionFilterFile() {
     }
 
     @NotNull
@@ -35,9 +35,6 @@ public final class IclusionFilterFile {
     private static IclusionFilterEntry fromLine(@NotNull String line) {
         String[] values = line.split(FIELD_DELIMITER);
 
-        return ImmutableIclusionFilterEntry.builder()
-                .type(IclusionFilterType.valueOf(values[0]))
-                .value(values[1])
-                .build();
+        return ImmutableIclusionFilterEntry.builder().type(IclusionFilterType.valueOf(values[0])).value(values[1]).build();
     }
 }

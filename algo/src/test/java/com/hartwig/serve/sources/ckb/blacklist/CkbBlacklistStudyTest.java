@@ -19,8 +19,8 @@ public class CkbBlacklistStudyTest {
     }
 
     @NotNull
-    public static CkbStudyBlacklistModel defineBlacklistStudies(@NotNull CkbBlacklistStudyType type, @Nullable String nctId, @Nullable String therapy,
-            @Nullable String cancerType, @Nullable String gene, @Nullable String event) {
+    public static CkbStudyBlacklistModel defineBlacklistStudies(@NotNull CkbBlacklistStudyType type, @Nullable String nctId,
+            @Nullable String therapy, @Nullable String cancerType, @Nullable String gene, @Nullable String event) {
         List<CkbBlacklistStudyEntry> blacklistStudiesList = Lists.newArrayList();
         CkbBlacklistStudyEntry entry1 = ImmutableCkbBlacklistStudyEntry.builder()
                 .type(type)
@@ -34,8 +34,6 @@ public class CkbBlacklistStudyTest {
         blacklistStudiesList.add(entry1);
         return new CkbStudyBlacklistModel(blacklistStudiesList);
     }
-
-
 
     @NotNull
     public static CkbStudyBlacklistModel createCkbBlacklistStudy(@NotNull CkbBlacklistStudyEntry blacklistStudyEntry) {
@@ -57,26 +55,12 @@ public class CkbBlacklistStudyTest {
 
     @Test
     public void canBlacklistAllStudiesBasedOnGene() {
-        CkbBlacklistStudyEntry blacklistStudyEntry = createBlacklistStudyEntryList(CkbBlacklistStudyType.ALL_STUDIES_BASED_ON_GENE,
-                "NCT1",
-                null,
-                null,
-                "KRAS",
-                null);
+        CkbBlacklistStudyEntry blacklistStudyEntry =
+                createBlacklistStudyEntryList(CkbBlacklistStudyType.ALL_STUDIES_BASED_ON_GENE, "NCT1", null, null, "KRAS", null);
         CkbStudyBlacklistModel ckbBlacklistStudy = createCkbBlacklistStudy(blacklistStudyEntry);
 
-        assertTrue(ckbBlacklistStudy.isMatch("NCT1",
-                "Nivolumab",
-                "Solid tumor",
-                "KRAS",
-                "amplification",
-                blacklistStudyEntry));
-        assertFalse(ckbBlacklistStudy.isMatch("NCT1",
-                "Nivolumab",
-                "Solid tumor",
-                "BRAF",
-                "amplification",
-                blacklistStudyEntry));
+        assertTrue(ckbBlacklistStudy.isMatch("NCT1", "Nivolumab", "Solid tumor", "KRAS", "amplification", blacklistStudyEntry));
+        assertFalse(ckbBlacklistStudy.isMatch("NCT1", "Nivolumab", "Solid tumor", "BRAF", "amplification", blacklistStudyEntry));
         assertTrue(ckbBlacklistStudy.isBlacklistStudy("NCT1", "Nivolumab", "Solid tumor", "KRAS", "amplification"));
         assertFalse(ckbBlacklistStudy.isBlacklistStudy("NCT1", "Nivolumab", "Solid tumor", "BRAF", "amplification"));
     }
@@ -92,12 +76,7 @@ public class CkbBlacklistStudyTest {
                         "amplification");
         CkbStudyBlacklistModel ckbBlacklistStudy = createCkbBlacklistStudy(blacklistStudyEntry);
 
-        assertTrue(ckbBlacklistStudy.isMatch("NCT1",
-                "Nivolumab",
-                "Solid tumor",
-                "KRAS",
-                "amplification",
-                blacklistStudyEntry));
+        assertTrue(ckbBlacklistStudy.isMatch("NCT1", "Nivolumab", "Solid tumor", "KRAS", "amplification", blacklistStudyEntry));
         assertFalse(ckbBlacklistStudy.isMatch("NCT1", "Nivolumab", "Solid tumor", "KRAS", "deletion", blacklistStudyEntry));
         assertTrue(ckbBlacklistStudy.isBlacklistStudy("NCT1", "Nivolumab", "Solid tumor", "KRAS", "amplification"));
         assertFalse(ckbBlacklistStudy.isBlacklistStudy("NCT1", "Nivolumab", "Solid tumor", "KRAS", "deletion"));
@@ -109,12 +88,7 @@ public class CkbBlacklistStudyTest {
                 createBlacklistStudyEntryList(CkbBlacklistStudyType.STUDY_WHOLE, "NCT1", null, null, null, null);
         CkbStudyBlacklistModel ckbBlacklistStudy = createCkbBlacklistStudy(blacklistStudyEntry);
 
-        assertTrue(ckbBlacklistStudy.isMatch("NCT1",
-                "Nivolumab",
-                "Solid tumor",
-                "KRAS",
-                "amplification",
-                blacklistStudyEntry));
+        assertTrue(ckbBlacklistStudy.isMatch("NCT1", "Nivolumab", "Solid tumor", "KRAS", "amplification", blacklistStudyEntry));
         assertFalse(ckbBlacklistStudy.isMatch("NCT2", "Nivolumab", "Solid tumor", "KRAS", "deletion", blacklistStudyEntry));
         assertTrue(ckbBlacklistStudy.isBlacklistStudy("NCT1", "Nivolumab", "Solid tumor", "KRAS", "amplification"));
         assertFalse(ckbBlacklistStudy.isBlacklistStudy("NCT2", "Nivolumab", "Solid tumor", "KRAS", "deletion"));
@@ -122,20 +96,11 @@ public class CkbBlacklistStudyTest {
 
     @Test
     public void canBlacklistStudyBasedOnTherapy() {
-        CkbBlacklistStudyEntry blacklistStudyEntry = createBlacklistStudyEntryList(CkbBlacklistStudyType.STUDY_BASED_ON_THERAPY,
-                "NCT1",
-                "Nivolumab",
-                null,
-                null,
-                null);
+        CkbBlacklistStudyEntry blacklistStudyEntry =
+                createBlacklistStudyEntryList(CkbBlacklistStudyType.STUDY_BASED_ON_THERAPY, "NCT1", "Nivolumab", null, null, null);
         CkbStudyBlacklistModel ckbBlacklistStudy = createCkbBlacklistStudy(blacklistStudyEntry);
 
-        assertTrue(ckbBlacklistStudy.isMatch("NCT1",
-                "Nivolumab",
-                "Solid tumor",
-                "KRAS",
-                "amplification",
-                blacklistStudyEntry));
+        assertTrue(ckbBlacklistStudy.isMatch("NCT1", "Nivolumab", "Solid tumor", "KRAS", "amplification", blacklistStudyEntry));
         assertFalse(ckbBlacklistStudy.isMatch("NCT1", "Chemo", "Solid tumor", "KRAS", "deletion", blacklistStudyEntry));
         assertTrue(ckbBlacklistStudy.isBlacklistStudy("NCT1", "Nivolumab", "Solid tumor", "KRAS", "amplification"));
         assertFalse(ckbBlacklistStudy.isBlacklistStudy("NCT1", "Chemo", "Solid tumor", "KRAS", "deletion"));
@@ -152,12 +117,7 @@ public class CkbBlacklistStudyTest {
                         null);
         CkbStudyBlacklistModel ckbBlacklistStudy = createCkbBlacklistStudy(blacklistStudyEntry);
 
-        assertTrue(ckbBlacklistStudy.isMatch("NCT1",
-                "Nivolumab",
-                "Solid tumor",
-                "KRAS",
-                "amplification",
-                blacklistStudyEntry));
+        assertTrue(ckbBlacklistStudy.isMatch("NCT1", "Nivolumab", "Solid tumor", "KRAS", "amplification", blacklistStudyEntry));
         assertFalse(ckbBlacklistStudy.isMatch("NCT1", "Chemo", "Breast", "KRAS", "deletion", blacklistStudyEntry));
         assertTrue(ckbBlacklistStudy.isBlacklistStudy("NCT1", "Nivolumab", "Solid tumor", "KRAS", "amplification"));
         assertFalse(ckbBlacklistStudy.isBlacklistStudy("NCT1", "Chemo", "Breast", "KRAS", "deletion"));
@@ -174,12 +134,7 @@ public class CkbBlacklistStudyTest {
                         null);
         CkbStudyBlacklistModel ckbBlacklistStudy = createCkbBlacklistStudy(blacklistStudyEntry);
 
-        assertTrue(ckbBlacklistStudy.isMatch("NCT1",
-                "Nivolumab",
-                "Solid tumor",
-                "KRAS",
-                "amplification",
-                blacklistStudyEntry));
+        assertTrue(ckbBlacklistStudy.isMatch("NCT1", "Nivolumab", "Solid tumor", "KRAS", "amplification", blacklistStudyEntry));
         assertFalse(ckbBlacklistStudy.isMatch("NCT1", "Chemo", "Breast", "PTEN", "deletion", blacklistStudyEntry));
         assertTrue(ckbBlacklistStudy.isBlacklistStudy("NCT1", "Nivolumab", "Solid tumor", "KRAS", "amplification"));
         assertFalse(ckbBlacklistStudy.isBlacklistStudy("NCT1", "Chemo", "Breast", "PTEN", "deletion"));
@@ -196,12 +151,7 @@ public class CkbBlacklistStudyTest {
                         "amplification");
         CkbStudyBlacklistModel ckbBlacklistStudy = createCkbBlacklistStudy(blacklistStudyEntry);
 
-        assertTrue(ckbBlacklistStudy.isMatch("NCT1",
-                "Nivolumab",
-                "Solid tumor",
-                "KRAS",
-                "amplification",
-                blacklistStudyEntry));
+        assertTrue(ckbBlacklistStudy.isMatch("NCT1", "Nivolumab", "Solid tumor", "KRAS", "amplification", blacklistStudyEntry));
         assertFalse(ckbBlacklistStudy.isMatch("NCT1", "Chemo", "Breast", "PTEN", "deletion", blacklistStudyEntry));
         assertTrue(ckbBlacklistStudy.isBlacklistStudy("NCT1", "Nivolumab", "Solid tumor", "KRAS", "amplification"));
         assertFalse(ckbBlacklistStudy.isBlacklistStudy("NCT1", "Chemo", "Breast", "PTEN", "deletion"));

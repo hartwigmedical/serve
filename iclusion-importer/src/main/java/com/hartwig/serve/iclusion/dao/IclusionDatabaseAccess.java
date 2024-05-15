@@ -35,8 +35,8 @@ public class IclusionDatabaseAccess {
     @NotNull
     private final IclusionDAO iclusionDAO;
 
-    public IclusionDatabaseAccess(@NotNull final String userName, @NotNull final String password, @NotNull final String url) throws
-            SQLException {
+    public IclusionDatabaseAccess(@NotNull final String userName, @NotNull final String password, @NotNull final String url)
+            throws SQLException {
         System.setProperty("org.jooq.no-logo", "true");
         System.setProperty("org.jooq.no-tips", "true");
 
@@ -86,7 +86,7 @@ public class IclusionDatabaseAccess {
         options.addOption(Option.builder(DB_PASS).desc("Database password").hasArg(true).required(isRequired).build());
         options.addOption(Option.builder(DB_URL).desc("Database url").hasArg(true).required(isRequired).build());
     }
-    
+
     public void writeIclusionDAO(@NotNull List<IclusionTrial> trials) {
         iclusionDAO.write(trials);
     }

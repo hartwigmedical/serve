@@ -47,16 +47,16 @@ class ClinicalTrialDAO {
 
     public void write(@NotNull ClinicalTrial clinicalTrial, int ckbEntryId) {
         int id = context.insertInto(Clinicaltrial.CLINICALTRIAL,
-                Clinicaltrial.CLINICALTRIAL.CKBENTRYID,
-                Clinicaltrial.CLINICALTRIAL.UPDATEDATE,
-                Clinicaltrial.CLINICALTRIAL.NCTID,
-                Clinicaltrial.CLINICALTRIAL.TITLE,
-                Clinicaltrial.CLINICALTRIAL.ACRONYM,
-                Clinicaltrial.CLINICALTRIAL.PHASE,
-                Clinicaltrial.CLINICALTRIAL.RECRUITMENT,
-                Clinicaltrial.CLINICALTRIAL.GENDER,
-                Clinicaltrial.CLINICALTRIAL.SPONSORS,
-                Clinicaltrial.CLINICALTRIAL.VARIANTREQUIREMENT)
+                        Clinicaltrial.CLINICALTRIAL.CKBENTRYID,
+                        Clinicaltrial.CLINICALTRIAL.UPDATEDATE,
+                        Clinicaltrial.CLINICALTRIAL.NCTID,
+                        Clinicaltrial.CLINICALTRIAL.TITLE,
+                        Clinicaltrial.CLINICALTRIAL.ACRONYM,
+                        Clinicaltrial.CLINICALTRIAL.PHASE,
+                        Clinicaltrial.CLINICALTRIAL.RECRUITMENT,
+                        Clinicaltrial.CLINICALTRIAL.GENDER,
+                        Clinicaltrial.CLINICALTRIAL.SPONSORS,
+                        Clinicaltrial.CLINICALTRIAL.VARIANTREQUIREMENT)
                 .values(ckbEntryId,
                         clinicalTrial.updateDate(),
                         clinicalTrial.nctId(),
@@ -73,27 +73,29 @@ class ClinicalTrialDAO {
 
         for (Therapy therapy : clinicalTrial.therapies()) {
             int therapyId = therapyDAO.write(therapy);
-            context.insertInto(Therapyclinicaltrial.THERAPYCLINICALTRIAL, Therapyclinicaltrial.THERAPYCLINICALTRIAL.CLINICALTRIALID, Therapyclinicaltrial.THERAPYCLINICALTRIAL.THERAPYID)
-                    .values(id, therapyId)
-                    .execute();
+            context.insertInto(Therapyclinicaltrial.THERAPYCLINICALTRIAL,
+                    Therapyclinicaltrial.THERAPYCLINICALTRIAL.CLINICALTRIALID,
+                    Therapyclinicaltrial.THERAPYCLINICALTRIAL.THERAPYID).values(id, therapyId).execute();
         }
 
         for (Indication indication : clinicalTrial.indications()) {
             int indicationId = indicationDAO.write(indication);
-            context.insertInto(Indicationclinicaltrial.INDICATIONCLINICALTRIAL, Indicationclinicaltrial.INDICATIONCLINICALTRIAL.CLINICALTRIALID, Indicationclinicaltrial.INDICATIONCLINICALTRIAL.INDICATIONID)
-                    .values(id, indicationId)
-                    .execute();
+            context.insertInto(Indicationclinicaltrial.INDICATIONCLINICALTRIAL,
+                    Indicationclinicaltrial.INDICATIONCLINICALTRIAL.CLINICALTRIALID,
+                    Indicationclinicaltrial.INDICATIONCLINICALTRIAL.INDICATIONID).values(id, indicationId).execute();
         }
 
         for (String ageGroup : clinicalTrial.ageGroups()) {
-            context.insertInto(Agegroup.AGEGROUP, Agegroup.AGEGROUP.CLINICALTRIALID, Agegroup.AGEGROUP.AGEGROUP_).values(id, ageGroup).execute();
+            context.insertInto(Agegroup.AGEGROUP, Agegroup.AGEGROUP.CLINICALTRIALID, Agegroup.AGEGROUP.AGEGROUP_)
+                    .values(id, ageGroup)
+                    .execute();
         }
 
         for (VariantRequirementDetail variantRequirementDetail : clinicalTrial.variantRequirementDetails()) {
             context.insertInto(Variantrequirementdetail.VARIANTREQUIREMENTDETAIL,
-                    Variantrequirementdetail.VARIANTREQUIREMENTDETAIL.CLINICALTRIALID,
-                    Variantrequirementdetail.VARIANTREQUIREMENTDETAIL.CKBPROFILEID,
-                    Variantrequirementdetail.VARIANTREQUIREMENTDETAIL.REQUIREMENTTYPE)
+                            Variantrequirementdetail.VARIANTREQUIREMENTDETAIL.CLINICALTRIALID,
+                            Variantrequirementdetail.VARIANTREQUIREMENTDETAIL.CKBPROFILEID,
+                            Variantrequirementdetail.VARIANTREQUIREMENTDETAIL.REQUIREMENTTYPE)
                     .values(id, variantRequirementDetail.profileId(), variantRequirementDetail.requirementType())
                     .execute();
         }
@@ -106,14 +108,14 @@ class ClinicalTrialDAO {
 
     private void writeLocation(@NotNull com.hartwig.serve.ckb.datamodel.clinicaltrial.Location location, int clinicalTrialId) {
         int id = context.insertInto(Location.LOCATION,
-                Location.LOCATION.CLINICALTRIALID,
-                Location.LOCATION.NCTID,
-                Location.LOCATION.STATUS,
-                Location.LOCATION.FACILITY,
-                Location.LOCATION.CITY,
-                Location.LOCATION.STATE,
-                Location.LOCATION.ZIP,
-                Location.LOCATION.COUNTRY)
+                        Location.LOCATION.CLINICALTRIALID,
+                        Location.LOCATION.NCTID,
+                        Location.LOCATION.STATUS,
+                        Location.LOCATION.FACILITY,
+                        Location.LOCATION.CITY,
+                        Location.LOCATION.STATE,
+                        Location.LOCATION.ZIP,
+                        Location.LOCATION.COUNTRY)
                 .values(clinicalTrialId,
                         location.nctId(),
                         location.status(),
@@ -127,7 +129,13 @@ class ClinicalTrialDAO {
                 .getValue(Location.LOCATION.ID);
 
         for (com.hartwig.serve.ckb.datamodel.clinicaltrial.Contact contact : location.contacts()) {
-            context.insertInto(Contact.CONTACT, Contact.CONTACT.LOCATIONID, Contact.CONTACT.NAME, Contact.CONTACT.EMAIL, Contact.CONTACT.PHONE, Contact.CONTACT.PHONEEXT, Contact.CONTACT.ROLE)
+            context.insertInto(Contact.CONTACT,
+                            Contact.CONTACT.LOCATIONID,
+                            Contact.CONTACT.NAME,
+                            Contact.CONTACT.EMAIL,
+                            Contact.CONTACT.PHONE,
+                            Contact.CONTACT.PHONEEXT,
+                            Contact.CONTACT.ROLE)
                     .values(id, contact.name(), contact.email(), contact.phone(), contact.phoneExt(), contact.role())
                     .execute();
         }

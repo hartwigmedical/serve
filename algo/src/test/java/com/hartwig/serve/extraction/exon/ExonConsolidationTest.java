@@ -22,10 +22,8 @@ public class ExonConsolidationTest {
 
     @Test
     public void canConsolidateKnownExons() {
-        KnownExon exon1 = RangeTestFactory.knownExonBuilder()
-                .addSources(Knowledgebase.VICC_CGI)
-                .proteinEffect(ProteinEffect.UNKNOWN)
-                .build();
+        KnownExon exon1 =
+                RangeTestFactory.knownExonBuilder().addSources(Knowledgebase.VICC_CGI).proteinEffect(ProteinEffect.UNKNOWN).build();
 
         KnownExon exon2 = RangeTestFactory.knownExonBuilder()
                 .addSources(Knowledgebase.VICC_CIVIC)

@@ -43,10 +43,7 @@ final class PmkbObjectFactory {
     private static PmkbTumor createTumor(@NotNull JsonObject tumorObject) {
         ViccDatamodelCheckerFactory.pmkbTumorChecker().check(tumorObject);
 
-        return ImmutablePmkbTumor.builder()
-                .name(string(tumorObject, "name"))
-                .id(string(tumorObject, "id"))
-                .build();
+        return ImmutablePmkbTumor.builder().name(string(tumorObject, "name")).id(string(tumorObject, "id")).build();
     }
 
     @NotNull
@@ -58,10 +55,7 @@ final class PmkbObjectFactory {
             JsonObject tissueObject = tissueElement.getAsJsonObject();
             tissueChecker.check(tissueObject);
 
-            tissueList.add(ImmutablePmkbTissue.builder()
-                    .name(string(tissueObject, "name"))
-                    .id(string(tissueObject, "id"))
-                    .build());
+            tissueList.add(ImmutablePmkbTissue.builder().name(string(tissueObject, "name")).id(string(tissueObject, "id")).build());
         }
         return tissueList;
     }

@@ -151,7 +151,6 @@ public final class ActionableFileUtil {
             throw new IllegalStateException("An actionable event has to contain either treatment or clinical trial: " + event);
         }
 
-
         Set<String> therapy = Sets.newHashSet();
         if (clinicalTrial != null) {
             therapy = clinicalTrial.therapyNames();

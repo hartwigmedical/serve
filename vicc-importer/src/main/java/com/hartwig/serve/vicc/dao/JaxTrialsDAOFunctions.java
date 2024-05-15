@@ -20,15 +20,15 @@ final class JaxTrialsDAOFunctions {
 
     static void write(@NotNull DSLContext context, int viccEntryId, @NotNull JaxTrials jaxTrials) {
         int id = context.insertInto(JAXTRIALS,
-                JAXTRIALS.NCTID,
-                JAXTRIALS.TITLE,
-                JAXTRIALS.VARIANTREQUIREMENTS,
-                JAXTRIALS.GENDER,
-                JAXTRIALS.RECRUITMENT,
-                JAXTRIALS.PHASE,
-                JAXTRIALS.SPONSORS,
-                JAXTRIALS.UPDATEDATE,
-                JAXTRIALS.VICCENTRYID)
+                        JAXTRIALS.NCTID,
+                        JAXTRIALS.TITLE,
+                        JAXTRIALS.VARIANTREQUIREMENTS,
+                        JAXTRIALS.GENDER,
+                        JAXTRIALS.RECRUITMENT,
+                        JAXTRIALS.PHASE,
+                        JAXTRIALS.SPONSORS,
+                        JAXTRIALS.UPDATEDATE,
+                        JAXTRIALS.VICCENTRYID)
                 .values(jaxTrials.nctId(),
                         jaxTrials.title(),
                         jaxTrials.variantRequirements(),
@@ -44,10 +44,10 @@ final class JaxTrialsDAOFunctions {
 
         for (JaxTrialsMolecularProfile molecularProfile : jaxTrials.molecularProfiles()) {
             context.insertInto(JAXTRIALSMOLECULARPROFILE,
-                    JAXTRIALSMOLECULARPROFILE.REQUIREMENTTYPE,
-                    JAXTRIALSMOLECULARPROFILE.PROFILENAME,
-                    JAXTRIALSMOLECULARPROFILE.IDMOLECULARPROFILE,
-                    JAXTRIALSMOLECULARPROFILE.JAXTRIALSID)
+                            JAXTRIALSMOLECULARPROFILE.REQUIREMENTTYPE,
+                            JAXTRIALSMOLECULARPROFILE.PROFILENAME,
+                            JAXTRIALSMOLECULARPROFILE.IDMOLECULARPROFILE,
+                            JAXTRIALSMOLECULARPROFILE.JAXTRIALSID)
                     .values(molecularProfile.requirementType(), molecularProfile.profileName(), molecularProfile.id(), id)
                     .execute();
         }

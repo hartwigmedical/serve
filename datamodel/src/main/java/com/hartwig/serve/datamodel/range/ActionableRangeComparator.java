@@ -1,10 +1,11 @@
 package com.hartwig.serve.datamodel.range;
 
+import java.util.Comparator;
+
 import com.hartwig.serve.datamodel.ActionableEvent;
 import com.hartwig.serve.datamodel.ActionableEventComparator;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.Comparator;
+import org.jetbrains.annotations.NotNull;
 
 public class ActionableRangeComparator implements Comparator<ActionableRange> {
 

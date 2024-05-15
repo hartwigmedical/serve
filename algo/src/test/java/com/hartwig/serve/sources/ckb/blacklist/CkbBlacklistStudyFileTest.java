@@ -1,12 +1,13 @@
 package com.hartwig.serve.sources.ckb.blacklist;
 
-import com.google.common.io.Resources;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import com.google.common.io.Resources;
+
+import org.junit.Test;
 
 public class CkbBlacklistStudyFileTest {
 

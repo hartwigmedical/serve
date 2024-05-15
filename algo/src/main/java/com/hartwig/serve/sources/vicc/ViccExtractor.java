@@ -24,7 +24,12 @@ import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
 import com.hartwig.serve.datamodel.hotspot.ImmutableKnownHotspot;
 import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
-import com.hartwig.serve.datamodel.range.*;
+import com.hartwig.serve.datamodel.range.ActionableRange;
+import com.hartwig.serve.datamodel.range.ImmutableKnownCodon;
+import com.hartwig.serve.datamodel.range.ImmutableKnownExon;
+import com.hartwig.serve.datamodel.range.KnownCodon;
+import com.hartwig.serve.datamodel.range.KnownExon;
+import com.hartwig.serve.datamodel.range.RangeAnnotation;
 import com.hartwig.serve.extraction.ActionableEventFactory;
 import com.hartwig.serve.extraction.EventExtractor;
 import com.hartwig.serve.extraction.EventExtractorOutput;
@@ -312,7 +317,7 @@ public final class ViccExtractor {
 
     @NotNull
     private static <T extends RangeAnnotation> Set<ActionableRange> extractActionableRange(@NotNull ViccExtractionResult extraction,
-                                                                                            @NotNull Map<Feature, List<T>> rangesPerFeature) {
+            @NotNull Map<Feature, List<T>> rangesPerFeature) {
         Set<ActionableRange> actionableRanges = Sets.newHashSet();
         for (Map.Entry<Feature, List<T>> entry : rangesPerFeature.entrySet()) {
             List<T> ranges = entry.getValue();

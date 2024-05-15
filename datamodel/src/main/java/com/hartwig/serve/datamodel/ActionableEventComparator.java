@@ -1,8 +1,8 @@
 package com.hartwig.serve.datamodel;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Comparator;
+
+import org.jetbrains.annotations.NotNull;
 
 public class ActionableEventComparator implements Comparator<ActionableEvent> {
 

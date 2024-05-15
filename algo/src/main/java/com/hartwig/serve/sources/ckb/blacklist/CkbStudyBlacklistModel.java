@@ -22,8 +22,8 @@ public class CkbStudyBlacklistModel {
         this.BLACKLIST_STUDIES_ENTRIES = blacklistStudiesList;
     }
 
-    public boolean isBlacklistStudy(@NotNull String nctId, @NotNull String therapyName, @NotNull String cancerType, @NotNull String sourceGene,
-                                    @NotNull String event) {
+    public boolean isBlacklistStudy(@NotNull String nctId, @NotNull String therapyName, @NotNull String cancerType,
+            @NotNull String sourceGene, @NotNull String event) {
         for (CkbBlacklistStudyEntry blacklistStudyEntry : BLACKLIST_STUDIES_ENTRIES) {
             boolean match = isMatch(nctId, therapyName, cancerType, sourceGene, event, blacklistStudyEntry);
             if (match) {
@@ -46,7 +46,7 @@ public class CkbStudyBlacklistModel {
     }
 
     public boolean isMatch(@NotNull String nctId, @NotNull String therapyName, @NotNull String cancerType, @NotNull String sourceGene,
-                           @NotNull String event, @NotNull CkbBlacklistStudyEntry blacklistStudyEntry) {
+            @NotNull String event, @NotNull CkbBlacklistStudyEntry blacklistStudyEntry) {
         switch (blacklistStudyEntry.type()) {
             case STUDY_WHOLE: {
                 return blacklistStudyEntry.nctId().equals(nctId);
@@ -54,58 +54,51 @@ public class CkbStudyBlacklistModel {
             case STUDY_BASED_ON_THERAPY: {
                 String blacklistEvidenceTherapy = blacklistStudyEntry.therapy();
                 assert blacklistEvidenceTherapy != null;
-                return blacklistStudyEntry.nctId().equals(nctId)
-                        && blacklistEvidenceTherapy.equals(therapyName);
+                return blacklistStudyEntry.nctId().equals(nctId) && blacklistEvidenceTherapy.equals(therapyName);
             }
             case STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE: {
                 String blacklistEvidenceTherapy = blacklistStudyEntry.therapy();
                 String blacklistEvidenceCancerType = blacklistStudyEntry.cancerType();
                 assert blacklistEvidenceTherapy != null;
                 assert blacklistEvidenceCancerType != null;
-                return blacklistStudyEntry.nctId().equals(nctId)
-                        && blacklistEvidenceTherapy.equals(therapyName)
+                return blacklistStudyEntry.nctId().equals(nctId) && blacklistEvidenceTherapy.equals(therapyName)
                         && blacklistEvidenceCancerType.equals(cancerType);
             }
             case STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE: {
                 String blacklistEvidenceTherapy = blacklistStudyEntry.therapy();
                 String blacklistEvidenceCancerType = blacklistStudyEntry.cancerType();
-                String blacklistEvidenceGene= blacklistStudyEntry.gene();
+                String blacklistEvidenceGene = blacklistStudyEntry.gene();
                 assert blacklistEvidenceGene != null;
                 assert blacklistEvidenceTherapy != null;
                 assert blacklistEvidenceCancerType != null;
-                return blacklistStudyEntry.nctId().equals(nctId)
-                        && blacklistEvidenceTherapy.equals(therapyName)
-                        && blacklistEvidenceCancerType.equals(cancerType)
-                        && blacklistEvidenceGene.equals(sourceGene);
+                return blacklistStudyEntry.nctId().equals(nctId) && blacklistEvidenceTherapy.equals(therapyName)
+                        && blacklistEvidenceCancerType.equals(cancerType) && blacklistEvidenceGene.equals(sourceGene);
             }
             case STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE_AND_EVENT: {
                 String blacklistEvidenceTherapy = blacklistStudyEntry.therapy();
                 String blacklistEvidenceCancerType = blacklistStudyEntry.cancerType();
-                String blacklistEvidenceGene= blacklistStudyEntry.gene();
-                String blacklistEvidenceEvent= blacklistStudyEntry.event();
+                String blacklistEvidenceGene = blacklistStudyEntry.gene();
+                String blacklistEvidenceEvent = blacklistStudyEntry.event();
                 assert blacklistEvidenceGene != null;
                 assert blacklistEvidenceEvent != null;
                 assert blacklistEvidenceTherapy != null;
                 assert blacklistEvidenceCancerType != null;
 
-                return blacklistStudyEntry.nctId().equals(nctId)
-                        && blacklistEvidenceTherapy.equals(therapyName)
-                        && blacklistEvidenceCancerType.equals(cancerType)
-                        && blacklistEvidenceGene.equals(sourceGene)
+                return blacklistStudyEntry.nctId().equals(nctId) && blacklistEvidenceTherapy.equals(therapyName)
+                        && blacklistEvidenceCancerType.equals(cancerType) && blacklistEvidenceGene.equals(sourceGene)
                         && blacklistEvidenceEvent.equals(event);
             }
             case ALL_STUDIES_BASED_ON_GENE: {
-                String blacklistEvidenceGene= blacklistStudyEntry.gene();
+                String blacklistEvidenceGene = blacklistStudyEntry.gene();
                 assert blacklistEvidenceGene != null;
                 return blacklistEvidenceGene.equals(sourceGene);
             }
             case ALL_STUDIES_BASED_ON_GENE_AND_EVENT: {
-                String blacklistEvidenceGene= blacklistStudyEntry.gene();
-                String blacklistEvidenceEvent= blacklistStudyEntry.event();
+                String blacklistEvidenceGene = blacklistStudyEntry.gene();
+                String blacklistEvidenceEvent = blacklistStudyEntry.event();
                 assert blacklistEvidenceEvent != null;
                 assert blacklistEvidenceGene != null;
-                return blacklistEvidenceGene.equals(sourceGene)
-                        && blacklistEvidenceEvent.equals(event);
+                return blacklistEvidenceGene.equals(sourceGene) && blacklistEvidenceEvent.equals(event);
             }
             default: {
                 LOGGER.warn("Blacklist study entry found with unrecognized type: {}", blacklistStudyEntry.type());

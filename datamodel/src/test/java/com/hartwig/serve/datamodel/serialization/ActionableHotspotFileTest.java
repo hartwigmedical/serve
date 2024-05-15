@@ -55,8 +55,7 @@ public class ActionableHotspotFileTest {
     }
 
     @NotNull
-    private static ActionableHotspot findBySource(@NotNull List<ActionableHotspot> hotspots,
-            @NotNull Knowledgebase sourceToFind) {
+    private static ActionableHotspot findBySource(@NotNull List<ActionableHotspot> hotspots, @NotNull Knowledgebase sourceToFind) {
         for (ActionableHotspot hotspot : hotspots) {
             if (hotspot.source() == sourceToFind) {
                 return hotspot;

@@ -48,7 +48,7 @@ public class IclusionDAO {
                             trial.eudra().isEmpty() ? null : trial.eudra(),
                             trial.nct().isEmpty() ? null : trial.nct(),
                             trial.ipn().isEmpty() ? null : trial.ipn(),
-                            trial.ccmo().isEmpty() ? null :  trial.ccmo())
+                            trial.ccmo().isEmpty() ? null : trial.ccmo())
                     .returning(STUDY.ID)
                     .fetchOne()
                     .getValue(STUDY.ID);

@@ -50,5 +50,4 @@ public abstract class BrcaAnnotationLOVD {
     @NotNull
     public abstract String individuals();
 
-
 }

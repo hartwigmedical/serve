@@ -4,7 +4,13 @@ import java.util.List;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
-import com.hartwig.serve.actionability.*;
+import com.hartwig.serve.actionability.ActionableCharacteristicUrlConsolidator;
+import com.hartwig.serve.actionability.ActionableEventUrlMerger;
+import com.hartwig.serve.actionability.ActionableFusionUrlConsolidator;
+import com.hartwig.serve.actionability.ActionableGeneUrlConsolidator;
+import com.hartwig.serve.actionability.ActionableHLAUrlConsolidator;
+import com.hartwig.serve.actionability.ActionableHotspotUrlConsolidator;
+import com.hartwig.serve.actionability.ActionableRangeUrlConsolidator;
 import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.datamodel.fusion.KnownFusion;
 import com.hartwig.serve.datamodel.gene.KnownCopyNumber;

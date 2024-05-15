@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
 import org.apache.commons.compress.utils.Lists;
@@ -14,6 +16,25 @@ import org.jetbrains.annotations.NotNull;
 public class CkbBlacklistStudyFile {
 
     private static final String FIELD_DELIMITER = "\t";
+
+    private final static Set<CkbBlacklistStudyType> STUDY_BLACKLIST_TYPES_CONTAINING_THERAPY =
+            Sets.newHashSet(CkbBlacklistStudyType.STUDY_BASED_ON_THERAPY,
+                    CkbBlacklistStudyType.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE,
+                    CkbBlacklistStudyType.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE,
+                    CkbBlacklistStudyType.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE_AND_EVENT);
+
+    private final static Set<CkbBlacklistStudyType> STUDY_BLACKLIST_TYPES_CONTAINING_CANCER_TYPE =
+            Sets.newHashSet(CkbBlacklistStudyType.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE,
+                    CkbBlacklistStudyType.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE,
+                    CkbBlacklistStudyType.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE_AND_EVENT);
+
+    private final static Set<CkbBlacklistStudyType> STUDY_BLACKLIST_TYPES_CONTAINING_GENE =
+            Sets.newHashSet(CkbBlacklistStudyType.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE,
+                    CkbBlacklistStudyType.ALL_STUDIES_BASED_ON_GENE);
+
+    private final static Set<CkbBlacklistStudyType> STUDY_BLACKLIST_TYPES_CONTAINING_EVENT =
+            Sets.newHashSet(CkbBlacklistStudyType.STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE_AND_EVENT,
+                    CkbBlacklistStudyType.ALL_STUDIES_BASED_ON_GENE_AND_EVENT);
 
     private CkbBlacklistStudyFile() {
     }
@@ -46,17 +67,17 @@ public class CkbBlacklistStudyFile {
         String gene = null;
         String event = null;
 
-        if (BlacklistConstants.STUDY_BLACKLIST_TYPES_CONTAINING_THERAPY.contains(type)) {
+        if (STUDY_BLACKLIST_TYPES_CONTAINING_THERAPY.contains(type)) {
             therapy = values[fields.get("therapyName")];
         }
-        if (BlacklistConstants.STUDY_BLACKLIST_TYPES_CONTAINING_CANCER_TYPE.contains(type)) {
+        if (STUDY_BLACKLIST_TYPES_CONTAINING_CANCER_TYPE.contains(type)) {
             cancerType = values[fields.get("cancerType")];
         }
-        if (BlacklistConstants.STUDY_BLACKLIST_TYPES_CONTAINING_GENE.contains(type)) {
+        if (STUDY_BLACKLIST_TYPES_CONTAINING_GENE.contains(type)) {
             gene = values[fields.get("gene")];
         }
 
-        if (BlacklistConstants.STUDY_BLACKLIST_TYPES_CONTAINING_EVENT.contains(type)) {
+        if (STUDY_BLACKLIST_TYPES_CONTAINING_EVENT.contains(type)) {
             event = values[fields.get("event")];
         }
         return ImmutableCkbBlacklistStudyEntry.builder()

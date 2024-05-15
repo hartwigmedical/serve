@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
@@ -15,6 +17,27 @@ import org.jetbrains.annotations.NotNull;
 public class CkbBlacklistEvidenceFile {
 
     private static final String FIELD_DELIMITER = "\t";
+
+    private final static Set<CkbBlacklistEvidenceType> EVIDENCE_BLACKLIST_TYPES_CONTAINING_THERAPY =
+            Sets.newHashSet(CkbBlacklistEvidenceType.EVIDENCE_BASED_ON_THERAPY,
+                    CkbBlacklistEvidenceType.EVIDENCE_ON_THERAPY_AND_CANCER_TYPE,
+                    CkbBlacklistEvidenceType.EVIDENCE_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE,
+                    CkbBlacklistEvidenceType.EVIDENCE_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE_AND_EVENT);
+
+    private final static Set<CkbBlacklistEvidenceType> EVIDENCE_BLACKLIST_TYPES_CONTAINING_CANCER_TYPE = Sets.newHashSet(
+            CkbBlacklistEvidenceType.EVIDENCE_ON_THERAPY_AND_CANCER_TYPE,
+            CkbBlacklistEvidenceType.EVIDENCE_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE,
+            CkbBlacklistEvidenceType.EVIDENCE_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE_AND_EVENT);
+
+    private final static Set<CkbBlacklistEvidenceType> EVIDENCE_BLACKLIST_TYPES_CONTAINING_GENE =
+            Sets.newHashSet(CkbBlacklistEvidenceType.EVIDENCE_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE,
+                    CkbBlacklistEvidenceType.EVIDENCE_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE_AND_EVENT,
+                    CkbBlacklistEvidenceType.ALL_EVIDENCE_BASED_ON_GENE,
+                    CkbBlacklistEvidenceType.ALL_EVIDENCE_BASED_ON_GENE_AND_EVENT);
+
+    private final static Set<CkbBlacklistEvidenceType> EVIDENCE_BLACKLIST_TYPES_CONTAINING_EVENT =
+            Sets.newHashSet(CkbBlacklistEvidenceType.ALL_EVIDENCE_BASED_ON_GENE_AND_EVENT,
+                    CkbBlacklistEvidenceType.EVIDENCE_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE_AND_EVENT);
 
     private CkbBlacklistEvidenceFile() {
     }
@@ -48,16 +71,16 @@ public class CkbBlacklistEvidenceFile {
         String event = null;
         EvidenceLevel level = null;
 
-        if (BlacklistConstants.EVIDENCE_BLACKLIST_TYPES_CONTAINING_THERAPY.contains(type)) {
+        if (EVIDENCE_BLACKLIST_TYPES_CONTAINING_THERAPY.contains(type)) {
             therapy = values[fields.get("therapyName")];
         }
-        if (BlacklistConstants.EVIDENCE_BLACKLIST_TYPES_CONTAINING_CANCER_TYPE.contains(type)) {
+        if (EVIDENCE_BLACKLIST_TYPES_CONTAINING_CANCER_TYPE.contains(type)) {
             cancerType = values[fields.get("cancerType")];
         }
-        if (BlacklistConstants.EVIDENCE_BLACKLIST_TYPES_CONTAINING_GENE.contains(type)) {
+        if (EVIDENCE_BLACKLIST_TYPES_CONTAINING_GENE.contains(type)) {
             gene = values[fields.get("gene")];
         }
-        if (BlacklistConstants.EVIDENCE_BLACKLIST_TYPES_CONTAINING_EVENT.contains(type)) {
+        if (EVIDENCE_BLACKLIST_TYPES_CONTAINING_EVENT.contains(type)) {
             event = values[fields.get("event")];
         }
 

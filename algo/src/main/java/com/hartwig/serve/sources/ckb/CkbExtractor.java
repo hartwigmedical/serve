@@ -1,9 +1,10 @@
 package com.hartwig.serve.sources.ckb;
 
+import static com.hartwig.serve.sources.ckb.CkbVariantAnnotator.resolveGeneRole;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -84,15 +85,15 @@ public class CkbExtractor {
 
         ProgressTracker tracker = new ProgressTracker("CKB", entries.size());
         // Assume entries without variants are filtered out prior to extraction
-        List<ExtractionResult> extractions = entries.parallelStream().map(entry -> getExtractionResult(entry, tracker))
-                .flatMap(Optional::stream)
+        List<ExtractionResult> extractions =
+                entries.parallelStream().map(this::getExtractionResult).peek(e -> tracker.update()).filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
         return ExtractionFunctions.merge(extractions);
     }
 
-    @NotNull
-    private Optional<ExtractionResult> getExtractionResult(@NotNull CkbEntry entry, @NotNull ProgressTracker tracker) {
+    @Nullable
+    private ExtractionResult getExtractionResult(@NotNull CkbEntry entry) {
         if (entry.variants().isEmpty()) {
             throw new IllegalStateException("A CKB entry without variants has been provided for extraction: " + entry);
         }
@@ -100,40 +101,41 @@ public class CkbExtractor {
         Variant variant = entry.variants().get(0);
         String event = variantCount > 1 ? concat(entry.variants()) : CkbEventAndGeneExtractor.extractEvent(variant);
         String gene = variantCount > 1 ? "Multiple" : CkbEventAndGeneExtractor.extractGene(variant);
-        
-        Optional<ExtractionResult> result;
+
         if (entry.type() == EventType.UNKNOWN) {
             LOGGER.warn("No event type known for '{}' on '{}'", event, gene);
-            result = Optional.empty();
+            return null;
         } else {
-            ExtractionResult extraction = extractAndInterpretEvent(entry, gene, event);
-            result = Optional.of(generateKnownEvents ? CkbVariantAnnotator.annotate(extraction, variant) : extraction);
+            EventExtractorOutput extractionOutput = eventExtractor.extract(gene, null, entry.type(), event);
+            String sourceEvent = gene.equals(CkbConstants.NO_GENE) ? event : gene + " " + event;
+
+            Set<ActionableEntry> actionableEntries = actionableEntryFactory.create(entry, sourceEvent, gene);
+
+            EventInterpretation interpretation = ImmutableEventInterpretation.builder()
+                    .source(source)
+                    .sourceEvent(sourceEvent)
+                    .interpretedGene(gene)
+                    .interpretedEvent(event)
+                    .interpretedEventType(entry.type())
+                    .build();
+
+            List<CodonAnnotation> codons = curateCodons(extractionOutput.codons());
+
+            ImmutableExtractionResult.Builder extractionResultBuilder = actionableEntries.stream()
+                    .map(actionableEntry -> actionableEntryToResultBuilder(extractionOutput, actionableEntry, codons))
+                    .reduce(ImmutableExtractionResult.builder(), CkbExtractor::mergeResultBuilders);
+
+            if (generateKnownEvents) {
+                extractionResultBuilder.knownHotspots(convertToKnownHotspots(extractionOutput.hotspots(), event, variant))
+                        .knownCodons(convertToKnownCodons(codons, variant))
+                        .knownExons(convertToKnownExons(extractionOutput.exons(), variant))
+                        .knownGenes(extractionOutput.fusionPair() == null ? convertToKnownGenes(gene, variant) : Collections.emptySet())
+                        .knownCopyNumbers(convertToKnownCopyNumbers(extractionOutput.copyNumber(), variant))
+                        .knownFusions(convertToKnownFusions(extractionOutput.fusionPair(), variant));
+            }
+
+            return extractionResultBuilder.refGenomeVersion(source.refGenomeVersion()).addEventInterpretations(interpretation).build();
         }
-        tracker.update();
-        return result;
-    }
-
-    @NotNull
-    private ExtractionResult extractAndInterpretEvent(@NotNull CkbEntry entry, @NotNull String gene, @NotNull String event) {
-        EventExtractorOutput extractionOutput = eventExtractor.extract(gene, null, entry.type(), event);
-        String sourceEvent;
-        if (!gene.equals(CkbConstants.NO_GENE)) {
-            sourceEvent = gene + " " + event;
-        } else {
-            sourceEvent = event;
-        }
-
-        Set<ActionableEntry> actionableEntries = actionableEntryFactory.create(entry, sourceEvent, gene);
-
-        EventInterpretation interpretation = ImmutableEventInterpretation.builder()
-                .source(source)
-                .sourceEvent(sourceEvent)
-                .interpretedGene(gene)
-                .interpretedEvent(event)
-                .interpretedEventType(entry.type())
-                .build();
-
-        return toExtractionResult(event, gene, extractionOutput, actionableEntries, interpretation);
     }
 
     @NotNull
@@ -148,51 +150,35 @@ public class CkbExtractor {
     }
 
     @NotNull
-    private ExtractionResult toExtractionResult(@NotNull String variant, @NotNull String gene, @NotNull EventExtractorOutput output,
-            @NotNull Set<ActionableEntry> actionableEntries, @NotNull EventInterpretation interpretation) {
+    private static ImmutableExtractionResult.Builder mergeResultBuilders(ImmutableExtractionResult.Builder a,
+            ImmutableExtractionResult.Builder b) {
+        ExtractionResult built = b.build();
+        a.addAllActionableHotspots(built.actionableHotspots());
+        a.addAllActionableCodons(built.actionableCodons());
+        a.addAllActionableExons(built.actionableExons());
+        a.addAllActionableGenes(built.actionableGenes());
+        a.addAllActionableFusions(built.actionableFusions());
+        a.addAllActionableCharacteristics(built.actionableCharacteristics());
+        a.addAllActionableHLA(built.actionableHLA());
+        return a;
+    }
 
-        List<CodonAnnotation> codons = curateCodons(output.codons());
-
-        ImmutableExtractionResult.Builder extractionResultBuilder = actionableEntries.stream()
-                .map(event -> ImmutableExtractionResult.builder()
-                        .refGenomeVersion(source.refGenomeVersion())
-                        .actionableHotspots(ActionableEventFactory.toActionableHotspots(event, output.hotspots()))
-                        .actionableCodons(ActionableEventFactory.toActionableRanges(event, codons))
-                        .actionableExons(ActionableEventFactory.toActionableRanges(event, output.exons()))
-                        .actionableGenes(Stream.of(output.geneLevel(), output.copyNumber())
-                                .filter(Objects::nonNull)
-                                .map(annotation -> ActionableEventFactory.geneAnnotationToActionableGene(event, annotation))
-                                .collect(Collectors.toSet()))
-                        .actionableFusions(extractNonNullToSet(output.fusionPair(), event, ActionableEventFactory::toActionableFusion))
-                        .actionableCharacteristics(extractNonNullToSet(output.characteristic(),
-                                event,
-                                ActionableEventFactory::toActionableCharacteristic))
-                        .actionableHLA(extractNonNullToSet(output.hla(), event, ActionableEventFactory::toActionableHLa)))
-                .reduce(ImmutableExtractionResult.builder(), (ImmutableExtractionResult.Builder a, ImmutableExtractionResult.Builder b) -> {
-                    ExtractionResult built = b.build();
-                    a.addAllActionableHotspots(built.actionableHotspots());
-                    a.addAllActionableCodons(built.actionableCodons());
-                    a.addAllActionableExons(built.actionableExons());
-                    a.addAllActionableGenes(built.actionableGenes());
-                    a.addAllActionableFusions(built.actionableFusions());
-                    a.addAllActionableCharacteristics(built.actionableCharacteristics());
-                    a.addAllActionableHLA(built.actionableHLA());
-                    return a;
-                });
-
-        if (generateKnownEvents) {
-            extractionResultBuilder.knownHotspots(convertToKnownHotspots(output.hotspots(), variant))
-                    .knownCodons(convertToKnownCodons(codons))
-                    .knownExons(convertToKnownExons(output.exons()))
-                    .knownGenes(output.fusionPair() == null ? convertToKnownGenes(gene) : Collections.emptySet())
-                    .knownCopyNumbers(convertToKnownAmpsDels(output.copyNumber()))
-                    .knownFusions(convertToKnownFusions(output.fusionPair()));
-        }
-
-        return extractionResultBuilder
+    private ImmutableExtractionResult.Builder actionableEntryToResultBuilder(@NotNull EventExtractorOutput output, ActionableEntry entry,
+            List<CodonAnnotation> codons) {
+        return ImmutableExtractionResult.builder()
                 .refGenomeVersion(source.refGenomeVersion())
-                .addEventInterpretations(interpretation)
-                .build();
+                .actionableHotspots(ActionableEventFactory.toActionableHotspots(entry, output.hotspots()))
+                .actionableCodons(ActionableEventFactory.toActionableRanges(entry, codons))
+                .actionableExons(ActionableEventFactory.toActionableRanges(entry, output.exons()))
+                .actionableGenes(Stream.of(output.geneLevel(), output.copyNumber())
+                        .filter(Objects::nonNull)
+                        .map(annotation -> ActionableEventFactory.geneAnnotationToActionableGene(entry, annotation))
+                        .collect(Collectors.toSet()))
+                .actionableFusions(extractNonNullToSet(output.fusionPair(), entry, ActionableEventFactory::toActionableFusion))
+                .actionableCharacteristics(extractNonNullToSet(output.characteristic(),
+                        entry,
+                        ActionableEventFactory::toActionableCharacteristic))
+                .actionableHLA(extractNonNullToSet(output.hla(), entry, ActionableEventFactory::toActionableHLa));
     }
 
     @VisibleForTesting
@@ -215,29 +201,29 @@ public class CkbExtractor {
     
     @NotNull
     private <T, U> Set<U> convertToKnownSet(@Nullable List<T> rawList, @NotNull Function<T, U> convert,
-            @NotNull Function<Set<U>, Set<U>> consolidate) {
+            @NotNull Function<Set<U>, Set<U>> consolidate, @NotNull BiFunction<U, Variant, U> annotate, @NotNull Variant variant) {
         if (rawList == null) {
             return Collections.emptySet();
         }
         Set<U> converted = rawList.stream().map(convert).collect(Collectors.toSet());
-        return consolidate.apply(converted);
+        return consolidate.apply(converted).stream().map(e -> annotate.apply(e, variant)).collect(Collectors.toSet());
     }
 
     @NotNull
-    private Set<KnownHotspot> convertToKnownHotspots(@Nullable List<VariantHotspot> hotspots, @NotNull String variant) {
+    private Set<KnownHotspot> convertToKnownHotspots(@Nullable List<VariantHotspot> hotspots, @NotNull String event,
+            @NotNull Variant variant) {
         CkbProteinAnnotationExtractor proteinExtractor = new CkbProteinAnnotationExtractor();
         Function<VariantHotspot, KnownHotspot> convert = hotspot -> ImmutableKnownHotspot.builder()
                 .from(hotspot)
                 .geneRole(GeneRole.UNKNOWN)
-                .proteinEffect(ProteinEffect.UNKNOWN)
-                .addSources(source)
-                .inputProteinAnnotation(proteinExtractor.apply(variant))
+                .proteinEffect(ProteinEffect.UNKNOWN).addSources(source).inputProteinAnnotation(proteinExtractor.apply(event))
                 .build();
-        return convertToKnownSet(hotspots, convert, HotspotConsolidation::consolidate);
+
+        return convertToKnownSet(hotspots, convert, HotspotConsolidation::consolidate, CkbVariantAnnotator::annotateHotspot, variant);
     }
 
     @NotNull
-    private Set<KnownCodon> convertToKnownCodons(@Nullable List<CodonAnnotation> codonAnnotations) {
+    private Set<KnownCodon> convertToKnownCodons(@Nullable List<CodonAnnotation> codonAnnotations, @NotNull Variant variant) {
         Function<CodonAnnotation, KnownCodon> convert = codonAnnotation -> ImmutableKnownCodon.builder()
                 .from(codonAnnotation)
                 .geneRole(GeneRole.UNKNOWN)
@@ -246,11 +232,12 @@ public class CkbExtractor {
                 .inputCodonRank(codonAnnotation.inputCodonRank())
                 .addSources(source)
                 .build();
-        return convertToKnownSet(codonAnnotations, convert, CodonConsolidation::consolidate);
+
+        return convertToKnownSet(codonAnnotations, convert, CodonConsolidation::consolidate, CkbVariantAnnotator::annotateCodon, variant);
     }
 
     @NotNull
-    private Set<KnownExon> convertToKnownExons(@Nullable List<ExonAnnotation> exonAnnotations) {
+    private Set<KnownExon> convertToKnownExons(@Nullable List<ExonAnnotation> exonAnnotations, @NotNull Variant variant) {
         Function<ExonAnnotation, KnownExon> convert = exonAnnotation -> ImmutableKnownExon.builder()
                 .from(exonAnnotation)
                 .geneRole(GeneRole.UNKNOWN)
@@ -259,38 +246,49 @@ public class CkbExtractor {
                 .inputExonRank(exonAnnotation.inputExonRank())
                 .addSources(source)
                 .build();
-        return convertToKnownSet(exonAnnotations, convert, ExonConsolidation::consolidate);
+        return convertToKnownSet(exonAnnotations, convert, ExonConsolidation::consolidate, CkbVariantAnnotator::annotateExon, variant);
     }
 
     @NotNull
-    private Set<KnownGene> convertToKnownGenes(@NotNull String gene) {
+    private Set<KnownGene> convertToKnownGenes(@NotNull String gene, @NotNull Variant variant) {
         if (!gene.equals(CkbConstants.NO_GENE)) {
-            return Set.of(ImmutableKnownGene.builder().gene(gene).geneRole(GeneRole.UNKNOWN).addSources(source).build());
+            return Set.of(ImmutableKnownGene.builder().gene(gene).geneRole(resolveGeneRole(variant)).addSources(source).build());
         }
 
         return Collections.emptySet();
     }
 
     @NotNull
-    private Set<KnownCopyNumber> convertToKnownAmpsDels(@Nullable GeneAnnotation copyNumber) {
-        Set<KnownCopyNumber> copyNumbers = (copyNumber == null) ? Collections.emptySet() : Set.of(
-                ImmutableKnownCopyNumber.builder()
-                    .from(copyNumber)
-                    .geneRole(GeneRole.UNKNOWN)
-                    .proteinEffect(ProteinEffect.UNKNOWN)
-                    .addSources(source)
-                    .build()
-        );
+    private Set<KnownCopyNumber> convertToKnownCopyNumbers(@Nullable GeneAnnotation copyNumber, @NotNull Variant variant) {
+        if (copyNumber == null) {
+            return Collections.emptySet();
+        }
+        Function<GeneAnnotation, KnownCopyNumber> convert = cn -> ImmutableKnownCopyNumber.builder()
+                .from(cn)
+                .geneRole(GeneRole.UNKNOWN)
+                .proteinEffect(ProteinEffect.UNKNOWN)
+                .addSources(source)
+                .build();
 
-        return CopyNumberConsolidation.consolidate(copyNumbers);
+        return convertToKnownSet(List.of(copyNumber),
+                convert,
+                CopyNumberConsolidation::consolidate,
+                CkbVariantAnnotator::annotateCopyNumber,
+                variant);
     }
 
     @NotNull
-    private Set<KnownFusion> convertToKnownFusions(@Nullable FusionPair fusion) {
-        Set<KnownFusion> fusions = (fusion == null) ? Collections.emptySet()
-                : Set.of(ImmutableKnownFusion.builder().from(fusion).proteinEffect(ProteinEffect.UNKNOWN).addSources(source).build());
+    private Set<KnownFusion> convertToKnownFusions(@Nullable FusionPair fusion, @NotNull Variant variant) {
+        if (fusion == null) {
+            return Collections.emptySet();
+        }
+        Function<FusionPair, KnownFusion> convert = fusionPair -> ImmutableKnownFusion.builder()
+                .from(fusionPair)
+                .proteinEffect(ProteinEffect.UNKNOWN)
+                .addSources(source)
+                .build();
 
-        return FusionConsolidation.consolidate(fusions);
+        return convertToKnownSet(List.of(fusion), convert, FusionConsolidation::consolidate, CkbVariantAnnotator::annotateFusion, variant);
     }
 }
 

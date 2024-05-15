@@ -9,7 +9,12 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.io.Resources;
-import com.hartwig.serve.datamodel.*;
+import com.hartwig.serve.datamodel.ClinicalTrial;
+import com.hartwig.serve.datamodel.DatamodelTestFactory;
+import com.hartwig.serve.datamodel.EvidenceDirection;
+import com.hartwig.serve.datamodel.EvidenceLevel;
+import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.datamodel.Treatment;
 import com.hartwig.serve.datamodel.characteristic.ActionableCharacteristic;
 import com.hartwig.serve.datamodel.characteristic.TumorCharacteristicCutoffType;
 import com.hartwig.serve.datamodel.characteristic.TumorCharacteristicType;
@@ -44,7 +49,7 @@ public class ActionableCharacteristicFileTest {
         assertEquals(2, characteristics.size());
 
         ActionableCharacteristic characteristic1 = findBySource(characteristics, Knowledgebase.CKB_EVIDENCE);
-        Treatment treatment1 = DatamodelTestFactory.treatmentBuilder(characteristic1);
+        Treatment treatment1 = DatamodelTestFactory.extractTreatment(characteristic1);
         assertEquals(TumorCharacteristicType.MICROSATELLITE_UNSTABLE, characteristic1.type());
         assertEquals(TumorCharacteristicCutoffType.EQUAL_OR_GREATER, characteristic1.cutoffType());
         assertEquals(4, characteristic1.cutoff(), EPSILON);
@@ -62,7 +67,7 @@ public class ActionableCharacteristicFileTest {
         assertEquals(2, characteristic1.evidenceUrls().size());
 
         ActionableCharacteristic characteristic2 = findBySource(characteristics, Knowledgebase.CKB_TRIAL);
-        ClinicalTrial trial = DatamodelTestFactory.clinicalTrialBuilder(characteristic2);
+        ClinicalTrial trial = DatamodelTestFactory.extractClinicalTrial(characteristic2);
         assertEquals(TumorCharacteristicType.MICROSATELLITE_UNSTABLE, characteristic2.type());
         assertNull(characteristic2.cutoffType());
         assertNull(characteristic2.cutoff());

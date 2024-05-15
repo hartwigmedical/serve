@@ -1,25 +1,26 @@
 package com.hartwig.serve.datamodel;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-import org.apache.logging.log4j.util.Strings;
-import org.jetbrains.annotations.NotNull;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+
+import org.apache.logging.log4j.util.Strings;
+import org.jetbrains.annotations.NotNull;
+import org.junit.Test;
 
 public class ActionableEventComparatorTest {
 
     @Test
     public void canSortActionableEvents() {
-        ActionableEvent event1 = create(Knowledgebase.VICC_CGI,  "CancerA", EvidenceLevel.A, EvidenceDirection.RESISTANT);
-        ActionableEvent event2 = create(Knowledgebase.VICC_CGI,  "CancerA", EvidenceLevel.A, EvidenceDirection.RESPONSIVE);
-        ActionableEvent event3 = create(Knowledgebase.VICC_CGI,  "CancerA", EvidenceLevel.A, EvidenceDirection.RESPONSIVE);
-        ActionableEvent event4 = create(Knowledgebase.VICC_CGI,  "CancerB", EvidenceLevel.A, EvidenceDirection.RESPONSIVE);
-        ActionableEvent event5 = create(Knowledgebase.VICC_CGI,  "CancerA", EvidenceLevel.B, EvidenceDirection.RESISTANT);
-        ActionableEvent event6 = create(Knowledgebase.VICC_CIVIC,  "CancerA", EvidenceLevel.A, EvidenceDirection.RESISTANT);
+        ActionableEvent event1 = create(Knowledgebase.VICC_CGI, "CancerA", EvidenceLevel.A, EvidenceDirection.RESISTANT);
+        ActionableEvent event2 = create(Knowledgebase.VICC_CGI, "CancerA", EvidenceLevel.A, EvidenceDirection.RESPONSIVE);
+        ActionableEvent event3 = create(Knowledgebase.VICC_CGI, "CancerA", EvidenceLevel.A, EvidenceDirection.RESPONSIVE);
+        ActionableEvent event4 = create(Knowledgebase.VICC_CGI, "CancerB", EvidenceLevel.A, EvidenceDirection.RESPONSIVE);
+        ActionableEvent event5 = create(Knowledgebase.VICC_CGI, "CancerA", EvidenceLevel.B, EvidenceDirection.RESISTANT);
+        ActionableEvent event6 = create(Knowledgebase.VICC_CIVIC, "CancerA", EvidenceLevel.A, EvidenceDirection.RESISTANT);
 
         List<ActionableEvent> events = Lists.newArrayList(event3, event5, event1, event6, event4, event2);
         events.sort(new ActionableEventComparator());
@@ -33,8 +34,8 @@ public class ActionableEventComparatorTest {
     }
 
     @NotNull
-    private static ActionableEvent create(@NotNull Knowledgebase source, @NotNull String applicableCancerType,
-                                          @NotNull EvidenceLevel level, @NotNull EvidenceDirection direction) {
+    private static ActionableEvent create(@NotNull Knowledgebase source, @NotNull String applicableCancerType, @NotNull EvidenceLevel level,
+            @NotNull EvidenceDirection direction) {
         return DatamodelTestFactory.createActionableEvent(source,
                 Strings.EMPTY,
                 Sets.newHashSet(),

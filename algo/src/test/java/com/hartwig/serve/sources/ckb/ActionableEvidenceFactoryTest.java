@@ -16,17 +16,18 @@ import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.Treatment;
 import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistEvidenceTest;
 import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistEvidenceType;
+import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistTestFactory;
 import com.hartwig.serve.sources.ckb.blacklist.CkbEvidenceBlacklistModel;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurator;
-import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachFactory;
+import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachTestFactory;
 
 import org.apache.logging.log4j.util.Strings;
 import org.junit.Test;
 
 public class ActionableEvidenceFactoryTest {
 
-    private static final TreatmentApproachCurator TREATMENT_APPROACH_CURATOR = TreatmentApproachFactory.createCurator();
-    private final CkbEvidenceBlacklistModel BLACKLIST_MODEL = CkbBlacklistEvidenceTest.createCkbBlacklistEvidence();
+    private static final TreatmentApproachCurator TREATMENT_APPROACH_CURATOR = TreatmentApproachTestFactory.createCurator();
+    private static final CkbEvidenceBlacklistModel BLACKLIST_MODEL = CkbBlacklistTestFactory.createCkbBlacklistEvidence();
 
     @Test
     public void shouldIgnoreNonActionableKrasDeletion() {
@@ -41,12 +42,13 @@ public class ActionableEvidenceFactoryTest {
     public void shouldCreateActionableMSIEntry() {
         CkbEntry entryCharacteristics =
                 CkbTestFactory.createEntry("-", "MSI neg", "MSI neg", "sensitive", "Actionable", "AB", "AB", "A", "DOID:162");
-        ActionableEvidenceFactory actionableEvidenceFactoryCharacteristic = new ActionableEvidenceFactory(TREATMENT_APPROACH_CURATOR, BLACKLIST_MODEL);
+        ActionableEvidenceFactory actionableEvidenceFactoryCharacteristic =
+                new ActionableEvidenceFactory(TREATMENT_APPROACH_CURATOR, BLACKLIST_MODEL);
         Set<ActionableEntry> entryCharacteristicsSet =
                 actionableEvidenceFactoryCharacteristic.create(entryCharacteristics, Strings.EMPTY, "-");
         assertEquals(1, entryCharacteristicsSet.size());
         ActionableEntry characteristics = entryCharacteristicsSet.iterator().next();
-        Treatment treatment = DatamodelTestFactory.treatmentBuilder(characteristics);
+        Treatment treatment = DatamodelTestFactory.extractTreatment(characteristics);
 
         assertEquals(Strings.EMPTY, characteristics.sourceEvent());
         assertEquals(Knowledgebase.CKB_EVIDENCE, characteristics.source());
@@ -69,14 +71,15 @@ public class ActionableEvidenceFactoryTest {
                 "AB",
                 "A",
                 "DOID:163");
-        ActionableEvidenceFactory actionableEvidenceFactoryAmplification = new ActionableEvidenceFactory(TREATMENT_APPROACH_CURATOR, BLACKLIST_MODEL);
+        ActionableEvidenceFactory actionableEvidenceFactoryAmplification =
+                new ActionableEvidenceFactory(TREATMENT_APPROACH_CURATOR, BLACKLIST_MODEL);
         Set<ActionableEntry> entryAmplificationSet = actionableEvidenceFactoryAmplification.create(entryAmplification, "KRAS", "KRAS");
         assertEquals(1, entryAmplificationSet.size());
         ActionableEntry amplification = entryAmplificationSet.iterator().next();
-        Treatment treatment = DatamodelTestFactory.treatmentBuilder(amplification);
+        Treatment treatment = DatamodelTestFactory.extractTreatment(amplification);
         assertEquals("KRAS", amplification.sourceEvent());
         assertEquals(Knowledgebase.CKB_EVIDENCE, amplification.source());
-        assertEquals("AB",treatment.name());
+        assertEquals("AB", treatment.name());
         assertEquals("AB", amplification.applicableCancerType().name());
         assertEquals("163", amplification.applicableCancerType().doid());
         assertTrue(amplification.blacklistCancerTypes().isEmpty());
@@ -88,11 +91,12 @@ public class ActionableEvidenceFactoryTest {
     public void shouldCreateActionableBrafHotspotEntry() {
         CkbEntry entryHotspot =
                 CkbTestFactory.createEntry("BRAF", "BRAF V600E", "BRAF V600E", "sensitive", "Actionable", "AB", "AB", "A", "DOID:162");
-        ActionableEvidenceFactory actionableEvidenceFactoryHotspot = new ActionableEvidenceFactory(TREATMENT_APPROACH_CURATOR, BLACKLIST_MODEL);
+        ActionableEvidenceFactory actionableEvidenceFactoryHotspot =
+                new ActionableEvidenceFactory(TREATMENT_APPROACH_CURATOR, BLACKLIST_MODEL);
         Set<ActionableEntry> entryHotspotSet = actionableEvidenceFactoryHotspot.create(entryHotspot, "BRAF", "BRAF");
         assertEquals(1, entryHotspotSet.size());
         ActionableEntry hotspot = entryHotspotSet.iterator().next();
-        Treatment treatment = DatamodelTestFactory.treatmentBuilder(hotspot);
+        Treatment treatment = DatamodelTestFactory.extractTreatment(hotspot);
         assertEquals("BRAF", hotspot.sourceEvent());
         assertEquals(Knowledgebase.CKB_EVIDENCE, hotspot.source());
         assertEquals("AB", treatment.name());
@@ -147,8 +151,12 @@ public class ActionableEvidenceFactoryTest {
 
     @Test
     public void canBlacklistEvidenceOnTherapy() {
-       CkbEvidenceBlacklistModel model = CkbBlacklistEvidenceTest.defineEvidenceModel(CkbBlacklistEvidenceType.EVIDENCE_BASED_ON_THERAPY,
-               "Nivolumab", null, null, null, null);
+        CkbEvidenceBlacklistModel model = CkbBlacklistEvidenceTest.defineEvidenceModel(CkbBlacklistEvidenceType.EVIDENCE_BASED_ON_THERAPY,
+                "Nivolumab",
+                null,
+                null,
+                null,
+                null);
         CkbEntry entryBlacklist = CkbTestFactory.createEntry("KRAS",
                 "KRAS amplification",
                 "KRAS amplification",
@@ -166,7 +174,11 @@ public class ActionableEvidenceFactoryTest {
     @Test
     public void canNotBlacklistEvidenceOnTherapy() {
         CkbEvidenceBlacklistModel model = CkbBlacklistEvidenceTest.defineEvidenceModel(CkbBlacklistEvidenceType.EVIDENCE_BASED_ON_THERAPY,
-                "Nivolumab", null, null, null, null);
+                "Nivolumab",
+                null,
+                null,
+                null,
+                null);
         CkbEntry entryBlacklist = CkbTestFactory.createEntry("KRAS",
                 "KRAS amplification",
                 "KRAS amplification",
@@ -184,7 +196,11 @@ public class ActionableEvidenceFactoryTest {
     @Test
     public void canBlacklistEvidenceOnTherapyAndLevel() {
         CkbEvidenceBlacklistModel model = CkbBlacklistEvidenceTest.defineEvidenceModel(CkbBlacklistEvidenceType.EVIDENCE_BASED_ON_THERAPY,
-                "Immuno", null, null, null, EvidenceLevel.A);
+                "Immuno",
+                null,
+                null,
+                null,
+                EvidenceLevel.A);
         CkbEntry entry = CkbTestFactory.createEntry("KRAS",
                 "KRAS amplification",
                 "KRAS amplification",
@@ -202,7 +218,11 @@ public class ActionableEvidenceFactoryTest {
     @Test
     public void canBlacklistAllEvidenceOnGene() {
         CkbEvidenceBlacklistModel model = CkbBlacklistEvidenceTest.defineEvidenceModel(CkbBlacklistEvidenceType.ALL_EVIDENCE_BASED_ON_GENE,
-                null, null, "KRAS", null, null);
+                null,
+                null,
+                "KRAS",
+                null,
+                null);
         CkbEntry entry = CkbTestFactory.createEntry("KRAS",
                 "KRAS amplification",
                 "KRAS amplification",
@@ -220,7 +240,11 @@ public class ActionableEvidenceFactoryTest {
     @Test
     public void canNonBlacklistAllEvidenceOnGene() {
         CkbEvidenceBlacklistModel model = CkbBlacklistEvidenceTest.defineEvidenceModel(CkbBlacklistEvidenceType.ALL_EVIDENCE_BASED_ON_GENE,
-                null, null, "BRAF", null, null);
+                null,
+                null,
+                "BRAF",
+                null,
+                null);
         CkbEntry entry = CkbTestFactory.createEntry("KRAS",
                 "KRAS amplification",
                 "KRAS amplification",

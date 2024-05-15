@@ -3,6 +3,7 @@ package com.hartwig.serve.sources.ckb.blacklist;
 import java.util.List;
 import java.util.Set;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.EvidenceLevel;
 
@@ -15,17 +16,17 @@ public class CkbEvidenceBlacklistModel {
     private static final Logger LOGGER = LogManager.getLogger(CkbEvidenceBlacklistModel.class);
 
     @NotNull
-    private final List<CkbBlacklistEvidenceEntry> blacklistEvidenceEntryList;
+    private final List<CkbBlacklistEvidenceEntry> blacklistEvidenceEntries;
     @NotNull
     private final Set<CkbBlacklistEvidenceEntry> usedBlacklistEvidenceEntries = Sets.newHashSet();
 
-    public CkbEvidenceBlacklistModel(@NotNull final List<CkbBlacklistEvidenceEntry> blacklistEvidenceEntryList) {
-        this.blacklistEvidenceEntryList = blacklistEvidenceEntryList;
+    public CkbEvidenceBlacklistModel(@NotNull final List<CkbBlacklistEvidenceEntry> blacklistEvidenceEntries) {
+        this.blacklistEvidenceEntries = blacklistEvidenceEntries;
     }
 
     public boolean isBlacklistEvidence(@NotNull String therapyName, @NotNull String cancerType, @NotNull EvidenceLevel level,
             @NotNull String sourceGene, @NotNull String event) {
-        for (CkbBlacklistEvidenceEntry blacklistEvidenceEntry : blacklistEvidenceEntryList) {
+        for (CkbBlacklistEvidenceEntry blacklistEvidenceEntry : blacklistEvidenceEntries) {
             boolean match = isMatch(therapyName, cancerType, level, sourceGene, event, blacklistEvidenceEntry);
             if (match) {
                 usedBlacklistEvidenceEntries.add(blacklistEvidenceEntry);
@@ -37,7 +38,7 @@ public class CkbEvidenceBlacklistModel {
 
     public void reportUnusedBlacklistEntries() {
         int unusedBlacklistEntryCount = 0;
-        for (CkbBlacklistEvidenceEntry entry : blacklistEvidenceEntryList) {
+        for (CkbBlacklistEvidenceEntry entry : blacklistEvidenceEntries) {
             if (!usedBlacklistEvidenceEntries.contains(entry)) {
                 unusedBlacklistEntryCount++;
                 LOGGER.warn(" Blacklist evidence entry '{}' hasn't been used for CKB blacklisting", entry);
@@ -47,6 +48,7 @@ public class CkbEvidenceBlacklistModel {
         LOGGER.debug(" Found {} unused blacklist evidence entries during CKB blacklisting", unusedBlacklistEntryCount);
     }
 
+    @VisibleForTesting
     public boolean isMatch(@NotNull String therapyName, @NotNull String cancerType, @NotNull EvidenceLevel level,
             @NotNull String sourceGene, @NotNull String event, @NotNull CkbBlacklistEvidenceEntry blacklistEvidenceEntry) {
         switch (blacklistEvidenceEntry.type()) {

@@ -49,7 +49,7 @@ public class ActionableEvidenceFactoryTest {
         assertEquals(2, evidences.size());
 
         ActionableEvidence eventA = findByCancerType(evidences, cancerTypeA);
-        Treatment treatmentA = DatamodelTestFactory.treatmentBuilder(eventA);
+        Treatment treatmentA = DatamodelTestFactory.extractTreatment(eventA);
         assertEquals("Treatment", treatmentA.name());
         assertEquals(cancerTypeA, eventA.applicableCancerType().name());
         assertEquals("1", eventA.applicableCancerType().doid());
@@ -59,7 +59,7 @@ public class ActionableEvidenceFactoryTest {
         assertEquals(Sets.newHashSet("url"), eventA.evidenceUrls());
 
         ActionableEvidence eventB = findByCancerType(evidences, cancerTypeB);
-        Treatment treatmentB = DatamodelTestFactory.treatmentBuilder(eventB);
+        Treatment treatmentB = DatamodelTestFactory.extractTreatment(eventB);
         assertEquals("Treatment", treatmentB.name());
         assertEquals(cancerTypeB, eventB.applicableCancerType().name());
         assertEquals(CancerTypeConstants.CANCER_DOID, eventB.applicableCancerType().doid());

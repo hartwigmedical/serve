@@ -143,10 +143,13 @@ public interface ServeConfig {
 
     @NotNull
     String ckbBlacklistMolecularProfileTsv();
+
     @NotNull
     String ckbBlacklistTrialTsv();
+
     @NotNull
     String ckbBlacklistEvidenceTsv();
+    
     @NotNull
     String ckbDrugCurationTsv();
 

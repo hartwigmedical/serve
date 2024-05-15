@@ -35,31 +35,7 @@ public class CkbBlacklistStudyTest {
         return new CkbStudyBlacklistModel(blacklistStudiesList);
     }
 
-    @NotNull
-    public static CkbStudyBlacklistModel createCkbBlacklistStudies() {
-        List<CkbBlacklistStudyEntry> blacklistStudiesList = Lists.newArrayList();
-        CkbBlacklistStudyEntry entry1 = ImmutableCkbBlacklistStudyEntry.builder()
-                .type(CkbBlacklistStudyType.STUDY_WHOLE)
-                .nctId("NCT0456")
-                .therapy(null)
-                .cancerType(null)
-                .gene(null)
-                .event(null)
-                .build();
 
-        CkbBlacklistStudyEntry entry2 = ImmutableCkbBlacklistStudyEntry.builder()
-                .type(CkbBlacklistStudyType.ALL_STUDIES_BASED_ON_GENE)
-                .nctId(null)
-                .therapy(null)
-                .cancerType(null)
-                .gene("EGFR")
-                .event(null)
-                .build();
-
-        blacklistStudiesList.add(entry1);
-        blacklistStudiesList.add(entry2);
-        return new CkbStudyBlacklistModel(blacklistStudiesList);
-    }
 
     @NotNull
     public static CkbStudyBlacklistModel createCkbBlacklistStudy(@NotNull CkbBlacklistStudyEntry blacklistStudyEntry) {

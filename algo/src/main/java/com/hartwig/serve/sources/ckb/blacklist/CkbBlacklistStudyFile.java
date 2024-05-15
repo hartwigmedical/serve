@@ -9,7 +9,6 @@ import java.util.Map;
 import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
 import org.apache.commons.compress.utils.Lists;
-import org.apache.commons.compress.utils.Sets;
 import org.jetbrains.annotations.NotNull;
 
 public class CkbBlacklistStudyFile {
@@ -47,17 +46,17 @@ public class CkbBlacklistStudyFile {
         String gene = null;
         String event = null;
 
-        if (BlacklistConditions.studyContainsTherapy.contains(type)) {
+        if (BlacklistConstants.STUDY_BLACKLIST_TYPES_CONTAINING_THERAPY.contains(type)) {
             therapy = values[fields.get("therapyName")];
         }
-        if (BlacklistConditions.studyContainsCancerType.contains(type)) {
+        if (BlacklistConstants.STUDY_BLACKLIST_TYPES_CONTAINING_CANCER_TYPE.contains(type)) {
             cancerType = values[fields.get("cancerType")];
         }
-        if (BlacklistConditions.studyContainsGene.contains(type)) {
+        if (BlacklistConstants.STUDY_BLACKLIST_TYPES_CONTAINING_GENE.contains(type)) {
             gene = values[fields.get("gene")];
         }
 
-        if (BlacklistConditions.studyContainsEvent.contains(type)) {
+        if (BlacklistConstants.STUDY_BLACKLIST_TYPES_CONTAINING_EVENT.contains(type)) {
             event = values[fields.get("event")];
         }
         return ImmutableCkbBlacklistStudyEntry.builder()

@@ -6,7 +6,13 @@ import java.util.Map;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
-import com.hartwig.serve.datamodel.*;
+import com.hartwig.serve.datamodel.ActionableEvent;
+import com.hartwig.serve.datamodel.CancerType;
+import com.hartwig.serve.datamodel.DatamodelTestFactory;
+import com.hartwig.serve.datamodel.EvidenceDirection;
+import com.hartwig.serve.datamodel.EvidenceLevel;
+import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.datamodel.Treatment;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
@@ -29,8 +35,8 @@ public class ActionableFileUtilTest {
         Map<String, Integer> fields = SerializationUtil.createFields(ActionableFileUtil.header(), ActionableFileUtil.FIELD_DELIMITER);
         ActionableEvent coveredEvent = ActionableFileUtil.fromLine(line.split(ActionableFileUtil.FIELD_DELIMITER), fields);
 
-        Treatment treatmentCovered = DatamodelTestFactory.treatmentBuilder(coveredEvent);
-        Treatment treatmentEvent = DatamodelTestFactory.treatmentBuilder(event);
+        Treatment treatmentCovered = DatamodelTestFactory.extractTreatment(coveredEvent);
+        Treatment treatmentEvent = DatamodelTestFactory.extractTreatment(event);
 
         assertEquals(event.source(), coveredEvent.source());
         assertEquals(event.sourceEvent(), coveredEvent.sourceEvent());

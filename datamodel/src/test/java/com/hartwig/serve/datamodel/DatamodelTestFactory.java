@@ -33,7 +33,7 @@ public final class DatamodelTestFactory {
     }
 
     @NotNull
-    public static ImmutableTreatment.Builder treatmentBuilder() {
+    public static ImmutableTreatment.Builder extractTreatment() {
         return ImmutableTreatment.builder().name(Strings.EMPTY);
     }
 
@@ -43,7 +43,7 @@ public final class DatamodelTestFactory {
     }
 
     @NotNull
-    public static Treatment treatmentBuilder(ActionableEvent event) {
+    public static Treatment extractTreatment(@NotNull ActionableEvent event) {
         Treatment treatment = null;
         if (event.intervention() instanceof Treatment) {
             treatment = (Treatment) event.intervention();
@@ -56,7 +56,7 @@ public final class DatamodelTestFactory {
     }
 
     @NotNull
-    public static ClinicalTrial clinicalTrialBuilder(ActionableEvent event) {
+    public static ClinicalTrial extractClinicalTrial(@NotNull ActionableEvent event) {
         ClinicalTrial clinicalTrial = null;
         if (event.intervention() instanceof ClinicalTrial) {
             clinicalTrial = (ClinicalTrial) event.intervention();
@@ -71,7 +71,7 @@ public final class DatamodelTestFactory {
     @NotNull
     public static Intervention interventionBuilder(boolean isTrial, boolean isTreatment) {
         ClinicalTrial clinicalTrial = isTrial ? clinicalTrialBuilderBuilder().build() : null;
-        Treatment treatment = isTreatment ? treatmentBuilder().name("treatmentA").build() : null;
+        Treatment treatment = isTreatment ? extractTreatment().name("treatmentA").build() : null;
 
         if ((clinicalTrial == null && treatment == null) || (clinicalTrial != null && treatment != null)) {
             throw new IllegalStateException("An actionable event has to contain either treatment or clinical trial");
@@ -130,10 +130,9 @@ public final class DatamodelTestFactory {
         @NotNull
         private final Set<String> evidenceUrls;
 
-
         public ActionableEventImpl(@NotNull Knowledgebase source, @NotNull String sourceEvent, @NotNull Set<String> sourceUrls,
-                                   @NotNull Intervention intervention, @NotNull CancerType applicableCancerType, @NotNull Set<CancerType> blacklistCancerTypes,
-                                   @NotNull EvidenceLevel level, @NotNull EvidenceDirection direction, @NotNull Set<String> evidenceUrls) {
+                @NotNull Intervention intervention, @NotNull CancerType applicableCancerType, @NotNull Set<CancerType> blacklistCancerTypes,
+                @NotNull EvidenceLevel level, @NotNull EvidenceDirection direction, @NotNull Set<String> evidenceUrls) {
             this.source = source;
             this.sourceEvent = sourceEvent;
             this.sourceUrls = sourceUrls;
@@ -201,30 +200,37 @@ public final class DatamodelTestFactory {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
             ActionableEventImpl that = (ActionableEventImpl) o;
-            return source == that.source && Objects.equals(sourceEvent, that.sourceEvent) && Objects.equals(sourceUrls, that.sourceUrls) && Objects.equals(intervention, that.intervention) && Objects.equals(applicableCancerType, that.applicableCancerType) && Objects.equals(blacklistCancerTypes, that.blacklistCancerTypes) && level == that.level && direction == that.direction && Objects.equals(evidenceUrls, that.evidenceUrls);
+            return source == that.source && Objects.equals(sourceEvent, that.sourceEvent) && Objects.equals(sourceUrls, that.sourceUrls)
+                    && Objects.equals(intervention, that.intervention) && Objects.equals(applicableCancerType, that.applicableCancerType)
+                    && Objects.equals(blacklistCancerTypes, that.blacklistCancerTypes) && level == that.level && direction == that.direction
+                    && Objects.equals(evidenceUrls, that.evidenceUrls);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(source, sourceEvent, sourceUrls, intervention, applicableCancerType, blacklistCancerTypes, level, direction, evidenceUrls);
+            return Objects.hash(source,
+                    sourceEvent,
+                    sourceUrls,
+                    intervention,
+                    applicableCancerType,
+                    blacklistCancerTypes,
+                    level,
+                    direction,
+                    evidenceUrls);
         }
 
         @Override
         public String toString() {
-            return "ActionableEventImpl{" +
-                    "source=" + source +
-                    ", sourceEvent='" + sourceEvent + '\'' +
-                    ", sourceUrls=" + sourceUrls +
-                    ", intervention=" + intervention +
-                    ", applicableCancerType=" + applicableCancerType +
-                    ", blacklistCancerTypes=" + blacklistCancerTypes +
-                    ", level=" + level +
-                    ", direction=" + direction +
-                    ", evidenceUrls=" + evidenceUrls +
-                    '}';
+            return "ActionableEventImpl{" + "source=" + source + ", sourceEvent='" + sourceEvent + '\'' + ", sourceUrls=" + sourceUrls
+                    + ", intervention=" + intervention + ", applicableCancerType=" + applicableCancerType + ", blacklistCancerTypes="
+                    + blacklistCancerTypes + ", level=" + level + ", direction=" + direction + ", evidenceUrls=" + evidenceUrls + '}';
         }
     }
 }

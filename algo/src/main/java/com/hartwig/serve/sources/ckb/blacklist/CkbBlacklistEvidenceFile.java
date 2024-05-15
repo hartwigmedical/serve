@@ -6,7 +6,6 @@ import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
@@ -31,11 +30,11 @@ public class CkbBlacklistEvidenceFile {
 
     @NotNull
     private static List<CkbBlacklistEvidenceEntry> fromLines(@NotNull List<String> lines, @NotNull Map<String, Integer> fields) {
-        List<CkbBlacklistEvidenceEntry> blacklistedEntries = Lists.newArrayList();
+        List<CkbBlacklistEvidenceEntry> blacklistEntries = Lists.newArrayList();
         for (String line : lines) {
-            blacklistedEntries.add(fromLine(line, fields));
+            blacklistEntries.add(fromLine(line, fields));
         }
-        return blacklistedEntries;
+        return blacklistEntries;
     }
 
     @NotNull
@@ -49,16 +48,16 @@ public class CkbBlacklistEvidenceFile {
         String event = null;
         EvidenceLevel level = null;
 
-        if (BlacklistConditions.evidenceContainsTherapy.contains(type)) {
+        if (BlacklistConstants.EVIDENCE_BLACKLIST_TYPES_CONTAINING_THERAPY.contains(type)) {
             therapy = values[fields.get("therapyName")];
         }
-        if (BlacklistConditions.evidenceContainsCancerType.contains(type)) {
+        if (BlacklistConstants.EVIDENCE_BLACKLIST_TYPES_CONTAINING_CANCER_TYPE.contains(type)) {
             cancerType = values[fields.get("cancerType")];
         }
-        if (BlacklistConditions.evidenceContainsGene.contains(type)) {
+        if (BlacklistConstants.EVIDENCE_BLACKLIST_TYPES_CONTAINING_GENE.contains(type)) {
             gene = values[fields.get("gene")];
         }
-        if (BlacklistConditions.evidenceContainsEvent.contains(type)) {
+        if (BlacklistConstants.EVIDENCE_BLACKLIST_TYPES_CONTAINING_EVENT.contains(type)) {
             event = values[fields.get("event")];
         }
 

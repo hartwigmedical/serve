@@ -37,12 +37,12 @@ public class ActionableHLAFileTest {
 
         ActionableHLA hla1 = findBySource(hlas, Knowledgebase.CKB_EVIDENCE);
         assertEquals("A*02", hla1.hlaAllele());
-        assertEquals("Nivolumab", DatamodelTestFactory.treatmentBuilder(hla1).name());
+        assertEquals("Nivolumab", DatamodelTestFactory.extractTreatment(hla1).name());
         assertEquals("All cancer types", hla1.applicableCancerType().name());
 
         ActionableHLA hla2 = findBySource(hlas, Knowledgebase.CKB_TRIAL);
         assertEquals("A*02", hla2.hlaAllele());
-        assertEquals("Nivolumab", DatamodelTestFactory.setToField(DatamodelTestFactory.clinicalTrialBuilder(hla2).therapyNames()));
+        assertEquals("Nivolumab", DatamodelTestFactory.setToField(DatamodelTestFactory.extractClinicalTrial(hla2).therapyNames()));
         assertEquals("Skin melanoma", hla2.applicableCancerType().name());
     }
 

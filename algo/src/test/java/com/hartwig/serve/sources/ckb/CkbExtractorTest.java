@@ -13,9 +13,9 @@ import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.codon.CodonAnnotation;
 import com.hartwig.serve.extraction.codon.ImmutableCodonAnnotation;
 import com.hartwig.serve.refgenome.RefGenomeResourceTestFactory;
-import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistFactory;
 import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudyTest;
-import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachFactory;
+import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistTestFactory;
+import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachTestFactory;
 
 import org.apache.commons.compress.utils.Lists;
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +27,8 @@ public class CkbExtractorTest {
     public void canExtractEvidenceFromCkbEntries() {
         CkbExtractor evidenceExtractor = CkbExtractorFactory.createEvidenceExtractor(CkbClassificationConfig.build(),
                 RefGenomeResourceTestFactory.buildTestResource37(),
-                TreatmentApproachFactory.createEmptyCurator(), CkbBlacklistFactory.createCkbBlacklistEvidenceEmpty());
+                TreatmentApproachTestFactory.createEmptyCurator(),
+                CkbBlacklistTestFactory.createCkbBlacklistEvidenceEmpty());
 
         ExtractionResult evidenceResult = evidenceExtractor.extract(createCkbEntryTestDatabase());
         assertEquals(1, evidenceResult.knownHotspots().size());
@@ -45,7 +46,8 @@ public class CkbExtractorTest {
     @Test
     public void canExtractTrialsFromCkbEntries() {
         CkbExtractor trialExtractor = CkbExtractorFactory.createTrialExtractor(CkbClassificationConfig.build(),
-                RefGenomeResourceTestFactory.buildTestResource37(), CkbBlacklistStudyTest.createCkbBlacklistStudyEmpty());
+                RefGenomeResourceTestFactory.buildTestResource37(),
+                CkbBlacklistStudyTest.createCkbBlacklistStudyEmpty());
 
         ExtractionResult trialResult = trialExtractor.extract(createCkbEntryTestDatabase());
         assertEquals(0, trialResult.knownHotspots().size());
@@ -149,7 +151,8 @@ public class CkbExtractorTest {
                                 .build()),
                         List.of(CkbTestFactory.createLocation("Netherlands", null)),
                         "nctid",
-                        "title", List.of(CkbTestFactory.createTherapy("Nivolumab")),
+                        "title",
+                        List.of(CkbTestFactory.createTherapy("Nivolumab")),
                         List.of(CkbTestFactory.createIndication("test", "JAX:10000006")))))
                 .build();
     }

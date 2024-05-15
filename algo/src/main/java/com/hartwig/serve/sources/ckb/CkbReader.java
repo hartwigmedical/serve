@@ -30,9 +30,9 @@ public final class CkbReader {
         LOGGER.info("Reading CBK blacklist molecular profile entries from {}", ckbBlacklistMolecularProfileTsv);
         List<CkbBlacklistMolecularProfileEntry> ckbBlacklistMolecularProfileEntries =
                 CkbBlacklistMolecularProfileFile.read(ckbBlacklistMolecularProfileTsv);
-        LOGGER.info(" Read {} blacklist molecular profile entries entries", ckbBlacklistMolecularProfileEntries.size());
+        LOGGER.info(" Read {} blacklist molecular profile entries", ckbBlacklistMolecularProfileEntries.size());
 
-        return whitelist(curate(blacklistEntries), ckbBlacklistMolecularProfileEntries);
+        return removeBlacklistedEntries(curate(blacklistEntries), ckbBlacklistMolecularProfileEntries);
     }
 
     @NotNull
@@ -48,7 +48,7 @@ public final class CkbReader {
     }
 
     @NotNull
-    private static List<CkbEntry> whitelist(@NotNull List<CkbEntry> entries,
+    private static List<CkbEntry> removeBlacklistedEntries(@NotNull List<CkbEntry> entries,
             @NotNull List<CkbBlacklistMolecularProfileEntry> ckbBlacklistEntries) {
         CkbMolecularProfileBlacklistModel blacklist = new CkbMolecularProfileBlacklistModel(ckbBlacklistEntries);
 

@@ -7,9 +7,9 @@ import com.hartwig.serve.datamodel.EvidenceDirection;
 
 import org.jetbrains.annotations.NotNull;
 
-public final class TreatmentApproachFactory {
+public final class TreatmentApproachTestFactory {
 
-    private TreatmentApproachFactory() {
+    private TreatmentApproachTestFactory() {
     }
 
     @NotNull

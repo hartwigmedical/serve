@@ -7,7 +7,12 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.cancertype.CancerTypeConstants;
 import com.hartwig.serve.curation.DoidLookup;
-import com.hartwig.serve.datamodel.*;
+import com.hartwig.serve.datamodel.CancerType;
+import com.hartwig.serve.datamodel.EvidenceDirection;
+import com.hartwig.serve.datamodel.EvidenceLevel;
+import com.hartwig.serve.datamodel.ImmutableCancerType;
+import com.hartwig.serve.datamodel.ImmutableClinicalTrial;
+import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.iclusion.datamodel.IclusionTrial;
 import com.hartwig.serve.iclusion.datamodel.IclusionTumorLocation;
 
@@ -64,7 +69,8 @@ public class ActionableTrialFactory {
                         .studyNctId(trial.nct())
                         .studyTitle(trial.acronym())
                         .countriesOfStudy(Sets.newHashSet("The Netherlands"))
-                        .therapyNames(Sets.newHashSet()).build())
+                        .therapyNames(Sets.newHashSet())
+                        .build())
                 .level(EvidenceLevel.B)
                 .direction(EvidenceDirection.RESPONSIVE)
                 .evidenceUrls(Sets.newHashSet());

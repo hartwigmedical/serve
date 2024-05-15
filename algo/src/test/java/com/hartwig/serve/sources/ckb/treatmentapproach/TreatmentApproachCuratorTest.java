@@ -15,27 +15,27 @@ public class TreatmentApproachCuratorTest {
     @Test
     public void canTestMatchEntries() {
         Map<TreatmentApproachCurationEntryKey, TreatmentApproachCurationEntry> curationEntries = Maps.newHashMap();
-        curationEntries.put(TreatmentApproachFactory.createCurationKey("Olutasidenib",
+        curationEntries.put(TreatmentApproachTestFactory.createCurationKey("Olutasidenib",
                         Strings.EMPTY,
                         "IDH1 GENE_LEVEL",
                         EvidenceDirection.PREDICTED_RESPONSIVE),
-                TreatmentApproachFactory.createCurationEntry(TreatmentApproachCurationType.TREATMENT_APPROACH_CURATION,
+                TreatmentApproachTestFactory.createCurationEntry(TreatmentApproachCurationType.TREATMENT_APPROACH_CURATION,
                         "Olutasidenib",
                         Strings.EMPTY,
                         "IDH1 GENE_LEVEL",
                         EvidenceDirection.PREDICTED_RESPONSIVE,
                         "AA"));
 
-        curationEntries.put(TreatmentApproachFactory.createCurationKey("B", "B", "BRAF amplification", EvidenceDirection.RESPONSIVE),
-                TreatmentApproachFactory.createCurationEntry(TreatmentApproachCurationType.TREATMENT_APPROACH_CURATION,
+        curationEntries.put(TreatmentApproachTestFactory.createCurationKey("B", "B", "BRAF amplification", EvidenceDirection.RESPONSIVE),
+                TreatmentApproachTestFactory.createCurationEntry(TreatmentApproachCurationType.TREATMENT_APPROACH_CURATION,
                         "B",
                         "B",
                         "BRAF amplification",
                         EvidenceDirection.RESPONSIVE,
                         "BB"));
 
-        curationEntries.put(TreatmentApproachFactory.createCurationKey("C", "C", "BRAF amplification", EvidenceDirection.RESPONSIVE),
-                TreatmentApproachFactory.createCurationEntry(TreatmentApproachCurationType.EVENT_TREATMENT_APPROACH_CURATION_IGNORE,
+        curationEntries.put(TreatmentApproachTestFactory.createCurationKey("C", "C", "BRAF amplification", EvidenceDirection.RESPONSIVE),
+                TreatmentApproachTestFactory.createCurationEntry(TreatmentApproachCurationType.EVENT_TREATMENT_APPROACH_CURATION_IGNORE,
                         "C",
                         "C",
                         "BRAF amplification",

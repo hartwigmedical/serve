@@ -23,7 +23,13 @@ import java.util.StringJoiner;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
-import com.hartwig.serve.datamodel.*;
+import com.hartwig.serve.datamodel.ActionableEvent;
+import com.hartwig.serve.datamodel.ActionableEvents;
+import com.hartwig.serve.datamodel.CancerType;
+import com.hartwig.serve.datamodel.ClinicalTrial;
+import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.datamodel.KnownEvents;
+import com.hartwig.serve.datamodel.Treatment;
 import com.hartwig.serve.datamodel.characteristic.ActionableCharacteristic;
 import com.hartwig.serve.datamodel.fusion.ActionableFusion;
 import com.hartwig.serve.datamodel.fusion.KnownFusion;
@@ -40,10 +46,19 @@ import com.hartwig.serve.extraction.events.EventInterpretation;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jooq.*;
+import org.jooq.DSLContext;
+import org.jooq.InsertValuesStep10;
+import org.jooq.InsertValuesStep12;
+import org.jooq.InsertValuesStep17;
+import org.jooq.InsertValuesStep18;
+import org.jooq.InsertValuesStep19;
+import org.jooq.InsertValuesStep21;
+import org.jooq.InsertValuesStep22;
+import org.jooq.InsertValuesStep4;
+import org.jooq.InsertValuesStep6;
+import org.jooq.InsertValuesStep7;
 
 @SuppressWarnings({ "unchecked", "ResultOfMethodCallIgnored" })
 public class ServeDAO {
@@ -134,7 +149,7 @@ public class ServeDAO {
     @Nullable
     private static Treatment extractOptionalTreatment(@NotNull ActionableEvent event) {
         Treatment treatment = null;
-         if (event.intervention() instanceof Treatment) {
+        if (event.intervention() instanceof Treatment) {
             treatment = (Treatment) event.intervention();
         }
         return treatment;
@@ -178,7 +193,6 @@ public class ServeDAO {
 
     private static void writeActionableHotspotBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep21 inserter,
             @NotNull ActionableHotspot actionableHotspot) {
-
         ClinicalTrial clinicalTrial = extractOptionalClinicalTrial(actionableHotspot);
         Treatment treatment = extractOptionalTreatment(actionableHotspot);
 
@@ -192,11 +206,11 @@ public class ServeDAO {
                 actionableHotspot.sourceEvent(),
                 concat(actionableHotspot.sourceUrls()),
                 clinicalTrial != null ? clinicalTrial.studyNctId() : null,
-                clinicalTrial != null ?  clinicalTrial.studyTitle() : null,
-                clinicalTrial != null ?  concat(clinicalTrial.countriesOfStudy()) : null,
+                clinicalTrial != null ? clinicalTrial.studyTitle() : null,
+                clinicalTrial != null ? concat(clinicalTrial.countriesOfStudy()) : null,
                 therapyName(clinicalTrial, treatment),
                 treatment != null ? concat(treatment.sourceRelevantTreatmentApproaches()) : null,
-                treatment != null ?concat(treatment.relevantTreatmentApproaches()) : null,
+                treatment != null ? concat(treatment.relevantTreatmentApproaches()) : null,
                 actionableHotspot.applicableCancerType().name(),
                 actionableHotspot.applicableCancerType().doid(),
                 concat(toStrings(actionableHotspot.blacklistCancerTypes())),
@@ -264,7 +278,7 @@ public class ServeDAO {
     }
 
     private static void writeActionableRangeBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep21 inserter,
-                                                   @NotNull ActionableRange actionableRange) {
+            @NotNull ActionableRange actionableRange) {
 
         ClinicalTrial clinicalTrial = extractOptionalClinicalTrial(actionableRange);
         Treatment treatment = extractOptionalTreatment(actionableRange);
@@ -278,9 +292,9 @@ public class ServeDAO {
                 actionableRange.source(),
                 actionableRange.sourceEvent(),
                 concat(actionableRange.sourceUrls()),
-                clinicalTrial != null ?  clinicalTrial.studyNctId() : null,
-                clinicalTrial != null ?  clinicalTrial.studyTitle() : null,
-                clinicalTrial != null ?  concat(clinicalTrial.countriesOfStudy()) : null,
+                clinicalTrial != null ? clinicalTrial.studyNctId() : null,
+                clinicalTrial != null ? clinicalTrial.studyTitle() : null,
+                clinicalTrial != null ? concat(clinicalTrial.countriesOfStudy()) : null,
                 therapyName(clinicalTrial, treatment),
                 treatment != null ? concat(treatment.sourceRelevantTreatmentApproaches()) : null,
                 treatment != null ? concat(treatment.relevantTreatmentApproaches()) : null,
@@ -617,11 +631,8 @@ public class ServeDAO {
 
     private void writeKnownGenes(@NotNull Timestamp timestamp, @NotNull Set<KnownGene> genes) {
         for (List<KnownGene> batch : Iterables.partition(genes, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
-            InsertValuesStep4 inserter = context.insertInto(KNOWNGENE,
-                    KNOWNGENE.MODIFIED,
-                    KNOWNGENE.GENE,
-                    KNOWNGENE.GENEROLE,
-                    KNOWNGENE.SOURCES);
+            InsertValuesStep4 inserter =
+                    context.insertInto(KNOWNGENE, KNOWNGENE.MODIFIED, KNOWNGENE.GENE, KNOWNGENE.GENEROLE, KNOWNGENE.SOURCES);
             batch.forEach(entry -> writeKnownGeneBatch(timestamp, inserter, entry));
             inserter.execute();
         }

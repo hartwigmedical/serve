@@ -69,9 +69,9 @@ public final class DatamodelTestFactory {
     }
 
     @NotNull
-    public static Intervention interventionBuilder(boolean isTrial, boolean isTreatment) {
-        ClinicalTrial clinicalTrial = isTrial ? clinicalTrialBuilderBuilder().build() : null;
-        Treatment treatment = isTreatment ? extractTreatment().name("treatmentA").build() : null;
+    public static Intervention interventionBuilder(boolean isTrial, boolean isTreatment, @NotNull String treatmentName) {
+        ClinicalTrial clinicalTrial = isTrial ? clinicalTrialBuilderBuilder().therapyNames(Sets.newHashSet(treatmentName)).build() : null;
+        Treatment treatment = isTreatment ? extractTreatment().name(treatmentName).build() : null;
 
         if ((clinicalTrial == null && treatment == null) || (clinicalTrial != null && treatment != null)) {
             throw new IllegalStateException("An actionable event has to contain either treatment or clinical trial");
@@ -85,7 +85,7 @@ public final class DatamodelTestFactory {
         return createActionableEvent(Knowledgebase.UNKNOWN,
                 Strings.EMPTY,
                 Sets.newHashSet(),
-                interventionBuilder(false, true),
+                interventionBuilder(false, true, "treatment1"),
                 DatamodelTestFactory.cancerTypeBuilder().build(),
                 Sets.newHashSet(),
                 EvidenceLevel.A,

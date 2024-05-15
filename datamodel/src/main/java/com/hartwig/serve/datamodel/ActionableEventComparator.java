@@ -8,11 +8,6 @@ public class ActionableEventComparator implements Comparator<ActionableEvent> {
 
     @Override
     public int compare(@NotNull ActionableEvent event1, @NotNull ActionableEvent event2) {
-        int sourceCompare = event1.source().toString().compareTo(event2.source().toString());
-        if (sourceCompare != 0) {
-            return sourceCompare;
-        }
-
         int levelCompare = event1.level().toString().compareTo(event2.level().toString());
         if (levelCompare != 0) {
             return levelCompare;

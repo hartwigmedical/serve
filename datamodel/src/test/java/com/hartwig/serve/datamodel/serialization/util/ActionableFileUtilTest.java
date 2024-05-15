@@ -24,7 +24,7 @@ public class ActionableFileUtilTest {
         ActionableEvent event = DatamodelTestFactory.createActionableEvent(Knowledgebase.VICC_CGI,
                 "source event",
                 Sets.newHashSet(),
-                DatamodelTestFactory.interventionBuilder(false, true),
+                DatamodelTestFactory.interventionBuilder(false, true, "treatment1"),
                 DatamodelTestFactory.cancerTypeBuilder().name("applicable name").doid("applicable doid").build(),
                 Sets.newHashSet(DatamodelTestFactory.cancerTypeBuilder().name("blacklist name").doid("blacklist doid").build()),
                 EvidenceLevel.C,

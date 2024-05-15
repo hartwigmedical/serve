@@ -56,6 +56,20 @@ public class ActionableEventComparator implements Comparator<ActionableEvent> {
             }
         }
 
+        if (clinicalTrialEvent1 != null && clinicalTrialEvent2 == null) {
+            return 1;
+        }
+        if (clinicalTrialEvent1 == null && clinicalTrialEvent2 != null) {
+            return -1;
+        }
+
+        if (treatmentEvent1 != null && treatmentEvent2 == null) {
+            return 1;
+        }
+        if (treatmentEvent1 == null && treatmentEvent2 != null) {
+            return -1;
+        }
+
         return compareCancerTypes(event1.applicableCancerType(), event2.applicableCancerType());
     }
 

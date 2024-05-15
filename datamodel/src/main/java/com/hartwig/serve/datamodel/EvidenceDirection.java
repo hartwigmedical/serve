@@ -1,14 +1,11 @@
 package com.hartwig.serve.datamodel;
 
-import org.jetbrains.annotations.NotNull;
-
 public enum EvidenceDirection {
     RESPONSIVE(true, false, true),
     PREDICTED_RESPONSIVE(true, false, false),
-
+    NO_BENEFIT(false, false, true),
     RESISTANT(false, true, true),
-    PREDICTED_RESISTANT(false, true, false),
-    NO_BENEFIT(false, false, true);
+    PREDICTED_RESISTANT(false, true, false);
 
     private final boolean isResponsive;
     private final boolean isResistant;
@@ -31,9 +28,5 @@ public enum EvidenceDirection {
     @SuppressWarnings("unused")
     public boolean isCertain() {
         return isCertain;
-    }
-
-    public boolean isHigher(@NotNull EvidenceDirection other) {
-        return this.ordinal() < other.ordinal();
     }
 }

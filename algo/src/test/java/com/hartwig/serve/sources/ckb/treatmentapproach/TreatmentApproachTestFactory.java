@@ -18,7 +18,7 @@ public final class TreatmentApproachTestFactory {
     }
 
     @NotNull
-    public static TreatmentApproachCurator createCurator() {
+    public static TreatmentApproachCurator createTestCurator() {
         Map<TreatmentApproachCurationEntryKey, TreatmentApproachCurationEntry> curationEntries = Maps.newHashMap();
 
         curationEntries.put(createCurationKey("A", "A", "BRAF amplification", EvidenceDirection.RESPONSIVE),

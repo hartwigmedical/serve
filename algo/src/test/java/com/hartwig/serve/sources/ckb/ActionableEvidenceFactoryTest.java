@@ -26,7 +26,7 @@ import org.junit.Test;
 
 public class ActionableEvidenceFactoryTest {
 
-    private static final TreatmentApproachCurator TREATMENT_APPROACH_CURATOR = TreatmentApproachTestFactory.createCurator();
+    private static final TreatmentApproachCurator TREATMENT_APPROACH_CURATOR = TreatmentApproachTestFactory.createTestCurator();
     private static final CkbEvidenceBlacklistModel BLACKLIST_MODEL = CkbBlacklistTestFactory.createCkbBlacklistEvidence();
 
     @Test
@@ -172,7 +172,7 @@ public class ActionableEvidenceFactoryTest {
     }
 
     @Test
-    public void canNotBlacklistEvidenceOnTherapy() {
+    public void doesNotBlacklistEvidenceOnOtherTherapy() {
         CkbEvidenceBlacklistModel model = CkbBlacklistEvidenceTest.defineEvidenceModel(CkbBlacklistEvidenceType.EVIDENCE_BASED_ON_THERAPY,
                 "Nivolumab",
                 null,

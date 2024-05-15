@@ -29,7 +29,6 @@ class ActionableTrialFactory implements ActionableEntryFactory {
     private static final Set<String> VARIANT_REQUIREMENT_TYPES_TO_INCLUDE = Sets.newHashSet();
 
     static {
-        //TODO: Determine which types to include
         POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("recruiting");
         POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("not yet recruiting");
         POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("unknown status");

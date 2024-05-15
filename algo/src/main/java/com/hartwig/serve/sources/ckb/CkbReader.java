@@ -24,15 +24,15 @@ public final class CkbReader {
     @NotNull
     public static List<CkbEntry> readAndCurate(@NotNull String ckbDir, @NotNull String ckbBlacklistMolecularProfileTsv) throws IOException {
         LOGGER.info("Reading CKB database from {}", ckbDir);
-        List<CkbEntry> blacklistEntries = CkbEntryReader.read(ckbDir);
-        LOGGER.info(" Read {} entries", blacklistEntries.size());
+        List<CkbEntry> ckbEntries = CkbEntryReader.read(ckbDir);
+        LOGGER.info(" Read {} entries", ckbEntries.size());
 
         LOGGER.info("Reading CBK blacklist molecular profile entries from {}", ckbBlacklistMolecularProfileTsv);
         List<CkbBlacklistMolecularProfileEntry> ckbBlacklistMolecularProfileEntries =
                 CkbBlacklistMolecularProfileFile.read(ckbBlacklistMolecularProfileTsv);
         LOGGER.info(" Read {} blacklist molecular profile entries", ckbBlacklistMolecularProfileEntries.size());
 
-        return removeBlacklistedEntries(curate(blacklistEntries), ckbBlacklistMolecularProfileEntries);
+        return removeBlacklistedEntries(curate(ckbEntries), ckbBlacklistMolecularProfileEntries);
     }
 
     @NotNull

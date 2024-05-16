@@ -26,7 +26,6 @@ public class ActionableEventComparator implements Comparator<ActionableEvent> {
         if (event1.intervention() instanceof ClinicalTrial) {
             clinicalTrialEvent1 = (ClinicalTrial) event1.intervention();
         }
-
         if (event2.intervention() instanceof ClinicalTrial) {
             clinicalTrialEvent2 = (ClinicalTrial) event2.intervention();
         }
@@ -35,6 +34,14 @@ public class ActionableEventComparator implements Comparator<ActionableEvent> {
         }
         if (event2.intervention() instanceof Treatment) {
             treatmentEvent2 = (Treatment) event2.intervention();
+        }
+
+        if (clinicalTrialEvent1 != null && clinicalTrialEvent2 == null) {
+            return -1;
+        }
+
+        if (clinicalTrialEvent1 == null && clinicalTrialEvent2 != null) {
+            return 1;
         }
 
         if (clinicalTrialEvent1 != null && clinicalTrialEvent2 != null) {
@@ -49,20 +56,6 @@ public class ActionableEventComparator implements Comparator<ActionableEvent> {
             if (treatmentCompare != 0) {
                 return treatmentCompare;
             }
-        }
-
-        if (clinicalTrialEvent1 != null && clinicalTrialEvent2 == null) {
-            return 1;
-        }
-        if (clinicalTrialEvent1 == null && clinicalTrialEvent2 != null) {
-            return -1;
-        }
-
-        if (treatmentEvent1 != null && treatmentEvent2 == null) {
-            return 1;
-        }
-        if (treatmentEvent1 == null && treatmentEvent2 != null) {
-            return -1;
         }
 
         return compareCancerTypes(event1.applicableCancerType(), event2.applicableCancerType());

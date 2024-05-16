@@ -110,19 +110,21 @@ public final class CkbTestFactory {
                         "NCT0102",
                         "Phase I trial",
                         List.of(CkbTestFactory.createTherapy("Nivolumab")),
-                        List.of(CkbTestFactory.createIndication("test", "JAX:10000006"))))
+                        List.of(CkbTestFactory.createIndication("test", "JAX:10000006")),
+                        List.of("senior", "child", "adult")))
                 .build();
     }
 
     @NotNull
     public static ClinicalTrial createTrial(@NotNull String recruitment, @NotNull List<VariantRequirementDetail> variantRequirementDetails,
-            @NotNull List<Location> locations, @NotNull String nctId, @NotNull String title) {
+            @NotNull List<Location> locations, @NotNull String nctId, @NotNull String title, @NotNull List<String> ageGroups) {
         return ImmutableClinicalTrial.builder()
                 .updateDate(TEST_DATE)
                 .nctId(nctId)
                 .title(title)
                 .indications(List.of(createIndication("AB", "DOID:162")))
                 .recruitment(recruitment)
+                .ageGroups(ageGroups)
                 .variantRequirement(Strings.EMPTY)
                 .variantRequirementDetails(variantRequirementDetails)
                 .locations(locations)
@@ -132,7 +134,7 @@ public final class CkbTestFactory {
     @NotNull
     public static ClinicalTrial createTrialWithTerapy(@NotNull String recruitment,
             @NotNull List<VariantRequirementDetail> variantRequirementDetails, @NotNull List<Location> locations, @NotNull String nctId,
-            @NotNull String title, @NotNull List<Therapy> therapies, @NotNull List<Indication> indication) {
+            @NotNull String title, @NotNull List<Therapy> therapies, @NotNull List<Indication> indication, @NotNull List<String> ageGroups) {
         return ImmutableClinicalTrial.builder()
                 .updateDate(TEST_DATE)
                 .nctId(nctId)
@@ -140,6 +142,7 @@ public final class CkbTestFactory {
                 .therapies(therapies)
                 .indications(indication)
                 .recruitment(recruitment)
+                .ageGroups(ageGroups)
                 .variantRequirement(Strings.EMPTY)
                 .variantRequirementDetails(variantRequirementDetails)
                 .locations(locations)

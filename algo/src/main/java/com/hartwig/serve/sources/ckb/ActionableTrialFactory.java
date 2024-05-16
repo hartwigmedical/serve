@@ -28,6 +28,9 @@ class ActionableTrialFactory implements ActionableEntryFactory {
     private static final Set<String> COUNTRIES_TO_INCLUDE = Sets.newHashSet();
     private static final Set<String> VARIANT_REQUIREMENT_TYPES_TO_INCLUDE = Sets.newHashSet();
 
+    private static final Set<String> AGE_GROUPS_TO_INCLUDE = Sets.newHashSet();
+
+
     static {
         POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("recruiting");
         POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("not yet recruiting");
@@ -42,6 +45,9 @@ class ActionableTrialFactory implements ActionableEntryFactory {
 
         VARIANT_REQUIREMENT_TYPES_TO_INCLUDE.add("partial - required");
         VARIANT_REQUIREMENT_TYPES_TO_INCLUDE.add("required");
+
+        AGE_GROUPS_TO_INCLUDE.add("adult");
+        AGE_GROUPS_TO_INCLUDE.add("senior");
     }
 
     @NotNull
@@ -114,7 +120,7 @@ class ActionableTrialFactory implements ActionableEntryFactory {
         List<ClinicalTrial> filtered = Lists.newArrayList();
         for (ClinicalTrial trial : entry.clinicalTrials()) {
             if (hasVariantRequirementTypeToInclude(trial.variantRequirementDetails(), entry) && POTENTIALLY_OPEN_RECRUITMENT_TYPES.contains(
-                    trial.recruitment().toLowerCase())) {
+                    trial.recruitment().toLowerCase()) && hasAgeGroupToInclude(trial.ageGroups())) {
                 filtered.add(trial);
             }
         }
@@ -142,6 +148,16 @@ class ActionableTrialFactory implements ActionableEntryFactory {
             // Check if trial should be included based on the molecular profile of the current entry (trial can be linked to multiple molecular profiles)
             if (entry.profileId() == variantRequirementDetail.profileId() && VARIANT_REQUIREMENT_TYPES_TO_INCLUDE.contains(
                     variantRequirementDetail.requirementType().toLowerCase())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @VisibleForTesting
+    static boolean hasAgeGroupToInclude(@NotNull List<String> ageGroups) {
+        for (String age : ageGroups) {
+            if (AGE_GROUPS_TO_INCLUDE.contains(age.toLowerCase())) {
                 return true;
             }
         }

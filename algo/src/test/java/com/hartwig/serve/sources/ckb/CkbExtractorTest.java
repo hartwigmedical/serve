@@ -153,7 +153,8 @@ public class CkbExtractorTest {
                         "nctid",
                         "title",
                         List.of(CkbTestFactory.createTherapy("Nivolumab")),
-                        List.of(CkbTestFactory.createIndication("test", "JAX:10000006")))))
+                        List.of(CkbTestFactory.createIndication("test", "JAX:10000006")),
+                        List.of("senior", "child", "adult"))))
                 .build();
     }
 }

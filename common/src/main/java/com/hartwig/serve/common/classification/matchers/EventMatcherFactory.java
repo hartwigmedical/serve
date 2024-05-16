@@ -35,8 +35,8 @@ public final class EventMatcherFactory {
                 config.genericGeneLevelKeyPhrases(),
                 config.activatingGeneLevelKeyPhrases(),
                 config.inactivatingGeneLevelKeyPhrases());
-        NegativeMatcher negativeMatcher = new NegativeMatcher(config.negativeEvents(), config.negativeBlacklistEvents());
-        PositiveMatcher positiveMatcher = new PositiveMatcher(config.positiveEvents(), config.positiveBlacklistEvents());
+        PositiveNegativeMatcher negativeMatcher = new PositiveNegativeMatcher(config.negativeEvents(), config.negativeBlacklistEvents());
+        PositiveNegativeMatcher positiveMatcher = new PositiveNegativeMatcher(config.positiveEvents(), config.positiveBlacklistEvents());
 
         WildTypeMatcher wildTypeMatcher = new WildTypeMatcher(config.wildTypeKeyPhrases());
 

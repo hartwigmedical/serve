@@ -61,6 +61,7 @@ public abstract class EventClassifierConfig {
 
     @NotNull
     public abstract Set<String> deletionKeywords();
+
     @NotNull
     public abstract Set<String> underexpressionKeywords();
 
@@ -113,16 +114,16 @@ public abstract class EventClassifierConfig {
     public abstract Set<String> ebvPositiveEvents();
 
     @NotNull
-    public abstract Set<String> positiveEvents();
+    public abstract Set<String> presenceOfProteinEvents();
 
     @NotNull
-    public abstract Set<String> positiveBlacklistEvents();
+    public abstract Set<String> presenceOfProteinBlacklistEvents();
 
     @NotNull
-    public abstract Set<String> negativeEvents();
+    public abstract Set<String> absenceOfProteinEvents();
 
     @NotNull
-    public abstract Set<String> negativeBlacklistEvents();
+    public abstract Set<String> absenceOfProteinBlacklistEvents();
 
     @NotNull
     public abstract Map<String, Set<String>> combinedEventsPerGene();

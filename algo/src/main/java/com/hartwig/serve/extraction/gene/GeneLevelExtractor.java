@@ -60,10 +60,10 @@ public class GeneLevelExtractor {
             return extractGeneLevelEvent(gene, event);
         } else if (type == EventType.PROMISCUOUS_FUSION && fusionGeneChecker.isValidGene(gene)) {
             return extractPromiscuousFusion(gene);
-        } else if (type == EventType.NEGATIVE && exomeGeneChecker.isValidGene(gene)) {
-            return extractNegativePositiveEvent(gene, GeneEvent.NEGATIVE, type);
-        } else if (type == EventType.POSITIVE && exomeGeneChecker.isValidGene(gene)) {
-            return extractNegativePositiveEvent(gene, GeneEvent.POSITIVE, type);
+        } else if (type == EventType.ABSENCE_OF_PROTEIN && exomeGeneChecker.isValidGene(gene)) {
+            return extractNegativePositiveEvent(gene, GeneEvent.ABSENCE_OF_PROTEIN, type);
+        } else if (type == EventType.PRESENCE_OF_PROTEIN && exomeGeneChecker.isValidGene(gene)) {
+            return extractNegativePositiveEvent(gene, GeneEvent.PRESENCE_OF_PROTEIN, type);
         }
 
         return null;

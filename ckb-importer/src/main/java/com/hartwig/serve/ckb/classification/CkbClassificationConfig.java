@@ -49,10 +49,10 @@ public class CkbClassificationConfig {
     private static final Set<String> HLA_KEY_PHRASES = hlaKeyPhrases();
     private static final Set<String> HPV_POSITIVE_EVENTS = hpvPositiveEvents();
     private static final Set<String> EBV_POSITIVE_EVENTS = ebvPositiveEvents();
-    private static final Set<String> NEGATIVE_KEYWORDS = negativeEvents();
-    private static final Set<String> NEGATIVE_BLACKLIST_KEYWORDS = negativeBlacklistEvents();
-    private static final Set<String> POSITIVE_KEYWORDS = positiveEvents();
-    private static final Set<String> POSITIVE_BLACKLIST_KEYWORDS = positiveBlacklistEvents();
+    private static final Set<String> ABSENCE_OF_PROTEIN_KEYWORDS = absenceOfProteinEvents();
+    private static final Set<String> ABSENCE_OF_PROTEIN_BLACKLIST_KEYWORDS = absenceOfProteinBlacklistEvents();
+    private static final Set<String> PRESENCE_OF_PROTEIN_KEYWORDS = presenceOfProteinEvents();
+    private static final Set<String> PRESENCE_OF_PROTEIN_BLACKLIST_KEYWORDS = presenceOfProteinBlacklistEvents();
     private static final Map<String, Set<String>> COMBINED_EVENTS_PER_GENE = combinedEventsPerGene();
     private static final Map<String, Set<String>> COMPLEX_EVENTS_PER_GENE = complexEventsPerGene();
 
@@ -96,10 +96,10 @@ public class CkbClassificationConfig {
                 .hlaKeyPhrases(HLA_KEY_PHRASES)
                 .hpvPositiveEvents(HPV_POSITIVE_EVENTS)
                 .ebvPositiveEvents(EBV_POSITIVE_EVENTS)
-                .positiveEvents(POSITIVE_KEYWORDS)
-                .positiveBlacklistEvents(POSITIVE_BLACKLIST_KEYWORDS)
-                .negativeEvents(NEGATIVE_KEYWORDS)
-                .negativeBlacklistEvents(NEGATIVE_BLACKLIST_KEYWORDS)
+                .presenceOfProteinEvents(PRESENCE_OF_PROTEIN_KEYWORDS)
+                .presenceOfProteinBlacklistEvents(PRESENCE_OF_PROTEIN_BLACKLIST_KEYWORDS)
+                .absenceOfProteinEvents(ABSENCE_OF_PROTEIN_KEYWORDS)
+                .absenceOfProteinBlacklistEvents(ABSENCE_OF_PROTEIN_BLACKLIST_KEYWORDS)
                 .combinedEventsPerGene(COMBINED_EVENTS_PER_GENE)
                 .complexEventsPerGene(COMPLEX_EVENTS_PER_GENE)
                 .build();
@@ -309,12 +309,12 @@ public class CkbClassificationConfig {
     }
 
     @NotNull
-    private static Set<String> negativeEvents() {
+    private static Set<String> absenceOfProteinEvents() {
         return Sets.newHashSet("negative");
     }
 
     @NotNull
-    private static Set<String> negativeBlacklistEvents() {
+    private static Set<String> absenceOfProteinBlacklistEvents() {
         Set<String> set = Sets.newHashSet();
         set.add("HRD");
         set.add("MSI");
@@ -322,12 +322,12 @@ public class CkbClassificationConfig {
     }
 
     @NotNull
-    private static Set<String> positiveEvents() {
+    private static Set<String> presenceOfProteinEvents() {
         return Sets.newHashSet("positive");
     }
 
     @NotNull
-    private static Set<String> positiveBlacklistEvents() {
+    private static Set<String> presenceOfProteinBlacklistEvents() {
         Set<String> set = Sets.newHashSet();
         set.add("HRD");
         set.add("MSI");

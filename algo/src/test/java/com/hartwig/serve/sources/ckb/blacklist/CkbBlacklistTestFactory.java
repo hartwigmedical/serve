@@ -9,6 +9,9 @@ import org.jetbrains.annotations.NotNull;
 
 public final class CkbBlacklistTestFactory {
 
+    private CkbBlacklistTestFactory() {
+    }
+
     @NotNull
     public static CkbEvidenceBlacklistModel createEmptyEvidenceBlacklist() {
         return new CkbEvidenceBlacklistModel(Lists.newArrayList());

@@ -86,8 +86,10 @@ public class CkbExtractor {
 
         ProgressTracker tracker = new ProgressTracker("CKB", entries.size());
         // Assume entries without variants are filtered out prior to extraction
-        List<ExtractionResult> extractions =
-                entries.parallelStream().map(this::getExtractionResult).peek(e -> tracker.update()).filter(Objects::nonNull)
+        List<ExtractionResult> extractions = entries.parallelStream()
+                .map(this::getExtractionResult)
+                .peek(e -> tracker.update())
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
         return ExtractionFunctions.merge(extractions);
@@ -120,7 +122,6 @@ public class CkbExtractor {
                     .interpretedEventType(entry.type())
                     .build();
 
-
             ImmutableExtractionResult.Builder extractionResultBuilder = actionableEntries.stream()
                     .map(actionableEntry -> actionableEntryToResultBuilder(extractionOutput, actionableEntry))
                     .reduce(ImmutableExtractionResult.builder(), CkbExtractor::mergeResultBuilders);
@@ -142,7 +143,7 @@ public class CkbExtractor {
     private static String concat(@NotNull List<Variant> variants) {
         return variants.stream().map(Variant::variant).collect(Collectors.joining(VARIANT_DELIMITER));
     }
-    
+
     @NotNull
     private static <T, U> Set<U> extractNonNullToSet(@Nullable T raw, @NotNull ActionableEntry event,
             @NotNull BiFunction<ActionableEntry, T, U> extract) {
@@ -201,7 +202,7 @@ public class CkbExtractor {
 
         return ImmutableEventExtractorOutput.copyOf(extractorOutput).withCodons(codons);
     }
-    
+
     @NotNull
     private <T, U> Set<U> convertToKnownSet(@Nullable List<T> rawList, @NotNull Function<T, U> convert,
             @NotNull Function<Set<U>, Set<U>> consolidate, @NotNull BiFunction<U, Variant, U> annotate, @NotNull Variant variant) {
@@ -219,7 +220,9 @@ public class CkbExtractor {
         Function<VariantHotspot, KnownHotspot> convert = hotspot -> ImmutableKnownHotspot.builder()
                 .from(hotspot)
                 .geneRole(GeneRole.UNKNOWN)
-                .proteinEffect(ProteinEffect.UNKNOWN).addSources(source).inputProteinAnnotation(proteinExtractor.apply(event))
+                .proteinEffect(ProteinEffect.UNKNOWN)
+                .addSources(source)
+                .inputProteinAnnotation(proteinExtractor.apply(event))
                 .build();
 
         return convertToKnownSet(hotspots, convert, HotspotConsolidation::consolidate, CkbVariantAnnotator::annotateHotspot, variant);

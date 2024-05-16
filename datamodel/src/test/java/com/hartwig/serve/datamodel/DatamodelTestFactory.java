@@ -50,8 +50,9 @@ public final class DatamodelTestFactory {
         }
 
         if (treatment == null) {
-            throw new IllegalStateException("An actionable event has to contain treatment");
+            throw new IllegalStateException("This actionable event has to contain treatment: " + event);
         }
+
         return treatment;
     }
 
@@ -63,8 +64,9 @@ public final class DatamodelTestFactory {
         }
 
         if (clinicalTrial == null) {
-            throw new IllegalStateException("An actionable event has to contain clinical trial");
+            throw new IllegalStateException("This actionable event has to contain clinical trial: " + event);
         }
+
         return clinicalTrial;
     }
 

@@ -4,13 +4,13 @@ import java.util.Set;
 
 import org.jetbrains.annotations.NotNull;
 
-public class PositiveNegativeMatcher implements EventMatcher {
+public class PresenceAbsenceOfProteinMatcher implements EventMatcher {
     @NotNull
     private final Set<String> events;
     @NotNull
     private final Set<String> blacklistEvents;
 
-    public PositiveNegativeMatcher(@NotNull final Set<String> events, @NotNull final Set<String> blacklistEvents) {
+    public PresenceAbsenceOfProteinMatcher(@NotNull final Set<String> events, @NotNull final Set<String> blacklistEvents) {
         this.events = events;
         this.blacklistEvents = blacklistEvents;
     }

@@ -9,17 +9,17 @@ import com.google.common.collect.Sets;
 
 import org.junit.Test;
 
-public class PositiveNegativeMatcherTest {
+public class PresenceAbsenceOfProteinMatcherTest {
 
-    private static final Set<String> POSITIVE_EVENTS = Sets.newHashSet("positive");
-    private static final Set<String> POSITIVE_BLACKLIST_EVENTS = Sets.newHashSet("HRD", "MSI");
-    private static final Set<String> NEGATIVE_EVENTS = Sets.newHashSet("negative");
-    private static final Set<String> NEGATIVE_BLACKLIST_EVENTS = Sets.newHashSet("HRD", "MSI");
+    private static final Set<String> PRESENCE_OF_PROTEIN_EVENTS = Sets.newHashSet("positive");
+    private static final Set<String> PRESENCE_OF_PROTEIN_BLACKLIST_EVENTS = Sets.newHashSet("HRD", "MSI");
+    private static final Set<String> ABSENCE_OF_PROTEIN_EVENTS = Sets.newHashSet("negative");
+    private static final Set<String> ABSENCE_OF_PROTEIN_BLACKLIST_EVENTS = Sets.newHashSet("HRD", "MSI");
 
     @Test
     public void canAssessWhetherEventIsPositiveEvent() {
-        PositiveNegativeMatcher matcher = new PositiveNegativeMatcher(POSITIVE_EVENTS,
-                POSITIVE_BLACKLIST_EVENTS);
+        PresenceAbsenceOfProteinMatcher matcher = new PresenceAbsenceOfProteinMatcher(PRESENCE_OF_PROTEIN_EVENTS,
+                PRESENCE_OF_PROTEIN_BLACKLIST_EVENTS);
 
         assertTrue(matcher.matches("AKT1", "AKT1 positive"));
         assertTrue(matcher.matches("TP53", "TP53 positive"));
@@ -30,8 +30,8 @@ public class PositiveNegativeMatcherTest {
 
     @Test
     public void canAssessWhetherEventIsNegativeEvent() {
-        PositiveNegativeMatcher matcher = new PositiveNegativeMatcher(NEGATIVE_EVENTS,
-                NEGATIVE_BLACKLIST_EVENTS);
+        PresenceAbsenceOfProteinMatcher matcher = new PresenceAbsenceOfProteinMatcher(ABSENCE_OF_PROTEIN_EVENTS,
+                ABSENCE_OF_PROTEIN_BLACKLIST_EVENTS);
 
         assertTrue(matcher.matches("AKT1", "AKT1 negative"));
         assertTrue(matcher.matches("TP53", "TP53 negative"));

@@ -13,7 +13,7 @@ import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 import org.apache.commons.compress.utils.Lists;
 import org.jetbrains.annotations.NotNull;
 
-public class CkbBlacklistStudyFile {
+public final class CkbBlacklistStudyFile {
 
     private static final String FIELD_DELIMITER = "\t";
 

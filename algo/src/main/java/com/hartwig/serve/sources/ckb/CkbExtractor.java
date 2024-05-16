@@ -41,6 +41,7 @@ import com.hartwig.serve.extraction.EventExtractor;
 import com.hartwig.serve.extraction.EventExtractorOutput;
 import com.hartwig.serve.extraction.ExtractionFunctions;
 import com.hartwig.serve.extraction.ExtractionResult;
+import com.hartwig.serve.extraction.ImmutableEventExtractorOutput;
 import com.hartwig.serve.extraction.ImmutableExtractionResult;
 import com.hartwig.serve.extraction.codon.CodonAnnotation;
 import com.hartwig.serve.extraction.codon.CodonConsolidation;
@@ -106,7 +107,7 @@ public class CkbExtractor {
             LOGGER.warn("No event type known for '{}' on '{}'", event, gene);
             return null;
         } else {
-            EventExtractorOutput extractionOutput = eventExtractor.extract(gene, null, entry.type(), event);
+            EventExtractorOutput extractionOutput = curateCodons(eventExtractor.extract(gene, null, entry.type(), event));
             String sourceEvent = gene.equals(CkbConstants.NO_GENE) ? event : gene + " " + event;
 
             Set<ActionableEntry> actionableEntries = actionableEntryFactory.create(entry, sourceEvent, gene);
@@ -119,15 +120,14 @@ public class CkbExtractor {
                     .interpretedEventType(entry.type())
                     .build();
 
-            List<CodonAnnotation> codons = curateCodons(extractionOutput.codons());
 
             ImmutableExtractionResult.Builder extractionResultBuilder = actionableEntries.stream()
-                    .map(actionableEntry -> actionableEntryToResultBuilder(extractionOutput, actionableEntry, codons))
+                    .map(actionableEntry -> actionableEntryToResultBuilder(extractionOutput, actionableEntry))
                     .reduce(ImmutableExtractionResult.builder(), CkbExtractor::mergeResultBuilders);
 
             if (generateKnownEvents) {
                 extractionResultBuilder.knownHotspots(convertToKnownHotspots(extractionOutput.hotspots(), event, variant))
-                        .knownCodons(convertToKnownCodons(codons, variant))
+                        .knownCodons(convertToKnownCodons(extractionOutput.codons(), variant))
                         .knownExons(convertToKnownExons(extractionOutput.exons(), variant))
                         .knownGenes(extractionOutput.fusionPair() == null ? convertToKnownGenes(gene, variant) : Collections.emptySet())
                         .knownCopyNumbers(convertToKnownCopyNumbers(extractionOutput.copyNumber(), variant))
@@ -150,8 +150,8 @@ public class CkbExtractor {
     }
 
     @NotNull
-    private static ImmutableExtractionResult.Builder mergeResultBuilders(ImmutableExtractionResult.Builder a,
-            ImmutableExtractionResult.Builder b) {
+    private static ImmutableExtractionResult.Builder mergeResultBuilders(@NotNull ImmutableExtractionResult.Builder a,
+            @NotNull ImmutableExtractionResult.Builder b) {
         ExtractionResult built = b.build();
         a.addAllActionableHotspots(built.actionableHotspots());
         a.addAllActionableCodons(built.actionableCodons());
@@ -163,12 +163,13 @@ public class CkbExtractor {
         return a;
     }
 
-    private ImmutableExtractionResult.Builder actionableEntryToResultBuilder(@NotNull EventExtractorOutput output, ActionableEntry entry,
-            List<CodonAnnotation> codons) {
+    @NotNull
+    private ImmutableExtractionResult.Builder actionableEntryToResultBuilder(@NotNull EventExtractorOutput output,
+            @NotNull ActionableEntry entry) {
         return ImmutableExtractionResult.builder()
                 .refGenomeVersion(source.refGenomeVersion())
                 .actionableHotspots(ActionableEventFactory.toActionableHotspots(entry, output.hotspots()))
-                .actionableCodons(ActionableEventFactory.toActionableRanges(entry, codons))
+                .actionableCodons(ActionableEventFactory.toActionableRanges(entry, output.codons()))
                 .actionableExons(ActionableEventFactory.toActionableRanges(entry, output.exons()))
                 .actionableGenes(Stream.of(output.geneLevel(), output.copyNumber())
                         .filter(Objects::nonNull)
@@ -182,21 +183,23 @@ public class CkbExtractor {
     }
 
     @VisibleForTesting
-    @Nullable
-    static List<CodonAnnotation> curateCodons(@Nullable List<CodonAnnotation> codonAnnotations) {
-        return codonAnnotations == null ? null : codonAnnotations.stream().map(codon -> {
+    @NotNull
+    static EventExtractorOutput curateCodons(@NotNull EventExtractorOutput extractorOutput) {
+        List<CodonAnnotation> codonAnnotations = extractorOutput.codons();
+        if (codonAnnotations == null) {
+            return extractorOutput;
+        }
+        List<CodonAnnotation> codons = codonAnnotations.stream().map(codon -> {
             if (codon.gene().equals("BRAF") && codon.inputCodonRank() == 600) {
-                return ImmutableCodonAnnotation.builder()
-                        .from(codon)
-                            .inputTranscript("ENST00000646891")
-                            .start(140753335)
-                            .end(140753337)
-                            .build();
+                return ImmutableCodonAnnotation.copyOf(codon)
+                        .withInputTranscript("ENST00000646891")
+                        .withStart(140753335)
+                        .withEnd(140753337);
             }
             return codon;
-        })
-                .collect(Collectors.toList());
+        }).collect(Collectors.toList());
 
+        return ImmutableEventExtractorOutput.copyOf(extractorOutput).withCodons(codons);
     }
     
     @NotNull

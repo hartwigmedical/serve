@@ -15,19 +15,21 @@ import com.hartwig.serve.datamodel.DatamodelTestFactory;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudyTest;
+import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudyEntry;
 import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudyType;
 import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistTestFactory;
 import com.hartwig.serve.sources.ckb.blacklist.CkbStudyBlacklistModel;
+import com.hartwig.serve.sources.ckb.blacklist.ImmutableCkbBlacklistStudyEntry;
 
 import org.apache.commons.compress.utils.Sets;
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.Test;
 
 public class ActionableTrialFactoryTest {
 
-    private static final CkbStudyBlacklistModel BLACKLIST_MODEL = CkbBlacklistTestFactory.createCkbBlacklistStudies();
+    private static final CkbStudyBlacklistModel BLACKLIST_MODEL = CkbBlacklistTestFactory.createProperStudyBlacklist();
 
     @Test
     public void canCreateActionableEntryForOpenTrialInAllowedCountryWithRequiredMolecularProfileAndValidAgeGroup() {
@@ -78,8 +80,7 @@ public class ActionableTrialFactoryTest {
                 List.of("senior", "child", "adult"));
         CkbEntry entry = CkbTestFactory.createEntryWithClinicalTrial(profileId, profileName, clinicalTrial);
 
-        CkbStudyBlacklistModel model =
-                CkbBlacklistStudyTest.defineBlacklistStudies(CkbBlacklistStudyType.STUDY_WHOLE, "NCT0456", null, null, null, null);
+        CkbStudyBlacklistModel model = createBlacklistModel(CkbBlacklistStudyType.STUDY_WHOLE, "NCT0456", null, null, null, null);
         ActionableTrialFactory actionableTrialFactory = new ActionableTrialFactory(model);
         Set<ActionableEntry> trials = actionableTrialFactory.create(entry, "KRAS", "gene");
         assertEquals(0, trials.size());
@@ -101,8 +102,7 @@ public class ActionableTrialFactoryTest {
                 List.of("senior", "child", "adult"));
         CkbEntry entry = CkbTestFactory.createEntryWithClinicalTrial(profileId, profileName, clinicalTrial);
 
-        CkbStudyBlacklistModel model =
-                CkbBlacklistStudyTest.defineBlacklistStudies(CkbBlacklistStudyType.STUDY_WHOLE, "NCT123", null, null, null, null);
+        CkbStudyBlacklistModel model = createBlacklistModel(CkbBlacklistStudyType.STUDY_WHOLE, "NCT123", null, null, null, null);
         ActionableTrialFactory actionableTrialFactory = new ActionableTrialFactory(model);
         Set<ActionableEntry> trials = actionableTrialFactory.create(entry, "KRAS", "gene");
         assertEquals(1, trials.size());
@@ -124,12 +124,8 @@ public class ActionableTrialFactoryTest {
                 List.of("senior", "child", "adult"));
         CkbEntry entry = CkbTestFactory.createEntryWithClinicalTrial(profileId, profileName, clinicalTrial);
 
-        CkbStudyBlacklistModel model = CkbBlacklistStudyTest.defineBlacklistStudies(CkbBlacklistStudyType.ALL_STUDIES_BASED_ON_GENE,
-                null,
-                null,
-                null,
-                "EGFR",
-                null);
+        CkbStudyBlacklistModel model =
+                createBlacklistModel(CkbBlacklistStudyType.ALL_STUDIES_BASED_ON_GENE, null, null, null, "EGFR", null);
         ActionableTrialFactory actionableTrialFactory = new ActionableTrialFactory(model);
         Set<ActionableEntry> trials = actionableTrialFactory.create(entry, "EGFR", "EGFR");
         assertEquals(0, trials.size());
@@ -151,12 +147,7 @@ public class ActionableTrialFactoryTest {
                 List.of("senior", "child", "adult"));
         CkbEntry entry = CkbTestFactory.createEntryWithClinicalTrial(profileId, profileName, clinicalTrial);
 
-        CkbStudyBlacklistModel model = CkbBlacklistStudyTest.defineBlacklistStudies(CkbBlacklistStudyType.ALL_STUDIES_BASED_ON_GENE,
-                null,
-                null,
-                null,
-                "ATM",
-                null);
+        CkbStudyBlacklistModel model = createBlacklistModel(CkbBlacklistStudyType.ALL_STUDIES_BASED_ON_GENE, null, null, null, "ATM", null);
         ActionableTrialFactory actionableTrialFactory = new ActionableTrialFactory(model);
         Set<ActionableEntry> trials = actionableTrialFactory.create(entry, "EGFR", "EGFR");
         assertEquals(1, trials.size());
@@ -272,5 +263,20 @@ public class ActionableTrialFactoryTest {
                 "nctid",
                 "title",
                 List.of("senior", "child", "adult"));
+    }
+
+    @NotNull
+    public static CkbStudyBlacklistModel createBlacklistModel(@NotNull CkbBlacklistStudyType type, @Nullable String nctId,
+            @Nullable String therapy, @Nullable String cancerType, @Nullable String gene, @Nullable String event) {
+        CkbBlacklistStudyEntry entry1 = ImmutableCkbBlacklistStudyEntry.builder()
+                .type(type)
+                .nctId(nctId)
+                .therapy(therapy)
+                .cancerType(cancerType)
+                .gene(gene)
+                .event(event)
+                .build();
+
+        return CkbBlacklistTestFactory.createSpecificStudyBlacklist(entry1);
     }
 }

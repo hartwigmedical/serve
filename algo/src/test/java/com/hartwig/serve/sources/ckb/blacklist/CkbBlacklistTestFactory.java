@@ -6,36 +6,22 @@ import com.google.common.collect.Lists;
 import com.hartwig.serve.datamodel.EvidenceLevel;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-public class CkbBlacklistTestFactory {
+public final class CkbBlacklistTestFactory {
 
     @NotNull
-    public static CkbEvidenceBlacklistModel createCkbBlacklistEvidenceEmpty() {
+    public static CkbEvidenceBlacklistModel createEmptyEvidenceBlacklist() {
         return new CkbEvidenceBlacklistModel(Lists.newArrayList());
     }
 
     @NotNull
-    public static CkbEvidenceBlacklistModel createCkbBlacklistEvidence(@NotNull CkbBlacklistEvidenceEntry entry) {
+    public static CkbEvidenceBlacklistModel createSpecificEvidenceBlacklist(@NotNull CkbBlacklistEvidenceEntry entry) {
         return new CkbEvidenceBlacklistModel(Lists.newArrayList(entry));
     }
 
     @NotNull
-    public static CkbBlacklistEvidenceEntry createBlacklistStudyEntryList(@NotNull CkbBlacklistEvidenceType type, @Nullable String therapy,
-            @Nullable String cancerType, @Nullable String gene, @Nullable String event, @Nullable EvidenceLevel level) {
-        return ImmutableCkbBlacklistEvidenceEntry.builder()
-                .type(type)
-                .therapy(therapy)
-                .cancerType(cancerType)
-                .gene(gene)
-                .event(event)
-                .level(level)
-                .build();
-    }
-
-    @NotNull
-    public static CkbEvidenceBlacklistModel createCkbBlacklistEvidence() {
-        List<CkbBlacklistEvidenceEntry> blacklistStudiesList = Lists.newArrayList();
+    public static CkbEvidenceBlacklistModel createProperEvidenceBlacklist() {
+        List<CkbBlacklistEvidenceEntry> blacklistEvidences = Lists.newArrayList();
         CkbBlacklistEvidenceEntry entry1 = ImmutableCkbBlacklistEvidenceEntry.builder()
                 .type(CkbBlacklistEvidenceType.EVIDENCE_BASED_ON_THERAPY)
                 .therapy("Nivolumab")
@@ -63,15 +49,25 @@ public class CkbBlacklistTestFactory {
                 .level(EvidenceLevel.A)
                 .build();
 
-        blacklistStudiesList.add(entry1);
-        blacklistStudiesList.add(entry2);
-        blacklistStudiesList.add(entry3);
-        return new CkbEvidenceBlacklistModel(blacklistStudiesList);
+        blacklistEvidences.add(entry1);
+        blacklistEvidences.add(entry2);
+        blacklistEvidences.add(entry3);
+        return new CkbEvidenceBlacklistModel(blacklistEvidences);
     }
 
     @NotNull
-    public static CkbStudyBlacklistModel createCkbBlacklistStudies() {
-        List<CkbBlacklistStudyEntry> blacklistStudiesList = Lists.newArrayList();
+    public static CkbStudyBlacklistModel createEmptyStudyBlacklist() {
+        return new CkbStudyBlacklistModel(Lists.newArrayList());
+    }
+
+    @NotNull
+    public static CkbStudyBlacklistModel createSpecificStudyBlacklist(@NotNull CkbBlacklistStudyEntry blacklistStudyEntry) {
+        return new CkbStudyBlacklistModel(Lists.newArrayList(blacklistStudyEntry));
+    }
+
+    @NotNull
+    public static CkbStudyBlacklistModel createProperStudyBlacklist() {
+        List<CkbBlacklistStudyEntry> blacklistStudies = Lists.newArrayList();
         CkbBlacklistStudyEntry entry1 = ImmutableCkbBlacklistStudyEntry.builder()
                 .type(CkbBlacklistStudyType.STUDY_WHOLE)
                 .nctId("NCT0456")
@@ -90,8 +86,9 @@ public class CkbBlacklistTestFactory {
                 .event(null)
                 .build();
 
-        blacklistStudiesList.add(entry1);
-        blacklistStudiesList.add(entry2);
-        return new CkbStudyBlacklistModel(blacklistStudiesList);
+        blacklistStudies.add(entry1);
+        blacklistStudies.add(entry2);
+
+        return new CkbStudyBlacklistModel(blacklistStudies);
     }
 }

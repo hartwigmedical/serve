@@ -18,5 +18,4 @@ public class CkbBlacklistStudyFileTest {
         List<CkbBlacklistStudyEntry> blacklistStudyEntries = CkbBlacklistStudyFile.read(TEST_CKB_BLACKLIST_STUDY_FILE);
         assertEquals(4, blacklistStudyEntries.size());
     }
-
 }

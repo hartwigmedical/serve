@@ -20,5 +20,4 @@ public class CkbBlacklistMolecularProfileFileTest {
                 CkbBlacklistMolecularProfileFile.read(TEST_CKB_BLACKLIST_MOLECULAR_PROFILE_FILE);
         assertEquals(2, blacklistMolecularProfileEntries.size());
     }
-
 }

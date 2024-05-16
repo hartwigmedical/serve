@@ -73,5 +73,4 @@ public class CkbMolecularProfileBlacklistModelTest {
             @NotNull String value) {
         return Lists.newArrayList(ImmutableCkbBlacklistMolecularProfileEntry.builder().type(type).value(value).build());
     }
-
 }

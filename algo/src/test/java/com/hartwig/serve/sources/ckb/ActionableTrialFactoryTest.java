@@ -65,7 +65,7 @@ public class ActionableTrialFactoryTest {
     }
 
     @Test
-    public void canCBlacklistStudies() {
+    public void canBlacklistStudies() {
         int profileId = 1;
         String profileName = Strings.EMPTY;
         Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting");

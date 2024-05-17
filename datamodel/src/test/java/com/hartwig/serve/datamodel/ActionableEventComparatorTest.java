@@ -24,9 +24,9 @@ public class ActionableEventComparatorTest {
         ActionableEvent event4 =
                 create(Knowledgebase.CKB_EVIDENCE, "CancerB", EvidenceLevel.A, EvidenceDirection.RESPONSIVE, false, true, "treatment4");
         ActionableEvent event5 =
-                create(Knowledgebase.CKB_EVIDENCE, "CancerA", EvidenceLevel.B, EvidenceDirection.RESISTANT, false, true, "treatment5");
+                create(Knowledgebase.CKB_EVIDENCE, "CancerA", EvidenceLevel.B, EvidenceDirection.RESPONSIVE, false, true, "treatment5");
         ActionableEvent event6 =
-                create(Knowledgebase.CKB_TRIAL, "CancerA", EvidenceLevel.B, EvidenceDirection.RESISTANT, true, false, "treatment5");
+                create(Knowledgebase.CKB_TRIAL, "CancerA", EvidenceLevel.B, EvidenceDirection.RESPONSIVE, true, false, "treatment5");
 
         List<ActionableEvent> events = Lists.newArrayList(event3, event5, event1, event6, event4, event2);
         events.sort(new ActionableEventComparator());

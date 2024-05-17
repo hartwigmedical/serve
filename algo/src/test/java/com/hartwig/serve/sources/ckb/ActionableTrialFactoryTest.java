@@ -87,7 +87,7 @@ public class ActionableTrialFactoryTest {
     }
 
     @Test
-    public void canNotBlacklistStudies() {
+    public void doesNotBlacklistStudies() {
         int profileId = 1;
         String profileName = Strings.EMPTY;
         Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting");
@@ -132,7 +132,7 @@ public class ActionableTrialFactoryTest {
     }
 
     @Test
-    public void canNotBlacklistOnGene() {
+    public void doesNotBlacklistOnGene() {
         int profileId = 1;
         String profileName = Strings.EMPTY;
         Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting");

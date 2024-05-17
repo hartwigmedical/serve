@@ -51,15 +51,13 @@ public class CkbEvidenceBlacklistModel {
     @VisibleForTesting
     public boolean isMatch(@NotNull String therapyName, @NotNull String cancerType, @NotNull EvidenceLevel level,
             @NotNull String sourceGene, @NotNull String event, @NotNull CkbBlacklistEvidenceEntry blacklistEvidenceEntry) {
+        boolean hasValidLevel = blacklistEvidenceEntry.level() == null || blacklistEvidenceEntry.level() == level;
+
         switch (blacklistEvidenceEntry.type()) {
             case ALL_EVIDENCE_BASED_ON_GENE: {
                 String blacklistEvidenceGene = blacklistEvidenceEntry.gene();
                 assert blacklistEvidenceGene != null;
-                if (blacklistEvidenceEntry.level() == null) {
-                    return blacklistEvidenceGene.equals(sourceGene);
-                } else {
-                    return blacklistEvidenceGene.equals(sourceGene) && blacklistEvidenceEntry.level() == level;
-                }
+                return hasValidLevel && blacklistEvidenceGene.equals(sourceGene);
             }
 
             case ALL_EVIDENCE_BASED_ON_GENE_AND_EVENT: {
@@ -67,22 +65,13 @@ public class CkbEvidenceBlacklistModel {
                 String blacklistEvidenceEvent = blacklistEvidenceEntry.event();
                 assert blacklistEvidenceGene != null;
                 assert blacklistEvidenceEvent != null;
-                if (blacklistEvidenceEntry.level() == null) {
-                    return blacklistEvidenceGene.equals(sourceGene) && blacklistEvidenceEvent.equals(event);
-                } else {
-                    return blacklistEvidenceGene.equals(sourceGene) && blacklistEvidenceEvent.equals(event)
-                            && blacklistEvidenceEntry.level() == level;
-                }
+                return hasValidLevel && blacklistEvidenceGene.equals(sourceGene) && blacklistEvidenceEvent.equals(event);
             }
 
             case EVIDENCE_BASED_ON_THERAPY: {
                 String blacklistEvidenceTherapy = blacklistEvidenceEntry.therapy();
                 assert blacklistEvidenceTherapy != null;
-                if (blacklistEvidenceEntry.level() == null) {
-                    return blacklistEvidenceTherapy.equals(therapyName);
-                } else {
-                    return blacklistEvidenceTherapy.equals(therapyName) && blacklistEvidenceEntry.level() == level;
-                }
+                return hasValidLevel && blacklistEvidenceTherapy.equals(therapyName);
             }
 
             case EVIDENCE_ON_THERAPY_AND_CANCER_TYPE: {
@@ -90,12 +79,7 @@ public class CkbEvidenceBlacklistModel {
                 String blacklistEvidenceCancerType = blacklistEvidenceEntry.cancerType();
                 assert blacklistEvidenceTherapy != null;
                 assert blacklistEvidenceCancerType != null;
-                if (blacklistEvidenceEntry.level() == null) {
-                    return blacklistEvidenceTherapy.equals(therapyName) && blacklistEvidenceCancerType.equals(cancerType);
-                } else {
-                    return blacklistEvidenceTherapy.equals(therapyName) && blacklistEvidenceCancerType.equals(cancerType)
-                            && blacklistEvidenceEntry.level() == level;
-                }
+                return hasValidLevel && blacklistEvidenceTherapy.equals(therapyName) && blacklistEvidenceCancerType.equals(cancerType);
             }
 
             case EVIDENCE_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE: {
@@ -105,13 +89,8 @@ public class CkbEvidenceBlacklistModel {
                 assert blacklistEvidenceTherapy != null;
                 assert blacklistEvidenceCancerType != null;
                 assert blacklistEvidenceGene != null;
-                if (blacklistEvidenceEntry.level() == null) {
-                    return blacklistEvidenceTherapy.equals(therapyName) && blacklistEvidenceCancerType.equals(cancerType)
-                            && blacklistEvidenceGene.equals(sourceGene);
-                } else {
-                    return blacklistEvidenceTherapy.equals(therapyName) && blacklistEvidenceCancerType.equals(cancerType)
-                            && blacklistEvidenceGene.equals(sourceGene) && blacklistEvidenceEntry.level() == level;
-                }
+                return hasValidLevel && blacklistEvidenceTherapy.equals(therapyName) && blacklistEvidenceCancerType.equals(cancerType)
+                        && blacklistEvidenceGene.equals(sourceGene);
             }
 
             case EVIDENCE_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE_AND_EVENT: {
@@ -123,14 +102,8 @@ public class CkbEvidenceBlacklistModel {
                 assert blacklistEvidenceTherapy != null;
                 assert blacklistEvidenceCancerType != null;
                 assert blacklistEvidenceEvent != null;
-                if (blacklistEvidenceEntry.level() == null) {
-                    return blacklistEvidenceTherapy.equals(therapyName) && blacklistEvidenceCancerType.equals(cancerType)
-                            && blacklistEvidenceGene.equals(sourceGene) && blacklistEvidenceEvent.equals(event);
-                } else {
-                    return blacklistEvidenceTherapy.equals(therapyName) && blacklistEvidenceCancerType.equals(cancerType)
-                            && blacklistEvidenceGene.equals(sourceGene) && blacklistEvidenceEvent.equals(event)
-                            && blacklistEvidenceEntry.level() == level;
-                }
+                return hasValidLevel && blacklistEvidenceTherapy.equals(therapyName) && blacklistEvidenceCancerType.equals(cancerType)
+                        && blacklistEvidenceGene.equals(sourceGene) && blacklistEvidenceEvent.equals(event);
             }
 
             default: {

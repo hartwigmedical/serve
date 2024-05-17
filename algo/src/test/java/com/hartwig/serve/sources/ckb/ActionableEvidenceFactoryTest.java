@@ -225,7 +225,7 @@ public class ActionableEvidenceFactoryTest {
     }
 
     @Test
-    public void canNonBlacklistAllEvidenceOnGene() {
+    public void doesNotBlacklistAllEvidenceOnGene() {
         CkbEvidenceBlacklistModel model =
                 createBlacklistModel(CkbBlacklistEvidenceType.ALL_EVIDENCE_BASED_ON_GENE, null, null, "BRAF", null, null);
         CkbEntry entry = CkbTestFactory.createEntry("KRAS",

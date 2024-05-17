@@ -128,7 +128,8 @@ public class CkbExtractor {
 
             if (generateKnownEvents) {
                 extractionResultBuilder.knownHotspots(convertToKnownHotspots(extractionOutput.hotspots(), event, variant))
-                        .knownCodons(convertToKnownCodons(extractionOutput.codons(), variant))
+                        .knownCodons(convertToKnownCodons(actionableEntries.isEmpty() ? Collections.emptyList() : extractionOutput.codons(),
+                                variant))
                         .knownExons(convertToKnownExons(extractionOutput.exons(), variant))
                         .knownGenes(extractionOutput.fusionPair() == null ? convertToKnownGenes(gene, variant) : Collections.emptySet())
                         .knownCopyNumbers(convertToKnownCopyNumbers(extractionOutput.copyNumber(), variant))

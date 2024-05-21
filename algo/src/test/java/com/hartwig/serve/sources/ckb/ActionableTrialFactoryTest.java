@@ -22,12 +22,16 @@ import org.junit.Test;
 public class ActionableTrialFactoryTest {
 
     @Test
-    public void canCreateActionableEntryForOpenTrialInAllowedCountryWithRequiredMolecularProfile() {
+    public void canCreateActionableEntryForOpenTrialInAllowedCountryWithRequiredMolecularProfileAndValidAgeGroup() {
         int profileId = 1;
         Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(profileId, "required");
-        ClinicalTrial clinicalTrial =
-                CkbTestFactory.createTrial("Recruiting", List.of(requirementDetail), List.of(location), "NCT0102", "Phase I trial");
+        ClinicalTrial clinicalTrial = CkbTestFactory.createTrial("Recruiting",
+                List.of(requirementDetail),
+                List.of(location),
+                "NCT0102",
+                "Phase I trial",
+                List.of("senior", "child", "adult"));
         CkbEntry entry = CkbTestFactory.createEntryWithClinicalTrial(profileId, clinicalTrial);
 
         ActionableTrialFactory actionableTrialFactory = new ActionableTrialFactory();
@@ -48,8 +52,12 @@ public class ActionableTrialFactoryTest {
     public void shouldNotCreateAnActionableEntryWhenVariantRequirementIsOnADifferentProfile() {
         Location location = CkbTestFactory.createLocation("Belgium", "Recruiting");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(0, "required");
-        ClinicalTrial clinicalTrial =
-                CkbTestFactory.createTrial("Recruiting", List.of(requirementDetail), List.of(location), "NCT0102", "Phase I trial");
+        ClinicalTrial clinicalTrial = CkbTestFactory.createTrial("Recruiting",
+                List.of(requirementDetail),
+                List.of(location),
+                "NCT0102",
+                "Phase I trial",
+                List.of("senior", "child", "adult"));
         CkbEntry entry = CkbTestFactory.createEntryWithClinicalTrial(1, clinicalTrial);
 
         ActionableTrialFactory actionableTrialFactory = new ActionableTrialFactory();
@@ -113,6 +121,22 @@ public class ActionableTrialFactoryTest {
         return ActionableTrialFactory.hasVariantRequirementTypeToInclude(List.of(requirementDetail), baseEntry);
     }
 
+    @Test
+    public void hasAgeGroupToInclude() {
+        assertTrue(ActionableTrialFactory.hasAgeGroupToInclude(List.of("senior")));
+        assertTrue(ActionableTrialFactory.hasAgeGroupToInclude(List.of("adult")));
+        assertFalse(ActionableTrialFactory.hasAgeGroupToInclude(List.of("child")));
+        assertTrue(ActionableTrialFactory.hasAgeGroupToInclude(List.of("senior", "adult", "child")));
+        assertTrue(ActionableTrialFactory.hasAgeGroupToInclude(List.of("senior", "child")));
+        assertTrue(ActionableTrialFactory.hasAgeGroupToInclude(List.of("senior", "adult")));
+        assertTrue(ActionableTrialFactory.hasAgeGroupToInclude(List.of("Senior")));
+        assertTrue(ActionableTrialFactory.hasAgeGroupToInclude(List.of("Adult")));
+        assertFalse(ActionableTrialFactory.hasAgeGroupToInclude(List.of("Child")));
+        assertTrue(ActionableTrialFactory.hasAgeGroupToInclude(List.of("Senior", "Adult", "Child")));
+        assertTrue(ActionableTrialFactory.hasAgeGroupToInclude(List.of("Senior", "Child")));
+        assertTrue(ActionableTrialFactory.hasAgeGroupToInclude(List.of("Senior", "Adult")));
+    }
+
     @NotNull
     private static ClinicalTrial createTrialWithMultipleLocations(@NotNull String recruitmentTrial, @NotNull String country1,
             @NotNull String recruitmentCountry1, @NotNull String country2, @NotNull String recruitmentCountry2) {
@@ -121,7 +145,8 @@ public class ActionableTrialFactoryTest {
                 List.of(CkbTestFactory.createLocation(country1, recruitmentCountry1),
                         CkbTestFactory.createLocation(country2, recruitmentCountry2)),
                 "nctid",
-                "title");
+                "title",
+                List.of("senior", "child", "adult"));
     }
 
     @NotNull
@@ -131,6 +156,7 @@ public class ActionableTrialFactoryTest {
                 List.of(CkbTestFactory.createVariantRequirementDetail(0, "required")),
                 List.of(CkbTestFactory.createLocation(country, recruitmentCountry)),
                 "nctid",
-                "title");
+                "title",
+                List.of("senior", "child", "adult"));
     }
 }

@@ -123,8 +123,9 @@ public class CkbExtractor {
                     .build();
 
             ImmutableExtractionResult.Builder extractionResultBuilder = actionableEntries.stream()
-                    .map(actionableEntry -> actionableEntryToResultBuilder(extractionOutput, actionableEntry))
-                    .reduce(ImmutableExtractionResult.builder(), CkbExtractor::mergeResultBuilders);
+                    .map(actionableEntry -> actionableEntryToExtractionResult(extractionOutput, actionableEntry))
+                    .collect(ImmutableExtractionResult::builder, CkbExtractor::mergeResultIntoBuilder,
+                            (a, b) -> mergeResultIntoBuilder(a, b.build()));
 
             if (generateKnownEvents) {
                 extractionResultBuilder.knownHotspots(convertToKnownHotspots(extractionOutput.hotspots(), event, variant))
@@ -151,22 +152,19 @@ public class CkbExtractor {
         return (raw == null) ? Collections.emptySet() : Set.of(extract.apply(event, raw));
     }
 
-    @NotNull
-    private static ImmutableExtractionResult.Builder mergeResultBuilders(@NotNull ImmutableExtractionResult.Builder a,
-            @NotNull ImmutableExtractionResult.Builder b) {
-        ExtractionResult built = b.build();
-        a.addAllActionableHotspots(built.actionableHotspots());
-        a.addAllActionableCodons(built.actionableCodons());
-        a.addAllActionableExons(built.actionableExons());
-        a.addAllActionableGenes(built.actionableGenes());
-        a.addAllActionableFusions(built.actionableFusions());
-        a.addAllActionableCharacteristics(built.actionableCharacteristics());
-        a.addAllActionableHLA(built.actionableHLA());
-        return a;
+    private static void mergeResultIntoBuilder(@NotNull ImmutableExtractionResult.Builder builder,
+            @NotNull ExtractionResult extractionResult) {
+        builder.addAllActionableHotspots(extractionResult.actionableHotspots());
+        builder.addAllActionableCodons(extractionResult.actionableCodons());
+        builder.addAllActionableExons(extractionResult.actionableExons());
+        builder.addAllActionableGenes(extractionResult.actionableGenes());
+        builder.addAllActionableFusions(extractionResult.actionableFusions());
+        builder.addAllActionableCharacteristics(extractionResult.actionableCharacteristics());
+        builder.addAllActionableHLA(extractionResult.actionableHLA());
     }
 
     @NotNull
-    private ImmutableExtractionResult.Builder actionableEntryToResultBuilder(@NotNull EventExtractorOutput output,
+    private ImmutableExtractionResult actionableEntryToExtractionResult(@NotNull EventExtractorOutput output,
             @NotNull ActionableEntry entry) {
         return ImmutableExtractionResult.builder()
                 .refGenomeVersion(source.refGenomeVersion())
@@ -181,7 +179,8 @@ public class CkbExtractor {
                 .actionableCharacteristics(extractNonNullToSet(output.characteristic(),
                         entry,
                         ActionableEventFactory::toActionableCharacteristic))
-                .actionableHLA(extractNonNullToSet(output.hla(), entry, ActionableEventFactory::toActionableHLa));
+                .actionableHLA(extractNonNullToSet(output.hla(), entry, ActionableEventFactory::toActionableHLa))
+                .build();
     }
 
     @VisibleForTesting

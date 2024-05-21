@@ -53,7 +53,7 @@ public abstract class CkbJsonDirectoryReader<T extends CkbJsonObject> {
             }
         }).collect(Collectors.toList());
 
-        LOGGER.debug("  Done reading {} files ", entries.size());
+        LOGGER.debug("  Done reading {} files ", files.length);
         return entries;
     }
 

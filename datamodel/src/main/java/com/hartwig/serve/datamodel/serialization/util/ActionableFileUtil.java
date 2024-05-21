@@ -95,8 +95,8 @@ public final class ActionableFileUtil {
                     return ImmutableClinicalTrial.builder()
                             .studyNctId(values[fields.get("studyNctId")])
                             .studyTitle(values[fields.get("studyTitle")])
-                            .studyAcronym(values[fields.get("studyAcronym")] != null ? values[fields.get("studyAcronym")]: null)
-                            .gender(values[fields.get("studyGender")] != null ? values[fields.get("studyGender")]: null)
+                            .studyAcronym(values[fields.get("studyAcronym")])
+                            .gender(values[fields.get("studyGender")])
                             .countriesOfStudy(fieldToSet(values[fields.get("countriesOfStudy")]))
                             .therapyNames(fieldToSet(values[fields.get("treatment")]))
                             .build();

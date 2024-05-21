@@ -268,7 +268,7 @@ public class ActionableTrialFactoryTest {
     @NotNull
     public static CkbStudyBlacklistModel createBlacklistModel(@NotNull CkbBlacklistStudyType type, @Nullable String nctId,
             @Nullable String therapy, @Nullable String cancerType, @Nullable String gene, @Nullable String event) {
-        CkbBlacklistStudyEntry entry1 = ImmutableCkbBlacklistStudyEntry.builder()
+        CkbBlacklistStudyEntry entry = ImmutableCkbBlacklistStudyEntry.builder()
                 .type(type)
                 .nctId(nctId)
                 .therapy(therapy)
@@ -277,6 +277,6 @@ public class ActionableTrialFactoryTest {
                 .event(event)
                 .build();
 
-        return CkbBlacklistTestFactory.createSpecificStudyBlacklist(entry1);
+        return CkbBlacklistTestFactory.createSpecificStudyBlacklist(entry);
     }
 }

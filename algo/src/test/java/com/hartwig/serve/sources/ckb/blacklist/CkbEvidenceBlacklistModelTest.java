@@ -15,62 +15,62 @@ public class CkbEvidenceBlacklistModelTest {
     public void canBlacklistAllEvidenceBasedOnGene() {
         CkbBlacklistEvidenceEntry blacklistEvidenceEntry =
                 create(CkbBlacklistEvidenceType.ALL_EVIDENCE_BASED_ON_GENE, "Nivolumab", null, "KRAS", null, null);
-        CkbEvidenceBlacklistModel ckbBlacklistEvidence = CkbBlacklistTestFactory.createSpecificEvidenceBlacklist(blacklistEvidenceEntry);
+        CkbEvidenceBlacklistModel blacklistEvidence = CkbBlacklistTestFactory.createSpecificEvidenceBlacklist(blacklistEvidenceEntry);
 
-        assertTrue(ckbBlacklistEvidence.isMatch("Nivolumab",
+        assertTrue(blacklistEvidence.isMatch("Nivolumab",
                 "Solid tumor",
                 EvidenceLevel.A,
                 "KRAS",
                 "amplification",
                 blacklistEvidenceEntry));
-        assertFalse(ckbBlacklistEvidence.isMatch("Nivolumab",
+        assertFalse(blacklistEvidence.isMatch("Nivolumab",
                 "Solid tumor",
                 EvidenceLevel.A,
                 "BRAF",
                 "amplification",
                 blacklistEvidenceEntry));
-        assertTrue(ckbBlacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.A, "KRAS", "amplification"));
-        assertFalse(ckbBlacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.A, "BRAF", "amplification"));
+        assertTrue(blacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.A, "KRAS", "amplification"));
+        assertFalse(blacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.A, "BRAF", "amplification"));
 
         CkbBlacklistEvidenceEntry blacklistEvidenceEntryLevel =
                 create(CkbBlacklistEvidenceType.ALL_EVIDENCE_BASED_ON_GENE, "Nivolumab", null, "KRAS", null, EvidenceLevel.C);
-        assertTrue(ckbBlacklistEvidence.isMatch("Nivolumab",
+        assertTrue(blacklistEvidence.isMatch("Nivolumab",
                 "Solid tumor",
                 EvidenceLevel.C,
                 "KRAS",
                 "amplification",
                 blacklistEvidenceEntryLevel));
-        assertFalse(ckbBlacklistEvidence.isMatch("Nivolumab",
+        assertFalse(blacklistEvidence.isMatch("Nivolumab",
                 "Solid tumor",
                 EvidenceLevel.A,
                 "KRAS",
                 "amplification",
                 blacklistEvidenceEntryLevel));
-        assertTrue(ckbBlacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.C, "KRAS", "amplification"));
-        assertTrue(ckbBlacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.A, "KRAS", "amplification"));
-        assertFalse(ckbBlacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.C, "BRAF", "amplification"));
+        assertTrue(blacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.C, "KRAS", "amplification"));
+        assertTrue(blacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.A, "KRAS", "amplification"));
+        assertFalse(blacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.C, "BRAF", "amplification"));
     }
 
     @Test
     public void canBlacklistAllEvidenceBasedOnGeneAndEvent() {
         CkbBlacklistEvidenceEntry blacklistEvidenceEntry =
                 create(CkbBlacklistEvidenceType.ALL_EVIDENCE_BASED_ON_GENE_AND_EVENT, "Nivolumab", null, "KRAS", "amplification", null);
-        CkbEvidenceBlacklistModel ckbBlacklistEvidence = CkbBlacklistTestFactory.createSpecificEvidenceBlacklist(blacklistEvidenceEntry);
+        CkbEvidenceBlacklistModel blacklistEvidence = CkbBlacklistTestFactory.createSpecificEvidenceBlacklist(blacklistEvidenceEntry);
 
-        assertTrue(ckbBlacklistEvidence.isMatch("Nivolumab",
+        assertTrue(blacklistEvidence.isMatch("Nivolumab",
                 "Solid tumor",
                 EvidenceLevel.A,
                 "KRAS",
                 "amplification",
                 blacklistEvidenceEntry));
-        assertFalse(ckbBlacklistEvidence.isMatch("Nivolumab",
+        assertFalse(blacklistEvidence.isMatch("Nivolumab",
                 "Solid tumor",
                 EvidenceLevel.A,
                 "BRAF",
                 "amplification",
                 blacklistEvidenceEntry));
-        assertTrue(ckbBlacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.A, "KRAS", "amplification"));
-        assertFalse(ckbBlacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.A, "BRAF", "amplification"));
+        assertTrue(blacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.A, "KRAS", "amplification"));
+        assertFalse(blacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.A, "BRAF", "amplification"));
 
         CkbBlacklistEvidenceEntry blacklistEvidenceEntryLevel = create(CkbBlacklistEvidenceType.ALL_EVIDENCE_BASED_ON_GENE_AND_EVENT,
                 "Nivolumab",
@@ -78,78 +78,78 @@ public class CkbEvidenceBlacklistModelTest {
                 "KRAS",
                 "amplification",
                 EvidenceLevel.C);
-        assertTrue(ckbBlacklistEvidence.isMatch("Nivolumab",
+        assertTrue(blacklistEvidence.isMatch("Nivolumab",
                 "Solid tumor",
                 EvidenceLevel.C,
                 "KRAS",
                 "amplification",
                 blacklistEvidenceEntryLevel));
-        assertFalse(ckbBlacklistEvidence.isMatch("Nivolumab",
+        assertFalse(blacklistEvidence.isMatch("Nivolumab",
                 "Solid tumor",
                 EvidenceLevel.A,
                 "KRAS",
                 "amplification",
                 blacklistEvidenceEntryLevel));
-        assertTrue(ckbBlacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.C, "KRAS", "amplification"));
-        assertTrue(ckbBlacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.A, "KRAS", "amplification"));
-        assertFalse(ckbBlacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.A, "BRAF", "amplification"));
+        assertTrue(blacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.C, "KRAS", "amplification"));
+        assertTrue(blacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.A, "KRAS", "amplification"));
+        assertFalse(blacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.A, "BRAF", "amplification"));
     }
 
     @Test
     public void canBlacklistEvidenceOnTherapy() {
         CkbBlacklistEvidenceEntry blacklistEvidenceEntry =
                 create(CkbBlacklistEvidenceType.EVIDENCE_BASED_ON_THERAPY, "Nivolumab", null, null, null, null);
-        CkbEvidenceBlacklistModel ckbBlacklistEvidence = CkbBlacklistTestFactory.createSpecificEvidenceBlacklist(blacklistEvidenceEntry);
+        CkbEvidenceBlacklistModel blacklistEvidence = CkbBlacklistTestFactory.createSpecificEvidenceBlacklist(blacklistEvidenceEntry);
 
-        assertTrue(ckbBlacklistEvidence.isMatch("Nivolumab",
+        assertTrue(blacklistEvidence.isMatch("Nivolumab",
                 "Solid tumor",
                 EvidenceLevel.A,
                 "KRAS",
                 "amplification",
                 blacklistEvidenceEntry));
-        assertFalse(ckbBlacklistEvidence.isMatch("Chemo", "Solid tumor", EvidenceLevel.A, "BRAF", "amplification", blacklistEvidenceEntry));
-        assertTrue(ckbBlacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.A, "KRAS", "amplification"));
-        assertFalse(ckbBlacklistEvidence.isBlacklistEvidence("Chemo", "Solid tumor", EvidenceLevel.A, "BRAF", "amplification"));
+        assertFalse(blacklistEvidence.isMatch("Chemo", "Solid tumor", EvidenceLevel.A, "BRAF", "amplification", blacklistEvidenceEntry));
+        assertTrue(blacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.A, "KRAS", "amplification"));
+        assertFalse(blacklistEvidence.isBlacklistEvidence("Chemo", "Solid tumor", EvidenceLevel.A, "BRAF", "amplification"));
 
         CkbBlacklistEvidenceEntry blacklistEvidenceEntryLevel =
                 create(CkbBlacklistEvidenceType.EVIDENCE_BASED_ON_THERAPY, "Nivolumab", null, null, null, EvidenceLevel.B);
-        assertTrue(ckbBlacklistEvidence.isMatch("Nivolumab",
+        assertTrue(blacklistEvidence.isMatch("Nivolumab",
                 "Solid tumor",
                 EvidenceLevel.B,
                 "KRAS",
                 "amplification",
                 blacklistEvidenceEntryLevel));
-        assertFalse(ckbBlacklistEvidence.isMatch("Nivolumab",
+        assertFalse(blacklistEvidence.isMatch("Nivolumab",
                 "Solid tumor",
                 EvidenceLevel.A,
                 "KRAS",
                 "amplification",
                 blacklistEvidenceEntryLevel));
-        assertTrue(ckbBlacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.B, "KRAS", "amplification"));
-        assertTrue(ckbBlacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.A, "KRAS", "amplification"));
-        assertFalse(ckbBlacklistEvidence.isBlacklistEvidence("Chemo", "Solid tumor", EvidenceLevel.A, "BRAS", "amplification"));
+        assertTrue(blacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.B, "KRAS", "amplification"));
+        assertTrue(blacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.A, "KRAS", "amplification"));
+        assertFalse(blacklistEvidence.isBlacklistEvidence("Chemo", "Solid tumor", EvidenceLevel.A, "BRAS", "amplification"));
     }
 
     @Test
     public void canBlacklistEvidenceOnTherapyAndCancerType() {
         CkbBlacklistEvidenceEntry blacklistEvidenceEntry =
                 create(CkbBlacklistEvidenceType.EVIDENCE_ON_THERAPY_AND_CANCER_TYPE, "Nivolumab", "Solid tumor", null, null, null);
-        CkbEvidenceBlacklistModel ckbBlacklistEvidence = CkbBlacklistTestFactory.createSpecificEvidenceBlacklist(blacklistEvidenceEntry);
+        CkbEvidenceBlacklistModel blacklistEvidence = CkbBlacklistTestFactory.createSpecificEvidenceBlacklist(blacklistEvidenceEntry);
 
-        assertTrue(ckbBlacklistEvidence.isMatch("Nivolumab",
+        assertTrue(blacklistEvidence.isMatch("Nivolumab",
                 "Solid tumor",
                 EvidenceLevel.A,
                 "KRAS",
                 "amplification",
                 blacklistEvidenceEntry));
-        assertFalse(ckbBlacklistEvidence.isMatch("Nivolumab",
-                "Colorectrum",
+        assertFalse(blacklistEvidence.isMatch("Nivolumab",
+                "Colorectum",
                 EvidenceLevel.A,
                 "BRAF",
                 "amplification",
                 blacklistEvidenceEntry));
-        assertTrue(ckbBlacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.A, "KRAS", "amplification"));
-        assertFalse(ckbBlacklistEvidence.isBlacklistEvidence("Nivolumab", "Colorectum", EvidenceLevel.A, "BRAF", "amplification"));
+        assertTrue(blacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.A, "KRAS", "amplification"));
+        assertFalse(blacklistEvidence.isBlacklistEvidence("Nivolumab", "Colorectum", EvidenceLevel.A, "BRAF", "amplification"));
 
         CkbBlacklistEvidenceEntry blacklistEvidenceEntryLevel = create(CkbBlacklistEvidenceType.EVIDENCE_ON_THERAPY_AND_CANCER_TYPE,
                 "Nivolumab",
@@ -157,21 +157,21 @@ public class CkbEvidenceBlacklistModelTest {
                 null,
                 null,
                 EvidenceLevel.A);
-        assertTrue(ckbBlacklistEvidence.isMatch("Nivolumab",
+        assertTrue(blacklistEvidence.isMatch("Nivolumab",
                 "Solid tumor",
                 EvidenceLevel.A,
                 "KRAS",
                 "amplification",
                 blacklistEvidenceEntryLevel));
-        assertFalse(ckbBlacklistEvidence.isMatch("Nivolumab",
+        assertFalse(blacklistEvidence.isMatch("Nivolumab",
                 "Solid tumor",
                 EvidenceLevel.B,
                 "KRAS",
                 "amplification",
                 blacklistEvidenceEntryLevel));
-        assertTrue(ckbBlacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.A, "KRAS", "amplification"));
-        assertTrue(ckbBlacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.B, "KRAS", "amplification"));
-        assertFalse(ckbBlacklistEvidence.isBlacklistEvidence("Nivolumab", "Colon", EvidenceLevel.B, "KRAS", "amplification"));
+        assertTrue(blacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.A, "KRAS", "amplification"));
+        assertTrue(blacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.B, "KRAS", "amplification"));
+        assertFalse(blacklistEvidence.isBlacklistEvidence("Nivolumab", "Colon", EvidenceLevel.B, "KRAS", "amplification"));
     }
 
     @Test
@@ -183,22 +183,22 @@ public class CkbEvidenceBlacklistModelTest {
                         "KRAS",
                         null,
                         null);
-        CkbEvidenceBlacklistModel ckbBlacklistEvidence = CkbBlacklistTestFactory.createSpecificEvidenceBlacklist(blacklistEvidenceEntry);
+        CkbEvidenceBlacklistModel blacklistEvidence = CkbBlacklistTestFactory.createSpecificEvidenceBlacklist(blacklistEvidenceEntry);
 
-        assertTrue(ckbBlacklistEvidence.isMatch("Nivolumab",
+        assertTrue(blacklistEvidence.isMatch("Nivolumab",
                 "Solid tumor",
                 EvidenceLevel.A,
                 "KRAS",
                 "amplification",
                 blacklistEvidenceEntry));
-        assertFalse(ckbBlacklistEvidence.isMatch("Nivolumab",
-                "Colorectrum",
+        assertFalse(blacklistEvidence.isMatch("Nivolumab",
+                "Colorectum",
                 EvidenceLevel.A,
                 "BRAF",
                 "amplification",
                 blacklistEvidenceEntry));
-        assertTrue(ckbBlacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.A, "KRAS", "amplification"));
-        assertFalse(ckbBlacklistEvidence.isBlacklistEvidence("Nivolumab", "Colorectum", EvidenceLevel.A, "BRAF", "amplification"));
+        assertTrue(blacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.A, "KRAS", "amplification"));
+        assertFalse(blacklistEvidence.isBlacklistEvidence("Nivolumab", "Colorectum", EvidenceLevel.A, "BRAF", "amplification"));
 
         CkbBlacklistEvidenceEntry blacklistEvidenceEntryLevel =
                 create(CkbBlacklistEvidenceType.EVIDENCE_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE,
@@ -207,21 +207,21 @@ public class CkbEvidenceBlacklistModelTest {
                         "KRAS",
                         null,
                         EvidenceLevel.B);
-        assertTrue(ckbBlacklistEvidence.isMatch("Nivolumab",
+        assertTrue(blacklistEvidence.isMatch("Nivolumab",
                 "Solid tumor",
                 EvidenceLevel.B,
                 "KRAS",
                 "amplification",
                 blacklistEvidenceEntryLevel));
-        assertFalse(ckbBlacklistEvidence.isMatch("Nivolumab",
+        assertFalse(blacklistEvidence.isMatch("Nivolumab",
                 "Solid tumor",
                 EvidenceLevel.A,
                 "KRAS",
                 "amplification",
                 blacklistEvidenceEntryLevel));
-        assertTrue(ckbBlacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.B, "KRAS", "amplification"));
-        assertTrue(ckbBlacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.A, "KRAS", "amplification"));
-        assertFalse(ckbBlacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.A, "BRAF", "amplification"));
+        assertTrue(blacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.B, "KRAS", "amplification"));
+        assertTrue(blacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.A, "KRAS", "amplification"));
+        assertFalse(blacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.A, "BRAF", "amplification"));
     }
 
     @Test
@@ -233,22 +233,22 @@ public class CkbEvidenceBlacklistModelTest {
                         "KRAS",
                         "amplification",
                         null);
-        CkbEvidenceBlacklistModel ckbBlacklistEvidence = CkbBlacklistTestFactory.createSpecificEvidenceBlacklist(blacklistEvidenceEntry);
+        CkbEvidenceBlacklistModel blacklistEvidence = CkbBlacklistTestFactory.createSpecificEvidenceBlacklist(blacklistEvidenceEntry);
 
-        assertTrue(ckbBlacklistEvidence.isMatch("Nivolumab",
+        assertTrue(blacklistEvidence.isMatch("Nivolumab",
                 "Solid tumor",
                 EvidenceLevel.A,
                 "KRAS",
                 "amplification",
                 blacklistEvidenceEntry));
-        assertFalse(ckbBlacklistEvidence.isMatch("Nivolumab",
-                "Colorectrum",
+        assertFalse(blacklistEvidence.isMatch("Nivolumab",
+                "Colorectum",
                 EvidenceLevel.A,
                 "BRAF",
                 "amplification",
                 blacklistEvidenceEntry));
-        assertTrue(ckbBlacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.A, "KRAS", "amplification"));
-        assertFalse(ckbBlacklistEvidence.isBlacklistEvidence("Nivolumab", "Colorectum", EvidenceLevel.A, "BRAF", "amplification"));
+        assertTrue(blacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.A, "KRAS", "amplification"));
+        assertFalse(blacklistEvidence.isBlacklistEvidence("Nivolumab", "Colorectum", EvidenceLevel.A, "BRAF", "amplification"));
 
         CkbBlacklistEvidenceEntry blacklistEvidenceEntryLevel =
                 create(CkbBlacklistEvidenceType.EVIDENCE_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE_AND_EVENT,
@@ -257,21 +257,21 @@ public class CkbEvidenceBlacklistModelTest {
                         "KRAS",
                         "amplification",
                         EvidenceLevel.D);
-        assertTrue(ckbBlacklistEvidence.isMatch("Nivolumab",
+        assertTrue(blacklistEvidence.isMatch("Nivolumab",
                 "Solid tumor",
                 EvidenceLevel.D,
                 "KRAS",
                 "amplification",
                 blacklistEvidenceEntryLevel));
-        assertFalse(ckbBlacklistEvidence.isMatch("Nivolumab",
-                "Colorectrum",
+        assertFalse(blacklistEvidence.isMatch("Nivolumab",
+                "Colorectum",
                 EvidenceLevel.A,
                 "BRAF",
                 "amplification",
                 blacklistEvidenceEntryLevel));
-        assertTrue(ckbBlacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.D, "KRAS", "amplification"));
-        assertTrue(ckbBlacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.A, "KRAS", "amplification"));
-        assertFalse(ckbBlacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.A, "BRAF", "amplification"));
+        assertTrue(blacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.D, "KRAS", "amplification"));
+        assertTrue(blacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.A, "KRAS", "amplification"));
+        assertFalse(blacklistEvidence.isBlacklistEvidence("Nivolumab", "Solid tumor", EvidenceLevel.A, "BRAF", "amplification"));
     }
 
     @NotNull

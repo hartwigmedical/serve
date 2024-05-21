@@ -245,7 +245,7 @@ public class ActionableEvidenceFactoryTest {
     @NotNull
     private static CkbEvidenceBlacklistModel createBlacklistModel(@NotNull CkbBlacklistEvidenceType type, @Nullable String therapy,
             @Nullable String cancerType, @Nullable String gene, @Nullable String event, @Nullable EvidenceLevel level) {
-        CkbBlacklistEvidenceEntry entry1 = ImmutableCkbBlacklistEvidenceEntry.builder()
+        CkbBlacklistEvidenceEntry entry = ImmutableCkbBlacklistEvidenceEntry.builder()
                 .type(type)
                 .therapy(therapy)
                 .cancerType(cancerType)
@@ -253,6 +253,7 @@ public class ActionableEvidenceFactoryTest {
                 .event(event)
                 .level(level)
                 .build();
-        return CkbBlacklistTestFactory.createSpecificEvidenceBlacklist(entry1);
+
+        return CkbBlacklistTestFactory.createSpecificEvidenceBlacklist(entry);
     }
 }

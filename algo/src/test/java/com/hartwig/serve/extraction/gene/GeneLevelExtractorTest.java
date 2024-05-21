@@ -121,7 +121,7 @@ public class GeneLevelExtractorTest {
     }
 
     @Test
-    public void canExtractGeneLevelEventWiltType() {
+    public void canExtractGeneLevelEventWildType() {
         GeneLevelExtractor geneLevelExtractor =
                 createWithDriverGenes(DriverGenesTestFactory.createDriverGenes("STK11", "KIT"), DriverInconsistencyMode.IGNORE);
         GeneAnnotation geneAnnotation = geneLevelExtractor.extract("KIT", EventType.WILD_TYPE, "KIT  wild type");

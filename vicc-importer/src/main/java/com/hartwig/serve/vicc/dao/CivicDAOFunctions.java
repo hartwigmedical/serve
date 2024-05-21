@@ -63,16 +63,16 @@ final class CivicDAOFunctions {
 
     static void write(@NotNull DSLContext context, int viccEntryId, @NotNull Civic civic) {
         int id = context.insertInto(CIVIC,
-                CIVIC.ENTREZID,
-                CIVIC.ENTREZNAME,
-                CIVIC.NAME,
-                CIVIC.TYPE,
-                CIVIC.CIVICACTIONABILITYSCORE,
-                CIVIC.ALLELEREGISTRYID,
-                CIVIC.IDCIVIC,
-                CIVIC.GENEID,
-                CIVIC.DESCRIPTION,
-                CIVIC.VICCENTRYID)
+                        CIVIC.ENTREZID,
+                        CIVIC.ENTREZNAME,
+                        CIVIC.NAME,
+                        CIVIC.TYPE,
+                        CIVIC.CIVICACTIONABILITYSCORE,
+                        CIVIC.ALLELEREGISTRYID,
+                        CIVIC.IDCIVIC,
+                        CIVIC.GENEID,
+                        CIVIC.DESCRIPTION,
+                        CIVIC.VICCENTRYID)
                 .values(civic.entrezId(),
                         civic.entrezName(),
                         civic.name(),
@@ -111,13 +111,13 @@ final class CivicDAOFunctions {
 
         for (CivicVariantType variantType : civic.variantTypes()) {
             context.insertInto(CIVICVARIANTTYPE,
-                    CIVICVARIANTTYPE.NAME,
-                    CIVICVARIANTTYPE.DISPLAYNAME,
-                    CIVICVARIANTTYPE.DESCRIPTION,
-                    CIVICVARIANTTYPE.URL,
-                    CIVICVARIANTTYPE.SOID,
-                    CIVICVARIANTTYPE.IDVARIANTTYPE,
-                    CIVICVARIANTTYPE.CIVICID)
+                            CIVICVARIANTTYPE.NAME,
+                            CIVICVARIANTTYPE.DISPLAYNAME,
+                            CIVICVARIANTTYPE.DESCRIPTION,
+                            CIVICVARIANTTYPE.URL,
+                            CIVICVARIANTTYPE.SOID,
+                            CIVICVARIANTTYPE.IDVARIANTTYPE,
+                            CIVICVARIANTTYPE.CIVICID)
                     .values(variantType.name(),
                             variantType.displayName(),
                             variantType.description(),
@@ -137,19 +137,19 @@ final class CivicDAOFunctions {
         }
 
         context.insertInto(CIVICCOORDINATES,
-                CIVICCOORDINATES.CHROMOSOME,
-                CIVICCOORDINATES.START,
-                CIVICCOORDINATES.STOP,
-                CIVICCOORDINATES.REFERENCEBASES,
-                CIVICCOORDINATES.VARIANTBASES,
-                CIVICCOORDINATES.REPRESENTATIVETRANSCRIPT,
-                CIVICCOORDINATES.ENSEMBLVERSION,
-                CIVICCOORDINATES.REFERENCEBUILD,
-                CIVICCOORDINATES.CHROMOSOME2,
-                CIVICCOORDINATES.START2,
-                CIVICCOORDINATES.STOP2,
-                CIVICCOORDINATES.REPRESENTATIVETRANSCRIPT2,
-                CIVICCOORDINATES.CIVICID)
+                        CIVICCOORDINATES.CHROMOSOME,
+                        CIVICCOORDINATES.START,
+                        CIVICCOORDINATES.STOP,
+                        CIVICCOORDINATES.REFERENCEBASES,
+                        CIVICCOORDINATES.VARIANTBASES,
+                        CIVICCOORDINATES.REPRESENTATIVETRANSCRIPT,
+                        CIVICCOORDINATES.ENSEMBLVERSION,
+                        CIVICCOORDINATES.REFERENCEBUILD,
+                        CIVICCOORDINATES.CHROMOSOME2,
+                        CIVICCOORDINATES.START2,
+                        CIVICCOORDINATES.STOP2,
+                        CIVICCOORDINATES.REPRESENTATIVETRANSCRIPT2,
+                        CIVICCOORDINATES.CIVICID)
                 .values(civic.coordinates().chromosome(),
                         civic.coordinates().start(),
                         civic.coordinates().stop(),
@@ -167,11 +167,11 @@ final class CivicDAOFunctions {
 
         for (CivicVariantGroup variantGroup : civic.variantGroups()) {
             int idVariantGroup = context.insertInto(CIVICVARIANTGROUP,
-                    CIVICVARIANTGROUP.NAME,
-                    CIVICVARIANTGROUP.TYPE,
-                    CIVICVARIANTGROUP.DESCRIPTION,
-                    CIVICVARIANTGROUP.IDVARIANTGROUP,
-                    CIVICVARIANTGROUP.CIVICID)
+                            CIVICVARIANTGROUP.NAME,
+                            CIVICVARIANTGROUP.TYPE,
+                            CIVICVARIANTGROUP.DESCRIPTION,
+                            CIVICVARIANTGROUP.IDVARIANTGROUP,
+                            CIVICVARIANTGROUP.CIVICID)
                     .values(variantGroup.name(), variantGroup.type(), variantGroup.description(), variantGroup.id(), id)
                     .returning(CIVICVARIANTGROUP.ID)
                     .fetchOne()
@@ -179,15 +179,15 @@ final class CivicDAOFunctions {
 
             for (CivicVariant variant : variantGroup.variants()) {
                 int idVariantGroupVariant = context.insertInto(CIVICVARIANTGROUPVARIANT,
-                        CIVICVARIANTGROUPVARIANT.ENTREZID,
-                        CIVICVARIANTGROUPVARIANT.ENTREZNAME,
-                        CIVICVARIANTGROUPVARIANT.NAME,
-                        CIVICVARIANTGROUPVARIANT.TYPE,
-                        CIVICVARIANTGROUPVARIANT.CIVICACTIONABILITYSCORE,
-                        CIVICVARIANTGROUPVARIANT.IDVARIANT,
-                        CIVICVARIANTGROUPVARIANT.GENEID,
-                        CIVICVARIANTGROUPVARIANT.DESCRIPTION,
-                        CIVICVARIANTGROUPVARIANT.CIVICVARIANTGROUPID)
+                                CIVICVARIANTGROUPVARIANT.ENTREZID,
+                                CIVICVARIANTGROUPVARIANT.ENTREZNAME,
+                                CIVICVARIANTGROUPVARIANT.NAME,
+                                CIVICVARIANTGROUPVARIANT.TYPE,
+                                CIVICVARIANTGROUPVARIANT.CIVICACTIONABILITYSCORE,
+                                CIVICVARIANTGROUPVARIANT.IDVARIANT,
+                                CIVICVARIANTGROUPVARIANT.GENEID,
+                                CIVICVARIANTGROUPVARIANT.DESCRIPTION,
+                                CIVICVARIANTGROUPVARIANT.CIVICVARIANTGROUPID)
                         .values(variant.entrezId(),
                                 variant.entrezName(),
                                 variant.name(),
@@ -204,19 +204,19 @@ final class CivicDAOFunctions {
                 CivicCoordinates coordinates = variant.coordinates();
                 if (coordinates != null) {
                     context.insertInto(CIVICVARIANTGROUPCOORDINATES,
-                            CIVICVARIANTGROUPCOORDINATES.CHROMOSOME,
-                            CIVICVARIANTGROUPCOORDINATES.START,
-                            CIVICVARIANTGROUPCOORDINATES.STOP,
-                            CIVICVARIANTGROUPCOORDINATES.REFERENCEBASES,
-                            CIVICVARIANTGROUPCOORDINATES.VARIANTBASES,
-                            CIVICVARIANTGROUPCOORDINATES.REPRESENTATIVETRANSCRIPT,
-                            CIVICVARIANTGROUPCOORDINATES.ENSEMBLVERSION,
-                            CIVICVARIANTGROUPCOORDINATES.REFERENCEBUILD,
-                            CIVICVARIANTGROUPCOORDINATES.CHROMOSOME2,
-                            CIVICVARIANTGROUPCOORDINATES.START2,
-                            CIVICVARIANTGROUPCOORDINATES.STOP2,
-                            CIVICVARIANTGROUPCOORDINATES.REPRESENTATIVETRANSCRIPT2,
-                            CIVICVARIANTGROUPCOORDINATES.CIVICVARIANTGROUPVARIANTID)
+                                    CIVICVARIANTGROUPCOORDINATES.CHROMOSOME,
+                                    CIVICVARIANTGROUPCOORDINATES.START,
+                                    CIVICVARIANTGROUPCOORDINATES.STOP,
+                                    CIVICVARIANTGROUPCOORDINATES.REFERENCEBASES,
+                                    CIVICVARIANTGROUPCOORDINATES.VARIANTBASES,
+                                    CIVICVARIANTGROUPCOORDINATES.REPRESENTATIVETRANSCRIPT,
+                                    CIVICVARIANTGROUPCOORDINATES.ENSEMBLVERSION,
+                                    CIVICVARIANTGROUPCOORDINATES.REFERENCEBUILD,
+                                    CIVICVARIANTGROUPCOORDINATES.CHROMOSOME2,
+                                    CIVICVARIANTGROUPCOORDINATES.START2,
+                                    CIVICVARIANTGROUPCOORDINATES.STOP2,
+                                    CIVICVARIANTGROUPCOORDINATES.REPRESENTATIVETRANSCRIPT2,
+                                    CIVICVARIANTGROUPCOORDINATES.CIVICVARIANTGROUPVARIANTID)
                             .values(coordinates.chromosome(),
                                     coordinates.start(),
                                     coordinates.stop(),
@@ -235,13 +235,13 @@ final class CivicDAOFunctions {
 
                 for (CivicVariantType variantType : variant.variantTypes()) {
                     context.insertInto(CIVICVARIANTGROUPTYPE,
-                            CIVICVARIANTGROUPTYPE.NAME,
-                            CIVICVARIANTGROUPTYPE.DISPLAYNAME,
-                            CIVICVARIANTGROUPTYPE.DESCRIPTION,
-                            CIVICVARIANTGROUPTYPE.URL,
-                            CIVICVARIANTGROUPTYPE.SOID,
-                            CIVICVARIANTGROUPTYPE.IDVARIANTTYPE,
-                            CIVICVARIANTGROUPTYPE.CIVICVARIANTGROUPVARIANTID)
+                                    CIVICVARIANTGROUPTYPE.NAME,
+                                    CIVICVARIANTGROUPTYPE.DISPLAYNAME,
+                                    CIVICVARIANTGROUPTYPE.DESCRIPTION,
+                                    CIVICVARIANTGROUPTYPE.URL,
+                                    CIVICVARIANTGROUPTYPE.SOID,
+                                    CIVICVARIANTGROUPTYPE.IDVARIANTTYPE,
+                                    CIVICVARIANTGROUPTYPE.CIVICVARIANTGROUPVARIANTID)
                             .values(variantType.name(),
                                     variantType.displayName(),
                                     variantType.description(),
@@ -255,21 +255,21 @@ final class CivicDAOFunctions {
         }
 
         int idEvidenceItem = context.insertInto(CIVICEVIDENCEITEM,
-                CIVICEVIDENCEITEM.NAME,
-                CIVICEVIDENCEITEM.TYPE,
-                CIVICEVIDENCEITEM.STATUS,
-                CIVICEVIDENCEITEM.RATING,
-                CIVICEVIDENCEITEM.EVIDENCETYPE,
-                CIVICEVIDENCEITEM.EVIDENCELEVEL,
-                CIVICEVIDENCEITEM.EVIDENCEDIRECTION,
-                CIVICEVIDENCEITEM.DRUGINTERACTIONTYPE,
-                CIVICEVIDENCEITEM.VARIANTORIGIN,
-                CIVICEVIDENCEITEM.CLINICALSIGNIFICANCE,
-                CIVICEVIDENCEITEM.OPENCHANGECOUNT,
-                CIVICEVIDENCEITEM.DESCRIPTION,
-                CIVICEVIDENCEITEM.VARIANTID,
-                CIVICEVIDENCEITEM.IDEVIDENCEITEM,
-                CIVICEVIDENCEITEM.CIVICID)
+                        CIVICEVIDENCEITEM.NAME,
+                        CIVICEVIDENCEITEM.TYPE,
+                        CIVICEVIDENCEITEM.STATUS,
+                        CIVICEVIDENCEITEM.RATING,
+                        CIVICEVIDENCEITEM.EVIDENCETYPE,
+                        CIVICEVIDENCEITEM.EVIDENCELEVEL,
+                        CIVICEVIDENCEITEM.EVIDENCEDIRECTION,
+                        CIVICEVIDENCEITEM.DRUGINTERACTIONTYPE,
+                        CIVICEVIDENCEITEM.VARIANTORIGIN,
+                        CIVICEVIDENCEITEM.CLINICALSIGNIFICANCE,
+                        CIVICEVIDENCEITEM.OPENCHANGECOUNT,
+                        CIVICEVIDENCEITEM.DESCRIPTION,
+                        CIVICEVIDENCEITEM.VARIANTID,
+                        CIVICEVIDENCEITEM.IDEVIDENCEITEM,
+                        CIVICEVIDENCEITEM.CIVICID)
                 .values(civic.evidenceItem().name(),
                         civic.evidenceItem().type(),
                         civic.evidenceItem().status(),
@@ -296,12 +296,12 @@ final class CivicDAOFunctions {
         }
 
         context.insertInto(CIVICDISEASE,
-                CIVICDISEASE.NAME,
-                CIVICDISEASE.DISPLAYNAME,
-                CIVICDISEASE.DOID,
-                CIVICDISEASE.URL,
-                CIVICDISEASE.IDDISEASE,
-                CIVICDISEASE.CIVICEVIDENCEITEMID)
+                        CIVICDISEASE.NAME,
+                        CIVICDISEASE.DISPLAYNAME,
+                        CIVICDISEASE.DOID,
+                        CIVICDISEASE.URL,
+                        CIVICDISEASE.IDDISEASE,
+                        CIVICDISEASE.CIVICEVIDENCEITEMID)
                 .values(civic.evidenceItem().disease().name(),
                         civic.evidenceItem().disease().displayName(),
                         civic.evidenceItem().disease().doid(),
@@ -311,18 +311,18 @@ final class CivicDAOFunctions {
                 .execute();
 
         int idEvidenceItemSource = context.insertInto(CIVICEVIDENCEITEMSOURCE,
-                CIVICEVIDENCEITEMSOURCE.NAME,
-                CIVICEVIDENCEITEMSOURCE.STATUS,
-                CIVICEVIDENCEITEMSOURCE.OPENACCESS,
-                CIVICEVIDENCEITEMSOURCE.JOURNAL,
-                CIVICEVIDENCEITEMSOURCE.FULLJOURNALTITLE,
-                CIVICEVIDENCEITEMSOURCE.CITATION,
-                CIVICEVIDENCEITEMSOURCE.PMCID,
-                CIVICEVIDENCEITEMSOURCE.SOURCEURL,
-                CIVICEVIDENCEITEMSOURCE.PUBMEDID,
-                CIVICEVIDENCEITEMSOURCE.ISREVIEW,
-                CIVICEVIDENCEITEMSOURCE.IDSOURCE,
-                CIVICEVIDENCEITEMSOURCE.CIVICEVIDENCEITEMID)
+                        CIVICEVIDENCEITEMSOURCE.NAME,
+                        CIVICEVIDENCEITEMSOURCE.STATUS,
+                        CIVICEVIDENCEITEMSOURCE.OPENACCESS,
+                        CIVICEVIDENCEITEMSOURCE.JOURNAL,
+                        CIVICEVIDENCEITEMSOURCE.FULLJOURNALTITLE,
+                        CIVICEVIDENCEITEMSOURCE.CITATION,
+                        CIVICEVIDENCEITEMSOURCE.PMCID,
+                        CIVICEVIDENCEITEMSOURCE.SOURCEURL,
+                        CIVICEVIDENCEITEMSOURCE.PUBMEDID,
+                        CIVICEVIDENCEITEMSOURCE.ISREVIEW,
+                        CIVICEVIDENCEITEMSOURCE.IDSOURCE,
+                        CIVICEVIDENCEITEMSOURCE.CIVICEVIDENCEITEMID)
                 .values(civic.evidenceItem().source().name(),
                         civic.evidenceItem().source().status(),
                         civic.evidenceItem().source().openAccess(),
@@ -340,10 +340,10 @@ final class CivicDAOFunctions {
                 .getValue(CIVICEVIDENCEITEMSOURCE.ID);
 
         context.insertInto(CIVICEVIDENCEITEMPUBLICATION,
-                CIVICEVIDENCEITEMPUBLICATION.YEAR,
-                CIVICEVIDENCEITEMPUBLICATION.MONTH,
-                CIVICEVIDENCEITEMPUBLICATION.DAY,
-                CIVICEVIDENCEITEMPUBLICATION.CIVICEVIDENCEITEMSOURCEID)
+                        CIVICEVIDENCEITEMPUBLICATION.YEAR,
+                        CIVICEVIDENCEITEMPUBLICATION.MONTH,
+                        CIVICEVIDENCEITEMPUBLICATION.DAY,
+                        CIVICEVIDENCEITEMPUBLICATION.CIVICEVIDENCEITEMSOURCEID)
                 .values(civic.evidenceItem().source().publicationDate().year(),
                         civic.evidenceItem().source().publicationDate().month(),
                         civic.evidenceItem().source().publicationDate().day(),
@@ -352,11 +352,11 @@ final class CivicDAOFunctions {
 
         for (CivicClinicalTrial clinicalTrial : civic.evidenceItem().source().clinicalTrials()) {
             context.insertInto(CIVICEVIDENCEITEMCLINICALTRIAL,
-                    CIVICEVIDENCEITEMCLINICALTRIAL.NAME,
-                    CIVICEVIDENCEITEMCLINICALTRIAL.NCTID,
-                    CIVICEVIDENCEITEMCLINICALTRIAL.CLINICALTRIALURL,
-                    CIVICEVIDENCEITEMCLINICALTRIAL.DESCRIPTION,
-                    CIVICEVIDENCEITEMCLINICALTRIAL.CIVICEVIDENCEITEMSOURCEID)
+                            CIVICEVIDENCEITEMCLINICALTRIAL.NAME,
+                            CIVICEVIDENCEITEMCLINICALTRIAL.NCTID,
+                            CIVICEVIDENCEITEMCLINICALTRIAL.CLINICALTRIALURL,
+                            CIVICEVIDENCEITEMCLINICALTRIAL.DESCRIPTION,
+                            CIVICEVIDENCEITEMCLINICALTRIAL.CIVICEVIDENCEITEMSOURCEID)
                     .values(clinicalTrial.name(),
                             clinicalTrial.nctId(),
                             clinicalTrial.clinicalTrialUrl(),
@@ -367,18 +367,18 @@ final class CivicDAOFunctions {
 
         for (CivicSource source : civic.sources()) {
             int idSource = context.insertInto(CIVICSOURCE,
-                    CIVICSOURCE.NAME,
-                    CIVICSOURCE.STATUS,
-                    CIVICSOURCE.OPENACCESS,
-                    CIVICSOURCE.JOURNAL,
-                    CIVICSOURCE.FULLJOURNALTITLE,
-                    CIVICSOURCE.CITATION,
-                    CIVICSOURCE.PMCID,
-                    CIVICSOURCE.SOURCEURL,
-                    CIVICSOURCE.PUBMEDID,
-                    CIVICSOURCE.ISREVIEW,
-                    CIVICSOURCE.IDSOURCE,
-                    CIVICSOURCE.CIVICID)
+                            CIVICSOURCE.NAME,
+                            CIVICSOURCE.STATUS,
+                            CIVICSOURCE.OPENACCESS,
+                            CIVICSOURCE.JOURNAL,
+                            CIVICSOURCE.FULLJOURNALTITLE,
+                            CIVICSOURCE.CITATION,
+                            CIVICSOURCE.PMCID,
+                            CIVICSOURCE.SOURCEURL,
+                            CIVICSOURCE.PUBMEDID,
+                            CIVICSOURCE.ISREVIEW,
+                            CIVICSOURCE.IDSOURCE,
+                            CIVICSOURCE.CIVICID)
                     .values(source.name(),
                             source.status(),
                             source.openAccess(),
@@ -396,20 +396,20 @@ final class CivicDAOFunctions {
                     .getValue(CIVICSOURCE.ID);
 
             context.insertInto(CIVICPUBLICATION,
-                    CIVICPUBLICATION.YEAR,
-                    CIVICPUBLICATION.MONTH,
-                    CIVICPUBLICATION.DAY,
-                    CIVICPUBLICATION.CIVICSOURCEID)
+                            CIVICPUBLICATION.YEAR,
+                            CIVICPUBLICATION.MONTH,
+                            CIVICPUBLICATION.DAY,
+                            CIVICPUBLICATION.CIVICSOURCEID)
                     .values(source.publicationDate().year(), source.publicationDate().month(), source.publicationDate().day(), idSource)
                     .execute();
 
             for (CivicClinicalTrial clinicalTrial : source.clinicalTrials()) {
                 context.insertInto(CIVICCLINICALTRIAL,
-                        CIVICCLINICALTRIAL.NAME,
-                        CIVICCLINICALTRIAL.NCTID,
-                        CIVICCLINICALTRIAL.CLINICALTRIALURL,
-                        CIVICCLINICALTRIAL.DESCRIPTION,
-                        CIVICCLINICALTRIAL.CIVICSOURCEID)
+                                CIVICCLINICALTRIAL.NAME,
+                                CIVICCLINICALTRIAL.NCTID,
+                                CIVICCLINICALTRIAL.CLINICALTRIALURL,
+                                CIVICCLINICALTRIAL.DESCRIPTION,
+                                CIVICCLINICALTRIAL.CIVICSOURCEID)
                         .values(clinicalTrial.name(),
                                 clinicalTrial.nctId(),
                                 clinicalTrial.clinicalTrialUrl(),
@@ -436,26 +436,26 @@ final class CivicDAOFunctions {
 
             CivicUser userLastCommentedOn = lastCommentedOn.user();
             int idLastCommentedOnUser = context.insertInto(CIVICLASTCOMMENTEDONUSER,
-                    CIVICLASTCOMMENTEDONUSER.USERNAME,
-                    CIVICLASTCOMMENTEDONUSER.NAME,
-                    CIVICLASTCOMMENTEDONUSER.DISPLAYNAME,
-                    CIVICLASTCOMMENTEDONUSER.ROLE,
-                    CIVICLASTCOMMENTEDONUSER.AFFILIATION,
-                    CIVICLASTCOMMENTEDONUSER.FEATUREDEXPERT,
-                    CIVICLASTCOMMENTEDONUSER.AREAOFEXPERTISE,
-                    CIVICLASTCOMMENTEDONUSER.BIO,
-                    CIVICLASTCOMMENTEDONUSER.URL,
-                    CIVICLASTCOMMENTEDONUSER.CREATEDAT,
-                    CIVICLASTCOMMENTEDONUSER.LASTSEENAT,
-                    CIVICLASTCOMMENTEDONUSER.AVATARURL,
-                    CIVICLASTCOMMENTEDONUSER.TWITTERHANDLE,
-                    CIVICLASTCOMMENTEDONUSER.FACEBOOKPROFILE,
-                    CIVICLASTCOMMENTEDONUSER.LINKEDINPROFILE,
-                    CIVICLASTCOMMENTEDONUSER.ORCID,
-                    CIVICLASTCOMMENTEDONUSER.SIGNUPCOMPLETE,
-                    CIVICLASTCOMMENTEDONUSER.ACCEPTEDLICENSE,
-                    CIVICLASTCOMMENTEDONUSER.IDUSER,
-                    CIVICLASTCOMMENTEDONUSER.CIVICLASTCOMMENTEDONID)
+                            CIVICLASTCOMMENTEDONUSER.USERNAME,
+                            CIVICLASTCOMMENTEDONUSER.NAME,
+                            CIVICLASTCOMMENTEDONUSER.DISPLAYNAME,
+                            CIVICLASTCOMMENTEDONUSER.ROLE,
+                            CIVICLASTCOMMENTEDONUSER.AFFILIATION,
+                            CIVICLASTCOMMENTEDONUSER.FEATUREDEXPERT,
+                            CIVICLASTCOMMENTEDONUSER.AREAOFEXPERTISE,
+                            CIVICLASTCOMMENTEDONUSER.BIO,
+                            CIVICLASTCOMMENTEDONUSER.URL,
+                            CIVICLASTCOMMENTEDONUSER.CREATEDAT,
+                            CIVICLASTCOMMENTEDONUSER.LASTSEENAT,
+                            CIVICLASTCOMMENTEDONUSER.AVATARURL,
+                            CIVICLASTCOMMENTEDONUSER.TWITTERHANDLE,
+                            CIVICLASTCOMMENTEDONUSER.FACEBOOKPROFILE,
+                            CIVICLASTCOMMENTEDONUSER.LINKEDINPROFILE,
+                            CIVICLASTCOMMENTEDONUSER.ORCID,
+                            CIVICLASTCOMMENTEDONUSER.SIGNUPCOMPLETE,
+                            CIVICLASTCOMMENTEDONUSER.ACCEPTEDLICENSE,
+                            CIVICLASTCOMMENTEDONUSER.IDUSER,
+                            CIVICLASTCOMMENTEDONUSER.CIVICLASTCOMMENTEDONID)
                     .values(userLastCommentedOn.username(),
                             userLastCommentedOn.name(),
                             userLastCommentedOn.displayName(),
@@ -481,11 +481,11 @@ final class CivicDAOFunctions {
                     .getValue(CIVICLASTCOMMENTEDONUSER.ID);
 
             context.insertInto(CIVICLASTCOMMENTEDONAVATARS,
-                    CIVICLASTCOMMENTEDONAVATARS.X14,
-                    CIVICLASTCOMMENTEDONAVATARS.X32,
-                    CIVICLASTCOMMENTEDONAVATARS.X64,
-                    CIVICLASTCOMMENTEDONAVATARS.X128,
-                    CIVICLASTCOMMENTEDONAVATARS.CIVICLASTCOMMENTEDONUSERID)
+                            CIVICLASTCOMMENTEDONAVATARS.X14,
+                            CIVICLASTCOMMENTEDONAVATARS.X32,
+                            CIVICLASTCOMMENTEDONAVATARS.X64,
+                            CIVICLASTCOMMENTEDONAVATARS.X128,
+                            CIVICLASTCOMMENTEDONAVATARS.CIVICLASTCOMMENTEDONUSERID)
                     .values(userLastCommentedOn.avatars().x14(),
                             userLastCommentedOn.avatars().x32(),
                             userLastCommentedOn.avatars().x64(),
@@ -494,11 +494,11 @@ final class CivicDAOFunctions {
                     .execute();
 
             int idLastCommentOnOrganization = context.insertInto(CIVICLASTCOMMENTEDONORGANIZATION,
-                    CIVICLASTCOMMENTEDONORGANIZATION.NAME,
-                    CIVICLASTCOMMENTEDONORGANIZATION.URL,
-                    CIVICLASTCOMMENTEDONORGANIZATION.IDORGANIZATION,
-                    CIVICLASTCOMMENTEDONORGANIZATION.DESCRIPTION,
-                    CIVICLASTCOMMENTEDONORGANIZATION.CIVICLASTCOMMENTEDONUSERID)
+                            CIVICLASTCOMMENTEDONORGANIZATION.NAME,
+                            CIVICLASTCOMMENTEDONORGANIZATION.URL,
+                            CIVICLASTCOMMENTEDONORGANIZATION.IDORGANIZATION,
+                            CIVICLASTCOMMENTEDONORGANIZATION.DESCRIPTION,
+                            CIVICLASTCOMMENTEDONORGANIZATION.CIVICLASTCOMMENTEDONUSERID)
                     .values(userLastCommentedOn.organization().name(),
                             userLastCommentedOn.organization().url(),
                             userLastCommentedOn.organization().id(),
@@ -511,12 +511,12 @@ final class CivicDAOFunctions {
             CivicProfileImage userLastCommentedOnProfileImage = userLastCommentedOn.organization().profileImage();
             if (userLastCommentedOnProfileImage != null) {
                 context.insertInto(CIVICLASTCOMMENTEDONPROFILEIMAGE,
-                        CIVICLASTCOMMENTEDONPROFILEIMAGE.X14,
-                        CIVICLASTCOMMENTEDONPROFILEIMAGE.X32,
-                        CIVICLASTCOMMENTEDONPROFILEIMAGE.X64,
-                        CIVICLASTCOMMENTEDONPROFILEIMAGE.X128,
-                        CIVICLASTCOMMENTEDONPROFILEIMAGE.X256,
-                        CIVICLASTCOMMENTEDONPROFILEIMAGE.CIVICLASTCOMMENTEDONORGANIZATIONID)
+                                CIVICLASTCOMMENTEDONPROFILEIMAGE.X14,
+                                CIVICLASTCOMMENTEDONPROFILEIMAGE.X32,
+                                CIVICLASTCOMMENTEDONPROFILEIMAGE.X64,
+                                CIVICLASTCOMMENTEDONPROFILEIMAGE.X128,
+                                CIVICLASTCOMMENTEDONPROFILEIMAGE.X256,
+                                CIVICLASTCOMMENTEDONPROFILEIMAGE.CIVICLASTCOMMENTEDONORGANIZATIONID)
                         .values(userLastCommentedOnProfileImage.x14(),
                                 userLastCommentedOnProfileImage.x32(),
                                 userLastCommentedOnProfileImage.x64(),
@@ -539,26 +539,26 @@ final class CivicDAOFunctions {
             CivicUser userLastModified = lastModified.user();
 
             int idLastModifiedUser = context.insertInto(CIVICLASTMODIFIEDUSER,
-                    CIVICLASTMODIFIEDUSER.USERNAME,
-                    CIVICLASTMODIFIEDUSER.NAME,
-                    CIVICLASTMODIFIEDUSER.DISPLAYNAME,
-                    CIVICLASTMODIFIEDUSER.ROLE,
-                    CIVICLASTMODIFIEDUSER.AFFILIATION,
-                    CIVICLASTMODIFIEDUSER.FEATUREDEXPERT,
-                    CIVICLASTMODIFIEDUSER.AREAOFEXPERTISE,
-                    CIVICLASTMODIFIEDUSER.BIO,
-                    CIVICLASTMODIFIEDUSER.URL,
-                    CIVICLASTMODIFIEDUSER.CREATEDAT,
-                    CIVICLASTMODIFIEDUSER.LASTSEENAT,
-                    CIVICLASTMODIFIEDUSER.AVATARURL,
-                    CIVICLASTMODIFIEDUSER.TWITTERHANDLE,
-                    CIVICLASTMODIFIEDUSER.FACEBOOKPROFILE,
-                    CIVICLASTMODIFIEDUSER.LINKEDINPROFILE,
-                    CIVICLASTMODIFIEDUSER.ORCID,
-                    CIVICLASTMODIFIEDUSER.SIGNUPCOMPLETE,
-                    CIVICLASTMODIFIEDUSER.ACCEPTEDLICENSE,
-                    CIVICLASTMODIFIEDUSER.IDUSER,
-                    CIVICLASTMODIFIEDUSER.CIVICLASTMODIFIEDID)
+                            CIVICLASTMODIFIEDUSER.USERNAME,
+                            CIVICLASTMODIFIEDUSER.NAME,
+                            CIVICLASTMODIFIEDUSER.DISPLAYNAME,
+                            CIVICLASTMODIFIEDUSER.ROLE,
+                            CIVICLASTMODIFIEDUSER.AFFILIATION,
+                            CIVICLASTMODIFIEDUSER.FEATUREDEXPERT,
+                            CIVICLASTMODIFIEDUSER.AREAOFEXPERTISE,
+                            CIVICLASTMODIFIEDUSER.BIO,
+                            CIVICLASTMODIFIEDUSER.URL,
+                            CIVICLASTMODIFIEDUSER.CREATEDAT,
+                            CIVICLASTMODIFIEDUSER.LASTSEENAT,
+                            CIVICLASTMODIFIEDUSER.AVATARURL,
+                            CIVICLASTMODIFIEDUSER.TWITTERHANDLE,
+                            CIVICLASTMODIFIEDUSER.FACEBOOKPROFILE,
+                            CIVICLASTMODIFIEDUSER.LINKEDINPROFILE,
+                            CIVICLASTMODIFIEDUSER.ORCID,
+                            CIVICLASTMODIFIEDUSER.SIGNUPCOMPLETE,
+                            CIVICLASTMODIFIEDUSER.ACCEPTEDLICENSE,
+                            CIVICLASTMODIFIEDUSER.IDUSER,
+                            CIVICLASTMODIFIEDUSER.CIVICLASTMODIFIEDID)
                     .values(userLastModified.username(),
                             userLastModified.name(),
                             userLastModified.displayName(),
@@ -584,11 +584,11 @@ final class CivicDAOFunctions {
                     .getValue(CIVICLASTMODIFIEDUSER.ID);
 
             context.insertInto(CIVICLASTMODIFIEDAVATARS,
-                    CIVICLASTMODIFIEDAVATARS.X14,
-                    CIVICLASTMODIFIEDAVATARS.X32,
-                    CIVICLASTMODIFIEDAVATARS.X64,
-                    CIVICLASTMODIFIEDAVATARS.X128,
-                    CIVICLASTMODIFIEDAVATARS.CIVICLASTMODIFIEDID)
+                            CIVICLASTMODIFIEDAVATARS.X14,
+                            CIVICLASTMODIFIEDAVATARS.X32,
+                            CIVICLASTMODIFIEDAVATARS.X64,
+                            CIVICLASTMODIFIEDAVATARS.X128,
+                            CIVICLASTMODIFIEDAVATARS.CIVICLASTMODIFIEDID)
                     .values(userLastModified.avatars().x14(),
                             userLastModified.avatars().x32(),
                             userLastModified.avatars().x64(),
@@ -597,11 +597,11 @@ final class CivicDAOFunctions {
                     .execute();
 
             int idLastModifiedOrganization = context.insertInto(CIVICLASTMODIFIEDORGANIZATION,
-                    CIVICLASTMODIFIEDORGANIZATION.NAME,
-                    CIVICLASTMODIFIEDORGANIZATION.URL,
-                    CIVICLASTMODIFIEDORGANIZATION.IDORGANIZATION,
-                    CIVICLASTMODIFIEDORGANIZATION.DESCRIPTION,
-                    CIVICLASTMODIFIEDORGANIZATION.CIVICLASTMODIFIEDUSERID)
+                            CIVICLASTMODIFIEDORGANIZATION.NAME,
+                            CIVICLASTMODIFIEDORGANIZATION.URL,
+                            CIVICLASTMODIFIEDORGANIZATION.IDORGANIZATION,
+                            CIVICLASTMODIFIEDORGANIZATION.DESCRIPTION,
+                            CIVICLASTMODIFIEDORGANIZATION.CIVICLASTMODIFIEDUSERID)
                     .values(userLastModified.organization().name(),
                             userLastModified.organization().url(),
                             userLastModified.organization().id(),
@@ -614,12 +614,12 @@ final class CivicDAOFunctions {
             CivicProfileImage userLastModifiedProfileImage = userLastModified.organization().profileImage();
             if (userLastModifiedProfileImage != null) {
                 context.insertInto(CIVICLASTMODIFIEDPROFILEIMAGE,
-                        CIVICLASTMODIFIEDPROFILEIMAGE.X14,
-                        CIVICLASTMODIFIEDPROFILEIMAGE.X32,
-                        CIVICLASTMODIFIEDPROFILEIMAGE.X64,
-                        CIVICLASTMODIFIEDPROFILEIMAGE.X128,
-                        CIVICLASTMODIFIEDPROFILEIMAGE.X256,
-                        CIVICLASTMODIFIEDPROFILEIMAGE.CIVICLASTMODIFIEDORGANIZATIONID)
+                                CIVICLASTMODIFIEDPROFILEIMAGE.X14,
+                                CIVICLASTMODIFIEDPROFILEIMAGE.X32,
+                                CIVICLASTMODIFIEDPROFILEIMAGE.X64,
+                                CIVICLASTMODIFIEDPROFILEIMAGE.X128,
+                                CIVICLASTMODIFIEDPROFILEIMAGE.X256,
+                                CIVICLASTMODIFIEDPROFILEIMAGE.CIVICLASTMODIFIEDORGANIZATIONID)
                         .values(userLastModifiedProfileImage.x14(),
                                 userLastModifiedProfileImage.x32(),
                                 userLastModifiedProfileImage.x64(),
@@ -641,26 +641,26 @@ final class CivicDAOFunctions {
 
             CivicUser userLastReviewed = lastReviewed.user();
             int idLastReviewedUser = context.insertInto(CIVICLASTREVIEWEDUSER,
-                    CIVICLASTREVIEWEDUSER.USERNAME,
-                    CIVICLASTREVIEWEDUSER.NAME,
-                    CIVICLASTREVIEWEDUSER.DISPLAYNAME,
-                    CIVICLASTREVIEWEDUSER.ROLE,
-                    CIVICLASTREVIEWEDUSER.AFFILIATION,
-                    CIVICLASTREVIEWEDUSER.FEATUREDEXPERT,
-                    CIVICLASTREVIEWEDUSER.AREAOFEXPERTISE,
-                    CIVICLASTREVIEWEDUSER.BIO,
-                    CIVICLASTREVIEWEDUSER.URL,
-                    CIVICLASTREVIEWEDUSER.CREATEDAT,
-                    CIVICLASTREVIEWEDUSER.LASTSEENAT,
-                    CIVICLASTREVIEWEDUSER.AVATARURL,
-                    CIVICLASTREVIEWEDUSER.TWITTERHANDLE,
-                    CIVICLASTREVIEWEDUSER.FACEBOOKPROFILE,
-                    CIVICLASTREVIEWEDUSER.LINKEDINPROFILE,
-                    CIVICLASTREVIEWEDUSER.ORCID,
-                    CIVICLASTREVIEWEDUSER.SIGNUPCOMPLETE,
-                    CIVICLASTREVIEWEDUSER.ACCEPTEDLICENSE,
-                    CIVICLASTREVIEWEDUSER.IDUSER,
-                    CIVICLASTREVIEWEDUSER.CIVICLASTREVIEWEDID)
+                            CIVICLASTREVIEWEDUSER.USERNAME,
+                            CIVICLASTREVIEWEDUSER.NAME,
+                            CIVICLASTREVIEWEDUSER.DISPLAYNAME,
+                            CIVICLASTREVIEWEDUSER.ROLE,
+                            CIVICLASTREVIEWEDUSER.AFFILIATION,
+                            CIVICLASTREVIEWEDUSER.FEATUREDEXPERT,
+                            CIVICLASTREVIEWEDUSER.AREAOFEXPERTISE,
+                            CIVICLASTREVIEWEDUSER.BIO,
+                            CIVICLASTREVIEWEDUSER.URL,
+                            CIVICLASTREVIEWEDUSER.CREATEDAT,
+                            CIVICLASTREVIEWEDUSER.LASTSEENAT,
+                            CIVICLASTREVIEWEDUSER.AVATARURL,
+                            CIVICLASTREVIEWEDUSER.TWITTERHANDLE,
+                            CIVICLASTREVIEWEDUSER.FACEBOOKPROFILE,
+                            CIVICLASTREVIEWEDUSER.LINKEDINPROFILE,
+                            CIVICLASTREVIEWEDUSER.ORCID,
+                            CIVICLASTREVIEWEDUSER.SIGNUPCOMPLETE,
+                            CIVICLASTREVIEWEDUSER.ACCEPTEDLICENSE,
+                            CIVICLASTREVIEWEDUSER.IDUSER,
+                            CIVICLASTREVIEWEDUSER.CIVICLASTREVIEWEDID)
                     .values(userLastReviewed.username(),
                             userLastReviewed.name(),
                             userLastReviewed.displayName(),
@@ -686,11 +686,11 @@ final class CivicDAOFunctions {
                     .getValue(CIVICLASTREVIEWEDUSER.ID);
 
             context.insertInto(CIVICLASTREVIEWEDAVATARS,
-                    CIVICLASTREVIEWEDAVATARS.X14,
-                    CIVICLASTREVIEWEDAVATARS.X32,
-                    CIVICLASTREVIEWEDAVATARS.X64,
-                    CIVICLASTREVIEWEDAVATARS.X128,
-                    CIVICLASTREVIEWEDAVATARS.CIVICLASTREVIEWEDID)
+                            CIVICLASTREVIEWEDAVATARS.X14,
+                            CIVICLASTREVIEWEDAVATARS.X32,
+                            CIVICLASTREVIEWEDAVATARS.X64,
+                            CIVICLASTREVIEWEDAVATARS.X128,
+                            CIVICLASTREVIEWEDAVATARS.CIVICLASTREVIEWEDID)
                     .values(userLastReviewed.avatars().x14(),
                             userLastReviewed.avatars().x32(),
                             userLastReviewed.avatars().x64(),
@@ -699,11 +699,11 @@ final class CivicDAOFunctions {
                     .execute();
 
             int idLastReviewedOrganization = context.insertInto(CIVICLASTREVIEWEDORGANIZATION,
-                    CIVICLASTREVIEWEDORGANIZATION.NAME,
-                    CIVICLASTREVIEWEDORGANIZATION.URL,
-                    CIVICLASTREVIEWEDORGANIZATION.IDORGANIZATION,
-                    CIVICLASTREVIEWEDORGANIZATION.DESCRIPTION,
-                    CIVICLASTREVIEWEDORGANIZATION.CIVICLASTREVIEWEDUSERID)
+                            CIVICLASTREVIEWEDORGANIZATION.NAME,
+                            CIVICLASTREVIEWEDORGANIZATION.URL,
+                            CIVICLASTREVIEWEDORGANIZATION.IDORGANIZATION,
+                            CIVICLASTREVIEWEDORGANIZATION.DESCRIPTION,
+                            CIVICLASTREVIEWEDORGANIZATION.CIVICLASTREVIEWEDUSERID)
                     .values(userLastReviewed.organization().name(),
                             userLastReviewed.organization().url(),
                             userLastReviewed.organization().id(),
@@ -716,12 +716,12 @@ final class CivicDAOFunctions {
             CivicProfileImage userLastReviewedProfileImage = userLastReviewed.organization().profileImage();
             if (userLastReviewedProfileImage != null) {
                 context.insertInto(CIVICLASTREVIEWEDPROFILEIMAGE,
-                        CIVICLASTREVIEWEDPROFILEIMAGE.X14,
-                        CIVICLASTREVIEWEDPROFILEIMAGE.X32,
-                        CIVICLASTREVIEWEDPROFILEIMAGE.X64,
-                        CIVICLASTREVIEWEDPROFILEIMAGE.X128,
-                        CIVICLASTREVIEWEDPROFILEIMAGE.X256,
-                        CIVICLASTREVIEWEDPROFILEIMAGE.CIVICLASTREVIEWEDORGANIZATIONID)
+                                CIVICLASTREVIEWEDPROFILEIMAGE.X14,
+                                CIVICLASTREVIEWEDPROFILEIMAGE.X32,
+                                CIVICLASTREVIEWEDPROFILEIMAGE.X64,
+                                CIVICLASTREVIEWEDPROFILEIMAGE.X128,
+                                CIVICLASTREVIEWEDPROFILEIMAGE.X256,
+                                CIVICLASTREVIEWEDPROFILEIMAGE.CIVICLASTREVIEWEDORGANIZATIONID)
                         .values(userLastReviewedProfileImage.x14(),
                                 userLastReviewedProfileImage.x32(),
                                 userLastReviewedProfileImage.x64(),

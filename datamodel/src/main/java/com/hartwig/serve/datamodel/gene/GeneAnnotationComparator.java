@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 public class GeneAnnotationComparator implements Comparator<GeneAnnotation> {
 
     @Override
-    public int compare(@NotNull GeneAnnotation annotation1, @NotNull  GeneAnnotation annotation2) {
+    public int compare(@NotNull GeneAnnotation annotation1, @NotNull GeneAnnotation annotation2) {
         int geneCompare = annotation1.gene().compareTo(annotation2.gene());
         if (geneCompare != 0) {
             return geneCompare;

@@ -92,16 +92,26 @@ public final class CkbTestFactory {
     }
 
     @NotNull
-    public static CkbEntry createEntryWithClinicalTrial(int profileId, @NotNull ClinicalTrial clinicalTrial) {
-        return builder().profileId(profileId).clinicalTrials(List.of(clinicalTrial)).build();
+    public static CkbEntry createEntryWithClinicalTrial(int profileId, @NotNull String profileName, @NotNull ClinicalTrial clinicalTrial) {
+        return builder().profileId(profileId).profileName(profileName).clinicalTrials(List.of(clinicalTrial)).build();
     }
 
     @NotNull
     public static CkbEntry createEntry(@NotNull String geneSymbol, @NotNull String variant, @NotNull String fullName,
             @NotNull String responseType, @NotNull String evidenceType, @NotNull String therapyName, @NotNull String indicationName,
             @NotNull String level, @NotNull String termId) {
+        Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting");
+        VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(0, "required");
         return builder().addVariants(createVariant(geneSymbol, variant, fullName))
                 .addEvidences(createEvidence(responseType, evidenceType, therapyName, indicationName, level, termId))
+                .addClinicalTrials(createTrialWithTerapy("Recruiting",
+                        List.of(requirementDetail),
+                        List.of(location),
+                        "NCT0102",
+                        "Phase I trial",
+                        List.of(CkbTestFactory.createTherapy("Nivolumab")),
+                        List.of(CkbTestFactory.createIndication("test", "JAX:10000006")),
+                        List.of("senior", "child", "adult")))
                 .build();
     }
 
@@ -113,6 +123,24 @@ public final class CkbTestFactory {
                 .nctId(nctId)
                 .title(title)
                 .indications(List.of(createIndication("AB", "DOID:162")))
+                .recruitment(recruitment)
+                .ageGroups(ageGroups)
+                .variantRequirement(Strings.EMPTY)
+                .variantRequirementDetails(variantRequirementDetails)
+                .locations(locations)
+                .build();
+    }
+
+    @NotNull
+    public static ClinicalTrial createTrialWithTerapy(@NotNull String recruitment,
+            @NotNull List<VariantRequirementDetail> variantRequirementDetails, @NotNull List<Location> locations, @NotNull String nctId,
+            @NotNull String title, @NotNull List<Therapy> therapies, @NotNull List<Indication> indication, @NotNull List<String> ageGroups) {
+        return ImmutableClinicalTrial.builder()
+                .updateDate(TEST_DATE)
+                .nctId(nctId)
+                .title(title)
+                .therapies(therapies)
+                .indications(indication)
                 .recruitment(recruitment)
                 .ageGroups(ageGroups)
                 .variantRequirement(Strings.EMPTY)
@@ -140,7 +168,7 @@ public final class CkbTestFactory {
     }
 
     @NotNull
-    private static Therapy createTherapy(@NotNull String therapyName) {
+    public static Therapy createTherapy(@NotNull String therapyName) {
         return ImmutableTherapy.builder()
                 .id(0)
                 .createDate(TEST_DATE)

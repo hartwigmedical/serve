@@ -8,13 +8,17 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.ActionableEvent;
 import com.hartwig.serve.datamodel.CancerType;
+import com.hartwig.serve.datamodel.ClinicalTrial;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.ImmutableCancerType;
+import com.hartwig.serve.datamodel.ImmutableClinicalTrial;
 import com.hartwig.serve.datamodel.ImmutableTreatment;
+import com.hartwig.serve.datamodel.Intervention;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.Treatment;
 
+import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 
 public final class ActionableFileUtil {
@@ -32,6 +36,9 @@ public final class ActionableFileUtil {
         return new StringJoiner(FIELD_DELIMITER).add("source")
                 .add("sourceEvent")
                 .add("sourceUrls")
+                .add("studyNctId")
+                .add("studyTitle")
+                .add("countriesOfStudy")
                 .add("treatment")
                 .add("sourceRelevantTreatmentApproaches")
                 .add("relevantTreatmentApproaches")
@@ -68,12 +75,30 @@ public final class ActionableFileUtil {
 
             @NotNull
             @Override
-            public Treatment treatment() {
-                return ImmutableTreatment.builder()
-                        .name(values[fields.get("treatment")])
-                        .sourceRelevantTreatmentApproaches(fieldToSet(values[fields.get("sourceRelevantTreatmentApproaches")]))
-                        .relevantTreatmentApproaches(fieldToSet(values[fields.get("relevantTreatmentApproaches")]))
-                        .build();
+            public Intervention intervention() {
+                boolean isClinicalTrial = !values[fields.get("studyNctId")].isEmpty();
+                boolean isTreatment = values[fields.get("studyNctId")].isEmpty() && !values[fields.get("treatment")].isEmpty();
+
+                if (isClinicalTrial && isTreatment) {
+                    throw new IllegalStateException("An actionable event cannot be both a treatment and clinical trial");
+                }
+
+                if (isTreatment) {
+                    return ImmutableTreatment.builder()
+                            .name(values[fields.get("treatment")])
+                            .sourceRelevantTreatmentApproaches(fieldToSet(values[fields.get("sourceRelevantTreatmentApproaches")]))
+                            .relevantTreatmentApproaches(fieldToSet(values[fields.get("relevantTreatmentApproaches")]))
+                            .build();
+                } else if (isClinicalTrial) {
+                    return ImmutableClinicalTrial.builder()
+                            .studyNctId(values[fields.get("studyNctId")])
+                            .studyTitle(values[fields.get("studyTitle")])
+                            .countriesOfStudy(fieldToSet(values[fields.get("countriesOfStudy")]))
+                            .therapyNames(fieldToSet(values[fields.get("treatment")]))
+                            .build();
+                } else {
+                    throw new IllegalStateException("An actionable event has to be either a treatment or a clinical trial!");
+                }
             }
 
             @NotNull
@@ -114,12 +139,33 @@ public final class ActionableFileUtil {
 
     @NotNull
     public static String toLine(@NotNull ActionableEvent event) {
+        ClinicalTrial clinicalTrial = null;
+        Treatment treatment = null;
+        if (event.intervention() instanceof ClinicalTrial) {
+            clinicalTrial = (ClinicalTrial) event.intervention();
+        } else if (event.intervention() instanceof Treatment) {
+            treatment = (Treatment) event.intervention();
+        }
+
+        if ((clinicalTrial == null && treatment == null)) {
+            throw new IllegalStateException("An actionable event has to contain either treatment or clinical trial: " + event);
+        }
+
+        Set<String> therapy = Sets.newHashSet();
+        if (clinicalTrial != null) {
+            therapy = clinicalTrial.therapyNames();
+        } else {
+            therapy.add(treatment.name());
+        }
         return new StringJoiner(FIELD_DELIMITER).add(event.source().toString())
                 .add(event.sourceEvent())
                 .add(setToField(event.sourceUrls()))
-                .add(event.treatment().name())
-                .add(setToField(event.treatment().sourceRelevantTreatmentApproaches()))
-                .add(setToField(event.treatment().relevantTreatmentApproaches()))
+                .add(clinicalTrial != null ? clinicalTrial.studyNctId() : Strings.EMPTY)
+                .add(clinicalTrial != null ? clinicalTrial.studyTitle() : Strings.EMPTY)
+                .add(clinicalTrial != null ? setToField(clinicalTrial.countriesOfStudy()) : Strings.EMPTY)
+                .add(setToField(therapy))
+                .add(treatment != null ? setToField(treatment.sourceRelevantTreatmentApproaches()) : Strings.EMPTY)
+                .add(treatment != null ? setToField(treatment.relevantTreatmentApproaches()) : Strings.EMPTY)
                 .add(event.applicableCancerType().name())
                 .add(event.applicableCancerType().doid())
                 .add(cancerTypesToField(event.blacklistCancerTypes()))

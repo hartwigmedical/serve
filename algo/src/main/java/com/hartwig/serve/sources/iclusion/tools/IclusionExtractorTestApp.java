@@ -55,8 +55,7 @@ public class IclusionExtractorTestApp {
         DoidLookup doidLookup = DoidLookupFactory.buildFromMappingTsv(config.missingDoidsMappingTsv());
 
         RefGenomeResource refGenomeResource = buildRefGenomeResource(config);
-        IclusionExtractor extractor =
-                IclusionExtractorFactory.create(IclusionClassificationConfig.build(), refGenomeResource, doidLookup);
+        IclusionExtractor extractor = IclusionExtractorFactory.create(IclusionClassificationConfig.build(), refGenomeResource, doidLookup);
 
         List<IclusionTrial> trials = IclusionReader.readAndCurate(config.iClusionTrialTsv(), config.iClusionFilterTsv());
         ExtractionResult result = extractor.extract(trials);

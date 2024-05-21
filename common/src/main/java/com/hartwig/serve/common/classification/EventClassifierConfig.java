@@ -49,6 +49,7 @@ public abstract class EventClassifierConfig {
 
     @NotNull
     public abstract Set<String> amplificationKeyPhrases();
+
     @NotNull
     public abstract Set<String> overexpressionKeywords();
 
@@ -60,11 +61,13 @@ public abstract class EventClassifierConfig {
 
     @NotNull
     public abstract Set<String> deletionKeywords();
+
     @NotNull
     public abstract Set<String> underexpressionKeywords();
 
     @NotNull
     public abstract Set<String> underexpressionKeyPhrases();
+
     @NotNull
     public abstract Set<String> deletionKeyPhrases();
 

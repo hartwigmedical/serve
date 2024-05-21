@@ -50,7 +50,7 @@ public class ActionableFusionFileTest {
     }
 
     @NotNull
-    private static ActionableFusion findByGeneUp(@NotNull List<ActionableFusion> fusions,  @NotNull String geneUpToFind) {
+    private static ActionableFusion findByGeneUp(@NotNull List<ActionableFusion> fusions, @NotNull String geneUpToFind) {
         for (ActionableFusion fusion : fusions) {
             if (fusion.geneUp().equals(geneUpToFind)) {
                 return fusion;

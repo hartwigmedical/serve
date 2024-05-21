@@ -19,16 +19,15 @@ public final class TreatmentApproachCurationFile {
     }
 
     @NotNull
-    public static Map<TreatmentApproachCurationEntryKey, TreatmentApproachCurationEntry> read(
-            @NotNull String treatmentApproachCurationFile) throws IOException {
+    public static Map<TreatmentApproachCurationEntryKey, TreatmentApproachCurationEntry> read(@NotNull String treatmentApproachCurationFile)
+            throws IOException {
         List<String> lines = Files.readAllLines(new File(treatmentApproachCurationFile).toPath());
         // Skip header
         return fromLines(lines.subList(1, lines.size()));
     }
 
     @NotNull
-    private static Map<TreatmentApproachCurationEntryKey, TreatmentApproachCurationEntry> fromLines(
-            @NotNull List<String> lines) {
+    private static Map<TreatmentApproachCurationEntryKey, TreatmentApproachCurationEntry> fromLines(@NotNull List<String> lines) {
         Map<TreatmentApproachCurationEntryKey, TreatmentApproachCurationEntry> mapEntry = Maps.newHashMap();
         for (String line : lines) {
             String[] values = line.split(FIELD_DELIMITER);

@@ -12,6 +12,7 @@ import com.hartwig.serve.datamodel.DatamodelTestFactory;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.datamodel.Treatment;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
@@ -23,11 +24,7 @@ public class ActionableFileUtilTest {
         ActionableEvent event = DatamodelTestFactory.createActionableEvent(Knowledgebase.VICC_CGI,
                 "source event",
                 Sets.newHashSet(),
-                DatamodelTestFactory.treatmentBuilder()
-                        .name("treatment")
-                        .addSourceRelevantTreatmentApproaches("drug classes")
-                        .addRelevantTreatmentApproaches("drug classes")
-                        .build(),
+                DatamodelTestFactory.interventionBuilder(false, true, "treatment1"),
                 DatamodelTestFactory.cancerTypeBuilder().name("applicable name").doid("applicable doid").build(),
                 Sets.newHashSet(DatamodelTestFactory.cancerTypeBuilder().name("blacklist name").doid("blacklist doid").build()),
                 EvidenceLevel.C,
@@ -36,17 +33,20 @@ public class ActionableFileUtilTest {
 
         String line = ActionableFileUtil.toLine(event);
         Map<String, Integer> fields = SerializationUtil.createFields(ActionableFileUtil.header(), ActionableFileUtil.FIELD_DELIMITER);
-        ActionableEvent convertedEvent = ActionableFileUtil.fromLine(line.split(ActionableFileUtil.FIELD_DELIMITER), fields);
+        ActionableEvent coveredEvent = ActionableFileUtil.fromLine(line.split(ActionableFileUtil.FIELD_DELIMITER), fields);
 
-        assertEquals(event.source(), convertedEvent.source());
-        assertEquals(event.sourceEvent(), convertedEvent.sourceEvent());
-        assertEquals(event.sourceUrls(), convertedEvent.sourceUrls());
-        assertEquals(event.treatment(), convertedEvent.treatment());
-        assertEquals(event.applicableCancerType(), convertedEvent.applicableCancerType());
-        assertEquals(event.blacklistCancerTypes(), convertedEvent.blacklistCancerTypes());
-        assertEquals(event.level(), convertedEvent.level());
-        assertEquals(event.direction(), convertedEvent.direction());
-        assertEquals(event.evidenceUrls(), convertedEvent.evidenceUrls());
+        Treatment treatmentCovered = DatamodelTestFactory.extractTreatment(coveredEvent);
+        Treatment treatmentEvent = DatamodelTestFactory.extractTreatment(event);
+
+        assertEquals(event.source(), coveredEvent.source());
+        assertEquals(event.sourceEvent(), coveredEvent.sourceEvent());
+        assertEquals(event.sourceUrls(), coveredEvent.sourceUrls());
+        assertEquals(treatmentEvent, treatmentCovered);
+        assertEquals(event.applicableCancerType(), coveredEvent.applicableCancerType());
+        assertEquals(event.blacklistCancerTypes(), coveredEvent.blacklistCancerTypes());
+        assertEquals(event.level(), coveredEvent.level());
+        assertEquals(event.direction(), coveredEvent.direction());
+        assertEquals(event.evidenceUrls(), coveredEvent.evidenceUrls());
     }
 
     @Test

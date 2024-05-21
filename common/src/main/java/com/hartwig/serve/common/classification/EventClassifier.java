@@ -26,7 +26,7 @@ public class EventClassifier {
     public EventType determineType(@NotNull String gene, @NotNull String event) {
         Map<EventType, Boolean> evaluations = Maps.newHashMap();
 
-        for (Map.Entry<EventType, EventMatcher> entry : matchers.entrySet()){
+        for (Map.Entry<EventType, EventMatcher> entry : matchers.entrySet()) {
             evaluations.put(entry.getKey(), entry.getValue().matches(gene, event));
         }
 

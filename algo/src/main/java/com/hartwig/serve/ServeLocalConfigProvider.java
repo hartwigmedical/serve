@@ -40,7 +40,9 @@ public final class ServeLocalConfigProvider {
         if (hostname.toLowerCase().contains("serve-vm")) {
             builder.viccJson("/data/resources/crunch/serve/vicc/all.json");
             builder.ckbDir("/data/resources/custom/ckb/latest");
-            builder.ckbFilterTsv("/data/resources/crunch/serve/curation/ckb_filters.tsv");
+            builder.ckbBlacklistMolecularProfileTsv("/data/resources/crunch/serve/curation/ckb_blacklist_molecular_profile.tsv");
+            builder.ckbBlacklistTrialTsv("/data/resources/crunch/serve/curation/ckb_blacklist_trial.tsv");
+            builder.ckbBlacklistEvidenceTsv("/data/resources/crunch/serve/curation/ckb_blacklist_evidence.tsv");
             builder.ckbDrugCurationTsv("/data/resources/crunch/serve/curation/ckb_drugs_class_curation.tsv");
             builder.iClusionTrialTsv("/data/resources/crunch/serve/iclusion/iclusion_trials_prod.tsv");
             builder.iClusionFilterTsv("/data/resources/crunch/serve/curation/iclusion_filters.tsv");
@@ -62,8 +64,10 @@ public final class ServeLocalConfigProvider {
             String baseDir = System.getProperty("user.home") + "/hmf/";
             builder.viccJson(baseDir + "actionable/static_sources/vicc/all.json");
             builder.ckbDir(baseDir + "actionable/ckb");
-            builder.ckbFilterTsv(baseDir + "actionable/curation/ckb_filters.tsv");
+            builder.ckbBlacklistMolecularProfileTsv(baseDir + "actionable/curation/ckb_blacklist_molecular_profile.tsv");
             builder.ckbDrugCurationTsv(baseDir + "actionable/curation/ckb_drugs_class_curation.tsv");
+            builder.ckbBlacklistTrialTsv(baseDir + "actionable/curation/ckb_blacklist_trial.tsv");
+            builder.ckbBlacklistEvidenceTsv(baseDir + "actionable/curation/ckb_blacklist_evidence.tsv");
             builder.iClusionTrialTsv(baseDir + "actionable/iclusion/iclusion_trials_prod.tsv");
             builder.iClusionFilterTsv(baseDir + "actionable/iclusion/iclusion_filter.tsv");
 

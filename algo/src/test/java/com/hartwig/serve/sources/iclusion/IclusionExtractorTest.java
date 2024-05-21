@@ -22,9 +22,8 @@ public class IclusionExtractorTest {
     @Test
     public void canExtractFromIclusionEntries() {
         EventClassifierConfig config = IclusionClassificationConfig.build();
-        IclusionExtractor extractor = IclusionExtractorFactory.create(config,
-                RefGenomeResourceTestFactory.buildTestResource37(),
-                DoidLookupTestFactory.dummy());
+        IclusionExtractor extractor =
+                IclusionExtractorFactory.create(config, RefGenomeResourceTestFactory.buildTestResource37(), DoidLookupTestFactory.dummy());
 
         IclusionTumorLocation loc1 = ImmutableIclusionTumorLocation.builder().primaryTumorLocation("ptum").addDoids("162").build();
 

@@ -71,12 +71,7 @@ public class HotspotExtractor {
 
             List<VariantHotspot> hotspots = Lists.newArrayList();
             for (Hotspot hotspot : proteinResolver.resolve(gene, transcriptId, proteinAnnotationExtractor.apply(event))) {
-                hotspots.add(ImmutableVariantHotspotImpl.builder()
-                        .from(hotspot)
-                        .gene(gene)
-                        .ref(hotspot.ref())
-                        .alt(hotspot.alt())
-                        .build());
+                hotspots.add(ImmutableVariantHotspotImpl.builder().from(hotspot).gene(gene).ref(hotspot.ref()).alt(hotspot.alt()).build());
             }
             return hotspots;
         }

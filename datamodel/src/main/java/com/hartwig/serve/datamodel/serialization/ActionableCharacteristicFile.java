@@ -30,8 +30,7 @@ public final class ActionableCharacteristicFile {
     }
 
     @NotNull
-    public static String actionableCharacteristicTsvPath(@NotNull String serveActionabilityDir,
-            @NotNull RefGenome refGenome) {
+    public static String actionableCharacteristicTsvPath(@NotNull String serveActionabilityDir, @NotNull RefGenome refGenome) {
         return refGenome.addVersionToFilePath(serveActionabilityDir + File.separator + ACTIONABLE_CHARACTERISTIC_TSV);
     }
 

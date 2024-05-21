@@ -11,7 +11,10 @@ import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
 import com.hartwig.serve.datamodel.hotspot.HotspotTestFactory;
 import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
-import com.hartwig.serve.datamodel.range.*;
+import com.hartwig.serve.datamodel.range.ActionableRange;
+import com.hartwig.serve.datamodel.range.KnownCodon;
+import com.hartwig.serve.datamodel.range.KnownExon;
+import com.hartwig.serve.datamodel.range.RangeTestFactory;
 import com.hartwig.serve.refgenome.liftover.ImmutableLiftOverResult;
 import com.hartwig.serve.refgenome.liftover.LiftOverAlgo;
 import com.hartwig.serve.refgenome.liftover.LiftOverResult;
@@ -132,10 +135,7 @@ public class RefGenomeConverterTest {
 
     @NotNull
     private static RefGenomeConverter build37To38ConverterWithLiftOverAlgo(@NotNull LiftOverAlgo algo) {
-        return new RefGenomeConverter(RefGenome.V37,
-                RefGenome.V38,
-                RefGenomeResourceTestFactory.loadTestRefSequence38(),
-                algo);
+        return new RefGenomeConverter(RefGenome.V37, RefGenome.V38, RefGenomeResourceTestFactory.loadTestRefSequence38(), algo);
     }
 
     private static class DummyLiftOver implements LiftOverAlgo {

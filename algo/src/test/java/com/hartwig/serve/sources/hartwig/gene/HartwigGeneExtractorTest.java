@@ -1,6 +1,6 @@
 package com.hartwig.serve.sources.hartwig.gene;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ public class HartwigGeneExtractorTest {
     private static final String GENE = "gene";
 
     @Test
-    public void shouldExtractGenesFromEntries(){
+    public void shouldExtractGenesFromEntries() {
         HartwigGeneExtractor victim = new HartwigGeneExtractor(Knowledgebase.HARTWIG_GENE_CURATED);
         ExtractionResult result = victim.extract(List.of(ImmutableHartwigGeneEntry.builder().gene(GENE).build()));
         assertEquals(result.knownGenes().size(), 1);

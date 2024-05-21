@@ -180,10 +180,10 @@ public class ViccDAO {
     private void writeGeneIdentifiers(int viccEntryId, @NotNull List<GeneIdentifier> geneIdentifiers) {
         for (GeneIdentifier geneIdentifier : geneIdentifiers) {
             context.insertInto(GENEIDENTIFIER,
-                    GENEIDENTIFIER.SYMBOL,
-                    GENEIDENTIFIER.ENTREZID,
-                    GENEIDENTIFIER.ENSEMBLGENEID,
-                    GENEIDENTIFIER.VICCENTRYID)
+                            GENEIDENTIFIER.SYMBOL,
+                            GENEIDENTIFIER.ENTREZID,
+                            GENEIDENTIFIER.ENSEMBLGENEID,
+                            GENEIDENTIFIER.VICCENTRYID)
                     .values(geneIdentifier.symbol(), geneIdentifier.entrezId(), geneIdentifier.ensemblGeneId(), viccEntryId)
                     .execute();
         }
@@ -204,19 +204,19 @@ public class ViccDAO {
     private void writeFeatures(int viccEntryId, @NotNull List<Feature> features) {
         for (Feature feature : features) {
             int id = context.insertInto(FEATURE,
-                    FEATURE.NAME,
-                    FEATURE.BIOMARKERTYPE,
-                    FEATURE.REFERENCENAME,
-                    FEATURE.CHROMOSOME,
-                    FEATURE.START,
-                    FEATURE.END,
-                    FEATURE.REF,
-                    FEATURE.ALT,
-                    FEATURE.PROVENANCERULE,
-                    FEATURE.GENESYMBOL,
-                    FEATURE.ENTREZID,
-                    FEATURE.DESCRIPTION,
-                    FEATURE.VICCENTRYID)
+                            FEATURE.NAME,
+                            FEATURE.BIOMARKERTYPE,
+                            FEATURE.REFERENCENAME,
+                            FEATURE.CHROMOSOME,
+                            FEATURE.START,
+                            FEATURE.END,
+                            FEATURE.REF,
+                            FEATURE.ALT,
+                            FEATURE.PROVENANCERULE,
+                            FEATURE.GENESYMBOL,
+                            FEATURE.ENTREZID,
+                            FEATURE.DESCRIPTION,
+                            FEATURE.VICCENTRYID)
                     .values(feature.name(),
                             feature.biomarkerType(),
                             feature.referenceName(),
@@ -253,25 +253,25 @@ public class ViccDAO {
     private void writeFeatureAttribute(int featureId, @Nullable FeatureAttribute featureAttribute) {
         if (featureAttribute != null) {
             context.insertInto(FEATUREATTRIBUTE,
-                    FEATUREATTRIBUTE.AMINOACIDCHANGE,
-                    FEATUREATTRIBUTE.GERMLINE,
-                    FEATUREATTRIBUTE.PARTNERGENE,
-                    FEATUREATTRIBUTE.DESCRIPTION,
-                    FEATUREATTRIBUTE.EXONS,
-                    FEATUREATTRIBUTE.NOTES,
-                    FEATUREATTRIBUTE.COSMIC,
-                    FEATUREATTRIBUTE.EFFECT,
-                    FEATUREATTRIBUTE.CNVTYPE,
-                    FEATUREATTRIBUTE.FEATUREATTRIBUTEID,
-                    FEATUREATTRIBUTE.CYTOBAND,
-                    FEATUREATTRIBUTE.VARIANTTYPE,
-                    FEATUREATTRIBUTE.DNACHANGE,
-                    FEATUREATTRIBUTE.CODONS,
-                    FEATUREATTRIBUTE.CHROMOSOMEBASEDCNV,
-                    FEATUREATTRIBUTE.TRANSCRIPT,
-                    FEATUREATTRIBUTE.DESCRIPTIONTYPE,
-                    FEATUREATTRIBUTE.CHROMOSOME,
-                    FEATUREINFO.FEATUREID)
+                            FEATUREATTRIBUTE.AMINOACIDCHANGE,
+                            FEATUREATTRIBUTE.GERMLINE,
+                            FEATUREATTRIBUTE.PARTNERGENE,
+                            FEATUREATTRIBUTE.DESCRIPTION,
+                            FEATUREATTRIBUTE.EXONS,
+                            FEATUREATTRIBUTE.NOTES,
+                            FEATUREATTRIBUTE.COSMIC,
+                            FEATUREATTRIBUTE.EFFECT,
+                            FEATUREATTRIBUTE.CNVTYPE,
+                            FEATUREATTRIBUTE.FEATUREATTRIBUTEID,
+                            FEATUREATTRIBUTE.CYTOBAND,
+                            FEATUREATTRIBUTE.VARIANTTYPE,
+                            FEATUREATTRIBUTE.DNACHANGE,
+                            FEATUREATTRIBUTE.CODONS,
+                            FEATUREATTRIBUTE.CHROMOSOMEBASEDCNV,
+                            FEATUREATTRIBUTE.TRANSCRIPT,
+                            FEATUREATTRIBUTE.DESCRIPTIONTYPE,
+                            FEATUREATTRIBUTE.CHROMOSOME,
+                            FEATUREINFO.FEATUREID)
                     .values(featureAttribute.aminoAcidChange(),
                             featureAttribute.germline(),
                             featureAttribute.partnerGene(),
@@ -316,11 +316,11 @@ public class ViccDAO {
     private void writeSequenceOntology(int featureId, @Nullable SequenceOntology sequenceOntologies) {
         if (sequenceOntologies != null) {
             int id = context.insertInto(SEQUENCEONTOLOGY,
-                    SEQUENCEONTOLOGY.SOID,
-                    SEQUENCEONTOLOGY.PARENTSOID,
-                    SEQUENCEONTOLOGY.NAME,
-                    SEQUENCEONTOLOGY.PARENTNAME,
-                    SEQUENCEONTOLOGY.FEATUREID)
+                            SEQUENCEONTOLOGY.SOID,
+                            SEQUENCEONTOLOGY.PARENTSOID,
+                            SEQUENCEONTOLOGY.NAME,
+                            SEQUENCEONTOLOGY.PARENTNAME,
+                            SEQUENCEONTOLOGY.FEATUREID)
                     .values(sequenceOntologies.soid(),
                             sequenceOntologies.parentSoid(),
                             sequenceOntologies.name(),
@@ -343,14 +343,14 @@ public class ViccDAO {
 
     private void writeAssociation(int viccEntryId, @NotNull Association association) {
         int id = context.insertInto(ASSOCIATION,
-                ASSOCIATION.EVIDENCELEVEL,
-                ASSOCIATION.EVIDENCELABEL,
-                ASSOCIATION.RESPONSETYPE,
-                ASSOCIATION.DRUGLABELS,
-                ASSOCIATION.SOURCELINK,
-                ASSOCIATION.DESCRIPTION,
-                ASSOCIATION.ONCOGENIC,
-                ASSOCIATION.VICCENTRYID)
+                        ASSOCIATION.EVIDENCELEVEL,
+                        ASSOCIATION.EVIDENCELABEL,
+                        ASSOCIATION.RESPONSETYPE,
+                        ASSOCIATION.DRUGLABELS,
+                        ASSOCIATION.SOURCELINK,
+                        ASSOCIATION.DESCRIPTION,
+                        ASSOCIATION.ONCOGENIC,
+                        ASSOCIATION.VICCENTRYID)
                 .values(association.evidenceLevel(),
                         association.evidenceLabel(),
                         association.responseType(),
@@ -425,10 +425,10 @@ public class ViccDAO {
     private void writePhenotypeType(int phenotypeId, @Nullable PhenotypeType phenotypeType) {
         if (phenotypeType != null) {
             context.insertInto(PHENOTYPETYPE,
-                    PHENOTYPETYPE.SOURCE,
-                    PHENOTYPETYPE.TERM,
-                    PHENOTYPETYPE.IDPHENOTYPETYPE,
-                    PHENOTYPETYPE.PHENOTYPEID)
+                            PHENOTYPETYPE.SOURCE,
+                            PHENOTYPETYPE.TERM,
+                            PHENOTYPETYPE.IDPHENOTYPETYPE,
+                            PHENOTYPETYPE.PHENOTYPEID)
                     .values(phenotypeType.source(), phenotypeType.term(), phenotypeType.id(), phenotypeId)
                     .execute();
         }
@@ -438,13 +438,13 @@ public class ViccDAO {
         if (environmentalContexts != null) {
             for (EnvironmentalContext environmentalContext : environmentalContexts) {
                 int id = context.insertInto(ENVIRONMENTALCONTEXT,
-                        ENVIRONMENTALCONTEXT.TERM,
-                        ENVIRONMENTALCONTEXT.DESCRIPTION,
-                        ENVIRONMENTALCONTEXT.SOURCE,
-                        ENVIRONMENTALCONTEXT.USANSTEM,
-                        ENVIRONMENTALCONTEXT.TOXICITY,
-                        ENVIRONMENTALCONTEXT.IDENVIRONMENTALCONTEXT,
-                        ENVIRONMENTALCONTEXT.ASSOCIATIONID)
+                                ENVIRONMENTALCONTEXT.TERM,
+                                ENVIRONMENTALCONTEXT.DESCRIPTION,
+                                ENVIRONMENTALCONTEXT.SOURCE,
+                                ENVIRONMENTALCONTEXT.USANSTEM,
+                                ENVIRONMENTALCONTEXT.TOXICITY,
+                                ENVIRONMENTALCONTEXT.IDENVIRONMENTALCONTEXT,
+                                ENVIRONMENTALCONTEXT.ASSOCIATIONID)
                         .values(environmentalContext.term(),
                                 environmentalContext.description(),
                                 environmentalContext.source(),
@@ -472,12 +472,12 @@ public class ViccDAO {
     private void writeTaxonomy(int environmentalContextsId, @Nullable Taxonomy taxonomy) {
         if (taxonomy != null) {
             context.insertInto(TAXONOMY,
-                    TAXONOMY.KINGDOM,
-                    TAXONOMY.DIRECTPARENT,
-                    TAXONOMY.CLASS,
-                    TAXONOMY.SUBCLASS,
-                    TAXONOMY.SUPERCLASS,
-                    TAXONOMY.ENVIRONMENTALCONTEXTID)
+                            TAXONOMY.KINGDOM,
+                            TAXONOMY.DIRECTPARENT,
+                            TAXONOMY.CLASS,
+                            TAXONOMY.SUBCLASS,
+                            TAXONOMY.SUPERCLASS,
+                            TAXONOMY.ENVIRONMENTALCONTEXTID)
                     .values(taxonomy.kingdom(),
                             taxonomy.directParent(),
                             taxonomy.classs(),

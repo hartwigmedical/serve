@@ -242,6 +242,16 @@ public class ActionableTrialFactoryTest {
         assertTrue(ActionableTrialFactory.hasAgeGroupToInclude(List.of("Senior", "Adult")));
     }
 
+    @Test
+    public void hasPotentiallyOpenRequirementToInclude() {
+        assertTrue(ActionableTrialFactory.hasPotentiallyOpenRequirementToInclude("recruiting"));
+        assertTrue(ActionableTrialFactory.hasPotentiallyOpenRequirementToInclude("not yet recruiting"));
+        assertTrue(ActionableTrialFactory.hasPotentiallyOpenRequirementToInclude("not_yet_recruiting"));
+        assertTrue(ActionableTrialFactory.hasPotentiallyOpenRequirementToInclude("approved for marketing"));
+        assertTrue(ActionableTrialFactory.hasPotentiallyOpenRequirementToInclude("available"));
+        assertFalse(ActionableTrialFactory.hasPotentiallyOpenRequirementToInclude("unknown status"));
+    }
+
     @NotNull
     private static ClinicalTrial createTrialWithMultipleLocations(@NotNull String recruitmentTrial, @NotNull String country1,
             @NotNull String recruitmentCountry1, @NotNull String country2, @NotNull String recruitmentCountry2) {

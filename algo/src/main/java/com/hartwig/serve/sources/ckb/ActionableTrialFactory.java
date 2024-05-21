@@ -20,6 +20,7 @@ import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.sources.ckb.blacklist.CkbStudyBlacklistModel;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 class ActionableTrialFactory implements ActionableEntryFactory {
 
@@ -30,11 +31,9 @@ class ActionableTrialFactory implements ActionableEntryFactory {
 
     private static final Set<String> AGE_GROUPS_TO_INCLUDE = Sets.newHashSet();
 
-
     static {
         POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("recruiting");
         POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("not yet recruiting");
-        POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("unknown status");
         POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("not_yet_recruiting");
         POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("approved for marketing");
         POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("available");
@@ -119,8 +118,8 @@ class ActionableTrialFactory implements ActionableEntryFactory {
     private static List<ClinicalTrial> trialsToInclude(@NotNull CkbEntry entry) {
         List<ClinicalTrial> filtered = Lists.newArrayList();
         for (ClinicalTrial trial : entry.clinicalTrials()) {
-            if (hasVariantRequirementTypeToInclude(trial.variantRequirementDetails(), entry) && POTENTIALLY_OPEN_RECRUITMENT_TYPES.contains(
-                    trial.recruitment().toLowerCase()) && hasAgeGroupToInclude(trial.ageGroups())) {
+            if (hasVariantRequirementTypeToInclude(trial.variantRequirementDetails(), entry) && hasPotentiallyOpenRequirementToInclude(trial.recruitment())
+                    && hasAgeGroupToInclude(trial.ageGroups())) {
                 filtered.add(trial);
             }
         }
@@ -132,8 +131,8 @@ class ActionableTrialFactory implements ActionableEntryFactory {
     static Set<String> countriesToInclude(@NotNull ClinicalTrial trial) {
         Set<String> countries = Sets.newHashSet();
         for (Location location : trial.locations()) {
-            if (COUNTRIES_TO_INCLUDE.contains(location.country().toLowerCase()) && (location.status() == null
-                    || POTENTIALLY_OPEN_RECRUITMENT_TYPES.contains(location.status().toLowerCase()))) {
+            if (COUNTRIES_TO_INCLUDE.contains(location.country().toLowerCase()) && hasPotentiallyOpenRequirementToInclude(
+                    location.status())) {
                 countries.add(location.country());
             }
         }
@@ -162,5 +161,10 @@ class ActionableTrialFactory implements ActionableEntryFactory {
             }
         }
         return false;
+    }
+
+    @VisibleForTesting
+    static boolean hasPotentiallyOpenRequirementToInclude(@Nullable String locationStatus) {
+        return locationStatus == null || POTENTIALLY_OPEN_RECRUITMENT_TYPES.contains(locationStatus.toLowerCase());
     }
 }

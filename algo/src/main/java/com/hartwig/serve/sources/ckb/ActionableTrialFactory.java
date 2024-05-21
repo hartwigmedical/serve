@@ -86,7 +86,7 @@ class ActionableTrialFactory implements ActionableEntryFactory {
                                     .intervention(ImmutableClinicalTrial.builder()
                                             .studyNctId(trial.nctId())
                                             .studyTitle(trial.title())
-                                            .studyAcronym(trial.acronym() != null ? trial.acronym() : null)
+                                            .studyAcronym(trial.acronym())
                                             .countriesOfStudy(countries)
                                             .therapyNames(therapies)
                                             .gender(trial.gender())

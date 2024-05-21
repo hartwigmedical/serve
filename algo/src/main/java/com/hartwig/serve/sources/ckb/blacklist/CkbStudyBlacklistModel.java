@@ -14,20 +14,20 @@ public class CkbStudyBlacklistModel {
     private static final Logger LOGGER = LogManager.getLogger(CkbStudyBlacklistModel.class);
 
     @NotNull
-    private final List<CkbBlacklistStudyEntry> BLACKLIST_STUDIES_ENTRIES;
+    private final List<CkbBlacklistStudyEntry> blacklistStudyEntries;
     @NotNull
-    private final Set<CkbBlacklistStudyEntry> USED_BLACKLIST_STUDIES_ENTRIES = Sets.newHashSet();
+    private final Set<CkbBlacklistStudyEntry> usedBlacklistStudyEntries = Sets.newHashSet();
 
     public CkbStudyBlacklistModel(@NotNull final List<CkbBlacklistStudyEntry> blacklistStudiesList) {
-        this.BLACKLIST_STUDIES_ENTRIES = blacklistStudiesList;
+        this.blacklistStudyEntries = blacklistStudiesList;
     }
 
     public boolean isBlacklistStudy(@NotNull String nctId, @NotNull String therapyName, @NotNull String cancerType,
             @NotNull String sourceGene, @NotNull String event) {
-        for (CkbBlacklistStudyEntry blacklistStudyEntry : BLACKLIST_STUDIES_ENTRIES) {
+        for (CkbBlacklistStudyEntry blacklistStudyEntry : blacklistStudyEntries) {
             boolean match = isMatch(nctId, therapyName, cancerType, sourceGene, event, blacklistStudyEntry);
             if (match) {
-                USED_BLACKLIST_STUDIES_ENTRIES.add(blacklistStudyEntry);
+                usedBlacklistStudyEntries.add(blacklistStudyEntry);
                 return true;
             }
         }
@@ -36,8 +36,8 @@ public class CkbStudyBlacklistModel {
 
     public void reportUnusedBlacklistEntries() {
         int unusedBlacklistEntryCount = 0;
-        for (CkbBlacklistStudyEntry entry : BLACKLIST_STUDIES_ENTRIES) {
-            if (!USED_BLACKLIST_STUDIES_ENTRIES.contains(entry)) {
+        for (CkbBlacklistStudyEntry entry : blacklistStudyEntries) {
+            if (!usedBlacklistStudyEntries.contains(entry)) {
                 unusedBlacklistEntryCount++;
                 LOGGER.warn(" Blacklist study entry '{}' hasn't been used for CKB filtering", entry);
             }

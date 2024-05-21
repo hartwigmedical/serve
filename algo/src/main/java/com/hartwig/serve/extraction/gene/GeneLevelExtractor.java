@@ -55,7 +55,7 @@ public class GeneLevelExtractor {
     @Nullable
     public GeneAnnotation extract(@NotNull String gene, @NotNull EventType type, @NotNull String event) {
         if (exomeGeneChecker.isValidGene(gene) || fusionGeneChecker.isValidGene(gene)) {
-            switch (type){
+            switch (type) {
                 case WILD_TYPE:
                     return extractWildTypeEvent(gene, type);
                 case GENE_LEVEL:
@@ -63,9 +63,8 @@ public class GeneLevelExtractor {
                 case PROMISCUOUS_FUSION:
                     return extractPromiscuousFusion(gene);
                 case ABSENCE_OF_PROTEIN:
-                    return extractNegativePositiveEvent(gene, GeneEvent.ABSENCE_OF_PROTEIN, type);
                 case PRESENCE_OF_PROTEIN:
-                    return extractNegativePositiveEvent(gene, GeneEvent.PRESENCE_OF_PROTEIN, type);
+                    return extractProteinEvent(gene, type);
                 default:
                     LOGGER.warn("Unrecognized event type : '{}'", type);
                     return null;
@@ -117,8 +116,17 @@ public class GeneLevelExtractor {
 
     @Nullable
     @VisibleForTesting
-    GeneAnnotation extractNegativePositiveEvent(@NotNull String gene, @NotNull GeneEvent geneEvent, @NotNull EventType type) {
+    GeneAnnotation extractProteinEvent(@NotNull String gene, @NotNull EventType type) {
         boolean geneInDriverGenesDatabase = geneInDriverGenes(driverGenes, gene);
+        GeneEvent geneEvent;
+        if (type == EventType.ABSENCE_OF_PROTEIN) {
+            geneEvent = GeneEvent.ABSENCE_OF_PROTEIN;
+        } else if (type == EventType.PRESENCE_OF_PROTEIN) {
+            geneEvent = GeneEvent.PRESENCE_OF_PROTEIN;
+        } else {
+            throw new IllegalStateException("Invalid event type passed into protein event extractor function: " + type);
+        }
+
         if (!geneInDriverGenesDatabase && driverInconsistencyMode.isActive()) {
             if (driverInconsistencyMode == DriverInconsistencyMode.WARN_ONLY) {
                 LOGGER.warn("{} event {} on {} is not included in driver catalog and won't ever be reported.", geneEvent, type, gene);
@@ -132,7 +140,6 @@ public class GeneLevelExtractor {
         }
 
         return ImmutableGeneAnnotationImpl.builder().gene(gene).event(geneEvent).build();
-
     }
 
     @Nullable

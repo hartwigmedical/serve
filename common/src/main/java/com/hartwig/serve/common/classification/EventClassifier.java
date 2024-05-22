@@ -2,9 +2,8 @@ package com.hartwig.serve.common.classification;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import com.hartwig.serve.common.classification.matchers.EventMatcher;
 
 import org.apache.logging.log4j.LogManager;
@@ -24,18 +23,10 @@ public class EventClassifier {
 
     @NotNull
     public EventType determineType(@NotNull String gene, @NotNull String event) {
-        Map<EventType, Boolean> evaluations = Maps.newHashMap();
-
-        for (Map.Entry<EventType, EventMatcher> entry : matchers.entrySet()) {
-            evaluations.put(entry.getKey(), entry.getValue().matches(gene, event));
-        }
-
-        Set<EventType> positiveTypes = Sets.newHashSet();
-        for (Map.Entry<EventType, Boolean> evaluation : evaluations.entrySet()) {
-            if (evaluation.getValue()) {
-                positiveTypes.add(evaluation.getKey());
-            }
-        }
+        Set<EventType> positiveTypes = matchers.entrySet().stream()
+                .filter(entry -> entry.getValue().matches(gene, event))
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toSet());
 
         if (positiveTypes.size() > 1) {
             LOGGER.warn("More than one type evaluated to true for '{}' on '{}': {}", event, gene, positiveTypes);

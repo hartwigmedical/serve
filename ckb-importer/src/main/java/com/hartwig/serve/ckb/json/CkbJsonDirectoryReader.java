@@ -3,9 +3,12 @@ package com.hartwig.serve.ckb.json;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
@@ -29,24 +32,28 @@ public abstract class CkbJsonDirectoryReader<T extends CkbJsonObject> {
 
     @NotNull
     public List<T> read(@NotNull String dir) throws IOException {
-        List<T> entries = Lists.newArrayList();
         File[] files = new File(dir).listFiles();
 
         LOGGER.debug(" {} files found in directory {}", files.length, dir);
 
-        int currentFileIndex = 0;
-        while (currentFileIndex < files.length && (maxFilesToRead == null || currentFileIndex < maxFilesToRead)) {
-            JsonReader reader = new JsonReader(new FileReader(files[currentFileIndex]));
-            reader.setLenient(true);
+        Stream<File> fileStream = (maxFilesToRead == null) ? Arrays.stream(files) : Arrays.stream(files).limit(maxFilesToRead);
+        List<T> entries = fileStream.parallel().flatMap(file -> {
+            try {
+                JsonReader reader = new JsonReader(new FileReader(file));
+                reader.setLenient(true);
 
-            while (reader.peek() != JsonToken.END_DOCUMENT) {
-                entries.add(read(JsonParser.parseReader(reader).getAsJsonObject()));
+                List<T> entriesForFile = new ArrayList<>();
+                while (reader.peek() != JsonToken.END_DOCUMENT) {
+                    entriesForFile.add(read(JsonParser.parseReader(reader).getAsJsonObject()));
+                }
+                reader.close();
+                return entriesForFile.stream();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
-            reader.close();
-            currentFileIndex++;
-        }
+        }).collect(Collectors.toList());
 
-        LOGGER.debug("  Done reading {} files ", currentFileIndex);
+        LOGGER.debug("  Done reading {} files ", files.length);
         return entries;
     }
 

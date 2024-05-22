@@ -3,16 +3,16 @@ package com.hartwig.serve.refgenome;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-import com.google.common.collect.Maps;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.RefGenome;
+import com.hartwig.serve.extraction.ExtractionFunctions;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.ImmutableExtractionResult;
 import com.hartwig.serve.refgenome.liftover.LiftOverAlgo;
 import com.hartwig.serve.refgenome.liftover.UCSCLiftOver;
 
-import org.apache.commons.compress.utils.Lists;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -50,19 +50,16 @@ public class RefGenomeManager {
     }
 
     @NotNull
-    public Map<RefGenome, List<ExtractionResult>> makeVersioned(@NotNull List<ExtractionResult> extractions) {
-        Map<RefGenome, List<ExtractionResult>> versionedExtractionMap = Maps.newHashMap();
-
-        for (RefGenome version : refGenomeResourceMap.keySet()) {
-            LOGGER.info("Creating extraction results for ref genome version {}", version);
-            List<ExtractionResult> targetExtractions = Lists.newArrayList();
-            for (ExtractionResult extraction : extractions) {
-                targetExtractions.add(convert(extraction, version));
-            }
-            versionedExtractionMap.put(version, targetExtractions);
-        }
-
-        return versionedExtractionMap;
+    public Map<RefGenome, ExtractionResult> makeVersioned(@NotNull List<ExtractionResult> extractions) {
+        return refGenomeResourceMap.keySet().stream()
+                .map(version -> {
+                    LOGGER.info("Creating extraction results for ref genome version {}", version);
+                    List<ExtractionResult> converted = extractions.stream()
+                            .map(extractionResult -> convert(extractionResult, version))
+                            .collect(Collectors.toList());
+                    return Map.entry(version, ExtractionFunctions.merge(converted));
+                })
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     @NotNull

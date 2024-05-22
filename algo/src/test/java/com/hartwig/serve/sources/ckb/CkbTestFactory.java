@@ -23,7 +23,6 @@ import com.hartwig.serve.ckb.datamodel.variant.ImmutableGene;
 import com.hartwig.serve.ckb.datamodel.variant.ImmutableVariant;
 import com.hartwig.serve.ckb.datamodel.variant.Variant;
 
-import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,59 +35,59 @@ public final class CkbTestFactory {
 
     @NotNull
     public static ImmutableCkbEntry.Builder builder() {
-        return ImmutableCkbEntry.builder().profileId(0).createDate(TEST_DATE).updateDate(TEST_DATE).profileName(Strings.EMPTY);
+        return ImmutableCkbEntry.builder().profileId(0).createDate(TEST_DATE).updateDate(TEST_DATE).profileName("");
     }
 
     @NotNull
     public static CkbEntry createEntryWithGene(@NotNull String geneSymbol) {
         return createEntry(geneSymbol,
-                Strings.EMPTY,
-                Strings.EMPTY,
-                Strings.EMPTY,
-                Strings.EMPTY,
-                Strings.EMPTY,
-                Strings.EMPTY,
-                Strings.EMPTY,
-                Strings.EMPTY);
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "");
     }
 
     @NotNull
     public static CkbEntry createEntryWithVariant(@NotNull String variant) {
-        return createEntry(Strings.EMPTY,
+        return createEntry("",
                 variant,
-                Strings.EMPTY,
-                Strings.EMPTY,
-                Strings.EMPTY,
-                Strings.EMPTY,
-                Strings.EMPTY,
-                Strings.EMPTY,
-                Strings.EMPTY);
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "");
     }
 
     @NotNull
     public static CkbEntry createEntryWithFullName(@NotNull String fullName) {
-        return createEntry(Strings.EMPTY,
-                Strings.EMPTY,
+        return createEntry("",
+                "",
                 fullName,
-                Strings.EMPTY,
-                Strings.EMPTY,
-                Strings.EMPTY,
-                Strings.EMPTY,
-                Strings.EMPTY,
-                Strings.EMPTY);
+                "",
+                "",
+                "",
+                "",
+                "",
+                "");
     }
 
     @NotNull
     public static CkbEntry createEntryWithGeneAndVariant(@NotNull String geneSymbol, @NotNull String variant) {
         return createEntry(geneSymbol,
                 variant,
-                Strings.EMPTY,
-                Strings.EMPTY,
-                Strings.EMPTY,
-                Strings.EMPTY,
-                Strings.EMPTY,
-                Strings.EMPTY,
-                Strings.EMPTY);
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "");
     }
 
     @NotNull
@@ -114,7 +113,7 @@ public final class CkbTestFactory {
                 .title(title)
                 .indications(List.of(createIndication("AB", "DOID:162")))
                 .recruitment(recruitment)
-                .variantRequirement(Strings.EMPTY)
+                .variantRequirement("")
                 .variantRequirementDetails(variantRequirementDetails)
                 .locations(locations)
                 .build();
@@ -130,10 +129,10 @@ public final class CkbTestFactory {
                 .responseType(responseType)
                 .relevantTreatmentApproaches(Lists.newArrayList())
                 .evidenceType(evidenceType)
-                .efficacyEvidence(Strings.EMPTY)
-                .approvalStatus(Strings.EMPTY)
+                .efficacyEvidence("")
+                .approvalStatus("")
                 .ampCapAscoEvidenceLevel(level)
-                .ampCapAscoInferredTier(Strings.EMPTY)
+                .ampCapAscoInferredTier("")
                 .references(Lists.newArrayList())
                 .build();
     }
@@ -148,7 +147,7 @@ public final class CkbTestFactory {
                 .drugs(Lists.newArrayList())
                 .synonyms(Lists.newArrayList())
                 .globalApprovalStatuses(Lists.newArrayList())
-                .description(Strings.EMPTY)
+                .description("")
                 .references(Lists.newArrayList())
                 .build();
     }
@@ -158,9 +157,9 @@ public final class CkbTestFactory {
         return ImmutableIndication.builder()
                 .id(0)
                 .name(name)
-                .source(Strings.EMPTY)
-                .definition(Strings.EMPTY)
-                .currentPreferredTerm(Strings.EMPTY)
+                .source("")
+                .definition("")
+                .currentPreferredTerm("")
                 .lastUpdateDateFromDO(TEST_DATE)
                 .termId(termId)
                 .altIds(Lists.newArrayList())
@@ -169,7 +168,7 @@ public final class CkbTestFactory {
 
     @NotNull
     public static Location createLocation(@NotNull String country, @Nullable String status) {
-        return ImmutableLocation.builder().nctId(Strings.EMPTY).city(Strings.EMPTY).country(country).status(status).build();
+        return ImmutableLocation.builder().nctId("").city("").country(country).status(status).build();
     }
 
     @NotNull
@@ -197,7 +196,7 @@ public final class CkbTestFactory {
                 .createDate(TEST_DATE)
                 .updateDate(TEST_DATE)
                 .geneSymbol(geneSymbol)
-                .geneRole(Strings.EMPTY)
+                .geneRole("")
                 .build();
     }
 }

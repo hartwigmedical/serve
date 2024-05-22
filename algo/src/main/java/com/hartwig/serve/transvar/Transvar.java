@@ -2,12 +2,12 @@ package com.hartwig.serve.transvar;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.hartwig.serve.common.ensemblcache.EnsemblDataCache;
 import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.extraction.hotspot.Hotspot;
@@ -33,7 +33,9 @@ public class Transvar implements ProteinResolver {
     @NotNull
     private final EnsemblDataCache ensemblDataCache;
     @NotNull
-    private final Set<String> unresolvedProteinAnnotations = Sets.newHashSet();
+    private final ConcurrentHashMap<String, List<Hotspot>> hotspotsByProteinKey = new ConcurrentHashMap<>();
+    @NotNull
+    private final Set<String> unresolvedProteinAnnotations = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
     @NotNull
     public static Transvar withRefGenome(@NotNull RefGenome refGenome, @NotNull String refGenomeFastaFile,
@@ -54,13 +56,18 @@ public class Transvar implements ProteinResolver {
     @Override
     @NotNull
     public List<Hotspot> resolve(@NotNull String gene, @Nullable String specificTranscript, @NotNull String proteinAnnotation) {
-        List<Hotspot> hotspots = extractHotspotsForAnnotation(gene, specificTranscript, proteinAnnotation);
 
         String proteinKey = KeyFormatter.toProteinKey(gene, specificTranscript, proteinAnnotation);
+        if (hotspotsByProteinKey.containsKey(proteinKey)) {
+            return hotspotsByProteinKey.get(proteinKey);
+        }
+        
+        List<Hotspot> hotspots = extractHotspotsForAnnotation(gene, specificTranscript, proteinAnnotation);
         LOGGER.debug("Converted '{}' to {} hotspot(s)", proteinKey, hotspots.size());
         if (hotspots.isEmpty()) {
             unresolvedProteinAnnotations.add(proteinKey);
         }
+        hotspotsByProteinKey.put(proteinKey, hotspots);
 
         return hotspots;
     }
@@ -78,7 +85,7 @@ public class Transvar implements ProteinResolver {
 
         if (records.isEmpty()) {
             LOGGER.warn("Transvar could not resolve any genomic coordinates for '{}:p.{}'", gene, proteinAnnotation);
-            return Lists.newArrayList();
+            return Collections.emptyList();
         }
 
         HmfTranscriptRegion canonicalTranscript = EnsemblFunctions.findCanonicalTranscript(ensemblDataCache, gene);
@@ -86,7 +93,7 @@ public class Transvar implements ProteinResolver {
             LOGGER.warn("Could not find canonical transcript for '{}' in ensembl data cache. Skipping hotspot extraction for 'p.{}'",
                     gene,
                     proteinAnnotation);
-            return Lists.newArrayList();
+            return Collections.emptyList();
         }
 
         TransvarRecord best = pickBestRecord(records, specificTranscript, canonicalTranscript.transcriptId());
@@ -97,7 +104,7 @@ public class Transvar implements ProteinResolver {
                     best.transcript(),
                     gene,
                     proteinAnnotation);
-            return Lists.newArrayList();
+            return Collections.emptyList();
         }
 
         LOGGER.debug("Interpreting transvar record: '{}'", best);

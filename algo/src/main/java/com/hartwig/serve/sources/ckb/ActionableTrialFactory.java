@@ -25,29 +25,12 @@ import org.jetbrains.annotations.Nullable;
 class ActionableTrialFactory implements ActionableEntryFactory {
 
     private static final String SUB_FIELD_DELIMITER = ",";
-    private static final Set<String> POTENTIALLY_OPEN_RECRUITMENT_TYPES = Sets.newHashSet();
-    private static final Set<String> COUNTRIES_TO_INCLUDE = Sets.newHashSet();
-    private static final Set<String> VARIANT_REQUIREMENT_TYPES_TO_INCLUDE = Sets.newHashSet();
+    private static final Set<String> POTENTIALLY_OPEN_RECRUITMENT_TYPES =
+            Set.of("recruiting", "not yet recruiting", "not_yet_recruiting", "approved for marketing", "available");
+    private static final Set<String> COUNTRIES_TO_INCLUDE = Set.of("netherlands", "belgium", "germany");
+    private static final Set<String> VARIANT_REQUIREMENT_TYPES_TO_INCLUDE = Set.of("partial - required", "required");
 
-    private static final Set<String> AGE_GROUPS_TO_INCLUDE = Sets.newHashSet();
-
-    static {
-        POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("recruiting");
-        POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("not yet recruiting");
-        POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("not_yet_recruiting");
-        POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("approved for marketing");
-        POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("available");
-
-        COUNTRIES_TO_INCLUDE.add("netherlands");
-        COUNTRIES_TO_INCLUDE.add("belgium");
-        COUNTRIES_TO_INCLUDE.add("germany");
-
-        VARIANT_REQUIREMENT_TYPES_TO_INCLUDE.add("partial - required");
-        VARIANT_REQUIREMENT_TYPES_TO_INCLUDE.add("required");
-
-        AGE_GROUPS_TO_INCLUDE.add("adult");
-        AGE_GROUPS_TO_INCLUDE.add("senior");
-    }
+    private static final Set<String> AGE_GROUPS_TO_INCLUDE = Set.of("adult", "senior");
 
     @NotNull
     private final CkbStudyBlacklistModel blacklistStudy;
@@ -118,8 +101,8 @@ class ActionableTrialFactory implements ActionableEntryFactory {
     private static List<ClinicalTrial> trialsToInclude(@NotNull CkbEntry entry) {
         List<ClinicalTrial> filtered = Lists.newArrayList();
         for (ClinicalTrial trial : entry.clinicalTrials()) {
-            if (hasVariantRequirementTypeToInclude(trial.variantRequirementDetails(), entry) && hasPotentiallyOpenRequirementToInclude(trial.recruitment())
-                    && hasAgeGroupToInclude(trial.ageGroups())) {
+            if (hasVariantRequirementTypeToInclude(trial.variantRequirementDetails(), entry)
+                    && hasPotentiallyOpenRequirementToInclude(trial.recruitment()) && hasAgeGroupToInclude(trial.ageGroups())) {
                 filtered.add(trial);
             }
         }
@@ -131,8 +114,8 @@ class ActionableTrialFactory implements ActionableEntryFactory {
     static Set<String> countriesToInclude(@NotNull ClinicalTrial trial) {
         Set<String> countries = Sets.newHashSet();
         for (Location location : trial.locations()) {
-            if (COUNTRIES_TO_INCLUDE.contains(location.country().toLowerCase()) && hasPotentiallyOpenRequirementToInclude(
-                    location.status())) {
+            if (COUNTRIES_TO_INCLUDE.contains(location.country().toLowerCase())
+                    && hasPotentiallyOpenRequirementToInclude(location.status())) {
                 countries.add(location.country());
             }
         }
@@ -164,7 +147,7 @@ class ActionableTrialFactory implements ActionableEntryFactory {
     }
 
     @VisibleForTesting
-    static boolean hasPotentiallyOpenRequirementToInclude(@Nullable String locationStatus) {
-        return locationStatus == null || POTENTIALLY_OPEN_RECRUITMENT_TYPES.contains(locationStatus.toLowerCase());
+    static boolean hasPotentiallyOpenRequirementToInclude(@Nullable String recruitmentStatus) {
+        return recruitmentStatus == null || POTENTIALLY_OPEN_RECRUITMENT_TYPES.contains(recruitmentStatus.toLowerCase());
     }
 }

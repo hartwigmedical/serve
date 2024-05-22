@@ -56,7 +56,7 @@ public class HartwigHotspotExtractor {
     }
 
     @NotNull
-    private Stream<KnownHotspot> resolveHotspotsForEntry(HartwigHotspotEntry entry, ProgressTracker tracker) {
+    private Stream<KnownHotspot> resolveHotspotsForEntry(@NotNull HartwigHotspotEntry entry, @NotNull ProgressTracker tracker) {
         List<Hotspot> hotspots = entry.proteinAnnotation().isEmpty()
                 ? Collections.emptyList()
                 : proteinResolver.resolve(entry.gene(), entry.transcript(), entry.proteinAnnotation());
@@ -79,7 +79,7 @@ public class HartwigHotspotExtractor {
     }
 
     @NotNull
-    private Optional<Hotspot> explicitHotspotOption(HartwigHotspotEntry entry, List<Hotspot> hotspots) {
+    private Optional<Hotspot> explicitHotspotOption(@NotNull HartwigHotspotEntry entry, @NotNull List<Hotspot> hotspots) {
         if (addExplicitHotspots) {
             Hotspot explicitHotspot = toHotspot(entry);
             if (!hotspots.contains(explicitHotspot)) {

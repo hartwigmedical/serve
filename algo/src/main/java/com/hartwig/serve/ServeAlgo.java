@@ -121,7 +121,8 @@ public class ServeAlgo {
         return extractor.extract(trials);
     }
 
-    private Stream<ExtractionResult> extractCkbKnowledge(ServeConfig config) throws IOException {
+    @NotNull
+    private Stream<ExtractionResult> extractCkbKnowledge(@NotNull ServeConfig config) throws IOException {
         List<CkbEntry> ckbEntries = CkbReader.readAndCurate(config.ckbDir(), config.ckbBlacklistMolecularProfileTsv());
 
         return Stream.of(config.useCkbEvidence() ? extractCkbEvidenceKnowledge(config.ckbDrugCurationTsv(),

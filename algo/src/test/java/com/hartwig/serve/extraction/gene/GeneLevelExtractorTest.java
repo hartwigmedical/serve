@@ -227,6 +227,23 @@ public class GeneLevelExtractorTest {
                 geneLevelExtractor.extractWildTypeEvent("TP53", EventType.WILD_TYPE));
     }
 
+    @Test(expected = IllegalStateException.class)
+    public void hasIllegalProteinEvents() {
+        GeneLevelExtractor geneLevelExtractor =
+                createWithDriverGenes(DriverGenesTestFactory.createDriverGenes("NOTCH1", "MET"), DriverInconsistencyMode.IGNORE);
+        geneLevelExtractor.extractProteinEvent("NOTCH1", EventType.OVEREXPRESSION);
+    }
+
+    @Test
+    public void canExtractProteinEvents() {
+        GeneLevelExtractor geneLevelExtractor =
+                createWithDriverGenes(DriverGenesTestFactory.createDriverGenes("NOTCH1", "MET"), DriverInconsistencyMode.IGNORE);
+        assertEquals(testBuilder().gene("MET").event(GeneEvent.ABSENCE_OF_PROTEIN).build(),
+                geneLevelExtractor.extractProteinEvent("MET", EventType.ABSENCE_OF_PROTEIN));
+        assertEquals(testBuilder().gene("NOTCH1").event(GeneEvent.PRESENCE_OF_PROTEIN).build(),
+                geneLevelExtractor.extractProteinEvent("NOTCH1", EventType.PRESENCE_OF_PROTEIN));
+    }
+
     @Test
     public void canDetermineGeneLevelFromDriverGenes() {
         List<DriverGene> driverGenes = DriverGenesTestFactory.createDriverGenes("STK11", "MET");

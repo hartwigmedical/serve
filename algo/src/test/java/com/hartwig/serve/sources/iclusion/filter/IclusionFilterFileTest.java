@@ -14,7 +14,7 @@ public class IclusionFilterFileTest {
     private static final String TEST_ICLUSION_FILTER_FILE = Resources.getResource("iclusion/filter.tsv").getPath();
 
     @Test
-    public void canReadCkbFilterTsv() throws IOException {
+    public void canReadIclusionFilterTsv() throws IOException {
         List<IclusionFilterEntry> filterEntries = IclusionFilterFile.read(TEST_ICLUSION_FILTER_FILE);
         assertEquals(1, filterEntries.size());
     }

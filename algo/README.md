@@ -51,9 +51,15 @@ they are compliant with the usage of the data itself.
 
 SERVE generates clinical evidence in the following datamodel:
 
-- Treatment (name of trial or drug(s))
-    - Relevant treatment approach underlying the treatment.
-    - Curated treatment approach underlying the treatment.
+- Either one of the following interventions: 
+  - Treatment (name of drug(s))
+      - Relevant treatment approach underlying the treatment.
+      - Curated treatment approach underlying the treatment.
+  - Clinical trial (name of trial)
+    - The NCT ID of the study 
+    - The title of the study 
+    - The countries where the study is active
+    - The name of the therapy given in the trial
 - Cancer type (annotated with DOID) for which the treatment is considered on-label.
 - Blacklist cancer types (annotated with DOID) that should be children of the main cancer type and are used for blacklisting
   specific types of the main cancer type.
@@ -310,6 +316,30 @@ downstream, this is curated for harmonize the knowledge. The following filters c
 | DIRECTION_TREATMENT_APPROACH_CURATION_IGNORE | The treatment approach wouldn't be used because we didn't use the treatment approach for this direction |
 | EVENT_TREATMENT_APPROACH_CURATION_IGNORE     | The treatment approach wouldn't be used because event is ignored for further interpretation             |
 
+## Blacklisting evidences
+All evidences, which are present in the external databases, can be blacklisted for downstream usage. Which results in all usable evidences which we should map to patient genomic event/cancer types.
+
+| Filter                                                       | Description                                                                                                        |
+|--------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
+| ALL_EVIDENCE_BASED_ON_GENE                                   | All evidences based on a specific gene is blacklisted for downstream usages.                                       |
+| ALL_EVIDENCE_BASED_ON_GENE_AND_EVENT                         | All evidences based on a specific gene and event is blacklisted for downstream usages.                             |
+| EVIDENCE_BASED_ON_THERAPY                                    | All evidences based on a specific therapy is blacklisted for downstream usages.                                    |
+| EVIDENCE_ON_THERAPY_AND_CANCER_TYPE                          | All evidences based on a specific therapy and cancer type is blacklisted for downstream usages.                    |
+| EVIDENCE_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE           | All evidences based on a specific therapy and cancer type and gene is blacklisted for downstream usages.           |
+| EVIDENCE_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE_AND_EVENT | All evidences based on a specific therapy and cancer type and gene and event is blacklisted for downstream usages. |
+
+## Blacklisting clinical trials 
+All clinical trials, which are present in the external databases, can be blacklisted for downstream usage. Which results in all usable clinical trials which we should map to patient genomic event/cancer types.
+| Filter                                                    | Description                                                                                                                  |
+|-----------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------|
+| ALL_STUDIES_BASED_ON_GENE                                 | All clinical studies based on a specific gene is blacklisted for downstream usages.                                          |
+| ALL_STUDIES_BASED_ON_GENE_AND_EVENT                       | All clinical studies based on a specific gene and event is blacklisted for downstream usages.                                |
+| STUDY_WHOLE                                               | The whole clinical study is blacklisted for downstream usages.                                                               |
+| STUDY_BASED_ON_THERAPY                                    | The clinical study with a specific therapy is blacklisted for downstream usages.                                             |
+| STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE                    | The clinical study with a specific therapy and cancer type is blacklisted for downstream usages.                             |
+| STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE           | The clinical study with a specific therapy and cancer type and specific gene is blacklisted for downstream usages.           |
+| STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE_AND_EVENT | The clinical study with a specific therapy and cancer type and specific gene and event is blacklisted for downstream usages. |
+
 ## Handling of multiple reference genome versions
 
 External knowledgebases generally define their knowledge for one specific reference genome version (v37 or v38). SERVE merges knowledgebases
@@ -408,7 +438,9 @@ The big files are the hg19 and hg37 reference genomes. They are too big to store
 elsewhere.
   
 ## Version History and Download Links
-
+-[Upcoming]
+    - Optional for blacklisting clinical studies and evidence
+    - Put clinical trial information into own model instead of using treatment model
 - [3.4.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v3.4.0)
   - Support for usage of CKB acronym for clinical study title in data model 
 - [3.3.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v3.3.0)

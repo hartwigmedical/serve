@@ -14,7 +14,7 @@ public final class TreatmentApproachTestFactory {
 
     @NotNull
     public static TreatmentApproachCurator createEmptyCurator() {
-       return new TreatmentApproachCurator(Maps.newHashMap());
+        return new TreatmentApproachCurator(Maps.newHashMap());
     }
 
     @NotNull
@@ -33,9 +33,8 @@ public final class TreatmentApproachTestFactory {
     }
 
     @NotNull
-    public static TreatmentApproachCurationEntry createCurationEntry(@NotNull TreatmentApproachCurationType type,
-            @NotNull String treatment, @NotNull String treatmentApproach, @NotNull String event, @NotNull EvidenceDirection direction,
-            @NotNull String curation) {
+    public static TreatmentApproachCurationEntry createCurationEntry(@NotNull TreatmentApproachCurationType type, @NotNull String treatment,
+            @NotNull String treatmentApproach, @NotNull String event, @NotNull EvidenceDirection direction, @NotNull String curation) {
         return ImmutableTreatmentApproachCurationEntry.builder()
                 .curationType(type)
                 .curationKey(createCurationKey(treatment, treatmentApproach, event, direction))

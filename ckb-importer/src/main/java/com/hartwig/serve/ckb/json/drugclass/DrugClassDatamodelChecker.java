@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 final class DrugClassDatamodelChecker {
 
-    private DrugClassDatamodelChecker(){
+    private DrugClassDatamodelChecker() {
     }
 
     @NotNull

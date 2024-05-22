@@ -11,8 +11,7 @@ class PromiscuousFusionMatcher implements EventMatcher {
     @NotNull
     private final FusionPairMatcher fusionPairMatcher;
 
-    PromiscuousFusionMatcher(@NotNull final Set<String> promiscuousFusionKeyPhrases,
-            @NotNull final FusionPairMatcher fusionPairMatcher) {
+    PromiscuousFusionMatcher(@NotNull final Set<String> promiscuousFusionKeyPhrases, @NotNull final FusionPairMatcher fusionPairMatcher) {
         this.promiscuousFusionKeyPhrases = promiscuousFusionKeyPhrases;
         this.fusionPairMatcher = fusionPairMatcher;
     }

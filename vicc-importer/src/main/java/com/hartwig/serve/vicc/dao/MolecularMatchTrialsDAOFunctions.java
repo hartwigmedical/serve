@@ -32,16 +32,16 @@ final class MolecularMatchTrialsDAOFunctions {
 
     static void write(@NotNull DSLContext context, int viccEntryId, @NotNull MolecularMatchTrials molecularMatchTrials) {
         int id = context.insertInto(MOLECULARMATCHTRIALS,
-                MOLECULARMATCHTRIALS.STATUS,
-                MOLECULARMATCHTRIALS.STARTDATE,
-                MOLECULARMATCHTRIALS.TITLE,
-                MOLECULARMATCHTRIALS.BRIEFTITLE,
-                MOLECULARMATCHTRIALS.STUDYTYPE,
-                MOLECULARMATCHTRIALS.SCORE,
-                MOLECULARMATCHTRIALS.LINK,
-                MOLECULARMATCHTRIALS.PHASE,
-                MOLECULARMATCHTRIALS.IDMOLECULARMATCHTRIALS,
-                MOLECULARMATCHTRIALS.VICCENTRYID)
+                        MOLECULARMATCHTRIALS.STATUS,
+                        MOLECULARMATCHTRIALS.STARTDATE,
+                        MOLECULARMATCHTRIALS.TITLE,
+                        MOLECULARMATCHTRIALS.BRIEFTITLE,
+                        MOLECULARMATCHTRIALS.STUDYTYPE,
+                        MOLECULARMATCHTRIALS.SCORE,
+                        MOLECULARMATCHTRIALS.LINK,
+                        MOLECULARMATCHTRIALS.PHASE,
+                        MOLECULARMATCHTRIALS.IDMOLECULARMATCHTRIALS,
+                        MOLECULARMATCHTRIALS.VICCENTRYID)
                 .values(molecularMatchTrials.status(),
                         molecularMatchTrials.startDate(),
                         molecularMatchTrials.title(),
@@ -64,10 +64,10 @@ final class MolecularMatchTrialsDAOFunctions {
 
         for (MolecularMatchTrialsIntervention intervention : molecularMatchTrials.interventions()) {
             int idIntervention = context.insertInto(MOLECULARMATCHTRIALSINTERVENTION,
-                    MOLECULARMATCHTRIALSINTERVENTION.INTERVENTIONNAME,
-                    MOLECULARMATCHTRIALSINTERVENTION.INTERVENTIONTYPE,
-                    MOLECULARMATCHTRIALSINTERVENTION.DESCRIPTION,
-                    MOLECULARMATCHTRIALSINTERVENTION.MOLECULARMATCHTRIALSID)
+                            MOLECULARMATCHTRIALSINTERVENTION.INTERVENTIONNAME,
+                            MOLECULARMATCHTRIALSINTERVENTION.INTERVENTIONTYPE,
+                            MOLECULARMATCHTRIALSINTERVENTION.DESCRIPTION,
+                            MOLECULARMATCHTRIALSINTERVENTION.MOLECULARMATCHTRIALSID)
                     .values(intervention.interventionName(), intervention.interventionType(), intervention.description(), id)
                     .returning(MOLECULARMATCHTRIALSINTERVENTION.ID)
                     .fetchOne()
@@ -81,8 +81,8 @@ final class MolecularMatchTrialsDAOFunctions {
 
             for (String armGroupLabel : intervention.armGroupLabels()) {
                 context.insertInto(MOLECULARMATCHTRIALSARMGROUPLABEL,
-                        MOLECULARMATCHTRIALSARMGROUPLABEL.ARMGROUPLABEL,
-                        MOLECULARMATCHTRIALSARMGROUPLABEL.MOLECULARMATCHTRIALSINTERVENTIONID)
+                                MOLECULARMATCHTRIALSARMGROUPLABEL.ARMGROUPLABEL,
+                                MOLECULARMATCHTRIALSARMGROUPLABEL.MOLECULARMATCHTRIALSINTERVENTIONID)
                         .values(armGroupLabel, idIntervention)
                         .execute();
             }
@@ -90,30 +90,30 @@ final class MolecularMatchTrialsDAOFunctions {
 
         for (MolecularMatchTrialsLocation location : molecularMatchTrials.locations()) {
             int idLocation = context.insertInto(MOLECULARMATCHTRIALSLOCATION,
-                    MOLECULARMATCHTRIALSLOCATION.STATUS,
-                    MOLECULARMATCHTRIALSLOCATION.NAME,
-                    MOLECULARMATCHTRIALSLOCATION.LASTNAME,
-                    MOLECULARMATCHTRIALSLOCATION.EMAIL,
-                    MOLECULARMATCHTRIALSLOCATION.PHONE,
-                    MOLECULARMATCHTRIALSLOCATION.PHONEEXT,
-                    MOLECULARMATCHTRIALSLOCATION.LASTNAMEBACKUP,
-                    MOLECULARMATCHTRIALSLOCATION.EMAILBACKUP,
-                    MOLECULARMATCHTRIALSLOCATION.PHONEBACKUP,
-                    MOLECULARMATCHTRIALSLOCATION.PHONEEXTBACKUP,
-                    MOLECULARMATCHTRIALSLOCATION.STREET,
-                    MOLECULARMATCHTRIALSLOCATION.ZIP,
-                    MOLECULARMATCHTRIALSLOCATION.CITY,
-                    MOLECULARMATCHTRIALSLOCATION.STATE,
-                    MOLECULARMATCHTRIALSLOCATION.COUNTRY,
-                    MOLECULARMATCHTRIALSLOCATION.NUMBER,
-                    MOLECULARMATCHTRIALSLOCATION.POBOX,
-                    MOLECULARMATCHTRIALSLOCATION.IDLOCATION,
-                    MOLECULARMATCHTRIALSLOCATION.VALID,
-                    MOLECULARMATCHTRIALSLOCATION.VALIDMESSAGE,
-                    MOLECULARMATCHTRIALSLOCATION.CREATED,
-                    MOLECULARMATCHTRIALSLOCATION.LASTUPDATED,
-                    MOLECULARMATCHTRIALSLOCATION.FAILEDGEOCODE,
-                    MOLECULARMATCHTRIALSLOCATION.MOLECULARMATCHTRIALSID)
+                            MOLECULARMATCHTRIALSLOCATION.STATUS,
+                            MOLECULARMATCHTRIALSLOCATION.NAME,
+                            MOLECULARMATCHTRIALSLOCATION.LASTNAME,
+                            MOLECULARMATCHTRIALSLOCATION.EMAIL,
+                            MOLECULARMATCHTRIALSLOCATION.PHONE,
+                            MOLECULARMATCHTRIALSLOCATION.PHONEEXT,
+                            MOLECULARMATCHTRIALSLOCATION.LASTNAMEBACKUP,
+                            MOLECULARMATCHTRIALSLOCATION.EMAILBACKUP,
+                            MOLECULARMATCHTRIALSLOCATION.PHONEBACKUP,
+                            MOLECULARMATCHTRIALSLOCATION.PHONEEXTBACKUP,
+                            MOLECULARMATCHTRIALSLOCATION.STREET,
+                            MOLECULARMATCHTRIALSLOCATION.ZIP,
+                            MOLECULARMATCHTRIALSLOCATION.CITY,
+                            MOLECULARMATCHTRIALSLOCATION.STATE,
+                            MOLECULARMATCHTRIALSLOCATION.COUNTRY,
+                            MOLECULARMATCHTRIALSLOCATION.NUMBER,
+                            MOLECULARMATCHTRIALSLOCATION.POBOX,
+                            MOLECULARMATCHTRIALSLOCATION.IDLOCATION,
+                            MOLECULARMATCHTRIALSLOCATION.VALID,
+                            MOLECULARMATCHTRIALSLOCATION.VALIDMESSAGE,
+                            MOLECULARMATCHTRIALSLOCATION.CREATED,
+                            MOLECULARMATCHTRIALSLOCATION.LASTUPDATED,
+                            MOLECULARMATCHTRIALSLOCATION.FAILEDGEOCODE,
+                            MOLECULARMATCHTRIALSLOCATION.MOLECULARMATCHTRIALSID)
                     .values(location.status(),
                             location.name(),
                             location.lastName(),
@@ -145,10 +145,10 @@ final class MolecularMatchTrialsDAOFunctions {
             MolecularMatchTrialsContact contact = location.contact();
             if (contact != null) {
                 context.insertInto(MOLECULARMATCHTRIALSCONTACT,
-                        MOLECULARMATCHTRIALSCONTACT.NAME,
-                        MOLECULARMATCHTRIALSCONTACT.EMAIL,
-                        MOLECULARMATCHTRIALSCONTACT.PHONE,
-                        MOLECULARMATCHTRIALSCONTACT.MOLECULARMATCHTRIALSLOCATIONID)
+                                MOLECULARMATCHTRIALSCONTACT.NAME,
+                                MOLECULARMATCHTRIALSCONTACT.EMAIL,
+                                MOLECULARMATCHTRIALSCONTACT.PHONE,
+                                MOLECULARMATCHTRIALSCONTACT.MOLECULARMATCHTRIALSLOCATIONID)
                         .values(contact.name(), contact.email(), contact.phone(), idLocation)
                         .execute();
             }
@@ -156,8 +156,8 @@ final class MolecularMatchTrialsDAOFunctions {
             MolecularMatchTrialsSubLocation subLocation = location.subLocation();
             if (subLocation != null) {
                 int idSubLocation = context.insertInto(MOLECULARMATCHTRIALSSUBLOCATION,
-                        MOLECULARMATCHTRIALSSUBLOCATION.TYPE,
-                        MOLECULARMATCHTRIALSSUBLOCATION.MOLECULARMATCHTRIALSLOCATIONID)
+                                MOLECULARMATCHTRIALSSUBLOCATION.TYPE,
+                                MOLECULARMATCHTRIALSSUBLOCATION.MOLECULARMATCHTRIALSLOCATIONID)
                         .values(subLocation.type(), idLocation)
                         .returning(MOLECULARMATCHTRIALSSUBLOCATION.ID)
                         .fetchOne()
@@ -175,28 +175,26 @@ final class MolecularMatchTrialsDAOFunctions {
                 context.insertInto(MOLECULARMATCHTRIALSGEO,
                         MOLECULARMATCHTRIALSGEO.LAT,
                         MOLECULARMATCHTRIALSGEO.LON,
-                        MOLECULARMATCHTRIALSGEO.MOLECULARMATCHTRIALSLOCATIONID)
-                        .values(geo.lat(), geo.lon(), idLocation)
-                        .execute();
+                        MOLECULARMATCHTRIALSGEO.MOLECULARMATCHTRIALSLOCATIONID).values(geo.lat(), geo.lon(), idLocation).execute();
             }
         }
 
         MolecularMatchTrialsOverallContact overallContact = molecularMatchTrials.overallContact();
         if (overallContact != null) {
             context.insertInto(MOLECULARMATCHTRIALSOVERALLCONTACT,
-                    MOLECULARMATCHTRIALSOVERALLCONTACT.NAME,
-                    MOLECULARMATCHTRIALSOVERALLCONTACT.TYPE,
-                    MOLECULARMATCHTRIALSOVERALLCONTACT.AFFILIATION,
-                    MOLECULARMATCHTRIALSOVERALLCONTACT.LASTNAME,
-                    MOLECULARMATCHTRIALSOVERALLCONTACT.EMAIL,
-                    MOLECULARMATCHTRIALSOVERALLCONTACT.PHONE,
-                    MOLECULARMATCHTRIALSOVERALLCONTACT.PHONEEXT,
-                    MOLECULARMATCHTRIALSOVERALLCONTACT.STREET,
-                    MOLECULARMATCHTRIALSOVERALLCONTACT.ZIP,
-                    MOLECULARMATCHTRIALSOVERALLCONTACT.CITY,
-                    MOLECULARMATCHTRIALSOVERALLCONTACT.COUNTRY,
-                    MOLECULARMATCHTRIALSOVERALLCONTACT.URL,
-                    MOLECULARMATCHTRIALSOVERALLCONTACT.MOLECULARMATCHTRIALSID)
+                            MOLECULARMATCHTRIALSOVERALLCONTACT.NAME,
+                            MOLECULARMATCHTRIALSOVERALLCONTACT.TYPE,
+                            MOLECULARMATCHTRIALSOVERALLCONTACT.AFFILIATION,
+                            MOLECULARMATCHTRIALSOVERALLCONTACT.LASTNAME,
+                            MOLECULARMATCHTRIALSOVERALLCONTACT.EMAIL,
+                            MOLECULARMATCHTRIALSOVERALLCONTACT.PHONE,
+                            MOLECULARMATCHTRIALSOVERALLCONTACT.PHONEEXT,
+                            MOLECULARMATCHTRIALSOVERALLCONTACT.STREET,
+                            MOLECULARMATCHTRIALSOVERALLCONTACT.ZIP,
+                            MOLECULARMATCHTRIALSOVERALLCONTACT.CITY,
+                            MOLECULARMATCHTRIALSOVERALLCONTACT.COUNTRY,
+                            MOLECULARMATCHTRIALSOVERALLCONTACT.URL,
+                            MOLECULARMATCHTRIALSOVERALLCONTACT.MOLECULARMATCHTRIALSID)
                     .values(overallContact.name(),
                             overallContact.type(),
                             overallContact.affiliation(),
@@ -215,20 +213,20 @@ final class MolecularMatchTrialsDAOFunctions {
 
         for (MolecularMatchTrialsTag tag : molecularMatchTrials.tags()) {
             context.insertInto(MOLECULARMATCHTRIALSTAG,
-                    MOLECULARMATCHTRIALSTAG.FACET,
-                    MOLECULARMATCHTRIALSTAG.COMPOSITEKEY,
-                    MOLECULARMATCHTRIALSTAG.SUPPRESS,
-                    MOLECULARMATCHTRIALSTAG.FILTERTYPE,
-                    MOLECULARMATCHTRIALSTAG.TERM,
-                    MOLECULARMATCHTRIALSTAG.CUSTOM,
-                    MOLECULARMATCHTRIALSTAG.PRIORITY,
-                    MOLECULARMATCHTRIALSTAG.ALIAS,
-                    MOLECULARMATCHTRIALSTAG.MANUALSUPPRESS,
-                    MOLECULARMATCHTRIALSTAG.GENERATEDBY,
-                    MOLECULARMATCHTRIALSTAG.GENERATEDBYTERM,
-                    MOLECULARMATCHTRIALSTAG.IDTAG,
-                    MOLECULARMATCHTRIALSTAG.MANUALPRIORITY,
-                    MOLECULARMATCHTRIALSTAG.MOLECULARMATCHTRIALSID)
+                            MOLECULARMATCHTRIALSTAG.FACET,
+                            MOLECULARMATCHTRIALSTAG.COMPOSITEKEY,
+                            MOLECULARMATCHTRIALSTAG.SUPPRESS,
+                            MOLECULARMATCHTRIALSTAG.FILTERTYPE,
+                            MOLECULARMATCHTRIALSTAG.TERM,
+                            MOLECULARMATCHTRIALSTAG.CUSTOM,
+                            MOLECULARMATCHTRIALSTAG.PRIORITY,
+                            MOLECULARMATCHTRIALSTAG.ALIAS,
+                            MOLECULARMATCHTRIALSTAG.MANUALSUPPRESS,
+                            MOLECULARMATCHTRIALSTAG.GENERATEDBY,
+                            MOLECULARMATCHTRIALSTAG.GENERATEDBYTERM,
+                            MOLECULARMATCHTRIALSTAG.IDTAG,
+                            MOLECULARMATCHTRIALSTAG.MANUALPRIORITY,
+                            MOLECULARMATCHTRIALSTAG.MOLECULARMATCHTRIALSID)
                     .values(tag.facet(),
                             tag.compositeKey(),
                             tag.suppress(),

@@ -10,6 +10,5 @@ import org.jetbrains.annotations.NotNull;
 interface TransvarProcess {
 
     @NotNull
-    List<TransvarRecord> runTransvarPanno(@NotNull String gene, @NotNull String proteinAnnotation)
-            throws InterruptedException, IOException;
+    List<TransvarRecord> runTransvarPanno(@NotNull String gene, @NotNull String proteinAnnotation) throws InterruptedException, IOException;
 }

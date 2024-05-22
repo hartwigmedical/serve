@@ -23,13 +23,13 @@ class IndicationDAO {
 
     public int write(@NotNull com.hartwig.serve.ckb.datamodel.indication.Indication indication) {
         int id = context.insertInto(Indication.INDICATION,
-                Indication.INDICATION.CKBINDICATIONID,
-                Indication.INDICATION.NAME,
-                Indication.INDICATION.SOURCE,
-                Indication.INDICATION.DEFINITION,
-                Indication.INDICATION.CURRENTPREFERREDTERM,
-                Indication.INDICATION.LASTUPDATEDATEFROMDO,
-                Indication.INDICATION.TERMID)
+                        Indication.INDICATION.CKBINDICATIONID,
+                        Indication.INDICATION.NAME,
+                        Indication.INDICATION.SOURCE,
+                        Indication.INDICATION.DEFINITION,
+                        Indication.INDICATION.CURRENTPREFERREDTERM,
+                        Indication.INDICATION.LASTUPDATEDATEFROMDO,
+                        Indication.INDICATION.TERMID)
                 .values(indication.id(),
                         indication.name(),
                         indication.source(),
@@ -42,7 +42,9 @@ class IndicationDAO {
                 .getValue(Indication.INDICATION.ID);
 
         for (String altId : indication.altIds()) {
-            context.insertInto(Indicationaltid.INDICATIONALTID, Indicationaltid.INDICATIONALTID.INDICATIONID, Indicationaltid.INDICATIONALTID.ALTID).values(id, altId).execute();
+            context.insertInto(Indicationaltid.INDICATIONALTID,
+                    Indicationaltid.INDICATIONALTID.INDICATIONID,
+                    Indicationaltid.INDICATIONALTID.ALTID).values(id, altId).execute();
         }
 
         return id;

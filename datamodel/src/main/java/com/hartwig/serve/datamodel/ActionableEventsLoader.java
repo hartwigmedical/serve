@@ -9,7 +9,12 @@ import com.hartwig.serve.datamodel.gene.ActionableGene;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
 import com.hartwig.serve.datamodel.immuno.ActionableHLA;
 import com.hartwig.serve.datamodel.range.ActionableRange;
-import com.hartwig.serve.datamodel.serialization.*;
+import com.hartwig.serve.datamodel.serialization.ActionableCharacteristicFile;
+import com.hartwig.serve.datamodel.serialization.ActionableFusionFile;
+import com.hartwig.serve.datamodel.serialization.ActionableGeneFile;
+import com.hartwig.serve.datamodel.serialization.ActionableHLAFile;
+import com.hartwig.serve.datamodel.serialization.ActionableHotspotFile;
+import com.hartwig.serve.datamodel.serialization.ActionableRangeFile;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,8 +28,7 @@ public final class ActionableEventsLoader {
     }
 
     @NotNull
-    public static ActionableEvents readFromDir(@NotNull String actionabilityDir, @NotNull RefGenome refGenome)
-            throws IOException {
+    public static ActionableEvents readFromDir(@NotNull String actionabilityDir, @NotNull RefGenome refGenome) throws IOException {
         LOGGER.info("Loading SERVE actionability files from {} using ref genome version '{}'", actionabilityDir, refGenome);
 
         String actionableHotspotTsv = ActionableHotspotFile.actionableHotspotTsvPath(actionabilityDir, refGenome);
@@ -47,8 +51,7 @@ public final class ActionableEventsLoader {
         List<ActionableFusion> fusions = ActionableFusionFile.read(actionableFusionTsv);
         LOGGER.info(" Loaded {} actionable fusions from {}", fusions.size(), actionableFusionTsv);
 
-        String actionableCharacteristicTsv =
-                ActionableCharacteristicFile.actionableCharacteristicTsvPath(actionabilityDir, refGenome);
+        String actionableCharacteristicTsv = ActionableCharacteristicFile.actionableCharacteristicTsvPath(actionabilityDir, refGenome);
         List<ActionableCharacteristic> characteristics = ActionableCharacteristicFile.read(actionableCharacteristicTsv);
         LOGGER.info(" Loaded {} actionable tumor characteristics from {}", characteristics.size(), actionableCharacteristicTsv);
 

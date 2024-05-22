@@ -128,7 +128,7 @@ public class EnsemblDataLoaderTest {
     @NotNull
     private static TranscriptData findByTranscriptId(@NotNull List<TranscriptData> transcripts, int transcriptIdToFind) {
         for (TranscriptData transcript : transcripts) {
-            if (transcript.transcriptId() == transcriptIdToFind){
+            if (transcript.transcriptId() == transcriptIdToFind) {
                 return transcript;
             }
         }

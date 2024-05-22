@@ -30,7 +30,7 @@ public abstract class MolecularMatchCriteriaUnmet {
     public abstract String isNew();
 
     @Nullable
-    public abstract  String generatedBy();
+    public abstract String generatedBy();
 
     @Nullable
     public abstract String generatedByTerm();

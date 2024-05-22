@@ -41,5 +41,4 @@ public abstract class BrcaAnnotationBIC {
     @NotNull
     public abstract String literatureCitation();
 
-
 }

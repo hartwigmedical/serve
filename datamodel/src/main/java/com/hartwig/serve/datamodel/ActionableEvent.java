@@ -16,7 +16,7 @@ public interface ActionableEvent {
     Set<String> sourceUrls();
 
     @NotNull
-    Treatment treatment();
+    Intervention intervention();
 
     @NotNull
     CancerType applicableCancerType();

@@ -42,8 +42,8 @@ public final class LiftOverChecker {
 
     public static boolean isValidLiftedRegion(@Nullable LiftOverResult liftedStart, @Nullable LiftOverResult liftedEnd,
             @NotNull GenomeRegion liftedRegion) {
-        return isValidLiftedPosition(liftedStart, new GenomePositionImpl(liftedRegion.chromosome(), liftedRegion.start())) &&
-                isValidLiftedPosition(liftedEnd, new GenomePositionImpl(liftedRegion.chromosome(), liftedRegion.end()));
+        return isValidLiftedPosition(liftedStart, new GenomePositionImpl(liftedRegion.chromosome(), liftedRegion.start()))
+                && isValidLiftedPosition(liftedEnd, new GenomePositionImpl(liftedRegion.chromosome(), liftedRegion.end()));
     }
 
     private static class GenomePositionImpl implements GenomePosition {

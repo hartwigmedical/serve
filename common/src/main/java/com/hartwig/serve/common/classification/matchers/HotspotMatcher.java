@@ -146,8 +146,8 @@ public class HotspotMatcher implements EventMatcher {
 
         String newAminoAcid = event.substring(firstNotDigit);
         // X is a wildcard which should become a codon range rather than a single codon mutation.
-        return !newAminoAcid.equals("X") && (newAminoAcid.length() == 1 || newAminoAcid.equals(HgvsConstants.HGVS_DELETION) || newAminoAcid.equals(
-                HgvsConstants.HGVS_DUPLICATION));
+        return !newAminoAcid.equals("X") && (newAminoAcid.length() == 1 || newAminoAcid.equals(HgvsConstants.HGVS_DELETION)
+                || newAminoAcid.equals(HgvsConstants.HGVS_DUPLICATION));
     }
 
     private boolean isHotspotOnFusionGene(@NotNull String gene, @NotNull String event) {

@@ -24,6 +24,4 @@ class IclusionObjectIndication {
     @Json(name = "node_ids")
     public List<String> nodeIds;
 
-
-
 }

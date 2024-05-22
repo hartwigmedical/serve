@@ -1,13 +1,14 @@
 package com.hartwig.serve.iclusion.classification;
 
+import java.util.Map;
+import java.util.Set;
+
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.common.classification.EventClassifierConfig;
 import com.hartwig.serve.common.classification.ImmutableEventClassifierConfig;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.Map;
-import java.util.Set;
+import org.jetbrains.annotations.NotNull;
 
 public final class IclusionClassificationConfig {
 

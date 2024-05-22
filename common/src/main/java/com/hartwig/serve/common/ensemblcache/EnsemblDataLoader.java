@@ -41,8 +41,7 @@ public final class EnsemblDataLoader {
     }
 
     @NotNull
-    private static Map<String, List<GeneData>> loadGeneData(@NotNull String geneDataFile, @NotNull RefGenome version)
-            throws IOException {
+    private static Map<String, List<GeneData>> loadGeneData(@NotNull String geneDataFile, @NotNull RefGenome version) throws IOException {
         BufferedReader fileReader = new BufferedReader(new FileReader(geneDataFile));
 
         Map<String, Integer> fields = SerializationUtil.createFields(fileReader.readLine(), ENSEMBL_FILE_DELIMITER);

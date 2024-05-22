@@ -42,18 +42,18 @@ class VariantDAO {
 
     public void write(@NotNull com.hartwig.serve.ckb.datamodel.variant.Variant variant, int ckbEntryId) {
         int id = context.insertInto(Variant.VARIANT,
-                Variant.VARIANT.CKBENTRYID,
-                Variant.VARIANT.CKBVARIANTID,
-                Variant.VARIANT.CREATEDATE,
-                Variant.VARIANT.UPDATEDATE,
-                Variant.VARIANT.FULLNAME,
-                Variant.VARIANT.VARIANT_,
-                Variant.VARIANT.IMPACT,
-                Variant.VARIANT.PROTEINEFFECT,
-                Variant.VARIANT.TYPE,
-                Variant.VARIANT.ASSOCIATEDWITHDRUGRESISTANCE,
-                Variant.VARIANT.TRANSFORMINGACTIVITY,
-                Variant.VARIANT.POLYMORPHISM,
+                        Variant.VARIANT.CKBENTRYID,
+                        Variant.VARIANT.CKBVARIANTID,
+                        Variant.VARIANT.CREATEDATE,
+                        Variant.VARIANT.UPDATEDATE,
+                        Variant.VARIANT.FULLNAME,
+                        Variant.VARIANT.VARIANT_,
+                        Variant.VARIANT.IMPACT,
+                        Variant.VARIANT.PROTEINEFFECT,
+                        Variant.VARIANT.TYPE,
+                        Variant.VARIANT.ASSOCIATEDWITHDRUGRESISTANCE,
+                        Variant.VARIANT.TRANSFORMINGACTIVITY,
+                        Variant.VARIANT.POLYMORPHISM,
                         Variant.VARIANT.HOTSPOTREFERENCE,
                         Variant.VARIANT.ISHOTSPOT,
                         Variant.VARIANT.DESCRIPTION)
@@ -84,9 +84,9 @@ class VariantDAO {
         }
 
         for (String categoryVariantPath : variant.categoryVariantPaths()) {
-            context.insertInto(Categoryvariantpath.CATEGORYVARIANTPATH, Categoryvariantpath.CATEGORYVARIANTPATH.VARIANTID, Categoryvariantpath.CATEGORYVARIANTPATH.VARIANTPATH)
-                    .values(id, categoryVariantPath)
-                    .execute();
+            context.insertInto(Categoryvariantpath.CATEGORYVARIANTPATH,
+                    Categoryvariantpath.CATEGORYVARIANTPATH.VARIANTID,
+                    Categoryvariantpath.CATEGORYVARIANTPATH.VARIANTPATH).values(id, categoryVariantPath).execute();
         }
 
         for (MemberVariant memberVariant : variant.memberVariants()) {
@@ -100,17 +100,17 @@ class VariantDAO {
 
     private void writeGene(@NotNull com.hartwig.serve.ckb.datamodel.variant.Gene gene, int variantId) {
         int id = context.insertInto(Gene.GENE,
-                Gene.GENE.VARIANTID,
-                Gene.GENE.CKBGENEID,
-                Gene.GENE.CREATEDATE,
-                Gene.GENE.UPDATEDATE,
-                Gene.GENE.GENESYMBOL,
-                Gene.GENE.GENEROLE,
-                Gene.GENE.ENTREZID,
-                Gene.GENE.CHROMOSOME,
-                Gene.GENE.MAPLOCATION,
-                Gene.GENE.CANONICALTRANSCRIPT,
-                Gene.GENE.DESCRIPTION)
+                        Gene.GENE.VARIANTID,
+                        Gene.GENE.CKBGENEID,
+                        Gene.GENE.CREATEDATE,
+                        Gene.GENE.UPDATEDATE,
+                        Gene.GENE.GENESYMBOL,
+                        Gene.GENE.GENEROLE,
+                        Gene.GENE.ENTREZID,
+                        Gene.GENE.CHROMOSOME,
+                        Gene.GENE.MAPLOCATION,
+                        Gene.GENE.CANONICALTRANSCRIPT,
+                        Gene.GENE.DESCRIPTION)
                 .values(variantId,
                         gene.id(),
                         gene.createDate(),
@@ -131,7 +131,9 @@ class VariantDAO {
         }
 
         for (String synonym : gene.synonyms()) {
-            context.insertInto(Genesynonym.GENESYNONYM, Genesynonym.GENESYNONYM.GENEID, Genesynonym.GENESYNONYM.SYNONYM).values(id, synonym).execute();
+            context.insertInto(Genesynonym.GENESYNONYM, Genesynonym.GENESYNONYM.GENEID, Genesynonym.GENESYNONYM.SYNONYM)
+                    .values(id, synonym)
+                    .execute();
         }
 
         for (Reference geneReference : gene.references()) {
@@ -141,20 +143,20 @@ class VariantDAO {
 
     private void writeGeneReference(@NotNull Reference reference, int geneId) {
         context.insertInto(Tables.GENEREFERENCE,
-                Tables.GENEREFERENCE.GENEID,
-                Tables.GENEREFERENCE.CKBREFERENCEID,
-                Tables.GENEREFERENCE.PUBMEDID,
-                Tables.GENEREFERENCE.TITLE,
-                Tables.GENEREFERENCE.SHORTJOURNALTITLE,
-                Tables.GENEREFERENCE.PAGES,
-                Tables.GENEREFERENCE.ABSTRACTTEXT,
-                Tables.GENEREFERENCE.URL,
-                Tables.GENEREFERENCE.JOURNAL,
-                Tables.GENEREFERENCE.AUTHORS,
-                Tables.GENEREFERENCE.VOLUME,
-                Tables.GENEREFERENCE.ISSUE,
-                Tables.GENEREFERENCE.DATE,
-                Tables.GENEREFERENCE.YEAR)
+                        Tables.GENEREFERENCE.GENEID,
+                        Tables.GENEREFERENCE.CKBREFERENCEID,
+                        Tables.GENEREFERENCE.PUBMEDID,
+                        Tables.GENEREFERENCE.TITLE,
+                        Tables.GENEREFERENCE.SHORTJOURNALTITLE,
+                        Tables.GENEREFERENCE.PAGES,
+                        Tables.GENEREFERENCE.ABSTRACTTEXT,
+                        Tables.GENEREFERENCE.URL,
+                        Tables.GENEREFERENCE.JOURNAL,
+                        Tables.GENEREFERENCE.AUTHORS,
+                        Tables.GENEREFERENCE.VOLUME,
+                        Tables.GENEREFERENCE.ISSUE,
+                        Tables.GENEREFERENCE.DATE,
+                        Tables.GENEREFERENCE.YEAR)
                 .values(geneId,
                         reference.id(),
                         reference.pubMedId(),
@@ -174,20 +176,20 @@ class VariantDAO {
 
     private void writeVariantReference(@NotNull Reference reference, int variantId) {
         context.insertInto(Tables.VARIANTREFERENCE,
-                Tables.VARIANTREFERENCE.VARIANTID,
-                Tables.VARIANTREFERENCE.CKBREFERENCEID,
-                Tables.VARIANTREFERENCE.PUBMEDID,
-                Tables.VARIANTREFERENCE.TITLE,
-                Tables.VARIANTREFERENCE.SHORTJOURNALTITLE,
-                Tables.VARIANTREFERENCE.PAGES,
-                Tables.VARIANTREFERENCE.ABSTRACTTEXT,
-                Tables.VARIANTREFERENCE.URL,
-                Tables.VARIANTREFERENCE.JOURNAL,
-                Tables.VARIANTREFERENCE.AUTHORS,
-                Tables.VARIANTREFERENCE.VOLUME,
-                Tables.VARIANTREFERENCE.ISSUE,
-                Tables.VARIANTREFERENCE.DATE,
-                Tables.VARIANTREFERENCE.YEAR)
+                        Tables.VARIANTREFERENCE.VARIANTID,
+                        Tables.VARIANTREFERENCE.CKBREFERENCEID,
+                        Tables.VARIANTREFERENCE.PUBMEDID,
+                        Tables.VARIANTREFERENCE.TITLE,
+                        Tables.VARIANTREFERENCE.SHORTJOURNALTITLE,
+                        Tables.VARIANTREFERENCE.PAGES,
+                        Tables.VARIANTREFERENCE.ABSTRACTTEXT,
+                        Tables.VARIANTREFERENCE.URL,
+                        Tables.VARIANTREFERENCE.JOURNAL,
+                        Tables.VARIANTREFERENCE.AUTHORS,
+                        Tables.VARIANTREFERENCE.VOLUME,
+                        Tables.VARIANTREFERENCE.ISSUE,
+                        Tables.VARIANTREFERENCE.DATE,
+                        Tables.VARIANTREFERENCE.YEAR)
                 .values(variantId,
                         reference.id(),
                         reference.pubMedId(),
@@ -209,14 +211,14 @@ class VariantDAO {
             boolean isReferenceTranscriptCoordinate) {
         if (transcriptCoordinate != null) {
             context.insertInto(Transcriptcoordinate.TRANSCRIPTCOORDINATE,
-                    Transcriptcoordinate.TRANSCRIPTCOORDINATE.VARIANTID,
-                    Transcriptcoordinate.TRANSCRIPTCOORDINATE.ISREFERENCETRANSCRIPTCOORDINATE,
-                    Transcriptcoordinate.TRANSCRIPTCOORDINATE.TRANSCRIPT,
-                    Transcriptcoordinate.TRANSCRIPTCOORDINATE.GDNA,
-                    Transcriptcoordinate.TRANSCRIPTCOORDINATE.CDNA,
-                    Transcriptcoordinate.TRANSCRIPTCOORDINATE.PROTEIN,
-                    Transcriptcoordinate.TRANSCRIPTCOORDINATE.SOURCEDB,
-                    Transcriptcoordinate.TRANSCRIPTCOORDINATE.REFGENOMEBUILD)
+                            Transcriptcoordinate.TRANSCRIPTCOORDINATE.VARIANTID,
+                            Transcriptcoordinate.TRANSCRIPTCOORDINATE.ISREFERENCETRANSCRIPTCOORDINATE,
+                            Transcriptcoordinate.TRANSCRIPTCOORDINATE.TRANSCRIPT,
+                            Transcriptcoordinate.TRANSCRIPTCOORDINATE.GDNA,
+                            Transcriptcoordinate.TRANSCRIPTCOORDINATE.CDNA,
+                            Transcriptcoordinate.TRANSCRIPTCOORDINATE.PROTEIN,
+                            Transcriptcoordinate.TRANSCRIPTCOORDINATE.SOURCEDB,
+                            Transcriptcoordinate.TRANSCRIPTCOORDINATE.REFGENOMEBUILD)
                     .values(variantId,
                             Util.toByte(isReferenceTranscriptCoordinate),
                             transcriptCoordinate.transcript(),
@@ -231,11 +233,11 @@ class VariantDAO {
 
     private void writeMemberVariant(@NotNull MemberVariant memberVariant, int variantId) {
         context.insertInto(Membervariant.MEMBERVARIANT,
-                Membervariant.MEMBERVARIANT.VARIANTID,
-                Membervariant.MEMBERVARIANT.CKBVARIANTID,
-                Membervariant.MEMBERVARIANT.FULLNAME,
-                Membervariant.MEMBERVARIANT.IMPACT,
-                Membervariant.MEMBERVARIANT.PROTEINEFFECT)
+                        Membervariant.MEMBERVARIANT.VARIANTID,
+                        Membervariant.MEMBERVARIANT.CKBVARIANTID,
+                        Membervariant.MEMBERVARIANT.FULLNAME,
+                        Membervariant.MEMBERVARIANT.IMPACT,
+                        Membervariant.MEMBERVARIANT.PROTEINEFFECT)
                 .values(variantId, memberVariant.id(), memberVariant.fullName(), memberVariant.impact(), memberVariant.proteinEffect())
                 .execute();
     }

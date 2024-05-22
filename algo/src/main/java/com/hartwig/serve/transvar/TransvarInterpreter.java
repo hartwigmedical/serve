@@ -189,8 +189,7 @@ class TransvarInterpreter {
         int position = record.gdnaPosition();
         String preMutatedSequence = refSequence(record.chromosome(), position, position);
 
-        ImmutableHotspot.Builder hotspotBuilder =
-                withRefBasedChromosome(record.chromosome()).position(position).ref(preMutatedSequence);
+        ImmutableHotspot.Builder hotspotBuilder = withRefBasedChromosome(record.chromosome()).position(position).ref(preMutatedSequence);
 
         // We assume inserts of length 3 are always (inframe) amino acid inserts,
         //  and we know the inserted bases match the proteins inserted.
@@ -252,15 +251,14 @@ class TransvarInterpreter {
     }
 
     @NotNull
-    private List<Hotspot> convertComplexInsertDeleteToHotspots(@NotNull TransvarRecord record,
-            @NotNull TransvarComplexInsertDelete insDel, @NotNull Strand strand) {
+    private List<Hotspot> convertComplexInsertDeleteToHotspots(@NotNull TransvarRecord record, @NotNull TransvarComplexInsertDelete insDel,
+            @NotNull Strand strand) {
         List<Hotspot> hotspots = Lists.newArrayList();
         if (!record.variantSpanMultipleExons()) {
             int position = record.gdnaPosition();
             String deletedBases = refSequence(record.chromosome(), position, position + insDel.deletedBaseCount() - 1);
 
-            ImmutableHotspot.Builder hotspotBuilder =
-                    withRefBasedChromosome(record.chromosome()).position(position).ref(deletedBases);
+            ImmutableHotspot.Builder hotspotBuilder = withRefBasedChromosome(record.chromosome()).position(position).ref(deletedBases);
 
             String insertedBases = insDel.insertedSequence();
             hotspots.add(reduceComplexityForComplexInsDel(hotspotBuilder.alt(insertedBases).build()));

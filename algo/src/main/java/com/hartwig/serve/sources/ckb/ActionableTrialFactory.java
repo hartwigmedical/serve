@@ -2,6 +2,7 @@ package com.hartwig.serve.sources.ckb;
 
 import java.util.List;
 import java.util.Set;
+import java.util.StringJoiner;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
@@ -11,15 +12,18 @@ import com.hartwig.serve.ckb.datamodel.clinicaltrial.ClinicalTrial;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.Location;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.VariantRequirementDetail;
 import com.hartwig.serve.ckb.datamodel.indication.Indication;
+import com.hartwig.serve.ckb.datamodel.therapy.Therapy;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
-import com.hartwig.serve.datamodel.ImmutableTreatment;
+import com.hartwig.serve.datamodel.ImmutableClinicalTrial;
 import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.sources.ckb.blacklist.CkbStudyBlacklistModel;
 
 import org.jetbrains.annotations.NotNull;
 
 class ActionableTrialFactory implements ActionableEntryFactory {
 
+    private static final String SUB_FIELD_DELIMITER = ",";
     private static final Set<String> POTENTIALLY_OPEN_RECRUITMENT_TYPES = Sets.newHashSet();
     private static final Set<String> COUNTRIES_TO_INCLUDE = Sets.newHashSet();
     private static final Set<String> VARIANT_REQUIREMENT_TYPES_TO_INCLUDE = Sets.newHashSet();
@@ -32,6 +36,8 @@ class ActionableTrialFactory implements ActionableEntryFactory {
         POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("not yet recruiting");
         POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("unknown status");
         POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("not_yet_recruiting");
+        POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("approved for marketing");
+        POTENTIALLY_OPEN_RECRUITMENT_TYPES.add("available");
 
         COUNTRIES_TO_INCLUDE.add("netherlands");
         COUNTRIES_TO_INCLUDE.add("belgium");
@@ -44,7 +50,11 @@ class ActionableTrialFactory implements ActionableEntryFactory {
         AGE_GROUPS_TO_INCLUDE.add("senior");
     }
 
-    public ActionableTrialFactory() {
+    @NotNull
+    private final CkbStudyBlacklistModel blacklistStudy;
+
+    public ActionableTrialFactory(@NotNull CkbStudyBlacklistModel blacklistStudy) {
+        this.blacklistStudy = blacklistStudy;
     }
 
     @NotNull
@@ -56,29 +66,53 @@ class ActionableTrialFactory implements ActionableEntryFactory {
             Set<String> countries = countriesToInclude(trial);
 
             if (!countries.isEmpty()) {
+                Set<String> therapies = Sets.newHashSet();
+                for (Therapy therapy : trial.therapies()) {
+                    therapies.add(therapy.therapyName());
+                }
                 for (Indication indication : trial.indications()) {
                     CancerTypeExtraction cancerTypeExtraction = ActionableFunctions.extractCancerTypeDetails(indication);
-
                     if (cancerTypeExtraction != null) {
-                        String trialName = trial.acronym() != null ? trial.acronym() : trial.title();
-                        assert trialName != null;
+                        if (!blacklistStudy.isBlacklistStudy(trial.nctId(),
+                                setToField(therapies),
+                                cancerTypeExtraction.applicableCancerType().name(),
+                                sourceGene,
+                                sourceEvent)) {
+                            String trialName = trial.acronym() != null ? trial.acronym() : trial.title();
+                            assert trialName != null;
 
-                        actionableTrials.add(ImmutableActionableEntry.builder()
-                                .source(Knowledgebase.CKB_TRIAL)
-                                .sourceEvent(sourceEvent)
-                                .sourceUrls(Sets.newHashSet("https://clinicaltrials.gov/study/" + trial.nctId()))
-                                .treatment(ImmutableTreatment.builder().name(trialName).build())
-                                .applicableCancerType(cancerTypeExtraction.applicableCancerType())
-                                .blacklistCancerTypes(cancerTypeExtraction.blacklistedCancerTypes())
-                                .level(EvidenceLevel.B)
-                                .direction(EvidenceDirection.RESPONSIVE)
-                                .evidenceUrls(countries)
-                                .build());
+                            actionableTrials.add(ImmutableActionableEntry.builder()
+                                    .source(Knowledgebase.CKB_TRIAL)
+                                    .sourceEvent(sourceEvent)
+                                    .sourceUrls(Sets.newHashSet("https://ckbhome.jax.org/clinicalTrial/show?nctId=" + trial.nctId()))
+                                    .intervention(ImmutableClinicalTrial.builder()
+                                            .studyNctId(trial.nctId())
+                                            .studyTitle(trialName)
+                                            .countriesOfStudy(countries)
+                                            .therapyNames(therapies)
+                                            .build())
+                                    .applicableCancerType(cancerTypeExtraction.applicableCancerType())
+                                    .blacklistCancerTypes(cancerTypeExtraction.blacklistedCancerTypes())
+                                    .level(EvidenceLevel.B)
+                                    .direction(EvidenceDirection.RESPONSIVE)
+                                    .evidenceUrls(Sets.newHashSet("https://clinicaltrials.gov/study/" + trial.nctId()))
+                                    .build());
+                        }
                     }
                 }
             }
         }
+
         return actionableTrials;
+    }
+
+    @NotNull
+    private static String setToField(@NotNull Set<String> strings) {
+        StringJoiner joiner = new StringJoiner(SUB_FIELD_DELIMITER);
+        for (String string : strings) {
+            joiner.add(string);
+        }
+        return joiner.toString();
     }
 
     @NotNull

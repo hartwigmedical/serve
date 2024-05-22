@@ -11,7 +11,7 @@ import com.hartwig.serve.datamodel.CancerType;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.ImmutableCancerType;
-import com.hartwig.serve.datamodel.ImmutableTreatment;
+import com.hartwig.serve.datamodel.ImmutableClinicalTrial;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.iclusion.datamodel.IclusionTrial;
 import com.hartwig.serve.iclusion.datamodel.IclusionTumorLocation;
@@ -65,7 +65,12 @@ public class ActionableTrialFactory {
                 .source(Knowledgebase.ICLUSION)
                 .sourceEvent(sourceEvent)
                 .sourceUrls(Sets.newHashSet("https://www.trial-eye.com/hmf/" + trial.id()))
-                .treatment(ImmutableTreatment.builder().name(trial.acronym()).build())
+                .intervention(ImmutableClinicalTrial.builder()
+                        .studyNctId(trial.nct())
+                        .studyTitle(trial.acronym())
+                        .countriesOfStudy(Sets.newHashSet("The Netherlands"))
+                        .therapyNames(Sets.newHashSet())
+                        .build())
                 .level(EvidenceLevel.B)
                 .direction(EvidenceDirection.RESPONSIVE)
                 .evidenceUrls(Sets.newHashSet());

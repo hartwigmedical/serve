@@ -5,10 +5,10 @@ import java.util.List;
 
 import com.hartwig.serve.ckb.CkbEntryReader;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
+import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistMolecularProfileEntry;
+import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistMolecularProfileFile;
+import com.hartwig.serve.sources.ckb.blacklist.CkbMolecularProfileBlacklistModel;
 import com.hartwig.serve.sources.ckb.curation.CkbCurator;
-import com.hartwig.serve.sources.ckb.filter.CkbFilter;
-import com.hartwig.serve.sources.ckb.filter.CkbFilterEntry;
-import com.hartwig.serve.sources.ckb.filter.CkbFilterFile;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,16 +22,17 @@ public final class CkbReader {
     }
 
     @NotNull
-    public static List<CkbEntry> readAndCurate(@NotNull String ckbDir, @NotNull String ckbFilterTsv) throws IOException {
+    public static List<CkbEntry> readAndCurate(@NotNull String ckbDir, @NotNull String ckbBlacklistMolecularProfileTsv) throws IOException {
         LOGGER.info("Reading CKB database from {}", ckbDir);
         List<CkbEntry> ckbEntries = CkbEntryReader.read(ckbDir);
         LOGGER.info(" Read {} entries", ckbEntries.size());
 
-        LOGGER.info("Reading CBK filter entries from {}", ckbFilterTsv);
-        List<CkbFilterEntry> ckbFilterEntries = CkbFilterFile.read(ckbFilterTsv);
-        LOGGER.info(" Read {} filter entries", ckbFilterEntries.size());
+        LOGGER.info("Reading CBK blacklist molecular profile entries from {}", ckbBlacklistMolecularProfileTsv);
+        List<CkbBlacklistMolecularProfileEntry> ckbBlacklistMolecularProfileEntries =
+                CkbBlacklistMolecularProfileFile.read(ckbBlacklistMolecularProfileTsv);
+        LOGGER.info(" Read {} blacklist molecular profile entries", ckbBlacklistMolecularProfileEntries.size());
 
-        return filter(curate(ckbEntries), ckbFilterEntries);
+        return removeBlacklistedEntries(curate(ckbEntries), ckbBlacklistMolecularProfileEntries);
     }
 
     @NotNull
@@ -47,17 +48,18 @@ public final class CkbReader {
     }
 
     @NotNull
-    private static List<CkbEntry> filter(@NotNull List<CkbEntry> entries, @NotNull List<CkbFilterEntry> ckbFilterEntries) {
-        CkbFilter filter = new CkbFilter(ckbFilterEntries);
+    private static List<CkbEntry> removeBlacklistedEntries(@NotNull List<CkbEntry> entries,
+            @NotNull List<CkbBlacklistMolecularProfileEntry> ckbBlacklistEntries) {
+        CkbMolecularProfileBlacklistModel blacklist = new CkbMolecularProfileBlacklistModel(ckbBlacklistEntries);
 
-        LOGGER.info("Filtering {} CKB entries", entries.size());
-        List<CkbEntry> filteredEntries = filter.run(entries);
-        LOGGER.info(" Finished CKB filtering. {} entries remaining, {} entries have been removed",
-                filteredEntries.size(),
-                entries.size() - filteredEntries.size());
+        LOGGER.info("Blacklisting {} CKB entries", entries.size());
+        List<CkbEntry> whitelistedEntries = blacklist.run(entries);
+        LOGGER.info(" Finished CKB blacklisting. {} entries remaining, {} entries have been removed",
+                whitelistedEntries.size(),
+                entries.size() - whitelistedEntries.size());
 
-        filter.reportUnusedFilterEntries();
+        blacklist.reportUnusedBlacklistEntries();
 
-        return filteredEntries;
+        return whitelistedEntries;
     }
 }

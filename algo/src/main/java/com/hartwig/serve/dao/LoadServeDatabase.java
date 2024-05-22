@@ -29,7 +29,7 @@ public class LoadServeDatabase {
     private static final String REF_GENOME_VERSION = "ref_genome_version";
 
     private static final String SERVE_ACTIONABILITY_DIRECTORY = "serve_actionability_dir";
-    
+
     public static void main(@NotNull String[] args) throws ParseException, SQLException, IOException {
         Options options = createOptions();
         CommandLine cmd = new DefaultParser().parse(options, args);

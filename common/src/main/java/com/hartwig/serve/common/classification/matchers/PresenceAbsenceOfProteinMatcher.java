@@ -5,6 +5,7 @@ import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 
 public class PresenceAbsenceOfProteinMatcher implements EventMatcher {
+
     @NotNull
     private final Set<String> events;
     @NotNull

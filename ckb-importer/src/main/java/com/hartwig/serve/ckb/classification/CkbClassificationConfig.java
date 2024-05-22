@@ -193,6 +193,19 @@ public class CkbClassificationConfig {
     }
 
     @NotNull
+    private static Set<String> presenceOfProteinEvents() {
+        return Sets.newHashSet("positive");
+    }
+
+    @NotNull
+    private static Set<String> presenceOfProteinBlacklistEvents() {
+        Set<String> set = Sets.newHashSet();
+        set.add("HRD");
+        set.add("MSI");
+        return set;
+    }
+
+    @NotNull
     private static Set<String> deletionBlacklistKeyPhrases() {
         Set<String> set = Sets.newHashSet();
         set.add("exon");
@@ -221,6 +234,19 @@ public class CkbClassificationConfig {
     private static Set<String> underexpressionKeyPhrases() {
         Set<String> set = Sets.newHashSet();
         set.add("dec exp");
+        return set;
+    }
+
+    @NotNull
+    private static Set<String> absenceOfProteinEvents() {
+        return Sets.newHashSet("negative");
+    }
+
+    @NotNull
+    private static Set<String> absenceOfProteinBlacklistEvents() {
+        Set<String> set = Sets.newHashSet();
+        set.add("HRD");
+        set.add("MSI");
         return set;
     }
 
@@ -302,32 +328,6 @@ public class CkbClassificationConfig {
     @NotNull
     private static Set<String> ebvPositiveEvents() {
         return Sets.newHashSet();
-    }
-
-    @NotNull
-    private static Set<String> absenceOfProteinEvents() {
-        return Sets.newHashSet("negative");
-    }
-
-    @NotNull
-    private static Set<String> absenceOfProteinBlacklistEvents() {
-        Set<String> set = Sets.newHashSet();
-        set.add("HRD");
-        set.add("MSI");
-        return set;
-    }
-
-    @NotNull
-    private static Set<String> presenceOfProteinEvents() {
-        return Sets.newHashSet("positive");
-    }
-
-    @NotNull
-    private static Set<String> presenceOfProteinBlacklistEvents() {
-        Set<String> set = Sets.newHashSet();
-        set.add("HRD");
-        set.add("MSI");
-        return set;
     }
 
     @NotNull

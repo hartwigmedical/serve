@@ -199,6 +199,16 @@ public final class IclusionClassificationConfig {
     }
 
     @NotNull
+    private static Set<String> presenceOfProteinEvents() {
+        return Sets.newHashSet();
+    }
+
+    @NotNull
+    private static Set<String> presenceOfProteinBlacklistEvents() {
+        return Sets.newHashSet();
+    }
+
+    @NotNull
     private static Set<String> deletionBlacklistKeyPhrases() {
         Set<String> set = Sets.newHashSet();
         set.add("EXON");
@@ -227,6 +237,16 @@ public final class IclusionClassificationConfig {
 
     @NotNull
     private static Set<String> underexpressionKeyPhrases() {
+        return Sets.newHashSet();
+    }
+
+    @NotNull
+    private static Set<String> absenceOfProteinEvents() {
+        return Sets.newHashSet();
+    }
+
+    @NotNull
+    private static Set<String> absenceOfProteinBlacklistEvents() {
         return Sets.newHashSet();
     }
 
@@ -328,26 +348,6 @@ public final class IclusionClassificationConfig {
         Set<String> set = Sets.newHashSet();
         set.add("EBV_POSITIVE");
         return set;
-    }
-
-    @NotNull
-    private static Set<String> absenceOfProteinEvents() {
-        return Sets.newHashSet();
-    }
-
-    @NotNull
-    private static Set<String> absenceOfProteinBlacklistEvents() {
-        return Sets.newHashSet();
-    }
-
-    @NotNull
-    private static Set<String> presenceOfProteinEvents() {
-        return Sets.newHashSet();
-    }
-
-    @NotNull
-    private static Set<String> presenceOfProteinBlacklistEvents() {
-        return Sets.newHashSet();
     }
 
     @NotNull

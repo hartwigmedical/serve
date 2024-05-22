@@ -54,21 +54,16 @@ public class GeneLevelExtractor {
 
     @Nullable
     public GeneAnnotation extract(@NotNull String gene, @NotNull EventType type, @NotNull String event) {
-        if (exomeGeneChecker.isValidGene(gene) || fusionGeneChecker.isValidGene(gene)) {
-            switch (type) {
-                case WILD_TYPE:
-                    return extractWildTypeEvent(gene, type);
-                case GENE_LEVEL:
-                    return extractGeneLevelEvent(gene, event);
-                case PROMISCUOUS_FUSION:
-                    return extractPromiscuousFusion(gene);
-                case ABSENCE_OF_PROTEIN:
-                case PRESENCE_OF_PROTEIN:
-                    return extractProteinEvent(gene, type);
-                default:
-                    LOGGER.warn("Unrecognized event type : '{}'", type);
-                    return null;
-            }
+        if (type == EventType.WILD_TYPE && exomeGeneChecker.isValidGene(gene)) {
+            return extractWildTypeEvent(gene, type);
+        } else if (type == EventType.GENE_LEVEL && exomeGeneChecker.isValidGene(gene)) {
+            return extractGeneLevelEvent(gene, event);
+        } else if (type == EventType.PROMISCUOUS_FUSION && fusionGeneChecker.isValidGene(gene)) {
+            return extractPromiscuousFusion(gene);
+        } else if (type == EventType.ABSENCE_OF_PROTEIN && exomeGeneChecker.isValidGene(gene)) {
+            return extractProteinEvent(gene, type);
+        } else if (type == EventType.PRESENCE_OF_PROTEIN && exomeGeneChecker.isValidGene(gene)) {
+            return extractProteinEvent(gene, type);
         }
         return null;
     }

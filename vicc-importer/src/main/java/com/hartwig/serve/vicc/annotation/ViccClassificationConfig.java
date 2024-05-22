@@ -241,6 +241,16 @@ public final class ViccClassificationConfig {
     }
 
     @NotNull
+    private static Set<String> presenceOfProteinEvents() {
+        return Sets.newHashSet();
+    }
+
+    @NotNull
+    private static Set<String> presenceOfProteinBlacklistEvents() {
+        return Sets.newHashSet();
+    }
+
+    @NotNull
     private static Set<String> deletionBlacklistKeyPhrases() {
         Set<String> set = Sets.newHashSet();
         set.add("exon");
@@ -283,6 +293,16 @@ public final class ViccClassificationConfig {
         Set<String> set = Sets.newHashSet();
         set.add("dec exp");
         return set;
+    }
+
+    @NotNull
+    private static Set<String> absenceOfProteinEvents() {
+        return Sets.newHashSet();
+    }
+
+    @NotNull
+    private static Set<String> absenceOfProteinBlacklistEvents() {
+        return Sets.newHashSet();
     }
 
     @NotNull
@@ -377,25 +397,6 @@ public final class ViccClassificationConfig {
         return Sets.newHashSet();
     }
 
-    @NotNull
-    private static Set<String> absenceOfProteinEvents() {
-        return Sets.newHashSet();
-    }
-
-    @NotNull
-    private static Set<String> absenceOfProteinBlacklistEvents() {
-        return Sets.newHashSet();
-    }
-
-    @NotNull
-    private static Set<String> presenceOfProteinEvents() {
-        return Sets.newHashSet();
-    }
-
-    @NotNull
-    private static Set<String> presenceOfProteinBlacklistEvents() {
-        return Sets.newHashSet();
-    }
 
     @NotNull
     private static Map<String, Set<String>> combinedEventsPerGene() {

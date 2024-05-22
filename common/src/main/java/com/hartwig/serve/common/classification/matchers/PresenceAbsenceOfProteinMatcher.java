@@ -30,7 +30,6 @@ public class PresenceAbsenceOfProteinMatcher implements EventMatcher {
             }
         }
 
-        // If the event matches the gene we assume it's a gene level event
-        return event.trim().equals(gene);
+        return false;
     }
 }

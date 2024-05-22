@@ -2,9 +2,10 @@ package com.hartwig.serve.ckb.dao;
 
 import com.hartwig.serve.ckb.database.Tables;
 import com.hartwig.serve.ckb.database.tables.Treatmentapproach;
-import com.hartwig.serve.ckb.datamodel.drug.DrugClass;
 import com.hartwig.serve.ckb.datamodel.reference.Reference;
 import com.hartwig.serve.ckb.datamodel.treatmentapproaches.RelevantTreatmentApproaches;
+import com.hartwig.serve.ckb.json.common.DrugClassInfo;
+import com.hartwig.serve.ckb.json.common.TherapyInfo;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -22,6 +23,7 @@ class TreatmentApproachDAO {
     public void deleteAll() {
         // Note that deletions should go from branch to root
         context.deleteFrom(Tables.TREATMENTAPPROACHDRUGCLASS).execute();
+        context.deleteFrom(Tables.TREATMENTAPPROACHTHERAPY).execute();
         context.deleteFrom(Tables.TREATMENTAPPROACHREFERENCE).execute();
 
         context.deleteFrom(Treatmentapproach.TREATMENTAPPROACH).execute();
@@ -42,6 +44,10 @@ class TreatmentApproachDAO {
             writeTreatmentDrugClass(treatmentApproaches.drugClass(), id);
         }
 
+        if (treatmentApproaches.therapy() != null) {
+            writeTreatmentTherapy(treatmentApproaches.therapy(), id);
+        }
+
         for (Reference reference : treatmentApproaches.references()) {
             writeTreatmentReference(reference, id);
         }
@@ -49,13 +55,21 @@ class TreatmentApproachDAO {
         return id;
     }
 
-    private void writeTreatmentDrugClass(@Nullable DrugClass drugClass, int treatmentApproachDrugClassId) {
+    private void writeTreatmentDrugClass(@Nullable DrugClassInfo drugClassInfo, int treatmentApproachDrugClassId) {
         context.insertInto(Tables.TREATMENTAPPROACHDRUGCLASS,
                         Tables.TREATMENTAPPROACHDRUGCLASS.TREATMENTAPPROACHID,
                         Tables.TREATMENTAPPROACHDRUGCLASS.DRUGCLASSID,
-                        Tables.TREATMENTAPPROACHDRUGCLASS.CREATEDATE,
                         Tables.TREATMENTAPPROACHDRUGCLASS.DRUGCLASS)
-                .values(treatmentApproachDrugClassId, drugClass.id(), drugClass.createDate(), drugClass.drugClass())
+                .values(treatmentApproachDrugClassId, drugClassInfo.id(), drugClassInfo.drugClass())
+                .execute();
+    }
+
+    private void writeTreatmentTherapy(@Nullable TherapyInfo therapyInfo, int treatmentApproachDrugClassId) {
+        context.insertInto(Tables.TREATMENTAPPROACHTHERAPY,
+                        Tables.TREATMENTAPPROACHTHERAPY.TREATMENTAPPROACHID,
+                        Tables.TREATMENTAPPROACHTHERAPY.THERAPYID,
+                        Tables.TREATMENTAPPROACHTHERAPY.THERAPYNAME)
+                .values(treatmentApproachDrugClassId, therapyInfo.id(), therapyInfo.therapyName())
                 .execute();
     }
 

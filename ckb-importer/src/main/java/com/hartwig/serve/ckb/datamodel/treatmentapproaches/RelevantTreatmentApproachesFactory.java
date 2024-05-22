@@ -3,7 +3,6 @@ package com.hartwig.serve.ckb.datamodel.treatmentapproaches;
 import java.util.List;
 
 import com.google.common.collect.Lists;
-import com.hartwig.serve.ckb.datamodel.drug.DrugFactory;
 import com.hartwig.serve.ckb.datamodel.reference.ReferenceFactory;
 import com.hartwig.serve.ckb.json.CkbJsonDatabase;
 import com.hartwig.serve.ckb.json.common.TreatmentApproachInfo;
@@ -36,8 +35,8 @@ public final class RelevantTreatmentApproachesFactory {
             if (treatmentApproach.id() == treatmentApproachInfo.id()) {
                 return ImmutableRelevantTreatmentApproaches.builder()
                         .id(treatmentApproach.id())
-                        .drugClass(treatmentApproach.drugClass() != null ? DrugFactory.resolveDrugClass(ckbJsonDatabase,
-                                treatmentApproach.drugClass()) : null)
+                        .drugClass(treatmentApproach.drugClass() != null ? treatmentApproach.drugClass() : null)
+                        .therapy(treatmentApproach.therapy() != null ? treatmentApproach.therapy() : null)
                         .references(ReferenceFactory.extractReferences(ckbJsonDatabase, treatmentApproach.references()))
                         .createDate(treatmentApproach.createDate())
                         .updateDate(treatmentApproach.updateDate())

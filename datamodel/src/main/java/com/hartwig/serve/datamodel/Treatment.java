@@ -14,8 +14,8 @@ public abstract class Treatment implements Intervention {
     public abstract String name();
 
     @NotNull
-    public abstract Set<String> sourceRelevantTreatmentApproaches();
+    public abstract Set<String> treatmentApproachesDrugClass();
 
     @NotNull
-    public abstract Set<String> relevantTreatmentApproaches();
+    public abstract Set<String> treatmentApproachesTherapy();
 }

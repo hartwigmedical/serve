@@ -7,17 +7,16 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
-import com.hartwig.serve.ckb.datamodel.drug.DrugClass;
 import com.hartwig.serve.ckb.datamodel.evidence.Evidence;
 import com.hartwig.serve.ckb.datamodel.reference.Reference;
 import com.hartwig.serve.ckb.datamodel.treatmentapproaches.RelevantTreatmentApproaches;
+import com.hartwig.serve.ckb.json.common.DrugClassInfo;
+import com.hartwig.serve.ckb.json.common.TherapyInfo;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.ImmutableTreatment;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.sources.ckb.blacklist.CkbEvidenceBlacklistModel;
-import com.hartwig.serve.sources.ckb.treatmentapproach.ImmutableTreatmentApproachCurationEntryKey;
-import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurationEntryKey;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurator;
 
 import org.apache.logging.log4j.LogManager;
@@ -100,34 +99,43 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
                     sourceUrls.add("https://ckbhome.jax.org/profileResponse/advancedEvidenceFind?molecularProfileId=" + entry.profileId());
 
                     Set<String> sourceRelevantTreatmentApproaches = Sets.newHashSet();
-                    for (RelevantTreatmentApproaches relevantTreatmentApproaches : evidence.relevantTreatmentApproaches()) {
-                        DrugClass relevantTreatmentApproachesInfo = relevantTreatmentApproaches.drugClass();
+                    Set<String> drugClass = Sets.newHashSet();
+                    Set<String> therapy = Sets.newHashSet();
 
-                        if (relevantTreatmentApproachesInfo != null) {
-                            sourceRelevantTreatmentApproaches.add(relevantTreatmentApproachesInfo.drugClass());
+                    for (RelevantTreatmentApproaches relevantTreatmentApproaches : evidence.relevantTreatmentApproaches()) {
+                        DrugClassInfo drugClassInfo = relevantTreatmentApproaches.drugClass();
+                        TherapyInfo therapyInfo = relevantTreatmentApproaches.therapy();
+
+                        // If drugClassInfo contains data then therapyInfo is null. When therapyInfo contains data then drugClassInfo is null
+                        if (drugClassInfo != null) {
+                            drugClass.add(drugClassInfo.drugClass());
+                        }
+
+                        if (therapyInfo != null) {
+                            therapy.add(therapyInfo.therapyName());
                         }
                     }
-
-                    String treatmentApproachString = String.join(",", sourceRelevantTreatmentApproaches);
-                    String treatmentApproachInterpret;
-                    if (sourceRelevantTreatmentApproaches.isEmpty()) {
-                        treatmentApproachInterpret = null;
-                    } else if (treatmentApproachString.endsWith(",")) {
-                        treatmentApproachInterpret = treatmentApproachString.substring(0, treatmentApproachString.length() - 1);
-                    } else {
-                        treatmentApproachInterpret = treatmentApproachString;
-                    }
-
-                    TreatmentApproachCurationEntryKey key = ImmutableTreatmentApproachCurationEntryKey.builder()
-                            .treatment(treatment)
-                            .treatmentApproach(treatmentApproachInterpret == null || treatmentApproachInterpret.isEmpty()
-                                    ? null
-                                    : treatmentApproachInterpret)
-                            .event(sourceGene + " " + entry.type())
-                            .direction(direction)
-                            .build();
-
-                    Set<String> curatedRelevantTreatmentApproaches = Sets.newHashSet(curator.isMatch(key));
+// TODO: implement
+//                    String treatmentApproachString = String.join(",", sourceRelevantTreatmentApproaches);
+//                    String treatmentApproachInterpret;
+//                    if (sourceRelevantTreatmentApproaches.isEmpty()) {
+//                        treatmentApproachInterpret = null;
+//                    } else if (treatmentApproachString.endsWith(",")) {
+//                        treatmentApproachInterpret = treatmentApproachString.substring(0, treatmentApproachString.length() - 1);
+//                    } else {
+//                        treatmentApproachInterpret = treatmentApproachString;
+//                    }
+//
+//                    TreatmentApproachCurationEntryKey key = ImmutableTreatmentApproachCurationEntryKey.builder()
+//                            .treatment(treatment)
+//                            .treatmentApproach(treatmentApproachInterpret == null || treatmentApproachInterpret.isEmpty()
+//                                    ? null
+//                                    : treatmentApproachInterpret)
+//                            .event(sourceGene + " " + entry.type())
+//                            .direction(direction)
+//                            .build();
+//
+//                    Set<String> curatedRelevantTreatmentApproaches = Sets.newHashSet(curator.isMatch(key));
 
                     actionableEntries.add(ImmutableActionableEntry.builder()
                             .source(Knowledgebase.CKB_EVIDENCE)
@@ -135,8 +143,8 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
                             .sourceUrls(sourceUrls)
                             .intervention(ImmutableTreatment.builder()
                                     .name(treatment)
-                                    .sourceRelevantTreatmentApproaches(sourceRelevantTreatmentApproaches)
-                                    .relevantTreatmentApproaches(curatedRelevantTreatmentApproaches)
+                                    .treatmentApproachesDrugClass(drugClass)
+                                    .treatmentApproachesTherapy(therapy)
                                     .build())
                             .applicableCancerType(cancerTypeExtraction.applicableCancerType())
                             .blacklistCancerTypes(cancerTypeExtraction.blacklistedCancerTypes())

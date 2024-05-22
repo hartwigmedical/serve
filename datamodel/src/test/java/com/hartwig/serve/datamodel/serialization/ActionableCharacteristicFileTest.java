@@ -56,8 +56,8 @@ public class ActionableCharacteristicFileTest {
         assertEquals("msi", characteristic1.sourceEvent());
         assertTrue(characteristic1.sourceUrls().contains("http"));
         assertEquals("Nivolumab", treatment1.name());
-        assertTrue(treatment1.sourceRelevantTreatmentApproaches().isEmpty());
-        assertTrue(treatment1.relevantTreatmentApproaches().isEmpty());
+        assertTrue(treatment1.treatmentApproachesDrugClass().isEmpty());
+        assertTrue(treatment1.treatmentApproachesTherapy().isEmpty());
         assertEquals("All cancer types", characteristic1.applicableCancerType().name());
         assertEquals("X", characteristic1.applicableCancerType().doid());
         assertTrue(characteristic1.blacklistCancerTypes()

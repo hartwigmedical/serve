@@ -1,6 +1,7 @@
 package com.hartwig.serve;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -71,19 +72,22 @@ public class ServeAlgo {
 
     @NotNull
     public Map<RefGenome, ExtractionResult> run(@NotNull ServeConfig config) throws IOException {
-        Stream<ExtractionResult> ckbExtractions =
-                (config.useCkbEvidence() || config.useCkbTrials()) ? extractCkbKnowledge(config) : Stream.empty();
+        List<CkbEntry> ckbEntries = (config.useCkbEvidence() || config.useCkbTrials()) ?
+                CkbReader.readAndCurate(config.ckbDir(), config.ckbBlacklistMolecularProfileTsv()) : Collections.emptyList();
 
-        List<ExtractionResult> extractions = Stream.concat(ckbExtractions,
-                        Stream.of(config.useVicc() ? extractViccKnowledge(config.viccJson(), config.viccSources()) : null,
-                                config.useIclusion() ? extractIclusionKnowledge(config.iClusionTrialTsv(), config.iClusionFilterTsv()) : null,
-                                config.useDocm() ? extractDocmKnowledge(config.docmTsv()) : null,
-                                config.useHartwigCohortHotspots() ? extractHartwigCohortHotspotKnowledge(config.hartwigCohortHotspotTsv(),
-                                        !config.skipHotspotResolving()) : null,
-                                config.useHartwigCuratedHotspots() ? extractHartwigCuratedHotspotKnowledge(config.hartwigCuratedHotspotTsv(),
-                                        !config.skipHotspotResolving()) : null,
-                                config.useHartwigDriverGenes() ? extractHartwigDriverGeneKnowledge(config.driverGene37Tsv()) : null,
-                                config.useHartwigCuratedGenes() ? extractHartwigCuratedGeneKnowledge(config.hartwigCuratedGeneTsv()) : null))
+        List<ExtractionResult> extractions = Stream.of(
+                config.useVicc() ? extractViccKnowledge(config.viccJson(), config.viccSources()) : null,
+                        config.useIclusion() ? extractIclusionKnowledge(config.iClusionTrialTsv(), config.iClusionFilterTsv()) : null,
+                        config.useCkbEvidence() ? extractCkbEvidenceKnowledge(config.ckbDrugCurationTsv(), config.ckbBlacklistEvidenceTsv(),
+                                ckbEntries) : null,
+                        config.useCkbTrials() ? extractCkbTrialKnowledge(config.ckbBlacklistTrialTsv(), ckbEntries) : null,
+                        config.useDocm() ? extractDocmKnowledge(config.docmTsv()) : null,
+                        config.useHartwigCohortHotspots() ? extractHartwigCohortHotspotKnowledge(config.hartwigCohortHotspotTsv(),
+                                !config.skipHotspotResolving()) : null,
+                        config.useHartwigCuratedHotspots() ? extractHartwigCuratedHotspotKnowledge(config.hartwigCuratedHotspotTsv(),
+                                !config.skipHotspotResolving()) : null,
+                        config.useHartwigDriverGenes() ? extractHartwigDriverGeneKnowledge(config.driverGene37Tsv()) : null,
+                        config.useHartwigCuratedGenes() ? extractHartwigCuratedGeneKnowledge(config.hartwigCuratedGeneTsv()) : null)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
@@ -119,15 +123,6 @@ public class ServeAlgo {
 
         LOGGER.info("Running iClusion knowledge extraction");
         return extractor.extract(trials);
-    }
-
-    @NotNull
-    private Stream<ExtractionResult> extractCkbKnowledge(@NotNull ServeConfig config) throws IOException {
-        List<CkbEntry> ckbEntries = CkbReader.readAndCurate(config.ckbDir(), config.ckbBlacklistMolecularProfileTsv());
-
-        return Stream.of(config.useCkbEvidence() ? extractCkbEvidenceKnowledge(config.ckbDrugCurationTsv(),
-                config.ckbBlacklistEvidenceTsv(),
-                ckbEntries) : null, config.useCkbTrials() ? extractCkbTrialKnowledge(config.ckbBlacklistTrialTsv(), ckbEntries) : null);
     }
 
     @NotNull

@@ -35,6 +35,8 @@ public final class EventMatcherFactory {
                 config.genericGeneLevelKeyPhrases(),
                 config.activatingGeneLevelKeyPhrases(),
                 config.inactivatingGeneLevelKeyPhrases());
+        PresenceAbsenceOfProteinMatcher absenceOfProteinMatcher = new PresenceAbsenceOfProteinMatcher(config.absenceOfProteinEvents(), config.absenceOfProteinBlacklistEvents());
+        PresenceAbsenceOfProteinMatcher presenceOfProteinMatcher = new PresenceAbsenceOfProteinMatcher(config.presenceOfProteinEvents(), config.presenceOfProteinBlacklistEvents());
 
         WildTypeMatcher wildTypeMatcher = new WildTypeMatcher(config.wildTypeKeyPhrases());
 
@@ -73,6 +75,8 @@ public final class EventMatcherFactory {
         map.put(EventType.PROMISCUOUS_FUSION, withFirstTierMatchers(firstTierEventMatchers, promiscuousFusionMatcher));
         map.put(EventType.CHARACTERISTIC, withFirstTierMatchers(firstTierEventMatchers, characteristicMatcher));
         map.put(EventType.IMMUNO_HLA, withFirstTierMatchers(firstTierEventMatchers, hlaMatcher));
+        map.put(EventType.ABSENCE_OF_PROTEIN, withFirstTierMatchers(firstTierEventMatchers, absenceOfProteinMatcher));
+        map.put(EventType.PRESENCE_OF_PROTEIN, withFirstTierMatchers(firstTierEventMatchers, presenceOfProteinMatcher));
         map.put(EventType.COMBINED, combinedMatcher);
         map.put(EventType.COMPLEX, complexMatcher);
 

@@ -57,6 +57,12 @@ public abstract class EventClassifierConfig {
     public abstract Set<String> overexpressionKeyPhrases();
 
     @NotNull
+    public abstract Set<String> presenceOfProteinEvents();
+
+    @NotNull
+    public abstract Set<String> presenceOfProteinBlacklistEvents();
+
+    @NotNull
     public abstract Set<String> deletionBlacklistKeyPhrases();
 
     @NotNull
@@ -67,6 +73,12 @@ public abstract class EventClassifierConfig {
 
     @NotNull
     public abstract Set<String> underexpressionKeyPhrases();
+
+    @NotNull
+    public abstract Set<String> absenceOfProteinEvents();
+
+    @NotNull
+    public abstract Set<String> absenceOfProteinBlacklistEvents();
 
     @NotNull
     public abstract Set<String> deletionKeyPhrases();

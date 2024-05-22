@@ -24,17 +24,17 @@ public final class IclusionClassificationConfig {
     private static final Set<String> WILD_TYPE_KEY_PHRASES = wildTypeKeyPhrases();
     private static final Set<String> AMPLIFICATION_KEYWORDS = amplificationKeywords();
     private static final Set<String> AMPLIFICATION_KEY_PHRASES = amplificationKeyPhrases();
-
     private static final Set<String> OVEREXPRESSION_KEYWORDS = overexpressionKeywords();
-
     private static final Set<String> OVEREXPRESSION_KEY_PHRASES = overexpressionKeyPhrases();
+    private static final Set<String> PRESENCE_OF_PROTEIN_KEYWORDS = presenceOfProteinEvents();
+    private static final Set<String> PRESENCE_OF_PROTEIN_BLACKLIST_KEYWORDS = presenceOfProteinBlacklistEvents();
     private static final Set<String> DELETION_BLACKLIST_KEY_PHRASES = deletionBlacklistKeyPhrases();
     private static final Set<String> DELETION_KEYWORDS = deletionKeywords();
     private static final Set<String> DELETION_KEY_PHRASES = deletionKeyPhrases();
-
     private static final Set<String> UNDEREXPRESSION_KEYWORDS = underexpressionKeywords();
-
     private static final Set<String> UNDEREXPRESSION_KEY_PHRASES = underexpressionKeyPhrases();
+    private static final Set<String> ABSENCE_OF_PROTEIN_KEYWORDS = absenceOfProteinEvents();
+    private static final Set<String> ABSENCE_OF_PROTEIN_BLACKLIST_KEYWORDS = absenceOfProteinBlacklistEvents();
     private static final Set<String> EXONIC_DEL_DUP_FUSION_KEY_PHRASES = exonicDelDupFusionKeyPhrases();
     private static final Set<String> EXONIC_DEL_DUP_FUSION_EVENTS = exonicDelDupFusionEvents();
     private static final Set<String> FUSION_PAIR_EVENTS_TO_SKIP = fusionPairEventsToSkip();
@@ -73,11 +73,15 @@ public final class IclusionClassificationConfig {
                 .amplificationKeyPhrases(AMPLIFICATION_KEY_PHRASES)
                 .overexpressionKeywords(OVEREXPRESSION_KEYWORDS)
                 .overexpressionKeyPhrases(OVEREXPRESSION_KEY_PHRASES)
+                .presenceOfProteinEvents(PRESENCE_OF_PROTEIN_KEYWORDS)
+                .presenceOfProteinBlacklistEvents(PRESENCE_OF_PROTEIN_BLACKLIST_KEYWORDS)
                 .deletionBlacklistKeyPhrases(DELETION_BLACKLIST_KEY_PHRASES)
                 .deletionKeywords(DELETION_KEYWORDS)
                 .deletionKeyPhrases(DELETION_KEY_PHRASES)
                 .underexpressionKeywords(UNDEREXPRESSION_KEYWORDS)
                 .underexpressionKeyPhrases(UNDEREXPRESSION_KEY_PHRASES)
+                .absenceOfProteinEvents(ABSENCE_OF_PROTEIN_KEYWORDS)
+                .absenceOfProteinBlacklistEvents(ABSENCE_OF_PROTEIN_BLACKLIST_KEYWORDS)
                 .exonicDelDupFusionKeyPhrases(EXONIC_DEL_DUP_FUSION_KEY_PHRASES)
                 .exonicDelDupFusionEvents(EXONIC_DEL_DUP_FUSION_EVENTS)
                 .fusionPairEventsToSkip(FUSION_PAIR_EVENTS_TO_SKIP)
@@ -195,6 +199,16 @@ public final class IclusionClassificationConfig {
     }
 
     @NotNull
+    private static Set<String> presenceOfProteinEvents() {
+        return Sets.newHashSet();
+    }
+
+    @NotNull
+    private static Set<String> presenceOfProteinBlacklistEvents() {
+        return Sets.newHashSet();
+    }
+
+    @NotNull
     private static Set<String> deletionBlacklistKeyPhrases() {
         Set<String> set = Sets.newHashSet();
         set.add("EXON");
@@ -223,6 +237,16 @@ public final class IclusionClassificationConfig {
 
     @NotNull
     private static Set<String> underexpressionKeyPhrases() {
+        return Sets.newHashSet();
+    }
+
+    @NotNull
+    private static Set<String> absenceOfProteinEvents() {
+        return Sets.newHashSet();
+    }
+
+    @NotNull
+    private static Set<String> absenceOfProteinBlacklistEvents() {
         return Sets.newHashSet();
     }
 

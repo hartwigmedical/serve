@@ -1,12 +1,13 @@
 package com.hartwig.serve.datamodel.range;
 
-import com.google.common.collect.Lists;
-import com.hartwig.serve.datamodel.EvidenceLevel;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import com.google.common.collect.Lists;
+import com.hartwig.serve.datamodel.EvidenceLevel;
+
+import org.junit.Test;
 
 public class ActionableRangeComparatorTest {
 

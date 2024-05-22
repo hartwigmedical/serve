@@ -101,7 +101,4 @@ public abstract class BrcaAnnotationExAC {
     @NotNull
     public abstract String alleleCountSAS();
 
-
-
-
 }

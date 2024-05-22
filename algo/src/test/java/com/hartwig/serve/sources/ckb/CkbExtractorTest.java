@@ -13,6 +13,7 @@ import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.codon.CodonAnnotation;
 import com.hartwig.serve.extraction.codon.ImmutableCodonAnnotation;
 import com.hartwig.serve.refgenome.RefGenomeResourceTestFactory;
+import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistTestFactory;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachTestFactory;
 
 import org.apache.commons.compress.utils.Lists;
@@ -25,7 +26,8 @@ public class CkbExtractorTest {
     public void canExtractEvidenceFromCkbEntries() {
         CkbExtractor evidenceExtractor = CkbExtractorFactory.createEvidenceExtractor(CkbClassificationConfig.build(),
                 RefGenomeResourceTestFactory.buildTestResource37(),
-                TreatmentApproachTestFactory.createEmptyCurator());
+                TreatmentApproachTestFactory.createEmptyCurator(),
+                CkbBlacklistTestFactory.createEmptyEvidenceBlacklist());
 
         ExtractionResult evidenceResult = evidenceExtractor.extract(createCkbEntryTestDatabase());
         assertEquals(1, evidenceResult.knownHotspots().size());
@@ -43,7 +45,8 @@ public class CkbExtractorTest {
     @Test
     public void canExtractTrialsFromCkbEntries() {
         CkbExtractor trialExtractor = CkbExtractorFactory.createTrialExtractor(CkbClassificationConfig.build(),
-                RefGenomeResourceTestFactory.buildTestResource37());
+                RefGenomeResourceTestFactory.buildTestResource37(),
+                CkbBlacklistTestFactory.createEmptyStudyBlacklist());
 
         ExtractionResult trialResult = trialExtractor.extract(createCkbEntryTestDatabase());
         assertEquals(0, trialResult.knownHotspots().size());
@@ -140,7 +143,7 @@ public class CkbExtractorTest {
 
         return CkbTestFactory.builder()
                 .from(baseEntry)
-                .clinicalTrials(List.of(CkbTestFactory.createTrial("Recruiting",
+                .clinicalTrials(List.of(CkbTestFactory.createTrialWithTerapy("Recruiting",
                         List.of(ImmutableVariantRequirementDetail.builder()
                                 .profileId(baseEntry.profileId())
                                 .requirementType("required")
@@ -148,6 +151,8 @@ public class CkbExtractorTest {
                         List.of(CkbTestFactory.createLocation("Netherlands", null)),
                         "nctid",
                         "title",
+                        List.of(CkbTestFactory.createTherapy("Nivolumab")),
+                        List.of(CkbTestFactory.createIndication("test", "JAX:10000006")),
                         List.of("senior", "child", "adult"))))
                 .build();
     }

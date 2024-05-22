@@ -15,6 +15,7 @@ import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.ImmutableTreatment;
 import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.sources.ckb.blacklist.CkbEvidenceBlacklistModel;
 import com.hartwig.serve.sources.ckb.treatmentapproach.ImmutableTreatmentApproachCurationEntryKey;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurationEntryKey;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurator;
@@ -62,8 +63,12 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
     @NotNull
     private final TreatmentApproachCurator curator;
 
-    public ActionableEvidenceFactory(@NotNull TreatmentApproachCurator curator) {
+    @NotNull
+    private final CkbEvidenceBlacklistModel blacklistEvidence;
+
+    public ActionableEvidenceFactory(@NotNull TreatmentApproachCurator curator, @NotNull CkbEvidenceBlacklistModel blacklistEvidence) {
         this.curator = curator;
+        this.blacklistEvidence = blacklistEvidence;
     }
 
     @NotNull
@@ -79,61 +84,67 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
             if (level != null && direction != null && cancerTypeExtraction != null) {
                 String treatment = evidence.therapy().therapyName();
 
-                Set<String> evidenceUrls = Sets.newHashSet();
-                for (Reference reference : evidence.references()) {
-                    if (reference.url() != null) {
-                        evidenceUrls.add(reference.url());
+                if (!blacklistEvidence.isBlacklistEvidence(treatment,
+                        cancerTypeExtraction.applicableCancerType().name(),
+                        level,
+                        sourceGene,
+                        sourceEvent)) {
+                    Set<String> evidenceUrls = Sets.newHashSet();
+                    for (Reference reference : evidence.references()) {
+                        if (reference.url() != null) {
+                            evidenceUrls.add(reference.url());
+                        }
                     }
-                }
 
-                Set<String> sourceUrls = Sets.newHashSet();
-                sourceUrls.add("https://ckbhome.jax.org/profileResponse/advancedEvidenceFind?molecularProfileId=" + entry.profileId());
+                    Set<String> sourceUrls = Sets.newHashSet();
+                    sourceUrls.add("https://ckbhome.jax.org/profileResponse/advancedEvidenceFind?molecularProfileId=" + entry.profileId());
 
-                Set<String> sourceRelevantTreatmentApproaches = Sets.newHashSet();
-                for (RelevantTreatmentApproaches relevantTreatmentApproaches : evidence.relevantTreatmentApproaches()) {
-                    DrugClass relevantTreatmentApproachesInfo = relevantTreatmentApproaches.drugClass();
+                    Set<String> sourceRelevantTreatmentApproaches = Sets.newHashSet();
+                    for (RelevantTreatmentApproaches relevantTreatmentApproaches : evidence.relevantTreatmentApproaches()) {
+                        DrugClass relevantTreatmentApproachesInfo = relevantTreatmentApproaches.drugClass();
 
-                    if (relevantTreatmentApproachesInfo != null) {
-                        sourceRelevantTreatmentApproaches.add(relevantTreatmentApproachesInfo.drugClass());
+                        if (relevantTreatmentApproachesInfo != null) {
+                            sourceRelevantTreatmentApproaches.add(relevantTreatmentApproachesInfo.drugClass());
+                        }
                     }
+
+                    String treatmentApproachString = String.join(",", sourceRelevantTreatmentApproaches);
+                    String treatmentApproachInterpret;
+                    if (sourceRelevantTreatmentApproaches.isEmpty()) {
+                        treatmentApproachInterpret = null;
+                    } else if (treatmentApproachString.endsWith(",")) {
+                        treatmentApproachInterpret = treatmentApproachString.substring(0, treatmentApproachString.length() - 1);
+                    } else {
+                        treatmentApproachInterpret = treatmentApproachString;
+                    }
+
+                    TreatmentApproachCurationEntryKey key = ImmutableTreatmentApproachCurationEntryKey.builder()
+                            .treatment(treatment)
+                            .treatmentApproach(treatmentApproachInterpret == null || treatmentApproachInterpret.isEmpty()
+                                    ? null
+                                    : treatmentApproachInterpret)
+                            .event(sourceGene + " " + entry.type())
+                            .direction(direction)
+                            .build();
+
+                    Set<String> curatedRelevantTreatmentApproaches = Sets.newHashSet(curator.isMatch(key));
+
+                    actionableEntries.add(ImmutableActionableEntry.builder()
+                            .source(Knowledgebase.CKB_EVIDENCE)
+                            .sourceEvent(sourceEvent)
+                            .sourceUrls(sourceUrls)
+                            .intervention(ImmutableTreatment.builder()
+                                    .name(treatment)
+                                    .sourceRelevantTreatmentApproaches(sourceRelevantTreatmentApproaches)
+                                    .relevantTreatmentApproaches(curatedRelevantTreatmentApproaches)
+                                    .build())
+                            .applicableCancerType(cancerTypeExtraction.applicableCancerType())
+                            .blacklistCancerTypes(cancerTypeExtraction.blacklistedCancerTypes())
+                            .level(level)
+                            .direction(direction)
+                            .evidenceUrls(evidenceUrls)
+                            .build());
                 }
-
-                String treatmentApproachString = String.join(",", sourceRelevantTreatmentApproaches);
-                String treatmentApproachInterpret;
-                if (sourceRelevantTreatmentApproaches.isEmpty()) {
-                    treatmentApproachInterpret = null;
-                } else if (treatmentApproachString.endsWith(",")) {
-                    treatmentApproachInterpret = treatmentApproachString.substring(0, treatmentApproachString.length() - 1);
-                } else {
-                    treatmentApproachInterpret = treatmentApproachString;
-                }
-
-                TreatmentApproachCurationEntryKey key = ImmutableTreatmentApproachCurationEntryKey.builder()
-                        .treatment(treatment)
-                        .treatmentApproach(treatmentApproachInterpret == null || treatmentApproachInterpret.isEmpty()
-                                ? null
-                                : treatmentApproachInterpret)
-                        .event(sourceGene + " " + entry.type())
-                        .direction(direction)
-                        .build();
-
-                Set<String> curatedRelevantTreatmentApproaches = Sets.newHashSet(curator.isMatch(key));
-
-                actionableEntries.add(ImmutableActionableEntry.builder()
-                        .source(Knowledgebase.CKB_EVIDENCE)
-                        .sourceEvent(sourceEvent)
-                        .sourceUrls(sourceUrls)
-                        .treatment(ImmutableTreatment.builder()
-                                .name(treatment)
-                                .sourceRelevantTreatmentApproaches(sourceRelevantTreatmentApproaches)
-                                .relevantTreatmentApproaches(curatedRelevantTreatmentApproaches)
-                                .build())
-                        .applicableCancerType(cancerTypeExtraction.applicableCancerType())
-                        .blacklistCancerTypes(cancerTypeExtraction.blacklistedCancerTypes())
-                        .level(level)
-                        .direction(direction)
-                        .evidenceUrls(evidenceUrls)
-                        .build());
             }
         }
         return actionableEntries;

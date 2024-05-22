@@ -20,9 +20,8 @@ public class ViccExtractorTest {
     @Test
     public void canExtractFromViccEntries() {
         EventClassifierConfig config = ViccClassificationConfig.build();
-        ViccExtractor extractor = ViccExtractorFactory.create(config,
-                RefGenomeResourceTestFactory.buildTestResource37(),
-                DoidLookupTestFactory.dummy());
+        ViccExtractor extractor =
+                ViccExtractorFactory.create(config, RefGenomeResourceTestFactory.buildTestResource37(), DoidLookupTestFactory.dummy());
 
         Association association =
                 ViccTestFactory.testActionableAssociation("drugs", "colorectal cancer", "DOID:123", "A", "Responsive", "http");

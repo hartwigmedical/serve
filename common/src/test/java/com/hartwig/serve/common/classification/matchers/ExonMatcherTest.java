@@ -13,7 +13,7 @@ public class ExonMatcherTest {
 
     private static final Set<String> EXON_IDENTIFIERS = Sets.newHashSet("exon", "EXON");
     private static final Set<String> EXON_KEYWORDS = Sets.newHashSet("deletions", "MUTATION");
-    private static final Set<String> EXON_BLACKLIST_KEY_PHRASES= Sets.newHashSet("no exon");
+    private static final Set<String> EXON_BLACKLIST_KEY_PHRASES = Sets.newHashSet("no exon");
     private static final Set<String> SPECIFIC_EXON_EVENTS = Sets.newHashSet("RARE EX 18-21 MUT");
 
     @Test

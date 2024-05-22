@@ -11,7 +11,7 @@ import com.hartwig.serve.sources.vicc.curation.EvidenceLevelCurator;
 import org.jetbrains.annotations.NotNull;
 
 public final class ViccExtractorFactory {
-    
+
     private ViccExtractorFactory() {
     }
 

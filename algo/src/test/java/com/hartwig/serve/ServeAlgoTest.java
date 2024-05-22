@@ -20,7 +20,10 @@ public class ServeAlgoTest {
     private static final String ICLUSION_FILTER_TSV = Resources.getResource("iclusion/filter.tsv").getPath();
 
     private static final String CKB_DIR = Resources.getResource("ckb_data").getPath();
-    private static final String CKB_FILTER_TSV = Resources.getResource("ckb_filter/ckb_filters.tsv").getPath();
+    private static final String CKB_BLACKLIST_MOLECULAR_PROFILE_TSV =
+            Resources.getResource("ckb_blacklist/ckb_blacklist_molecular_profile.tsv").getPath();
+    private static final String CKB_BLACKLIST_TRIAL_TSV = Resources.getResource("ckb_blacklist/ckb_blacklist_trial.tsv").getPath();
+    private static final String CKB_BLACKLIST_EVIDENCE_TSV = Resources.getResource("ckb_blacklist/ckb_blacklist_evidence.tsv").getPath();
     private static final String CKB_DRUG_CLASS_CURATION_TSV =
             Resources.getResource("ckb_curation/ckb_treatment_approach_curation.tsv").getPath();
 
@@ -53,7 +56,9 @@ public class ServeAlgoTest {
                 .useCkbEvidence(true)
                 .useCkbTrials(true)
                 .ckbDir(CKB_DIR)
-                .ckbFilterTsv(CKB_FILTER_TSV)
+                .ckbBlacklistMolecularProfileTsv(CKB_BLACKLIST_MOLECULAR_PROFILE_TSV)
+                .ckbBlacklistTrialTsv(CKB_BLACKLIST_TRIAL_TSV)
+                .ckbBlacklistEvidenceTsv(CKB_BLACKLIST_EVIDENCE_TSV)
                 .ckbDrugCurationTsv(CKB_DRUG_CLASS_CURATION_TSV)
                 .useDocm(true)
                 .docmTsv(DOCM_TSV)

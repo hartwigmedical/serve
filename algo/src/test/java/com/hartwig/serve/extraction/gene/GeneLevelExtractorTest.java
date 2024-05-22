@@ -66,7 +66,7 @@ public class GeneLevelExtractorTest {
     public void canExtractGeneLevelEventOnco() {
         GeneLevelExtractor geneLevelExtractor =
                 createWithDriverGenes(DriverGenesTestFactory.createDriverGenes("STK11", "KIT"), DriverInconsistencyMode.IGNORE);
-        GeneAnnotation geneAnnotation = geneLevelExtractor.extract("KIT", EventType.GENE_LEVEL, "KIT mutated");
+        GeneAnnotation geneAnnotation = geneLevelExtractor.extract("KIT", EventType.GENE_LEVEL, "KIT act mut");
 
         assertNotNull(geneAnnotation);
         assertEquals("KIT", geneAnnotation.gene());
@@ -77,7 +77,7 @@ public class GeneLevelExtractorTest {
     public void canExtractGeneLevelEventTsg() {
         GeneLevelExtractor geneLevelExtractor =
                 createWithDriverGenes(DriverGenesTestFactory.createDriverGenes("TP53", "KIT"), DriverInconsistencyMode.IGNORE);
-        GeneAnnotation geneAnnotation = geneLevelExtractor.extract("TP53", EventType.GENE_LEVEL, "TP53 mutated");
+        GeneAnnotation geneAnnotation = geneLevelExtractor.extract("TP53", EventType.GENE_LEVEL, "TP53 inact mut");
 
         assertNotNull(geneAnnotation);
         assertEquals("TP53", geneAnnotation.gene());
@@ -218,7 +218,7 @@ public class GeneLevelExtractorTest {
         GeneLevelExtractor geneLevelExtractor =
                 createWithDriverGenes(DriverGenesTestFactory.createDriverGenes("STK11", "KIT"), DriverInconsistencyMode.FILTER);
 
-        GeneAnnotation conflictingGeneAnnotation = geneLevelExtractor.extract("STK11", EventType.GENE_LEVEL, "STK11 positive");
+        GeneAnnotation conflictingGeneAnnotation = geneLevelExtractor.extract("STK11", EventType.GENE_LEVEL, "STK11 activating mutationut");
         assertNull(conflictingGeneAnnotation);
     }
 
@@ -238,8 +238,8 @@ public class GeneLevelExtractorTest {
                 GENE_CHECKER,
                 driverGenes,
                 RefGenomeResourceTestFactory.buildTestResource37().knownFusionCache(),
-                Sets.newHashSet("positive", "activating mutation", "act mut"),
-                Sets.newHashSet("negative", "LOSS-OF-FUNCTION", "inact mut"),
+                Sets.newHashSet("activating mutation", "act mut"),
+                Sets.newHashSet("LOSS-OF-FUNCTION", "inact mut"),
                 Sets.newHashSet("mutant"),
                 annotation);
     }

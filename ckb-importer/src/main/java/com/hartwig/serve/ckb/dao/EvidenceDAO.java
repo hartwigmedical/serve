@@ -22,8 +22,8 @@ class EvidenceDAO {
     @NotNull
     private final TreatmentApproachDAO treatmentApproachDAO;
 
-    public EvidenceDAO(@NotNull final DSLContext context, @NotNull final TherapyDAO therapyDAO,
-            @NotNull final IndicationDAO indicationDAO, @NotNull final TreatmentApproachDAO treatmentApproachDAO) {
+    public EvidenceDAO(@NotNull final DSLContext context, @NotNull final TherapyDAO therapyDAO, @NotNull final IndicationDAO indicationDAO,
+            @NotNull final TreatmentApproachDAO treatmentApproachDAO) {
         this.context = context;
         this.therapyDAO = therapyDAO;
         this.indicationDAO = indicationDAO;
@@ -62,19 +62,23 @@ class EvidenceDAO {
                 .getValue(Evidence.EVIDENCE.ID);
 
         int therapyId = therapyDAO.write(evidence.therapy());
-        context.insertInto(Therapyevidence.THERAPYEVIDENCE, Therapyevidence.THERAPYEVIDENCE.EVIDENCEID, Therapyevidence.THERAPYEVIDENCE.THERAPYID).values(id, therapyId).execute();
+        context.insertInto(Therapyevidence.THERAPYEVIDENCE,
+                Therapyevidence.THERAPYEVIDENCE.EVIDENCEID,
+                Therapyevidence.THERAPYEVIDENCE.THERAPYID).values(id, therapyId).execute();
 
         int indicationId = indicationDAO.write(evidence.indication());
-        context.insertInto(Indicationevidence.INDICATIONEVIDENCE, Indicationevidence.INDICATIONEVIDENCE.EVIDENCEID, Indicationevidence.INDICATIONEVIDENCE.INDICATIONID)
-                .values(id, indicationId)
-                .execute();
+        context.insertInto(Indicationevidence.INDICATIONEVIDENCE,
+                Indicationevidence.INDICATIONEVIDENCE.EVIDENCEID,
+                Indicationevidence.INDICATIONEVIDENCE.INDICATIONID).values(id, indicationId).execute();
 
         for (RelevantTreatmentApproaches treatmentApproaches : evidence.relevantTreatmentApproaches()) {
             int treatmentApproachId = treatmentApproachDAO.write(treatmentApproaches);
 
             context.insertInto(Treatmentapproachevidence.TREATMENTAPPROACHEVIDENCE,
-                    Treatmentapproachevidence.TREATMENTAPPROACHEVIDENCE.EVIDENCEID,
-                    Treatmentapproachevidence.TREATMENTAPPROACHEVIDENCE.TREATMENTAPPROACHEVIDENCEID).values(id, treatmentApproachId).execute();
+                            Treatmentapproachevidence.TREATMENTAPPROACHEVIDENCE.EVIDENCEID,
+                            Treatmentapproachevidence.TREATMENTAPPROACHEVIDENCE.TREATMENTAPPROACHEVIDENCEID)
+                    .values(id, treatmentApproachId)
+                    .execute();
         }
 
         for (Reference reference : evidence.references()) {

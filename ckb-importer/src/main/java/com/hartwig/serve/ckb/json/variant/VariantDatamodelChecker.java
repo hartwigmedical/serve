@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 final class VariantDatamodelChecker {
 
-    private VariantDatamodelChecker(){
+    private VariantDatamodelChecker() {
     }
 
     @NotNull

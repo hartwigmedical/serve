@@ -52,10 +52,7 @@ public class TreatmentApproachReader extends CkbJsonDirectoryReader<JsonTreatmen
         JsonDatamodelChecker drugClassObjectChecker = TreatmentApproachDatamodelChecker.drugClassObjectChecker();
         drugClassObjectChecker.check(jsonObject);
 
-        return ImmutableDrugClassInfo.builder()
-                .id(Json.integer(jsonObject, "id"))
-                .drugClass(Json.string(jsonObject, "drugClass"))
-                .build();
+        return ImmutableDrugClassInfo.builder().id(Json.integer(jsonObject, "id")).drugClass(Json.string(jsonObject, "drugClass")).build();
     }
 
     @NotNull

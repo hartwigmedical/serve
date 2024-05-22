@@ -26,8 +26,8 @@ public final class CommonTestFactory {
     }
 
     @NotNull
-    public static GeneAlteration createGeneAlteration(@NotNull GeneRole geneRole,
-            @NotNull ProteinEffect proteinEffect, @Nullable Boolean associatedWithDrugResistance) {
+    public static GeneAlteration createGeneAlteration(@NotNull GeneRole geneRole, @NotNull ProteinEffect proteinEffect,
+            @Nullable Boolean associatedWithDrugResistance) {
         return new GeneAlterationImpl(geneRole, proteinEffect, associatedWithDrugResistance);
     }
 

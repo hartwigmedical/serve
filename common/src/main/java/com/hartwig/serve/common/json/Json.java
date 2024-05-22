@@ -71,7 +71,7 @@ public final class Json {
 
     @Nullable
     public static String optionalString(@NotNull JsonObject object, @NotNull String field) {
-        return object.has(field) ?string(object, field) : null;
+        return object.has(field) ? string(object, field) : null;
     }
 
     @Nullable

@@ -41,17 +41,15 @@ public final class EventMatcherFactory {
         WildTypeMatcher wildTypeMatcher = new WildTypeMatcher(config.wildTypeKeyPhrases());
 
         FusionPairAndExonMatcher fusionPairAndExonMatcher = new FusionPairAndExonMatcher(config.fusionPairAndExonsPerGene());
-        AmplificationMatcher amplificationMatcher = new AmplificationMatcher(config.amplificationKeywords(),
-                config.amplificationKeyPhrases());
-        DeletionMatcher deletionMatcher = new DeletionMatcher(config.deletionBlacklistKeyPhrases(),
-                config.deletionKeywords(),
-                config.deletionKeyPhrases());
+        AmplificationMatcher amplificationMatcher =
+                new AmplificationMatcher(config.amplificationKeywords(), config.amplificationKeyPhrases());
+        DeletionMatcher deletionMatcher =
+                new DeletionMatcher(config.deletionBlacklistKeyPhrases(), config.deletionKeywords(), config.deletionKeyPhrases());
 
-        OverexpressionMatcher2 overExpressionMatcher = new OverexpressionMatcher2(config.overexpressionKeywords(),
-                config.overexpressionKeyPhrases());
-        UnderexpressionMatcher2 underExpressionMatcher = new UnderexpressionMatcher2(
-                config.underexpressionKeywords(),
-                config.underexpressionKeyPhrases());
+        OverexpressionMatcher2 overExpressionMatcher =
+                new OverexpressionMatcher2(config.overexpressionKeywords(), config.overexpressionKeyPhrases());
+        UnderexpressionMatcher2 underExpressionMatcher =
+                new UnderexpressionMatcher2(config.underexpressionKeywords(), config.underexpressionKeyPhrases());
 
         CharacteristicMatcher characteristicMatcher = new CharacteristicMatcher(allCharacteristicKeyPhrases(config));
         HlaMatcher hlaMatcher = new HlaMatcher(allHlaKeyPhrases(config));

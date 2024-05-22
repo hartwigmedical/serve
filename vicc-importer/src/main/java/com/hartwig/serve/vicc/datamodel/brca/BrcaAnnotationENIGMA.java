@@ -53,5 +53,4 @@ public abstract class BrcaAnnotationENIGMA {
     @NotNull
     public abstract String url();
 
-
 }

@@ -19,12 +19,12 @@ final class JaxDAOFunctions {
 
     static void write(@NotNull DSLContext context, int viccEntryId, @NotNull Jax jax) {
         int id = context.insertInto(JAX,
-                JAX.RESPONSETYPE,
-                JAX.APPROVALSTATUS,
-                JAX.EVIDENCETYPE,
-                JAX.EFFICACYEVIDENCE,
-                JAX.IDJAXENTRY,
-                JAX.VICCENTRYID)
+                        JAX.RESPONSETYPE,
+                        JAX.APPROVALSTATUS,
+                        JAX.EVIDENCETYPE,
+                        JAX.EFFICACYEVIDENCE,
+                        JAX.IDJAXENTRY,
+                        JAX.VICCENTRYID)
                 .values(jax.responseType(), jax.approvalStatus(), jax.evidenceType(), jax.efficacyEvidence(), jax.id(), viccEntryId)
                 .returning(JAX.ID)
                 .fetchOne()

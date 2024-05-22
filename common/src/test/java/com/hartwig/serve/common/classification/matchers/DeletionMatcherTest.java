@@ -17,9 +17,7 @@ public class DeletionMatcherTest {
 
     @Test
     public void canAssessWhetherEventIsDeletion() {
-        EventMatcher matcher = new DeletionMatcher(BLACKLIST_KEY_PHRASES,
-                DELETION_KEYWORDS,
-                DELETION_KEY_PHRASES);
+        EventMatcher matcher = new DeletionMatcher(BLACKLIST_KEY_PHRASES, DELETION_KEYWORDS, DELETION_KEY_PHRASES);
 
         assertTrue(matcher.matches("CDKN2A", "CDKN2A del"));
 

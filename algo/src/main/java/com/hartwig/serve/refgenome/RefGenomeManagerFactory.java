@@ -94,8 +94,7 @@ public final class RefGenomeManagerFactory {
     }
 
     @NotNull
-    private static EnsemblDataCache loadEnsemblDataCache(@NotNull RefGenome refGenome, @NotNull String ensemblDataDir)
-            throws IOException {
+    private static EnsemblDataCache loadEnsemblDataCache(@NotNull RefGenome refGenome, @NotNull String ensemblDataDir) throws IOException {
         LOGGER.info(" Reading ensembl data cache from {}", ensemblDataDir);
         EnsemblDataCache ensemblDataCache = EnsemblDataLoader.load(ensemblDataDir, refGenome);
         int geneCount = 0;

@@ -16,8 +16,7 @@ public class AmplificationMatcherTest {
 
     @Test
     public void canAssessWhetherEventIsAmplification() {
-        EventMatcher matcher = new AmplificationMatcher(AMPLIFICATION_KEYWORDS,
-                AMPLIFICATION_KEY_PHRASES);
+        EventMatcher matcher = new AmplificationMatcher(AMPLIFICATION_KEYWORDS, AMPLIFICATION_KEY_PHRASES);
 
         assertTrue(matcher.matches("ALK", "ALK  amp"));
 

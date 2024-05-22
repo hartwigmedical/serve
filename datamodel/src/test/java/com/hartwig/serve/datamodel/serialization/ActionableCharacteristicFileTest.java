@@ -9,10 +9,12 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.io.Resources;
+import com.hartwig.serve.datamodel.ClinicalTrial;
 import com.hartwig.serve.datamodel.DatamodelTestFactory;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.datamodel.Treatment;
 import com.hartwig.serve.datamodel.characteristic.ActionableCharacteristic;
 import com.hartwig.serve.datamodel.characteristic.TumorCharacteristicCutoffType;
 import com.hartwig.serve.datamodel.characteristic.TumorCharacteristicType;
@@ -46,15 +48,16 @@ public class ActionableCharacteristicFileTest {
     private static void assertCharacteristics(@NotNull List<ActionableCharacteristic> characteristics) {
         assertEquals(2, characteristics.size());
 
-        ActionableCharacteristic characteristic1 = findBySource(characteristics, Knowledgebase.VICC_CGI);
+        ActionableCharacteristic characteristic1 = findBySource(characteristics, Knowledgebase.CKB_EVIDENCE);
+        Treatment treatment1 = DatamodelTestFactory.extractTreatment(characteristic1);
         assertEquals(TumorCharacteristicType.MICROSATELLITE_UNSTABLE, characteristic1.type());
         assertEquals(TumorCharacteristicCutoffType.EQUAL_OR_GREATER, characteristic1.cutoffType());
         assertEquals(4, characteristic1.cutoff(), EPSILON);
         assertEquals("msi", characteristic1.sourceEvent());
         assertTrue(characteristic1.sourceUrls().contains("http"));
-        assertEquals("Nivolumab", characteristic1.treatment().name());
-        assertTrue(characteristic1.treatment().sourceRelevantTreatmentApproaches().isEmpty());
-        assertTrue(characteristic1.treatment().relevantTreatmentApproaches().isEmpty());
+        assertEquals("Nivolumab", treatment1.name());
+        assertTrue(treatment1.sourceRelevantTreatmentApproaches().isEmpty());
+        assertTrue(treatment1.relevantTreatmentApproaches().isEmpty());
         assertEquals("All cancer types", characteristic1.applicableCancerType().name());
         assertEquals("X", characteristic1.applicableCancerType().doid());
         assertTrue(characteristic1.blacklistCancerTypes()
@@ -63,15 +66,14 @@ public class ActionableCharacteristicFileTest {
         assertEquals(EvidenceDirection.RESPONSIVE, characteristic1.direction());
         assertEquals(2, characteristic1.evidenceUrls().size());
 
-        ActionableCharacteristic characteristic2 = findBySource(characteristics, Knowledgebase.VICC_CIVIC);
+        ActionableCharacteristic characteristic2 = findBySource(characteristics, Knowledgebase.CKB_TRIAL);
+        ClinicalTrial trial = DatamodelTestFactory.extractClinicalTrial(characteristic2);
         assertEquals(TumorCharacteristicType.MICROSATELLITE_UNSTABLE, characteristic2.type());
         assertNull(characteristic2.cutoffType());
         assertNull(characteristic2.cutoff());
         assertEquals("msi", characteristic2.sourceEvent());
         assertTrue(characteristic2.sourceUrls().contains("http"));
-        assertEquals("Pembro", characteristic2.treatment().name());
-        assertTrue(characteristic2.treatment().sourceRelevantTreatmentApproaches().isEmpty());
-        assertTrue(characteristic2.treatment().relevantTreatmentApproaches().isEmpty());
+        assertEquals("Immuno,Pembro", DatamodelTestFactory.setToField(trial.therapyNames()));
         assertEquals("All cancer types", characteristic2.applicableCancerType().name());
         assertEquals("X", characteristic2.applicableCancerType().doid());
         assertTrue(characteristic2.blacklistCancerTypes()

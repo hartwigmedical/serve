@@ -16,9 +16,15 @@ public abstract class ClinicalTrial implements Intervention {
     @NotNull
     public abstract String studyTitle();
 
+    @Nullable
+    public abstract String studyAcronym();
+
     @NotNull
     public abstract Set<String> countriesOfStudy();
 
     @NotNull
     public abstract Set<String> therapyNames();
+
+    @Nullable
+    public abstract String gender();
 }

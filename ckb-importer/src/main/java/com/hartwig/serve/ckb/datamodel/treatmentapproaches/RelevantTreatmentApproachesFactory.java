@@ -39,7 +39,6 @@ public final class RelevantTreatmentApproachesFactory {
 
                 return ImmutableRelevantTreatmentApproaches.builder()
                         .id(treatmentApproach.id())
-                        .name(treatmentApproach.name())
                         .drugClass(treatmentApproach.drugClass() != null ? DrugFactory.resolveDrugClass(ckbJsonDatabase,
                                 Objects.requireNonNull(treatmentApproach.drugClass())) : null)
                         .therapy(treatmentApproach.therapy() != null ? TherapyFactory.resolveTherapy(ckbJsonDatabase,

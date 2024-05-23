@@ -35,8 +35,8 @@ public final class RelevantTreatmentApproachesFactory {
             if (treatmentApproach.id() == treatmentApproachInfo.id()) {
                 return ImmutableRelevantTreatmentApproaches.builder()
                         .id(treatmentApproach.id())
-                        .drugClass(treatmentApproach.drugClass() != null ? treatmentApproach.drugClass() : null)
-                        .therapy(treatmentApproach.therapy() != null ? treatmentApproach.therapy() : null)
+                        .drugClass(treatmentApproach.drugClass())
+                        .therapy(treatmentApproach.therapy())
                         .references(ReferenceFactory.extractReferences(ckbJsonDatabase, treatmentApproach.references()))
                         .createDate(treatmentApproach.createDate())
                         .updateDate(treatmentApproach.updateDate())

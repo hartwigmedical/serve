@@ -98,7 +98,6 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
                     Set<String> sourceUrls = Sets.newHashSet();
                     sourceUrls.add("https://ckbhome.jax.org/profileResponse/advancedEvidenceFind?molecularProfileId=" + entry.profileId());
 
-                    Set<String> sourceRelevantTreatmentApproaches = Sets.newHashSet();
                     Set<String> drugClass = Sets.newHashSet();
                     Set<String> therapy = Sets.newHashSet();
 

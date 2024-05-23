@@ -1,5 +1,7 @@
 package com.hartwig.serve.ckb.dao;
 
+import java.util.Objects;
+
 import com.hartwig.serve.ckb.database.Tables;
 import com.hartwig.serve.ckb.database.tables.Treatmentapproach;
 import com.hartwig.serve.ckb.datamodel.reference.Reference;
@@ -8,7 +10,6 @@ import com.hartwig.serve.ckb.json.common.DrugClassInfo;
 import com.hartwig.serve.ckb.json.common.TherapyInfo;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.jooq.DSLContext;
 
 class TreatmentApproachDAO {
@@ -41,11 +42,11 @@ class TreatmentApproachDAO {
                 .getValue(Treatmentapproach.TREATMENTAPPROACH.ID);
 
         if (treatmentApproaches.drugClass() != null) {
-            writeTreatmentDrugClass(treatmentApproaches.drugClass(), id);
+            writeTreatmentDrugClass(Objects.requireNonNull(treatmentApproaches.drugClass()), id);
         }
 
         if (treatmentApproaches.therapy() != null) {
-            writeTreatmentTherapy(treatmentApproaches.therapy(), id);
+            writeTreatmentTherapy(Objects.requireNonNull(treatmentApproaches.therapy()), id);
         }
 
         for (Reference reference : treatmentApproaches.references()) {
@@ -55,7 +56,7 @@ class TreatmentApproachDAO {
         return id;
     }
 
-    private void writeTreatmentDrugClass(@Nullable DrugClassInfo drugClassInfo, int treatmentApproachDrugClassId) {
+    private void writeTreatmentDrugClass(@NotNull DrugClassInfo drugClassInfo, int treatmentApproachDrugClassId) {
         context.insertInto(Tables.TREATMENTAPPROACHDRUGCLASS,
                         Tables.TREATMENTAPPROACHDRUGCLASS.TREATMENTAPPROACHID,
                         Tables.TREATMENTAPPROACHDRUGCLASS.DRUGCLASSID,
@@ -64,7 +65,7 @@ class TreatmentApproachDAO {
                 .execute();
     }
 
-    private void writeTreatmentTherapy(@Nullable TherapyInfo therapyInfo, int treatmentApproachDrugClassId) {
+    private void writeTreatmentTherapy(@NotNull TherapyInfo therapyInfo, int treatmentApproachDrugClassId) {
         context.insertInto(Tables.TREATMENTAPPROACHTHERAPY,
                         Tables.TREATMENTAPPROACHTHERAPY.TREATMENTAPPROACHID,
                         Tables.TREATMENTAPPROACHTHERAPY.THERAPYID,

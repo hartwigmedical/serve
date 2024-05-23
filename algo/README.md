@@ -441,6 +441,7 @@ elsewhere.
 -[Upcoming]
     - Optional for blacklisting clinical studies and evidence
     - Put clinical trial information into own model instead of using treatment model
+    - Improve hotspot extraction performance with caching and parallelization
 - [3.4.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v3.4.0)
   - Support for usage of CKB acronym for clinical study title in data model 
 - [3.3.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v3.3.0)

@@ -147,7 +147,7 @@ public class CkbExtractorTest {
 
         return CkbTestFactory.builder()
                 .from(baseEntry)
-                .clinicalTrials(List.of(CkbTestFactory.createTrialWithTerapy("Recruiting",
+                .clinicalTrials(List.of(CkbTestFactory.createTrialWithTherapy("Recruiting",
                         List.of(ImmutableVariantRequirementDetail.builder()
                                 .profileId(baseEntry.profileId())
                                 .requirementType("required")

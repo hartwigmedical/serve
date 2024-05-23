@@ -37,7 +37,7 @@ public class ActionableTrialFactoryTest {
         String profileName = Strings.EMPTY;
         Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(profileId, "required");
-        ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTerapy("Recruiting",
+        ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTherapy("Recruiting",
                 List.of(requirementDetail),
                 List.of(location),
                 "NCT0102",
@@ -70,7 +70,7 @@ public class ActionableTrialFactoryTest {
         String profileName = Strings.EMPTY;
         Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(profileId, "required");
-        ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTerapy("Recruiting",
+        ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTherapy("Recruiting",
                 List.of(requirementDetail),
                 List.of(location),
                 "NCT0456",
@@ -92,7 +92,7 @@ public class ActionableTrialFactoryTest {
         String profileName = Strings.EMPTY;
         Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(profileId, "required");
-        ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTerapy("Recruiting",
+        ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTherapy("Recruiting",
                 List.of(requirementDetail),
                 List.of(location),
                 "NCT0456",
@@ -114,7 +114,7 @@ public class ActionableTrialFactoryTest {
         String profileName = Strings.EMPTY;
         Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(profileId, "required");
-        ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTerapy("Recruiting",
+        ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTherapy("Recruiting",
                 List.of(requirementDetail),
                 List.of(location),
                 "NCT0456",
@@ -137,7 +137,7 @@ public class ActionableTrialFactoryTest {
         String profileName = Strings.EMPTY;
         Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(profileId, "required");
-        ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTerapy("Recruiting",
+        ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTherapy("Recruiting",
                 List.of(requirementDetail),
                 List.of(location),
                 "NCT0456",

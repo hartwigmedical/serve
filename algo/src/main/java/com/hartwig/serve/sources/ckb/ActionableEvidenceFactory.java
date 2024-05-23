@@ -7,11 +7,11 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
-import com.hartwig.serve.ckb.datamodel.drug.DrugClass;
 import com.hartwig.serve.ckb.datamodel.evidence.Evidence;
 import com.hartwig.serve.ckb.datamodel.reference.Reference;
-import com.hartwig.serve.ckb.datamodel.therapy.Therapy;
+import com.hartwig.serve.ckb.datamodel.treatmentapproaches.DrugClassTreatmentApproach;
 import com.hartwig.serve.ckb.datamodel.treatmentapproaches.RelevantTreatmentApproaches;
+import com.hartwig.serve.ckb.datamodel.treatmentapproaches.TherapyTreatmentApproach;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.ImmutableTreatment;
@@ -102,16 +102,17 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
                     Set<String> treatmentApproachTherapies = Sets.newHashSet();
 
                     for (RelevantTreatmentApproaches relevantTreatmentApproaches : evidence.relevantTreatmentApproaches()) {
-                        DrugClass drugClass = relevantTreatmentApproaches.drugClass();
-                        Therapy therapy = relevantTreatmentApproaches.therapy();
+
+                        TherapyTreatmentApproach therapyTreatmentApproach = extractOptionalTherapyTreatmentApproach(relevantTreatmentApproaches);
+                        DrugClassTreatmentApproach drugClassTreatmentApproach = extractOptionalDrugClassTreatmentApproach(relevantTreatmentApproaches);
 
                         // If drugClass contains data then therapy is null. When therapy contains data then drugClass is null
-                        if (drugClass != null) {
-                            treatmentApproachDrugClasses.add(drugClass.drugClass());
+                        if (drugClassTreatmentApproach.drugClass() != null) {
+                            treatmentApproachDrugClasses.add(drugClassTreatmentApproach.drugClass().drugClass());
                         }
 
-                        if (therapy != null) {
-                            treatmentApproachTherapies.add(therapy.therapyName());
+                        if (therapyTreatmentApproach.therapy() != null) {
+                            treatmentApproachTherapies.add(therapyTreatmentApproach.therapy().therapyName());
                         }
                     }
 // TODO: implement
@@ -155,6 +156,26 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
             }
         }
         return actionableEntries;
+    }
+
+    @Nullable
+    private static TherapyTreatmentApproach extractOptionalTherapyTreatmentApproach(
+            @NotNull RelevantTreatmentApproaches treatmentApproaches) {
+        TherapyTreatmentApproach therapyTreatmentApproach = null;
+        if (treatmentApproaches.treatmentApproachIntervation() instanceof TherapyTreatmentApproach) {
+            therapyTreatmentApproach = (TherapyTreatmentApproach) treatmentApproaches.treatmentApproachIntervation();
+        }
+        return therapyTreatmentApproach;
+    }
+
+    @Nullable
+    private static DrugClassTreatmentApproach extractOptionalDrugClassTreatmentApproach(
+            @NotNull RelevantTreatmentApproaches treatmentApproaches) {
+        DrugClassTreatmentApproach drugClassTreatmentApproach = null;
+        if (treatmentApproaches.treatmentApproachIntervation() instanceof DrugClassTreatmentApproach) {
+            drugClassTreatmentApproach = (DrugClassTreatmentApproach) treatmentApproaches.treatmentApproachIntervation();
+        }
+        return drugClassTreatmentApproach;
     }
 
     @NotNull

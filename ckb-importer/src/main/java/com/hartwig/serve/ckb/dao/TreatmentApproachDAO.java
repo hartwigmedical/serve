@@ -1,15 +1,14 @@
 package com.hartwig.serve.ckb.dao;
 
-import java.util.Objects;
-
 import com.hartwig.serve.ckb.database.Tables;
 import com.hartwig.serve.ckb.database.tables.Treatmentapproach;
-import com.hartwig.serve.ckb.datamodel.drug.DrugClass;
 import com.hartwig.serve.ckb.datamodel.reference.Reference;
-import com.hartwig.serve.ckb.datamodel.therapy.Therapy;
+import com.hartwig.serve.ckb.datamodel.treatmentapproaches.DrugClassTreatmentApproach;
 import com.hartwig.serve.ckb.datamodel.treatmentapproaches.RelevantTreatmentApproaches;
+import com.hartwig.serve.ckb.datamodel.treatmentapproaches.TherapyTreatmentApproach;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jooq.DSLContext;
 
 class TreatmentApproachDAO {
@@ -31,6 +30,26 @@ class TreatmentApproachDAO {
 
     }
 
+    @Nullable
+    private static TherapyTreatmentApproach extractOptionalTherapyTreatmentApproach(
+            @NotNull RelevantTreatmentApproaches treatmentApproaches) {
+        TherapyTreatmentApproach therapyTreatmentApproach = null;
+        if (treatmentApproaches.treatmentApproachIntervation() instanceof TherapyTreatmentApproach) {
+            therapyTreatmentApproach = (TherapyTreatmentApproach) treatmentApproaches.treatmentApproachIntervation();
+        }
+        return therapyTreatmentApproach;
+    }
+
+    @Nullable
+    private static DrugClassTreatmentApproach extractOptionalDrugClassTreatmentApproach(
+            @NotNull RelevantTreatmentApproaches treatmentApproaches) {
+        DrugClassTreatmentApproach drugClassTreatmentApproach = null;
+        if (treatmentApproaches.treatmentApproachIntervation() instanceof DrugClassTreatmentApproach) {
+            drugClassTreatmentApproach = (DrugClassTreatmentApproach) treatmentApproaches.treatmentApproachIntervation();
+        }
+        return drugClassTreatmentApproach;
+    }
+
     public int write(@NotNull RelevantTreatmentApproaches treatmentApproaches) {
         int id = context.insertInto(Treatmentapproach.TREATMENTAPPROACH,
                         Treatmentapproach.TREATMENTAPPROACH.TREATMENTAPPROACHID,
@@ -41,12 +60,15 @@ class TreatmentApproachDAO {
                 .fetchOne()
                 .getValue(Treatmentapproach.TREATMENTAPPROACH.ID);
 
-        if (treatmentApproaches.drugClass() != null) {
-            writeTreatmentDrugClass(Objects.requireNonNull(treatmentApproaches.drugClass()), id);
+        TherapyTreatmentApproach therapyTreatmentApproach = extractOptionalTherapyTreatmentApproach(treatmentApproaches);
+        DrugClassTreatmentApproach drugClassTreatmentApproach = extractOptionalDrugClassTreatmentApproach(treatmentApproaches);
+
+        if (drugClassTreatmentApproach != null) {
+            writeTreatmentDrugClass(drugClassTreatmentApproach, id);
         }
 
-        if (treatmentApproaches.therapy() != null) {
-            writeTreatmentTherapy(Objects.requireNonNull(treatmentApproaches.therapy()), id);
+        if (therapyTreatmentApproach != null) {
+            writeTreatmentTherapy(therapyTreatmentApproach, id);
         }
 
         for (Reference reference : treatmentApproaches.references()) {
@@ -56,23 +78,25 @@ class TreatmentApproachDAO {
         return id;
     }
 
-    private void writeTreatmentDrugClass(@NotNull DrugClass drugClassInfo, int treatmentApproachDrugClassId) {
+    private void writeTreatmentDrugClass(@NotNull DrugClassTreatmentApproach drugClassTreatmentApproach, int treatmentApproachDrugClassId) {
         //Only written relevant drug class name for treatment approach and other redundant for table drugclass
         context.insertInto(Tables.TREATMENTAPPROACHDRUGCLASS,
                         Tables.TREATMENTAPPROACHDRUGCLASS.TREATMENTAPPROACHID,
                         Tables.TREATMENTAPPROACHDRUGCLASS.DRUGCLASSID,
                         Tables.TREATMENTAPPROACHDRUGCLASS.DRUGCLASS)
-                .values(treatmentApproachDrugClassId, drugClassInfo.id(), drugClassInfo.drugClass())
+                .values(treatmentApproachDrugClassId, drugClassTreatmentApproach.drugClass().id(), drugClassTreatmentApproach.drugClass().drugClass())
                 .execute();
     }
 
-    private void writeTreatmentTherapy(@NotNull Therapy therapyInfo, int treatmentApproachDrugClassId) {
+    private void writeTreatmentTherapy(@NotNull TherapyTreatmentApproach therapyTreatmentApproach, int treatmentApproachDrugClassId) {
         //Only written relevant therapy name for treatment approach and other redundant for tables therapy/therapy synonym
         context.insertInto(Tables.TREATMENTAPPROACHTHERAPY,
                         Tables.TREATMENTAPPROACHTHERAPY.TREATMENTAPPROACHID,
                         Tables.TREATMENTAPPROACHTHERAPY.THERAPYID,
                         Tables.TREATMENTAPPROACHTHERAPY.THERAPYNAME)
-                .values(treatmentApproachDrugClassId, therapyInfo.id(), therapyInfo.therapyName())
+                .values(treatmentApproachDrugClassId,
+                        therapyTreatmentApproach.therapy().id(),
+                        therapyTreatmentApproach.therapy().therapyName())
                 .execute();
     }
 

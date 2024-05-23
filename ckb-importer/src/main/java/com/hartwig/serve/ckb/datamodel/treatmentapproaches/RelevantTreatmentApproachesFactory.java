@@ -32,17 +32,36 @@ public final class RelevantTreatmentApproachesFactory {
     }
 
     @NotNull
+    private static TreatmentApproachIntervation extractTreatmentApproachIntervation(@NotNull CkbJsonDatabase ckbJsonDatabase,
+            @NotNull JsonTreatmentApproach treatmentApproach) {
+        boolean isDrugClass = treatmentApproach.drugClass() != null;
+        boolean isTherapy = treatmentApproach.therapy() != null;
+
+        if (isDrugClass && isTherapy) {
+            throw new IllegalStateException("An treatment approach cannot be both a drug class and therapy");
+        }
+
+        if (isDrugClass) {
+            return ImmutableTherapyTreatmentApproach.builder()
+                    .therapy(TherapyFactory.resolveTherapy(ckbJsonDatabase, Objects.requireNonNull(treatmentApproach.therapy())))
+                    .build();
+        } else if (isTherapy) {
+            return ImmutableDrugClassTreatmentApproach.builder()
+                    .drugClass(DrugFactory.resolveDrugClass(ckbJsonDatabase, Objects.requireNonNull(treatmentApproach.drugClass())))
+                    .build();
+        } else {
+            throw new IllegalStateException("An treatment approach cannot be both a drug class and therapy!");
+        }
+    }
+
+    @NotNull
     private static RelevantTreatmentApproaches resolveRelevantTreatmentApproaches(@NotNull CkbJsonDatabase ckbJsonDatabase,
             @NotNull TreatmentApproachInfo treatmentApproachInfo) {
         for (JsonTreatmentApproach treatmentApproach : ckbJsonDatabase.treatmentApproaches()) {
             if (treatmentApproach.id() == treatmentApproachInfo.id()) {
-
                 return ImmutableRelevantTreatmentApproaches.builder()
                         .id(treatmentApproach.id())
-                        .drugClass(treatmentApproach.drugClass() != null ? DrugFactory.resolveDrugClass(ckbJsonDatabase,
-                                Objects.requireNonNull(treatmentApproach.drugClass())) : null)
-                        .therapy(treatmentApproach.therapy() != null ? TherapyFactory.resolveTherapy(ckbJsonDatabase,
-                                Objects.requireNonNull(treatmentApproach.therapy())) : null)
+                        .treatmentApproachIntervation(extractTreatmentApproachIntervation(ckbJsonDatabase, treatmentApproach))
                         .references(ReferenceFactory.extractReferences(ckbJsonDatabase, treatmentApproach.references()))
                         .createDate(treatmentApproach.createDate())
                         .updateDate(treatmentApproach.updateDate())

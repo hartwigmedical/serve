@@ -60,23 +60,12 @@ public class GeneLevelExtractor {
             return extractGeneLevelEvent(gene, event);
         } else if (type == EventType.PROMISCUOUS_FUSION && fusionGeneChecker.isValidGene(gene)) {
             return extractPromiscuousFusion(gene);
+        } else if (type == EventType.ABSENCE_OF_PROTEIN && exomeGeneChecker.isValidGene(gene)) {
+            return extractProteinEvent(gene, type);
+        } else if (type == EventType.PRESENCE_OF_PROTEIN && exomeGeneChecker.isValidGene(gene)) {
+            return extractProteinEvent(gene, type);
         }
-
         return null;
-    }
-
-    @Nullable
-    GeneAnnotation extractPromiscuousFusion(@NotNull String gene) {
-        if (driverInconsistencyMode.isActive() && !geneIsPresentInFusionCache(gene)) {
-            if (driverInconsistencyMode == DriverInconsistencyMode.WARN_ONLY) {
-                LOGGER.warn("Promiscuous fusion '{}' is not present in the known fusion cache", gene);
-            } else if (driverInconsistencyMode == DriverInconsistencyMode.FILTER) {
-                LOGGER.info("Promiscuous fusion filtered -- Promiscuous fusion '{}' is not present in the known fusion cache", gene);
-                return null;
-            }
-        }
-
-        return ImmutableGeneAnnotationImpl.builder().gene(gene).event(GeneEvent.FUSION).build();
     }
 
     @Nullable
@@ -95,15 +84,6 @@ public class GeneLevelExtractor {
         }
 
         return ImmutableGeneAnnotationImpl.builder().gene(gene).event(GeneEvent.WILD_TYPE).build();
-    }
-
-    static boolean geneInDriverGenes(@NotNull List<DriverGene> driverGenes, @NotNull String gene) {
-        for (DriverGene driverGene : driverGenes) {
-            if (driverGene.gene().equals(gene)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     @Nullable
@@ -172,6 +152,57 @@ public class GeneLevelExtractor {
             }
         }
         return GeneEvent.ANY_MUTATION;
+    }
+
+    @Nullable
+    GeneAnnotation extractPromiscuousFusion(@NotNull String gene) {
+        if (driverInconsistencyMode.isActive() && !geneIsPresentInFusionCache(gene)) {
+            if (driverInconsistencyMode == DriverInconsistencyMode.WARN_ONLY) {
+                LOGGER.warn("Promiscuous fusion '{}' is not present in the known fusion cache", gene);
+            } else if (driverInconsistencyMode == DriverInconsistencyMode.FILTER) {
+                LOGGER.info("Promiscuous fusion filtered -- Promiscuous fusion '{}' is not present in the known fusion cache", gene);
+                return null;
+            }
+        }
+
+        return ImmutableGeneAnnotationImpl.builder().gene(gene).event(GeneEvent.FUSION).build();
+    }
+
+    @Nullable
+    @VisibleForTesting
+    GeneAnnotation extractProteinEvent(@NotNull String gene, @NotNull EventType type) {
+        boolean geneInDriverGenesDatabase = geneInDriverGenes(driverGenes, gene);
+        GeneEvent geneEvent;
+        if (type == EventType.ABSENCE_OF_PROTEIN) {
+            geneEvent = GeneEvent.ABSENCE_OF_PROTEIN;
+        } else if (type == EventType.PRESENCE_OF_PROTEIN) {
+            geneEvent = GeneEvent.PRESENCE_OF_PROTEIN;
+        } else {
+            throw new IllegalStateException("Invalid event type passed into protein event extractor function: " + type);
+        }
+
+        if (!geneInDriverGenesDatabase && driverInconsistencyMode.isActive()) {
+            if (driverInconsistencyMode == DriverInconsistencyMode.WARN_ONLY) {
+                LOGGER.warn("{} event {} on {} is not included in driver catalog and won't ever be reported.", geneEvent, type, gene);
+            } else if (driverInconsistencyMode == DriverInconsistencyMode.FILTER) {
+                LOGGER.info("{}  event filtered -- {} on {} is not included in driver catalog and won't ever be reported.",
+                        geneEvent,
+                        type,
+                        gene);
+                return null;
+            }
+        }
+
+        return ImmutableGeneAnnotationImpl.builder().gene(gene).event(geneEvent).build();
+    }
+
+    private static boolean geneInDriverGenes(@NotNull List<DriverGene> driverGenes, @NotNull String gene) {
+        for (DriverGene driverGene : driverGenes) {
+            if (driverGene.gene().equals(gene)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean geneIsPresentInFusionCache(@NotNull String gene) {

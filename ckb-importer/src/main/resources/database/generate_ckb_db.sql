@@ -348,7 +348,7 @@ CREATE TABLE `clinicalTrial`
     `updateDate` DATE,
     `nctId` varchar(50) NOT NULL,
     `title` varchar(500) NOT NULL,
-    `acronym` varchar(500),
+    `acronym` varchar(250),
     `phase` varchar(50),
     `recruitment` varchar(50) NOT NULL,
     `gender` varchar(50),

@@ -28,6 +28,8 @@ public final class DatamodelTestFactory {
         return ImmutableClinicalTrial.builder()
                 .studyNctId(Strings.EMPTY)
                 .studyTitle(Strings.EMPTY)
+                .studyAcronym(Strings.EMPTY)
+                .gender(Strings.EMPTY)
                 .countriesOfStudy(Sets.newHashSet())
                 .therapyNames(Sets.newHashSet());
     }

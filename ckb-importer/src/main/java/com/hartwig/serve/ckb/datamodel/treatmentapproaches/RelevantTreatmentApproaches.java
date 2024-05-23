@@ -3,9 +3,9 @@ package com.hartwig.serve.ckb.datamodel.treatmentapproaches;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.hartwig.serve.ckb.datamodel.drug.DrugClass;
 import com.hartwig.serve.ckb.datamodel.reference.Reference;
-import com.hartwig.serve.ckb.json.common.DrugClassInfo;
-import com.hartwig.serve.ckb.json.common.TherapyInfo;
+import com.hartwig.serve.ckb.datamodel.therapy.Therapy;
 
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;
@@ -17,11 +17,13 @@ public abstract class RelevantTreatmentApproaches {
 
     public abstract int id();
 
+    @NotNull
+    public abstract String name();
     @Nullable
-    public abstract DrugClassInfo drugClass();
+    public abstract DrugClass drugClass();
 
     @Nullable
-    public abstract TherapyInfo therapy();
+    public abstract Therapy therapy();
 
     @NotNull
     public abstract List<Reference> references();

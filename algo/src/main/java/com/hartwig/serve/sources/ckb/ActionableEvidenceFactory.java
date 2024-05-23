@@ -7,11 +7,11 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
+import com.hartwig.serve.ckb.datamodel.drug.DrugClass;
 import com.hartwig.serve.ckb.datamodel.evidence.Evidence;
 import com.hartwig.serve.ckb.datamodel.reference.Reference;
+import com.hartwig.serve.ckb.datamodel.therapy.Therapy;
 import com.hartwig.serve.ckb.datamodel.treatmentapproaches.RelevantTreatmentApproaches;
-import com.hartwig.serve.ckb.json.common.DrugClassInfo;
-import com.hartwig.serve.ckb.json.common.TherapyInfo;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.ImmutableTreatment;
@@ -102,16 +102,16 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
                     Set<String> treatmentApproachTherapies = Sets.newHashSet();
 
                     for (RelevantTreatmentApproaches relevantTreatmentApproaches : evidence.relevantTreatmentApproaches()) {
-                        DrugClassInfo drugClassInfo = relevantTreatmentApproaches.drugClass();
-                        TherapyInfo therapyInfo = relevantTreatmentApproaches.therapy();
+                        DrugClass drugClass = relevantTreatmentApproaches.drugClass();
+                        Therapy therapy = relevantTreatmentApproaches.therapy();
 
-                        // If drugClassInfo contains data then therapyInfo is null. When therapyInfo contains data then drugClassInfo is null
-                        if (drugClassInfo != null) {
-                            treatmentApproachDrugClasses.add(drugClassInfo.drugClass());
+                        // If drugClass contains data then therapy is null. When therapy contains data then drugClass is null
+                        if (drugClass != null) {
+                            treatmentApproachDrugClasses.add(drugClass.drugClass());
                         }
 
-                        if (therapyInfo != null) {
-                            treatmentApproachTherapies.add(therapyInfo.therapyName());
+                        if (therapy != null) {
+                            treatmentApproachTherapies.add(therapy.therapyName());
                         }
                     }
 // TODO: implement

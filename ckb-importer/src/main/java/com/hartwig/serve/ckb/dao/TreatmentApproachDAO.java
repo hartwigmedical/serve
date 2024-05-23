@@ -4,10 +4,10 @@ import java.util.Objects;
 
 import com.hartwig.serve.ckb.database.Tables;
 import com.hartwig.serve.ckb.database.tables.Treatmentapproach;
+import com.hartwig.serve.ckb.datamodel.drug.DrugClass;
 import com.hartwig.serve.ckb.datamodel.reference.Reference;
+import com.hartwig.serve.ckb.datamodel.therapy.Therapy;
 import com.hartwig.serve.ckb.datamodel.treatmentapproaches.RelevantTreatmentApproaches;
-import com.hartwig.serve.ckb.json.common.DrugClassInfo;
-import com.hartwig.serve.ckb.json.common.TherapyInfo;
 
 import org.jetbrains.annotations.NotNull;
 import org.jooq.DSLContext;
@@ -56,7 +56,8 @@ class TreatmentApproachDAO {
         return id;
     }
 
-    private void writeTreatmentDrugClass(@NotNull DrugClassInfo drugClassInfo, int treatmentApproachDrugClassId) {
+    private void writeTreatmentDrugClass(@NotNull DrugClass drugClassInfo, int treatmentApproachDrugClassId) {
+        //Only written relevant drug class name for treatment approach and other redundant for table drugclass
         context.insertInto(Tables.TREATMENTAPPROACHDRUGCLASS,
                         Tables.TREATMENTAPPROACHDRUGCLASS.TREATMENTAPPROACHID,
                         Tables.TREATMENTAPPROACHDRUGCLASS.DRUGCLASSID,
@@ -65,7 +66,8 @@ class TreatmentApproachDAO {
                 .execute();
     }
 
-    private void writeTreatmentTherapy(@NotNull TherapyInfo therapyInfo, int treatmentApproachDrugClassId) {
+    private void writeTreatmentTherapy(@NotNull Therapy therapyInfo, int treatmentApproachDrugClassId) {
+        //Only written relevant therapy name for treatment approach and other redundant for tables therapy/therapy synonym
         context.insertInto(Tables.TREATMENTAPPROACHTHERAPY,
                         Tables.TREATMENTAPPROACHTHERAPY.TREATMENTAPPROACHID,
                         Tables.TREATMENTAPPROACHTHERAPY.THERAPYID,

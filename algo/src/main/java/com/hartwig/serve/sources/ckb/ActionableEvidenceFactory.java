@@ -98,8 +98,8 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
                     Set<String> sourceUrls = Sets.newHashSet();
                     sourceUrls.add("https://ckbhome.jax.org/profileResponse/advancedEvidenceFind?molecularProfileId=" + entry.profileId());
 
-                    Set<String> drugClass = Sets.newHashSet();
-                    Set<String> therapy = Sets.newHashSet();
+                    Set<String> treatmentApproachDrugClasses = Sets.newHashSet();
+                    Set<String> treatmentApproachTherapies = Sets.newHashSet();
 
                     for (RelevantTreatmentApproaches relevantTreatmentApproaches : evidence.relevantTreatmentApproaches()) {
                         DrugClassInfo drugClassInfo = relevantTreatmentApproaches.drugClass();
@@ -107,11 +107,11 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
 
                         // If drugClassInfo contains data then therapyInfo is null. When therapyInfo contains data then drugClassInfo is null
                         if (drugClassInfo != null) {
-                            drugClass.add(drugClassInfo.drugClass());
+                            treatmentApproachDrugClasses.add(drugClassInfo.drugClass());
                         }
 
                         if (therapyInfo != null) {
-                            therapy.add(therapyInfo.therapyName());
+                            treatmentApproachTherapies.add(therapyInfo.therapyName());
                         }
                     }
 // TODO: implement
@@ -142,8 +142,8 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
                             .sourceUrls(sourceUrls)
                             .intervention(ImmutableTreatment.builder()
                                     .name(treatment)
-                                    .treatmentApproachesDrugClass(drugClass)
-                                    .treatmentApproachesTherapy(therapy)
+                                    .treatmentApproachesDrugClass(treatmentApproachDrugClasses)
+                                    .treatmentApproachesTherapy(treatmentApproachTherapies)
                                     .build())
                             .applicableCancerType(cancerTypeExtraction.applicableCancerType())
                             .blacklistCancerTypes(cancerTypeExtraction.blacklistedCancerTypes())

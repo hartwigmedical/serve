@@ -1,6 +1,7 @@
 package com.hartwig.serve.sources.ckb;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 import com.google.common.collect.Lists;
@@ -157,7 +158,6 @@ public final class CkbTestFactory {
                 .therapy(createTherapy(therapyName))
                 .indication(createIndication(indicationName, termId))
                 .responseType(responseType)
-                .relevantTreatmentApproaches(Lists.newArrayList())
                 .evidenceType(evidenceType)
                 .efficacyEvidence(Strings.EMPTY)
                 .approvalStatus(Strings.EMPTY)

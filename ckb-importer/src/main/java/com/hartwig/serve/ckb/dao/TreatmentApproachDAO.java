@@ -30,27 +30,7 @@ class TreatmentApproachDAO {
 
     }
 
-    @Nullable
-    private static TherapyTreatmentApproach extractOptionalTherapyTreatmentApproach(
-            @NotNull RelevantTreatmentApproaches treatmentApproaches) {
-        TherapyTreatmentApproach therapyTreatmentApproach = null;
-        if (treatmentApproaches.treatmentApproachIntervation() instanceof TherapyTreatmentApproach) {
-            therapyTreatmentApproach = (TherapyTreatmentApproach) treatmentApproaches.treatmentApproachIntervation();
-        }
-        return therapyTreatmentApproach;
-    }
-
-    @Nullable
-    private static DrugClassTreatmentApproach extractOptionalDrugClassTreatmentApproach(
-            @NotNull RelevantTreatmentApproaches treatmentApproaches) {
-        DrugClassTreatmentApproach drugClassTreatmentApproach = null;
-        if (treatmentApproaches.treatmentApproachIntervation() instanceof DrugClassTreatmentApproach) {
-            drugClassTreatmentApproach = (DrugClassTreatmentApproach) treatmentApproaches.treatmentApproachIntervation();
-        }
-        return drugClassTreatmentApproach;
-    }
-
-    public int write(@NotNull RelevantTreatmentApproaches treatmentApproaches) {
+    public int write(@NotNull DrugClassTreatmentApproach treatmentApproaches) {
         int id = context.insertInto(Treatmentapproach.TREATMENTAPPROACH,
                         Treatmentapproach.TREATMENTAPPROACH.TREATMENTAPPROACHID,
                         Treatmentapproach.TREATMENTAPPROACH.CREATEDATE,
@@ -60,16 +40,26 @@ class TreatmentApproachDAO {
                 .fetchOne()
                 .getValue(Treatmentapproach.TREATMENTAPPROACH.ID);
 
-        TherapyTreatmentApproach therapyTreatmentApproach = extractOptionalTherapyTreatmentApproach(treatmentApproaches);
-        DrugClassTreatmentApproach drugClassTreatmentApproach = extractOptionalDrugClassTreatmentApproach(treatmentApproaches);
+        writeTreatmentDrugClass(treatmentApproaches, id);
 
-        if (drugClassTreatmentApproach != null) {
-            writeTreatmentDrugClass(drugClassTreatmentApproach, id);
+        for (Reference reference : treatmentApproaches.references()) {
+            writeTreatmentReference(reference, id);
         }
 
-        if (therapyTreatmentApproach != null) {
-            writeTreatmentTherapy(therapyTreatmentApproach, id);
-        }
+        return id;
+    }
+
+    public int write(@NotNull TherapyTreatmentApproach treatmentApproaches) {
+        int id = context.insertInto(Treatmentapproach.TREATMENTAPPROACH,
+                        Treatmentapproach.TREATMENTAPPROACH.TREATMENTAPPROACHID,
+                        Treatmentapproach.TREATMENTAPPROACH.CREATEDATE,
+                        Treatmentapproach.TREATMENTAPPROACH.UPDATEDATE)
+                .values(treatmentApproaches.id(), treatmentApproaches.createDate(), treatmentApproaches.updateDate())
+                .returning(Treatmentapproach.TREATMENTAPPROACH.ID)
+                .fetchOne()
+                .getValue(Treatmentapproach.TREATMENTAPPROACH.ID);
+
+        writeTreatmentTherapy(treatmentApproaches, id);
 
         for (Reference reference : treatmentApproaches.references()) {
             writeTreatmentReference(reference, id);

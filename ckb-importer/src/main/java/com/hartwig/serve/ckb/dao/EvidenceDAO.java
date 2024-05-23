@@ -6,7 +6,9 @@ import com.hartwig.serve.ckb.database.tables.Indicationevidence;
 import com.hartwig.serve.ckb.database.tables.Therapyevidence;
 import com.hartwig.serve.ckb.database.tables.Treatmentapproachevidence;
 import com.hartwig.serve.ckb.datamodel.reference.Reference;
+import com.hartwig.serve.ckb.datamodel.treatmentapproaches.DrugClassTreatmentApproach;
 import com.hartwig.serve.ckb.datamodel.treatmentapproaches.RelevantTreatmentApproaches;
+import com.hartwig.serve.ckb.datamodel.treatmentapproaches.TherapyTreatmentApproach;
 
 import org.jetbrains.annotations.NotNull;
 import org.jooq.DSLContext;
@@ -71,7 +73,17 @@ class EvidenceDAO {
                 Indicationevidence.INDICATIONEVIDENCE.EVIDENCEID,
                 Indicationevidence.INDICATIONEVIDENCE.INDICATIONID).values(id, indicationId).execute();
 
-        for (RelevantTreatmentApproaches treatmentApproaches : evidence.relevantTreatmentApproaches()) {
+        for (DrugClassTreatmentApproach treatmentApproaches : evidence.drugTreatmentApproaches()) {
+            int treatmentApproachId = treatmentApproachDAO.write(treatmentApproaches);
+
+            context.insertInto(Treatmentapproachevidence.TREATMENTAPPROACHEVIDENCE,
+                            Treatmentapproachevidence.TREATMENTAPPROACHEVIDENCE.EVIDENCEID,
+                            Treatmentapproachevidence.TREATMENTAPPROACHEVIDENCE.TREATMENTAPPROACHEVIDENCEID)
+                    .values(id, treatmentApproachId)
+                    .execute();
+        }
+
+        for (TherapyTreatmentApproach treatmentApproaches : evidence.therapyTreatmentApproaches()) {
             int treatmentApproachId = treatmentApproachDAO.write(treatmentApproaches);
 
             context.insertInto(Treatmentapproachevidence.TREATMENTAPPROACHEVIDENCE,

@@ -2,13 +2,16 @@ package com.hartwig.serve.sources.ckb;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
+import com.hartwig.serve.ckb.datamodel.drug.DrugClass;
 import com.hartwig.serve.ckb.datamodel.evidence.Evidence;
 import com.hartwig.serve.ckb.datamodel.reference.Reference;
+import com.hartwig.serve.ckb.datamodel.therapy.Therapy;
 import com.hartwig.serve.ckb.datamodel.treatmentapproaches.DrugClassTreatmentApproach;
 import com.hartwig.serve.ckb.datamodel.treatmentapproaches.RelevantTreatmentApproaches;
 import com.hartwig.serve.ckb.datamodel.treatmentapproaches.TherapyTreatmentApproach;
@@ -98,44 +101,39 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
                     Set<String> sourceUrls = Sets.newHashSet();
                     sourceUrls.add("https://ckbhome.jax.org/profileResponse/advancedEvidenceFind?molecularProfileId=" + entry.profileId());
 
-                    Set<String> treatmentApproachDrugClasses = Sets.newHashSet();
-                    Set<String> treatmentApproachTherapies = Sets.newHashSet();
+                    Set<String> treatmentApproachDrugClasses = evidence.drugTreatmentApproaches()
+                            .stream()
+                            .map(DrugClassTreatmentApproach::drugClass)
+                            .map(DrugClass::drugClass)
+                            .collect(Collectors.toSet());
 
-                    for (RelevantTreatmentApproaches relevantTreatmentApproaches : evidence.relevantTreatmentApproaches()) {
+                    Set<String> treatmentApproachTherapies = evidence.therapyTreatmentApproaches()
+                            .stream()
+                            .map(TherapyTreatmentApproach::therapy)
+                            .map(Therapy::therapyName)
+                            .collect(Collectors.toSet());
 
-                        TherapyTreatmentApproach therapyTreatmentApproach = extractOptionalTherapyTreatmentApproach(relevantTreatmentApproaches);
-                        DrugClassTreatmentApproach drugClassTreatmentApproach = extractOptionalDrugClassTreatmentApproach(relevantTreatmentApproaches);
-
-                        // If drugClass contains data then therapy is null. When therapy contains data then drugClass is null
-                        if (drugClassTreatmentApproach.drugClass() != null) {
-                            treatmentApproachDrugClasses.add(drugClassTreatmentApproach.drugClass().drugClass());
-                        }
-
-                        if (therapyTreatmentApproach.therapy() != null) {
-                            treatmentApproachTherapies.add(therapyTreatmentApproach.therapy().therapyName());
-                        }
-                    }
-// TODO: implement
-//                    String treatmentApproachString = String.join(",", sourceRelevantTreatmentApproaches);
-//                    String treatmentApproachInterpret;
-//                    if (sourceRelevantTreatmentApproaches.isEmpty()) {
-//                        treatmentApproachInterpret = null;
-//                    } else if (treatmentApproachString.endsWith(",")) {
-//                        treatmentApproachInterpret = treatmentApproachString.substring(0, treatmentApproachString.length() - 1);
-//                    } else {
-//                        treatmentApproachInterpret = treatmentApproachString;
-//                    }
-//
-//                    TreatmentApproachCurationEntryKey key = ImmutableTreatmentApproachCurationEntryKey.builder()
-//                            .treatment(treatment)
-//                            .treatmentApproach(treatmentApproachInterpret == null || treatmentApproachInterpret.isEmpty()
-//                                    ? null
-//                                    : treatmentApproachInterpret)
-//                            .event(sourceGene + " " + entry.type())
-//                            .direction(direction)
-//                            .build();
-//
-//                    Set<String> curatedRelevantTreatmentApproaches = Sets.newHashSet(curator.isMatch(key));
+                    // TODO: implement
+                    //                    String treatmentApproachString = String.join(",", sourceRelevantTreatmentApproaches);
+                    //                    String treatmentApproachInterpret;
+                    //                    if (sourceRelevantTreatmentApproaches.isEmpty()) {
+                    //                        treatmentApproachInterpret = null;
+                    //                    } else if (treatmentApproachString.endsWith(",")) {
+                    //                        treatmentApproachInterpret = treatmentApproachString.substring(0, treatmentApproachString.length() - 1);
+                    //                    } else {
+                    //                        treatmentApproachInterpret = treatmentApproachString;
+                    //                    }
+                    //
+                    //                    TreatmentApproachCurationEntryKey key = ImmutableTreatmentApproachCurationEntryKey.builder()
+                    //                            .treatment(treatment)
+                    //                            .treatmentApproach(treatmentApproachInterpret == null || treatmentApproachInterpret.isEmpty()
+                    //                                    ? null
+                    //                                    : treatmentApproachInterpret)
+                    //                            .event(sourceGene + " " + entry.type())
+                    //                            .direction(direction)
+                    //                            .build();
+                    //
+                    //                    Set<String> curatedRelevantTreatmentApproaches = Sets.newHashSet(curator.isMatch(key));
 
                     actionableEntries.add(ImmutableActionableEntry.builder()
                             .source(Knowledgebase.CKB_EVIDENCE)
@@ -156,26 +154,6 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
             }
         }
         return actionableEntries;
-    }
-
-    @Nullable
-    private static TherapyTreatmentApproach extractOptionalTherapyTreatmentApproach(
-            @NotNull RelevantTreatmentApproaches treatmentApproaches) {
-        TherapyTreatmentApproach therapyTreatmentApproach = null;
-        if (treatmentApproaches.treatmentApproachIntervation() instanceof TherapyTreatmentApproach) {
-            therapyTreatmentApproach = (TherapyTreatmentApproach) treatmentApproaches.treatmentApproachIntervation();
-        }
-        return therapyTreatmentApproach;
-    }
-
-    @Nullable
-    private static DrugClassTreatmentApproach extractOptionalDrugClassTreatmentApproach(
-            @NotNull RelevantTreatmentApproaches treatmentApproaches) {
-        DrugClassTreatmentApproach drugClassTreatmentApproach = null;
-        if (treatmentApproaches.treatmentApproachIntervation() instanceof DrugClassTreatmentApproach) {
-            drugClassTreatmentApproach = (DrugClassTreatmentApproach) treatmentApproaches.treatmentApproachIntervation();
-        }
-        return drugClassTreatmentApproach;
     }
 
     @NotNull

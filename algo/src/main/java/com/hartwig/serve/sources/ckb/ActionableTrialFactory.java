@@ -25,8 +25,13 @@ import org.jetbrains.annotations.Nullable;
 class ActionableTrialFactory implements ActionableEntryFactory {
 
     private static final String SUB_FIELD_DELIMITER = ",";
-    private static final Set<String> POTENTIALLY_OPEN_RECRUITMENT_TYPES =
-            Set.of("recruiting", "not yet recruiting", "not_yet_recruiting", "approved for marketing", "available");
+    private static final Set<String> POTENTIALLY_OPEN_RECRUITMENT_TYPES = Set.of("recruiting",
+            "not yet recruiting",
+            "not_yet_recruiting",
+            "approved for marketing",
+            "available",
+            "enrolling by invitation",
+            "enrolling_by_invitation");
     private static final Set<String> COUNTRIES_TO_INCLUDE = Set.of("netherlands", "belgium", "germany");
     private static final Set<String> VARIANT_REQUIREMENT_TYPES_TO_INCLUDE = Set.of("partial - required", "required");
 

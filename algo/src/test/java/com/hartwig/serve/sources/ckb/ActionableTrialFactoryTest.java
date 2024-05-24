@@ -249,6 +249,8 @@ public class ActionableTrialFactoryTest {
         assertTrue(ActionableTrialFactory.hasPotentiallyOpenRequirementToInclude("not_yet_recruiting"));
         assertTrue(ActionableTrialFactory.hasPotentiallyOpenRequirementToInclude("approved for marketing"));
         assertTrue(ActionableTrialFactory.hasPotentiallyOpenRequirementToInclude("available"));
+        assertTrue(ActionableTrialFactory.hasPotentiallyOpenRequirementToInclude("enrolling by invitation"));
+        assertTrue(ActionableTrialFactory.hasPotentiallyOpenRequirementToInclude("enrolling_by_invitation"));
         assertFalse(ActionableTrialFactory.hasPotentiallyOpenRequirementToInclude("unknown status"));
     }
 

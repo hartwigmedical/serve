@@ -53,11 +53,13 @@ SERVE generates clinical evidence in the following datamodel:
 
 - Either one of the following interventions: 
   - Treatment (name of drug(s))
-      - Relevant treatment approach underlying the treatment.
-      - Curated treatment approach underlying the treatment.
+      - Treatment approach underlying the treatment based on drug class.
+      - Treatment approach underlying the treatment based on drug name.
   - Clinical trial (name of trial)
     - The NCT ID of the study 
     - The title of the study 
+    - The acronym of the study
+    - For which gender the study is a option 
     - The countries where the study is active
     - The name of the therapy given in the trial
 - Cancer type (annotated with DOID) for which the treatment is considered on-label.

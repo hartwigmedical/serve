@@ -446,8 +446,17 @@ CREATE TABLE `treatmentApproachDrugClass`
 (   `id` int NOT NULL AUTO_INCREMENT,
     `treatmentApproachId` int NOT NULL,
     `drugClassId` int NOT NULL,
-    `createDate` DATE NOT NULL,
     `drugClass` varchar(250),
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`treatmentApproachId`) REFERENCES `treatmentApproach`(`id`)
+);
+
+DROP TABLE IF EXISTS `treatmentApproachTherapy`;
+CREATE TABLE `treatmentApproachTherapy`
+(   `id` int NOT NULL AUTO_INCREMENT,
+    `treatmentApproachId` int NOT NULL,
+    `therapyId` int NOT NULL,
+    `therapyName` varchar(250) NOT NULL,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`treatmentApproachId`) REFERENCES `treatmentApproach`(`id`)
 );

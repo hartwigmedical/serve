@@ -53,11 +53,13 @@ SERVE generates clinical evidence in the following datamodel:
 
 - Either one of the following interventions: 
   - Treatment (name of drug(s))
-      - Relevant treatment approach underlying the treatment.
-      - Curated treatment approach underlying the treatment.
+      - Treatment approach underlying the treatment based on drug class.
+      - Treatment approach underlying the treatment based on drug name.
   - Clinical trial (name of trial)
     - The NCT ID of the study 
     - The title of the study 
+    - The acronym of the study
+    - For which gender the study is a option 
     - The countries where the study is active
     - The name of the therapy given in the trial
 - Cancer type (annotated with DOID) for which the treatment is considered on-label.
@@ -441,6 +443,7 @@ elsewhere.
 -[Upcoming]
     - Optional for blacklisting clinical studies and evidence
     - Put clinical trial information into own model instead of using treatment model
+    - Support for usage the drug class data of treatment approach model 
     - Improve hotspot extraction performance with caching and parallelization
 - [3.4.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v3.4.0)
   - Support for usage of CKB acronym for clinical study title in data model 

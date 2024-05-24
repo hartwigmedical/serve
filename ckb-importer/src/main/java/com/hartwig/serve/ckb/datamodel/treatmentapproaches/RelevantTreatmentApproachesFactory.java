@@ -1,10 +1,12 @@
 package com.hartwig.serve.ckb.datamodel.treatmentapproaches;
 
 import java.util.List;
+import java.util.Objects;
 
 import com.google.common.collect.Lists;
 import com.hartwig.serve.ckb.datamodel.drug.DrugFactory;
 import com.hartwig.serve.ckb.datamodel.reference.ReferenceFactory;
+import com.hartwig.serve.ckb.datamodel.therapy.TherapyFactory;
 import com.hartwig.serve.ckb.json.CkbJsonDatabase;
 import com.hartwig.serve.ckb.json.common.TreatmentApproachInfo;
 import com.hartwig.serve.ckb.json.treatmentapproach.JsonTreatmentApproach;
@@ -17,27 +19,58 @@ public final class RelevantTreatmentApproachesFactory {
     }
 
     @NotNull
-    public static List<RelevantTreatmentApproaches> extractRelevantTreatmentApproaches(@NotNull CkbJsonDatabase ckbJsonDatabase,
+    public static List<DrugClassTreatmentApproach> extractDrugTreatmentApproaches(@NotNull CkbJsonDatabase ckbJsonDatabase,
             @NotNull List<TreatmentApproachInfo> treatmentApproachInfos) {
-        List<RelevantTreatmentApproaches> relevantTreatmentApproach = Lists.newArrayList();
+        List<DrugClassTreatmentApproach> relevantTreatmentApproach = Lists.newArrayList();
 
         for (TreatmentApproachInfo treatmentApproachInfo : treatmentApproachInfos) {
-            RelevantTreatmentApproaches resolvedRelevantTreatmentApproaches =
-                    resolveRelevantTreatmentApproaches(ckbJsonDatabase, treatmentApproachInfo);
+            DrugClassTreatmentApproach resolvedRelevantTreatmentApproaches =
+                    resolveDrugTreatmentApproaches(ckbJsonDatabase, treatmentApproachInfo);
             relevantTreatmentApproach.add(resolvedRelevantTreatmentApproaches);
         }
         return relevantTreatmentApproach;
     }
 
     @NotNull
-    private static RelevantTreatmentApproaches resolveRelevantTreatmentApproaches(@NotNull CkbJsonDatabase ckbJsonDatabase,
+    public static List<TherapyTreatmentApproach> extractTherapyTreatmentApproaches(@NotNull CkbJsonDatabase ckbJsonDatabase,
+            @NotNull List<TreatmentApproachInfo> treatmentApproachInfos) {
+        List<TherapyTreatmentApproach> relevantTreatmentApproach = Lists.newArrayList();
+
+        for (TreatmentApproachInfo treatmentApproachInfo : treatmentApproachInfos) {
+            TherapyTreatmentApproach resolvedRelevantTreatmentApproaches =
+                    resolveTherapyTreatmentApproaches(ckbJsonDatabase, treatmentApproachInfo);
+            relevantTreatmentApproach.add(resolvedRelevantTreatmentApproaches);
+        }
+        return relevantTreatmentApproach;
+    }
+
+    @NotNull
+    private static DrugClassTreatmentApproach resolveDrugTreatmentApproaches(@NotNull CkbJsonDatabase ckbJsonDatabase,
             @NotNull TreatmentApproachInfo treatmentApproachInfo) {
+
         for (JsonTreatmentApproach treatmentApproach : ckbJsonDatabase.treatmentApproaches()) {
-            if (treatmentApproach.id() == treatmentApproachInfo.id()) {
-                return ImmutableRelevantTreatmentApproaches.builder()
+            if (treatmentApproach.id() == treatmentApproachInfo.id() && treatmentApproach.drugClass() != null) {
+                return ImmutableDrugClassTreatmentApproach.builder()
                         .id(treatmentApproach.id())
-                        .drugClass(treatmentApproach.drugClass() != null ? DrugFactory.resolveDrugClass(ckbJsonDatabase,
-                                treatmentApproach.drugClass()) : null)
+                        .drugClass(DrugFactory.resolveDrugClass(ckbJsonDatabase, Objects.requireNonNull(treatmentApproach.drugClass())))
+                        .references(ReferenceFactory.extractReferences(ckbJsonDatabase, treatmentApproach.references()))
+                        .createDate(treatmentApproach.createDate())
+                        .updateDate(treatmentApproach.updateDate())
+                        .build();
+            }
+        }
+        throw new IllegalStateException("Could not resolve CKB treatment approach with id '" + treatmentApproachInfo.id() + "'");
+    }
+
+    @NotNull
+    private static TherapyTreatmentApproach resolveTherapyTreatmentApproaches(@NotNull CkbJsonDatabase ckbJsonDatabase,
+            @NotNull TreatmentApproachInfo treatmentApproachInfo) {
+
+        for (JsonTreatmentApproach treatmentApproach : ckbJsonDatabase.treatmentApproaches()) {
+            if (treatmentApproach.id() == treatmentApproachInfo.id() && treatmentApproach.therapy() != null) {
+                return ImmutableTherapyTreatmentApproach.builder()
+                        .id(treatmentApproach.id())
+                        .therapy(TherapyFactory.resolveTherapy(ckbJsonDatabase, Objects.requireNonNull(treatmentApproach.therapy())))
                         .references(ReferenceFactory.extractReferences(ckbJsonDatabase, treatmentApproach.references()))
                         .createDate(treatmentApproach.createDate())
                         .updateDate(treatmentApproach.updateDate())

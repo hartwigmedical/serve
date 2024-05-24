@@ -156,7 +156,6 @@ public final class CkbTestFactory {
                 .therapy(createTherapy(therapyName))
                 .indication(createIndication(indicationName, termId))
                 .responseType(responseType)
-                .relevantTreatmentApproaches(Lists.newArrayList())
                 .evidenceType(evidenceType)
                 .efficacyEvidence("")
                 .approvalStatus("")

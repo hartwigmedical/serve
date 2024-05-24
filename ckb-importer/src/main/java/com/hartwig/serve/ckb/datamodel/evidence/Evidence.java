@@ -5,7 +5,8 @@ import java.util.List;
 import com.hartwig.serve.ckb.datamodel.indication.Indication;
 import com.hartwig.serve.ckb.datamodel.reference.Reference;
 import com.hartwig.serve.ckb.datamodel.therapy.Therapy;
-import com.hartwig.serve.ckb.datamodel.treatmentapproaches.RelevantTreatmentApproaches;
+import com.hartwig.serve.ckb.datamodel.treatmentapproaches.DrugClassTreatmentApproach;
+import com.hartwig.serve.ckb.datamodel.treatmentapproaches.TherapyTreatmentApproach;
 
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +28,10 @@ public abstract class Evidence {
     public abstract String responseType();
 
     @NotNull
-    public abstract List<RelevantTreatmentApproaches> relevantTreatmentApproaches();
+    public abstract List<DrugClassTreatmentApproach> drugTreatmentApproaches();
+
+    @NotNull
+    public abstract List<TherapyTreatmentApproach> therapyTreatmentApproaches();
 
     @NotNull
     public abstract String evidenceType();

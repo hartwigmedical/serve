@@ -42,8 +42,8 @@ public final class ActionableFileUtil {
                 .add("studyGender")
                 .add("countriesOfStudy")
                 .add("treatment")
-                .add("sourceRelevantTreatmentApproaches")
-                .add("relevantTreatmentApproaches")
+                .add("treatmentApproachesDrugClass")
+                .add("treatmentApproachesTherapy")
                 .add("applicableCancerType")
                 .add("applicableDoid")
                 .add("blacklistCancerTypes")
@@ -88,8 +88,8 @@ public final class ActionableFileUtil {
                 if (isTreatment) {
                     return ImmutableTreatment.builder()
                             .name(values[fields.get("treatment")])
-                            .sourceRelevantTreatmentApproaches(fieldToSet(values[fields.get("sourceRelevantTreatmentApproaches")]))
-                            .relevantTreatmentApproaches(fieldToSet(values[fields.get("relevantTreatmentApproaches")]))
+                            .treatmentApproachesDrugClass(fieldToSet(values[fields.get("treatmentApproachesDrugClass")]))
+                            .treatmentApproachesTherapy(fieldToSet(values[fields.get("treatmentApproachesTherapy")]))
                             .build();
                 } else if (isClinicalTrial) {
                     return ImmutableClinicalTrial.builder()
@@ -170,8 +170,8 @@ public final class ActionableFileUtil {
                 .add(clinicalTrial != null ? clinicalTrial.gender() : Strings.EMPTY)
                 .add(clinicalTrial != null ? setToField(clinicalTrial.countriesOfStudy()) : Strings.EMPTY)
                 .add(setToField(therapy))
-                .add(treatment != null ? setToField(treatment.sourceRelevantTreatmentApproaches()) : Strings.EMPTY)
-                .add(treatment != null ? setToField(treatment.relevantTreatmentApproaches()) : Strings.EMPTY)
+                .add(treatment != null ? setToField(treatment.treatmentApproachesDrugClass()) : Strings.EMPTY)
+                .add(treatment != null ? setToField(treatment.treatmentApproachesTherapy()) : Strings.EMPTY)
                 .add(event.applicableCancerType().name())
                 .add(event.applicableCancerType().doid())
                 .add(cancerTypesToField(event.blacklistCancerTypes()))

@@ -1,15 +1,15 @@
 package com.hartwig.serve.ckb;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
-import com.google.common.collect.Lists;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.ckb.datamodel.ImmutableCkbEntry;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.ClinicalTrialFactory;
 import com.hartwig.serve.ckb.datamodel.evidence.EvidenceFactory;
 import com.hartwig.serve.ckb.datamodel.variant.VariantFactory;
 import com.hartwig.serve.ckb.json.CkbJsonDatabase;
-import com.hartwig.serve.ckb.json.molecularprofile.JsonMolecularProfile;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,33 +24,30 @@ final class JsonDatabaseToCkbEntryConverter {
 
     @NotNull
     public static List<CkbEntry> convert(@NotNull CkbJsonDatabase ckbJsonDatabase) {
-        List<CkbEntry> ckbEntries = Lists.newArrayList();
-
         int profileCount = ckbJsonDatabase.molecularProfiles().size();
         LOGGER.debug(" Converting {} CKB molecular profiles to interpreted CKB entries", profileCount);
 
-        int current = 0;
+        VariantFactory variantFactory = new VariantFactory(ckbJsonDatabase);
+        AtomicInteger current = new AtomicInteger(0);
         int report = (int) Math.round(profileCount / 10D);
-        for (JsonMolecularProfile molecularProfile : ckbJsonDatabase.molecularProfiles()) {
-            ckbEntries.add(ImmutableCkbEntry.builder()
+
+        return ckbJsonDatabase.molecularProfiles().parallelStream().map(molecularProfile -> {
+            CkbEntry entry = ImmutableCkbEntry.builder()
                     .profileId(molecularProfile.id())
                     .createDate(molecularProfile.createDate())
                     .updateDate(molecularProfile.updateDate())
                     .profileName(molecularProfile.profileName())
-                    .variants(VariantFactory.extractVariants(ckbJsonDatabase, molecularProfile.geneVariants()))
+                    .variants(variantFactory.extractVariants(molecularProfile.geneVariants()))
                     .evidences(EvidenceFactory.extractEvidences(ckbJsonDatabase, molecularProfile.variantLevelEvidence().evidences()))
                     .clinicalTrials(ClinicalTrialFactory.extractClinicalTrials(ckbJsonDatabase,
                             molecularProfile.variantAssociatedClinicalTrials()))
-                    .build());
-            current++;
+                    .build();
 
-            if (current > 1) {
-                if (current % report == 0) {
-                    LOGGER.debug("  Processed {} of {} molecular profiles", current, profileCount);
-                }
+            int processed = current.addAndGet(1);
+            if (processed > 1 && processed % report == 0) {
+                LOGGER.debug("  Processed {} of {} molecular profiles", processed, profileCount);
             }
-        }
-
-        return ckbEntries;
+            return entry;
+        }).collect(Collectors.toList());
     }
 }

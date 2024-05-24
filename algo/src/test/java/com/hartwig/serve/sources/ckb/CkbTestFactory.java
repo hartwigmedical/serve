@@ -1,7 +1,6 @@
 package com.hartwig.serve.sources.ckb;
 
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 
 import com.google.common.collect.Lists;
@@ -24,7 +23,6 @@ import com.hartwig.serve.ckb.datamodel.variant.ImmutableGene;
 import com.hartwig.serve.ckb.datamodel.variant.ImmutableVariant;
 import com.hartwig.serve.ckb.datamodel.variant.Variant;
 
-import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,59 +35,59 @@ public final class CkbTestFactory {
 
     @NotNull
     public static ImmutableCkbEntry.Builder builder() {
-        return ImmutableCkbEntry.builder().profileId(0).createDate(TEST_DATE).updateDate(TEST_DATE).profileName(Strings.EMPTY);
+        return ImmutableCkbEntry.builder().profileId(0).createDate(TEST_DATE).updateDate(TEST_DATE).profileName("");
     }
 
     @NotNull
     public static CkbEntry createEntryWithGene(@NotNull String geneSymbol) {
         return createEntry(geneSymbol,
-                Strings.EMPTY,
-                Strings.EMPTY,
-                Strings.EMPTY,
-                Strings.EMPTY,
-                Strings.EMPTY,
-                Strings.EMPTY,
-                Strings.EMPTY,
-                Strings.EMPTY);
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "");
     }
 
     @NotNull
     public static CkbEntry createEntryWithVariant(@NotNull String variant) {
-        return createEntry(Strings.EMPTY,
+        return createEntry("",
                 variant,
-                Strings.EMPTY,
-                Strings.EMPTY,
-                Strings.EMPTY,
-                Strings.EMPTY,
-                Strings.EMPTY,
-                Strings.EMPTY,
-                Strings.EMPTY);
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "");
     }
 
     @NotNull
     public static CkbEntry createEntryWithFullName(@NotNull String fullName) {
-        return createEntry(Strings.EMPTY,
-                Strings.EMPTY,
+        return createEntry("",
+                "",
                 fullName,
-                Strings.EMPTY,
-                Strings.EMPTY,
-                Strings.EMPTY,
-                Strings.EMPTY,
-                Strings.EMPTY,
-                Strings.EMPTY);
+                "",
+                "",
+                "",
+                "",
+                "",
+                "");
     }
 
     @NotNull
     public static CkbEntry createEntryWithGeneAndVariant(@NotNull String geneSymbol, @NotNull String variant) {
         return createEntry(geneSymbol,
                 variant,
-                Strings.EMPTY,
-                Strings.EMPTY,
-                Strings.EMPTY,
-                Strings.EMPTY,
-                Strings.EMPTY,
-                Strings.EMPTY,
-                Strings.EMPTY);
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "");
     }
 
     @NotNull
@@ -105,7 +103,7 @@ public final class CkbTestFactory {
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(0, "required");
         return builder().addVariants(createVariant(geneSymbol, variant, fullName))
                 .addEvidences(createEvidence(responseType, evidenceType, therapyName, indicationName, level, termId))
-                .addClinicalTrials(createTrialWithTerapy("Recruiting",
+                .addClinicalTrials(createTrialWithTherapy("Recruiting",
                         List.of(requirementDetail),
                         List.of(location),
                         "NCT0102",
@@ -126,14 +124,14 @@ public final class CkbTestFactory {
                 .indications(List.of(createIndication("AB", "DOID:162")))
                 .recruitment(recruitment)
                 .ageGroups(ageGroups)
-                .variantRequirement(Strings.EMPTY)
+                .variantRequirement("")
                 .variantRequirementDetails(variantRequirementDetails)
                 .locations(locations)
                 .build();
     }
 
     @NotNull
-    public static ClinicalTrial createTrialWithTerapy(@NotNull String recruitment,
+    public static ClinicalTrial createTrialWithTherapy(@NotNull String recruitment,
             @NotNull List<VariantRequirementDetail> variantRequirementDetails, @NotNull List<Location> locations, @NotNull String nctId,
             @NotNull String title, @NotNull List<Therapy> therapies, @NotNull List<Indication> indication, @NotNull List<String> ageGroups) {
         return ImmutableClinicalTrial.builder()
@@ -144,7 +142,7 @@ public final class CkbTestFactory {
                 .indications(indication)
                 .recruitment(recruitment)
                 .ageGroups(ageGroups)
-                .variantRequirement(Strings.EMPTY)
+                .variantRequirement("")
                 .variantRequirementDetails(variantRequirementDetails)
                 .locations(locations)
                 .build();
@@ -159,10 +157,10 @@ public final class CkbTestFactory {
                 .indication(createIndication(indicationName, termId))
                 .responseType(responseType)
                 .evidenceType(evidenceType)
-                .efficacyEvidence(Strings.EMPTY)
-                .approvalStatus(Strings.EMPTY)
+                .efficacyEvidence("")
+                .approvalStatus("")
                 .ampCapAscoEvidenceLevel(level)
-                .ampCapAscoInferredTier(Strings.EMPTY)
+                .ampCapAscoInferredTier("")
                 .references(Lists.newArrayList())
                 .build();
     }
@@ -177,7 +175,7 @@ public final class CkbTestFactory {
                 .drugs(Lists.newArrayList())
                 .synonyms(Lists.newArrayList())
                 .globalApprovalStatuses(Lists.newArrayList())
-                .description(Strings.EMPTY)
+                .description("")
                 .references(Lists.newArrayList())
                 .build();
     }
@@ -187,9 +185,9 @@ public final class CkbTestFactory {
         return ImmutableIndication.builder()
                 .id(0)
                 .name(name)
-                .source(Strings.EMPTY)
-                .definition(Strings.EMPTY)
-                .currentPreferredTerm(Strings.EMPTY)
+                .source("")
+                .definition("")
+                .currentPreferredTerm("")
                 .lastUpdateDateFromDO(TEST_DATE)
                 .termId(termId)
                 .altIds(Lists.newArrayList())
@@ -198,7 +196,7 @@ public final class CkbTestFactory {
 
     @NotNull
     public static Location createLocation(@NotNull String country, @Nullable String status) {
-        return ImmutableLocation.builder().nctId(Strings.EMPTY).city(Strings.EMPTY).country(country).status(status).build();
+        return ImmutableLocation.builder().nctId("").city("").country(country).status(status).build();
     }
 
     @NotNull
@@ -226,7 +224,7 @@ public final class CkbTestFactory {
                 .createDate(TEST_DATE)
                 .updateDate(TEST_DATE)
                 .geneSymbol(geneSymbol)
-                .geneRole(Strings.EMPTY)
+                .geneRole("")
                 .build();
     }
 }

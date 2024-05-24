@@ -37,7 +37,7 @@ public class ActionableTrialFactoryTest {
         String profileName = Strings.EMPTY;
         Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(profileId, "required");
-        ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTerapy("Recruiting",
+        ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTherapy("Recruiting",
                 List.of(requirementDetail),
                 List.of(location),
                 "NCT0102",
@@ -70,7 +70,7 @@ public class ActionableTrialFactoryTest {
         String profileName = Strings.EMPTY;
         Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(profileId, "required");
-        ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTerapy("Recruiting",
+        ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTherapy("Recruiting",
                 List.of(requirementDetail),
                 List.of(location),
                 "NCT0456",
@@ -92,7 +92,7 @@ public class ActionableTrialFactoryTest {
         String profileName = Strings.EMPTY;
         Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(profileId, "required");
-        ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTerapy("Recruiting",
+        ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTherapy("Recruiting",
                 List.of(requirementDetail),
                 List.of(location),
                 "NCT0456",
@@ -114,7 +114,7 @@ public class ActionableTrialFactoryTest {
         String profileName = Strings.EMPTY;
         Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(profileId, "required");
-        ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTerapy("Recruiting",
+        ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTherapy("Recruiting",
                 List.of(requirementDetail),
                 List.of(location),
                 "NCT0456",
@@ -137,7 +137,7 @@ public class ActionableTrialFactoryTest {
         String profileName = Strings.EMPTY;
         Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(profileId, "required");
-        ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTerapy("Recruiting",
+        ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTherapy("Recruiting",
                 List.of(requirementDetail),
                 List.of(location),
                 "NCT0456",
@@ -240,6 +240,18 @@ public class ActionableTrialFactoryTest {
         assertTrue(ActionableTrialFactory.hasAgeGroupToInclude(List.of("Senior", "Adult", "Child")));
         assertTrue(ActionableTrialFactory.hasAgeGroupToInclude(List.of("Senior", "Child")));
         assertTrue(ActionableTrialFactory.hasAgeGroupToInclude(List.of("Senior", "Adult")));
+    }
+
+    @Test
+    public void hasPotentiallyOpenRequirementToInclude() {
+        assertTrue(ActionableTrialFactory.hasPotentiallyOpenRequirementToInclude("recruiting"));
+        assertTrue(ActionableTrialFactory.hasPotentiallyOpenRequirementToInclude("not yet recruiting"));
+        assertTrue(ActionableTrialFactory.hasPotentiallyOpenRequirementToInclude("not_yet_recruiting"));
+        assertTrue(ActionableTrialFactory.hasPotentiallyOpenRequirementToInclude("approved for marketing"));
+        assertTrue(ActionableTrialFactory.hasPotentiallyOpenRequirementToInclude("available"));
+        assertTrue(ActionableTrialFactory.hasPotentiallyOpenRequirementToInclude("enrolling by invitation"));
+        assertTrue(ActionableTrialFactory.hasPotentiallyOpenRequirementToInclude("enrolling_by_invitation"));
+        assertFalse(ActionableTrialFactory.hasPotentiallyOpenRequirementToInclude("unknown status"));
     }
 
     @NotNull

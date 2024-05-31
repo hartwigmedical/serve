@@ -56,7 +56,7 @@ public class ActionableTrialFactoryTest {
 
         assertEquals(Knowledgebase.CKB_TRIAL, trial.source());
         assertEquals("KRAS", trial.sourceEvent());
-        assertEquals(Sets.newHashSet("https://ckbhome.jax.org/clinicalTrial/show?nctId=NCT0102"), trial.sourceUrls());
+        assertEquals(Sets.newHashSet("https://ckbhome.jax.org/profileResponse/advancedEvidenceFind?molecularProfileId=1"), trial.sourceUrls());
         assertEquals("Phase I trial", clinicalTrial1.studyTitle());
         assertEquals(EvidenceLevel.B, trial.level());
         assertEquals(EvidenceDirection.RESPONSIVE, trial.direction());

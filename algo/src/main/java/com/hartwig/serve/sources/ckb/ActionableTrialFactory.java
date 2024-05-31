@@ -66,10 +66,13 @@ class ActionableTrialFactory implements ActionableEntryFactory {
                                 sourceGene,
                                 sourceEvent)) {
 
+                            Set<String> sourceUrls = Sets.newHashSet();
+                            sourceUrls.add("https://ckbhome.jax.org/profileResponse/advancedEvidenceFind?molecularProfileId=" + entry.profileId());
+
                             actionableTrials.add(ImmutableActionableEntry.builder()
                                     .source(Knowledgebase.CKB_TRIAL)
                                     .sourceEvent(sourceEvent)
-                                    .sourceUrls(Sets.newHashSet("https://ckbhome.jax.org/clinicalTrial/show?nctId=" + trial.nctId()))
+                                    .sourceUrls(sourceUrls)
                                     .intervention(ImmutableClinicalTrial.builder()
                                             .studyNctId(trial.nctId())
                                             .studyTitle(trial.title())

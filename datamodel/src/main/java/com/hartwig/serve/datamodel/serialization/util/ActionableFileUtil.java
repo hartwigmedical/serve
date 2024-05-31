@@ -84,7 +84,6 @@ public final class ActionableFileUtil {
                 if (isClinicalTrial && isTreatment) {
                     throw new IllegalStateException("An actionable event cannot be both a treatment and clinical trial");
                 }
-
                 if (isTreatment) {
                     return ImmutableTreatment.builder()
                             .name(values[fields.get("treatment")])
@@ -95,8 +94,8 @@ public final class ActionableFileUtil {
                     return ImmutableClinicalTrial.builder()
                             .studyNctId(values[fields.get("studyNctId")])
                             .studyTitle(values[fields.get("studyTitle")])
-                            .studyAcronym(values[fields.get("studyAcronym")])
-                            .gender(values[fields.get("studyGender")])
+                            .studyAcronym(SerializationUtil.optionalString(values[fields.get("studyAcronym")]))
+                            .gender(SerializationUtil.optionalString(values[fields.get("studyGender")]))
                             .countriesOfStudy(fieldToSet(values[fields.get("countriesOfStudy")]))
                             .therapyNames(fieldToSet(values[fields.get("treatment")]))
                             .build();
@@ -166,12 +165,12 @@ public final class ActionableFileUtil {
                 .add(setToField(event.sourceUrls()))
                 .add(clinicalTrial != null ? clinicalTrial.studyNctId() : Strings.EMPTY)
                 .add(clinicalTrial != null ? clinicalTrial.studyTitle() : Strings.EMPTY)
-                .add(clinicalTrial != null ? clinicalTrial.studyAcronym() : Strings.EMPTY)
-                .add(clinicalTrial != null ? clinicalTrial.gender() : Strings.EMPTY)
+                .add(clinicalTrial != null && clinicalTrial.studyAcronym() != null ? clinicalTrial.studyAcronym() : Strings.EMPTY)
+                .add(clinicalTrial != null && clinicalTrial.gender() != null? clinicalTrial.gender() : Strings.EMPTY)
                 .add(clinicalTrial != null ? setToField(clinicalTrial.countriesOfStudy()) : Strings.EMPTY)
                 .add(setToField(therapy))
-                .add(treatment != null ? setToField(treatment.treatmentApproachesDrugClass()) : Strings.EMPTY)
-                .add(treatment != null ? setToField(treatment.treatmentApproachesTherapy()) : Strings.EMPTY)
+                .add(treatment != null && !treatment.treatmentApproachesDrugClass().isEmpty() ? setToField(treatment.treatmentApproachesDrugClass()) : Strings.EMPTY)
+                .add(treatment != null && !treatment.treatmentApproachesTherapy().isEmpty() ? setToField(treatment.treatmentApproachesTherapy()) : Strings.EMPTY)
                 .add(event.applicableCancerType().name())
                 .add(event.applicableCancerType().doid())
                 .add(cancerTypesToField(event.blacklistCancerTypes()))

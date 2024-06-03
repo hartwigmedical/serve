@@ -1,5 +1,6 @@
 package com.hartwig.serve.sources.ckb;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.StringJoiner;
@@ -66,8 +67,7 @@ class ActionableTrialFactory implements ActionableEntryFactory {
                                 sourceGene,
                                 sourceEvent)) {
 
-                            Set<String> sourceUrls = Sets.newHashSet();
-                            sourceUrls.add("https://ckbhome.jax.org/profileResponse/advancedEvidenceFind?molecularProfileId=" + entry.profileId());
+                            Set<String> sourceUrls = Collections.singleton("https://ckbhome.jax.org/profileResponse/advancedEvidenceFind?molecularProfileId=" + entry.profileId());
 
                             actionableTrials.add(ImmutableActionableEntry.builder()
                                     .source(Knowledgebase.CKB_TRIAL)

@@ -29,7 +29,8 @@ public final class RelevantTreatmentApproachesFactory {
                     resolveDrugTreatmentApproaches(ckbJsonDatabase, treatmentApproachInfo);
             if (resolvedRelevantTreatmentApproaches != null) {
                 relevantTreatmentApproach.add(resolvedRelevantTreatmentApproaches);
-            }        }
+            }
+        }
         return relevantTreatmentApproach;
     }
 

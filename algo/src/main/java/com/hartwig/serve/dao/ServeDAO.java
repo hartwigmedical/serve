@@ -179,19 +179,9 @@ public class ServeDAO {
             return treatment.name();
         } else {
             assert clinicalTrial != null;
-            return setToField(clinicalTrial.therapyNames());
+            return concat(clinicalTrial.therapyNames());
         }
     }
-
-    @NotNull
-    private static String setToField(@NotNull Set<String> strings) {
-        StringJoiner joiner = new StringJoiner(",");
-        for (String string : strings) {
-            joiner.add(string);
-        }
-        return joiner.toString();
-    }
-
     private static void writeActionableHotspotBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStepN inserter,
             @NotNull ActionableHotspot actionableHotspot) {
         ClinicalTrial clinicalTrial = extractOptionalClinicalTrial(actionableHotspot);
@@ -208,12 +198,12 @@ public class ServeDAO {
                 concat(actionableHotspot.sourceUrls()),
                 clinicalTrial != null ? clinicalTrial.studyNctId() : null,
                 clinicalTrial != null ? clinicalTrial.studyTitle() : null,
-                clinicalTrial != null ? clinicalTrial.studyAcronym() : null,
-                clinicalTrial != null ? clinicalTrial.gender() : null,
+                clinicalTrial != null && clinicalTrial.studyAcronym() != null ? clinicalTrial.studyAcronym() : null,
+                clinicalTrial != null && clinicalTrial.gender() != null ? clinicalTrial.gender() : null,
                 clinicalTrial != null ? concat(clinicalTrial.countriesOfStudy()) : null,
                 therapyName(clinicalTrial, treatment),
-                treatment != null ? concat(treatment.treatmentApproachesDrugClass()) : null,
-                treatment != null ? concat(treatment.treatmentApproachesTherapy()) : null,
+                treatment != null && !treatment.treatmentApproachesDrugClass().isEmpty() ? concat(treatment.treatmentApproachesDrugClass()) : null,
+                treatment != null && !treatment.treatmentApproachesTherapy().isEmpty() ? concat(treatment.treatmentApproachesTherapy()) : null,
                 actionableHotspot.applicableCancerType().name(),
                 actionableHotspot.applicableCancerType().doid(),
                 concat(toStrings(actionableHotspot.blacklistCancerTypes())),
@@ -301,12 +291,12 @@ public class ServeDAO {
                 concat(actionableRange.sourceUrls()),
                 clinicalTrial != null ? clinicalTrial.studyNctId() : null,
                 clinicalTrial != null ? clinicalTrial.studyTitle() : null,
-                clinicalTrial != null ? clinicalTrial.studyAcronym() : null,
-                clinicalTrial != null ? clinicalTrial.gender() : null,
+                clinicalTrial != null && clinicalTrial.studyAcronym() != null ? clinicalTrial.studyAcronym() : null,
+                clinicalTrial != null && clinicalTrial.gender() != null ? clinicalTrial.gender() : null,
                 clinicalTrial != null ? concat(clinicalTrial.countriesOfStudy()) : null,
                 therapyName(clinicalTrial, treatment),
-                treatment != null ? concat(treatment.treatmentApproachesDrugClass()) : null,
-                treatment != null ? concat(treatment.treatmentApproachesTherapy()) : null,
+                treatment != null && !treatment.treatmentApproachesDrugClass().isEmpty() ? concat(treatment.treatmentApproachesDrugClass()) : null,
+                treatment != null && !treatment.treatmentApproachesTherapy().isEmpty() ? concat(treatment.treatmentApproachesTherapy()) : null,
                 actionableRange.applicableCancerType().name(),
                 actionableRange.applicableCancerType().doid(),
                 concat(toStrings(actionableRange.blacklistCancerTypes())),
@@ -357,12 +347,12 @@ public class ServeDAO {
                 concat(actionableGene.sourceUrls()),
                 clinicalTrial != null ? clinicalTrial.studyNctId() : null,
                 clinicalTrial != null ? clinicalTrial.studyTitle() : null,
-                clinicalTrial != null ? clinicalTrial.studyAcronym() : null,
-                clinicalTrial != null ? clinicalTrial.gender() : null,
+                clinicalTrial != null && clinicalTrial.studyAcronym() != null ? clinicalTrial.studyAcronym() : null,
+                clinicalTrial != null && clinicalTrial.gender() != null ? clinicalTrial.gender() : null,
                 clinicalTrial != null ? concat(clinicalTrial.countriesOfStudy()) : null,
                 therapyName(clinicalTrial, treatment),
-                treatment != null ? concat(treatment.treatmentApproachesDrugClass()) : null,
-                treatment != null ? concat(treatment.treatmentApproachesTherapy()) : null,
+                treatment != null && !treatment.treatmentApproachesDrugClass().isEmpty() ? concat(treatment.treatmentApproachesDrugClass()) : null,
+                treatment != null && !treatment.treatmentApproachesTherapy().isEmpty() ? concat(treatment.treatmentApproachesTherapy()) : null,
                 actionableGene.applicableCancerType().name(),
                 actionableGene.applicableCancerType().doid(),
                 concat(toStrings(actionableGene.blacklistCancerTypes())),
@@ -421,12 +411,12 @@ public class ServeDAO {
                 concat(actionableFusion.sourceUrls()),
                 clinicalTrial != null ? clinicalTrial.studyNctId() : null,
                 clinicalTrial != null ? clinicalTrial.studyTitle() : null,
-                clinicalTrial != null ? clinicalTrial.studyAcronym() : null,
-                clinicalTrial != null ? clinicalTrial.gender() : null,
+                clinicalTrial != null && clinicalTrial.studyAcronym() != null ? clinicalTrial.studyAcronym() : null,
+                clinicalTrial != null && clinicalTrial.gender() != null ? clinicalTrial.gender() : null,
                 clinicalTrial != null ? concat(clinicalTrial.countriesOfStudy()) : null,
                 therapyName(clinicalTrial, treatment),
-                treatment != null ? concat(treatment.treatmentApproachesDrugClass()) : null,
-                treatment != null ? concat(treatment.treatmentApproachesTherapy()) : null,
+                treatment != null && !treatment.treatmentApproachesDrugClass().isEmpty() ? concat(treatment.treatmentApproachesDrugClass()) : null,
+                treatment != null && !treatment.treatmentApproachesTherapy().isEmpty() ? concat(treatment.treatmentApproachesTherapy()) : null,
                 actionableFusion.applicableCancerType().name(),
                 actionableFusion.applicableCancerType().doid(),
                 concat(toStrings(actionableFusion.blacklistCancerTypes())),
@@ -479,12 +469,12 @@ public class ServeDAO {
                 concat(actionableCharacteristic.sourceUrls()),
                 clinicalTrial != null ? clinicalTrial.studyNctId() : null,
                 clinicalTrial != null ? clinicalTrial.studyTitle() : null,
-                clinicalTrial != null ? clinicalTrial.studyAcronym() : null,
-                clinicalTrial != null ? clinicalTrial.gender() : null,
+                clinicalTrial != null && clinicalTrial.studyAcronym() != null ? clinicalTrial.studyAcronym() : null,
+                clinicalTrial != null && clinicalTrial.gender() != null ? clinicalTrial.gender() : null,
                 clinicalTrial != null ? concat(clinicalTrial.countriesOfStudy()) : null,
                 therapyName(clinicalTrial, treatment),
-                treatment != null ? concat(treatment.treatmentApproachesDrugClass()) : null,
-                treatment != null ? concat(treatment.treatmentApproachesTherapy()) : null,
+                treatment != null && !treatment.treatmentApproachesDrugClass().isEmpty() ? concat(treatment.treatmentApproachesDrugClass()) : null,
+                treatment != null && !treatment.treatmentApproachesTherapy().isEmpty() ? concat(treatment.treatmentApproachesTherapy()) : null,
                 actionableCharacteristic.applicableCancerType().name(),
                 actionableCharacteristic.applicableCancerType().doid(),
                 concat(toStrings(actionableCharacteristic.blacklistCancerTypes())),
@@ -532,12 +522,12 @@ public class ServeDAO {
                 concat(actionableHLA.sourceUrls()),
                 clinicalTrial != null ? clinicalTrial.studyNctId() : null,
                 clinicalTrial != null ? clinicalTrial.studyTitle() : null,
-                clinicalTrial != null ? clinicalTrial.studyAcronym() : null,
-                clinicalTrial != null ? clinicalTrial.gender() : null,
+                clinicalTrial != null && clinicalTrial.studyAcronym() != null ? clinicalTrial.studyAcronym() : null,
+                clinicalTrial != null && clinicalTrial.gender() != null ? clinicalTrial.gender() : null,
                 clinicalTrial != null ? concat(clinicalTrial.countriesOfStudy()) : null,
                 therapyName(clinicalTrial, treatment),
-                treatment != null ? concat(treatment.treatmentApproachesDrugClass()) : null,
-                treatment != null ? concat(treatment.treatmentApproachesTherapy()) : null,
+                treatment != null && !treatment.treatmentApproachesDrugClass().isEmpty() ? concat(treatment.treatmentApproachesDrugClass()) : null,
+                treatment != null && !treatment.treatmentApproachesTherapy().isEmpty() ? concat(treatment.treatmentApproachesTherapy()) : null,
                 actionableHLA.applicableCancerType().name(),
                 actionableHLA.applicableCancerType().doid(),
                 concat(toStrings(actionableHLA.blacklistCancerTypes())),

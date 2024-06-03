@@ -12,6 +12,7 @@ import com.hartwig.serve.ckb.json.common.TreatmentApproachInfo;
 import com.hartwig.serve.ckb.json.treatmentapproach.JsonTreatmentApproach;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public final class RelevantTreatmentApproachesFactory {
 
@@ -26,7 +27,9 @@ public final class RelevantTreatmentApproachesFactory {
         for (TreatmentApproachInfo treatmentApproachInfo : treatmentApproachInfos) {
             DrugClassTreatmentApproach resolvedRelevantTreatmentApproaches =
                     resolveDrugTreatmentApproaches(ckbJsonDatabase, treatmentApproachInfo);
-            relevantTreatmentApproach.add(resolvedRelevantTreatmentApproaches);
+            if (resolvedRelevantTreatmentApproaches != null) {
+                relevantTreatmentApproach.add(resolvedRelevantTreatmentApproaches);
+            }
         }
         return relevantTreatmentApproach;
     }
@@ -39,44 +42,56 @@ public final class RelevantTreatmentApproachesFactory {
         for (TreatmentApproachInfo treatmentApproachInfo : treatmentApproachInfos) {
             TherapyTreatmentApproach resolvedRelevantTreatmentApproaches =
                     resolveTherapyTreatmentApproaches(ckbJsonDatabase, treatmentApproachInfo);
-            relevantTreatmentApproach.add(resolvedRelevantTreatmentApproaches);
+            if (resolvedRelevantTreatmentApproaches != null) {
+                relevantTreatmentApproach.add(resolvedRelevantTreatmentApproaches);
+            }
         }
         return relevantTreatmentApproach;
     }
 
-    @NotNull
+    @Nullable
     private static DrugClassTreatmentApproach resolveDrugTreatmentApproaches(@NotNull CkbJsonDatabase ckbJsonDatabase,
             @NotNull TreatmentApproachInfo treatmentApproachInfo) {
 
         for (JsonTreatmentApproach treatmentApproach : ckbJsonDatabase.treatmentApproaches()) {
-            if (treatmentApproach.id() == treatmentApproachInfo.id() && treatmentApproach.drugClass() != null) {
-                return ImmutableDrugClassTreatmentApproach.builder()
-                        .id(treatmentApproach.id())
-                        .drugClass(DrugFactory.resolveDrugClass(ckbJsonDatabase, Objects.requireNonNull(treatmentApproach.drugClass())))
-                        .references(ReferenceFactory.extractReferences(ckbJsonDatabase, treatmentApproach.references()))
-                        .createDate(treatmentApproach.createDate())
-                        .updateDate(treatmentApproach.updateDate())
-                        .build();
+            if (treatmentApproach.id() == treatmentApproachInfo.id()) {
+                var drugClass = treatmentApproach.drugClass();
+                if (drugClass != null) {
+                    return ImmutableDrugClassTreatmentApproach.builder()
+                            .id(treatmentApproach.id())
+                            .drugClass(DrugFactory.resolveDrugClass(ckbJsonDatabase, Objects.requireNonNull(treatmentApproach.drugClass())))
+                            .references(ReferenceFactory.extractReferences(ckbJsonDatabase, treatmentApproach.references()))
+                            .createDate(treatmentApproach.createDate())
+                            .updateDate(treatmentApproach.updateDate())
+                            .build();
+                } else {
+                    return null;
+                }
             }
         }
-        throw new IllegalStateException("Could not resolve CKB treatment approach with id '" + treatmentApproachInfo.id() + "'");
+        throw new IllegalStateException("Could not resolve CKB treatment approach drug class with id '" + treatmentApproachInfo.id() + "'");
     }
 
-    @NotNull
+    @Nullable
     private static TherapyTreatmentApproach resolveTherapyTreatmentApproaches(@NotNull CkbJsonDatabase ckbJsonDatabase,
             @NotNull TreatmentApproachInfo treatmentApproachInfo) {
 
         for (JsonTreatmentApproach treatmentApproach : ckbJsonDatabase.treatmentApproaches()) {
-            if (treatmentApproach.id() == treatmentApproachInfo.id() && treatmentApproach.therapy() != null) {
-                return ImmutableTherapyTreatmentApproach.builder()
-                        .id(treatmentApproach.id())
-                        .therapy(TherapyFactory.resolveTherapy(ckbJsonDatabase, Objects.requireNonNull(treatmentApproach.therapy())))
-                        .references(ReferenceFactory.extractReferences(ckbJsonDatabase, treatmentApproach.references()))
-                        .createDate(treatmentApproach.createDate())
-                        .updateDate(treatmentApproach.updateDate())
-                        .build();
+            if (treatmentApproach.id() == treatmentApproachInfo.id()) {
+                var therapy = treatmentApproach.therapy();
+                if (therapy != null) {
+                    return ImmutableTherapyTreatmentApproach.builder()
+                            .id(treatmentApproach.id())
+                            .therapy(TherapyFactory.resolveTherapy(ckbJsonDatabase, therapy))
+                            .references(ReferenceFactory.extractReferences(ckbJsonDatabase, treatmentApproach.references()))
+                            .createDate(treatmentApproach.createDate())
+                            .updateDate(treatmentApproach.updateDate())
+                            .build();
+                } else {
+                    return null;
+                }
             }
         }
-        throw new IllegalStateException("Could not resolve CKB treatment approach with id '" + treatmentApproachInfo.id() + "'");
+        throw new IllegalStateException("Could not resolve CKB treatment approach therapy with id '" + treatmentApproachInfo.id() + "'");
     }
 }

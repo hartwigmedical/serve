@@ -209,7 +209,7 @@ public class ServeDAO {
                 concat(toStrings(actionableHotspot.blacklistCancerTypes())),
                 actionableHotspot.level(),
                 actionableHotspot.direction(),
-                concat(actionableHotspot.evidenceUrls()).isEmpty());
+                concat(actionableHotspot.evidenceUrls()));
     }
 
     private void writeActionableCodons(@NotNull Timestamp timestamp, @NotNull List<ActionableRange> codons) {

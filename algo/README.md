@@ -51,17 +51,17 @@ they are compliant with the usage of the data itself.
 
 SERVE generates clinical evidence in the following datamodel:
 
-- Either one of the following interventions: 
-  - Treatment (name of drug(s))
-      - Treatment approach underlying the treatment based on drug class.
-      - Treatment approach underlying the treatment based on drug name.
-  - Clinical trial (name of trial)
-    - The NCT ID of the study 
-    - The title of the study 
-    - The acronym of the study
-    - For which gender the study is a option 
-    - The countries where the study is active
-    - The name of the therapy given in the trial
+- Either one of the following interventions:
+    - Treatment (name of drug(s))
+        - Treatment approach underlying the treatment based on drug class.
+        - Treatment approach underlying the treatment based on drug name.
+    - Clinical trial (name of trial)
+        - The NCT ID of the study
+        - The title of the study
+        - The acronym of the study
+        - For which gender the study is a option
+        - The countries where the study is active
+        - The name of the therapy given in the trial
 - Cancer type (annotated with DOID) for which the treatment is considered on-label.
 - Blacklist cancer types (annotated with DOID) that should be children of the main cancer type and are used for blacklisting
   specific types of the main cancer type.
@@ -319,7 +319,9 @@ downstream, this is curated for harmonize the knowledge. The following filters c
 | EVENT_TREATMENT_APPROACH_CURATION_IGNORE     | The treatment approach wouldn't be used because event is ignored for further interpretation             |
 
 ## Blacklisting evidences
-All evidences, which are present in the external databases, can be blacklisted for downstream usage. Which results in all usable evidences which we should map to patient genomic event/cancer types.
+
+All evidences, which are present in the external databases, can be blacklisted for downstream usage. Which results in all usable evidences
+which we should map to patient genomic event/cancer types.
 
 | Filter                                                       | Description                                                                                                        |
 |--------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
@@ -330,17 +332,22 @@ All evidences, which are present in the external databases, can be blacklisted f
 | EVIDENCE_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE           | All evidences based on a specific therapy and cancer type and gene is blacklisted for downstream usages.           |
 | EVIDENCE_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE_AND_EVENT | All evidences based on a specific therapy and cancer type and gene and event is blacklisted for downstream usages. |
 
-## Blacklisting clinical trials 
-All clinical trials, which are present in the external databases, can be blacklisted for downstream usage. Which results in all usable clinical trials which we should map to patient genomic event/cancer types.
-| Filter                                                    | Description                                                                                                                  |
+## Blacklisting clinical trials
+
+All clinical trials, which are present in the external databases, can be blacklisted for downstream usage. Which results in all usable
+clinical trials which we should map to patient genomic event/cancer types.
+| Filter | Description |
 |-----------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------|
-| ALL_STUDIES_BASED_ON_GENE                                 | All clinical studies based on a specific gene is blacklisted for downstream usages.                                          |
-| ALL_STUDIES_BASED_ON_GENE_AND_EVENT                       | All clinical studies based on a specific gene and event is blacklisted for downstream usages.                                |
-| STUDY_WHOLE                                               | The whole clinical study is blacklisted for downstream usages.                                                               |
-| STUDY_BASED_ON_THERAPY                                    | The clinical study with a specific therapy is blacklisted for downstream usages.                                             |
-| STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE                    | The clinical study with a specific therapy and cancer type is blacklisted for downstream usages.                             |
-| STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE           | The clinical study with a specific therapy and cancer type and specific gene is blacklisted for downstream usages.           |
-| STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE_AND_EVENT | The clinical study with a specific therapy and cancer type and specific gene and event is blacklisted for downstream usages. |
+| ALL_STUDIES_BASED_ON_GENE | All clinical studies based on a specific gene is blacklisted for downstream usages. |
+| ALL_STUDIES_BASED_ON_GENE_AND_EVENT | All clinical studies based on a specific gene and event is blacklisted for downstream usages. |
+| STUDY_WHOLE | The whole clinical study is blacklisted for downstream usages. |
+| STUDY_BASED_ON_THERAPY | The clinical study with a specific therapy is blacklisted for downstream usages. |
+| STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE | The clinical study with a specific therapy and cancer type is blacklisted for downstream
+usages. |
+| STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE | The clinical study with a specific therapy and cancer type and specific gene is
+blacklisted for downstream usages. |
+| STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE_AND_EVENT | The clinical study with a specific therapy and cancer type and specific gene
+and event is blacklisted for downstream usages. |
 
 ## Handling of multiple reference genome versions
 
@@ -412,6 +419,7 @@ Within the Hartwig pipeline, SERVE output is used in the following manner:
 The docker image has no entrypoint, it requires some extra setup to be functional:
 
 The transvar config file should look something like this:
+
 ```cfg
 [DEFAULT]
 refversion = hg19
@@ -438,20 +446,21 @@ reference = /data/reference_genome/38/GCA_000001405.15_GRCh38_no_alt_analysis_se
 All transvar DB files can be found in the `crunch-resources` repo and accompanying docker image.
 The big files are the hg19 and hg37 reference genomes. They are too big to store in version control, so they will need to be mounted in from
 elsewhere.
-  
+
 ## Version History and Download Links
--[Upcoming]
+
+- [4.0.1](https://github.com/hartwigmedical/serve/releases/tag/serve-v4.0.1)
     - Optional for blacklisting clinical studies and evidence
     - Put clinical trial information into own model instead of using treatment model
-    - Support for usage the drug class data of treatment approach model 
+    - Support for usage the drug class data of treatment approach model
     - Improve hotspot extraction performance with caching and parallelization
 - [3.4.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v3.4.0)
-  - Support for usage of CKB acronym for clinical study title in data model 
+    - Support for usage of CKB acronym for clinical study title in data model
 - [3.3.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v3.3.0)
-  - Drastically improved performance of transvar calls 
-  - Inclusion of all SERVE dependencies in docker image
+    - Drastically improved performance of transvar calls
+    - Inclusion of all SERVE dependencies in docker image
 - [3.2.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v3.2.0)
-    - FGFR2 del events are configured as being interpreted as full exonic deletions. 
+    - FGFR2 del events are configured as being interpreted as full exonic deletions.
 - [3.1.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v3.1.0)
     - Remove "Active, not recruiting" and add "Not yet recruiting" from/to potentially open recruitment status list
 - [3.0.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v3.0.0)

@@ -1,8 +1,13 @@
 package com.hartwig.serve;
 
+import static java.util.Arrays.stream;
+
 import java.io.File;
 import java.nio.file.Files;
+import java.util.Locale;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.google.common.collect.Sets;
 import com.hartwig.serve.vicc.datamodel.ViccSource;
@@ -69,6 +74,7 @@ public interface ServeConfig {
     // Options to help with debugging / testing
     String SKIP_HOTSPOT_RESOLVING = "skip_hotspot_resolving";
     String LOG_DEBUG = "log_debug";
+    String COUNTRIES_TO_INCLUDE = "countries";
 
     @NotNull
     static Options createOptions() {
@@ -109,6 +115,8 @@ public interface ServeConfig {
         options.addOption(DRIVER_GENE_38_TSV, true, "Path to driver gene v38 TSV");
         options.addOption(KNOWN_FUSION_37_FILE, true, "Path to the known fusion v37 file");
         options.addOption(KNOWN_FUSION_38_FILE, true, "Path to the known fusion v38 file");
+
+        options.addOption(COUNTRIES_TO_INCLUDE, true, "Comma-delimited list of countries to include");
 
         options.addOption(OUTPUT_DIR, true, "Dir which will hold all SERVE output files");
 
@@ -208,6 +216,9 @@ public interface ServeConfig {
     String knownFusion38File();
 
     @NotNull
+    Set<String> countriesToInclude();
+
+    @NotNull
     String outputDir();
 
     boolean skipHotspotResolving();
@@ -264,6 +275,10 @@ public interface ServeConfig {
                 .driverGene38Tsv(nonOptionalFile(cmd, DRIVER_GENE_38_TSV))
                 .knownFusion37File(nonOptionalFile(cmd, KNOWN_FUSION_37_FILE))
                 .knownFusion38File(nonOptionalFile(cmd, KNOWN_FUSION_38_FILE))
+                .countriesToInclude(Optional.ofNullable(cmd.getOptionValue(COUNTRIES_TO_INCLUDE))
+                        .map(countries -> stream(countries.split(",")).map(country -> country.toLowerCase(Locale.ROOT))
+                                .collect(Collectors.toSet()))
+                        .orElse(Set.of("netherlands", "belgium", "germany")))
                 .outputDir(nonOptionalDir(cmd, OUTPUT_DIR))
                 .skipHotspotResolving(cmd.hasOption(SKIP_HOTSPOT_RESOLVING))
                 .build();

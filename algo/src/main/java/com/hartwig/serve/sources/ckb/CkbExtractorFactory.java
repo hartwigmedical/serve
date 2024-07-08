@@ -1,5 +1,7 @@
 package com.hartwig.serve.sources.ckb;
 
+import java.util.Set;
+
 import com.hartwig.serve.common.classification.EventClassifierConfig;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.extraction.EventExtractor;
@@ -28,10 +30,10 @@ public final class CkbExtractorFactory {
 
     @NotNull
     public static CkbExtractor createTrialExtractor(@NotNull EventClassifierConfig config, @NotNull RefGenomeResource refGenomeResource,
-            @NotNull CkbStudyBlacklistModel blacklistStudy) {
+            @NotNull CkbStudyBlacklistModel blacklistStudy, @NotNull Set<String> countriesToInclude) {
         return new CkbExtractor(Knowledgebase.CKB_TRIAL,
                 createEventExtractor(config, refGenomeResource),
-                new ActionableTrialFactory(blacklistStudy),
+                new ActionableTrialFactory(blacklistStudy, countriesToInclude),
                 false);
     }
 

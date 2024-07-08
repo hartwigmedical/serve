@@ -72,24 +72,27 @@ public class ServeAlgo {
 
     @NotNull
     public Map<RefGenome, ExtractionResult> run(@NotNull ServeConfig config) throws IOException {
-        List<CkbEntry> ckbEntries = (config.useCkbEvidence() || config.useCkbTrials()) ?
-                CkbReader.readAndCurate(config.ckbDir(), config.ckbBlacklistMolecularProfileTsv()) : Collections.emptyList();
+        List<CkbEntry> ckbEntries = (config.useCkbEvidence() || config.useCkbTrials()) ? CkbReader.readAndCurate(config.ckbDir(),
+                config.ckbBlacklistMolecularProfileTsv()) : Collections.emptyList();
 
-        List<ExtractionResult> extractions = Stream.of(
-                config.useVicc() ? extractViccKnowledge(config.viccJson(), config.viccSources()) : null,
-                        config.useIclusion() ? extractIclusionKnowledge(config.iClusionTrialTsv(), config.iClusionFilterTsv()) : null,
-                        config.useCkbEvidence() ? extractCkbEvidenceKnowledge(config.ckbDrugCurationTsv(), config.ckbBlacklistEvidenceTsv(),
-                                ckbEntries) : null,
-                        config.useCkbTrials() ? extractCkbTrialKnowledge(config.ckbBlacklistTrialTsv(), ckbEntries) : null,
-                        config.useDocm() ? extractDocmKnowledge(config.docmTsv()) : null,
-                        config.useHartwigCohortHotspots() ? extractHartwigCohortHotspotKnowledge(config.hartwigCohortHotspotTsv(),
-                                !config.skipHotspotResolving()) : null,
-                        config.useHartwigCuratedHotspots() ? extractHartwigCuratedHotspotKnowledge(config.hartwigCuratedHotspotTsv(),
-                                !config.skipHotspotResolving()) : null,
-                        config.useHartwigDriverGenes() ? extractHartwigDriverGeneKnowledge(config.driverGene37Tsv()) : null,
-                        config.useHartwigCuratedGenes() ? extractHartwigCuratedGeneKnowledge(config.hartwigCuratedGeneTsv()) : null)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+        List<ExtractionResult> extractions =
+                Stream.of(config.useVicc() ? extractViccKnowledge(config.viccJson(), config.viccSources()) : null,
+                                config.useIclusion() ? extractIclusionKnowledge(config.iClusionTrialTsv(), config.iClusionFilterTsv()) : null,
+                                config.useCkbEvidence() ? extractCkbEvidenceKnowledge(config.ckbDrugCurationTsv(),
+                                        config.ckbBlacklistEvidenceTsv(),
+                                        ckbEntries) : null,
+                                config.useCkbTrials() ? extractCkbTrialKnowledge(config.ckbBlacklistTrialTsv(),
+                                        ckbEntries,
+                                        config.countriesToInclude()) : null,
+                                config.useDocm() ? extractDocmKnowledge(config.docmTsv()) : null,
+                                config.useHartwigCohortHotspots() ? extractHartwigCohortHotspotKnowledge(config.hartwigCohortHotspotTsv(),
+                                        !config.skipHotspotResolving()) : null,
+                                config.useHartwigCuratedHotspots() ? extractHartwigCuratedHotspotKnowledge(config.hartwigCuratedHotspotTsv(),
+                                        !config.skipHotspotResolving()) : null,
+                                config.useHartwigDriverGenes() ? extractHartwigDriverGeneKnowledge(config.driverGene37Tsv()) : null,
+                                config.useHartwigCuratedGenes() ? extractHartwigCuratedGeneKnowledge(config.hartwigCuratedGeneTsv()) : null)
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.toList());
 
         Map<RefGenome, ExtractionResult> versionedMap = refGenomeManager.makeVersioned(extractions);
 
@@ -152,8 +155,8 @@ public class ServeAlgo {
     }
 
     @NotNull
-    private ExtractionResult extractCkbTrialKnowledge(@NotNull String ckbBlacklistStudyTsv, @NotNull List<CkbEntry> ckbEntries)
-            throws IOException {
+    private ExtractionResult extractCkbTrialKnowledge(@NotNull String ckbBlacklistStudyTsv, @NotNull List<CkbEntry> ckbEntries,
+            @NotNull Set<String> countriesToInclude) throws IOException {
         EventClassifierConfig config = CkbClassificationConfig.build();
         RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.CKB_TRIAL);
 
@@ -162,7 +165,7 @@ public class ServeAlgo {
 
         CkbStudyBlacklistModel blacklistStudy = new CkbStudyBlacklistModel(ckbBlacklistStudyEntriesEntries);
 
-        CkbExtractor extractor = CkbExtractorFactory.createTrialExtractor(config, refGenomeResource, blacklistStudy);
+        CkbExtractor extractor = CkbExtractorFactory.createTrialExtractor(config, refGenomeResource, blacklistStudy, countriesToInclude);
 
         LOGGER.info("Running CKB trial knowledge extraction");
         ExtractionResult result = extractor.extract(ckbEntries);

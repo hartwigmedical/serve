@@ -33,16 +33,18 @@ class ActionableTrialFactory implements ActionableEntryFactory {
             "available",
             "enrolling by invitation",
             "enrolling_by_invitation");
-    private static final Set<String> COUNTRIES_TO_INCLUDE = Set.of("netherlands", "belgium", "germany");
     private static final Set<String> VARIANT_REQUIREMENT_TYPES_TO_INCLUDE = Set.of("partial - required", "required");
 
     private static final Set<String> AGE_GROUPS_TO_INCLUDE = Set.of("adult", "senior");
 
     @NotNull
     private final CkbStudyBlacklistModel blacklistStudy;
+    @NotNull
+    private final Set<String> countriesToInclude;
 
-    public ActionableTrialFactory(@NotNull CkbStudyBlacklistModel blacklistStudy) {
+    public ActionableTrialFactory(@NotNull CkbStudyBlacklistModel blacklistStudy, @NotNull Set<String> countriesToInclude) {
         this.blacklistStudy = blacklistStudy;
+        this.countriesToInclude = countriesToInclude;
     }
 
     @NotNull
@@ -51,7 +53,7 @@ class ActionableTrialFactory implements ActionableEntryFactory {
         Set<ActionableEntry> actionableTrials = Sets.newHashSet();
 
         for (ClinicalTrial trial : trialsToInclude(entry)) {
-            Set<String> countries = countriesToInclude(trial);
+            Set<String> countries = countriesToInclude(trial, countriesToInclude);
 
             if (!countries.isEmpty()) {
                 Set<String> therapies = Sets.newHashSet();
@@ -67,7 +69,8 @@ class ActionableTrialFactory implements ActionableEntryFactory {
                                 sourceGene,
                                 sourceEvent)) {
 
-                            Set<String> sourceUrls = Collections.singleton("https://ckbhome.jax.org/profileResponse/advancedEvidenceFind?molecularProfileId=" + entry.profileId());
+                            Set<String> sourceUrls = Collections.singleton(
+                                    "https://ckbhome.jax.org/profileResponse/advancedEvidenceFind?molecularProfileId=" + entry.profileId());
 
                             actionableTrials.add(ImmutableActionableEntry.builder()
                                     .source(Knowledgebase.CKB_TRIAL)
@@ -119,10 +122,10 @@ class ActionableTrialFactory implements ActionableEntryFactory {
 
     @NotNull
     @VisibleForTesting
-    static Set<String> countriesToInclude(@NotNull ClinicalTrial trial) {
+    static Set<String> countriesToInclude(@NotNull ClinicalTrial trial, @NotNull Set<String> countriesToInclude) {
         Set<String> countries = Sets.newHashSet();
         for (Location location : trial.locations()) {
-            if (COUNTRIES_TO_INCLUDE.contains(location.country().toLowerCase())
+            if (countriesToInclude.contains(location.country().toLowerCase())
                     && hasPotentiallyOpenRequirementToInclude(location.status())) {
                 countries.add(location.country());
             }

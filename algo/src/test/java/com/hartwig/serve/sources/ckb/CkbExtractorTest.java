@@ -50,7 +50,7 @@ public class CkbExtractorTest {
     public void canExtractTrialsFromCkbEntries() {
         CkbExtractor trialExtractor = CkbExtractorFactory.createTrialExtractor(CkbClassificationConfig.build(),
                 RefGenomeResourceTestFactory.buildTestResource37(),
-                CkbBlacklistTestFactory.createEmptyStudyBlacklist(), Set.of("netherlands", "belgium", "germany"));
+                CkbBlacklistTestFactory.createEmptyStudyBlacklist(), Set.of());
 
         ExtractionResult trialResult = trialExtractor.extract(createCkbEntryTestDatabase());
         assertEquals(0, trialResult.knownHotspots().size());

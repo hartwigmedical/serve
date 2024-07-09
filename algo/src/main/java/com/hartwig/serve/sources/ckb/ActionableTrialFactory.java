@@ -19,6 +19,7 @@ import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.ImmutableClinicalTrial;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.sources.ckb.blacklist.CkbStudyBlacklistModel;
+import com.hartwig.serve.sources.ckb.region.CkbRegion;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -40,11 +41,11 @@ class ActionableTrialFactory implements ActionableEntryFactory {
     @NotNull
     private final CkbStudyBlacklistModel blacklistStudy;
     @NotNull
-    private final Set<String> countriesToInclude;
+    private final Set<CkbRegion> regions;
 
-    public ActionableTrialFactory(@NotNull CkbStudyBlacklistModel blacklistStudy, @NotNull Set<String> countriesToInclude) {
+    public ActionableTrialFactory(@NotNull CkbStudyBlacklistModel blacklistStudy, @NotNull Set<CkbRegion> regions) {
         this.blacklistStudy = blacklistStudy;
-        this.countriesToInclude = countriesToInclude;
+        this.regions = regions;
     }
 
     @NotNull
@@ -53,7 +54,7 @@ class ActionableTrialFactory implements ActionableEntryFactory {
         Set<ActionableEntry> actionableTrials = Sets.newHashSet();
 
         for (ClinicalTrial trial : trialsToInclude(entry)) {
-            Set<String> countries = countriesToInclude(trial, countriesToInclude);
+            Set<String> countries = regionsToInclude(trial, regions);
 
             if (!countries.isEmpty()) {
                 Set<String> therapies = Sets.newHashSet();
@@ -122,10 +123,10 @@ class ActionableTrialFactory implements ActionableEntryFactory {
 
     @NotNull
     @VisibleForTesting
-    static Set<String> countriesToInclude(@NotNull ClinicalTrial trial, @NotNull Set<String> countriesToInclude) {
+    static Set<String> regionsToInclude(@NotNull ClinicalTrial trial, @NotNull Set<CkbRegion> regions) {
         Set<String> countries = Sets.newHashSet();
         for (Location location : trial.locations()) {
-            if (countriesToInclude.contains(location.country().toLowerCase())
+            if (regions.stream().anyMatch(region -> region.includes(location))
                     && hasPotentiallyOpenRequirementToInclude(location.status())) {
                 countries.add(location.country());
             }

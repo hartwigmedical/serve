@@ -10,6 +10,7 @@ import com.hartwig.serve.extraction.util.DriverInconsistencyMode;
 import com.hartwig.serve.refgenome.RefGenomeResource;
 import com.hartwig.serve.sources.ckb.blacklist.CkbEvidenceBlacklistModel;
 import com.hartwig.serve.sources.ckb.blacklist.CkbStudyBlacklistModel;
+import com.hartwig.serve.sources.ckb.region.CkbRegion;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurator;
 
 import org.jetbrains.annotations.NotNull;
@@ -30,10 +31,10 @@ public final class CkbExtractorFactory {
 
     @NotNull
     public static CkbExtractor createTrialExtractor(@NotNull EventClassifierConfig config, @NotNull RefGenomeResource refGenomeResource,
-            @NotNull CkbStudyBlacklistModel blacklistStudy, @NotNull Set<String> countriesToInclude) {
+            @NotNull CkbStudyBlacklistModel blacklistStudy, @NotNull Set<CkbRegion> regions) {
         return new CkbExtractor(Knowledgebase.CKB_TRIAL,
                 createEventExtractor(config, refGenomeResource),
-                new ActionableTrialFactory(blacklistStudy, countriesToInclude),
+                new ActionableTrialFactory(blacklistStudy, regions),
                 false);
     }
 

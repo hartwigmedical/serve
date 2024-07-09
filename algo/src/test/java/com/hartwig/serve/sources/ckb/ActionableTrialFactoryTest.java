@@ -21,6 +21,7 @@ import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudyType;
 import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistTestFactory;
 import com.hartwig.serve.sources.ckb.blacklist.CkbStudyBlacklistModel;
 import com.hartwig.serve.sources.ckb.blacklist.ImmutableCkbBlacklistStudyEntry;
+import com.hartwig.serve.sources.ckb.region.CkbRegion;
 
 import org.apache.commons.compress.utils.Sets;
 import org.apache.logging.log4j.util.Strings;
@@ -31,7 +32,7 @@ import org.junit.Test;
 public class ActionableTrialFactoryTest {
 
     private static final CkbStudyBlacklistModel BLACKLIST_MODEL = CkbBlacklistTestFactory.createProperStudyBlacklist();
-    public static final Set<String> COUNTRIES_TO_INCLUDE = Set.of("netherlands", "belgium", "germany");
+    public static final Set<CkbRegion> COUNTRIES_TO_INCLUDE = Set.of();
 
     @Test
     public void canCreateActionableEntryForOpenTrialInAllowedCountryWithRequiredMolecularProfileAndValidAgeGroup() {
@@ -177,41 +178,41 @@ public class ActionableTrialFactoryTest {
     @Test
     public void canDetermineCountriesToInclude() {
         ClinicalTrial trialPotentiallyOpenInBelgium = createTrialWithOneLocation("Recruiting", "Belgium", "Recruiting");
-        assertEquals(1, ActionableTrialFactory.countriesToInclude(trialPotentiallyOpenInBelgium, COUNTRIES_TO_INCLUDE).size());
+        assertEquals(1, ActionableTrialFactory.regionsToInclude(trialPotentiallyOpenInBelgium, COUNTRIES_TO_INCLUDE).size());
 
         ClinicalTrial trialNotOpenInNetherlands = createTrialWithOneLocation("Recruiting", "Netherlands", "Completed");
-        assertEquals(0, ActionableTrialFactory.countriesToInclude(trialNotOpenInNetherlands, COUNTRIES_TO_INCLUDE).size());
+        assertEquals(0, ActionableTrialFactory.regionsToInclude(trialNotOpenInNetherlands, COUNTRIES_TO_INCLUDE).size());
 
         ClinicalTrial trialPotentiallyOpenInUnitedStates = createTrialWithOneLocation("Recruiting", "United States", "Recruiting");
-        assertEquals(0, ActionableTrialFactory.countriesToInclude(trialPotentiallyOpenInUnitedStates, COUNTRIES_TO_INCLUDE).size());
+        assertEquals(0, ActionableTrialFactory.regionsToInclude(trialPotentiallyOpenInUnitedStates, COUNTRIES_TO_INCLUDE).size());
 
         ClinicalTrial trialWithdrawnInUnitedStates = createTrialWithOneLocation("Recruiting", "United States", "Withdrawn");
-        assertEquals(0, ActionableTrialFactory.countriesToInclude(trialWithdrawnInUnitedStates, COUNTRIES_TO_INCLUDE).size());
+        assertEquals(0, ActionableTrialFactory.regionsToInclude(trialWithdrawnInUnitedStates, COUNTRIES_TO_INCLUDE).size());
 
         ClinicalTrial trialPotentiallyOpenInBelgiumAndIndia =
                 createTrialWithMultipleLocations("Recruiting", "Belgium", "Recruiting", "India", "Recruiting");
-        assertEquals(1, ActionableTrialFactory.countriesToInclude(trialPotentiallyOpenInBelgiumAndIndia, COUNTRIES_TO_INCLUDE).size());
+        assertEquals(1, ActionableTrialFactory.regionsToInclude(trialPotentiallyOpenInBelgiumAndIndia, COUNTRIES_TO_INCLUDE).size());
 
         ClinicalTrial trialPotentiallyOpenInBelgiumAndGermany =
                 createTrialWithMultipleLocations("Recruiting", "Belgium", "Recruiting", "Germany", "Not yet recruiting");
-        assertEquals(2, ActionableTrialFactory.countriesToInclude(trialPotentiallyOpenInBelgiumAndGermany, COUNTRIES_TO_INCLUDE).size());
+        assertEquals(2, ActionableTrialFactory.regionsToInclude(trialPotentiallyOpenInBelgiumAndGermany, COUNTRIES_TO_INCLUDE).size());
 
         ClinicalTrial trialPotentiallyOpenInBelgiumSuspendedInGermany =
                 createTrialWithMultipleLocations("Recruiting", "Belgium", "Recruiting", "Germany", "Suspended");
         assertEquals(1,
-                ActionableTrialFactory.countriesToInclude(trialPotentiallyOpenInBelgiumSuspendedInGermany, COUNTRIES_TO_INCLUDE).size());
+                ActionableTrialFactory.regionsToInclude(trialPotentiallyOpenInBelgiumSuspendedInGermany, COUNTRIES_TO_INCLUDE).size());
 
         ClinicalTrial trialPotentiallyOpenInBelgiumSuspendedInIndia =
                 createTrialWithMultipleLocations("Recruiting", "Belgium", "Recruiting", "India", "Suspended");
         assertEquals(1,
-                ActionableTrialFactory.countriesToInclude(trialPotentiallyOpenInBelgiumSuspendedInIndia, COUNTRIES_TO_INCLUDE).size());
+                ActionableTrialFactory.regionsToInclude(trialPotentiallyOpenInBelgiumSuspendedInIndia, COUNTRIES_TO_INCLUDE).size());
 
         ClinicalTrial trialSuspendedInBelgiumOpenInIndia =
                 createTrialWithMultipleLocations("Recruiting", "Belgium", "Suspended", "India", "Not yet recruiting");
-        assertEquals(0, ActionableTrialFactory.countriesToInclude(trialSuspendedInBelgiumOpenInIndia, COUNTRIES_TO_INCLUDE).size());
+        assertEquals(0, ActionableTrialFactory.regionsToInclude(trialSuspendedInBelgiumOpenInIndia, COUNTRIES_TO_INCLUDE).size());
 
         ClinicalTrial terminatedTrial = createTrialWithOneLocation("Terminated", "Netherlands", "Suspended");
-        assertEquals(0, ActionableTrialFactory.countriesToInclude(terminatedTrial, COUNTRIES_TO_INCLUDE).size());
+        assertEquals(0, ActionableTrialFactory.regionsToInclude(terminatedTrial, COUNTRIES_TO_INCLUDE).size());
     }
 
     @Test

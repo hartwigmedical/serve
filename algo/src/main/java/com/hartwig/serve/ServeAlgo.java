@@ -29,6 +29,7 @@ import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudyEntry;
 import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudyFile;
 import com.hartwig.serve.sources.ckb.blacklist.CkbEvidenceBlacklistModel;
 import com.hartwig.serve.sources.ckb.blacklist.CkbStudyBlacklistModel;
+import com.hartwig.serve.sources.ckb.region.CkbRegionFile;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurationEntry;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurationEntryKey;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurationFile;
@@ -81,9 +82,9 @@ public class ServeAlgo {
                                 config.useCkbEvidence() ? extractCkbEvidenceKnowledge(config.ckbDrugCurationTsv(),
                                         config.ckbBlacklistEvidenceTsv(),
                                         ckbEntries) : null,
-                                config.useCkbTrials() ? extractCkbTrialKnowledge(config.ckbBlacklistTrialTsv(),
-                                        ckbEntries,
-                                        config.countriesToInclude()) : null,
+                                config.useCkbTrials()
+                                        ? extractCkbTrialKnowledge(config.ckbBlacklistTrialTsv(), config.ckbRegionTsv(), ckbEntries)
+                                        : null,
                                 config.useDocm() ? extractDocmKnowledge(config.docmTsv()) : null,
                                 config.useHartwigCohortHotspots() ? extractHartwigCohortHotspotKnowledge(config.hartwigCohortHotspotTsv(),
                                         !config.skipHotspotResolving()) : null,
@@ -155,8 +156,8 @@ public class ServeAlgo {
     }
 
     @NotNull
-    private ExtractionResult extractCkbTrialKnowledge(@NotNull String ckbBlacklistStudyTsv, @NotNull List<CkbEntry> ckbEntries,
-            @NotNull Set<String> countriesToInclude) throws IOException {
+    private ExtractionResult extractCkbTrialKnowledge(@NotNull String ckbBlacklistStudyTsv, @NotNull String ckbRegionTsv,
+            @NotNull List<CkbEntry> ckbEntries) throws IOException {
         EventClassifierConfig config = CkbClassificationConfig.build();
         RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.CKB_TRIAL);
 
@@ -165,7 +166,8 @@ public class ServeAlgo {
 
         CkbStudyBlacklistModel blacklistStudy = new CkbStudyBlacklistModel(ckbBlacklistStudyEntriesEntries);
 
-        CkbExtractor extractor = CkbExtractorFactory.createTrialExtractor(config, refGenomeResource, blacklistStudy, countriesToInclude);
+        CkbExtractor extractor =
+                CkbExtractorFactory.createTrialExtractor(config, refGenomeResource, blacklistStudy, CkbRegionFile.read(ckbRegionTsv));
 
         LOGGER.info("Running CKB trial knowledge extraction");
         ExtractionResult result = extractor.extract(ckbEntries);

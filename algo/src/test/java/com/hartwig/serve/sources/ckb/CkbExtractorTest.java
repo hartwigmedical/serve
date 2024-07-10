@@ -50,7 +50,8 @@ public class CkbExtractorTest {
     public void canExtractTrialsFromCkbEntries() {
         CkbExtractor trialExtractor = CkbExtractorFactory.createTrialExtractor(CkbClassificationConfig.build(),
                 RefGenomeResourceTestFactory.buildTestResource37(),
-                CkbBlacklistTestFactory.createEmptyStudyBlacklist(), Set.of());
+                CkbBlacklistTestFactory.createEmptyStudyBlacklist(),
+                Set.of());
 
         ExtractionResult trialResult = trialExtractor.extract(createCkbEntryTestDatabase());
         assertEquals(0, trialResult.knownHotspots().size());
@@ -68,8 +69,7 @@ public class CkbExtractorTest {
     @Test
     public void canCurateCodons() {
         EventExtractorOutput extractorOutput = ImmutableEventExtractorOutput.builder()
-                .codons(List.of(
-                        ImmutableCodonAnnotation.builder()
+                .codons(List.of(ImmutableCodonAnnotation.builder()
                                 .from(RangeTestFactory.createTestRangeAnnotation())
                                 .gene("BRAF")
                                 .chromosome("1")
@@ -88,14 +88,13 @@ public class CkbExtractorTest {
                                 .applicableMutationType(MutationType.ANY)
                                 .inputTranscript("transcript")
                                 .inputCodonRank(600)
-                                .build()
-                ))
+                                .build()))
                 .build();
 
         List<CodonAnnotation> curatedCodons = CkbExtractor.curateCodons(extractorOutput).codons();
 
         assertNotNull(curatedCodons);
-        
+
         CodonAnnotation codon1 = findByGene(curatedCodons, "BRAF");
         assertEquals(140753335, codon1.start());
         assertEquals(140753337, codon1.end());

@@ -18,6 +18,7 @@ public class CkbRegionFile {
 
     public static final String FIELD_DELIMITER = "\t";
 
+    @NotNull
     public static Set<CkbRegion> read(@NotNull String ckbRegionTsv) throws IOException {
         List<String> lines = Files.readAllLines(new File(ckbRegionTsv).toPath());
         Map<String, Integer> fields = SerializationUtil.createFields(lines.get(0), FIELD_DELIMITER);
@@ -27,11 +28,11 @@ public class CkbRegionFile {
 
     @NotNull
     private static Set<CkbRegion> fromLines(@NotNull List<String> lines, @NotNull Map<String, Integer> fields) {
-        Set<CkbRegion> blacklistEntries = new HashSet<>();
+        Set<CkbRegion> regions = new HashSet<>();
         for (String line : lines) {
-            blacklistEntries.add(fromLine(line, fields));
+            regions.add(fromLine(line, fields));
         }
-        return blacklistEntries;
+        return regions;
     }
 
     @NotNull
@@ -39,8 +40,7 @@ public class CkbRegionFile {
         String[] values = line.split(FIELD_DELIMITER);
         return ImmutableCkbRegion.builder()
                 .country(values[fields.get("country")])
-                .states(Arrays.stream(values[fields.get("state")].split(",")).collect(Collectors.toSet()))
+                .states(Arrays.stream(values[fields.get("states")].split(",")).collect(Collectors.toSet()))
                 .build();
     }
-
 }

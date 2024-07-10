@@ -18,7 +18,8 @@ public abstract class CkbRegion {
     @NotNull
     public abstract List<String> states();
 
-    public boolean includes(Location location) {
+    public boolean includes(@NotNull Location location) {
+        // TODO (PW): Shouldn't this be "states.isEmpty || states.contains()"? Or how would someone configure all states for a country?
         return location.country().equals(country()) && (!states().isEmpty() && states().contains(location.state()));
     }
 }

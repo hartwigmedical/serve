@@ -41,11 +41,11 @@ class ActionableTrialFactory implements ActionableEntryFactory {
     @NotNull
     private final CkbStudyBlacklistModel blacklistStudy;
     @NotNull
-    private final Set<CkbRegion> regions;
+    private final Set<CkbRegion> regionsToInclude;
 
-    public ActionableTrialFactory(@NotNull CkbStudyBlacklistModel blacklistStudy, @NotNull Set<CkbRegion> regions) {
+    public ActionableTrialFactory(@NotNull CkbStudyBlacklistModel blacklistStudy, @NotNull Set<CkbRegion> regionsToInclude) {
         this.blacklistStudy = blacklistStudy;
-        this.regions = regions;
+        this.regionsToInclude = regionsToInclude;
     }
 
     @NotNull
@@ -54,7 +54,7 @@ class ActionableTrialFactory implements ActionableEntryFactory {
         Set<ActionableEntry> actionableTrials = Sets.newHashSet();
 
         for (ClinicalTrial trial : trialsToInclude(entry)) {
-            Set<String> countries = regionsToInclude(trial, regions);
+            Set<String> countries = filterOnRegionsToInclude(trial, regionsToInclude);
 
             if (!countries.isEmpty()) {
                 Set<String> therapies = Sets.newHashSet();
@@ -123,10 +123,10 @@ class ActionableTrialFactory implements ActionableEntryFactory {
 
     @NotNull
     @VisibleForTesting
-    static Set<String> regionsToInclude(@NotNull ClinicalTrial trial, @NotNull Set<CkbRegion> regions) {
+    static Set<String> filterOnRegionsToInclude(@NotNull ClinicalTrial trial, @NotNull Set<CkbRegion> regionsToInclude) {
         Set<String> countries = Sets.newHashSet();
         for (Location location : trial.locations()) {
-            if (regions.stream().anyMatch(region -> region.includes(location))
+            if (regionsToInclude.stream().anyMatch(region -> region.includes(location))
                     && hasPotentiallyOpenRequirementToInclude(location.status())) {
                 countries.add(location.country());
             }

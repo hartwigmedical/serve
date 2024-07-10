@@ -29,6 +29,7 @@ import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudyEntry;
 import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudyFile;
 import com.hartwig.serve.sources.ckb.blacklist.CkbEvidenceBlacklistModel;
 import com.hartwig.serve.sources.ckb.blacklist.CkbStudyBlacklistModel;
+import com.hartwig.serve.sources.ckb.region.CkbRegion;
 import com.hartwig.serve.sources.ckb.region.CkbRegionFile;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurationEntry;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurationEntryKey;
@@ -166,8 +167,11 @@ public class ServeAlgo {
 
         CkbStudyBlacklistModel blacklistStudy = new CkbStudyBlacklistModel(ckbBlacklistStudyEntriesEntries);
 
-        CkbExtractor extractor =
-                CkbExtractorFactory.createTrialExtractor(config, refGenomeResource, blacklistStudy, CkbRegionFile.read(ckbRegionTsv));
+        LOGGER.info("Reading regions to include from {}", ckbRegionTsv);
+        Set<CkbRegion> regionsToInclude = CkbRegionFile.read(ckbRegionTsv);
+        LOGGER.info(" Read {} regions to include", regionsToInclude.size());
+
+        CkbExtractor extractor = CkbExtractorFactory.createTrialExtractor(config, refGenomeResource, blacklistStudy, regionsToInclude);
 
         LOGGER.info("Running CKB trial knowledge extraction");
         ExtractionResult result = extractor.extract(ckbEntries);

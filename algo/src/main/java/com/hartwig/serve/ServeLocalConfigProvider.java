@@ -44,6 +44,7 @@ public final class ServeLocalConfigProvider {
             builder.ckbBlacklistTrialTsv("/data/resources/crunch/serve/curation/ckb_blacklist_trial.tsv");
             builder.ckbBlacklistEvidenceTsv("/data/resources/crunch/serve/curation/ckb_blacklist_evidence.tsv");
             builder.ckbDrugCurationTsv("/data/resources/crunch/serve/curation/ckb_drugs_class_curation.tsv");
+            builder.ckbRegionTsv("/data/resources/crunch/serve/region/ckb_regions.tsv");
             builder.iClusionTrialTsv("/data/resources/crunch/serve/iclusion/iclusion_trials_prod.tsv");
             builder.iClusionFilterTsv("/data/resources/crunch/serve/curation/iclusion_filters.tsv");
 
@@ -68,6 +69,7 @@ public final class ServeLocalConfigProvider {
             builder.ckbDrugCurationTsv(baseDir + "actionable/curation/ckb_drugs_class_curation.tsv");
             builder.ckbBlacklistTrialTsv(baseDir + "actionable/curation/ckb_blacklist_trial.tsv");
             builder.ckbBlacklistEvidenceTsv(baseDir + "actionable/curation/ckb_blacklist_evidence.tsv");
+            builder.ckbRegionTsv(baseDir + "region/ckb_regions.tsv");
             builder.iClusionTrialTsv(baseDir + "actionable/iclusion/iclusion_trials_prod.tsv");
             builder.iClusionFilterTsv(baseDir + "actionable/iclusion/iclusion_filter.tsv");
 

@@ -26,7 +26,7 @@ public abstract class CkbRegion {
     }
 
     @NotNull
-    static CkbRegion of(@NotNull String country, @NotNull Set<String> states) {
+    public static CkbRegion of(@NotNull String country, @NotNull Set<String> states) {
         return ImmutableCkbRegion.builder()
                 .country(country.toLowerCase())
                 .states(states.stream().map(String::toLowerCase).collect(Collectors.toSet()))

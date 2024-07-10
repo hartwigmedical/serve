@@ -3,6 +3,7 @@ package com.hartwig.serve.sources.ckb;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -18,6 +19,7 @@ import com.hartwig.serve.extraction.codon.CodonAnnotation;
 import com.hartwig.serve.extraction.codon.ImmutableCodonAnnotation;
 import com.hartwig.serve.refgenome.RefGenomeResourceTestFactory;
 import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistTestFactory;
+import com.hartwig.serve.sources.ckb.region.CkbRegion;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachTestFactory;
 
 import org.apache.commons.compress.utils.Lists;
@@ -51,7 +53,7 @@ public class CkbExtractorTest {
         CkbExtractor trialExtractor = CkbExtractorFactory.createTrialExtractor(CkbClassificationConfig.build(),
                 RefGenomeResourceTestFactory.buildTestResource37(),
                 CkbBlacklistTestFactory.createEmptyStudyBlacklist(),
-                Set.of());
+                Set.of(CkbRegion.of("Netherlands", Collections.emptySet())));
 
         ExtractionResult trialResult = trialExtractor.extract(createCkbEntryTestDatabase());
         assertEquals(0, trialResult.knownHotspots().size());

@@ -39,6 +39,6 @@ public class CkbRegionFile {
     private static CkbRegion fromLine(@NotNull String line, @NotNull Map<String, Integer> fields) {
         String[] values = line.split(FIELD_DELIMITER);
         return CkbRegion.of(values[fields.get("country")],
-                Arrays.stream(values[fields.get("states")].split(";")).collect(Collectors.toSet()));
+                values.length == 2 ? Arrays.stream(values[fields.get("states")].split(",")).collect(Collectors.toSet()) : new HashSet<>());
     }
 }

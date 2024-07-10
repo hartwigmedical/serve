@@ -34,11 +34,11 @@ public class ActionableTrialFactoryTest {
 
     private static final CkbStudyBlacklistModel BLACKLIST_MODEL = CkbBlacklistTestFactory.createProperStudyBlacklist();
     public static final Set<CkbRegion> COUNTRIES_TO_INCLUDE =
-            Set.of(createRegion("netherlands"), createRegion("belgium"), createRegion("germany"));
+            Set.of(createRegion("netherlands"), createRegion("belgium"), createRegion("germany"), createRegion("united states", "maine"));
 
     @NotNull
-    private static ImmutableCkbRegion createRegion(@NotNull String country) {
-        return ImmutableCkbRegion.builder().country(country).build();
+    private static ImmutableCkbRegion createRegion(@NotNull String country, @NotNull String... states) {
+        return ImmutableCkbRegion.builder().country(country).addStates(states).build();
     }
 
     @Test
@@ -183,18 +183,25 @@ public class ActionableTrialFactoryTest {
     }
 
     @Test
-    public void canDetermineCountriesToInclude() {
+    public void canDetermineCountriesAndStatesToInclude() {
         ClinicalTrial trialPotentiallyOpenInBelgium = createTrialWithOneLocation("Recruiting", "Belgium", "Recruiting");
         assertEquals(1, ActionableTrialFactory.filterOnRegionsToInclude(trialPotentiallyOpenInBelgium, COUNTRIES_TO_INCLUDE).size());
 
         ClinicalTrial trialNotOpenInNetherlands = createTrialWithOneLocation("Recruiting", "Netherlands", "Completed");
         assertEquals(0, ActionableTrialFactory.filterOnRegionsToInclude(trialNotOpenInNetherlands, COUNTRIES_TO_INCLUDE).size());
 
-        ClinicalTrial trialPotentiallyOpenInUnitedStates = createTrialWithOneLocation("Recruiting", "United States", "Recruiting");
-        assertEquals(0, ActionableTrialFactory.filterOnRegionsToInclude(trialPotentiallyOpenInUnitedStates, COUNTRIES_TO_INCLUDE).size());
+        ClinicalTrial trialPotentiallyOpenInUSMaine = createTrialWithOneLocation("Recruiting", "United States", "Maine", "Recruiting");
+        assertEquals(1, ActionableTrialFactory.filterOnRegionsToInclude(trialPotentiallyOpenInUSMaine, COUNTRIES_TO_INCLUDE).size());
 
-        ClinicalTrial trialWithdrawnInUnitedStates = createTrialWithOneLocation("Recruiting", "United States", "Withdrawn");
-        assertEquals(0, ActionableTrialFactory.filterOnRegionsToInclude(trialWithdrawnInUnitedStates, COUNTRIES_TO_INCLUDE).size());
+        ClinicalTrial trialPotentiallyOpenInUSCalifornia =
+                createTrialWithOneLocation("Recruiting", "United States", "California", "Recruiting");
+        assertEquals(0, ActionableTrialFactory.filterOnRegionsToInclude(trialPotentiallyOpenInUSCalifornia, COUNTRIES_TO_INCLUDE).size());
+
+        ClinicalTrial trialPotentiallyOpenInCanada = createTrialWithOneLocation("Recruiting", "Canada", "Recruiting");
+        assertEquals(0, ActionableTrialFactory.filterOnRegionsToInclude(trialPotentiallyOpenInCanada, COUNTRIES_TO_INCLUDE).size());
+
+        ClinicalTrial trialWithdrawnInCanada = createTrialWithOneLocation("Recruiting", "Canada", "Withdrawn");
+        assertEquals(0, ActionableTrialFactory.filterOnRegionsToInclude(trialWithdrawnInCanada, COUNTRIES_TO_INCLUDE).size());
 
         ClinicalTrial trialPotentiallyOpenInBelgiumAndIndia =
                 createTrialWithMultipleLocations("Recruiting", "Belgium", "Recruiting", "India", "Recruiting");
@@ -286,9 +293,15 @@ public class ActionableTrialFactoryTest {
     @NotNull
     private static ClinicalTrial createTrialWithOneLocation(@NotNull String recruitmentTrial, @NotNull String country,
             @NotNull String recruitmentCountry) {
+        return createTrialWithOneLocation(recruitmentTrial, country, null, recruitmentCountry);
+    }
+
+    @NotNull
+    private static ClinicalTrial createTrialWithOneLocation(@NotNull String recruitmentTrial, @NotNull String country,
+            @Nullable String state, @NotNull String recruitmentCountry) {
         return CkbTestFactory.createTrial(recruitmentTrial,
                 List.of(CkbTestFactory.createVariantRequirementDetail(0, "required")),
-                List.of(CkbTestFactory.createLocation(country, recruitmentCountry)),
+                List.of(CkbTestFactory.createLocation(country, state, recruitmentCountry)),
                 "nctid",
                 "title",
                 List.of("senior", "child", "adult"));

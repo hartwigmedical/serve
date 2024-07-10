@@ -1,6 +1,8 @@
 package com.hartwig.serve.sources.ckb.region;
 
-import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.Location;
 
@@ -16,10 +18,23 @@ public abstract class CkbRegion {
     public abstract String country();
 
     @NotNull
-    public abstract List<String> states();
+    public abstract Set<String> states();
 
     public boolean includes(@NotNull Location location) {
-        // TODO (PW): Shouldn't this be "states.isEmpty || states.contains()"? Or how would someone configure all states for a country?
-        return location.country().equals(country()) && (!states().isEmpty() && states().contains(location.state()));
+        return country().equals(toLowercaseNullable(location.country())) && (states().isEmpty() || states().contains(toLowercaseNullable(
+                location.state())));
+    }
+
+    @NotNull
+    static CkbRegion of(@NotNull String country, @NotNull Set<String> states) {
+        return ImmutableCkbRegion.builder()
+                .country(country.toLowerCase())
+                .states(states.stream().map(String::toLowerCase).collect(Collectors.toSet()))
+                .build();
+    }
+
+    @NotNull
+    private static String toLowercaseNullable(@Nullable String string) {
+        return Optional.ofNullable(string).map(String::toLowerCase).orElse("null");
     }
 }

@@ -70,7 +70,6 @@ public interface ServeConfig {
     // Options to help with debugging / testing
     String SKIP_HOTSPOT_RESOLVING = "skip_hotspot_resolving";
     String LOG_DEBUG = "log_debug";
-    String COUNTRIES_TO_INCLUDE = "countries";
 
     @NotNull
     static Options createOptions() {
@@ -250,7 +249,7 @@ public interface ServeConfig {
                 .ckbBlacklistTrialTsv(useCkbTrials ? nonOptionalFile(cmd, CKB_BLACKLIST_TRIAL_TSV) : NOT_APPLICABLE)
                 .ckbBlacklistEvidenceTsv(useCkbEvidence ? nonOptionalFile(cmd, CKB_BLACKLIST_EVIDENCE_TSV) : NOT_APPLICABLE)
                 .ckbDrugCurationTsv(useCkbEvidence ? nonOptionalFile(cmd, CKB_DRUG_CURATION_TSV) : NOT_APPLICABLE)
-                .ckbRegionTsv(useCkbEvidence ? nonOptionalFile(cmd, CKB_REGION_TSV) : NOT_APPLICABLE)
+                .ckbRegionTsv(useCkbTrials ? nonOptionalFile(cmd, CKB_REGION_TSV) : NOT_APPLICABLE)
                 .useDocm(useDocm)
                 .docmTsv(useDocm ? nonOptionalFile(cmd, DOCM_TSV) : NOT_APPLICABLE)
                 .useHartwigCohortHotspots(useHartwigCohortHotspots)

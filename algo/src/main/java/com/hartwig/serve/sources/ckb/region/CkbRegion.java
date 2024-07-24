@@ -2,7 +2,6 @@ package com.hartwig.serve.sources.ckb.region;
 
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.Location;
 
@@ -21,16 +20,9 @@ public abstract class CkbRegion {
     public abstract Set<String> states();
 
     public boolean includes(@NotNull Location location) {
-        return country().equals(toLowercaseNullable(location.country())) && (states().isEmpty() || states().contains(toLowercaseNullable(
-                location.state())));
-    }
-
-    @NotNull
-    public static CkbRegion of(@NotNull String country, @NotNull Set<String> states) {
-        return ImmutableCkbRegion.builder()
-                .country(country.toLowerCase())
-                .states(states.stream().map(String::toLowerCase).collect(Collectors.toSet()))
-                .build();
+        boolean isCountryMatch = country().equals(toLowercaseNullable(location.country()));
+        boolean isStateMatch = states().isEmpty() || states().contains(toLowercaseNullable(location.state()));
+        return isCountryMatch && isStateMatch;
     }
 
     @NotNull

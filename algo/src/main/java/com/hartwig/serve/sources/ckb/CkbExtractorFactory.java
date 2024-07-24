@@ -1,5 +1,7 @@
 package com.hartwig.serve.sources.ckb;
 
+import java.util.Set;
+
 import com.hartwig.serve.common.classification.EventClassifierConfig;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.extraction.EventExtractor;
@@ -8,6 +10,7 @@ import com.hartwig.serve.extraction.util.DriverInconsistencyMode;
 import com.hartwig.serve.refgenome.RefGenomeResource;
 import com.hartwig.serve.sources.ckb.blacklist.CkbEvidenceBlacklistModel;
 import com.hartwig.serve.sources.ckb.blacklist.CkbStudyBlacklistModel;
+import com.hartwig.serve.sources.ckb.region.CkbRegion;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurator;
 
 import org.jetbrains.annotations.NotNull;
@@ -28,10 +31,10 @@ public final class CkbExtractorFactory {
 
     @NotNull
     public static CkbExtractor createTrialExtractor(@NotNull EventClassifierConfig config, @NotNull RefGenomeResource refGenomeResource,
-            @NotNull CkbStudyBlacklistModel blacklistStudy) {
+            @NotNull CkbStudyBlacklistModel blacklistStudy, @NotNull Set<CkbRegion> regionsToInclude) {
         return new CkbExtractor(Knowledgebase.CKB_TRIAL,
                 createEventExtractor(config, refGenomeResource),
-                new ActionableTrialFactory(blacklistStudy),
+                new ActionableTrialFactory(blacklistStudy, regionsToInclude),
                 false);
     }
 

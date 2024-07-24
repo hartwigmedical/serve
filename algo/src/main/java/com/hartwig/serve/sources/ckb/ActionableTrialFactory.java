@@ -19,6 +19,7 @@ import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.ImmutableClinicalTrial;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.sources.ckb.blacklist.CkbStudyBlacklistModel;
+import com.hartwig.serve.sources.ckb.region.CkbRegion;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,16 +34,18 @@ class ActionableTrialFactory implements ActionableEntryFactory {
             "available",
             "enrolling by invitation",
             "enrolling_by_invitation");
-    private static final Set<String> COUNTRIES_TO_INCLUDE = Set.of("netherlands", "belgium", "germany");
     private static final Set<String> VARIANT_REQUIREMENT_TYPES_TO_INCLUDE = Set.of("partial - required", "required");
 
     private static final Set<String> AGE_GROUPS_TO_INCLUDE = Set.of("adult", "senior");
 
     @NotNull
     private final CkbStudyBlacklistModel blacklistStudy;
+    @NotNull
+    private final Set<CkbRegion> regionsToInclude;
 
-    public ActionableTrialFactory(@NotNull CkbStudyBlacklistModel blacklistStudy) {
+    public ActionableTrialFactory(@NotNull CkbStudyBlacklistModel blacklistStudy, @NotNull Set<CkbRegion> regionsToInclude) {
         this.blacklistStudy = blacklistStudy;
+        this.regionsToInclude = regionsToInclude;
     }
 
     @NotNull
@@ -51,7 +54,7 @@ class ActionableTrialFactory implements ActionableEntryFactory {
         Set<ActionableEntry> actionableTrials = Sets.newHashSet();
 
         for (ClinicalTrial trial : trialsToInclude(entry)) {
-            Set<String> countries = countriesToInclude(trial);
+            Set<String> countries = filterOnRegionsToInclude(trial, regionsToInclude);
 
             if (!countries.isEmpty()) {
                 Set<String> therapies = Sets.newHashSet();
@@ -67,7 +70,8 @@ class ActionableTrialFactory implements ActionableEntryFactory {
                                 sourceGene,
                                 sourceEvent)) {
 
-                            Set<String> sourceUrls = Collections.singleton("https://ckbhome.jax.org/profileResponse/advancedEvidenceFind?molecularProfileId=" + entry.profileId());
+                            Set<String> sourceUrls = Collections.singleton(
+                                    "https://ckbhome.jax.org/profileResponse/advancedEvidenceFind?molecularProfileId=" + entry.profileId());
 
                             actionableTrials.add(ImmutableActionableEntry.builder()
                                     .source(Knowledgebase.CKB_TRIAL)
@@ -119,10 +123,10 @@ class ActionableTrialFactory implements ActionableEntryFactory {
 
     @NotNull
     @VisibleForTesting
-    static Set<String> countriesToInclude(@NotNull ClinicalTrial trial) {
+    static Set<String> filterOnRegionsToInclude(@NotNull ClinicalTrial trial, @NotNull Set<CkbRegion> regionsToInclude) {
         Set<String> countries = Sets.newHashSet();
         for (Location location : trial.locations()) {
-            if (COUNTRIES_TO_INCLUDE.contains(location.country().toLowerCase())
+            if (regionsToInclude.stream().anyMatch(region -> region.includes(location))
                     && hasPotentiallyOpenRequirementToInclude(location.status())) {
                 countries.add(location.country());
             }

@@ -449,6 +449,8 @@ elsewhere.
 
 ## Version History and Download Links
 
+- [4.1.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v4.1.0)
+  - Add support for definition of regions using the `ckb_regions.tsv`
 - [4.0.1](https://github.com/hartwigmedical/serve/releases/tag/serve-v4.0.1)
     - Optional for blacklisting clinical studies and evidence
     - Put clinical trial information into own model instead of using treatment model

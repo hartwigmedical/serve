@@ -40,54 +40,22 @@ public final class CkbTestFactory {
 
     @NotNull
     public static CkbEntry createEntryWithGene(@NotNull String geneSymbol) {
-        return createEntry(geneSymbol,
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "");
+        return createEntry(geneSymbol, "", "", "", "", "", "", "", "");
     }
 
     @NotNull
     public static CkbEntry createEntryWithVariant(@NotNull String variant) {
-        return createEntry("",
-                variant,
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "");
+        return createEntry("", variant, "", "", "", "", "", "", "");
     }
 
     @NotNull
     public static CkbEntry createEntryWithFullName(@NotNull String fullName) {
-        return createEntry("",
-                "",
-                fullName,
-                "",
-                "",
-                "",
-                "",
-                "",
-                "");
+        return createEntry("", "", fullName, "", "", "", "", "", "");
     }
 
     @NotNull
     public static CkbEntry createEntryWithGeneAndVariant(@NotNull String geneSymbol, @NotNull String variant) {
-        return createEntry(geneSymbol,
-                variant,
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "");
+        return createEntry(geneSymbol, variant, "", "", "", "", "", "", "");
     }
 
     @NotNull
@@ -133,7 +101,8 @@ public final class CkbTestFactory {
     @NotNull
     public static ClinicalTrial createTrialWithTherapy(@NotNull String recruitment,
             @NotNull List<VariantRequirementDetail> variantRequirementDetails, @NotNull List<Location> locations, @NotNull String nctId,
-            @NotNull String title, @NotNull List<Therapy> therapies, @NotNull List<Indication> indication, @NotNull List<String> ageGroups) {
+            @NotNull String title, @NotNull List<Therapy> therapies, @NotNull List<Indication> indication,
+            @NotNull List<String> ageGroups) {
         return ImmutableClinicalTrial.builder()
                 .updateDate(TEST_DATE)
                 .nctId(nctId)
@@ -196,7 +165,12 @@ public final class CkbTestFactory {
 
     @NotNull
     public static Location createLocation(@NotNull String country, @Nullable String status) {
-        return ImmutableLocation.builder().nctId("").city("").country(country).status(status).build();
+        return createLocation(country, null, status);
+    }
+
+    @NotNull
+    public static Location createLocation(@NotNull String country, @Nullable String state, @Nullable String status) {
+        return ImmutableLocation.builder().nctId("").city("").country(country).state(state).status(status).build();
     }
 
     @NotNull
@@ -219,12 +193,6 @@ public final class CkbTestFactory {
 
     @NotNull
     private static Gene createGene(@NotNull String geneSymbol) {
-        return ImmutableGene.builder()
-                .id(0)
-                .createDate(TEST_DATE)
-                .updateDate(TEST_DATE)
-                .geneSymbol(geneSymbol)
-                .geneRole("")
-                .build();
+        return ImmutableGene.builder().id(0).createDate(TEST_DATE).updateDate(TEST_DATE).geneSymbol(geneSymbol).geneRole("").build();
     }
 }

@@ -3,7 +3,9 @@ package com.hartwig.serve.sources.ckb;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import com.hartwig.serve.ckb.classification.CkbClassificationConfig;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
@@ -17,6 +19,7 @@ import com.hartwig.serve.extraction.codon.CodonAnnotation;
 import com.hartwig.serve.extraction.codon.ImmutableCodonAnnotation;
 import com.hartwig.serve.refgenome.RefGenomeResourceTestFactory;
 import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistTestFactory;
+import com.hartwig.serve.sources.ckb.region.ImmutableCkbRegion;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachTestFactory;
 
 import org.apache.commons.compress.utils.Lists;
@@ -49,7 +52,8 @@ public class CkbExtractorTest {
     public void canExtractTrialsFromCkbEntries() {
         CkbExtractor trialExtractor = CkbExtractorFactory.createTrialExtractor(CkbClassificationConfig.build(),
                 RefGenomeResourceTestFactory.buildTestResource37(),
-                CkbBlacklistTestFactory.createEmptyStudyBlacklist());
+                CkbBlacklistTestFactory.createEmptyStudyBlacklist(),
+                Set.of(ImmutableCkbRegion.builder().country("netherlands").states(Collections.emptySet()).build()));
 
         ExtractionResult trialResult = trialExtractor.extract(createCkbEntryTestDatabase());
         assertEquals(0, trialResult.knownHotspots().size());
@@ -67,8 +71,7 @@ public class CkbExtractorTest {
     @Test
     public void canCurateCodons() {
         EventExtractorOutput extractorOutput = ImmutableEventExtractorOutput.builder()
-                .codons(List.of(
-                        ImmutableCodonAnnotation.builder()
+                .codons(List.of(ImmutableCodonAnnotation.builder()
                                 .from(RangeTestFactory.createTestRangeAnnotation())
                                 .gene("BRAF")
                                 .chromosome("1")
@@ -87,14 +90,13 @@ public class CkbExtractorTest {
                                 .applicableMutationType(MutationType.ANY)
                                 .inputTranscript("transcript")
                                 .inputCodonRank(600)
-                                .build()
-                ))
+                                .build()))
                 .build();
 
         List<CodonAnnotation> curatedCodons = CkbExtractor.curateCodons(extractorOutput).codons();
 
         assertNotNull(curatedCodons);
-        
+
         CodonAnnotation codon1 = findByGene(curatedCodons, "BRAF");
         assertEquals(140753335, codon1.start());
         assertEquals(140753337, codon1.end());

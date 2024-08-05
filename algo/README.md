@@ -66,7 +66,8 @@ SERVE generates clinical evidence in the following datamodel:
 - Blacklist cancer types (annotated with DOID) that should be children of the main cancer type and are used for blacklisting
   specific types of the main cancer type.
 - Tier / Evidence level of the treatment
-- Direction (Responsive for the treatment, resistant to the treatment or whether mutation implies no benefit for the treatment)
+- Direction (Responsive for the treatment, resistant to the treatment, decreased response to the treatment or whether mutation implies no
+  benefit for the treatment)
 - A set of URLs pointing towards the source website which provide extra information about the treatment.
 - A set of URLs with extra information about the evidence (e.g. publications backing up the evidence)
 
@@ -449,8 +450,10 @@ elsewhere.
 
 ## Version History and Download Links
 
+- Upcoming:
+    - Add "Decreased response" and "No benefit" to directions to output
 - [4.1.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v4.1.0)
-  - Add support for definition of regions using the `ckb_regions.tsv`
+    - Add support for definition of regions using the `ckb_regions.tsv`
 - [4.0.1](https://github.com/hartwigmedical/serve/releases/tag/serve-v4.0.1)
     - Optional for blacklisting clinical studies and evidence
     - Put clinical trial information into own model instead of using treatment model

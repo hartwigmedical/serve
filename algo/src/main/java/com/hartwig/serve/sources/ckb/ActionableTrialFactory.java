@@ -1,10 +1,11 @@
 package com.hartwig.serve.sources.ckb;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.StringJoiner;
 
@@ -17,9 +18,11 @@ import com.hartwig.serve.ckb.datamodel.clinicaltrial.Location;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.VariantRequirementDetail;
 import com.hartwig.serve.ckb.datamodel.indication.Indication;
 import com.hartwig.serve.ckb.datamodel.therapy.Therapy;
+import com.hartwig.serve.datamodel.Country;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.ImmutableClinicalTrial;
+import com.hartwig.serve.datamodel.ImmutableCountry;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.sources.ckb.blacklist.CkbStudyBlacklistModel;
 import com.hartwig.serve.sources.ckb.region.CkbRegion;
@@ -57,9 +60,9 @@ class ActionableTrialFactory implements ActionableEntryFactory {
         Set<ActionableEntry> actionableTrials = Sets.newHashSet();
 
         for (ClinicalTrial trial : trialsToInclude(entry)) {
-            Map<String, List<String>> locationsOfStudy = filterOnRegionsToInclude(trial, regionsToInclude);
+            Set<Country> countries = filterOnRegionsToInclude(trial, regionsToInclude);
 
-            if (!locationsOfStudy.isEmpty()) {
+            if (!countries.isEmpty()) {
                 Set<String> therapies = Sets.newHashSet();
                 for (Therapy therapy : trial.therapies()) {
                     therapies.add(therapy.therapyName());
@@ -84,7 +87,7 @@ class ActionableTrialFactory implements ActionableEntryFactory {
                                             .studyNctId(trial.nctId())
                                             .studyTitle(trial.title())
                                             .studyAcronym(trial.acronym())
-                                            .locationsOfStudy(locationsOfStudy)
+                                            .countriesOfStudy(countries)
                                             .therapyNames(therapies)
                                             .gender(trial.gender())
                                             .build())
@@ -126,16 +129,36 @@ class ActionableTrialFactory implements ActionableEntryFactory {
 
     @NotNull
     @VisibleForTesting
-    static Map<String, List<String>> filterOnRegionsToInclude(@NotNull ClinicalTrial trial, @NotNull Set<CkbRegion> regionsToInclude) {
-        Map<String, List<String>> countryToCities = new HashMap<>();
+    static Set<Country> filterOnRegionsToInclude(@NotNull ClinicalTrial trial, @NotNull Set<CkbRegion> regionsToInclude) {
+        Map<String, Map<String, Set<String>>> countriesToCitiesToHospitalNames = new HashMap<>();
         for (Location location : trial.locations()) {
             if (regionsToInclude.stream().anyMatch(region -> region.includes(location))
                     && hasPotentiallyOpenRequirementToInclude(location.status())) {
-                countryToCities.computeIfAbsent(location.country(), it -> new ArrayList<>()).add(location.city());
+                countriesToCitiesToHospitalNames.computeIfAbsent(location.country(), it -> new HashMap<>())
+                        .computeIfAbsent(location.city(), it2 -> new HashSet<>())
+                        .add(location.facility());
             }
         }
 
-        return countryToCities;
+        Set<Country> countries = new HashSet<>();
+        for (Map.Entry<String, Map<String, Set<String>>> countryEntry : countriesToCitiesToHospitalNames.entrySet()) {
+            String countryName = countryEntry.getKey();
+            Map<String, Set<String>> citiesToHospitals = countryEntry.getValue();
+
+            Set<String> cities = citiesToHospitals.keySet();
+            Set<String> hospitals = null;
+            if (Objects.equals(countryName, "Japan")) {
+                hospitals = new HashSet<>();
+                for (Set<String> hospitalSet : citiesToHospitals.values()) {
+                    hospitals.addAll(hospitalSet);
+                }
+            }
+
+            Country country = ImmutableCountry.builder().countryName(countryName).cities(cities).hospitals(hospitals).build();
+            countries.add(country);
+        }
+
+        return countries;
     }
 
     @VisibleForTesting

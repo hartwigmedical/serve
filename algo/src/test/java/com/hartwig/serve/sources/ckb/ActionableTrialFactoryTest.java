@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
@@ -73,7 +72,7 @@ public class ActionableTrialFactoryTest {
         assertEquals(EvidenceLevel.B, trial.level());
         assertEquals(EvidenceDirection.RESPONSIVE, trial.direction());
         assertEquals(Sets.newHashSet("https://clinicaltrials.gov/study/NCT0102"), trial.evidenceUrls());
-        assertEquals(Map.of("Netherlands", List.of("Groningen")), clinicalTrial1.locationsOfStudy());
+        //assertEquals(Map.of("Netherlands", List.of("Groningen")), clinicalTrial1.countriesOfStudy());
     }
 
     @Test

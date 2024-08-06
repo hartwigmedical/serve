@@ -29,6 +29,13 @@ import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudyEntry;
 import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudyFile;
 import com.hartwig.serve.sources.ckb.blacklist.CkbEvidenceBlacklistModel;
 import com.hartwig.serve.sources.ckb.blacklist.CkbStudyBlacklistModel;
+import com.hartwig.serve.sources.ckb.facility.CkbFacilityCityEntry;
+import com.hartwig.serve.sources.ckb.facility.CkbFacilityCityFile;
+import com.hartwig.serve.sources.ckb.facility.CkbFacilityModel;
+import com.hartwig.serve.sources.ckb.facility.CkbFacilityNameEntry;
+import com.hartwig.serve.sources.ckb.facility.CkbFacilityNameFile;
+import com.hartwig.serve.sources.ckb.facility.CkbFacilityZipEntry;
+import com.hartwig.serve.sources.ckb.facility.CkbFacilityZipFile;
 import com.hartwig.serve.sources.ckb.region.CkbRegion;
 import com.hartwig.serve.sources.ckb.region.CkbRegionFile;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurationEntry;
@@ -83,9 +90,12 @@ public class ServeAlgo {
                                 config.useCkbEvidence() ? extractCkbEvidenceKnowledge(config.ckbDrugCurationTsv(),
                                         config.ckbBlacklistEvidenceTsv(),
                                         ckbEntries) : null,
-                                config.useCkbTrials()
-                                        ? extractCkbTrialKnowledge(config.ckbBlacklistTrialTsv(), config.ckbRegionTsv(), ckbEntries)
-                                        : null,
+                                config.useCkbTrials() ? extractCkbTrialKnowledge(config.ckbBlacklistTrialTsv(),
+                                        config.ckbRegionTsv(),
+                                        config.ckbFacilityCityTsv(),
+                                        config.ckbFacilityNameTsv(),
+                                        config.ckbFacilityZipTsv(),
+                                        ckbEntries) : null,
                                 config.useDocm() ? extractDocmKnowledge(config.docmTsv()) : null,
                                 config.useHartwigCohortHotspots() ? extractHartwigCohortHotspotKnowledge(config.hartwigCohortHotspotTsv(),
                                         !config.skipHotspotResolving()) : null,
@@ -158,6 +168,7 @@ public class ServeAlgo {
 
     @NotNull
     private ExtractionResult extractCkbTrialKnowledge(@NotNull String ckbBlacklistStudyTsv, @NotNull String ckbRegionTsv,
+            @NotNull String ckbFacilityCityTsv, @NotNull String ckbFacilityNameTsv, @NotNull String ckbFacilityZipTsv,
             @NotNull List<CkbEntry> ckbEntries) throws IOException {
         EventClassifierConfig config = CkbClassificationConfig.build();
         RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.CKB_TRIAL);
@@ -171,7 +182,22 @@ public class ServeAlgo {
         Set<CkbRegion> regionsToInclude = CkbRegionFile.read(ckbRegionTsv);
         LOGGER.info(" Read {} regions to include", regionsToInclude.size());
 
-        CkbExtractor extractor = CkbExtractorFactory.createTrialExtractor(config, refGenomeResource, blacklistStudy, regionsToInclude);
+        LOGGER.info("Reading facility city curations from {}", ckbFacilityCityTsv);
+        List<CkbFacilityCityEntry> facilityCityCurations = CkbFacilityCityFile.read(ckbFacilityCityTsv);
+        LOGGER.info(" Read {} facility city curations to include", regionsToInclude.size());
+
+        LOGGER.info("Reading facility name curations from {}", ckbFacilityNameTsv);
+        List<CkbFacilityNameEntry> facilityNameCurations = CkbFacilityNameFile.read(ckbFacilityNameTsv);
+        LOGGER.info(" Read {} facility name curations to include", regionsToInclude.size());
+
+        LOGGER.info("Reading facility zip curations from {}", ckbFacilityZipTsv);
+        List<CkbFacilityZipEntry> facilityZipCurations = CkbFacilityZipFile.read(ckbFacilityZipTsv);
+        LOGGER.info(" Read {} facility zip curations to include", regionsToInclude.size());
+
+        CkbFacilityModel ckbFacilityModel = new CkbFacilityModel(facilityCityCurations, facilityNameCurations, facilityZipCurations);
+
+        CkbExtractor extractor =
+                CkbExtractorFactory.createTrialExtractor(config, refGenomeResource, blacklistStudy, regionsToInclude, ckbFacilityModel);
 
         LOGGER.info("Running CKB trial knowledge extraction");
         ExtractionResult result = extractor.extract(ckbEntries);

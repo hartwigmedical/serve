@@ -25,6 +25,7 @@ import com.hartwig.serve.datamodel.ImmutableClinicalTrial;
 import com.hartwig.serve.datamodel.ImmutableCountry;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.sources.ckb.blacklist.CkbStudyBlacklistModel;
+import com.hartwig.serve.sources.ckb.facility.CkbFacilityModel;
 import com.hartwig.serve.sources.ckb.region.CkbRegion;
 
 import org.jetbrains.annotations.NotNull;
@@ -48,10 +49,14 @@ class ActionableTrialFactory implements ActionableEntryFactory {
     private final CkbStudyBlacklistModel blacklistStudy;
     @NotNull
     private final Set<CkbRegion> regionsToInclude;
+    @NotNull
+    private final CkbFacilityModel ckbFacilityModel;
 
-    public ActionableTrialFactory(@NotNull CkbStudyBlacklistModel blacklistStudy, @NotNull Set<CkbRegion> regionsToInclude) {
+    public ActionableTrialFactory(@NotNull CkbStudyBlacklistModel blacklistStudy, @NotNull Set<CkbRegion> regionsToInclude,
+            @NotNull CkbFacilityModel ckbFacilityModel) {
         this.blacklistStudy = blacklistStudy;
         this.regionsToInclude = regionsToInclude;
+        this.ckbFacilityModel = ckbFacilityModel;
     }
 
     @NotNull

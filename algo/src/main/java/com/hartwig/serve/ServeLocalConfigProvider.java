@@ -70,6 +70,9 @@ public final class ServeLocalConfigProvider {
             builder.ckbBlacklistTrialTsv(baseDir + "actionable/curation/ckb_blacklist_trial.tsv");
             builder.ckbBlacklistEvidenceTsv(baseDir + "actionable/curation/ckb_blacklist_evidence.tsv");
             builder.ckbRegionTsv(baseDir + "region/ckb_regions.tsv");
+            builder.ckbFacilityCityTsv(baseDir + "facility/ckb_facility_city.tsv");
+            builder.ckbFacilityNameTsv(baseDir + "facility/ckb_facility_name.tsv");
+            builder.ckbFacilityZipTsv(baseDir + "facility/ckb_facility_zip.tsv");
             builder.iClusionTrialTsv(baseDir + "actionable/iclusion/iclusion_trials_prod.tsv");
             builder.iClusionFilterTsv(baseDir + "actionable/iclusion/iclusion_filter.tsv");
 

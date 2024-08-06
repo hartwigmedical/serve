@@ -154,7 +154,7 @@ public class CkbExtractorTest {
                                 .profileId(baseEntry.profileId())
                                 .requirementType("required")
                                 .build()),
-                        List.of(CkbTestFactory.createLocation("Netherlands", null, "Rotterdam")),
+                        List.of(CkbTestFactory.createLocation("Netherlands", null, "Rotterdam", "EMC")),
                         "nctid",
                         "title",
                         List.of(CkbTestFactory.createTherapy("Nivolumab")),

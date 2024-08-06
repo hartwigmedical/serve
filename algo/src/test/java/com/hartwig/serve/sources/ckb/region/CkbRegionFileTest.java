@@ -19,12 +19,12 @@ public class CkbRegionFileTest {
         CkbRegion netherlands = regions.stream().filter(r -> r.country().equals("netherlands")).findFirst().orElseThrow();
         CkbRegion us = regions.stream().filter(r -> r.country().equals("united states")).findFirst().orElseThrow();
 
-        assertTrue(netherlands.includes(createLocation("Netherlands", null, "Rotterdam", "Noord Holland")));
-        assertTrue(netherlands.includes(createLocation("Netherlands", null, "Rotterdam", null)));
+        assertTrue(netherlands.includes(createLocation("Netherlands", null, "Rotterdam", "Noord Holland", null)));
+        assertTrue(netherlands.includes(createLocation("Netherlands", null, "Rotterdam", null, null)));
 
-        assertTrue(us.includes(createLocation("United States", null, "New York", "Maine")));
-        assertFalse(us.includes(createLocation("United States", null, "New York", "California")));
-        assertFalse(us.includes(createLocation("United States", null, "New York", null)));
+        assertTrue(us.includes(createLocation("United States", null, "New York", "Maine", null)));
+        assertFalse(us.includes(createLocation("United States", null, "New York", "California", null)));
+        assertFalse(us.includes(createLocation("United States", null, "New York", null, null)));
 
     }
 

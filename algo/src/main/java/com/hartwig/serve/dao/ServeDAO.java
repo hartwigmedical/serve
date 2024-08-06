@@ -53,9 +53,9 @@ import org.jetbrains.annotations.Nullable;
 import org.jooq.DSLContext;
 import org.jooq.InsertValuesStep10;
 import org.jooq.InsertValuesStep12;
-import org.jooq.InsertValuesStep19;
 import org.jooq.InsertValuesStep20;
 import org.jooq.InsertValuesStep21;
+import org.jooq.InsertValuesStep22;
 import org.jooq.InsertValuesStep4;
 import org.jooq.InsertValuesStep6;
 import org.jooq.InsertValuesStep7;
@@ -135,6 +135,7 @@ public class ServeDAO {
                     ACTIONABLEHOTSPOT.STUDYACRONYM,
                     ACTIONABLEHOTSPOT.STUDYGENDER,
                     ACTIONABLEHOTSPOT.COUNTRIESOFSTUDY,
+                    ACTIONABLEHOTSPOT.DUTCHHOSPITALS,
                     ACTIONABLEHOTSPOT.TREATMENT,
                     ACTIONABLEHOTSPOT.TREATMENTAPPROACHESDRUGCLASS,
                     ACTIONABLEHOTSPOT.TREATMENTAPPROACHESTHERAPY,
@@ -203,6 +204,7 @@ public class ServeDAO {
                 clinicalTrial != null && clinicalTrial.studyAcronym() != null ? clinicalTrial.studyAcronym() : null,
                 clinicalTrial != null && clinicalTrial.gender() != null ? clinicalTrial.gender() : null,
                 clinicalTrial != null ? toCountryWithCities(clinicalTrial.countriesOfStudy()) : null,
+                clinicalTrial != null ? toDutchHospitals(clinicalTrial.countriesOfStudy()) : null,
                 therapyName(clinicalTrial, treatment),
                 treatment != null && !treatment.treatmentApproachesDrugClass().isEmpty()
                         ? concat(treatment.treatmentApproachesDrugClass())
@@ -235,6 +237,7 @@ public class ServeDAO {
                     ACTIONABLECODON.STUDYACRONYM,
                     ACTIONABLECODON.STUDYGENDER,
                     ACTIONABLECODON.COUNTRIESOFSTUDY,
+                    ACTIONABLECODON.DUTCHHOSPITALS,
                     ACTIONABLECODON.TREATMENT,
                     ACTIONABLECODON.TREATMENTAPPROACHESDRUGCLASS,
                     ACTIONABLECODON.TREATMENTAPPROACHESTHERAPY,
@@ -266,6 +269,7 @@ public class ServeDAO {
                     ACTIONABLEEXON.STUDYACRONYM,
                     ACTIONABLEEXON.STUDYGENDER,
                     ACTIONABLEEXON.COUNTRIESOFSTUDY,
+                    ACTIONABLEEXON.DUTCHHOSPITALS,
                     ACTIONABLEEXON.TREATMENT,
                     ACTIONABLEEXON.TREATMENTAPPROACHESDRUGCLASS,
                     ACTIONABLEEXON.TREATMENTAPPROACHESTHERAPY,
@@ -300,6 +304,7 @@ public class ServeDAO {
                 clinicalTrial != null && clinicalTrial.studyAcronym() != null ? clinicalTrial.studyAcronym() : null,
                 clinicalTrial != null && clinicalTrial.gender() != null ? clinicalTrial.gender() : null,
                 clinicalTrial != null ? toCountryWithCities(clinicalTrial.countriesOfStudy()) : null,
+                clinicalTrial != null ? toDutchHospitals(clinicalTrial.countriesOfStudy()) : null,
                 therapyName(clinicalTrial, treatment),
                 treatment != null && !treatment.treatmentApproachesDrugClass().isEmpty()
                         ? concat(treatment.treatmentApproachesDrugClass())
@@ -317,7 +322,7 @@ public class ServeDAO {
 
     private void writeActionableGenes(@NotNull Timestamp timestamp, @NotNull List<ActionableGene> genes) {
         for (List<ActionableGene> batch : Iterables.partition(genes, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
-            InsertValuesStep20 inserter = context.insertInto(ACTIONABLEGENE,
+            InsertValuesStep21 inserter = context.insertInto(ACTIONABLEGENE,
                     ACTIONABLEGENE.MODIFIED,
                     ACTIONABLEGENE.GENE,
                     ACTIONABLEGENE.EVENT,
@@ -329,6 +334,7 @@ public class ServeDAO {
                     ACTIONABLEGENE.STUDYACRONYM,
                     ACTIONABLEGENE.STUDYGENDER,
                     ACTIONABLEGENE.COUNTRIESOFSTUDY,
+                    ACTIONABLEGENE.DUTCHHOSPITALS,
                     ACTIONABLEGENE.TREATMENT,
                     ACTIONABLEGENE.TREATMENTAPPROACHESDRUGCLASS,
                     ACTIONABLEGENE.TREATMENTAPPROACHESTHERAPY,
@@ -343,7 +349,7 @@ public class ServeDAO {
         }
     }
 
-    private static void writeActionableGeneBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep20 inserter,
+    private static void writeActionableGeneBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep21 inserter,
             @NotNull ActionableGene actionableGene) {
 
         ClinicalTrial clinicalTrial = extractOptionalClinicalTrial(actionableGene);
@@ -360,6 +366,7 @@ public class ServeDAO {
                 clinicalTrial != null && clinicalTrial.studyAcronym() != null ? clinicalTrial.studyAcronym() : null,
                 clinicalTrial != null && clinicalTrial.gender() != null ? clinicalTrial.gender() : null,
                 clinicalTrial != null ? toCountryWithCities(clinicalTrial.countriesOfStudy()) : null,
+                clinicalTrial != null ? toDutchHospitals(clinicalTrial.countriesOfStudy()) : null,
                 therapyName(clinicalTrial, treatment),
                 treatment != null && !treatment.treatmentApproachesDrugClass().isEmpty()
                         ? concat(treatment.treatmentApproachesDrugClass())
@@ -393,6 +400,7 @@ public class ServeDAO {
                     ACTIONABLEFUSION.STUDYACRONYM,
                     ACTIONABLEFUSION.STUDYGENDER,
                     ACTIONABLEFUSION.COUNTRIESOFSTUDY,
+                    ACTIONABLEFUSION.DUTCHHOSPITALS,
                     ACTIONABLEFUSION.TREATMENT,
                     ACTIONABLEFUSION.TREATMENTAPPROACHESDRUGCLASS,
                     ACTIONABLEFUSION.TREATMENTAPPROACHESTHERAPY,
@@ -428,6 +436,7 @@ public class ServeDAO {
                 clinicalTrial != null && clinicalTrial.studyAcronym() != null ? clinicalTrial.studyAcronym() : null,
                 clinicalTrial != null && clinicalTrial.gender() != null ? clinicalTrial.gender() : null,
                 clinicalTrial != null ? toCountryWithCities(clinicalTrial.countriesOfStudy()) : null,
+                clinicalTrial != null ? toDutchHospitals(clinicalTrial.countriesOfStudy()) : null,
                 therapyName(clinicalTrial, treatment),
                 treatment != null && !treatment.treatmentApproachesDrugClass().isEmpty()
                         ? concat(treatment.treatmentApproachesDrugClass())
@@ -445,7 +454,7 @@ public class ServeDAO {
 
     private void writeActionableCharacteristics(@NotNull Timestamp timestamp, @NotNull List<ActionableCharacteristic> characteristics) {
         for (List<ActionableCharacteristic> batch : Iterables.partition(characteristics, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
-            InsertValuesStep21 inserter = context.insertInto(ACTIONABLECHARACTERISTIC,
+            InsertValuesStep22 inserter = context.insertInto(ACTIONABLECHARACTERISTIC,
                     ACTIONABLECHARACTERISTIC.MODIFIED,
                     ACTIONABLECHARACTERISTIC.TYPE,
                     ACTIONABLECHARACTERISTIC.CUTOFFTYPE,
@@ -458,6 +467,7 @@ public class ServeDAO {
                     ACTIONABLECHARACTERISTIC.STUDYACRONYM,
                     ACTIONABLECHARACTERISTIC.STUDYGENDER,
                     ACTIONABLECHARACTERISTIC.COUNTRIESOFSTUDY,
+                    ACTIONABLECHARACTERISTIC.DUTCHHOSPITALS,
                     ACTIONABLECHARACTERISTIC.TREATMENT,
                     ACTIONABLECHARACTERISTIC.TREATMENTAPPROACHESDRUGCLASS,
                     ACTIONABLECHARACTERISTIC.TREATMENTAPPROACHESTHERAPY,
@@ -472,7 +482,7 @@ public class ServeDAO {
         }
     }
 
-    private static void writeActionableCharacteristicBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep21 inserter,
+    private static void writeActionableCharacteristicBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep22 inserter,
             @NotNull ActionableCharacteristic actionableCharacteristic) {
 
         ClinicalTrial clinicalTrial = extractOptionalClinicalTrial(actionableCharacteristic);
@@ -490,6 +500,7 @@ public class ServeDAO {
                 clinicalTrial != null && clinicalTrial.studyAcronym() != null ? clinicalTrial.studyAcronym() : null,
                 clinicalTrial != null && clinicalTrial.gender() != null ? clinicalTrial.gender() : null,
                 clinicalTrial != null ? toCountryWithCities(clinicalTrial.countriesOfStudy()) : null,
+                clinicalTrial != null ? toDutchHospitals(clinicalTrial.countriesOfStudy()) : null,
                 therapyName(clinicalTrial, treatment),
                 treatment != null && !treatment.treatmentApproachesDrugClass().isEmpty()
                         ? concat(treatment.treatmentApproachesDrugClass())
@@ -507,7 +518,7 @@ public class ServeDAO {
 
     private void writeActionableHLA(@NotNull Timestamp timestamp, @NotNull List<ActionableHLA> hla) {
         for (List<ActionableHLA> batch : Iterables.partition(hla, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
-            InsertValuesStep19 inserter = context.insertInto(ACTIONABLEHLA,
+            InsertValuesStep20 inserter = context.insertInto(ACTIONABLEHLA,
                     ACTIONABLEHLA.MODIFIED,
                     ACTIONABLEHLA.HLAALLELE,
                     ACTIONABLEHLA.SOURCE,
@@ -518,6 +529,7 @@ public class ServeDAO {
                     ACTIONABLEHLA.STUDYACRONYM,
                     ACTIONABLEHLA.STUDYGENDER,
                     ACTIONABLEHLA.COUNTRIESOFSTUDY,
+                    ACTIONABLEHLA.DUTCHHOSPITALS,
                     ACTIONABLEHLA.TREATMENT,
                     ACTIONABLEHLA.TREATMENTAPPROACHESDRUGCLASS,
                     ACTIONABLEHLA.TREATMENTAPPROACHESTHERAPY,
@@ -532,7 +544,7 @@ public class ServeDAO {
         }
     }
 
-    private static void writeActionableHLABatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep19 inserter,
+    private static void writeActionableHLABatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep20 inserter,
             @NotNull ActionableHLA actionableHLA) {
         ClinicalTrial clinicalTrial = extractOptionalClinicalTrial(actionableHLA);
         Treatment treatment = extractOptionalTreatment(actionableHLA);
@@ -547,6 +559,7 @@ public class ServeDAO {
                 clinicalTrial != null && clinicalTrial.studyAcronym() != null ? clinicalTrial.studyAcronym() : null,
                 clinicalTrial != null && clinicalTrial.gender() != null ? clinicalTrial.gender() : null,
                 clinicalTrial != null ? toCountryWithCities(clinicalTrial.countriesOfStudy()) : null,
+                clinicalTrial != null ? toDutchHospitals(clinicalTrial.countriesOfStudy()) : null,
                 therapyName(clinicalTrial, treatment),
                 treatment != null && !treatment.treatmentApproachesDrugClass().isEmpty()
                         ? concat(treatment.treatmentApproachesDrugClass())
@@ -783,6 +796,17 @@ public class ServeDAO {
         return countriesOfStudy.stream()
                 .map(country -> country.countryName() + "(" + String.join(MAIN_JOINER, country.cities()) + ")")
                 .collect(Collectors.joining(MAIN_JOINER));
+    }
+
+    @NotNull
+    private static String toDutchHospitals(@NotNull Set<Country> countriesOfStudy) {
+        String result = countriesOfStudy.stream()
+                .filter(country -> country.countryName().equals("Netherlands"))
+                .map(Country::hospitals)
+                .flatMap(Set::stream)
+                .collect(Collectors.joining(MAIN_JOINER));
+
+        return result.isEmpty() ? "" : result;
     }
 
     @NotNull

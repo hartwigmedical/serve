@@ -147,7 +147,7 @@ class ActionableTrialFactory implements ActionableEntryFactory {
 
             Set<String> cities = citiesToHospitals.keySet();
             Set<String> hospitals = null;
-            if (Objects.equals(countryName, "Japan")) {
+            if (Objects.equals(countryName, "Netherlands")) {
                 hospitals = new HashSet<>();
                 for (Set<String> hospitalSet : citiesToHospitals.values()) {
                     hospitals.addAll(hospitalSet);

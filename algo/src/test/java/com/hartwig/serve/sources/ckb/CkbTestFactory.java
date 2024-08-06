@@ -67,7 +67,7 @@ public final class CkbTestFactory {
     public static CkbEntry createEntry(@NotNull String geneSymbol, @NotNull String variant, @NotNull String fullName,
             @NotNull String responseType, @NotNull String evidenceType, @NotNull String therapyName, @NotNull String indicationName,
             @NotNull String level, @NotNull String termId) {
-        Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting", "Rotterdam");
+        Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting", "Rotterdam", "EMC");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(0, "required");
         return builder().addVariants(createVariant(geneSymbol, variant, fullName))
                 .addEvidences(createEvidence(responseType, evidenceType, therapyName, indicationName, level, termId))
@@ -164,13 +164,15 @@ public final class CkbTestFactory {
     }
 
     @NotNull
-    public static Location createLocation(@NotNull String country, @Nullable String status, @NotNull String city) {
-        return createLocation(country, status, city, null);
+    public static Location createLocation(@NotNull String country, @Nullable String status, @NotNull String city,
+            @Nullable String hospital) {
+        return createLocation(country, status, city, null, hospital);
     }
 
     @NotNull
-    public static Location createLocation(@NotNull String country, @Nullable String status, @NotNull String city, @Nullable String state) {
-        return ImmutableLocation.builder().nctId("").city(city).country(country).state(state).status(status).build();
+    public static Location createLocation(@NotNull String country, @Nullable String status, @NotNull String city, @Nullable String state,
+            @Nullable String hospital) {
+        return ImmutableLocation.builder().nctId("").city(city).country(country).state(state).status(status).facility(hospital).build();
     }
 
     @NotNull

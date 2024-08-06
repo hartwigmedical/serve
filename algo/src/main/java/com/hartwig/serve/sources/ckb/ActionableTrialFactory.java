@@ -1,7 +1,10 @@
 package com.hartwig.serve.sources.ckb;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
 
@@ -54,9 +57,9 @@ class ActionableTrialFactory implements ActionableEntryFactory {
         Set<ActionableEntry> actionableTrials = Sets.newHashSet();
 
         for (ClinicalTrial trial : trialsToInclude(entry)) {
-            Set<String> countries = filterOnRegionsToInclude(trial, regionsToInclude);
+            Map<String, List<String>> locationsOfStudy = filterOnRegionsToInclude(trial, regionsToInclude);
 
-            if (!countries.isEmpty()) {
+            if (!locationsOfStudy.isEmpty()) {
                 Set<String> therapies = Sets.newHashSet();
                 for (Therapy therapy : trial.therapies()) {
                     therapies.add(therapy.therapyName());
@@ -81,7 +84,7 @@ class ActionableTrialFactory implements ActionableEntryFactory {
                                             .studyNctId(trial.nctId())
                                             .studyTitle(trial.title())
                                             .studyAcronym(trial.acronym())
-                                            .countriesOfStudy(countries)
+                                            .locationsOfStudy(locationsOfStudy)
                                             .therapyNames(therapies)
                                             .gender(trial.gender())
                                             .build())
@@ -123,16 +126,16 @@ class ActionableTrialFactory implements ActionableEntryFactory {
 
     @NotNull
     @VisibleForTesting
-    static Set<String> filterOnRegionsToInclude(@NotNull ClinicalTrial trial, @NotNull Set<CkbRegion> regionsToInclude) {
-        Set<String> countries = Sets.newHashSet();
+    static Map<String, List<String>> filterOnRegionsToInclude(@NotNull ClinicalTrial trial, @NotNull Set<CkbRegion> regionsToInclude) {
+        Map<String, List<String>> countryToCities = new HashMap<>();
         for (Location location : trial.locations()) {
             if (regionsToInclude.stream().anyMatch(region -> region.includes(location))
                     && hasPotentiallyOpenRequirementToInclude(location.status())) {
-                countries.add(location.country());
+                countryToCities.computeIfAbsent(location.country(), it -> new ArrayList<>()).add(location.city());
             }
         }
 
-        return countries;
+        return countryToCities;
     }
 
     @VisibleForTesting

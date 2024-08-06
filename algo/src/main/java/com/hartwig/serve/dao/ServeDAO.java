@@ -18,8 +18,10 @@ import static com.hartwig.serve.database.Tables.KNOWNHOTSPOT;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
@@ -132,7 +134,7 @@ public class ServeDAO {
                     ACTIONABLEHOTSPOT.STUDYTITLE,
                     ACTIONABLEHOTSPOT.STUDYACRONYM,
                     ACTIONABLEHOTSPOT.STUDYGENDER,
-                    ACTIONABLEHOTSPOT.COUNTRIESOFSTUDY,
+                    ACTIONABLEHOTSPOT.LOCATIONSOFSTUDY,
                     ACTIONABLEHOTSPOT.TREATMENT,
                     ACTIONABLEHOTSPOT.TREATMENTAPPROACHESDRUGCLASS,
                     ACTIONABLEHOTSPOT.TREATMENTAPPROACHESTHERAPY,
@@ -200,10 +202,14 @@ public class ServeDAO {
                 clinicalTrial != null ? clinicalTrial.studyTitle() : null,
                 clinicalTrial != null && clinicalTrial.studyAcronym() != null ? clinicalTrial.studyAcronym() : null,
                 clinicalTrial != null && clinicalTrial.gender() != null ? clinicalTrial.gender() : null,
-                clinicalTrial != null ? concat(clinicalTrial.countriesOfStudy()) : null,
+                clinicalTrial != null ? concat(toCountryWithCities(clinicalTrial.locationsOfStudy())) : null,
                 therapyName(clinicalTrial, treatment),
-                treatment != null && !treatment.treatmentApproachesDrugClass().isEmpty() ? concat(treatment.treatmentApproachesDrugClass()) : null,
-                treatment != null && !treatment.treatmentApproachesTherapy().isEmpty() ? concat(treatment.treatmentApproachesTherapy()) : null,
+                treatment != null && !treatment.treatmentApproachesDrugClass().isEmpty()
+                        ? concat(treatment.treatmentApproachesDrugClass())
+                        : null,
+                treatment != null && !treatment.treatmentApproachesTherapy().isEmpty()
+                        ? concat(treatment.treatmentApproachesTherapy())
+                        : null,
                 actionableHotspot.applicableCancerType().name(),
                 actionableHotspot.applicableCancerType().doid(),
                 concat(toStrings(actionableHotspot.blacklistCancerTypes())),
@@ -228,7 +234,7 @@ public class ServeDAO {
                     ACTIONABLECODON.STUDYTITLE,
                     ACTIONABLECODON.STUDYACRONYM,
                     ACTIONABLECODON.STUDYGENDER,
-                    ACTIONABLECODON.COUNTRIESOFSTUDY,
+                    ACTIONABLECODON.LOCATIONSOFSTUDY,
                     ACTIONABLECODON.TREATMENT,
                     ACTIONABLECODON.TREATMENTAPPROACHESDRUGCLASS,
                     ACTIONABLECODON.TREATMENTAPPROACHESTHERAPY,
@@ -259,7 +265,7 @@ public class ServeDAO {
                     ACTIONABLEEXON.STUDYTITLE,
                     ACTIONABLEEXON.STUDYACRONYM,
                     ACTIONABLEEXON.STUDYGENDER,
-                    ACTIONABLEEXON.COUNTRIESOFSTUDY,
+                    ACTIONABLEEXON.LOCATIONSOFSTUDY,
                     ACTIONABLEEXON.TREATMENT,
                     ACTIONABLEEXON.TREATMENTAPPROACHESDRUGCLASS,
                     ACTIONABLEEXON.TREATMENTAPPROACHESTHERAPY,
@@ -293,10 +299,14 @@ public class ServeDAO {
                 clinicalTrial != null ? clinicalTrial.studyTitle() : null,
                 clinicalTrial != null && clinicalTrial.studyAcronym() != null ? clinicalTrial.studyAcronym() : null,
                 clinicalTrial != null && clinicalTrial.gender() != null ? clinicalTrial.gender() : null,
-                clinicalTrial != null ? concat(clinicalTrial.countriesOfStudy()) : null,
+                clinicalTrial != null ? concat(toCountryWithCities(clinicalTrial.locationsOfStudy())) : null,
                 therapyName(clinicalTrial, treatment),
-                treatment != null && !treatment.treatmentApproachesDrugClass().isEmpty() ? concat(treatment.treatmentApproachesDrugClass()) : null,
-                treatment != null && !treatment.treatmentApproachesTherapy().isEmpty() ? concat(treatment.treatmentApproachesTherapy()) : null,
+                treatment != null && !treatment.treatmentApproachesDrugClass().isEmpty()
+                        ? concat(treatment.treatmentApproachesDrugClass())
+                        : null,
+                treatment != null && !treatment.treatmentApproachesTherapy().isEmpty()
+                        ? concat(treatment.treatmentApproachesTherapy())
+                        : null,
                 actionableRange.applicableCancerType().name(),
                 actionableRange.applicableCancerType().doid(),
                 concat(toStrings(actionableRange.blacklistCancerTypes())),
@@ -318,7 +328,7 @@ public class ServeDAO {
                     ACTIONABLEGENE.STUDYTITLE,
                     ACTIONABLEGENE.STUDYACRONYM,
                     ACTIONABLEGENE.STUDYGENDER,
-                    ACTIONABLEGENE.COUNTRIESOFSTUDY,
+                    ACTIONABLEGENE.LOCATIONSOFSTUDY,
                     ACTIONABLEGENE.TREATMENT,
                     ACTIONABLEGENE.TREATMENTAPPROACHESDRUGCLASS,
                     ACTIONABLEGENE.TREATMENTAPPROACHESTHERAPY,
@@ -349,10 +359,14 @@ public class ServeDAO {
                 clinicalTrial != null ? clinicalTrial.studyTitle() : null,
                 clinicalTrial != null && clinicalTrial.studyAcronym() != null ? clinicalTrial.studyAcronym() : null,
                 clinicalTrial != null && clinicalTrial.gender() != null ? clinicalTrial.gender() : null,
-                clinicalTrial != null ? concat(clinicalTrial.countriesOfStudy()) : null,
+                clinicalTrial != null ? concat(toCountryWithCities(clinicalTrial.locationsOfStudy())) : null,
                 therapyName(clinicalTrial, treatment),
-                treatment != null && !treatment.treatmentApproachesDrugClass().isEmpty() ? concat(treatment.treatmentApproachesDrugClass()) : null,
-                treatment != null && !treatment.treatmentApproachesTherapy().isEmpty() ? concat(treatment.treatmentApproachesTherapy()) : null,
+                treatment != null && !treatment.treatmentApproachesDrugClass().isEmpty()
+                        ? concat(treatment.treatmentApproachesDrugClass())
+                        : null,
+                treatment != null && !treatment.treatmentApproachesTherapy().isEmpty()
+                        ? concat(treatment.treatmentApproachesTherapy())
+                        : null,
                 actionableGene.applicableCancerType().name(),
                 actionableGene.applicableCancerType().doid(),
                 concat(toStrings(actionableGene.blacklistCancerTypes())),
@@ -378,7 +392,7 @@ public class ServeDAO {
                     ACTIONABLEFUSION.STUDYTITLE,
                     ACTIONABLEFUSION.STUDYACRONYM,
                     ACTIONABLEFUSION.STUDYGENDER,
-                    ACTIONABLEFUSION.COUNTRIESOFSTUDY,
+                    ACTIONABLEFUSION.LOCATIONSOFSTUDY,
                     ACTIONABLEFUSION.TREATMENT,
                     ACTIONABLEFUSION.TREATMENTAPPROACHESDRUGCLASS,
                     ACTIONABLEFUSION.TREATMENTAPPROACHESTHERAPY,
@@ -413,10 +427,14 @@ public class ServeDAO {
                 clinicalTrial != null ? clinicalTrial.studyTitle() : null,
                 clinicalTrial != null && clinicalTrial.studyAcronym() != null ? clinicalTrial.studyAcronym() : null,
                 clinicalTrial != null && clinicalTrial.gender() != null ? clinicalTrial.gender() : null,
-                clinicalTrial != null ? concat(clinicalTrial.countriesOfStudy()) : null,
+                clinicalTrial != null ? concat(toCountryWithCities(clinicalTrial.locationsOfStudy())) : null,
                 therapyName(clinicalTrial, treatment),
-                treatment != null && !treatment.treatmentApproachesDrugClass().isEmpty() ? concat(treatment.treatmentApproachesDrugClass()) : null,
-                treatment != null && !treatment.treatmentApproachesTherapy().isEmpty() ? concat(treatment.treatmentApproachesTherapy()) : null,
+                treatment != null && !treatment.treatmentApproachesDrugClass().isEmpty()
+                        ? concat(treatment.treatmentApproachesDrugClass())
+                        : null,
+                treatment != null && !treatment.treatmentApproachesTherapy().isEmpty()
+                        ? concat(treatment.treatmentApproachesTherapy())
+                        : null,
                 actionableFusion.applicableCancerType().name(),
                 actionableFusion.applicableCancerType().doid(),
                 concat(toStrings(actionableFusion.blacklistCancerTypes())),
@@ -439,7 +457,7 @@ public class ServeDAO {
                     ACTIONABLECHARACTERISTIC.STUDYTITLE,
                     ACTIONABLECHARACTERISTIC.STUDYACRONYM,
                     ACTIONABLECHARACTERISTIC.STUDYGENDER,
-                    ACTIONABLECHARACTERISTIC.COUNTRIESOFSTUDY,
+                    ACTIONABLECHARACTERISTIC.LOCATIONSOFSTUDY,
                     ACTIONABLECHARACTERISTIC.TREATMENT,
                     ACTIONABLECHARACTERISTIC.TREATMENTAPPROACHESDRUGCLASS,
                     ACTIONABLECHARACTERISTIC.TREATMENTAPPROACHESTHERAPY,
@@ -471,10 +489,14 @@ public class ServeDAO {
                 clinicalTrial != null ? clinicalTrial.studyTitle() : null,
                 clinicalTrial != null && clinicalTrial.studyAcronym() != null ? clinicalTrial.studyAcronym() : null,
                 clinicalTrial != null && clinicalTrial.gender() != null ? clinicalTrial.gender() : null,
-                clinicalTrial != null ? concat(clinicalTrial.countriesOfStudy()) : null,
+                clinicalTrial != null ? concat(toCountryWithCities(clinicalTrial.locationsOfStudy())) : null,
                 therapyName(clinicalTrial, treatment),
-                treatment != null && !treatment.treatmentApproachesDrugClass().isEmpty() ? concat(treatment.treatmentApproachesDrugClass()) : null,
-                treatment != null && !treatment.treatmentApproachesTherapy().isEmpty() ? concat(treatment.treatmentApproachesTherapy()) : null,
+                treatment != null && !treatment.treatmentApproachesDrugClass().isEmpty()
+                        ? concat(treatment.treatmentApproachesDrugClass())
+                        : null,
+                treatment != null && !treatment.treatmentApproachesTherapy().isEmpty()
+                        ? concat(treatment.treatmentApproachesTherapy())
+                        : null,
                 actionableCharacteristic.applicableCancerType().name(),
                 actionableCharacteristic.applicableCancerType().doid(),
                 concat(toStrings(actionableCharacteristic.blacklistCancerTypes())),
@@ -495,7 +517,7 @@ public class ServeDAO {
                     ACTIONABLEHLA.STUDYTITLE,
                     ACTIONABLEHLA.STUDYACRONYM,
                     ACTIONABLEHLA.STUDYGENDER,
-                    ACTIONABLEHLA.COUNTRIESOFSTUDY,
+                    ACTIONABLEHLA.LOCATIONSOFSTUDY,
                     ACTIONABLEHLA.TREATMENT,
                     ACTIONABLEHLA.TREATMENTAPPROACHESDRUGCLASS,
                     ACTIONABLEHLA.TREATMENTAPPROACHESTHERAPY,
@@ -524,10 +546,14 @@ public class ServeDAO {
                 clinicalTrial != null ? clinicalTrial.studyTitle() : null,
                 clinicalTrial != null && clinicalTrial.studyAcronym() != null ? clinicalTrial.studyAcronym() : null,
                 clinicalTrial != null && clinicalTrial.gender() != null ? clinicalTrial.gender() : null,
-                clinicalTrial != null ? concat(clinicalTrial.countriesOfStudy()) : null,
+                clinicalTrial != null ? concat(toCountryWithCities(clinicalTrial.locationsOfStudy())) : null,
                 therapyName(clinicalTrial, treatment),
-                treatment != null && !treatment.treatmentApproachesDrugClass().isEmpty() ? concat(treatment.treatmentApproachesDrugClass()) : null,
-                treatment != null && !treatment.treatmentApproachesTherapy().isEmpty() ? concat(treatment.treatmentApproachesTherapy()) : null,
+                treatment != null && !treatment.treatmentApproachesDrugClass().isEmpty()
+                        ? concat(treatment.treatmentApproachesDrugClass())
+                        : null,
+                treatment != null && !treatment.treatmentApproachesTherapy().isEmpty()
+                        ? concat(treatment.treatmentApproachesTherapy())
+                        : null,
                 actionableHLA.applicableCancerType().name(),
                 actionableHLA.applicableCancerType().doid(),
                 concat(toStrings(actionableHLA.blacklistCancerTypes())),
@@ -750,6 +776,14 @@ public class ServeDAO {
             strings.add(cancerType.name() + NAME_DOID_JOINER + cancerType.doid());
         }
         return strings;
+    }
+
+    @NotNull
+    private static Set<String> toCountryWithCities(@NotNull Map<String, List<String>> locationsOfStudy) {
+        return locationsOfStudy.entrySet()
+                .stream()
+                .map(entry -> entry.getKey() + "(" + String.join(MAIN_JOINER, entry.getValue()) + ")")
+                .collect(Collectors.toSet());
     }
 
     @NotNull

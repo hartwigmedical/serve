@@ -1,5 +1,7 @@
 package com.hartwig.serve.datamodel;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.immutables.value.Value;
@@ -20,7 +22,7 @@ public abstract class ClinicalTrial implements Intervention {
     public abstract String studyAcronym();
 
     @NotNull
-    public abstract Set<String> countriesOfStudy();
+    public abstract Map<String, List<String>> locationsOfStudy();
 
     @NotNull
     public abstract Set<String> therapyNames();

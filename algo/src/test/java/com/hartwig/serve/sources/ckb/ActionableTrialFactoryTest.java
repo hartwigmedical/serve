@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
@@ -45,7 +46,7 @@ public class ActionableTrialFactoryTest {
     public void canCreateActionableEntryForOpenTrialInAllowedCountryWithRequiredMolecularProfileAndValidAgeGroup() {
         int profileId = 1;
         String profileName = Strings.EMPTY;
-        Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting");
+        Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting", "Groningen");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(profileId, "required");
         ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTherapy("Recruiting",
                 List.of(requirementDetail),
@@ -72,14 +73,14 @@ public class ActionableTrialFactoryTest {
         assertEquals(EvidenceLevel.B, trial.level());
         assertEquals(EvidenceDirection.RESPONSIVE, trial.direction());
         assertEquals(Sets.newHashSet("https://clinicaltrials.gov/study/NCT0102"), trial.evidenceUrls());
-        assertEquals(Sets.newHashSet("Netherlands"), clinicalTrial1.countriesOfStudy());
+        assertEquals(Map.of("Netherlands", List.of("Groningen")), clinicalTrial1.locationsOfStudy());
     }
 
     @Test
     public void canBlacklistStudies() {
         int profileId = 1;
         String profileName = Strings.EMPTY;
-        Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting");
+        Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting", "Groningen");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(profileId, "required");
         ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTherapy("Recruiting",
                 List.of(requirementDetail),
@@ -101,7 +102,7 @@ public class ActionableTrialFactoryTest {
     public void doesNotBlacklistStudies() {
         int profileId = 1;
         String profileName = Strings.EMPTY;
-        Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting");
+        Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting", "Groningen");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(profileId, "required");
         ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTherapy("Recruiting",
                 List.of(requirementDetail),
@@ -123,7 +124,7 @@ public class ActionableTrialFactoryTest {
     public void canBlacklistOnGene() {
         int profileId = 1;
         String profileName = Strings.EMPTY;
-        Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting");
+        Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting", "Groningen");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(profileId, "required");
         ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTherapy("Recruiting",
                 List.of(requirementDetail),
@@ -146,7 +147,7 @@ public class ActionableTrialFactoryTest {
     public void doesNotBlacklistOnGene() {
         int profileId = 1;
         String profileName = Strings.EMPTY;
-        Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting");
+        Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting", "Groningen");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(profileId, "required");
         ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTherapy("Recruiting",
                 List.of(requirementDetail),
@@ -166,7 +167,7 @@ public class ActionableTrialFactoryTest {
 
     @Test
     public void shouldNotCreateAnActionableEntryWhenVariantRequirementIsOnADifferentProfile() {
-        Location location = CkbTestFactory.createLocation("Belgium", "Recruiting");
+        Location location = CkbTestFactory.createLocation("Belgium", "Recruiting", "Brussel");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(0, "required");
         ClinicalTrial clinicalTrial = CkbTestFactory.createTrial("Recruiting",
                 List.of(requirementDetail),
@@ -283,8 +284,8 @@ public class ActionableTrialFactoryTest {
             @NotNull String recruitmentCountry1, @NotNull String country2, @NotNull String recruitmentCountry2) {
         return CkbTestFactory.createTrial(recruitmentTrial,
                 List.of(CkbTestFactory.createVariantRequirementDetail(0, "required")),
-                List.of(CkbTestFactory.createLocation(country1, recruitmentCountry1),
-                        CkbTestFactory.createLocation(country2, recruitmentCountry2)),
+                List.of(CkbTestFactory.createLocation(country1, recruitmentCountry1, "Rotterdam"),
+                        CkbTestFactory.createLocation(country2, recruitmentCountry2, "Groningen")),
                 "nctid",
                 "title",
                 List.of("senior", "child", "adult"));
@@ -301,7 +302,7 @@ public class ActionableTrialFactoryTest {
             @Nullable String state, @NotNull String recruitmentCountry) {
         return CkbTestFactory.createTrial(recruitmentTrial,
                 List.of(CkbTestFactory.createVariantRequirementDetail(0, "required")),
-                List.of(CkbTestFactory.createLocation(country, state, recruitmentCountry)),
+                List.of(CkbTestFactory.createLocation(country, recruitmentCountry, "Rotterdam", state)),
                 "nctid",
                 "title",
                 List.of("senior", "child", "adult"));

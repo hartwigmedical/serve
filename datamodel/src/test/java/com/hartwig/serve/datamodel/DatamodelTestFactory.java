@@ -4,6 +4,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.StringJoiner;
 
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 import org.apache.logging.log4j.util.Strings;
@@ -30,7 +31,7 @@ public final class DatamodelTestFactory {
                 .studyTitle(Strings.EMPTY)
                 .studyAcronym(Strings.EMPTY)
                 .gender(Strings.EMPTY)
-                .countriesOfStudy(Sets.newHashSet())
+                .locationsOfStudy(Maps.newHashMap())
                 .therapyNames(Sets.newHashSet());
     }
 

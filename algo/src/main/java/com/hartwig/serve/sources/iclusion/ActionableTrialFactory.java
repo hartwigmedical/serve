@@ -1,6 +1,7 @@
 package com.hartwig.serve.sources.iclusion;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.google.common.annotations.VisibleForTesting;
@@ -70,7 +71,7 @@ public class ActionableTrialFactory {
                         .studyTitle("")
                         .studyAcronym(trial.acronym())
                         .gender(null)
-                        .countriesOfStudy(Sets.newHashSet("The Netherlands"))
+                        .locationsOfStudy(Map.of("The Netherlands", List.of("Unknown")))
                         .therapyNames(Sets.newHashSet())
                         .build())
                 .level(EvidenceLevel.B)

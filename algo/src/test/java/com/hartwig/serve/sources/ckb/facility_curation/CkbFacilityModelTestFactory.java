@@ -25,8 +25,11 @@ public final class CkbFacilityModelTestFactory {
         facilityCityEntries.add(entry1);
 
         List<CkbFacilityCurationNameEntry> facilityNameEntries = Lists.newArrayList();
-        CkbFacilityCurationNameEntry entry2 =
-                ImmutableCkbFacilityCurationNameEntry.builder().facilityName("Erasmus").curatedFacilityName("EMC").build();
+        CkbFacilityCurationNameEntry entry2 = ImmutableCkbFacilityCurationNameEntry.builder()
+                .facilityName("Erasmus")
+                .city("Rotterdam")
+                .curatedFacilityName("EMC")
+                .build();
 
         facilityNameEntries.add(entry2);
 

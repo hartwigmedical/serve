@@ -12,5 +12,8 @@ public abstract class CkbFacilityCurationNameEntry {
     public abstract String facilityName();
 
     @NotNull
+    public abstract String city();
+
+    @NotNull
     public abstract String curatedFacilityName();
 }

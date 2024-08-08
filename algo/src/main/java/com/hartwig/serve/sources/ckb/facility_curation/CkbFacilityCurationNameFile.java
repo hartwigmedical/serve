@@ -36,9 +36,10 @@ public class CkbFacilityCurationNameFile {
     private static CkbFacilityCurationNameEntry fromLine(@NotNull String line, @NotNull Map<String, Integer> fields) {
         String[] values = line.split(FIELD_DELIMITER);
         String name = values[fields.get("facility name")];
+        String city = values[fields.get("city")];
         String facilityName = values[fields.get("curated facility name")];
 
-        return ImmutableCkbFacilityCurationNameEntry.builder().facilityName(name).curatedFacilityName(facilityName).build();
+        return ImmutableCkbFacilityCurationNameEntry.builder().facilityName(name).city(city).curatedFacilityName(facilityName).build();
     }
 }
 

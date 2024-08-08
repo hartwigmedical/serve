@@ -1,4 +1,4 @@
-package com.hartwig.serve.sources.ckb.facility;
+package com.hartwig.serve.sources.ckb.facility_curation;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,12 +11,12 @@ import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 import org.apache.commons.compress.utils.Lists;
 import org.jetbrains.annotations.NotNull;
 
-public class CkbFacilityCityFile {
+public class CkbFacilityCurationCityFile {
 
     public static final String FIELD_DELIMITER = "\t";
 
     @NotNull
-    public static List<CkbFacilityCityEntry> read(@NotNull String ckbFacilityCityTsv) throws IOException {
+    public static List<CkbFacilityCurationCityEntry> read(@NotNull String ckbFacilityCityTsv) throws IOException {
         List<String> lines = Files.readAllLines(new File(ckbFacilityCityTsv).toPath());
         Map<String, Integer> fields = SerializationUtil.createFields(lines.get(0), FIELD_DELIMITER);
 
@@ -24,8 +24,8 @@ public class CkbFacilityCityFile {
     }
 
     @NotNull
-    private static List<CkbFacilityCityEntry> fromLines(@NotNull List<String> lines, @NotNull Map<String, Integer> fields) {
-        List<CkbFacilityCityEntry> cities = Lists.newArrayList();
+    private static List<CkbFacilityCurationCityEntry> fromLines(@NotNull List<String> lines, @NotNull Map<String, Integer> fields) {
+        List<CkbFacilityCurationCityEntry> cities = Lists.newArrayList();
         for (String line : lines) {
             cities.add(fromLine(line, fields));
         }
@@ -33,11 +33,11 @@ public class CkbFacilityCityFile {
     }
 
     @NotNull
-    private static CkbFacilityCityEntry fromLine(@NotNull String line, @NotNull Map<String, Integer> fields) {
+    private static CkbFacilityCurationCityEntry fromLine(@NotNull String line, @NotNull Map<String, Integer> fields) {
         String[] values = line.split(FIELD_DELIMITER);
         String city = values[fields.get("city")];
         String facilityName = values[fields.get("curated facility name")];
 
-        return ImmutableCkbFacilityCityEntry.builder().city(city).curatedFacilityName(facilityName).build();
+        return ImmutableCkbFacilityCurationCityEntry.builder().city(city).curatedFacilityName(facilityName).build();
     }
 }

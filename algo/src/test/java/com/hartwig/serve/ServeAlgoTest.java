@@ -28,10 +28,10 @@ public class ServeAlgoTest {
             Resources.getResource("ckb_curation/ckb_treatment_approach_curation.tsv").getPath();
     private static final String CKB_REGION_TSV = Resources.getResource("ckb_region/ckb_regions.tsv").getPath();
 
-    private static final String CKB_FACILITY_CITY_TSV = Resources.getResource("ckb_facility/ckb_facility_city.tsv").getPath();
-    private static final String CKB_FACILITY_NAME_TSV = Resources.getResource("ckb_facility/ckb_facility_name.tsv").getPath();
-    private static final String CKB_FACILITY_ZIP_TSV = Resources.getResource("ckb_facility/ckb_facility_zip.tsv").getPath();
-    private static final String CKB_FACILITY_FILTER_TSV = Resources.getResource("ckb_facility/ckb_facility_filter.tsv").getPath();
+    private static final String CKB_FACILITY_CURATION_CITY_TSV = Resources.getResource("ckb_facility/ckb_facility_city.tsv").getPath();
+    private static final String CKB_FACILITY_CURATION_NAME_TSV = Resources.getResource("ckb_facility/ckb_facility_name.tsv").getPath();
+    private static final String CKB_FACILITY_CURATION_ZIP_TSV = Resources.getResource("ckb_facility/ckb_facility_zip.tsv").getPath();
+    private static final String CKB_FACILITY_CURATION_FILTER_TSV = Resources.getResource("ckb_facility/ckb_facility_filter.tsv").getPath();
 
     private static final String DOCM_TSV = Resources.getResource("docm/example.tsv").getPath();
     private static final String HARTWIG_CURATED_HOTSPOT_TSV = Resources.getResource("hartwig/hartwig_curated_hotspots.tsv").getPath();
@@ -67,10 +67,10 @@ public class ServeAlgoTest {
                 .ckbBlacklistEvidenceTsv(CKB_BLACKLIST_EVIDENCE_TSV)
                 .ckbDrugCurationTsv(CKB_DRUG_CLASS_CURATION_TSV)
                 .ckbRegionTsv(CKB_REGION_TSV)
-                .ckbFacilityCityTsv(CKB_FACILITY_CITY_TSV)
-                .ckbFacilityNameTsv(CKB_FACILITY_NAME_TSV)
-                .ckbFacilityZipTsv(CKB_FACILITY_ZIP_TSV)
-                .ckbFacilityFilterTsv(CKB_FACILITY_FILTER_TSV)
+                .ckbFacilityCurationCityTsv(CKB_FACILITY_CURATION_CITY_TSV)
+                .ckbFacilityCurationNameTsv(CKB_FACILITY_CURATION_NAME_TSV)
+                .ckbFacilityCurationZipTsv(CKB_FACILITY_CURATION_ZIP_TSV)
+                .ckbFacilityCurationFilterTsv(CKB_FACILITY_CURATION_FILTER_TSV)
                 .useDocm(true)
                 .docmTsv(DOCM_TSV)
                 .useHartwigCohortHotspots(true)

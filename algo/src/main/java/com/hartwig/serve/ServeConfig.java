@@ -40,10 +40,10 @@ public interface ServeConfig {
     String CKB_BLACKLIST_EVIDENCE_TSV = "ckb_blacklist_evidence_tsv";
     String CKB_DRUG_CURATION_TSV = "ckb_drug_curation_tsv";
     String CKB_REGION_TSV = "ckb_region_tsv";
-    String CKB_FACILITY_CITY_TSV = "ckb_facility_city_tsv";
-    String CKB_FACILITY_NAME_TSV = "ckb_facility_name_tsv";
-    String CKB_FACILITY_ZIP_TSV = "ckb_facility_zip_tsv";
-    String CKB_FACILITY_FILTER_TSV = "ckb_facility_filter_tsv";
+    String CKB_FACILITY_CURATION_CITY_TSV = "ckb_facility_curation_city_tsv";
+    String CKB_FACILITY_CURATION_NAME_TSV = "ckb_facility_curation_name_tsv";
+    String CKB_FACILITY_CURATION_ZIP_TSV = "ckb_facility_curation_zip_tsv";
+    String CKB_FACILITY_CURATION_FILTER_TSV = "ckb_facility_curation_filter_tsv";
     String USE_DOCM = "use_docm";
     String DOCM_TSV = "docm_tsv";
     String USE_HARTWIG_COHORT_HOTSPOTS = "use_hartwig_cohort_hotspots";
@@ -93,10 +93,10 @@ public interface ServeConfig {
         options.addOption(CKB_BLACKLIST_EVIDENCE_TSV, true, "Path to the CKB blacklist evidence tsv");
         options.addOption(CKB_DRUG_CURATION_TSV, true, "Path to the CKB drug curation tsv");
         options.addOption(CKB_REGION_TSV, true, "Path to the CKB regions tsv. Only trials from the configured regions will be used.");
-        options.addOption(CKB_FACILITY_CITY_TSV, true, "");
-        options.addOption(CKB_FACILITY_NAME_TSV, true, "");
-        options.addOption(CKB_FACILITY_ZIP_TSV, true, "");
-        options.addOption(CKB_FACILITY_FILTER_TSV, true, "");
+        options.addOption(CKB_FACILITY_CURATION_CITY_TSV, true, "Path to the CKB facility curations based on city tsv");
+        options.addOption(CKB_FACILITY_CURATION_NAME_TSV, true, "Path to the CKB facility curations based on name tsv");
+        options.addOption(CKB_FACILITY_CURATION_ZIP_TSV, true, "Path to the CKB facility curations based on zip tsv");
+        options.addOption(CKB_FACILITY_CURATION_FILTER_TSV, true, "Path to the CKB facility curations to filter tsv");
         options.addOption(USE_DOCM, false, "If provided, DoCM will be used as a source in SERVE");
         options.addOption(DOCM_TSV, true, "Path to the DoCM knowledgebase input TSV");
         options.addOption(USE_HARTWIG_COHORT_HOTSPOTS, false, "If provided, Hartwig Cohort Hotspots will be used as a source in SERVE");
@@ -167,16 +167,16 @@ public interface ServeConfig {
     String ckbRegionTsv();
 
     @NotNull
-    String ckbFacilityCityTsv();
+    String ckbFacilityCurationCityTsv();
 
     @NotNull
-    String ckbFacilityNameTsv();
+    String ckbFacilityCurationNameTsv();
 
     @NotNull
-    String ckbFacilityZipTsv();
+    String ckbFacilityCurationZipTsv();
 
     @NotNull
-    String ckbFacilityFilterTsv();
+    String ckbFacilityCurationFilterTsv();
 
     boolean useDocm();
 
@@ -270,10 +270,10 @@ public interface ServeConfig {
                 .ckbBlacklistEvidenceTsv(useCkbEvidence ? nonOptionalFile(cmd, CKB_BLACKLIST_EVIDENCE_TSV) : NOT_APPLICABLE)
                 .ckbDrugCurationTsv(useCkbEvidence ? nonOptionalFile(cmd, CKB_DRUG_CURATION_TSV) : NOT_APPLICABLE)
                 .ckbRegionTsv(useCkbTrials ? nonOptionalFile(cmd, CKB_REGION_TSV) : NOT_APPLICABLE)
-                .ckbFacilityCityTsv(useCkbTrials ? nonOptionalFile(cmd, CKB_FACILITY_CITY_TSV) : NOT_APPLICABLE)
-                .ckbFacilityNameTsv(useCkbTrials ? nonOptionalFile(cmd, CKB_FACILITY_NAME_TSV) : NOT_APPLICABLE)
-                .ckbFacilityZipTsv(useCkbTrials ? nonOptionalFile(cmd, CKB_FACILITY_ZIP_TSV) : NOT_APPLICABLE)
-                .ckbFacilityFilterTsv(useCkbTrials ? nonOptionalFile(cmd, CKB_FACILITY_FILTER_TSV) : NOT_APPLICABLE)
+                .ckbFacilityCurationCityTsv(useCkbTrials ? nonOptionalFile(cmd, CKB_FACILITY_CURATION_CITY_TSV) : NOT_APPLICABLE)
+                .ckbFacilityCurationNameTsv(useCkbTrials ? nonOptionalFile(cmd, CKB_FACILITY_CURATION_NAME_TSV) : NOT_APPLICABLE)
+                .ckbFacilityCurationZipTsv(useCkbTrials ? nonOptionalFile(cmd, CKB_FACILITY_CURATION_ZIP_TSV) : NOT_APPLICABLE)
+                .ckbFacilityCurationFilterTsv(useCkbTrials ? nonOptionalFile(cmd, CKB_FACILITY_CURATION_FILTER_TSV) : NOT_APPLICABLE)
                 .useDocm(useDocm)
                 .docmTsv(useDocm ? nonOptionalFile(cmd, DOCM_TSV) : NOT_APPLICABLE)
                 .useHartwigCohortHotspots(useHartwigCohortHotspots)

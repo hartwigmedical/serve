@@ -1,4 +1,4 @@
-package com.hartwig.serve.sources.ckb.facility;
+package com.hartwig.serve.sources.ckb.facility_curation;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,12 +11,12 @@ import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 import org.apache.commons.compress.utils.Lists;
 import org.jetbrains.annotations.NotNull;
 
-public class CkbFacilityZipFile {
+public class CkbFacilityCurationZipFile {
 
     public static final String FIELD_DELIMITER = "\t";
 
     @NotNull
-    public static List<CkbFacilityZipEntry> read(@NotNull String ckbFacilityZipTsv) throws IOException {
+    public static List<CkbFacilityCurationZipEntry> read(@NotNull String ckbFacilityZipTsv) throws IOException {
         List<String> lines = Files.readAllLines(new File(ckbFacilityZipTsv).toPath());
         Map<String, Integer> fields = SerializationUtil.createFields(lines.get(0), FIELD_DELIMITER);
 
@@ -24,8 +24,8 @@ public class CkbFacilityZipFile {
     }
 
     @NotNull
-    private static List<CkbFacilityZipEntry> fromLines(@NotNull List<String> lines, @NotNull Map<String, Integer> fields) {
-        List<CkbFacilityZipEntry> zips = Lists.newArrayList();
+    private static List<CkbFacilityCurationZipEntry> fromLines(@NotNull List<String> lines, @NotNull Map<String, Integer> fields) {
+        List<CkbFacilityCurationZipEntry> zips = Lists.newArrayList();
         for (String line : lines) {
             zips.add(fromLine(line, fields));
         }
@@ -33,12 +33,12 @@ public class CkbFacilityZipFile {
     }
 
     @NotNull
-    private static CkbFacilityZipEntry fromLine(@NotNull String line, @NotNull Map<String, Integer> fields) {
+    private static CkbFacilityCurationZipEntry fromLine(@NotNull String line, @NotNull Map<String, Integer> fields) {
         String[] values = line.split(FIELD_DELIMITER);
         String city = values[fields.get("city")];
         String zip = values[fields.get("zip")];
         String facilityName = values[fields.get("curated facility name")];
 
-        return ImmutableCkbFacilityZipEntry.builder().city(city).zip(zip).curatedFacilityName(facilityName).build();
+        return ImmutableCkbFacilityCurationZipEntry.builder().city(city).zip(zip).curatedFacilityName(facilityName).build();
     }
 }

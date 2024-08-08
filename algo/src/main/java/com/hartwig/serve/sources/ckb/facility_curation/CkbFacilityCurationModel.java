@@ -1,4 +1,4 @@
-package com.hartwig.serve.sources.ckb.facility;
+package com.hartwig.serve.sources.ckb.facility_curation;
 
 import java.util.List;
 
@@ -9,25 +9,26 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class CkbFacilityModel {
+public class CkbFacilityCurationModel {
 
-    private static final Logger LOGGER = LogManager.getLogger(CkbFacilityModel.class);
-
-    @NotNull
-    private final List<CkbFacilityCityEntry> facilityCityEntries;
+    private static final Logger LOGGER = LogManager.getLogger(CkbFacilityCurationModel.class);
 
     @NotNull
-    private final List<CkbFacilityNameEntry> facilityNameEntries;
+    private final List<CkbFacilityCurationCityEntry> facilityCityEntries;
 
     @NotNull
-    private final List<CkbFacilityZipEntry> facilityZipEntries;
+    private final List<CkbFacilityCurationNameEntry> facilityNameEntries;
 
     @NotNull
-    private final List<CkbFacilityFilterEntry> facilityFilterEntries;
+    private final List<CkbFacilityCurationZipEntry> facilityZipEntries;
 
-    public CkbFacilityModel(@NotNull final List<CkbFacilityCityEntry> facilityCityList,
-            @NotNull final List<CkbFacilityNameEntry> facilityNameList, @NotNull final List<CkbFacilityZipEntry> facilityZipList,
-            @NotNull final List<CkbFacilityFilterEntry> facilityFilterList) {
+    @NotNull
+    private final List<CkbFacilityCurationFilterEntry> facilityFilterEntries;
+
+    public CkbFacilityCurationModel(@NotNull final List<CkbFacilityCurationCityEntry> facilityCityList,
+            @NotNull final List<CkbFacilityCurationNameEntry> facilityNameList,
+            @NotNull final List<CkbFacilityCurationZipEntry> facilityZipList,
+            @NotNull final List<CkbFacilityCurationFilterEntry> facilityFilterList) {
         this.facilityCityEntries = facilityCityList;
         this.facilityNameEntries = facilityNameList;
         this.facilityZipEntries = facilityZipList;
@@ -35,14 +36,14 @@ public class CkbFacilityModel {
     }
 
     public String curateFacilityName(@NotNull Location location) {
-        for (CkbFacilityCityEntry facilityCityEntry : facilityCityEntries) {
+        for (CkbFacilityCurationCityEntry facilityCityEntry : facilityCityEntries) {
             if (location.city().toLowerCase().contains(facilityCityEntry.city().toLowerCase())) {
                 return facilityCityEntry.curatedFacilityName();
             }
         }
 
         if (location.facility() != null) {
-            for (CkbFacilityNameEntry facilityNameEntry : facilityNameEntries) {
+            for (CkbFacilityCurationNameEntry facilityNameEntry : facilityNameEntries) {
                 if (location.facility().toLowerCase().contains(facilityNameEntry.facilityName().toLowerCase())) {
                     return facilityNameEntry.curatedFacilityName();
                 }
@@ -50,7 +51,7 @@ public class CkbFacilityModel {
         }
 
         if (location.zip() != null) {
-            for (CkbFacilityZipEntry facilityZipEntry : facilityZipEntries) {
+            for (CkbFacilityCurationZipEntry facilityZipEntry : facilityZipEntries) {
                 if (location.city().toLowerCase().contains(facilityZipEntry.city().toLowerCase()) && location.zip()
                         .replaceAll("\\s", "")
                         .contains(facilityZipEntry.zip())) {
@@ -59,7 +60,7 @@ public class CkbFacilityModel {
             }
         }
 
-        for (CkbFacilityFilterEntry facilityFilterEntry : facilityFilterEntries) {
+        for (CkbFacilityCurationFilterEntry facilityFilterEntry : facilityFilterEntries) {
             if (equalStringsIncludingNull(location.facility(), facilityFilterEntry.facilityName()) && location.city()
                     .equals(facilityFilterEntry.city()) && equalStringsIncludingNull(location.zip(), facilityFilterEntry.zip())) {
                 return facilityFilterEntry.curatedFacilityName();

@@ -23,8 +23,8 @@ import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudyType;
 import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistTestFactory;
 import com.hartwig.serve.sources.ckb.blacklist.CkbStudyBlacklistModel;
 import com.hartwig.serve.sources.ckb.blacklist.ImmutableCkbBlacklistStudyEntry;
-import com.hartwig.serve.sources.ckb.facility.CkbFacilityModel;
-import com.hartwig.serve.sources.ckb.facility.CkbFacilityModelTestFactory;
+import com.hartwig.serve.sources.ckb.facility_curation.CkbFacilityCurationModel;
+import com.hartwig.serve.sources.ckb.facility_curation.CkbFacilityModelTestFactory;
 import com.hartwig.serve.sources.ckb.region.CkbRegion;
 import com.hartwig.serve.sources.ckb.region.ImmutableCkbRegion;
 
@@ -39,7 +39,7 @@ public class ActionableTrialFactoryTest {
     private static final CkbStudyBlacklistModel BLACKLIST_MODEL = CkbBlacklistTestFactory.createProperStudyBlacklist();
     public static final Set<CkbRegion> REGIONS_TO_INCLUDE =
             Set.of(createRegion("netherlands"), createRegion("belgium"), createRegion("germany"), createRegion("united states", "maine"));
-    public static final CkbFacilityModel FACILITY_MODEL = CkbFacilityModelTestFactory.createProperFacilityModel();
+    public static final CkbFacilityCurationModel FACILITY_MODEL = CkbFacilityModelTestFactory.createProperFacilityModel();
 
     @NotNull
     private static ImmutableCkbRegion createRegion(@NotNull String country, @NotNull String... states) {

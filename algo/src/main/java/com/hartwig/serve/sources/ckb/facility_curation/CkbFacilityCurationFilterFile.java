@@ -1,4 +1,4 @@
-package com.hartwig.serve.sources.ckb.facility;
+package com.hartwig.serve.sources.ckb.facility_curation;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,12 +11,12 @@ import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 import org.apache.commons.compress.utils.Lists;
 import org.jetbrains.annotations.NotNull;
 
-public class CkbFacilityFilterFile {
+public class CkbFacilityCurationFilterFile {
 
     public static final String FIELD_DELIMITER = "\t";
 
     @NotNull
-    public static List<CkbFacilityFilterEntry> read(@NotNull String ckbFacilityFilterTsv) throws IOException {
+    public static List<CkbFacilityCurationFilterEntry> read(@NotNull String ckbFacilityFilterTsv) throws IOException {
         List<String> lines = Files.readAllLines(new File(ckbFacilityFilterTsv).toPath());
         Map<String, Integer> fields = SerializationUtil.createFields(lines.get(0), FIELD_DELIMITER);
 
@@ -24,8 +24,8 @@ public class CkbFacilityFilterFile {
     }
 
     @NotNull
-    private static List<CkbFacilityFilterEntry> fromLines(@NotNull List<String> lines, @NotNull Map<String, Integer> fields) {
-        List<CkbFacilityFilterEntry> filters = Lists.newArrayList();
+    private static List<CkbFacilityCurationFilterEntry> fromLines(@NotNull List<String> lines, @NotNull Map<String, Integer> fields) {
+        List<CkbFacilityCurationFilterEntry> filters = Lists.newArrayList();
         for (String line : lines) {
             filters.add(fromLine(line, fields));
         }
@@ -33,14 +33,14 @@ public class CkbFacilityFilterFile {
     }
 
     @NotNull
-    private static CkbFacilityFilterEntry fromLine(@NotNull String line, @NotNull Map<String, Integer> fields) {
+    private static CkbFacilityCurationFilterEntry fromLine(@NotNull String line, @NotNull Map<String, Integer> fields) {
         String[] values = line.split(FIELD_DELIMITER);
         String facilityName = values[fields.get("facility name")];
         String city = values[fields.get("city")];
         String zip = values[fields.get("zip")];
         String curatedFacilityName = values[fields.get("curated facility name")];
 
-        return ImmutableCkbFacilityFilterEntry.builder()
+        return ImmutableCkbFacilityCurationFilterEntry.builder()
                 .facilityName(facilityName)
                 .city(city)
                 .zip(zip)

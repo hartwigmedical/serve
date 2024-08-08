@@ -1,4 +1,4 @@
-package com.hartwig.serve.sources.ckb.facility;
+package com.hartwig.serve.sources.ckb.facility_curation;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,12 +11,12 @@ import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 import org.apache.commons.compress.utils.Lists;
 import org.jetbrains.annotations.NotNull;
 
-public class CkbFacilityNameFile {
+public class CkbFacilityCurationNameFile {
 
     public static final String FIELD_DELIMITER = "\t";
 
     @NotNull
-    public static List<CkbFacilityNameEntry> read(@NotNull String ckbFacilityNameTsv) throws IOException {
+    public static List<CkbFacilityCurationNameEntry> read(@NotNull String ckbFacilityNameTsv) throws IOException {
         List<String> lines = Files.readAllLines(new File(ckbFacilityNameTsv).toPath());
         Map<String, Integer> fields = SerializationUtil.createFields(lines.get(0), FIELD_DELIMITER);
 
@@ -24,8 +24,8 @@ public class CkbFacilityNameFile {
     }
 
     @NotNull
-    private static List<CkbFacilityNameEntry> fromLines(@NotNull List<String> lines, @NotNull Map<String, Integer> fields) {
-        List<CkbFacilityNameEntry> names = Lists.newArrayList();
+    private static List<CkbFacilityCurationNameEntry> fromLines(@NotNull List<String> lines, @NotNull Map<String, Integer> fields) {
+        List<CkbFacilityCurationNameEntry> names = Lists.newArrayList();
         for (String line : lines) {
             names.add(fromLine(line, fields));
         }
@@ -33,12 +33,12 @@ public class CkbFacilityNameFile {
     }
 
     @NotNull
-    private static CkbFacilityNameEntry fromLine(@NotNull String line, @NotNull Map<String, Integer> fields) {
+    private static CkbFacilityCurationNameEntry fromLine(@NotNull String line, @NotNull Map<String, Integer> fields) {
         String[] values = line.split(FIELD_DELIMITER);
         String name = values[fields.get("facility name")];
         String facilityName = values[fields.get("curated facility name")];
 
-        return ImmutableCkbFacilityNameEntry.builder().facilityName(name).curatedFacilityName(facilityName).build();
+        return ImmutableCkbFacilityCurationNameEntry.builder().facilityName(name).curatedFacilityName(facilityName).build();
     }
 }
 

@@ -29,15 +29,15 @@ import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudyEntry;
 import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudyFile;
 import com.hartwig.serve.sources.ckb.blacklist.CkbEvidenceBlacklistModel;
 import com.hartwig.serve.sources.ckb.blacklist.CkbStudyBlacklistModel;
-import com.hartwig.serve.sources.ckb.facility.CkbFacilityCityEntry;
-import com.hartwig.serve.sources.ckb.facility.CkbFacilityCityFile;
-import com.hartwig.serve.sources.ckb.facility.CkbFacilityFilterEntry;
-import com.hartwig.serve.sources.ckb.facility.CkbFacilityFilterFile;
-import com.hartwig.serve.sources.ckb.facility.CkbFacilityModel;
-import com.hartwig.serve.sources.ckb.facility.CkbFacilityNameEntry;
-import com.hartwig.serve.sources.ckb.facility.CkbFacilityNameFile;
-import com.hartwig.serve.sources.ckb.facility.CkbFacilityZipEntry;
-import com.hartwig.serve.sources.ckb.facility.CkbFacilityZipFile;
+import com.hartwig.serve.sources.ckb.facility_curation.CkbFacilityCurationCityEntry;
+import com.hartwig.serve.sources.ckb.facility_curation.CkbFacilityCurationCityFile;
+import com.hartwig.serve.sources.ckb.facility_curation.CkbFacilityCurationFilterEntry;
+import com.hartwig.serve.sources.ckb.facility_curation.CkbFacilityCurationModel;
+import com.hartwig.serve.sources.ckb.facility_curation.CkbFacilityCurationNameFile;
+import com.hartwig.serve.sources.ckb.facility_curation.CkbFacilityCurationFilterFile;
+import com.hartwig.serve.sources.ckb.facility_curation.CkbFacilityCurationNameEntry;
+import com.hartwig.serve.sources.ckb.facility_curation.CkbFacilityCurationZipEntry;
+import com.hartwig.serve.sources.ckb.facility_curation.CkbFacilityCurationZipFile;
 import com.hartwig.serve.sources.ckb.region.CkbRegion;
 import com.hartwig.serve.sources.ckb.region.CkbRegionFile;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurationEntry;
@@ -94,10 +94,10 @@ public class ServeAlgo {
                                         ckbEntries) : null,
                                 config.useCkbTrials() ? extractCkbTrialKnowledge(config.ckbBlacklistTrialTsv(),
                                         config.ckbRegionTsv(),
-                                        config.ckbFacilityCityTsv(),
-                                        config.ckbFacilityNameTsv(),
-                                        config.ckbFacilityZipTsv(),
-                                        config.ckbFacilityFilterTsv(),
+                                        config.ckbFacilityCurationCityTsv(),
+                                        config.ckbFacilityCurationNameTsv(),
+                                        config.ckbFacilityCurationZipTsv(),
+                                        config.ckbFacilityCurationFilterTsv(),
                                         ckbEntries) : null,
                                 config.useDocm() ? extractDocmKnowledge(config.docmTsv()) : null,
                                 config.useHartwigCohortHotspots() ? extractHartwigCohortHotspotKnowledge(config.hartwigCohortHotspotTsv(),
@@ -171,8 +171,9 @@ public class ServeAlgo {
 
     @NotNull
     private ExtractionResult extractCkbTrialKnowledge(@NotNull String ckbBlacklistStudyTsv, @NotNull String ckbRegionTsv,
-            @NotNull String ckbFacilityCityTsv, @NotNull String ckbFacilityNameTsv, @NotNull String ckbFacilityZipTsv,
-            @NotNull String ckbFacilityFilterTsv, @NotNull List<CkbEntry> ckbEntries) throws IOException {
+            @NotNull String ckbFacilityCurationCityTsv, @NotNull String ckbFacilityCurationNameTsv,
+            @NotNull String ckbFacilityCurationZipTsv, @NotNull String ckbFacilityCurationFilterTsv, @NotNull List<CkbEntry> ckbEntries)
+            throws IOException {
         EventClassifierConfig config = CkbClassificationConfig.build();
         RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.CKB_TRIAL);
 
@@ -185,27 +186,30 @@ public class ServeAlgo {
         Set<CkbRegion> regionsToInclude = CkbRegionFile.read(ckbRegionTsv);
         LOGGER.info(" Read {} regions to include", regionsToInclude.size());
 
-        LOGGER.info("Reading facility city curations from {}", ckbFacilityCityTsv);
-        List<CkbFacilityCityEntry> facilityCityCurations = CkbFacilityCityFile.read(ckbFacilityCityTsv);
+        LOGGER.info("Reading facility city curations from {}", ckbFacilityCurationCityTsv);
+        List<CkbFacilityCurationCityEntry> facilityCityCurations = CkbFacilityCurationCityFile.read(ckbFacilityCurationCityTsv);
         LOGGER.info(" Read {} facility city curations to include", regionsToInclude.size());
 
-        LOGGER.info("Reading facility name curations from {}", ckbFacilityNameTsv);
-        List<CkbFacilityNameEntry> facilityNameCurations = CkbFacilityNameFile.read(ckbFacilityNameTsv);
+        LOGGER.info("Reading facility name curations from {}", ckbFacilityCurationNameTsv);
+        List<CkbFacilityCurationNameEntry> facilityNameCurations = CkbFacilityCurationNameFile.read(ckbFacilityCurationNameTsv);
         LOGGER.info(" Read {} facility name curations to include", regionsToInclude.size());
 
-        LOGGER.info("Reading facility zip curations from {}", ckbFacilityZipTsv);
-        List<CkbFacilityZipEntry> facilityZipCurations = CkbFacilityZipFile.read(ckbFacilityZipTsv);
+        LOGGER.info("Reading facility zip curations from {}", ckbFacilityCurationZipTsv);
+        List<CkbFacilityCurationZipEntry> facilityZipCurations = CkbFacilityCurationZipFile.read(ckbFacilityCurationZipTsv);
         LOGGER.info(" Read {} facility zip curations to include", regionsToInclude.size());
 
-        LOGGER.info("Reading facility filter curations from {}", ckbFacilityFilterTsv);
-        List<CkbFacilityFilterEntry> facilityFilterCurations = CkbFacilityFilterFile.read(ckbFacilityFilterTsv);
+        LOGGER.info("Reading facility filter curations from {}", ckbFacilityCurationFilterTsv);
+        List<CkbFacilityCurationFilterEntry> facilityFilterCurations = CkbFacilityCurationFilterFile.read(ckbFacilityCurationFilterTsv);
         LOGGER.info(" Read {} facility filter curations to include", regionsToInclude.size());
 
-        CkbFacilityModel ckbFacilityModel =
-                new CkbFacilityModel(facilityCityCurations, facilityNameCurations, facilityZipCurations, facilityFilterCurations);
+        CkbFacilityCurationModel ckbFacilityCurationModel =
+                new CkbFacilityCurationModel(facilityCityCurations, facilityNameCurations, facilityZipCurations, facilityFilterCurations);
 
-        CkbExtractor extractor =
-                CkbExtractorFactory.createTrialExtractor(config, refGenomeResource, blacklistStudy, regionsToInclude, ckbFacilityModel);
+        CkbExtractor extractor = CkbExtractorFactory.createTrialExtractor(config,
+                refGenomeResource,
+                blacklistStudy,
+                regionsToInclude,
+                ckbFacilityCurationModel);
 
         LOGGER.info("Running CKB trial knowledge extraction");
         ExtractionResult result = extractor.extract(ckbEntries);

@@ -1,4 +1,4 @@
-package com.hartwig.serve.sources.ckb.facility;
+package com.hartwig.serve.sources.ckb.facility_curation;
 
 import static org.junit.Assert.assertEquals;
 
@@ -9,9 +9,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.Test;
 
-public class CkbFacilityModelTest {
+public class CkbFacilityCurationModelTest {
 
-    private static final CkbFacilityModel facilityModel = CkbFacilityModelTestFactory.createProperFacilityModel();
+    private static final CkbFacilityCurationModel facilityModel = CkbFacilityModelTestFactory.createProperFacilityModel();
 
     @Test
     public void canCurateFacilityNameBasedOnCity() {

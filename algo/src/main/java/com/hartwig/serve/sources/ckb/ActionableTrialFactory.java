@@ -25,7 +25,7 @@ import com.hartwig.serve.datamodel.ImmutableClinicalTrial;
 import com.hartwig.serve.datamodel.ImmutableCountry;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.sources.ckb.blacklist.CkbStudyBlacklistModel;
-import com.hartwig.serve.sources.ckb.facility.CkbFacilityModel;
+import com.hartwig.serve.sources.ckb.facility_curation.CkbFacilityCurationModel;
 import com.hartwig.serve.sources.ckb.region.CkbRegion;
 
 import org.jetbrains.annotations.NotNull;
@@ -50,13 +50,13 @@ class ActionableTrialFactory implements ActionableEntryFactory {
     @NotNull
     private final Set<CkbRegion> regionsToInclude;
     @NotNull
-    private final CkbFacilityModel ckbFacilityModel;
+    private final CkbFacilityCurationModel ckbFacilityCurationModel;
 
     public ActionableTrialFactory(@NotNull CkbStudyBlacklistModel blacklistStudy, @NotNull Set<CkbRegion> regionsToInclude,
-            @NotNull CkbFacilityModel ckbFacilityModel) {
+            @NotNull CkbFacilityCurationModel ckbFacilityCurationModel) {
         this.blacklistStudy = blacklistStudy;
         this.regionsToInclude = regionsToInclude;
-        this.ckbFacilityModel = ckbFacilityModel;
+        this.ckbFacilityCurationModel = ckbFacilityCurationModel;
     }
 
     @NotNull
@@ -65,7 +65,7 @@ class ActionableTrialFactory implements ActionableEntryFactory {
         Set<ActionableEntry> actionableTrials = Sets.newHashSet();
 
         for (ClinicalTrial trial : trialsToInclude(entry)) {
-            Set<Country> countries = filterOnRegionsToInclude(trial, regionsToInclude, ckbFacilityModel);
+            Set<Country> countries = filterOnRegionsToInclude(trial, regionsToInclude, ckbFacilityCurationModel);
 
             if (!countries.isEmpty()) {
                 Set<String> therapies = Sets.newHashSet();
@@ -135,14 +135,14 @@ class ActionableTrialFactory implements ActionableEntryFactory {
     @NotNull
     @VisibleForTesting
     static Set<Country> filterOnRegionsToInclude(@NotNull ClinicalTrial trial, @NotNull Set<CkbRegion> regionsToInclude,
-            @NotNull CkbFacilityModel ckbFacilityModel) {
+            @NotNull CkbFacilityCurationModel ckbFacilityCurationModel) {
         Map<String, Map<String, Set<String>>> countriesToCitiesToHospitalNames = new HashMap<>();
         for (Location location : trial.locations()) {
             if (regionsToInclude.stream().anyMatch(region -> region.includes(location))
                     && hasPotentiallyOpenRequirementToInclude(location.status())) {
                 String facility = "";
                 if (location.country().equals("Netherlands")) {
-                    facility = ckbFacilityModel.curateFacilityName(location);
+                    facility = ckbFacilityCurationModel.curateFacilityName(location);
                 }
                 countriesToCitiesToHospitalNames.computeIfAbsent(location.country(), it -> new HashMap<>())
                         .computeIfAbsent(location.city(), it2 -> new HashSet<>())

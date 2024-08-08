@@ -174,8 +174,8 @@ public final class ActionableFileUtil {
                 .add(clinicalTrial != null ? clinicalTrial.studyTitle() : Strings.EMPTY)
                 .add(clinicalTrial != null && clinicalTrial.studyAcronym() != null ? clinicalTrial.studyAcronym() : Strings.EMPTY)
                 .add(clinicalTrial != null && clinicalTrial.gender() != null ? clinicalTrial.gender() : Strings.EMPTY)
-                .add(clinicalTrial != null ? countriesOfStudyToField1(clinicalTrial.countriesOfStudy()) : Strings.EMPTY)
-                .add(clinicalTrial != null ? countriesOfStudyToField2(clinicalTrial.countriesOfStudy()) : Strings.EMPTY)
+                .add(clinicalTrial != null ? countriesOfStudyToCountryNameAndCities(clinicalTrial.countriesOfStudy()) : Strings.EMPTY)
+                .add(clinicalTrial != null ? countriesOfStudyToHospitals(clinicalTrial.countriesOfStudy()) : Strings.EMPTY)
                 .add(setToField(therapy))
                 .add(treatment != null && !treatment.treatmentApproachesDrugClass().isEmpty() ? setToField(treatment.treatmentApproachesDrugClass()) : Strings.EMPTY)
                 .add(treatment != null && !treatment.treatmentApproachesTherapy().isEmpty() ? setToField(treatment.treatmentApproachesTherapy()) : Strings.EMPTY)
@@ -208,7 +208,7 @@ public final class ActionableFileUtil {
 
     @VisibleForTesting
     @NotNull
-    private static String countriesOfStudyToField1(@NotNull Set<Country> countriesOfStudy) {
+    static String countriesOfStudyToCountryNameAndCities(@NotNull Set<Country> countriesOfStudy) {
         return countriesOfStudy.stream()
                 .map(country -> country.countryName() + "(" + String.join(NAME_DOID_DELIMITER, country.cities()) + ")")
                 .collect(Collectors.joining(SUB_FIELD_DELIMITER));
@@ -216,7 +216,7 @@ public final class ActionableFileUtil {
 
     @VisibleForTesting
     @NotNull
-    private static String countriesOfStudyToField2(@NotNull Set<Country> countriesOfStudy) {
+    static String countriesOfStudyToHospitals(@NotNull Set<Country> countriesOfStudy) {
         String result = countriesOfStudy.stream()
                 .filter(country -> country.countryName().equals("Netherlands"))
                 .map(Country::hospitals)
@@ -228,18 +228,18 @@ public final class ActionableFileUtil {
 
     @VisibleForTesting
     @NotNull
-    private static Set<Country> fieldToCountriesOfStudy(@NotNull String field1, @NotNull String field2) {
-        if (field1.isEmpty()) {
+    static Set<Country> fieldToCountriesOfStudy(@NotNull String countriesAndCitiesField, @NotNull String hospitalsField) {
+        if (countriesAndCitiesField.isEmpty()) {
             return Sets.newHashSet();
         }
 
-        return Arrays.stream(field1.split(SUB_FIELD_DELIMITER)).map(part -> {
+        return Arrays.stream(countriesAndCitiesField.split(SUB_FIELD_DELIMITER)).map(part -> {
             String[] splitPart = part.split("\\(");
             String countryName = splitPart[0];
             Set<String> cities = Arrays.stream(splitPart[1].replace(")", "").split(NAME_DOID_DELIMITER)).collect(Collectors.toSet());
             Set<String> hospitals = null;
             if (Objects.equals(countryName, "Netherlands")) {
-                hospitals = fieldToSet(field2);
+                hospitals = fieldToSet(hospitalsField);
             }
             return ImmutableCountry.builder().countryName(countryName).cities(cities).hospitals(hospitals).build();
         }).collect(Collectors.toSet());

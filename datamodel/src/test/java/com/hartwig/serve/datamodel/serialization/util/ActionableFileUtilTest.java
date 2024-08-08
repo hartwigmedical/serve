@@ -8,9 +8,11 @@ import java.util.Set;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.ActionableEvent;
 import com.hartwig.serve.datamodel.CancerType;
+import com.hartwig.serve.datamodel.Country;
 import com.hartwig.serve.datamodel.DatamodelTestFactory;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
+import com.hartwig.serve.datamodel.ImmutableCountry;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.Treatment;
 
@@ -50,17 +52,31 @@ public class ActionableFileUtilTest {
     }
 
     @Test
+    public void canConvertCountriesOfStudyToHospitals() {
+        Set<Country> countriesOfStudy = Sets.newHashSet();
+        countriesOfStudy.add(createCountry("Groningen", "UMCG"));
+        assertEquals("UMCG", ActionableFileUtil.countriesOfStudyToHospitals(countriesOfStudy));
+    }
+
+    @Test
+    public void canConvertCountriesOfStudyToCountryNameAndCities() {
+        Set<Country> countriesOfStudy = Sets.newHashSet();
+        countriesOfStudy.add(createCountry("Groningen", "UMCG"));
+        assertEquals("Netherlands(Groningen)", ActionableFileUtil.countriesOfStudyToCountryNameAndCities(countriesOfStudy));
+    }
+
+    @Test
     public void canConvertSingleCancerTypeToField() {
         Set<CancerType> cancerTypes = Sets.newHashSet();
-        cancerTypes.add(create("Hematologic cancer", "2531"));
+        cancerTypes.add(createCancerType("Hematologic cancer", "2531"));
         assertEquals("Hematologic cancer;2531", ActionableFileUtil.cancerTypesToField(cancerTypes));
     }
 
     @Test
     public void canConvertTwoCancerTypesToField() {
         Set<CancerType> cancerTypes = Sets.newHashSet();
-        cancerTypes.add(create("Hematologic cancer", "2531"));
-        cancerTypes.add(create("Skin Melanoma", "8923"));
+        cancerTypes.add(createCancerType("Hematologic cancer", "2531"));
+        cancerTypes.add(createCancerType("Skin Melanoma", "8923"));
 
         assertEquals("Hematologic cancer;2531,Skin Melanoma;8923", ActionableFileUtil.cancerTypesToField(cancerTypes));
     }
@@ -68,13 +84,27 @@ public class ActionableFileUtilTest {
     @Test
     public void canConvertMultipleCancerTypesToField() {
         Set<CancerType> cancerTypes = Sets.newHashSet();
-        cancerTypes.add(create("Hematologic cancer", "2531"));
-        cancerTypes.add(create("Skin Melanoma", "8923"));
-        cancerTypes.add(create("Bladder Cancer", "11054"));
-        cancerTypes.add(create("Colorectal Cancer", "1520"));
+        cancerTypes.add(createCancerType("Hematologic cancer", "2531"));
+        cancerTypes.add(createCancerType("Skin Melanoma", "8923"));
+        cancerTypes.add(createCancerType("Bladder Cancer", "11054"));
+        cancerTypes.add(createCancerType("Colorectal Cancer", "1520"));
 
         assertEquals("Hematologic cancer;2531,Colorectal Cancer;1520,Skin Melanoma;8923,Bladder Cancer;11054",
                 ActionableFileUtil.cancerTypesToField(cancerTypes));
+    }
+
+    @Test
+    public void canResolveCountriesOfStudy() {
+        String countryNameAndCity = "Netherlands(Groningen)";
+        String hospital = "UMCG";
+
+        Set<Country> countriesOfStudy = ActionableFileUtil.fieldToCountriesOfStudy(countryNameAndCity, hospital);
+
+        assertEquals(1, countriesOfStudy.size());
+        Country country = countriesOfStudy.iterator().next();
+        assertEquals("Netherlands", country.countryName());
+        assertEquals(Set.of("Groningen"), country.cities());
+        assertEquals(Set.of("UMCG"), country.hospitals());
     }
 
     @Test
@@ -132,7 +162,12 @@ public class ActionableFileUtilTest {
     }
 
     @NotNull
-    private static CancerType create(@NotNull String name, @NotNull String doid) {
+    private static CancerType createCancerType(@NotNull String name, @NotNull String doid) {
         return DatamodelTestFactory.cancerTypeBuilder().name(name).doid(doid).build();
+    }
+
+    @NotNull
+    private static Country createCountry(@NotNull String city, @NotNull String hospitals) {
+        return ImmutableCountry.builder().countryName("Netherlands").cities(Set.of(city)).hospitals(Set.of(hospitals)).build();
     }
 }

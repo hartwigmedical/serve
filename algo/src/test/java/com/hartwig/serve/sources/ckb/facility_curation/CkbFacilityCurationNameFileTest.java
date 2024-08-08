@@ -12,7 +12,7 @@ import org.junit.Test;
 public class CkbFacilityCurationNameFileTest {
 
     private static final String TEST_CKB_FACILITY_CURATION_NAME_FILE =
-            Resources.getResource("ckb_facility/ckb_facility_name.tsv").getPath();
+            Resources.getResource("ckb_facility_curation/ckb_facility_name.tsv").getPath();
 
     @Test
     public void canReadCkbFacilityNameTsv() throws IOException {

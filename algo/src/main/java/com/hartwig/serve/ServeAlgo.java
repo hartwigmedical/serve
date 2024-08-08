@@ -188,19 +188,19 @@ public class ServeAlgo {
 
         LOGGER.info("Reading facility city curations from {}", ckbFacilityCurationCityTsv);
         List<CkbFacilityCurationCityEntry> facilityCityCurations = CkbFacilityCurationCityFile.read(ckbFacilityCurationCityTsv);
-        LOGGER.info(" Read {} facility city curations to include", regionsToInclude.size());
+        LOGGER.info(" Read {} facility city curations to include", facilityCityCurations.size());
 
         LOGGER.info("Reading facility name curations from {}", ckbFacilityCurationNameTsv);
         List<CkbFacilityCurationNameEntry> facilityNameCurations = CkbFacilityCurationNameFile.read(ckbFacilityCurationNameTsv);
-        LOGGER.info(" Read {} facility name curations to include", regionsToInclude.size());
+        LOGGER.info(" Read {} facility name curations to include", facilityNameCurations.size());
 
         LOGGER.info("Reading facility zip curations from {}", ckbFacilityCurationZipTsv);
         List<CkbFacilityCurationZipEntry> facilityZipCurations = CkbFacilityCurationZipFile.read(ckbFacilityCurationZipTsv);
-        LOGGER.info(" Read {} facility zip curations to include", regionsToInclude.size());
+        LOGGER.info(" Read {} facility zip curations to include", facilityZipCurations.size());
 
         LOGGER.info("Reading facility filter curations from {}", ckbFacilityCurationFilterTsv);
         List<CkbFacilityCurationFilterEntry> facilityFilterCurations = CkbFacilityCurationFilterFile.read(ckbFacilityCurationFilterTsv);
-        LOGGER.info(" Read {} facility filter curations to include", regionsToInclude.size());
+        LOGGER.info(" Read {} facility filter curations to include", facilityFilterCurations.size());
 
         CkbFacilityCurationModel ckbFacilityCurationModel =
                 new CkbFacilityCurationModel(facilityCityCurations, facilityNameCurations, facilityZipCurations, facilityFilterCurations);

@@ -16,8 +16,8 @@ public class CkbFacilityCurationFilterFile {
     public static final String FIELD_DELIMITER = "\t";
 
     @NotNull
-    public static List<CkbFacilityCurationFilterEntry> read(@NotNull String ckbFacilityFilterTsv) throws IOException {
-        List<String> lines = Files.readAllLines(new File(ckbFacilityFilterTsv).toPath());
+    public static List<CkbFacilityCurationFilterEntry> read(@NotNull String ckbFacilityCurationFilterTsv) throws IOException {
+        List<String> lines = Files.readAllLines(new File(ckbFacilityCurationFilterTsv).toPath());
         Map<String, Integer> fields = SerializationUtil.createFields(lines.get(0), FIELD_DELIMITER);
 
         return fromLines(lines.subList(1, lines.size()), fields);

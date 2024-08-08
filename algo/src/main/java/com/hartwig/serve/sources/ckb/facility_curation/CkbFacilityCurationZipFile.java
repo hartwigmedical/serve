@@ -16,8 +16,8 @@ public class CkbFacilityCurationZipFile {
     public static final String FIELD_DELIMITER = "\t";
 
     @NotNull
-    public static List<CkbFacilityCurationZipEntry> read(@NotNull String ckbFacilityZipTsv) throws IOException {
-        List<String> lines = Files.readAllLines(new File(ckbFacilityZipTsv).toPath());
+    public static List<CkbFacilityCurationZipEntry> read(@NotNull String ckbFacilityCurationZipTsv) throws IOException {
+        List<String> lines = Files.readAllLines(new File(ckbFacilityCurationZipTsv).toPath());
         Map<String, Integer> fields = SerializationUtil.createFields(lines.get(0), FIELD_DELIMITER);
 
         return fromLines(lines.subList(1, lines.size()), fields);

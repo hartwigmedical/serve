@@ -16,8 +16,8 @@ public class CkbFacilityCurationCityFile {
     public static final String FIELD_DELIMITER = "\t";
 
     @NotNull
-    public static List<CkbFacilityCurationCityEntry> read(@NotNull String ckbFacilityCityTsv) throws IOException {
-        List<String> lines = Files.readAllLines(new File(ckbFacilityCityTsv).toPath());
+    public static List<CkbFacilityCurationCityEntry> read(@NotNull String ckbFacilityCurationCityTsv) throws IOException {
+        List<String> lines = Files.readAllLines(new File(ckbFacilityCurationCityTsv).toPath());
         Map<String, Integer> fields = SerializationUtil.createFields(lines.get(0), FIELD_DELIMITER);
 
         return fromLines(lines.subList(1, lines.size()), fields);

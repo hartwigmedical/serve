@@ -31,6 +31,8 @@ import com.hartwig.serve.sources.ckb.blacklist.CkbEvidenceBlacklistModel;
 import com.hartwig.serve.sources.ckb.blacklist.CkbStudyBlacklistModel;
 import com.hartwig.serve.sources.ckb.facility.CkbFacilityCityEntry;
 import com.hartwig.serve.sources.ckb.facility.CkbFacilityCityFile;
+import com.hartwig.serve.sources.ckb.facility.CkbFacilityFilterEntry;
+import com.hartwig.serve.sources.ckb.facility.CkbFacilityFilterFile;
 import com.hartwig.serve.sources.ckb.facility.CkbFacilityModel;
 import com.hartwig.serve.sources.ckb.facility.CkbFacilityNameEntry;
 import com.hartwig.serve.sources.ckb.facility.CkbFacilityNameFile;
@@ -95,6 +97,7 @@ public class ServeAlgo {
                                         config.ckbFacilityCityTsv(),
                                         config.ckbFacilityNameTsv(),
                                         config.ckbFacilityZipTsv(),
+                                        config.ckbFacilityFilterTsv(),
                                         ckbEntries) : null,
                                 config.useDocm() ? extractDocmKnowledge(config.docmTsv()) : null,
                                 config.useHartwigCohortHotspots() ? extractHartwigCohortHotspotKnowledge(config.hartwigCohortHotspotTsv(),
@@ -169,7 +172,7 @@ public class ServeAlgo {
     @NotNull
     private ExtractionResult extractCkbTrialKnowledge(@NotNull String ckbBlacklistStudyTsv, @NotNull String ckbRegionTsv,
             @NotNull String ckbFacilityCityTsv, @NotNull String ckbFacilityNameTsv, @NotNull String ckbFacilityZipTsv,
-            @NotNull List<CkbEntry> ckbEntries) throws IOException {
+            @NotNull String ckbFacilityFilterTsv, @NotNull List<CkbEntry> ckbEntries) throws IOException {
         EventClassifierConfig config = CkbClassificationConfig.build();
         RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.CKB_TRIAL);
 
@@ -194,7 +197,12 @@ public class ServeAlgo {
         List<CkbFacilityZipEntry> facilityZipCurations = CkbFacilityZipFile.read(ckbFacilityZipTsv);
         LOGGER.info(" Read {} facility zip curations to include", regionsToInclude.size());
 
-        CkbFacilityModel ckbFacilityModel = new CkbFacilityModel(facilityCityCurations, facilityNameCurations, facilityZipCurations);
+        LOGGER.info("Reading facility filter curations from {}", ckbFacilityFilterTsv);
+        List<CkbFacilityFilterEntry> facilityFilterCurations = CkbFacilityFilterFile.read(ckbFacilityFilterTsv);
+        LOGGER.info(" Read {} facility filter curations to include", regionsToInclude.size());
+
+        CkbFacilityModel ckbFacilityModel =
+                new CkbFacilityModel(facilityCityCurations, facilityNameCurations, facilityZipCurations, facilityFilterCurations);
 
         CkbExtractor extractor =
                 CkbExtractorFactory.createTrialExtractor(config, refGenomeResource, blacklistStudy, regionsToInclude, ckbFacilityModel);

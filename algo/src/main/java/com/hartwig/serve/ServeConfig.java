@@ -43,6 +43,7 @@ public interface ServeConfig {
     String CKB_FACILITY_CITY_TSV = "ckb_facility_city_tsv";
     String CKB_FACILITY_NAME_TSV = "ckb_facility_name_tsv";
     String CKB_FACILITY_ZIP_TSV = "ckb_facility_zip_tsv";
+    String CKB_FACILITY_FILTER_TSV = "ckb_facility_filter_tsv";
     String USE_DOCM = "use_docm";
     String DOCM_TSV = "docm_tsv";
     String USE_HARTWIG_COHORT_HOTSPOTS = "use_hartwig_cohort_hotspots";
@@ -95,6 +96,7 @@ public interface ServeConfig {
         options.addOption(CKB_FACILITY_CITY_TSV, true, "");
         options.addOption(CKB_FACILITY_NAME_TSV, true, "");
         options.addOption(CKB_FACILITY_ZIP_TSV, true, "");
+        options.addOption(CKB_FACILITY_FILTER_TSV, true, "");
         options.addOption(USE_DOCM, false, "If provided, DoCM will be used as a source in SERVE");
         options.addOption(DOCM_TSV, true, "Path to the DoCM knowledgebase input TSV");
         options.addOption(USE_HARTWIG_COHORT_HOTSPOTS, false, "If provided, Hartwig Cohort Hotspots will be used as a source in SERVE");
@@ -172,6 +174,9 @@ public interface ServeConfig {
 
     @NotNull
     String ckbFacilityZipTsv();
+
+    @NotNull
+    String ckbFacilityFilterTsv();
 
     boolean useDocm();
 
@@ -268,6 +273,7 @@ public interface ServeConfig {
                 .ckbFacilityCityTsv(useCkbTrials ? nonOptionalFile(cmd, CKB_FACILITY_CITY_TSV) : NOT_APPLICABLE)
                 .ckbFacilityNameTsv(useCkbTrials ? nonOptionalFile(cmd, CKB_FACILITY_NAME_TSV) : NOT_APPLICABLE)
                 .ckbFacilityZipTsv(useCkbTrials ? nonOptionalFile(cmd, CKB_FACILITY_ZIP_TSV) : NOT_APPLICABLE)
+                .ckbFacilityFilterTsv(useCkbTrials ? nonOptionalFile(cmd, CKB_FACILITY_FILTER_TSV) : NOT_APPLICABLE)
                 .useDocm(useDocm)
                 .docmTsv(useDocm ? nonOptionalFile(cmd, DOCM_TSV) : NOT_APPLICABLE)
                 .useHartwigCohortHotspots(useHartwigCohortHotspots)

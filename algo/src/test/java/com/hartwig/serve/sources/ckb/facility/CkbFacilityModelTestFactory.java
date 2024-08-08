@@ -13,7 +13,7 @@ public final class CkbFacilityModelTestFactory {
 
     @NotNull
     public static CkbFacilityModel createEmptyFacilityModel() {
-        return new CkbFacilityModel(Lists.newArrayList(), Lists.newArrayList(), Lists.newArrayList());
+        return new CkbFacilityModel(Lists.newArrayList(), Lists.newArrayList(), Lists.newArrayList(), Lists.newArrayList());
     }
 
     @NotNull
@@ -34,6 +34,16 @@ public final class CkbFacilityModelTestFactory {
 
         facilityZipEntries.add(entry3);
 
-        return new CkbFacilityModel(facilityCityEntries, facilityNameEntries, facilityZipEntries);
+        List<CkbFacilityFilterEntry> facilityFilterEntries = Lists.newArrayList();
+        CkbFacilityFilterEntry entry4 = ImmutableCkbFacilityFilterEntry.builder()
+                .facilityName("Amsterdam UMC")
+                .city("Amsterdam")
+                .zip("")
+                .curatedFacilityName("Amsterdam UMC")
+                .build();
+
+        facilityFilterEntries.add(entry4);
+
+        return new CkbFacilityModel(facilityCityEntries, facilityNameEntries, facilityZipEntries, facilityFilterEntries);
     }
 }

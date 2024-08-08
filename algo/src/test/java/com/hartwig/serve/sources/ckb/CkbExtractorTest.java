@@ -55,7 +55,7 @@ public class CkbExtractorTest {
                 RefGenomeResourceTestFactory.buildTestResource37(),
                 CkbBlacklistTestFactory.createEmptyStudyBlacklist(),
                 Set.of(ImmutableCkbRegion.builder().country("netherlands").states(Collections.emptySet()).build()),
-                new CkbFacilityModel(Lists.newArrayList(), Lists.newArrayList(), Lists.newArrayList()));
+                new CkbFacilityModel(Lists.newArrayList(), Lists.newArrayList(), Lists.newArrayList(), Lists.newArrayList()));
 
         ExtractionResult trialResult = trialExtractor.extract(createCkbEntryTestDatabase());
         assertEquals(0, trialResult.knownHotspots().size());

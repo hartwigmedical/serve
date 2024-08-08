@@ -140,9 +140,13 @@ class ActionableTrialFactory implements ActionableEntryFactory {
         for (Location location : trial.locations()) {
             if (regionsToInclude.stream().anyMatch(region -> region.includes(location))
                     && hasPotentiallyOpenRequirementToInclude(location.status())) {
+                String facility = "";
+                if (location.country().equals("Netherlands")) {
+                    facility = ckbFacilityModel.curateFacilityName(location);
+                }
                 countriesToCitiesToHospitalNames.computeIfAbsent(location.country(), it -> new HashMap<>())
                         .computeIfAbsent(location.city(), it2 -> new HashSet<>())
-                        .add(ckbFacilityModel.curateFacilityName(location));
+                        .add(facility);
             }
         }
 

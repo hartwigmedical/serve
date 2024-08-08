@@ -34,6 +34,13 @@ public class CkbFacilityModelTest {
         assertEquals(facilityModel.curateFacilityName(location), "UMCG");
     }
 
+    @Test
+    public void canCurateFacilityNameBasedOnFilter() {
+        Location location = createLocation("Amsterdam", "Amsterdam UMC", null);
+
+        assertEquals(facilityModel.curateFacilityName(location), "Amsterdam UMC");
+    }
+
     @NotNull
     private static Location createLocation(@NotNull String city, @NotNull String facility, @Nullable String zip) {
         return ImmutableLocation.builder().nctId("").city(city).country("Netherlands").facility(facility).zip(zip).build();

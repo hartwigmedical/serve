@@ -165,14 +165,14 @@ public final class CkbTestFactory {
 
     @NotNull
     public static Location createLocation(@NotNull String country, @Nullable String status, @NotNull String city,
-            @Nullable String hospital) {
-        return createLocation(country, status, city, null, hospital);
+            @Nullable String facility) {
+        return createLocation(country, status, city, null, facility);
     }
 
     @NotNull
     public static Location createLocation(@NotNull String country, @Nullable String status, @NotNull String city, @Nullable String state,
-            @Nullable String hospital) {
-        return ImmutableLocation.builder().nctId("").city(city).country(country).state(state).status(status).facility(hospital).build();
+            @Nullable String facility) {
+        return ImmutableLocation.builder().nctId("").city(city).country(country).state(state).status(status).facility(facility).build();
     }
 
     @NotNull

@@ -25,7 +25,30 @@ public class CkbFacilityModel {
     }
 
     public String curateFacilityName(@NotNull Location location) {
+        for (CkbFacilityCityEntry facilityCityEntry : facilityCityEntries) {
+            if (location.city().toLowerCase().contains(facilityCityEntry.city().toLowerCase())) {
+                return facilityCityEntry.curatedFacilityName();
+            }
+        }
 
-        return "Unknown";
+        if (location.facility() != null) {
+            for (CkbFacilityNameEntry facilityNameEntry : facilityNameEntries) {
+                if (location.facility().toLowerCase().contains(facilityNameEntry.facilityName().toLowerCase())) {
+                    return facilityNameEntry.curatedFacilityName();
+                }
+            }
+        }
+
+        if (location.zip() != null) {
+            for (CkbFacilityZipEntry facilityZipEntry : facilityZipEntries) {
+                if (location.city().toLowerCase().contains(facilityZipEntry.city().toLowerCase()) && location.zip()
+                        .replaceAll("\\s", "")
+                        .contains(facilityZipEntry.zip())) {
+                    return facilityZipEntry.curatedFacilityName();
+                }
+            }
+        }
+
+        return "Unknown (" + location.city() + ")";
     }
 }

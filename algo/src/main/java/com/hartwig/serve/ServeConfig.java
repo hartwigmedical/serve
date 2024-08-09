@@ -40,7 +40,6 @@ public interface ServeConfig {
     String CKB_BLACKLIST_EVIDENCE_TSV = "ckb_blacklist_evidence_tsv";
     String CKB_DRUG_CURATION_TSV = "ckb_drug_curation_tsv";
     String CKB_REGION_TSV = "ckb_region_tsv";
-    String CKB_FACILITY_CURATION_CITY_TSV = "ckb_facility_curation_city_tsv";
     String CKB_FACILITY_CURATION_NAME_TSV = "ckb_facility_curation_name_tsv";
     String CKB_FACILITY_CURATION_ZIP_TSV = "ckb_facility_curation_zip_tsv";
     String CKB_FACILITY_CURATION_FILTER_TSV = "ckb_facility_curation_filter_tsv";
@@ -93,7 +92,6 @@ public interface ServeConfig {
         options.addOption(CKB_BLACKLIST_EVIDENCE_TSV, true, "Path to the CKB blacklist evidence tsv");
         options.addOption(CKB_DRUG_CURATION_TSV, true, "Path to the CKB drug curation tsv");
         options.addOption(CKB_REGION_TSV, true, "Path to the CKB regions tsv. Only trials from the configured regions will be used.");
-        options.addOption(CKB_FACILITY_CURATION_CITY_TSV, true, "Path to the CKB facility curations based on city tsv");
         options.addOption(CKB_FACILITY_CURATION_NAME_TSV, true, "Path to the CKB facility curations based on name tsv");
         options.addOption(CKB_FACILITY_CURATION_ZIP_TSV, true, "Path to the CKB facility curations based on zip tsv");
         options.addOption(CKB_FACILITY_CURATION_FILTER_TSV, true, "Path to the CKB facility curations to filter tsv");
@@ -165,9 +163,6 @@ public interface ServeConfig {
 
     @NotNull
     String ckbRegionTsv();
-
-    @NotNull
-    String ckbFacilityCurationCityTsv();
 
     @NotNull
     String ckbFacilityCurationNameTsv();
@@ -270,7 +265,6 @@ public interface ServeConfig {
                 .ckbBlacklistEvidenceTsv(useCkbEvidence ? nonOptionalFile(cmd, CKB_BLACKLIST_EVIDENCE_TSV) : NOT_APPLICABLE)
                 .ckbDrugCurationTsv(useCkbEvidence ? nonOptionalFile(cmd, CKB_DRUG_CURATION_TSV) : NOT_APPLICABLE)
                 .ckbRegionTsv(useCkbTrials ? nonOptionalFile(cmd, CKB_REGION_TSV) : NOT_APPLICABLE)
-                .ckbFacilityCurationCityTsv(useCkbTrials ? nonOptionalFile(cmd, CKB_FACILITY_CURATION_CITY_TSV) : NOT_APPLICABLE)
                 .ckbFacilityCurationNameTsv(useCkbTrials ? nonOptionalFile(cmd, CKB_FACILITY_CURATION_NAME_TSV) : NOT_APPLICABLE)
                 .ckbFacilityCurationZipTsv(useCkbTrials ? nonOptionalFile(cmd, CKB_FACILITY_CURATION_ZIP_TSV) : NOT_APPLICABLE)
                 .ckbFacilityCurationFilterTsv(useCkbTrials ? nonOptionalFile(cmd, CKB_FACILITY_CURATION_FILTER_TSV) : NOT_APPLICABLE)

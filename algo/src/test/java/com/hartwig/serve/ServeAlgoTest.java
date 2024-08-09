@@ -28,8 +28,6 @@ public class ServeAlgoTest {
             Resources.getResource("ckb_curation/ckb_treatment_approach_curation.tsv").getPath();
     private static final String CKB_REGION_TSV = Resources.getResource("ckb_region/ckb_regions.tsv").getPath();
 
-    private static final String CKB_FACILITY_CURATION_CITY_TSV =
-            Resources.getResource("ckb_facility_curation/ckb_facility_city.tsv").getPath();
     private static final String CKB_FACILITY_CURATION_NAME_TSV =
             Resources.getResource("ckb_facility_curation/ckb_facility_name.tsv").getPath();
     private static final String CKB_FACILITY_CURATION_ZIP_TSV =
@@ -71,7 +69,6 @@ public class ServeAlgoTest {
                 .ckbBlacklistEvidenceTsv(CKB_BLACKLIST_EVIDENCE_TSV)
                 .ckbDrugCurationTsv(CKB_DRUG_CLASS_CURATION_TSV)
                 .ckbRegionTsv(CKB_REGION_TSV)
-                .ckbFacilityCurationCityTsv(CKB_FACILITY_CURATION_CITY_TSV)
                 .ckbFacilityCurationNameTsv(CKB_FACILITY_CURATION_NAME_TSV)
                 .ckbFacilityCurationZipTsv(CKB_FACILITY_CURATION_ZIP_TSV)
                 .ckbFacilityCurationFilterTsv(CKB_FACILITY_CURATION_FILTER_TSV)

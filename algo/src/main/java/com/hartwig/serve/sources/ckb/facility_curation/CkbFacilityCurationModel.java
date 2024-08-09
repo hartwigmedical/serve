@@ -15,9 +15,6 @@ public class CkbFacilityCurationModel {
     private static final Logger LOGGER = LogManager.getLogger(CkbFacilityCurationModel.class);
 
     @NotNull
-    private final List<CkbFacilityCurationCityEntry> facilityCurationCityEntries;
-
-    @NotNull
     private final List<CkbFacilityCurationNameEntry> facilityCurationNameEntries;
 
     @NotNull
@@ -26,11 +23,9 @@ public class CkbFacilityCurationModel {
     @NotNull
     private final List<CkbFacilityCurationFilterEntry> facilityCurationFilterEntries;
 
-    public CkbFacilityCurationModel(@NotNull final List<CkbFacilityCurationCityEntry> facilityCurationCityList,
-            @NotNull final List<CkbFacilityCurationNameEntry> facilityCurationNameList,
+    public CkbFacilityCurationModel(@NotNull final List<CkbFacilityCurationNameEntry> facilityCurationNameList,
             @NotNull final List<CkbFacilityCurationZipEntry> facilityCurationZipList,
             @NotNull final List<CkbFacilityCurationFilterEntry> facilityCurationFilterList) {
-        this.facilityCurationCityEntries = facilityCurationCityList;
         this.facilityCurationNameEntries = facilityCurationNameList;
         this.facilityCurationZipEntries = facilityCurationZipList;
         this.facilityCurationFilterEntries = facilityCurationFilterList;
@@ -38,35 +33,32 @@ public class CkbFacilityCurationModel {
 
     @VisibleForTesting
     public String curateFacilityName(@NotNull Location location) {
-        for (CkbFacilityCurationCityEntry facilityCurationCityEntry : facilityCurationCityEntries) {
-            if (location.city().toLowerCase().contains(facilityCurationCityEntry.city().toLowerCase())) {
-                return facilityCurationCityEntry.curatedFacilityName();
+        if (location.zip() != null) {
+            for (CkbFacilityCurationZipEntry facilityCurationZipEntry : facilityCurationZipEntries) {
+                if (location.city().toLowerCase().equals(facilityCurationZipEntry.city())) {
+                    if (facilityCurationZipEntry.zip() == null) {
+                        return facilityCurationZipEntry.curatedFacilityName();
+                    } else if (location.zip().toLowerCase().replaceAll("\\s", "").contains(facilityCurationZipEntry.zip())) {
+                        return facilityCurationZipEntry.curatedFacilityName();
+                    }
+                }
             }
         }
 
         if (location.facility() != null) {
             for (CkbFacilityCurationNameEntry facilityCurationNameEntry : facilityCurationNameEntries) {
-                if (location.facility().toLowerCase().contains(facilityCurationNameEntry.facilityName().toLowerCase()) && location.city()
+                if (location.facility().toLowerCase().contains(facilityCurationNameEntry.facilityName()) && location.city()
                         .toLowerCase()
-                        .equals(facilityCurationNameEntry.city().toLowerCase())) {
+                        .equals(facilityCurationNameEntry.city())) {
                     return facilityCurationNameEntry.curatedFacilityName();
                 }
             }
         }
 
-        if (location.zip() != null) {
-            for (CkbFacilityCurationZipEntry facilityCurationZipEntry : facilityCurationZipEntries) {
-                if (location.city().toLowerCase().contains(facilityCurationZipEntry.city().toLowerCase()) && location.zip()
-                        .replaceAll("\\s", "")
-                        .contains(facilityCurationZipEntry.zip())) {
-                    return facilityCurationZipEntry.curatedFacilityName();
-                }
-            }
-        }
-
         for (CkbFacilityCurationFilterEntry facilityCurationFilterEntry : facilityCurationFilterEntries) {
-            if (equalStringsIncludingNull(location.facility(), facilityCurationFilterEntry.facilityName()) && location.city()
-                    .equals(facilityCurationFilterEntry.city()) && equalStringsIncludingNull(location.zip(),
+            if (equalStringsOrNull(location.facility().toLowerCase(), facilityCurationFilterEntry.facilityName()) && location.city()
+                    .toLowerCase()
+                    .equals(facilityCurationFilterEntry.city()) && equalStringsOrNull(location.zip().toLowerCase(),
                     facilityCurationFilterEntry.zip())) {
                 return facilityCurationFilterEntry.curatedFacilityName();
             }
@@ -77,7 +69,7 @@ public class CkbFacilityCurationModel {
     }
 
     @VisibleForTesting
-    private Boolean equalStringsIncludingNull(@Nullable String string1, @NotNull String string2) {
+    private Boolean equalStringsOrNull(@Nullable String string1, @NotNull String string2) {
         if (string1 == null && string2.equals("")) {
             return true;
         }

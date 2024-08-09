@@ -13,42 +13,36 @@ public final class CkbFacilityModelTestFactory {
 
     @NotNull
     public static CkbFacilityCurationModel createEmptyFacilityModel() {
-        return new CkbFacilityCurationModel(Lists.newArrayList(), Lists.newArrayList(), Lists.newArrayList(), Lists.newArrayList());
+        return new CkbFacilityCurationModel(Lists.newArrayList(), Lists.newArrayList(), Lists.newArrayList());
     }
 
     @NotNull
     public static CkbFacilityCurationModel createProperFacilityModel() {
-        List<CkbFacilityCurationCityEntry> facilityCityEntries = Lists.newArrayList();
-        CkbFacilityCurationCityEntry entry1 =
-                ImmutableCkbFacilityCurationCityEntry.builder().city("Almere").curatedFacilityName("Flevoziekenhuis").build();
-
-        facilityCityEntries.add(entry1);
-
         List<CkbFacilityCurationNameEntry> facilityNameEntries = Lists.newArrayList();
-        CkbFacilityCurationNameEntry entry2 = ImmutableCkbFacilityCurationNameEntry.builder()
+        CkbFacilityCurationNameEntry entry1 = ImmutableCkbFacilityCurationNameEntry.builder()
                 .facilityName("Erasmus")
                 .city("Rotterdam")
                 .curatedFacilityName("EMC")
                 .build();
 
-        facilityNameEntries.add(entry2);
+        facilityNameEntries.add(entry1);
 
         List<CkbFacilityCurationZipEntry> facilityZipEntries = Lists.newArrayList();
-        CkbFacilityCurationZipEntry entry3 =
+        CkbFacilityCurationZipEntry entry2 =
                 ImmutableCkbFacilityCurationZipEntry.builder().city("Groningen").zip("9713").curatedFacilityName("UMCG").build();
 
-        facilityZipEntries.add(entry3);
+        facilityZipEntries.add(entry2);
 
         List<CkbFacilityCurationFilterEntry> facilityFilterEntries = Lists.newArrayList();
-        CkbFacilityCurationFilterEntry entry4 = ImmutableCkbFacilityCurationFilterEntry.builder()
+        CkbFacilityCurationFilterEntry entry3 = ImmutableCkbFacilityCurationFilterEntry.builder()
                 .facilityName("Amsterdam UMC")
                 .city("Amsterdam")
                 .zip("")
                 .curatedFacilityName("Amsterdam UMC")
                 .build();
 
-        facilityFilterEntries.add(entry4);
+        facilityFilterEntries.add(entry3);
 
-        return new CkbFacilityCurationModel(facilityCityEntries, facilityNameEntries, facilityZipEntries, facilityFilterEntries);
+        return new CkbFacilityCurationModel(facilityNameEntries, facilityZipEntries, facilityFilterEntries);
     }
 }

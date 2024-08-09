@@ -22,8 +22,8 @@ public class CkbRegionFileTest {
         assertTrue(netherlands.includes(createLocation("Netherlands", null, "Rotterdam", "Noord Holland", null)));
         assertTrue(netherlands.includes(createLocation("Netherlands", null, "Rotterdam", null, null)));
 
-        assertTrue(us.includes(createLocation("United States", null, "New York", "Maine", null)));
-        assertFalse(us.includes(createLocation("United States", null, "New York", "California", null)));
+        assertTrue(us.includes(createLocation("United States", null, "Augusta", "Maine", null)));
+        assertFalse(us.includes(createLocation("United States", null, "LA", "California", null)));
         assertFalse(us.includes(createLocation("United States", null, "New York", null, null)));
 
     }

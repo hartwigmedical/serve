@@ -33,15 +33,11 @@ public class CkbFacilityCurationModel {
 
     @NotNull
     public String curateFacilityName(@NotNull Location location) {
-        if (location.zip() != null) {
-            for (CkbFacilityCurationZipEntry facilityCurationZipEntry : facilityCurationZipEntries) {
-                if (location.city().toLowerCase().equals(facilityCurationZipEntry.city())) {
-                    if ((facilityCurationZipEntry.zip().equals("")) || (location.zip()
-                            .toLowerCase()
-                            .replaceAll("\\s", "")
-                            .contains(facilityCurationZipEntry.zip()))) {
-                        return facilityCurationZipEntry.curatedFacilityName();
-                    }
+        for (CkbFacilityCurationZipEntry facilityCurationZipEntry : facilityCurationZipEntries) {
+            if (location.city().toLowerCase().equals(facilityCurationZipEntry.city())) {
+                String zip = location.zip() != null ? location.zip().toLowerCase().replaceAll("\\s", "") : "";
+                if ((facilityCurationZipEntry.zip().equals("")) || (zip.contains(facilityCurationZipEntry.zip()))) {
+                    return facilityCurationZipEntry.curatedFacilityName();
                 }
             }
         }
@@ -57,10 +53,8 @@ public class CkbFacilityCurationModel {
         }
 
         for (CkbFacilityCurationFilterEntry facilityCurationFilterEntry : facilityCurationFilterEntries) {
-            if (equalStringsOrNull(location.facility().toLowerCase(), facilityCurationFilterEntry.facilityName()) && location.city()
-                    .toLowerCase()
-                    .equals(facilityCurationFilterEntry.city()) && equalStringsOrNull(location.zip().toLowerCase(),
-                    facilityCurationFilterEntry.zip())) {
+            if (equalStringsOrNull(location.facility(), facilityCurationFilterEntry.facilityName()) && location.city()
+                    .equals(facilityCurationFilterEntry.city()) && equalStringsOrNull(location.zip(), facilityCurationFilterEntry.zip())) {
                 return facilityCurationFilterEntry.curatedFacilityName();
             }
         }

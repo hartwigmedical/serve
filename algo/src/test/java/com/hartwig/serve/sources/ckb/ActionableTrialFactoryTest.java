@@ -39,7 +39,7 @@ public class ActionableTrialFactoryTest {
     private static final CkbStudyBlacklistModel BLACKLIST_MODEL = CkbBlacklistTestFactory.createProperStudyBlacklist();
     public static final Set<CkbRegion> REGIONS_TO_INCLUDE =
             Set.of(createRegion("netherlands"), createRegion("belgium"), createRegion("germany"), createRegion("united states", "maine"));
-    public static final CkbFacilityCurationModel FACILITY_MODEL = CkbFacilityModelTestFactory.createProperFacilityModel();
+    public static final CkbFacilityCurationModel FACILITY_CURATION_MODEL = CkbFacilityModelTestFactory.createProperFacilityModel();
 
     @NotNull
     private static ImmutableCkbRegion createRegion(@NotNull String country, @NotNull String... states) {
@@ -62,7 +62,8 @@ public class ActionableTrialFactoryTest {
                 List.of("senior", "child", "adult"));
         CkbEntry entry = CkbTestFactory.createEntryWithClinicalTrial(profileId, profileName, clinicalTrial);
 
-        ActionableTrialFactory actionableTrialFactory = new ActionableTrialFactory(BLACKLIST_MODEL, REGIONS_TO_INCLUDE, FACILITY_MODEL);
+        ActionableTrialFactory actionableTrialFactory =
+                new ActionableTrialFactory(BLACKLIST_MODEL, REGIONS_TO_INCLUDE, FACILITY_CURATION_MODEL);
         Set<ActionableEntry> trials = actionableTrialFactory.create(entry, "KRAS", "gene");
 
         assertEquals(1, trials.size());
@@ -101,7 +102,7 @@ public class ActionableTrialFactoryTest {
         CkbEntry entry = CkbTestFactory.createEntryWithClinicalTrial(profileId, profileName, clinicalTrial);
 
         CkbStudyBlacklistModel model = createBlacklistModel(CkbBlacklistStudyType.STUDY_WHOLE, "NCT0456", null, null, null, null);
-        ActionableTrialFactory actionableTrialFactory = new ActionableTrialFactory(model, REGIONS_TO_INCLUDE, FACILITY_MODEL);
+        ActionableTrialFactory actionableTrialFactory = new ActionableTrialFactory(model, REGIONS_TO_INCLUDE, FACILITY_CURATION_MODEL);
         Set<ActionableEntry> trials = actionableTrialFactory.create(entry, "KRAS", "gene");
         assertEquals(0, trials.size());
     }
@@ -123,7 +124,7 @@ public class ActionableTrialFactoryTest {
         CkbEntry entry = CkbTestFactory.createEntryWithClinicalTrial(profileId, profileName, clinicalTrial);
 
         CkbStudyBlacklistModel model = createBlacklistModel(CkbBlacklistStudyType.STUDY_WHOLE, "NCT123", null, null, null, null);
-        ActionableTrialFactory actionableTrialFactory = new ActionableTrialFactory(model, REGIONS_TO_INCLUDE, FACILITY_MODEL);
+        ActionableTrialFactory actionableTrialFactory = new ActionableTrialFactory(model, REGIONS_TO_INCLUDE, FACILITY_CURATION_MODEL);
         Set<ActionableEntry> trials = actionableTrialFactory.create(entry, "KRAS", "gene");
         assertEquals(1, trials.size());
     }
@@ -146,7 +147,7 @@ public class ActionableTrialFactoryTest {
 
         CkbStudyBlacklistModel model =
                 createBlacklistModel(CkbBlacklistStudyType.ALL_STUDIES_BASED_ON_GENE, null, null, null, "EGFR", null);
-        ActionableTrialFactory actionableTrialFactory = new ActionableTrialFactory(model, REGIONS_TO_INCLUDE, FACILITY_MODEL);
+        ActionableTrialFactory actionableTrialFactory = new ActionableTrialFactory(model, REGIONS_TO_INCLUDE, FACILITY_CURATION_MODEL);
         Set<ActionableEntry> trials = actionableTrialFactory.create(entry, "EGFR", "EGFR");
         assertEquals(0, trials.size());
     }
@@ -168,14 +169,14 @@ public class ActionableTrialFactoryTest {
         CkbEntry entry = CkbTestFactory.createEntryWithClinicalTrial(profileId, profileName, clinicalTrial);
 
         CkbStudyBlacklistModel model = createBlacklistModel(CkbBlacklistStudyType.ALL_STUDIES_BASED_ON_GENE, null, null, null, "ATM", null);
-        ActionableTrialFactory actionableTrialFactory = new ActionableTrialFactory(model, REGIONS_TO_INCLUDE, FACILITY_MODEL);
+        ActionableTrialFactory actionableTrialFactory = new ActionableTrialFactory(model, REGIONS_TO_INCLUDE, FACILITY_CURATION_MODEL);
         Set<ActionableEntry> trials = actionableTrialFactory.create(entry, "EGFR", "EGFR");
         assertEquals(1, trials.size());
     }
 
     @Test
     public void shouldNotCreateAnActionableEntryWhenVariantRequirementIsOnADifferentProfile() {
-        Location location = CkbTestFactory.createLocation("Belgium", "Recruiting", "Brussel", null);
+        Location location = CkbTestFactory.createLocation("Belgium", "Recruiting", "Brussel", "UZ Brussel");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(0, "required");
         ClinicalTrial clinicalTrial = CkbTestFactory.createTrial("Recruiting",
                 List.of(requirementDetail),
@@ -185,7 +186,8 @@ public class ActionableTrialFactoryTest {
                 List.of("senior", "child", "adult"));
         CkbEntry entry = CkbTestFactory.createEntryWithClinicalTrial(1, Strings.EMPTY, clinicalTrial);
 
-        ActionableTrialFactory actionableTrialFactory = new ActionableTrialFactory(BLACKLIST_MODEL, new HashSet<>(), FACILITY_MODEL);
+        ActionableTrialFactory actionableTrialFactory =
+                new ActionableTrialFactory(BLACKLIST_MODEL, new HashSet<>(), FACILITY_CURATION_MODEL);
         Set<ActionableEntry> trials = actionableTrialFactory.create(entry, "KRAS", "gene");
 
         assertEquals(0, trials.size());
@@ -195,70 +197,143 @@ public class ActionableTrialFactoryTest {
     public void canDetermineCountriesAndStatesToInclude() {
         ClinicalTrial trialPotentiallyOpenInBelgium = createTrialWithOneLocation("Recruiting", "Belgium", "Brussel", "Recruiting");
         assertEquals(1,
-                ActionableTrialFactory.filterOnRegionsToInclude(trialPotentiallyOpenInBelgium, REGIONS_TO_INCLUDE, FACILITY_MODEL).size());
+                ActionableTrialFactory.filterOnRegionsToInclude(trialPotentiallyOpenInBelgium, REGIONS_TO_INCLUDE, FACILITY_CURATION_MODEL)
+                        .size());
 
         ClinicalTrial trialNotOpenInNetherlands = createTrialWithOneLocation("Recruiting", "Netherlands", "Rotterdam", "Completed");
         assertEquals(0,
-                ActionableTrialFactory.filterOnRegionsToInclude(trialNotOpenInNetherlands, REGIONS_TO_INCLUDE, FACILITY_MODEL).size());
+                ActionableTrialFactory.filterOnRegionsToInclude(trialNotOpenInNetherlands, REGIONS_TO_INCLUDE, FACILITY_CURATION_MODEL)
+                        .size());
 
         ClinicalTrial trialPotentiallyOpenInUSMaine =
                 createTrialWithOneLocation("Recruiting", "United States", "Maine", "Augusta", "Recruiting");
         assertEquals(1,
-                ActionableTrialFactory.filterOnRegionsToInclude(trialPotentiallyOpenInUSMaine, REGIONS_TO_INCLUDE, FACILITY_MODEL).size());
+                ActionableTrialFactory.filterOnRegionsToInclude(trialPotentiallyOpenInUSMaine, REGIONS_TO_INCLUDE, FACILITY_CURATION_MODEL)
+                        .size());
 
         ClinicalTrial trialPotentiallyOpenInUSCalifornia =
                 createTrialWithOneLocation("Recruiting", "United States", "California", "Recruiting");
         assertEquals(0,
-                ActionableTrialFactory.filterOnRegionsToInclude(trialPotentiallyOpenInUSCalifornia, REGIONS_TO_INCLUDE, FACILITY_MODEL)
-                        .size());
+                ActionableTrialFactory.filterOnRegionsToInclude(trialPotentiallyOpenInUSCalifornia,
+                        REGIONS_TO_INCLUDE,
+                        FACILITY_CURATION_MODEL).size());
 
         ClinicalTrial trialPotentiallyOpenInCanada = createTrialWithOneLocation("Recruiting", "Canada", "Toronto", "Recruiting");
         assertEquals(0,
-                ActionableTrialFactory.filterOnRegionsToInclude(trialPotentiallyOpenInCanada, REGIONS_TO_INCLUDE, FACILITY_MODEL).size());
+                ActionableTrialFactory.filterOnRegionsToInclude(trialPotentiallyOpenInCanada, REGIONS_TO_INCLUDE, FACILITY_CURATION_MODEL)
+                        .size());
 
         ClinicalTrial trialWithdrawnInCanada = createTrialWithOneLocation("Recruiting", "Canada", "Toronto", "Withdrawn");
-        assertEquals(0, ActionableTrialFactory.filterOnRegionsToInclude(trialWithdrawnInCanada, REGIONS_TO_INCLUDE, FACILITY_MODEL).size());
+        assertEquals(0,
+                ActionableTrialFactory.filterOnRegionsToInclude(trialWithdrawnInCanada, REGIONS_TO_INCLUDE, FACILITY_CURATION_MODEL)
+                        .size());
 
-        ClinicalTrial trialPotentiallyOpenInBelgiumAndIndia =
-                createTrialWithMultipleLocations("Recruiting", "Belgium", "Recruiting", "India", "Recruiting");
+        ClinicalTrial trialPotentiallyOpenInBelgiumAndIndia = createTrialWithMultipleLocations("Recruiting",
+                "Belgium",
+                "Recruiting",
+                "Brussel",
+                null,
+                "India",
+                "Recruiting",
+                "Mumbai",
+                null);
         assertEquals(1,
-                ActionableTrialFactory.filterOnRegionsToInclude(trialPotentiallyOpenInBelgiumAndIndia, REGIONS_TO_INCLUDE, FACILITY_MODEL)
-                        .size());
+                ActionableTrialFactory.filterOnRegionsToInclude(trialPotentiallyOpenInBelgiumAndIndia,
+                        REGIONS_TO_INCLUDE,
+                        FACILITY_CURATION_MODEL).size());
 
-        ClinicalTrial trialPotentiallyOpenInBelgiumAndGermany =
-                createTrialWithMultipleLocations("Recruiting", "Belgium", "Recruiting", "Germany", "Not yet recruiting");
+        ClinicalTrial trialPotentiallyOpenInBelgiumAndGermany = createTrialWithMultipleLocations("Recruiting",
+                "Belgium",
+                "Recruiting",
+                "Brussel",
+                null,
+                "Germany",
+                "Not yet recruiting",
+                "Koln",
+                null);
         assertEquals(2,
-                ActionableTrialFactory.filterOnRegionsToInclude(trialPotentiallyOpenInBelgiumAndGermany, REGIONS_TO_INCLUDE, FACILITY_MODEL)
-                        .size());
+                ActionableTrialFactory.filterOnRegionsToInclude(trialPotentiallyOpenInBelgiumAndGermany,
+                        REGIONS_TO_INCLUDE,
+                        FACILITY_CURATION_MODEL).size());
 
-        ClinicalTrial trialPotentiallyOpenInBelgiumSuspendedInGermany =
-                createTrialWithMultipleLocations("Recruiting", "Belgium", "Recruiting", "Germany", "Suspended");
+        ClinicalTrial trialPotentiallyOpenInBelgiumSuspendedInGermany = createTrialWithMultipleLocations("Recruiting",
+                "Belgium",
+                "Recruiting",
+                "Brussel",
+                null,
+                "Germany",
+                "Suspended",
+                "Koln",
+                null);
         assertEquals(1,
                 ActionableTrialFactory.filterOnRegionsToInclude(trialPotentiallyOpenInBelgiumSuspendedInGermany,
                         REGIONS_TO_INCLUDE,
-                        FACILITY_MODEL).size());
+                        FACILITY_CURATION_MODEL).size());
 
-        ClinicalTrial trialPotentiallyOpenInBelgiumSuspendedInIndia =
-                createTrialWithMultipleLocations("Recruiting", "Belgium", "Recruiting", "India", "Suspended");
+        ClinicalTrial trialPotentiallyOpenInBelgiumSuspendedInIndia = createTrialWithMultipleLocations("Recruiting",
+                "Belgium",
+                "Recruiting",
+                "Brussel",
+                null,
+                "India",
+                "Suspended",
+                "Mumbai",
+                null);
         assertEquals(1,
                 ActionableTrialFactory.filterOnRegionsToInclude(trialPotentiallyOpenInBelgiumSuspendedInIndia,
                         REGIONS_TO_INCLUDE,
-                        FACILITY_MODEL).size());
+                        FACILITY_CURATION_MODEL).size());
 
-        ClinicalTrial trialSuspendedInBelgiumOpenInIndia =
-                createTrialWithMultipleLocations("Recruiting", "Belgium", "Suspended", "India", "Not yet recruiting");
+        ClinicalTrial trialSuspendedInBelgiumOpenInIndia = createTrialWithMultipleLocations("Recruiting",
+                "Belgium",
+                "Suspended",
+                "Brusel",
+                null,
+                "India",
+                "Not yet recruiting",
+                "Mumbai",
+                null);
         assertEquals(0,
-                ActionableTrialFactory.filterOnRegionsToInclude(trialSuspendedInBelgiumOpenInIndia, REGIONS_TO_INCLUDE, FACILITY_MODEL)
-                        .size());
+                ActionableTrialFactory.filterOnRegionsToInclude(trialSuspendedInBelgiumOpenInIndia,
+                        REGIONS_TO_INCLUDE,
+                        FACILITY_CURATION_MODEL).size());
 
         ClinicalTrial terminatedTrial = createTrialWithOneLocation("Terminated", "Netherlands", "Rotterdam", "Suspended");
-        assertEquals(0, ActionableTrialFactory.filterOnRegionsToInclude(terminatedTrial, REGIONS_TO_INCLUDE, FACILITY_MODEL).size());
+        assertEquals(0,
+                ActionableTrialFactory.filterOnRegionsToInclude(terminatedTrial, REGIONS_TO_INCLUDE, FACILITY_CURATION_MODEL).size());
+    }
+
+    @Test
+    public void canAddCities() {
+        ClinicalTrial trialWithOneLocation = createTrialWithOneLocation("Recruiting", "Belgium", "Brussel", "Recruiting");
+        assertEquals(ActionableTrialFactory.filterOnRegionsToInclude(trialWithOneLocation, REGIONS_TO_INCLUDE, FACILITY_CURATION_MODEL),
+                Set.of(ImmutableCountry.builder().countryName("Belgium").cities(Set.of("Brussel")).build()));
+
+        ClinicalTrial trialWithMultipleLocations = createTrialWithMultipleLocations("Recruiting",
+                "Belgium",
+                "Recruiting",
+                "Brussel",
+                "UZ Brussel",
+                "Netherlands",
+                "Not yet recruiting",
+                "Rotterdam",
+                "Erasmus");
+        assertEquals(ActionableTrialFactory.filterOnRegionsToInclude(trialWithMultipleLocations,
+                        REGIONS_TO_INCLUDE,
+                        FACILITY_CURATION_MODEL),
+                Set.of(ImmutableCountry.builder().countryName("Belgium").cities(Set.of("Brussel")).build(),
+                        ImmutableCountry.builder()
+                                .countryName("Netherlands")
+                                .hospitals(Set.of("EMC"))
+                                .cities(Set.of("Rotterdam"))
+                                .build()));
     }
 
     @Test
     public void canAddHospitalNames() {
-        Map<String, Set<String>> citiesToHospitals = Map.of("Groningen", Set.of("UMCG"));
-        assertEquals(ActionableTrialFactory.addHospitalNames("Netherlands", citiesToHospitals).hospitals(), Set.of("UMCG"));
+        Map<String, Set<String>> citiesToHospitals = Map.of("Groningen", Set.of("UMCG", "Martini"), "Utrecht", Set.of("UMCU"));
+        assertEquals(ActionableTrialFactory.addHospitalNames("Netherlands", citiesToHospitals).hospitals(),
+                Set.of("UMCG", "Martini", "UMCU"));
     }
 
     @Test
@@ -308,11 +383,12 @@ public class ActionableTrialFactoryTest {
 
     @NotNull
     private static ClinicalTrial createTrialWithMultipleLocations(@NotNull String recruitmentTrial, @NotNull String country1,
-            @NotNull String recruitmentCountry1, @NotNull String country2, @NotNull String recruitmentCountry2) {
+            @NotNull String recruitmentCountry1, @NotNull String city1, @Nullable String facility1, @NotNull String country2,
+            @NotNull String recruitmentCountry2, @NotNull String city2, @Nullable String facility2) {
         return CkbTestFactory.createTrial(recruitmentTrial,
                 List.of(CkbTestFactory.createVariantRequirementDetail(0, "required")),
-                List.of(CkbTestFactory.createLocation(country1, recruitmentCountry1, "Rotterdam", "EMC"),
-                        CkbTestFactory.createLocation(country2, recruitmentCountry2, "Groningen", "UMCG")),
+                List.of(CkbTestFactory.createLocation(country1, recruitmentCountry1, city1, facility1),
+                        CkbTestFactory.createLocation(country2, recruitmentCountry2, city2, facility2)),
                 "nctid",
                 "title",
                 List.of("senior", "child", "adult"));

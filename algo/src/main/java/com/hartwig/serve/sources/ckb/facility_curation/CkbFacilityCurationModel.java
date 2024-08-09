@@ -1,8 +1,10 @@
 package com.hartwig.serve.sources.ckb.facility_curation;
 
 import java.util.List;
+import java.util.Set;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.collect.Sets;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.Location;
 
 import org.apache.logging.log4j.LogManager;
@@ -23,6 +25,9 @@ public class CkbFacilityCurationModel {
     @NotNull
     private final List<CkbFacilityCurationFilterEntry> facilityCurationFilterEntries;
 
+    @NotNull
+    private final Set<CkbFacilityCurationFilterEntry> usedFacilityCurationFilterEntries = Sets.newHashSet();
+
     public CkbFacilityCurationModel(@NotNull final List<CkbFacilityCurationNameEntry> facilityCurationNameList,
             @NotNull final List<CkbFacilityCurationZipEntry> facilityCurationZipList,
             @NotNull final List<CkbFacilityCurationFilterEntry> facilityCurationFilterList) {
@@ -34,7 +39,7 @@ public class CkbFacilityCurationModel {
     @NotNull
     public String curateFacilityName(@NotNull Location location) {
         for (CkbFacilityCurationZipEntry facilityCurationZipEntry : facilityCurationZipEntries) {
-            if (location.city().toLowerCase().equals(facilityCurationZipEntry.city())) {
+            if (containsWord(facilityCurationZipEntry.city(), location.city().toLowerCase())) {
                 String zip = location.zip() != null ? location.zip().toLowerCase().replaceAll("\\s", "") : "";
                 if ((facilityCurationZipEntry.zip().equals("")) || (zip.contains(facilityCurationZipEntry.zip()))) {
                     return facilityCurationZipEntry.curatedFacilityName();
@@ -44,9 +49,9 @@ public class CkbFacilityCurationModel {
 
         if (location.facility() != null) {
             for (CkbFacilityCurationNameEntry facilityCurationNameEntry : facilityCurationNameEntries) {
-                if (location.facility().toLowerCase().contains(facilityCurationNameEntry.facilityName()) && location.city()
-                        .toLowerCase()
-                        .equals(facilityCurationNameEntry.city())) {
+                if (containsWord(facilityCurationNameEntry.facilityName(), location.facility().toLowerCase()) && containsWord(
+                        facilityCurationNameEntry.city(),
+                        location.city().toLowerCase())) {
                     return facilityCurationNameEntry.curatedFacilityName();
                 }
             }
@@ -55,6 +60,7 @@ public class CkbFacilityCurationModel {
         for (CkbFacilityCurationFilterEntry facilityCurationFilterEntry : facilityCurationFilterEntries) {
             if (equalStringsOrNull(location.facility(), facilityCurationFilterEntry.facilityName()) && location.city()
                     .equals(facilityCurationFilterEntry.city()) && equalStringsOrNull(location.zip(), facilityCurationFilterEntry.zip())) {
+                usedFacilityCurationFilterEntries.add(facilityCurationFilterEntry);
                 return facilityCurationFilterEntry.curatedFacilityName();
             }
         }
@@ -63,9 +69,20 @@ public class CkbFacilityCurationModel {
         return "Unknown (" + location.city() + ")";
     }
 
+    public void reportUnusedFacilityCurationFilterEntries() {
+        int unusedFacilityCurationFilterCount = 0;
+        for (CkbFacilityCurationFilterEntry entry : facilityCurationFilterEntries) {
+            if (!usedFacilityCurationFilterEntries.contains(entry)) {
+                unusedFacilityCurationFilterCount++;
+                LOGGER.warn(" Facility curation filter entry '{}' hasn't been used for CKB filtering", entry);
+            }
+        }
+        LOGGER.debug(" Found {} unused facility curation filters during CKB filtering", unusedFacilityCurationFilterCount);
+    }
+
     @VisibleForTesting
     @NotNull
-    private Boolean equalStringsOrNull(@Nullable String string1, @NotNull String string2) {
+    Boolean equalStringsOrNull(@Nullable String string1, @NotNull String string2) {
         if (string1 == null && string2.equals("")) {
             return true;
         }
@@ -73,5 +90,12 @@ public class CkbFacilityCurationModel {
             return false;
         }
         return string1.equals(string2);
+    }
+
+    @VisibleForTesting
+    @NotNull
+    Boolean containsWord(@Nullable String string1, @NotNull String string2) {
+        String pattern = "\\b" + string1 + "\\b";
+        return string2.matches(".*" + pattern + ".*");
     }
 }

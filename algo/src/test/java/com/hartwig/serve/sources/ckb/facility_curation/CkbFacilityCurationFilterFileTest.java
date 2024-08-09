@@ -18,6 +18,6 @@ public class CkbFacilityCurationFilterFileTest {
     public void canReadCkbFacilityFilterTsv() throws IOException {
         List<CkbFacilityCurationFilterEntry> facilityCurationFilterEntries =
                 CkbFacilityCurationFilterFile.read(TEST_CKB_FACILITY_CURATION_FILTER_FILE);
-        //assertEquals(1, facilityCurationFilterEntries.size());
+        assertEquals(1, facilityCurationFilterEntries.size());
     }
 }

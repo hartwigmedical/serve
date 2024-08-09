@@ -194,19 +194,17 @@ public class ServeAlgo {
         List<CkbFacilityCurationFilterEntry> facilityFilterCurations = CkbFacilityCurationFilterFile.read(ckbFacilityCurationFilterTsv);
         LOGGER.info(" Read {} facility filter curations to include", facilityFilterCurations.size());
 
-        CkbFacilityCurationModel ckbFacilityCurationModel =
+        CkbFacilityCurationModel ckbFacilityCuration =
                 new CkbFacilityCurationModel(facilityNameCurations, facilityZipCurations, facilityFilterCurations);
 
-        CkbExtractor extractor = CkbExtractorFactory.createTrialExtractor(config,
-                refGenomeResource,
-                blacklistStudy,
-                regionsToInclude,
-                ckbFacilityCurationModel);
+        CkbExtractor extractor =
+                CkbExtractorFactory.createTrialExtractor(config, refGenomeResource, blacklistStudy, regionsToInclude, ckbFacilityCuration);
 
         LOGGER.info("Running CKB trial knowledge extraction");
         ExtractionResult result = extractor.extract(ckbEntries);
 
         blacklistStudy.reportUnusedBlacklistEntries();
+        ckbFacilityCuration.reportUnusedFacilityCurationFilterEntries();
 
         return result;
     }

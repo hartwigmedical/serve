@@ -17,6 +17,6 @@ public class CkbFacilityCurationZipFileTest {
     @Test
     public void canReadCkbFacilityZipTsv() throws IOException {
         List<CkbFacilityCurationZipEntry> facilityCurationZipEntries = CkbFacilityCurationZipFile.read(TEST_CKB_FACILITY_CURATION_ZIP_FILE);
-        //assertEquals(1, facilityCurationZipEntries.size());
+        assertEquals(1, facilityCurationZipEntries.size());
     }
 }

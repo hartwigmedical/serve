@@ -40,6 +40,39 @@ public class CkbFacilityCurationModelTest {
         assertEquals(facilityModel.curateFacilityName(location), "Amsterdam UMC");
     }
 
+    @Test
+    public void canFindEqualStringsOrNull() {
+        String string1 = null;
+        String string2 = "";
+        assertEquals(facilityModel.equalStringsOrNull(string1, string2), true);
+
+        String string3 = "same string";
+        String string4 = "same string";
+        assertEquals(facilityModel.equalStringsOrNull(string3, string4), true);
+
+        String string5 = null;
+        String string6 = "string";
+        assertEquals(facilityModel.equalStringsOrNull(string5, string6), false);
+
+        String string7 = "string";
+        String string8 = "another string";
+        assertEquals(facilityModel.equalStringsOrNull(string7, string8), false);
+    }
+
+    @Test
+    public void canFindStandAloneWordInString() {
+        String string1 = "amc";
+
+        String string2 = "amsterdam";
+        assertEquals(facilityModel.containsWord(string1, string2), false);
+
+        String string4 = "amc amsterdam";
+        assertEquals(facilityModel.containsWord(string1, string4), true);
+
+        String string6 = "amcterdam";
+        assertEquals(facilityModel.containsWord(string1, string6), false);
+    }
+
     @NotNull
     private static Location createLocation(@NotNull String city, @NotNull String facility, @Nullable String zip) {
         return ImmutableLocation.builder().nctId("").city(city).country("Netherlands").facility(facility).zip(zip).build();

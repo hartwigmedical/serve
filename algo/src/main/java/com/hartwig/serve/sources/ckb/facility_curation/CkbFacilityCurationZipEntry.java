@@ -11,7 +11,7 @@ public abstract class CkbFacilityCurationZipEntry {
     @NotNull
     public abstract String city();
 
-    @Nullable
+    @NotNull
     public abstract String zip();
 
     @NotNull

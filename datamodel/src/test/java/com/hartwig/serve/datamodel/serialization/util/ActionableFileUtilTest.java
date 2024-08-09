@@ -55,14 +55,14 @@ public class ActionableFileUtilTest {
     public void canConvertCountriesOfStudyToHospitals() {
         Set<Country> countriesOfStudy = Sets.newHashSet();
         countriesOfStudy.add(createCountry("Groningen", "UMCG"));
-        assertEquals("UMCG", ActionableFileUtil.countriesOfStudyToHospitals(countriesOfStudy));
+        assertEquals("UMCG", ActionableFileUtil.countriesOfStudyToHospitalsField(countriesOfStudy));
     }
 
     @Test
     public void canConvertCountriesOfStudyToCountryNameAndCities() {
         Set<Country> countriesOfStudy = Sets.newHashSet();
         countriesOfStudy.add(createCountry("Groningen", "UMCG"));
-        assertEquals("Netherlands(Groningen)", ActionableFileUtil.countriesOfStudyToCountryNameAndCities(countriesOfStudy));
+        assertEquals("Netherlands(Groningen)", ActionableFileUtil.countriesOfStudyToCountryNameAndCitiesField(countriesOfStudy));
     }
 
     @Test
@@ -98,7 +98,7 @@ public class ActionableFileUtilTest {
         String countryNameAndCity = "Netherlands(Groningen)";
         String hospital = "UMCG";
 
-        Set<Country> countriesOfStudy = ActionableFileUtil.fieldToCountriesOfStudy(countryNameAndCity, hospital);
+        Set<Country> countriesOfStudy = ActionableFileUtil.twoFieldsToCountriesOfStudy(countryNameAndCity, hospital);
 
         assertEquals(1, countriesOfStudy.size());
         Country country = countriesOfStudy.iterator().next();

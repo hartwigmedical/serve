@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
@@ -50,13 +51,13 @@ class ActionableTrialFactory implements ActionableEntryFactory {
     @NotNull
     private final Set<CkbRegion> regionsToInclude;
     @NotNull
-    private final CkbFacilityCurationModel ckbFacilityCurationModel;
+    private final CkbFacilityCurationModel ckbFacilityCuration;
 
     public ActionableTrialFactory(@NotNull CkbStudyBlacklistModel blacklistStudy, @NotNull Set<CkbRegion> regionsToInclude,
-            @NotNull CkbFacilityCurationModel ckbFacilityCurationModel) {
+            @NotNull CkbFacilityCurationModel ckbFacilityCuration) {
         this.blacklistStudy = blacklistStudy;
         this.regionsToInclude = regionsToInclude;
-        this.ckbFacilityCurationModel = ckbFacilityCurationModel;
+        this.ckbFacilityCuration = ckbFacilityCuration;
     }
 
     @NotNull
@@ -65,7 +66,7 @@ class ActionableTrialFactory implements ActionableEntryFactory {
         Set<ActionableEntry> actionableTrials = Sets.newHashSet();
 
         for (ClinicalTrial trial : trialsToInclude(entry)) {
-            Set<Country> countries = filterOnRegionsToInclude(trial, regionsToInclude, ckbFacilityCurationModel);
+            Set<Country> countries = filterOnRegionsToInclude(trial, regionsToInclude, ckbFacilityCuration);
 
             if (!countries.isEmpty()) {
                 Set<String> therapies = Sets.newHashSet();
@@ -136,41 +137,29 @@ class ActionableTrialFactory implements ActionableEntryFactory {
     @VisibleForTesting
     static Set<Country> filterOnRegionsToInclude(@NotNull ClinicalTrial trial, @NotNull Set<CkbRegion> regionsToInclude,
             @NotNull CkbFacilityCurationModel ckbFacilityCurationModel) {
-        Map<String, Map<String, Set<String>>> countriesToCitiesToHospitalNames = new HashMap<>();
-        for (Location location : trial.locations()) {
-            if (regionsToInclude.stream().anyMatch(region -> region.includes(location))
-                    && hasPotentiallyOpenRequirementToInclude(location.status())) {
-                String facility = "";
-                if (location.country().equals("Netherlands")) {
-                    facility = ckbFacilityCurationModel.curateFacilityName(location);
-                }
-                countriesToCitiesToHospitalNames.computeIfAbsent(location.country(), it -> new HashMap<>())
-                        .computeIfAbsent(location.city(), it2 -> new HashSet<>())
-                        .add(facility);
-            }
-        }
+        Map<String, Map<String, Set<String>>> countriesToCitiesToHospitalNames = trial.locations()
+                .stream()
+                .filter(location -> regionsToInclude.stream().anyMatch(region -> region.includes(location))
+                        && hasPotentiallyOpenRequirementToInclude(location.status()))
+                .collect(Collectors.groupingBy(Location::country, Collectors.groupingBy(Location::city, Collectors.mapping(location -> {
+                    if ("Netherlands".equals(location.country())) {
+                        return ckbFacilityCurationModel.curateFacilityName(location);
+                    }
+                    return "";
+                }, Collectors.toSet()))));
 
-        Set<Country> countries = new HashSet<>();
-        for (Map.Entry<String, Map<String, Set<String>>> countryEntry : countriesToCitiesToHospitalNames.entrySet()) {
-            String countryName = countryEntry.getKey();
-            Map<String, Set<String>> citiesToHospitals = countryEntry.getValue();
-            Country country = addHospitalNames(countryName, citiesToHospitals);
-            countries.add(country);
-        }
-
-        return countries;
+        return countriesToCitiesToHospitalNames.entrySet()
+                .stream()
+                .map(entry -> addHospitalNames(entry.getKey(), entry.getValue()))
+                .collect(Collectors.toSet());
     }
 
     @VisibleForTesting
     static Country addHospitalNames(@NotNull String countryName, @NotNull Map<String, Set<String>> citiesToHospitals) {
         Set<String> cities = citiesToHospitals.keySet();
-        Set<String> hospitals = null;
-        if (Objects.equals(countryName, "Netherlands")) {
-            hospitals = new HashSet<>();
-            for (Set<String> hospitalSet : citiesToHospitals.values()) {
-                hospitals.addAll(hospitalSet);
-            }
-        }
+        Set<String> hospitals = "Netherlands".equals(countryName)
+                ? citiesToHospitals.values().stream().flatMap(Set::stream).collect(Collectors.toSet())
+                : null;
 
         return ImmutableCountry.builder().countryName(countryName).cities(cities).hospitals(hospitals).build();
     }

@@ -30,18 +30,15 @@ public final class ActionableFileUtil {
 
     public static final String FIELD_DELIMITER = "\t";
 
-    private static final String SUB_FIELD_DELIMITER = ",";
-    private static final String NAME_DOID_DELIMITER = ";";
+    private static final String MAIN_DELIMITER = ",";
+    private static final String SUB_DELIMITER = ";";
 
     private ActionableFileUtil() {
     }
 
     @NotNull
     public static String header() {
-        return new StringJoiner(FIELD_DELIMITER).add("source")
-                .add("sourceEvent")
-                .add("sourceUrls")
-                .add("studyNctId")
+        return new StringJoiner(FIELD_DELIMITER).add("source").add("sourceEvent").add("sourceUrls").add("studyNctId")
                 .add("studyTitle")
                 .add("studyAcronym")
                 .add("studyGender")
@@ -102,7 +99,7 @@ public final class ActionableFileUtil {
                             .studyTitle(values[fields.get("studyTitle")])
                             .studyAcronym(SerializationUtil.optionalString(values[fields.get("studyAcronym")]))
                             .gender(SerializationUtil.optionalString(values[fields.get("studyGender")]))
-                            .countriesOfStudy(fieldToCountriesOfStudy(values[fields.get("countriesOfStudy")],
+                            .countriesOfStudy(twoFieldsToCountriesOfStudy(values[fields.get("countriesOfStudy")],
                                     values[fields.get("dutchHospitals")]))
                             .therapyNames(fieldToSet(values[fields.get("treatment")]))
                             .build();
@@ -174,8 +171,8 @@ public final class ActionableFileUtil {
                 .add(clinicalTrial != null ? clinicalTrial.studyTitle() : Strings.EMPTY)
                 .add(clinicalTrial != null && clinicalTrial.studyAcronym() != null ? clinicalTrial.studyAcronym() : Strings.EMPTY)
                 .add(clinicalTrial != null && clinicalTrial.gender() != null ? clinicalTrial.gender() : Strings.EMPTY)
-                .add(clinicalTrial != null ? countriesOfStudyToCountryNameAndCities(clinicalTrial.countriesOfStudy()) : Strings.EMPTY)
-                .add(clinicalTrial != null ? countriesOfStudyToHospitals(clinicalTrial.countriesOfStudy()) : Strings.EMPTY)
+                .add(clinicalTrial != null ? countriesOfStudyToCountryNameAndCitiesField(clinicalTrial.countriesOfStudy()) : Strings.EMPTY)
+                .add(clinicalTrial != null ? countriesOfStudyToHospitalsField(clinicalTrial.countriesOfStudy()) : Strings.EMPTY)
                 .add(setToField(therapy))
                 .add(treatment != null && !treatment.treatmentApproachesDrugClass().isEmpty() ? setToField(treatment.treatmentApproachesDrugClass()) : Strings.EMPTY)
                 .add(treatment != null && !treatment.treatmentApproachesTherapy().isEmpty() ? setToField(treatment.treatmentApproachesTherapy()) : Strings.EMPTY)
@@ -194,12 +191,12 @@ public final class ActionableFileUtil {
             return Sets.newHashSet();
         }
 
-        return Sets.newHashSet(field.split(SUB_FIELD_DELIMITER));
+        return Sets.newHashSet(field.split(MAIN_DELIMITER));
     }
 
     @NotNull
     private static String setToField(@NotNull Set<String> strings) {
-        StringJoiner joiner = new StringJoiner(SUB_FIELD_DELIMITER);
+        StringJoiner joiner = new StringJoiner(MAIN_DELIMITER);
         for (String string : strings) {
             joiner.add(string);
         }
@@ -208,35 +205,35 @@ public final class ActionableFileUtil {
 
     @VisibleForTesting
     @NotNull
-    static String countriesOfStudyToCountryNameAndCities(@NotNull Set<Country> countriesOfStudy) {
+    static String countriesOfStudyToCountryNameAndCitiesField(@NotNull Set<Country> countriesOfStudy) {
         return countriesOfStudy.stream()
-                .map(country -> country.countryName() + "(" + String.join(NAME_DOID_DELIMITER, country.cities()) + ")")
-                .collect(Collectors.joining(SUB_FIELD_DELIMITER));
+                .map(country -> country.countryName() + "(" + String.join(SUB_DELIMITER, country.cities()) + ")")
+                .collect(Collectors.joining(MAIN_DELIMITER));
     }
 
     @VisibleForTesting
     @NotNull
-    static String countriesOfStudyToHospitals(@NotNull Set<Country> countriesOfStudy) {
-        String result = countriesOfStudy.stream()
+    static String countriesOfStudyToHospitalsField(@NotNull Set<Country> countriesOfStudy) {
+        String hospitals = countriesOfStudy.stream()
                 .filter(country -> country.countryName().equals("Netherlands"))
                 .map(Country::hospitals)
                 .flatMap(Set::stream)
-                .collect(Collectors.joining(SUB_FIELD_DELIMITER));
+                .collect(Collectors.joining(MAIN_DELIMITER));
 
-        return result.isEmpty() ? "" : result;
+        return hospitals.isEmpty() ? "" : hospitals;
     }
 
     @VisibleForTesting
     @NotNull
-    static Set<Country> fieldToCountriesOfStudy(@NotNull String countriesAndCitiesField, @NotNull String hospitalsField) {
+    static Set<Country> twoFieldsToCountriesOfStudy(@NotNull String countriesAndCitiesField, @NotNull String hospitalsField) {
         if (countriesAndCitiesField.isEmpty()) {
             return Sets.newHashSet();
         }
 
-        return Arrays.stream(countriesAndCitiesField.split(SUB_FIELD_DELIMITER)).map(part -> {
-            String[] splitPart = part.split("\\(");
-            String countryName = splitPart[0];
-            Set<String> cities = Arrays.stream(splitPart[1].replace(")", "").split(NAME_DOID_DELIMITER)).collect(Collectors.toSet());
+        return Arrays.stream(countriesAndCitiesField.split(MAIN_DELIMITER)).map(part -> {
+            String[] countriesAndCities = part.split("\\(");
+            String countryName = countriesAndCities[0];
+            Set<String> cities = Arrays.stream(countriesAndCities[1].replace(")", "").split(SUB_DELIMITER)).collect(Collectors.toSet());
             Set<String> hospitals = null;
             if (Objects.equals(countryName, "Netherlands")) {
                 hospitals = fieldToSet(hospitalsField);
@@ -248,9 +245,9 @@ public final class ActionableFileUtil {
     @VisibleForTesting
     @NotNull
     static String cancerTypesToField(@NotNull Set<CancerType> cancerTypes) {
-        StringJoiner joiner = new StringJoiner(SUB_FIELD_DELIMITER);
+        StringJoiner joiner = new StringJoiner(MAIN_DELIMITER);
         for (CancerType cancerType : cancerTypes) {
-            joiner.add(cancerType.name() + NAME_DOID_DELIMITER + cancerType.doid());
+            joiner.add(cancerType.name() + SUB_DELIMITER + cancerType.doid());
         }
         return joiner.toString();
     }
@@ -263,8 +260,8 @@ public final class ActionableFileUtil {
         }
 
         Set<CancerType> cancerTypes = Sets.newHashSet();
-        for (String cancerTypeEntry : field.split(SUB_FIELD_DELIMITER)) {
-            String[] nameAndDoid = cancerTypeEntry.split(NAME_DOID_DELIMITER);
+        for (String cancerTypeEntry : field.split(MAIN_DELIMITER)) {
+            String[] nameAndDoid = cancerTypeEntry.split(SUB_DELIMITER);
             cancerTypes.add(ImmutableCancerType.builder().name(nameAndDoid[0]).doid(nameAndDoid[1]).build());
         }
 

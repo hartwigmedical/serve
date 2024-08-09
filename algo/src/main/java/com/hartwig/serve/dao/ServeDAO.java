@@ -67,7 +67,7 @@ public class ServeDAO {
     private static final Logger LOGGER = LogManager.getLogger(ServeDAO.class);
 
     private static final String MAIN_JOINER = ",";
-    private static final String NAME_DOID_JOINER = ";";
+    private static final String SUB_JOINER = ";";
 
     @NotNull
     private final DSLContext context;
@@ -786,27 +786,26 @@ public class ServeDAO {
     private static Set<String> toStrings(@NotNull Set<CancerType> cancerTypes) {
         Set<String> strings = Sets.newHashSet();
         for (CancerType cancerType : cancerTypes) {
-            strings.add(cancerType.name() + NAME_DOID_JOINER + cancerType.doid());
+            strings.add(cancerType.name() + SUB_JOINER + cancerType.doid());
         }
         return strings;
     }
 
     @NotNull
     private static String toCountryWithCities(@NotNull Set<Country> countriesOfStudy) {
-        return countriesOfStudy.stream()
-                .map(country -> country.countryName() + "(" + String.join(MAIN_JOINER, country.cities()) + ")")
+        return countriesOfStudy.stream().map(country -> country.countryName() + "(" + String.join(SUB_JOINER, country.cities()) + ")")
                 .collect(Collectors.joining(MAIN_JOINER));
     }
 
     @NotNull
     private static String toDutchHospitals(@NotNull Set<Country> countriesOfStudy) {
-        String result = countriesOfStudy.stream()
+        String hospitals = countriesOfStudy.stream()
                 .filter(country -> country.countryName().equals("Netherlands"))
                 .map(Country::hospitals)
                 .flatMap(Set::stream)
                 .collect(Collectors.joining(MAIN_JOINER));
 
-        return result.isEmpty() ? "" : result;
+        return hospitals.isEmpty() ? "" : hospitals;
     }
 
     @NotNull

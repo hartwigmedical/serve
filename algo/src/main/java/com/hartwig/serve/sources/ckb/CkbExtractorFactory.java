@@ -33,10 +33,10 @@ public final class CkbExtractorFactory {
     @NotNull
     public static CkbExtractor createTrialExtractor(@NotNull EventClassifierConfig config, @NotNull RefGenomeResource refGenomeResource,
             @NotNull CkbStudyBlacklistModel blacklistStudy, @NotNull Set<CkbRegion> regionsToInclude,
-            @NotNull CkbFacilityCurationModel ckbFacilityCurationModel) {
+            @NotNull CkbFacilityCurationModel ckbFacilityCuration) {
         return new CkbExtractor(Knowledgebase.CKB_TRIAL,
                 createEventExtractor(config, refGenomeResource),
-                new ActionableTrialFactory(blacklistStudy, regionsToInclude, ckbFacilityCurationModel),
+                new ActionableTrialFactory(blacklistStudy, regionsToInclude, ckbFacilityCuration),
                 false);
     }
 

@@ -31,14 +31,15 @@ public class CkbFacilityCurationModel {
         this.facilityCurationFilterEntries = facilityCurationFilterList;
     }
 
-    @VisibleForTesting
+    @NotNull
     public String curateFacilityName(@NotNull Location location) {
         if (location.zip() != null) {
             for (CkbFacilityCurationZipEntry facilityCurationZipEntry : facilityCurationZipEntries) {
                 if (location.city().toLowerCase().equals(facilityCurationZipEntry.city())) {
-                    if (facilityCurationZipEntry.zip() == null) {
-                        return facilityCurationZipEntry.curatedFacilityName();
-                    } else if (location.zip().toLowerCase().replaceAll("\\s", "").contains(facilityCurationZipEntry.zip())) {
+                    if ((facilityCurationZipEntry.zip().equals("")) || (location.zip()
+                            .toLowerCase()
+                            .replaceAll("\\s", "")
+                            .contains(facilityCurationZipEntry.zip()))) {
                         return facilityCurationZipEntry.curatedFacilityName();
                     }
                 }
@@ -69,6 +70,7 @@ public class CkbFacilityCurationModel {
     }
 
     @VisibleForTesting
+    @NotNull
     private Boolean equalStringsOrNull(@Nullable String string1, @NotNull String string2) {
         if (string1 == null && string2.equals("")) {
             return true;

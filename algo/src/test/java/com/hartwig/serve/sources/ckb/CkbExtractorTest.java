@@ -19,6 +19,7 @@ import com.hartwig.serve.extraction.codon.CodonAnnotation;
 import com.hartwig.serve.extraction.codon.ImmutableCodonAnnotation;
 import com.hartwig.serve.refgenome.RefGenomeResourceTestFactory;
 import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistTestFactory;
+import com.hartwig.serve.sources.ckb.facility_curation.CkbFacilityCurationModel;
 import com.hartwig.serve.sources.ckb.region.ImmutableCkbRegion;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachTestFactory;
 
@@ -53,7 +54,8 @@ public class CkbExtractorTest {
         CkbExtractor trialExtractor = CkbExtractorFactory.createTrialExtractor(CkbClassificationConfig.build(),
                 RefGenomeResourceTestFactory.buildTestResource37(),
                 CkbBlacklistTestFactory.createEmptyStudyBlacklist(),
-                Set.of(ImmutableCkbRegion.builder().country("netherlands").states(Collections.emptySet()).build()));
+                Set.of(ImmutableCkbRegion.builder().country("netherlands").states(Collections.emptySet()).build()),
+                new CkbFacilityCurationModel(Lists.newArrayList(), Lists.newArrayList(), Lists.newArrayList()));
 
         ExtractionResult trialResult = trialExtractor.extract(createCkbEntryTestDatabase());
         assertEquals(0, trialResult.knownHotspots().size());
@@ -154,7 +156,7 @@ public class CkbExtractorTest {
                                 .profileId(baseEntry.profileId())
                                 .requirementType("required")
                                 .build()),
-                        List.of(CkbTestFactory.createLocation("Netherlands", null)),
+                        List.of(CkbTestFactory.createLocation("Netherlands", null, "Rotterdam", "EMC")),
                         "nctid",
                         "title",
                         List.of(CkbTestFactory.createTherapy("Nivolumab")),

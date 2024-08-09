@@ -12,6 +12,7 @@ import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.ImmutableCancerType;
 import com.hartwig.serve.datamodel.ImmutableClinicalTrial;
+import com.hartwig.serve.datamodel.ImmutableCountry;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.iclusion.datamodel.IclusionTrial;
 import com.hartwig.serve.iclusion.datamodel.IclusionTumorLocation;
@@ -70,7 +71,11 @@ public class ActionableTrialFactory {
                         .studyTitle("")
                         .studyAcronym(trial.acronym())
                         .gender(null)
-                        .countriesOfStudy(Sets.newHashSet("The Netherlands"))
+                        .countriesOfStudy(Sets.newHashSet(ImmutableCountry.builder()
+                                .countryName("The Netherlands")
+                                .cities(Sets.newHashSet("Unknown"))
+                                .hospitals(null)
+                                .build()))
                         .therapyNames(Sets.newHashSet())
                         .build())
                 .level(EvidenceLevel.B)

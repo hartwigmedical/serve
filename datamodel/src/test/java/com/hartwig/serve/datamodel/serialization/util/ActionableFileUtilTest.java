@@ -2,19 +2,23 @@ package com.hartwig.serve.datamodel.serialization.util;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.ActionableEvent;
 import com.hartwig.serve.datamodel.CancerType;
+import com.hartwig.serve.datamodel.Country;
 import com.hartwig.serve.datamodel.DatamodelTestFactory;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
+import com.hartwig.serve.datamodel.ImmutableCountry;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.Treatment;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.Test;
 
 public class ActionableFileUtilTest {
@@ -50,17 +54,34 @@ public class ActionableFileUtilTest {
     }
 
     @Test
+    public void canConvertCountriesOfStudyToHospitals() {
+        Set<Country> countriesOfStudy = Sets.newHashSet();
+        countriesOfStudy.add(createCountry("Netherlands", "Groningen", "UMCG"));
+        countriesOfStudy.add(createCountry("Belgium", "Brussel", "UZ Brussel"));
+        assertEquals("UMCG", ActionableFileUtil.countriesOfStudyToHospitalsField(countriesOfStudy));
+    }
+
+    @Test
+    public void canConvertCountriesOfStudyToCountryNameAndCities() {
+        Set<Country> countriesOfStudy = Sets.newHashSet();
+        countriesOfStudy.add(createCountry("Netherlands", "Groningen", "UMCG"));
+        countriesOfStudy.add(createCountry("Belgium", "Brussel", ""));
+        assertEquals("Belgium(Brussel),Netherlands(Groningen)",
+                ActionableFileUtil.countriesOfStudyToCountryNameAndCitiesField(countriesOfStudy));
+    }
+
+    @Test
     public void canConvertSingleCancerTypeToField() {
         Set<CancerType> cancerTypes = Sets.newHashSet();
-        cancerTypes.add(create("Hematologic cancer", "2531"));
+        cancerTypes.add(createCancerType("Hematologic cancer", "2531"));
         assertEquals("Hematologic cancer;2531", ActionableFileUtil.cancerTypesToField(cancerTypes));
     }
 
     @Test
     public void canConvertTwoCancerTypesToField() {
         Set<CancerType> cancerTypes = Sets.newHashSet();
-        cancerTypes.add(create("Hematologic cancer", "2531"));
-        cancerTypes.add(create("Skin Melanoma", "8923"));
+        cancerTypes.add(createCancerType("Hematologic cancer", "2531"));
+        cancerTypes.add(createCancerType("Skin Melanoma", "8923"));
 
         assertEquals("Hematologic cancer;2531,Skin Melanoma;8923", ActionableFileUtil.cancerTypesToField(cancerTypes));
     }
@@ -68,13 +89,33 @@ public class ActionableFileUtilTest {
     @Test
     public void canConvertMultipleCancerTypesToField() {
         Set<CancerType> cancerTypes = Sets.newHashSet();
-        cancerTypes.add(create("Hematologic cancer", "2531"));
-        cancerTypes.add(create("Skin Melanoma", "8923"));
-        cancerTypes.add(create("Bladder Cancer", "11054"));
-        cancerTypes.add(create("Colorectal Cancer", "1520"));
+        cancerTypes.add(createCancerType("Hematologic cancer", "2531"));
+        cancerTypes.add(createCancerType("Skin Melanoma", "8923"));
+        cancerTypes.add(createCancerType("Bladder Cancer", "11054"));
+        cancerTypes.add(createCancerType("Colorectal Cancer", "1520"));
 
         assertEquals("Hematologic cancer;2531,Colorectal Cancer;1520,Skin Melanoma;8923,Bladder Cancer;11054",
                 ActionableFileUtil.cancerTypesToField(cancerTypes));
+    }
+
+    @Test
+    public void canResolveCountriesOfStudy() {
+        String countryNameAndCity = "Belgium(Brussel),Netherlands(Groningen)";
+        String hospital = "UMCG";
+
+        Set<Country> countriesOfStudy = ActionableFileUtil.twoFieldsToCountriesOfStudy(countryNameAndCity, hospital);
+        assertEquals(2, countriesOfStudy.size());
+        Iterator<Country> iterator = countriesOfStudy.iterator();
+
+        Country country1 = iterator.next();
+        assertEquals("Belgium", country1.countryName());
+        assertEquals(Set.of("Brussel"), country1.cities());
+        assertEquals(null, country1.hospitals());
+
+        Country country2 = iterator.next();
+        assertEquals("Netherlands", country2.countryName());
+        assertEquals(Set.of("Groningen"), country2.cities());
+        assertEquals(Set.of("UMCG"), country2.hospitals());
     }
 
     @Test
@@ -94,10 +135,10 @@ public class ActionableFileUtilTest {
         Set<CancerType> cancerTypes = ActionableFileUtil.fieldToCancerTypes(combinedNamesAndDoids);
 
         assertEquals(2, cancerTypes.size());
-        CancerType cancerType1 = findByName(cancerTypes, "Hematologic cancer");
+        CancerType cancerType1 = findCancerTypeByName(cancerTypes, "Hematologic cancer");
         assertEquals("2531", cancerType1.doid());
 
-        CancerType cancerType2 = findByName(cancerTypes, "Skin Melanoma");
+        CancerType cancerType2 = findCancerTypeByName(cancerTypes, "Skin Melanoma");
         assertEquals("8923", cancerType2.doid());
     }
 
@@ -107,21 +148,21 @@ public class ActionableFileUtilTest {
         Set<CancerType> cancerTypes = ActionableFileUtil.fieldToCancerTypes(combinedNamesAndDoids);
 
         assertEquals(4, cancerTypes.size());
-        CancerType cancerType1 = findByName(cancerTypes, "Hematologic cancer");
+        CancerType cancerType1 = findCancerTypeByName(cancerTypes, "Hematologic cancer");
         assertEquals("2531", cancerType1.doid());
 
-        CancerType cancerType2 = findByName(cancerTypes, "Colorectal Cancer");
+        CancerType cancerType2 = findCancerTypeByName(cancerTypes, "Colorectal Cancer");
         assertEquals("1520", cancerType2.doid());
 
-        CancerType cancerType3 = findByName(cancerTypes, "Skin Melanoma");
+        CancerType cancerType3 = findCancerTypeByName(cancerTypes, "Skin Melanoma");
         assertEquals("8923", cancerType3.doid());
 
-        CancerType cancerType4 = findByName(cancerTypes, "Bladder Cancer");
+        CancerType cancerType4 = findCancerTypeByName(cancerTypes, "Bladder Cancer");
         assertEquals("11054", cancerType4.doid());
     }
 
     @NotNull
-    private static CancerType findByName(@NotNull Iterable<CancerType> cancerTypes, @NotNull String nameToFind) {
+    private static CancerType findCancerTypeByName(@NotNull Iterable<CancerType> cancerTypes, @NotNull String nameToFind) {
         for (CancerType cancerType : cancerTypes) {
             if (cancerType.name().equals(nameToFind)) {
                 return cancerType;
@@ -132,7 +173,12 @@ public class ActionableFileUtilTest {
     }
 
     @NotNull
-    private static CancerType create(@NotNull String name, @NotNull String doid) {
+    private static CancerType createCancerType(@NotNull String name, @NotNull String doid) {
         return DatamodelTestFactory.cancerTypeBuilder().name(name).doid(doid).build();
+    }
+
+    @NotNull
+    private static Country createCountry(@NotNull String country, @NotNull String city, @Nullable String hospital) {
+        return ImmutableCountry.builder().countryName(country).cities(Set.of(city)).hospitals(Set.of(hospital)).build();
     }
 }

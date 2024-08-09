@@ -20,7 +20,7 @@ public abstract class ClinicalTrial implements Intervention {
     public abstract String studyAcronym();
 
     @NotNull
-    public abstract Set<String> countriesOfStudy();
+    public abstract Set<Country> countriesOfStudy();
 
     @NotNull
     public abstract Set<String> therapyNames();

@@ -49,12 +49,12 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
         PREDICTED_RESISTANT_DIRECTIONS.add("predicted - resistant");
 
         NO_BENEFIT_DIRECTIONS.add("no benefit");
-        NO_BENEFIT_DIRECTIONS.add("not predictive");
         DECREASED_RESPONSE_DIRECTIONS.add("decreased response");
 
         DIRECTIONS_TO_IGNORE.add("unknown");
         DIRECTIONS_TO_IGNORE.add("not applicable");
         DIRECTIONS_TO_IGNORE.add("conflicting");
+        DIRECTIONS_TO_IGNORE.add("not predictive");
 
         USABLE_EVIDENCE_TYPES.add("Actionable");
 

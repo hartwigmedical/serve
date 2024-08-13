@@ -13,7 +13,6 @@ import com.hartwig.serve.ckb.datamodel.evidence.Evidence;
 import com.hartwig.serve.ckb.datamodel.reference.Reference;
 import com.hartwig.serve.ckb.datamodel.therapy.Therapy;
 import com.hartwig.serve.ckb.datamodel.treatmentapproaches.DrugClassTreatmentApproach;
-import com.hartwig.serve.ckb.datamodel.treatmentapproaches.RelevantTreatmentApproaches;
 import com.hartwig.serve.ckb.datamodel.treatmentapproaches.TherapyTreatmentApproach;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
@@ -50,12 +49,12 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
         PREDICTED_RESISTANT_DIRECTIONS.add("predicted - resistant");
 
         NO_BENEFIT_DIRECTIONS.add("no benefit");
+        NO_BENEFIT_DIRECTIONS.add("not predictive");
         DECREASED_RESPONSE_DIRECTIONS.add("decreased response");
 
         DIRECTIONS_TO_IGNORE.add("unknown");
         DIRECTIONS_TO_IGNORE.add("not applicable");
         DIRECTIONS_TO_IGNORE.add("conflicting");
-        DIRECTIONS_TO_IGNORE.add("not predictive");
 
         USABLE_EVIDENCE_TYPES.add("Actionable");
 

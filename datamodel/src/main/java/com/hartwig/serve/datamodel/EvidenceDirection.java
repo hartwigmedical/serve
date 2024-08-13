@@ -1,38 +1,42 @@
 package com.hartwig.serve.datamodel;
 
 public enum EvidenceDirection {
-    RESPONSIVE(true, false, false, true),
-    PREDICTED_RESPONSIVE(true, false, false, false),
-    DECREASED_RESPONSE(false, false, false, true),
-    NO_BENEFIT(false, true, false, true),
-    RESISTANT(false, true, true, true),
-    PREDICTED_RESISTANT(false, true, true, false);
+    RESPONSIVE(true, true, false, true),
+    PREDICTED_RESPONSIVE(true, true, false, false),
+    DECREASED_RESPONSE(false, true, false, true),
+    NO_BENEFIT(false, false, false, true),
+    RESISTANT(false, false, true, true),
+    PREDICTED_RESISTANT(false, false, true, false);
 
     private final boolean hasPositiveResponse;
-    private final boolean hasNoBenefit;
+    private final boolean hasBenefit;
     private final boolean isResistant;
     private final boolean isCertain;
 
-    EvidenceDirection(final boolean hasPositiveResponse, final boolean hasNoBenefit, final boolean isResistant, final boolean isCertain) {
+    EvidenceDirection(final boolean hasPositiveResponse, final boolean hasBenefit, final boolean isResistant, final boolean isCertain) {
         this.hasPositiveResponse = hasPositiveResponse;
-        this.hasNoBenefit = hasNoBenefit;
+        this.hasBenefit = hasBenefit;
         this.isResistant = isResistant;
         this.isCertain = isCertain;
+    }
+
+    @Deprecated
+    public boolean isResponsive() {
+        return hasPositiveResponse;
     }
 
     public boolean hasPositiveResponse() {
         return hasPositiveResponse;
     }
 
-    public boolean hasNoBenefit() {
-        return hasNoBenefit;
+    public boolean hasBenefit() {
+        return hasBenefit;
     }
 
     public boolean isResistant() {
         return isResistant;
     }
 
-    @SuppressWarnings("unused")
     public boolean isCertain() {
         return isCertain;
     }

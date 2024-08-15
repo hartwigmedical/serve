@@ -42,7 +42,7 @@ public class ActionableTrialFactoryTest {
         List<ActionableTrial> actionableTrials = factory.toActionableTrials(trial, Strings.EMPTY);
 
         assertEquals(3, actionableTrials.size());
-        assertEquals(trialNCT, DatamodelTestFactory.extractClinicalTrial(actionableTrials.get(0)).studyNctId());
+        assertEquals(trialNCT, DatamodelTestFactory.extractClinicalTrial(actionableTrials.get(0)).nctId());
         assertEquals(location1, actionableTrials.get(0).applicableCancerType().name());
         assertEquals(loc1Doid1, actionableTrials.get(0).applicableCancerType().doid());
         assertEquals(Sets.newHashSet(CancerTypeConstants.REFRACTORY_HEMATOLOGIC_TYPE,
@@ -50,13 +50,13 @@ public class ActionableTrialFactoryTest {
                 CancerTypeConstants.BONE_MARROW_TYPE,
                 CancerTypeConstants.LEUKEMIA_TYPE), actionableTrials.get(0).blacklistCancerTypes());
 
-        assertEquals(trialNCT, DatamodelTestFactory.extractClinicalTrial(actionableTrials.get(1)).studyNctId());
+        assertEquals(trialNCT, DatamodelTestFactory.extractClinicalTrial(actionableTrials.get(1)).nctId());
         assertEquals(location1, actionableTrials.get(1).applicableCancerType().name());
         assertEquals(loc1Doid2, actionableTrials.get(1).applicableCancerType().doid());
         assertEquals(Sets.newHashSet(ImmutableCancerType.builder().name(blacklistLocation1).doid(blacklistDoid1).build()),
                 actionableTrials.get(1).blacklistCancerTypes());
 
-        assertEquals(trialNCT, DatamodelTestFactory.extractClinicalTrial(actionableTrials.get(2)).studyNctId());
+        assertEquals(trialNCT, DatamodelTestFactory.extractClinicalTrial(actionableTrials.get(2)).nctId());
         assertEquals(location2, actionableTrials.get(2).applicableCancerType().name());
         assertEquals(loc2Doid1, actionableTrials.get(2).applicableCancerType().doid());
         assertEquals(Sets.newHashSet(ImmutableCancerType.builder().name(blacklistLocation1).doid(blacklistDoid1).build()),
@@ -73,7 +73,7 @@ public class ActionableTrialFactoryTest {
                 IclusionTestFactory.trialWithTumors("trial", Lists.newArrayList(location), Lists.newArrayList());
         List<ActionableTrial> actionableTrialsWithoutBlacklist = factory.toActionableTrials(trialWithoutBlacklist, Strings.EMPTY);
         assertEquals(1, actionableTrialsWithoutBlacklist.size());
-        assertEquals("nct", DatamodelTestFactory.extractClinicalTrial(actionableTrialsWithoutBlacklist.get(0)).studyNctId());
+        assertEquals("nct", DatamodelTestFactory.extractClinicalTrial(actionableTrialsWithoutBlacklist.get(0)).nctId());
         assertEquals("location", actionableTrialsWithoutBlacklist.get(0).applicableCancerType().name());
         assertEquals("doid", actionableTrialsWithoutBlacklist.get(0).applicableCancerType().doid());
         assertTrue(actionableTrialsWithoutBlacklist.get(0).blacklistCancerTypes().isEmpty());
@@ -92,7 +92,7 @@ public class ActionableTrialFactoryTest {
         IclusionTrial trialOnCancer = IclusionTestFactory.trialWithTumors("trial", Lists.newArrayList(location), Lists.newArrayList());
         List<ActionableTrial> actionableTrialsWithCancer = factory.toActionableTrials(trialOnCancer, Strings.EMPTY);
         assertEquals(2, actionableTrialsWithCancer.size());
-        assertEquals("nct", DatamodelTestFactory.extractClinicalTrial(actionableTrialsWithCancer.get(0)).studyNctId());
+        assertEquals("nct", DatamodelTestFactory.extractClinicalTrial(actionableTrialsWithCancer.get(0)).nctId());
         assertEquals("cancer", actionableTrialsWithCancer.get(0).applicableCancerType().name());
         assertEquals(CancerTypeConstants.CANCER_DOID, actionableTrialsWithCancer.get(0).applicableCancerType().doid());
         assertEquals(Sets.newHashSet(CancerTypeConstants.REFRACTORY_HEMATOLOGIC_TYPE,

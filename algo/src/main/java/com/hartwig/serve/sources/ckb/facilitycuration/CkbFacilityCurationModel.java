@@ -1,4 +1,4 @@
-package com.hartwig.serve.sources.ckb.facility_curation;
+package com.hartwig.serve.sources.ckb.facilitycuration;
 
 import java.util.List;
 import java.util.Set;
@@ -65,8 +65,10 @@ public class CkbFacilityCurationModel {
             }
         }
 
-        LOGGER.warn(" Couldn't curate facility name for location '{}'", location);
-        return "Unknown (" + location.city() + ")";
+        if (location.country().equals("Netherlands")) {
+            LOGGER.warn(" Couldn't curate facility name for location '{}'", location);
+        }
+        return location.facility() == null ? "Unknown (" + location.city() + ")" : location.facility().replaceAll("[(),]", "");
     }
 
     public void reportUnusedFacilityCurationFilterEntries() {
@@ -81,8 +83,7 @@ public class CkbFacilityCurationModel {
     }
 
     @VisibleForTesting
-    @NotNull
-    Boolean equalStringsOrNull(@Nullable String string1, @NotNull String string2) {
+    boolean equalStringsOrNull(@Nullable String string1, @NotNull String string2) {
         if (string1 == null && string2.equals("")) {
             return true;
         }
@@ -93,8 +94,7 @@ public class CkbFacilityCurationModel {
     }
 
     @VisibleForTesting
-    @NotNull
-    Boolean containsWord(@Nullable String string1, @NotNull String string2) {
+    boolean containsWord(@Nullable String string1, @NotNull String string2) {
         String pattern = "\\b" + string1 + "\\b";
         return string2.matches(".*" + pattern + ".*");
     }

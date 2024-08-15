@@ -1,5 +1,6 @@
 package com.hartwig.serve.datamodel;
 
+import java.util.Map;
 import java.util.Set;
 
 import org.immutables.value.Value;
@@ -17,5 +18,5 @@ public abstract class Country {
     public abstract Set<String> cities();
 
     @Nullable
-    public abstract Set<String> hospitals();
+    public abstract Map<String, Set<String>> hospitalsPerCity();
 }

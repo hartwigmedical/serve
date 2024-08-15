@@ -1,4 +1,4 @@
-package com.hartwig.serve.sources.ckb.facility_curation;
+package com.hartwig.serve.sources.ckb.facilitycuration;
 
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;

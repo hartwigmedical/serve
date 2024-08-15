@@ -26,11 +26,11 @@ public final class DatamodelTestFactory {
     @NotNull
     public static ImmutableClinicalTrial.Builder clinicalTrialBuilderBuilder() {
         return ImmutableClinicalTrial.builder()
-                .studyNctId(Strings.EMPTY)
-                .studyTitle(Strings.EMPTY)
-                .studyAcronym(Strings.EMPTY)
-                .gender(Strings.EMPTY)
-                .countriesOfStudy(Sets.newHashSet())
+                .nctId(Strings.EMPTY)
+                .title(Strings.EMPTY)
+                .acronym(Strings.EMPTY)
+                .genderCriterium(Strings.EMPTY)
+                .countries(Sets.newHashSet())
                 .therapyNames(Sets.newHashSet());
     }
 

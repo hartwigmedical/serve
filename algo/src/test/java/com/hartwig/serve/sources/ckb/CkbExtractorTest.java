@@ -19,7 +19,7 @@ import com.hartwig.serve.extraction.codon.CodonAnnotation;
 import com.hartwig.serve.extraction.codon.ImmutableCodonAnnotation;
 import com.hartwig.serve.refgenome.RefGenomeResourceTestFactory;
 import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistTestFactory;
-import com.hartwig.serve.sources.ckb.facility_curation.CkbFacilityCurationModel;
+import com.hartwig.serve.sources.ckb.facilitycuration.CkbFacilityCurationModel;
 import com.hartwig.serve.sources.ckb.region.ImmutableCkbRegion;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachTestFactory;
 

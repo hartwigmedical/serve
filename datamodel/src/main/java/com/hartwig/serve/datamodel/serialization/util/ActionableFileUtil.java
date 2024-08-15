@@ -1,8 +1,8 @@
 package com.hartwig.serve.datamodel.serialization.util;
 
+import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
@@ -38,12 +38,15 @@ public final class ActionableFileUtil {
 
     @NotNull
     public static String header() {
-        return new StringJoiner(FIELD_DELIMITER).add("source").add("sourceEvent").add("sourceUrls").add("studyNctId")
-                .add("studyTitle")
-                .add("studyAcronym")
-                .add("studyGender")
-                .add("countriesOfStudy")
-                .add("dutchHospitals")
+        return new StringJoiner(FIELD_DELIMITER).add("source")
+                .add("sourceEvent")
+                .add("sourceUrls")
+                .add("nctId")
+                .add("title")
+                .add("acronym")
+                .add("genderCriterium")
+                .add("countries")
+                .add("hospitalsPerCity")
                 .add("treatment")
                 .add("treatmentApproachesDrugClass")
                 .add("treatmentApproachesTherapy")
@@ -81,8 +84,8 @@ public final class ActionableFileUtil {
             @NotNull
             @Override
             public Intervention intervention() {
-                boolean isClinicalTrial = !values[fields.get("studyNctId")].isEmpty();
-                boolean isTreatment = values[fields.get("studyNctId")].isEmpty() && !values[fields.get("treatment")].isEmpty();
+                boolean isClinicalTrial = !values[fields.get("nctId")].isEmpty();
+                boolean isTreatment = values[fields.get("nctId")].isEmpty() && !values[fields.get("treatment")].isEmpty();
 
                 if (isClinicalTrial && isTreatment) {
                     throw new IllegalStateException("An actionable event cannot be both a treatment and clinical trial");
@@ -95,12 +98,11 @@ public final class ActionableFileUtil {
                             .build();
                 } else if (isClinicalTrial) {
                     return ImmutableClinicalTrial.builder()
-                            .studyNctId(values[fields.get("studyNctId")])
-                            .studyTitle(values[fields.get("studyTitle")])
-                            .studyAcronym(SerializationUtil.optionalString(values[fields.get("studyAcronym")]))
-                            .gender(SerializationUtil.optionalString(values[fields.get("studyGender")]))
-                            .countriesOfStudy(twoFieldsToCountriesOfStudy(values[fields.get("countriesOfStudy")],
-                                    values[fields.get("dutchHospitals")]))
+                            .nctId(values[fields.get("nctId")])
+                            .title(values[fields.get("title")])
+                            .acronym(SerializationUtil.optionalString(values[fields.get("acronym")]))
+                            .genderCriterium(SerializationUtil.optionalString(values[fields.get("genderCriterium")]))
+                            .countries(twoFieldsToCountries(values[fields.get("countries")], values[fields.get("hospitalsPerCity")]))
                             .therapyNames(fieldToSet(values[fields.get("treatment")]))
                             .build();
                 } else {
@@ -167,12 +169,12 @@ public final class ActionableFileUtil {
         return new StringJoiner(FIELD_DELIMITER).add(event.source().toString())
                 .add(event.sourceEvent())
                 .add(setToField(event.sourceUrls()))
-                .add(clinicalTrial != null ? clinicalTrial.studyNctId() : Strings.EMPTY)
-                .add(clinicalTrial != null ? clinicalTrial.studyTitle() : Strings.EMPTY)
-                .add(clinicalTrial != null && clinicalTrial.studyAcronym() != null ? clinicalTrial.studyAcronym() : Strings.EMPTY)
-                .add(clinicalTrial != null && clinicalTrial.gender() != null ? clinicalTrial.gender() : Strings.EMPTY)
-                .add(clinicalTrial != null ? countriesOfStudyToCountryNameAndCitiesField(clinicalTrial.countriesOfStudy()) : Strings.EMPTY)
-                .add(clinicalTrial != null ? countriesOfStudyToHospitalsField(clinicalTrial.countriesOfStudy()) : Strings.EMPTY)
+                .add(clinicalTrial != null ? clinicalTrial.nctId() : Strings.EMPTY)
+                .add(clinicalTrial != null ? clinicalTrial.title() : Strings.EMPTY)
+                .add(clinicalTrial != null && clinicalTrial.acronym() != null ? clinicalTrial.acronym() : Strings.EMPTY)
+                .add(clinicalTrial != null && clinicalTrial.genderCriterium() != null ? clinicalTrial.genderCriterium() : Strings.EMPTY)
+                .add(clinicalTrial != null ? countriesToCountryNameAndCitiesField(clinicalTrial.countries()) : Strings.EMPTY)
+                .add(clinicalTrial != null ? countriesToHospitalsField(clinicalTrial.countries()) : Strings.EMPTY)
                 .add(setToField(therapy))
                 .add(treatment != null && !treatment.treatmentApproachesDrugClass().isEmpty() ? setToField(treatment.treatmentApproachesDrugClass()) : Strings.EMPTY)
                 .add(treatment != null && !treatment.treatmentApproachesTherapy().isEmpty() ? setToField(treatment.treatmentApproachesTherapy()) : Strings.EMPTY)
@@ -205,40 +207,49 @@ public final class ActionableFileUtil {
 
     @VisibleForTesting
     @NotNull
-    static String countriesOfStudyToCountryNameAndCitiesField(@NotNull Set<Country> countriesOfStudy) {
-        return countriesOfStudy.stream()
+    static String countriesToCountryNameAndCitiesField(@NotNull Set<Country> countries) {
+        return countries.stream()
                 .map(country -> country.countryName() + "(" + String.join(SUB_DELIMITER, country.cities()) + ")")
                 .collect(Collectors.joining(MAIN_DELIMITER));
     }
 
     @VisibleForTesting
     @NotNull
-    static String countriesOfStudyToHospitalsField(@NotNull Set<Country> countriesOfStudy) {
-        String hospitals = countriesOfStudy.stream()
-                .filter(country -> country.countryName().equals("Netherlands"))
-                .map(Country::hospitals)
-                .flatMap(Set::stream)
-                .collect(Collectors.joining(MAIN_DELIMITER));
-
-        return hospitals.isEmpty() ? "" : hospitals;
+    static String countriesToHospitalsField(@NotNull Set<Country> countries) {
+        StringJoiner joiner = new StringJoiner(MAIN_DELIMITER);
+        for (Country country : countries) {
+            for (Map.Entry<String, Set<String>> entry : country.hospitalsPerCity().entrySet()) {
+                String city = entry.getKey();
+                Set<String> hospitals = entry.getValue();
+                joiner.add(city + "(" + String.join(SUB_DELIMITER, hospitals) + ")");
+            }
+        }
+        return joiner.toString();
     }
 
     @VisibleForTesting
     @NotNull
-    static Set<Country> twoFieldsToCountriesOfStudy(@NotNull String countriesAndCitiesField, @NotNull String hospitalsField) {
+    static Set<Country> twoFieldsToCountries(@NotNull String countriesAndCitiesField, @NotNull String hospitalsField) {
         if (countriesAndCitiesField.isEmpty()) {
             return Sets.newHashSet();
         }
+
+        Map<String, Set<String>> hospitalsPerCity = Arrays.stream(hospitalsField.split(MAIN_DELIMITER)).map(part -> {
+            String[] citiesAndHospitals = part.split("\\(");
+            String cityName = citiesAndHospitals[0];
+            Set<String> hospitals = Arrays.stream(citiesAndHospitals[1].replace(")", "").split(SUB_DELIMITER)).collect(Collectors.toSet());
+            return new AbstractMap.SimpleEntry<>(cityName, hospitals);
+        }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
         return Arrays.stream(countriesAndCitiesField.split(MAIN_DELIMITER)).map(part -> {
             String[] countriesAndCities = part.split("\\(");
             String countryName = countriesAndCities[0];
             Set<String> cities = Arrays.stream(countriesAndCities[1].replace(")", "").split(SUB_DELIMITER)).collect(Collectors.toSet());
-            Set<String> hospitals = null;
-            if (Objects.equals(countryName, "Netherlands")) {
-                hospitals = fieldToSet(hospitalsField);
-            }
-            return ImmutableCountry.builder().countryName(countryName).cities(cities).hospitals(hospitals).build();
+            Map<String, Set<String>> hospitalsPerCityForCountry = hospitalsPerCity.entrySet()
+                    .stream()
+                    .filter(entry -> cities.contains(entry.getKey()))
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+            return ImmutableCountry.builder().countryName(countryName).cities(cities).hospitalsPerCity(hospitalsPerCityForCountry).build();
         }).collect(Collectors.toSet());
     }
 

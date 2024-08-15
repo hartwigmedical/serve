@@ -1,4 +1,4 @@
-package com.hartwig.serve.sources.ckb.facility_curation;
+package com.hartwig.serve.sources.ckb.facilitycuration;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,7 +11,7 @@ import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 import org.apache.commons.compress.utils.Lists;
 import org.jetbrains.annotations.NotNull;
 
-public class CkbFacilityCurationFilterFile {
+public final class CkbFacilityCurationFilterFile {
 
     public static final String FIELD_DELIMITER = "\t";
 

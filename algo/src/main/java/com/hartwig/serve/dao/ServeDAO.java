@@ -18,6 +18,7 @@ import static com.hartwig.serve.database.Tables.KNOWNHOTSPOT;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
@@ -130,12 +131,12 @@ public class ServeDAO {
                     ACTIONABLEHOTSPOT.SOURCE,
                     ACTIONABLEHOTSPOT.SOURCEEVENT,
                     ACTIONABLEHOTSPOT.SOURCEURLS,
-                    ACTIONABLEHOTSPOT.STUDYNCTID,
-                    ACTIONABLEHOTSPOT.STUDYTITLE,
-                    ACTIONABLEHOTSPOT.STUDYACRONYM,
-                    ACTIONABLEHOTSPOT.STUDYGENDER,
-                    ACTIONABLEHOTSPOT.COUNTRIESOFSTUDY,
-                    ACTIONABLEHOTSPOT.DUTCHHOSPITALS,
+                    ACTIONABLEHOTSPOT.NCTID,
+                    ACTIONABLEHOTSPOT.TITLE,
+                    ACTIONABLEHOTSPOT.ACRONYM,
+                    ACTIONABLEHOTSPOT.GENDERCRITERIUM,
+                    ACTIONABLEHOTSPOT.COUNTRIES,
+                    ACTIONABLEHOTSPOT.HOSPITALSPERCITY,
                     ACTIONABLEHOTSPOT.TREATMENT,
                     ACTIONABLEHOTSPOT.TREATMENTAPPROACHESDRUGCLASS,
                     ACTIONABLEHOTSPOT.TREATMENTAPPROACHESTHERAPY,
@@ -199,12 +200,12 @@ public class ServeDAO {
                 actionableHotspot.source(),
                 actionableHotspot.sourceEvent(),
                 concat(actionableHotspot.sourceUrls()),
-                clinicalTrial != null ? clinicalTrial.studyNctId() : null,
-                clinicalTrial != null ? clinicalTrial.studyTitle() : null,
-                clinicalTrial != null && clinicalTrial.studyAcronym() != null ? clinicalTrial.studyAcronym() : null,
-                clinicalTrial != null && clinicalTrial.gender() != null ? clinicalTrial.gender() : null,
-                clinicalTrial != null ? toCountryWithCities(clinicalTrial.countriesOfStudy()) : null,
-                clinicalTrial != null ? toDutchHospitals(clinicalTrial.countriesOfStudy()) : null,
+                clinicalTrial != null ? clinicalTrial.nctId() : null,
+                clinicalTrial != null ? clinicalTrial.title() : null,
+                clinicalTrial != null && clinicalTrial.acronym() != null ? clinicalTrial.acronym() : null,
+                clinicalTrial != null && clinicalTrial.genderCriterium() != null ? clinicalTrial.genderCriterium() : null,
+                clinicalTrial != null ? toCountryWithCities(clinicalTrial.countries()) : null,
+                clinicalTrial != null ? toHospitals(clinicalTrial.countries()) : null,
                 therapyName(clinicalTrial, treatment),
                 treatment != null && !treatment.treatmentApproachesDrugClass().isEmpty()
                         ? concat(treatment.treatmentApproachesDrugClass())
@@ -232,12 +233,12 @@ public class ServeDAO {
                     ACTIONABLECODON.SOURCE,
                     ACTIONABLECODON.SOURCEEVENT,
                     ACTIONABLECODON.SOURCEURLS,
-                    ACTIONABLECODON.STUDYNCTID,
-                    ACTIONABLECODON.STUDYTITLE,
-                    ACTIONABLECODON.STUDYACRONYM,
-                    ACTIONABLECODON.STUDYGENDER,
-                    ACTIONABLECODON.COUNTRIESOFSTUDY,
-                    ACTIONABLECODON.DUTCHHOSPITALS,
+                    ACTIONABLECODON.NCTID,
+                    ACTIONABLECODON.TITLE,
+                    ACTIONABLECODON.ACRONYM,
+                    ACTIONABLECODON.GENDERCRITERIUM,
+                    ACTIONABLECODON.COUNTRIES,
+                    ACTIONABLECODON.HOSPITALSPERCITY,
                     ACTIONABLECODON.TREATMENT,
                     ACTIONABLECODON.TREATMENTAPPROACHESDRUGCLASS,
                     ACTIONABLECODON.TREATMENTAPPROACHESTHERAPY,
@@ -264,12 +265,12 @@ public class ServeDAO {
                     ACTIONABLEEXON.SOURCE,
                     ACTIONABLEEXON.SOURCEEVENT,
                     ACTIONABLEEXON.SOURCEURLS,
-                    ACTIONABLEEXON.STUDYNCTID,
-                    ACTIONABLEEXON.STUDYTITLE,
-                    ACTIONABLEEXON.STUDYACRONYM,
-                    ACTIONABLEEXON.STUDYGENDER,
-                    ACTIONABLEEXON.COUNTRIESOFSTUDY,
-                    ACTIONABLEEXON.DUTCHHOSPITALS,
+                    ACTIONABLEEXON.NCTID,
+                    ACTIONABLEEXON.TITLE,
+                    ACTIONABLEEXON.ACRONYM,
+                    ACTIONABLEEXON.GENDERCRITERIUM,
+                    ACTIONABLEEXON.COUNTRIES,
+                    ACTIONABLEEXON.HOSPITALSPERCITY,
                     ACTIONABLEEXON.TREATMENT,
                     ACTIONABLEEXON.TREATMENTAPPROACHESDRUGCLASS,
                     ACTIONABLEEXON.TREATMENTAPPROACHESTHERAPY,
@@ -299,12 +300,12 @@ public class ServeDAO {
                 actionableRange.source(),
                 actionableRange.sourceEvent(),
                 concat(actionableRange.sourceUrls()),
-                clinicalTrial != null ? clinicalTrial.studyNctId() : null,
-                clinicalTrial != null ? clinicalTrial.studyTitle() : null,
-                clinicalTrial != null && clinicalTrial.studyAcronym() != null ? clinicalTrial.studyAcronym() : null,
-                clinicalTrial != null && clinicalTrial.gender() != null ? clinicalTrial.gender() : null,
-                clinicalTrial != null ? toCountryWithCities(clinicalTrial.countriesOfStudy()) : null,
-                clinicalTrial != null ? toDutchHospitals(clinicalTrial.countriesOfStudy()) : null,
+                clinicalTrial != null ? clinicalTrial.nctId() : null,
+                clinicalTrial != null ? clinicalTrial.title() : null,
+                clinicalTrial != null && clinicalTrial.acronym() != null ? clinicalTrial.acronym() : null,
+                clinicalTrial != null && clinicalTrial.genderCriterium() != null ? clinicalTrial.genderCriterium() : null,
+                clinicalTrial != null ? toCountryWithCities(clinicalTrial.countries()) : null,
+                clinicalTrial != null ? toHospitals(clinicalTrial.countries()) : null,
                 therapyName(clinicalTrial, treatment),
                 treatment != null && !treatment.treatmentApproachesDrugClass().isEmpty()
                         ? concat(treatment.treatmentApproachesDrugClass())
@@ -329,12 +330,12 @@ public class ServeDAO {
                     ACTIONABLEGENE.SOURCE,
                     ACTIONABLEGENE.SOURCEEVENT,
                     ACTIONABLEGENE.SOURCEURLS,
-                    ACTIONABLEGENE.STUDYNCTID,
-                    ACTIONABLEGENE.STUDYTITLE,
-                    ACTIONABLEGENE.STUDYACRONYM,
-                    ACTIONABLEGENE.STUDYGENDER,
-                    ACTIONABLEGENE.COUNTRIESOFSTUDY,
-                    ACTIONABLEGENE.DUTCHHOSPITALS,
+                    ACTIONABLEGENE.NCTID,
+                    ACTIONABLEGENE.TITLE,
+                    ACTIONABLEGENE.ACRONYM,
+                    ACTIONABLEGENE.GENDERCRITERIUM,
+                    ACTIONABLEGENE.COUNTRIES,
+                    ACTIONABLEGENE.HOSPITALSPERCITY,
                     ACTIONABLEGENE.TREATMENT,
                     ACTIONABLEGENE.TREATMENTAPPROACHESDRUGCLASS,
                     ACTIONABLEGENE.TREATMENTAPPROACHESTHERAPY,
@@ -361,12 +362,12 @@ public class ServeDAO {
                 actionableGene.source(),
                 actionableGene.sourceEvent(),
                 concat(actionableGene.sourceUrls()),
-                clinicalTrial != null ? clinicalTrial.studyNctId() : null,
-                clinicalTrial != null ? clinicalTrial.studyTitle() : null,
-                clinicalTrial != null && clinicalTrial.studyAcronym() != null ? clinicalTrial.studyAcronym() : null,
-                clinicalTrial != null && clinicalTrial.gender() != null ? clinicalTrial.gender() : null,
-                clinicalTrial != null ? toCountryWithCities(clinicalTrial.countriesOfStudy()) : null,
-                clinicalTrial != null ? toDutchHospitals(clinicalTrial.countriesOfStudy()) : null,
+                clinicalTrial != null ? clinicalTrial.nctId() : null,
+                clinicalTrial != null ? clinicalTrial.title() : null,
+                clinicalTrial != null && clinicalTrial.acronym() != null ? clinicalTrial.acronym() : null,
+                clinicalTrial != null && clinicalTrial.genderCriterium() != null ? clinicalTrial.genderCriterium() : null,
+                clinicalTrial != null ? toCountryWithCities(clinicalTrial.countries()) : null,
+                clinicalTrial != null ? toHospitals(clinicalTrial.countries()) : null,
                 therapyName(clinicalTrial, treatment),
                 treatment != null && !treatment.treatmentApproachesDrugClass().isEmpty()
                         ? concat(treatment.treatmentApproachesDrugClass())
@@ -395,12 +396,12 @@ public class ServeDAO {
                     ACTIONABLEFUSION.SOURCE,
                     ACTIONABLEFUSION.SOURCEEVENT,
                     ACTIONABLEFUSION.SOURCEURLS,
-                    ACTIONABLEFUSION.STUDYNCTID,
-                    ACTIONABLEFUSION.STUDYTITLE,
-                    ACTIONABLEFUSION.STUDYACRONYM,
-                    ACTIONABLEFUSION.STUDYGENDER,
-                    ACTIONABLEFUSION.COUNTRIESOFSTUDY,
-                    ACTIONABLEFUSION.DUTCHHOSPITALS,
+                    ACTIONABLEFUSION.NCTID,
+                    ACTIONABLEFUSION.TITLE,
+                    ACTIONABLEFUSION.ACRONYM,
+                    ACTIONABLEFUSION.GENDERCRITERIUM,
+                    ACTIONABLEFUSION.COUNTRIES,
+                    ACTIONABLEFUSION.HOSPITALSPERCITY,
                     ACTIONABLEFUSION.TREATMENT,
                     ACTIONABLEFUSION.TREATMENTAPPROACHESDRUGCLASS,
                     ACTIONABLEFUSION.TREATMENTAPPROACHESTHERAPY,
@@ -431,12 +432,12 @@ public class ServeDAO {
                 actionableFusion.source(),
                 actionableFusion.sourceEvent(),
                 concat(actionableFusion.sourceUrls()),
-                clinicalTrial != null ? clinicalTrial.studyNctId() : null,
-                clinicalTrial != null ? clinicalTrial.studyTitle() : null,
-                clinicalTrial != null && clinicalTrial.studyAcronym() != null ? clinicalTrial.studyAcronym() : null,
-                clinicalTrial != null && clinicalTrial.gender() != null ? clinicalTrial.gender() : null,
-                clinicalTrial != null ? toCountryWithCities(clinicalTrial.countriesOfStudy()) : null,
-                clinicalTrial != null ? toDutchHospitals(clinicalTrial.countriesOfStudy()) : null,
+                clinicalTrial != null ? clinicalTrial.nctId() : null,
+                clinicalTrial != null ? clinicalTrial.title() : null,
+                clinicalTrial != null && clinicalTrial.acronym() != null ? clinicalTrial.acronym() : null,
+                clinicalTrial != null && clinicalTrial.genderCriterium() != null ? clinicalTrial.genderCriterium() : null,
+                clinicalTrial != null ? toCountryWithCities(clinicalTrial.countries()) : null,
+                clinicalTrial != null ? toHospitals(clinicalTrial.countries()) : null,
                 therapyName(clinicalTrial, treatment),
                 treatment != null && !treatment.treatmentApproachesDrugClass().isEmpty()
                         ? concat(treatment.treatmentApproachesDrugClass())
@@ -462,12 +463,12 @@ public class ServeDAO {
                     ACTIONABLECHARACTERISTIC.SOURCE,
                     ACTIONABLECHARACTERISTIC.SOURCEEVENT,
                     ACTIONABLECHARACTERISTIC.SOURCEURLS,
-                    ACTIONABLECHARACTERISTIC.STUDYNCTID,
-                    ACTIONABLECHARACTERISTIC.STUDYTITLE,
-                    ACTIONABLECHARACTERISTIC.STUDYACRONYM,
-                    ACTIONABLECHARACTERISTIC.STUDYGENDER,
-                    ACTIONABLECHARACTERISTIC.COUNTRIESOFSTUDY,
-                    ACTIONABLECHARACTERISTIC.DUTCHHOSPITALS,
+                    ACTIONABLECHARACTERISTIC.NCTID,
+                    ACTIONABLECHARACTERISTIC.TITLE,
+                    ACTIONABLECHARACTERISTIC.ACRONYM,
+                    ACTIONABLECHARACTERISTIC.GENDERCRITERIUM,
+                    ACTIONABLECHARACTERISTIC.COUNTRIES,
+                    ACTIONABLECHARACTERISTIC.HOSPITALSPERCITY,
                     ACTIONABLECHARACTERISTIC.TREATMENT,
                     ACTIONABLECHARACTERISTIC.TREATMENTAPPROACHESDRUGCLASS,
                     ACTIONABLECHARACTERISTIC.TREATMENTAPPROACHESTHERAPY,
@@ -495,12 +496,12 @@ public class ServeDAO {
                 actionableCharacteristic.source(),
                 actionableCharacteristic.sourceEvent(),
                 concat(actionableCharacteristic.sourceUrls()),
-                clinicalTrial != null ? clinicalTrial.studyNctId() : null,
-                clinicalTrial != null ? clinicalTrial.studyTitle() : null,
-                clinicalTrial != null && clinicalTrial.studyAcronym() != null ? clinicalTrial.studyAcronym() : null,
-                clinicalTrial != null && clinicalTrial.gender() != null ? clinicalTrial.gender() : null,
-                clinicalTrial != null ? toCountryWithCities(clinicalTrial.countriesOfStudy()) : null,
-                clinicalTrial != null ? toDutchHospitals(clinicalTrial.countriesOfStudy()) : null,
+                clinicalTrial != null ? clinicalTrial.nctId() : null,
+                clinicalTrial != null ? clinicalTrial.title() : null,
+                clinicalTrial != null && clinicalTrial.acronym() != null ? clinicalTrial.acronym() : null,
+                clinicalTrial != null && clinicalTrial.genderCriterium() != null ? clinicalTrial.genderCriterium() : null,
+                clinicalTrial != null ? toCountryWithCities(clinicalTrial.countries()) : null,
+                clinicalTrial != null ? toHospitals(clinicalTrial.countries()) : null,
                 therapyName(clinicalTrial, treatment),
                 treatment != null && !treatment.treatmentApproachesDrugClass().isEmpty()
                         ? concat(treatment.treatmentApproachesDrugClass())
@@ -524,12 +525,12 @@ public class ServeDAO {
                     ACTIONABLEHLA.SOURCE,
                     ACTIONABLEHLA.SOURCEEVENT,
                     ACTIONABLEHLA.SOURCEURLS,
-                    ACTIONABLEHLA.STUDYNCTID,
-                    ACTIONABLEHLA.STUDYTITLE,
-                    ACTIONABLEHLA.STUDYACRONYM,
-                    ACTIONABLEHLA.STUDYGENDER,
-                    ACTIONABLEHLA.COUNTRIESOFSTUDY,
-                    ACTIONABLEHLA.DUTCHHOSPITALS,
+                    ACTIONABLEHLA.NCTID,
+                    ACTIONABLEHLA.TITLE,
+                    ACTIONABLEHLA.ACRONYM,
+                    ACTIONABLEHLA.GENDERCRITERIUM,
+                    ACTIONABLEHLA.COUNTRIES,
+                    ACTIONABLEHLA.HOSPITALSPERCITY,
                     ACTIONABLEHLA.TREATMENT,
                     ACTIONABLEHLA.TREATMENTAPPROACHESDRUGCLASS,
                     ACTIONABLEHLA.TREATMENTAPPROACHESTHERAPY,
@@ -554,12 +555,12 @@ public class ServeDAO {
                 actionableHLA.source(),
                 actionableHLA.sourceEvent(),
                 concat(actionableHLA.sourceUrls()),
-                clinicalTrial != null ? clinicalTrial.studyNctId() : null,
-                clinicalTrial != null ? clinicalTrial.studyTitle() : null,
-                clinicalTrial != null && clinicalTrial.studyAcronym() != null ? clinicalTrial.studyAcronym() : null,
-                clinicalTrial != null && clinicalTrial.gender() != null ? clinicalTrial.gender() : null,
-                clinicalTrial != null ? toCountryWithCities(clinicalTrial.countriesOfStudy()) : null,
-                clinicalTrial != null ? toDutchHospitals(clinicalTrial.countriesOfStudy()) : null,
+                clinicalTrial != null ? clinicalTrial.nctId() : null,
+                clinicalTrial != null ? clinicalTrial.title() : null,
+                clinicalTrial != null && clinicalTrial.acronym() != null ? clinicalTrial.acronym() : null,
+                clinicalTrial != null && clinicalTrial.genderCriterium() != null ? clinicalTrial.genderCriterium() : null,
+                clinicalTrial != null ? toCountryWithCities(clinicalTrial.countries()) : null,
+                clinicalTrial != null ? toHospitals(clinicalTrial.countries()) : null,
                 therapyName(clinicalTrial, treatment),
                 treatment != null && !treatment.treatmentApproachesDrugClass().isEmpty()
                         ? concat(treatment.treatmentApproachesDrugClass())
@@ -792,20 +793,23 @@ public class ServeDAO {
     }
 
     @NotNull
-    private static String toCountryWithCities(@NotNull Set<Country> countriesOfStudy) {
-        return countriesOfStudy.stream().map(country -> country.countryName() + "(" + String.join(SUB_JOINER, country.cities()) + ")")
+    private static String toCountryWithCities(@NotNull Set<Country> countries) {
+        return countries.stream()
+                .map(country -> country.countryName() + "(" + String.join(SUB_JOINER, country.cities()) + ")")
                 .collect(Collectors.joining(MAIN_JOINER));
     }
 
     @NotNull
-    private static String toDutchHospitals(@NotNull Set<Country> countriesOfStudy) {
-        String hospitals = countriesOfStudy.stream()
-                .filter(country -> country.countryName().equals("Netherlands"))
-                .map(Country::hospitals)
-                .flatMap(Set::stream)
-                .collect(Collectors.joining(MAIN_JOINER));
-
-        return hospitals.isEmpty() ? "" : hospitals;
+    private static String toHospitals(@NotNull Set<Country> countries) {
+        StringJoiner joiner = new StringJoiner(MAIN_JOINER);
+        for (Country country : countries) {
+            for (Map.Entry<String, Set<String>> entry : country.hospitalsPerCity().entrySet()) {
+                String city = entry.getKey();
+                Set<String> hospitals = entry.getValue();
+                joiner.add(city + "(" + String.join(SUB_JOINER, hospitals) + ")");
+            }
+        }
+        return joiner.toString();
     }
 
     @NotNull

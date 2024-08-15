@@ -58,7 +58,7 @@ public class ActionableFileUtilTest {
         Set<Country> countriesOfStudy = Sets.newHashSet();
         countriesOfStudy.add(createCountry("Netherlands", "Groningen", "UMCG"));
         countriesOfStudy.add(createCountry("Belgium", "Brussel", "UZ Brussel"));
-        assertEquals("UMCG", ActionableFileUtil.countriesOfStudyToHospitalsField(countriesOfStudy));
+        assertEquals("Brussel(UZ Brussel),Groningen(UMCG)", ActionableFileUtil.countriesToHospitalsField(countriesOfStudy));
     }
 
     @Test
@@ -66,8 +66,7 @@ public class ActionableFileUtilTest {
         Set<Country> countriesOfStudy = Sets.newHashSet();
         countriesOfStudy.add(createCountry("Netherlands", "Groningen", "UMCG"));
         countriesOfStudy.add(createCountry("Belgium", "Brussel", ""));
-        assertEquals("Belgium(Brussel),Netherlands(Groningen)",
-                ActionableFileUtil.countriesOfStudyToCountryNameAndCitiesField(countriesOfStudy));
+        assertEquals("Belgium(Brussel),Netherlands(Groningen)", ActionableFileUtil.countriesToCountryNameAndCitiesField(countriesOfStudy));
     }
 
     @Test
@@ -101,21 +100,21 @@ public class ActionableFileUtilTest {
     @Test
     public void canResolveCountriesOfStudy() {
         String countryNameAndCity = "Belgium(Brussel),Netherlands(Groningen)";
-        String hospital = "UMCG";
+        String hospital = "Brussel(UZ Brussel),Groningen(UMCG)";
 
-        Set<Country> countriesOfStudy = ActionableFileUtil.twoFieldsToCountriesOfStudy(countryNameAndCity, hospital);
+        Set<Country> countriesOfStudy = ActionableFileUtil.twoFieldsToCountries(countryNameAndCity, hospital);
         assertEquals(2, countriesOfStudy.size());
         Iterator<Country> iterator = countriesOfStudy.iterator();
 
         Country country1 = iterator.next();
         assertEquals("Belgium", country1.countryName());
         assertEquals(Set.of("Brussel"), country1.cities());
-        assertEquals(null, country1.hospitals());
+        assertEquals(Map.of("Brussel", Set.of("UZ Brussel")), country1.hospitalsPerCity());
 
         Country country2 = iterator.next();
         assertEquals("Netherlands", country2.countryName());
         assertEquals(Set.of("Groningen"), country2.cities());
-        assertEquals(Set.of("UMCG"), country2.hospitals());
+        assertEquals(Map.of("Groningen", Set.of("UMCG")), country2.hospitalsPerCity());
     }
 
     @Test
@@ -179,6 +178,10 @@ public class ActionableFileUtilTest {
 
     @NotNull
     private static Country createCountry(@NotNull String country, @NotNull String city, @Nullable String hospital) {
-        return ImmutableCountry.builder().countryName(country).cities(Set.of(city)).hospitals(Set.of(hospital)).build();
+        return ImmutableCountry.builder()
+                .countryName(country)
+                .cities(Set.of(city))
+                .hospitalsPerCity(Map.of(city, Set.of(hospital)))
+                .build();
     }
 }

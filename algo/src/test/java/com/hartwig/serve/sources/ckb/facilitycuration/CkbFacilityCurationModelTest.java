@@ -1,6 +1,8 @@
-package com.hartwig.serve.sources.ckb.facility_curation;
+package com.hartwig.serve.sources.ckb.facilitycuration;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.ImmutableLocation;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.Location;
@@ -44,19 +46,19 @@ public class CkbFacilityCurationModelTest {
     public void canFindEqualStringsOrNull() {
         String string1 = null;
         String string2 = "";
-        assertEquals(facilityModel.equalStringsOrNull(string1, string2), true);
+        assertTrue(facilityModel.equalStringsOrNull(string1, string2));
 
         String string3 = "same string";
         String string4 = "same string";
-        assertEquals(facilityModel.equalStringsOrNull(string3, string4), true);
+        assertTrue(facilityModel.equalStringsOrNull(string3, string4));
 
         String string5 = null;
         String string6 = "string";
-        assertEquals(facilityModel.equalStringsOrNull(string5, string6), false);
+        assertFalse(facilityModel.equalStringsOrNull(string5, string6));
 
         String string7 = "string";
         String string8 = "another string";
-        assertEquals(facilityModel.equalStringsOrNull(string7, string8), false);
+        assertFalse(facilityModel.equalStringsOrNull(string7, string8));
     }
 
     @Test
@@ -64,13 +66,13 @@ public class CkbFacilityCurationModelTest {
         String string1 = "amc";
 
         String string2 = "amsterdam";
-        assertEquals(facilityModel.containsWord(string1, string2), false);
+        assertFalse(facilityModel.containsWord(string1, string2));
 
         String string4 = "amc amsterdam";
-        assertEquals(facilityModel.containsWord(string1, string4), true);
+        assertTrue(facilityModel.containsWord(string1, string4));
 
         String string6 = "amcterdam";
-        assertEquals(facilityModel.containsWord(string1, string6), false);
+        assertFalse(facilityModel.containsWord(string1, string6));
     }
 
     @NotNull

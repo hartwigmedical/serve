@@ -234,23 +234,26 @@ public final class ActionableFileUtil {
             return Sets.newHashSet();
         }
 
-        Map<String, Set<String>> hospitalsPerCity = Arrays.stream(hospitalsField.split(MAIN_DELIMITER)).map(part -> {
-            String[] citiesAndHospitals = part.split("\\(");
+        Map<String, Set<String>> hospitalsPerCity = fieldToHospitalPerCity(hospitalsField);
+
+        return Arrays.stream(countriesAndCitiesField.split(MAIN_DELIMITER)).map(part -> {
+            String[] countriesAndCities = part.split("\\(", 2);
+            String countryName = countriesAndCities[0];
+            Set<String> cities = Arrays.stream(countriesAndCities[1].replace(")", "").split(SUB_DELIMITER)).collect(Collectors.toSet());
+            Map<String, Set<String>> hospitalsPerCityForCountry =
+                    cities.stream().filter(hospitalsPerCity::containsKey).collect(Collectors.toMap(city -> city, hospitalsPerCity::get));
+            return ImmutableCountry.builder().countryName(countryName).cities(cities).hospitalsPerCity(hospitalsPerCityForCountry).build();
+        }).collect(Collectors.toSet());
+    }
+
+    @NotNull
+    static Map<String, Set<String>> fieldToHospitalPerCity(@NotNull String hospitalsField) {
+        return Arrays.stream(hospitalsField.split(MAIN_DELIMITER)).map(part -> {
+            String[] citiesAndHospitals = part.split("\\(", 2);
             String cityName = citiesAndHospitals[0];
             Set<String> hospitals = Arrays.stream(citiesAndHospitals[1].replace(")", "").split(SUB_DELIMITER)).collect(Collectors.toSet());
             return new AbstractMap.SimpleEntry<>(cityName, hospitals);
         }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-
-        return Arrays.stream(countriesAndCitiesField.split(MAIN_DELIMITER)).map(part -> {
-            String[] countriesAndCities = part.split("\\(");
-            String countryName = countriesAndCities[0];
-            Set<String> cities = Arrays.stream(countriesAndCities[1].replace(")", "").split(SUB_DELIMITER)).collect(Collectors.toSet());
-            Map<String, Set<String>> hospitalsPerCityForCountry = hospitalsPerCity.entrySet()
-                    .stream()
-                    .filter(entry -> cities.contains(entry.getKey()))
-                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-            return ImmutableCountry.builder().countryName(countryName).cities(cities).hospitalsPerCity(hospitalsPerCityForCountry).build();
-        }).collect(Collectors.toSet());
     }
 
     @VisibleForTesting

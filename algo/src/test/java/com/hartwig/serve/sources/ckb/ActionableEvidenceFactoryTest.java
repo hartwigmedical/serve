@@ -142,14 +142,14 @@ public class ActionableEvidenceFactoryTest {
         assertNull(ActionableEvidenceFactory.resolveDirection("unknown"));
         assertNull(ActionableEvidenceFactory.resolveDirection("not applicable"));
         assertNull(ActionableEvidenceFactory.resolveDirection("conflicting"));
-        assertNull(ActionableEvidenceFactory.resolveDirection("no benefit"));
         assertNull(ActionableEvidenceFactory.resolveDirection("not predictive"));
-        assertNull(ActionableEvidenceFactory.resolveDirection("decreased response"));
 
         assertEquals(EvidenceDirection.RESPONSIVE, ActionableEvidenceFactory.resolveDirection("sensitive"));
         assertEquals(EvidenceDirection.PREDICTED_RESPONSIVE, ActionableEvidenceFactory.resolveDirection("predicted - sensitive"));
         assertEquals(EvidenceDirection.RESISTANT, ActionableEvidenceFactory.resolveDirection("resistant"));
         assertEquals(EvidenceDirection.PREDICTED_RESISTANT, ActionableEvidenceFactory.resolveDirection("predicted - resistant"));
+        assertEquals(EvidenceDirection.NO_BENEFIT, ActionableEvidenceFactory.resolveDirection("no benefit"));
+        assertEquals(EvidenceDirection.DECREASED_RESPONSE, ActionableEvidenceFactory.resolveDirection("decreased response"));
     }
 
     @Test

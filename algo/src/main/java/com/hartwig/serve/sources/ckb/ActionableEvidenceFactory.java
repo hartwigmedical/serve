@@ -13,7 +13,6 @@ import com.hartwig.serve.ckb.datamodel.evidence.Evidence;
 import com.hartwig.serve.ckb.datamodel.reference.Reference;
 import com.hartwig.serve.ckb.datamodel.therapy.Therapy;
 import com.hartwig.serve.ckb.datamodel.treatmentapproaches.DrugClassTreatmentApproach;
-import com.hartwig.serve.ckb.datamodel.treatmentapproaches.RelevantTreatmentApproaches;
 import com.hartwig.serve.ckb.datamodel.treatmentapproaches.TherapyTreatmentApproach;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
@@ -35,6 +34,8 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
     private static final Set<String> PREDICTED_RESPONSIVE_DIRECTIONS = Sets.newHashSet();
     private static final Set<String> RESISTANT_DIRECTIONS = Sets.newHashSet();
     private static final Set<String> PREDICTED_RESISTANT_DIRECTIONS = Sets.newHashSet();
+    private static final Set<String> NO_BENEFIT_DIRECTIONS = Sets.newHashSet();
+    private static final Set<String> DECREASED_RESPONSE_DIRECTIONS = Sets.newHashSet();
     private static final Set<String> DIRECTIONS_TO_IGNORE = Sets.newHashSet();
 
     private static final Set<String> USABLE_EVIDENCE_TYPES = Sets.newHashSet();
@@ -47,12 +48,13 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
         RESISTANT_DIRECTIONS.add("resistant");
         PREDICTED_RESISTANT_DIRECTIONS.add("predicted - resistant");
 
+        NO_BENEFIT_DIRECTIONS.add("no benefit");
+        DECREASED_RESPONSE_DIRECTIONS.add("decreased response");
+
         DIRECTIONS_TO_IGNORE.add("unknown");
         DIRECTIONS_TO_IGNORE.add("not applicable");
         DIRECTIONS_TO_IGNORE.add("conflicting");
-        DIRECTIONS_TO_IGNORE.add("no benefit");
         DIRECTIONS_TO_IGNORE.add("not predictive");
-        DIRECTIONS_TO_IGNORE.add("decreased response");
 
         USABLE_EVIDENCE_TYPES.add("Actionable");
 
@@ -208,6 +210,10 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
             return EvidenceDirection.RESISTANT;
         } else if (PREDICTED_RESISTANT_DIRECTIONS.contains(direction)) {
             return EvidenceDirection.PREDICTED_RESISTANT;
+        } else if (NO_BENEFIT_DIRECTIONS.contains(direction)) {
+            return EvidenceDirection.NO_BENEFIT;
+        } else if (DECREASED_RESPONSE_DIRECTIONS.contains(direction)) {
+            return EvidenceDirection.DECREASED_RESPONSE;
         }
 
         if (!DIRECTIONS_TO_IGNORE.contains(direction)) {

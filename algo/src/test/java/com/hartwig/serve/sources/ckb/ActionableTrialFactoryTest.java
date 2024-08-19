@@ -249,7 +249,7 @@ public class ActionableTrialFactoryTest {
         ClinicalTrial trialSuspendedInBelgiumOpenInIndia = createTrialWithMultipleLocations("Recruiting",
                 "Belgium",
                 "Suspended",
-                "Brusel",
+                "Brussel",
                 null,
                 "India",
                 "Not yet recruiting",

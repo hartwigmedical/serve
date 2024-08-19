@@ -135,7 +135,7 @@ public class ServeDAO {
                     ACTIONABLEHOTSPOT.TITLE,
                     ACTIONABLEHOTSPOT.ACRONYM,
                     ACTIONABLEHOTSPOT.GENDERCRITERIUM,
-                    ACTIONABLEHOTSPOT.COUNTRIES,
+                    ACTIONABLEHOTSPOT.COUNTRIESANDCITIES,
                     ACTIONABLEHOTSPOT.HOSPITALSPERCITY,
                     ACTIONABLEHOTSPOT.TREATMENT,
                     ACTIONABLEHOTSPOT.TREATMENTAPPROACHESDRUGCLASS,
@@ -237,7 +237,7 @@ public class ServeDAO {
                     ACTIONABLECODON.TITLE,
                     ACTIONABLECODON.ACRONYM,
                     ACTIONABLECODON.GENDERCRITERIUM,
-                    ACTIONABLECODON.COUNTRIES,
+                    ACTIONABLECODON.COUNTRIESANDCITIES,
                     ACTIONABLECODON.HOSPITALSPERCITY,
                     ACTIONABLECODON.TREATMENT,
                     ACTIONABLECODON.TREATMENTAPPROACHESDRUGCLASS,
@@ -269,7 +269,7 @@ public class ServeDAO {
                     ACTIONABLEEXON.TITLE,
                     ACTIONABLEEXON.ACRONYM,
                     ACTIONABLEEXON.GENDERCRITERIUM,
-                    ACTIONABLEEXON.COUNTRIES,
+                    ACTIONABLEEXON.COUNTRIESANDCITIES,
                     ACTIONABLEEXON.HOSPITALSPERCITY,
                     ACTIONABLEEXON.TREATMENT,
                     ACTIONABLEEXON.TREATMENTAPPROACHESDRUGCLASS,
@@ -334,7 +334,7 @@ public class ServeDAO {
                     ACTIONABLEGENE.TITLE,
                     ACTIONABLEGENE.ACRONYM,
                     ACTIONABLEGENE.GENDERCRITERIUM,
-                    ACTIONABLEGENE.COUNTRIES,
+                    ACTIONABLEGENE.COUNTRIESANDCITIES,
                     ACTIONABLEGENE.HOSPITALSPERCITY,
                     ACTIONABLEGENE.TREATMENT,
                     ACTIONABLEGENE.TREATMENTAPPROACHESDRUGCLASS,
@@ -400,7 +400,7 @@ public class ServeDAO {
                     ACTIONABLEFUSION.TITLE,
                     ACTIONABLEFUSION.ACRONYM,
                     ACTIONABLEFUSION.GENDERCRITERIUM,
-                    ACTIONABLEFUSION.COUNTRIES,
+                    ACTIONABLEFUSION.COUNTRIESANDCITIES,
                     ACTIONABLEFUSION.HOSPITALSPERCITY,
                     ACTIONABLEFUSION.TREATMENT,
                     ACTIONABLEFUSION.TREATMENTAPPROACHESDRUGCLASS,
@@ -467,7 +467,7 @@ public class ServeDAO {
                     ACTIONABLECHARACTERISTIC.TITLE,
                     ACTIONABLECHARACTERISTIC.ACRONYM,
                     ACTIONABLECHARACTERISTIC.GENDERCRITERIUM,
-                    ACTIONABLECHARACTERISTIC.COUNTRIES,
+                    ACTIONABLECHARACTERISTIC.COUNTRIESANDCITIES,
                     ACTIONABLECHARACTERISTIC.HOSPITALSPERCITY,
                     ACTIONABLECHARACTERISTIC.TREATMENT,
                     ACTIONABLECHARACTERISTIC.TREATMENTAPPROACHESDRUGCLASS,
@@ -529,7 +529,7 @@ public class ServeDAO {
                     ACTIONABLEHLA.TITLE,
                     ACTIONABLEHLA.ACRONYM,
                     ACTIONABLEHLA.GENDERCRITERIUM,
-                    ACTIONABLEHLA.COUNTRIES,
+                    ACTIONABLEHLA.COUNTRIESANDCITIES,
                     ACTIONABLEHLA.HOSPITALSPERCITY,
                     ACTIONABLEHLA.TREATMENT,
                     ACTIONABLEHLA.TREATMENTAPPROACHESDRUGCLASS,
@@ -795,7 +795,7 @@ public class ServeDAO {
     @NotNull
     private static String toCountryWithCities(@NotNull Set<Country> countries) {
         return countries.stream()
-                .map(country -> country.countryName() + "(" + String.join(SUB_JOINER, country.cities()) + ")")
+                .map(country -> country.countryName() + "(" + String.join(SUB_JOINER, country.hospitalsPerCity().keySet()) + ")")
                 .collect(Collectors.joining(MAIN_JOINER));
     }
 

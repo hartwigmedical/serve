@@ -62,7 +62,11 @@ public class CkbEvidenceExtractorTestApp {
         CkbExtractor extractor =
                 CkbExtractorFactory.createEvidenceExtractor(CkbClassificationConfig.build(), refGenomeResource, curator, blacklistEvidence);
 
-        List<CkbEntry> entries = CkbReader.readAndCurate(config.ckbDir(), config.ckbBlacklistMolecularProfileTsv());
+        List<CkbEntry> entries = CkbReader.readAndCurate(config.ckbDir(),
+                config.ckbBlacklistMolecularProfileTsv(),
+                config.ckbFacilityCurationNameTsv(),
+                config.ckbFacilityCurationZipTsv(),
+                config.ckbFacilityCurationManualTsv());
 
         ExtractionResult result = extractor.extract(entries);
 

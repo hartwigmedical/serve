@@ -19,7 +19,6 @@ import com.hartwig.serve.extraction.codon.CodonAnnotation;
 import com.hartwig.serve.extraction.codon.ImmutableCodonAnnotation;
 import com.hartwig.serve.refgenome.RefGenomeResourceTestFactory;
 import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistTestFactory;
-import com.hartwig.serve.sources.ckb.facilitycuration.CkbFacilityCurationModel;
 import com.hartwig.serve.sources.ckb.region.ImmutableCkbRegion;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachTestFactory;
 
@@ -54,8 +53,7 @@ public class CkbExtractorTest {
         CkbExtractor trialExtractor = CkbExtractorFactory.createTrialExtractor(CkbClassificationConfig.build(),
                 RefGenomeResourceTestFactory.buildTestResource37(),
                 CkbBlacklistTestFactory.createEmptyStudyBlacklist(),
-                Set.of(ImmutableCkbRegion.builder().country("netherlands").states(Collections.emptySet()).build()),
-                new CkbFacilityCurationModel(Lists.newArrayList(), Lists.newArrayList(), Lists.newArrayList()));
+                Set.of(ImmutableCkbRegion.builder().country("netherlands").states(Collections.emptySet()).build()));
 
         ExtractionResult trialResult = trialExtractor.extract(createCkbEntryTestDatabase());
         assertEquals(0, trialResult.knownHotspots().size());

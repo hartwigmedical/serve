@@ -1,4 +1,4 @@
-package com.hartwig.serve.sources.ckb.facilitycuration;
+package com.hartwig.serve.sources.ckb.curation;
 
 import static org.junit.Assert.assertEquals;
 
@@ -11,8 +11,7 @@ import org.junit.Test;
 
 public class CkbFacilityCurationZipFileTest {
 
-    private static final String TEST_CKB_FACILITY_CURATION_ZIP_FILE =
-            Resources.getResource("ckb_facility_curation/ckb_facility_zip.tsv").getPath();
+    private static final String TEST_CKB_FACILITY_CURATION_ZIP_FILE = Resources.getResource("ckb_curation/ckb_facility_zip.tsv").getPath();
 
     @Test
     public void canReadCkbFacilityZipTsv() throws IOException {

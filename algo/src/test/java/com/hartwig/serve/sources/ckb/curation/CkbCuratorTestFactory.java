@@ -1,4 +1,4 @@
-package com.hartwig.serve.sources.ckb.facilitycuration;
+package com.hartwig.serve.sources.ckb.curation;
 
 import java.util.List;
 
@@ -6,13 +6,13 @@ import com.google.common.collect.Lists;
 
 import org.jetbrains.annotations.NotNull;
 
-public final class CkbFacilityModelTestFactory {
+public final class CkbCuratorTestFactory {
 
-    private CkbFacilityModelTestFactory() {
+    private CkbCuratorTestFactory() {
     }
 
     @NotNull
-    public static CkbFacilityCurationModel createProperFacilityModel() {
+    public static CkbCurator createProperModel() {
         List<CkbFacilityCurationNameEntry> facilityNameEntries = Lists.newArrayList();
         CkbFacilityCurationNameEntry entry1 = ImmutableCkbFacilityCurationNameEntry.builder()
                 .facilityName("erasmus")
@@ -31,8 +31,8 @@ public final class CkbFacilityModelTestFactory {
         facilityZipEntries.add(entry2);
         facilityZipEntries.add(entry3);
 
-        List<CkbFacilityCurationFilterEntry> facilityFilterEntries = Lists.newArrayList();
-        CkbFacilityCurationFilterEntry entry4 = ImmutableCkbFacilityCurationFilterEntry.builder()
+        List<CkbFacilityCurationManualEntry> facilityFilterEntries = Lists.newArrayList();
+        CkbFacilityCurationManualEntry entry4 = ImmutableCkbFacilityCurationManualEntry.builder()
                 .facilityName("Amsterdam UMC")
                 .city("Amsterdam")
                 .zip("")
@@ -41,6 +41,6 @@ public final class CkbFacilityModelTestFactory {
 
         facilityFilterEntries.add(entry4);
 
-        return new CkbFacilityCurationModel(facilityNameEntries, facilityZipEntries, facilityFilterEntries);
+        return new CkbCurator(facilityNameEntries, facilityZipEntries, facilityFilterEntries);
     }
 }

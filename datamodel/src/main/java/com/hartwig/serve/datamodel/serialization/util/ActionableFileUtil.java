@@ -45,7 +45,7 @@ public final class ActionableFileUtil {
                 .add("title")
                 .add("acronym")
                 .add("genderCriterium")
-                .add("countries")
+                .add("countriesAndCities")
                 .add("hospitalsPerCity")
                 .add("treatment")
                 .add("treatmentApproachesDrugClass")
@@ -102,7 +102,8 @@ public final class ActionableFileUtil {
                             .title(values[fields.get("title")])
                             .acronym(SerializationUtil.optionalString(values[fields.get("acronym")]))
                             .genderCriterium(SerializationUtil.optionalString(values[fields.get("genderCriterium")]))
-                            .countries(twoFieldsToCountries(values[fields.get("countries")], values[fields.get("hospitalsPerCity")]))
+                            .countries(twoFieldsToCountries(values[fields.get("countriesAndCities")],
+                                    values[fields.get("hospitalsPerCity")]))
                             .therapyNames(fieldToSet(values[fields.get("treatment")]))
                             .build();
                 } else {
@@ -209,7 +210,7 @@ public final class ActionableFileUtil {
     @NotNull
     static String countriesToCountryNameAndCitiesField(@NotNull Set<Country> countries) {
         return countries.stream()
-                .map(country -> country.countryName() + "(" + String.join(SUB_DELIMITER, country.cities()) + ")")
+                .map(country -> country.countryName() + "(" + String.join(SUB_DELIMITER, country.hospitalsPerCity().keySet()) + ")")
                 .collect(Collectors.joining(MAIN_DELIMITER));
     }
 
@@ -242,7 +243,7 @@ public final class ActionableFileUtil {
             Set<String> cities = Arrays.stream(countriesAndCities[1].replace(")", "").split(SUB_DELIMITER)).collect(Collectors.toSet());
             Map<String, Set<String>> hospitalsPerCityForCountry =
                     cities.stream().filter(hospitalsPerCity::containsKey).collect(Collectors.toMap(city -> city, hospitalsPerCity::get));
-            return ImmutableCountry.builder().countryName(countryName).cities(cities).hospitalsPerCity(hospitalsPerCityForCountry).build();
+            return ImmutableCountry.builder().countryName(countryName).hospitalsPerCity(hospitalsPerCityForCountry).build();
         }).collect(Collectors.toSet());
     }
 

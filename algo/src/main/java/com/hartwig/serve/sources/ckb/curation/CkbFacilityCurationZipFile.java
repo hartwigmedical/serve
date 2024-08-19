@@ -1,4 +1,4 @@
-package com.hartwig.serve.sources.ckb.facilitycuration;
+package com.hartwig.serve.sources.ckb.curation;
 
 import java.io.File;
 import java.io.IOException;

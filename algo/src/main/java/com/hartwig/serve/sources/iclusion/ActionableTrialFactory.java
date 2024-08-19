@@ -1,6 +1,7 @@
 package com.hartwig.serve.sources.iclusion;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.google.common.annotations.VisibleForTesting;
@@ -73,8 +74,7 @@ public class ActionableTrialFactory {
                         .genderCriterium(null)
                         .countries(Sets.newHashSet(ImmutableCountry.builder()
                                 .countryName("The Netherlands")
-                                .cities(Sets.newHashSet("Unknown"))
-                                .hospitalsPerCity(null)
+                                .hospitalsPerCity(Map.of("Unknown", Set.of("Unknown")))
                                 .build()))
                         .therapyNames(Sets.newHashSet())
                         .build())

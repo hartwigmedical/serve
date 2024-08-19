@@ -1,4 +1,4 @@
-package com.hartwig.serve.sources.ckb.facilitycuration;
+package com.hartwig.serve.sources.ckb.curation;
 
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;
@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 @Value.Immutable
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class })
-public abstract class CkbFacilityCurationFilterEntry {
+public abstract class CkbFacilityCurationManualEntry {
 
     @NotNull
     public abstract String facilityName();
@@ -19,5 +19,4 @@ public abstract class CkbFacilityCurationFilterEntry {
 
     @NotNull
     public abstract String curatedFacilityName();
-
 }

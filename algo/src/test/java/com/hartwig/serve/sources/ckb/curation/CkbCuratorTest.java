@@ -41,10 +41,10 @@ public class CkbCuratorTest {
     public void canCurateFacilityNameBasedOnName() {
         Location location1 = createLocation("Rotterdam", "Erasmus MC", "3062 PA");
         Location location2 = createLocation("Rotterdam", "Erasmus ziekenhuis in Rotterdam", "3062 PA");
-        Location curatedLocation = createLocation("Rotterdam", "EMC", "3062 PA");
+        Location expectedLocation = createLocation("Rotterdam", "EMC", "3062 PA");
 
-        assertEquals(curator.curateFacilityName(location1), curatedLocation);
-        assertEquals(curator.curateFacilityName(location2), curatedLocation);
+        assertEquals(expectedLocation, curator.curateFacilityName(location1));
+        assertEquals(expectedLocation, curator.curateFacilityName(location2));
     }
 
     @Test
@@ -52,24 +52,24 @@ public class CkbCuratorTest {
         Location locationWithZip1 = createLocation("Groningen", "Research site", "9713 GZ");
         Location locationWithZip2 = createLocation("Groningen", "Research site", "9713");
         Location locationWithoutZip = createLocation("Almere", "Flevo location 2", null);
-        Location curatedLocationWithZip1 = createLocation("Groningen", "UMCG", "9713 GZ");
-        Location curatedLocationWithZip2 = createLocation("Groningen", "UMCG", "9713");
-        Location curatedLocationWithoutZip = createLocation("Almere", "Flevoziekenhuis", null);
+        Location expectedLocationWithZip1 = createLocation("Groningen", "UMCG", "9713 GZ");
+        Location expectedLocationWithZip2 = createLocation("Groningen", "UMCG", "9713");
+        Location expectedLocationWithoutZip = createLocation("Almere", "Flevoziekenhuis", null);
 
-        assertEquals(curator.curateFacilityName(locationWithZip1), curatedLocationWithZip1);
-        assertEquals(curator.curateFacilityName(locationWithZip2), curatedLocationWithZip2);
-        assertEquals(curator.curateFacilityName(locationWithoutZip), curatedLocationWithoutZip);
+        assertEquals(expectedLocationWithZip1, curator.curateFacilityName(locationWithZip1));
+        assertEquals(expectedLocationWithZip2, curator.curateFacilityName(locationWithZip2));
+        assertEquals(expectedLocationWithoutZip, curator.curateFacilityName(locationWithoutZip));
     }
 
     @Test
-    public void canCurateFacilityNameBasedOnFilter() {
+    public void canUseManualCuration() {
         Location location = createLocation("Amsterdam", "Amsterdam UMC", null);
 
-        assertEquals(curator.curateFacilityName(location), location);
+        assertEquals(location, curator.curateFacilityName(location));
     }
 
     @Test
-    public void canFindEqualStringsOrNull() {
+    public void canEvaluateEqualStringsOrNull() {
         String string1 = null;
         String string2 = "";
         assertTrue(curator.equalStringsOrNull(string1, string2));
@@ -88,7 +88,7 @@ public class CkbCuratorTest {
     }
 
     @Test
-    public void canFindStandAloneWordInString() {
+    public void canEvaluateStandAloneWordInString() {
         String string1 = "amc";
 
         String string2 = "amsterdam";

@@ -55,11 +55,11 @@ public class CkbCurator {
                 curatedVariants.add(curateVariant(variant));
             }
             for (ClinicalTrial clinicalTrial : ckbEntry.clinicalTrials()) {
-                List<Location> locations = Lists.newArrayList();
+                List<Location> curatedLocations = Lists.newArrayList();
                 for (Location location : clinicalTrial.locations()) {
-                    locations.add(curateFacilityName(location));
+                    curatedLocations.add(curateFacilityName(location));
                 }
-                curatedClinicalTrials.add(ImmutableClinicalTrial.builder().from(clinicalTrial).locations(locations).build());
+                curatedClinicalTrials.add(ImmutableClinicalTrial.builder().from(clinicalTrial).locations(curatedLocations).build());
             }
             curatedCkbEntries.add(ImmutableCkbEntry.builder()
                     .from(ckbEntry)
@@ -104,11 +104,12 @@ public class CkbCurator {
     }
 
     @NotNull
-    public Location curateFacilityName(@NotNull Location location) {
+    @VisibleForTesting
+    Location curateFacilityName(@NotNull Location location) {
         for (CkbFacilityCurationZipEntry facilityCurationZipEntry : facilityCurationZipEntries) {
             if (containsWord(facilityCurationZipEntry.city(), location.city().toLowerCase())) {
                 String zip = location.zip() != null ? location.zip().toLowerCase().replaceAll("\\s", "") : "";
-                if ((facilityCurationZipEntry.zip().equals("")) || (zip.contains(facilityCurationZipEntry.zip()))) {
+                if ((facilityCurationZipEntry.zip().isEmpty()) || (zip.contains(facilityCurationZipEntry.zip()))) {
                     return ImmutableLocation.builder().from(location).facility(facilityCurationZipEntry.curatedFacilityName()).build();
                 }
             }
@@ -125,8 +126,10 @@ public class CkbCurator {
         }
 
         for (CkbFacilityCurationManualEntry facilityCurationManualEntry : facilityCurationManualEntries) {
-            if (equalStringsOrNull(location.facility(), facilityCurationManualEntry.facilityName()) && location.city()
-                    .equals(facilityCurationManualEntry.city()) && equalStringsOrNull(location.zip(), facilityCurationManualEntry.zip())) {
+            boolean hasMatchingFacilityName = equalStringsOrNull(location.facility(), facilityCurationManualEntry.facilityName());
+            boolean hasMatchingCity = location.city().equals(facilityCurationManualEntry.city());
+            boolean hasMatchingZip = equalStringsOrNull(location.zip(), facilityCurationManualEntry.zip());
+            if (hasMatchingFacilityName && hasMatchingCity && hasMatchingZip) {
                 usedFacilityCurationManualEntries.add(facilityCurationManualEntry);
                 return ImmutableLocation.builder().from(location).facility(facilityCurationManualEntry.curatedFacilityName()).build();
             }
@@ -169,7 +172,7 @@ public class CkbCurator {
 
     @VisibleForTesting
     boolean equalStringsOrNull(@Nullable String string1, @NotNull String string2) {
-        if (string1 == null && string2.equals("")) {
+        if (string1 == null && string2.isEmpty()) {
             return true;
         }
         if (string1 == null) {

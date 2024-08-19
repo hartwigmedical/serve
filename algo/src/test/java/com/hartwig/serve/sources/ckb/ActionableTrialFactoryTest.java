@@ -262,14 +262,13 @@ public class ActionableTrialFactoryTest {
     }
 
     @Test
-    public void canAddCities() {
+    public void canMapCities() {
         ClinicalTrial trialWithOneLocation =
                 createTrialWithOneLocation("Recruiting", "Belgium", "Brussel", "Recruiting", "Unknown(Brussel)");
-        assertEquals(ActionableTrialFactory.extractCountriesToInclude(trialWithOneLocation, REGIONS_TO_INCLUDE),
-                Set.of(ImmutableCountry.builder()
-                        .countryName("Belgium")
-                        .hospitalsPerCity(Map.of("Brussel", Set.of("Unknown(Brussel)")))
-                        .build()));
+        assertEquals(Set.of(ImmutableCountry.builder()
+                .countryName("Belgium")
+                .hospitalsPerCity(Map.of("Brussel", Set.of("Unknown(Brussel)")))
+                .build()), ActionableTrialFactory.extractCountriesToInclude(trialWithOneLocation, REGIONS_TO_INCLUDE));
 
         ClinicalTrial trialWithMultipleLocations = createTrialWithMultipleLocations("Recruiting",
                 "Belgium",
@@ -280,12 +279,12 @@ public class ActionableTrialFactoryTest {
                 "Not yet recruiting",
                 "Rotterdam",
                 "EMC");
-        assertEquals(ActionableTrialFactory.extractCountriesToInclude(trialWithMultipleLocations, REGIONS_TO_INCLUDE),
-                Set.of(ImmutableCountry.builder().countryName("Belgium").hospitalsPerCity(Map.of("Brussel", Set.of("UZ Brussel"))).build(),
-                        ImmutableCountry.builder()
-                                .countryName("Netherlands")
-                                .hospitalsPerCity(Map.of("Rotterdam", Set.of("EMC")))
-                                .build()));
+        assertEquals(Set.of(ImmutableCountry.builder()
+                                .countryName("Belgium")
+                                .hospitalsPerCity(Map.of("Brussel", Set.of("UZ Brussel")))
+                                .build(),
+                        ImmutableCountry.builder().countryName("Netherlands").hospitalsPerCity(Map.of("Rotterdam", Set.of("EMC"))).build()),
+                ActionableTrialFactory.extractCountriesToInclude(trialWithMultipleLocations, REGIONS_TO_INCLUDE));
     }
 
     @Test

@@ -8,6 +8,7 @@ import com.google.common.collect.Sets;
 
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public final class DatamodelTestFactory {
 
@@ -26,10 +27,10 @@ public final class DatamodelTestFactory {
     @NotNull
     public static ImmutableClinicalTrial.Builder clinicalTrialBuilderBuilder() {
         return ImmutableClinicalTrial.builder()
-                .nctId(Strings.EMPTY)
+                .nctId("nctid")
                 .title(Strings.EMPTY)
-                .acronym(Strings.EMPTY)
-                .genderCriterium(Strings.EMPTY)
+                .acronym(null)
+                .genderCriterium(null)
                 .countries(Sets.newHashSet())
                 .therapyNames(Sets.newHashSet());
     }
@@ -73,8 +74,11 @@ public final class DatamodelTestFactory {
     }
 
     @NotNull
-    public static Intervention interventionBuilder(boolean isTrial, boolean isTreatment, @NotNull String treatmentName) {
-        ClinicalTrial clinicalTrial = isTrial ? clinicalTrialBuilderBuilder().therapyNames(Sets.newHashSet(treatmentName)).build() : null;
+    public static Intervention interventionBuilder(boolean isTrial, boolean isTreatment, @NotNull String treatmentName,
+            @Nullable Country country) {
+        ClinicalTrial clinicalTrial = isTrial
+                ? clinicalTrialBuilderBuilder().countries(Set.of(country)).therapyNames(Sets.newHashSet(treatmentName)).build()
+                : null;
         Treatment treatment = isTreatment ? extractTreatment().name(treatmentName).build() : null;
 
         if ((clinicalTrial == null && treatment == null) || (clinicalTrial != null && treatment != null)) {
@@ -89,7 +93,7 @@ public final class DatamodelTestFactory {
         return createActionableEvent(Knowledgebase.UNKNOWN,
                 Strings.EMPTY,
                 Sets.newHashSet(),
-                interventionBuilder(false, true, "treatment1"),
+                interventionBuilder(false, true, "treatment1", null),
                 DatamodelTestFactory.cancerTypeBuilder().build(),
                 Sets.newHashSet(),
                 EvidenceLevel.A,

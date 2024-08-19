@@ -9,6 +9,7 @@ import java.util.Set;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.ActionableEvent;
 import com.hartwig.serve.datamodel.CancerType;
+import com.hartwig.serve.datamodel.ClinicalTrial;
 import com.hartwig.serve.datamodel.Country;
 import com.hartwig.serve.datamodel.DatamodelTestFactory;
 import com.hartwig.serve.datamodel.EvidenceDirection;
@@ -24,11 +25,11 @@ import org.junit.Test;
 public class ActionableFileUtilTest {
 
     @Test
-    public void canConvertActionableEvents() {
+    public void canConvertActionableTreatment() {
         ActionableEvent event = DatamodelTestFactory.createActionableEvent(Knowledgebase.VICC_CGI,
                 "source event",
                 Sets.newHashSet(),
-                DatamodelTestFactory.interventionBuilder(false, true, "treatment1"),
+                DatamodelTestFactory.interventionBuilder(false, true, "treatment1", null),
                 DatamodelTestFactory.cancerTypeBuilder().name("applicable name").doid("applicable doid").build(),
                 Sets.newHashSet(DatamodelTestFactory.cancerTypeBuilder().name("blacklist name").doid("blacklist doid").build()),
                 EvidenceLevel.C,
@@ -46,6 +47,40 @@ public class ActionableFileUtilTest {
         assertEquals(event.sourceEvent(), coveredEvent.sourceEvent());
         assertEquals(event.sourceUrls(), coveredEvent.sourceUrls());
         assertEquals(treatmentEvent, treatmentCovered);
+        assertEquals(event.applicableCancerType(), coveredEvent.applicableCancerType());
+        assertEquals(event.blacklistCancerTypes(), coveredEvent.blacklistCancerTypes());
+        assertEquals(event.level(), coveredEvent.level());
+        assertEquals(event.direction(), coveredEvent.direction());
+        assertEquals(event.evidenceUrls(), coveredEvent.evidenceUrls());
+    }
+
+    @Test
+    public void canConvertActionableTrial() {
+        Country country = ImmutableCountry.builder()
+                .countryName("Netherlands")
+                .hospitalsPerCity(Map.of("Rotterdam", Set.of("EMC", "Ikazia"), "Nijmegen", Set.of("Radboud UMC", "CWZ")))
+                .build();
+        ActionableEvent event = DatamodelTestFactory.createActionableEvent(Knowledgebase.VICC_CGI,
+                "source event",
+                Sets.newHashSet(),
+                DatamodelTestFactory.interventionBuilder(true, false, "treatment1", country),
+                DatamodelTestFactory.cancerTypeBuilder().name("applicable name").doid("applicable doid").build(),
+                Sets.newHashSet(DatamodelTestFactory.cancerTypeBuilder().name("blacklist name").doid("blacklist doid").build()),
+                EvidenceLevel.C,
+                EvidenceDirection.RESISTANT,
+                Sets.newHashSet("url1", "url2"));
+
+        String line = ActionableFileUtil.toLine(event);
+        Map<String, Integer> fields = SerializationUtil.createFields(ActionableFileUtil.header(), ActionableFileUtil.FIELD_DELIMITER);
+        ActionableEvent coveredEvent = ActionableFileUtil.fromLine(line.split(ActionableFileUtil.FIELD_DELIMITER), fields);
+
+        ClinicalTrial clinicalTrialCovered = DatamodelTestFactory.extractClinicalTrial(coveredEvent);
+        ClinicalTrial clinicalTrialEvent = DatamodelTestFactory.extractClinicalTrial(event);
+
+        assertEquals(event.source(), coveredEvent.source());
+        assertEquals(event.sourceEvent(), coveredEvent.sourceEvent());
+        assertEquals(event.sourceUrls(), coveredEvent.sourceUrls());
+        assertEquals(clinicalTrialEvent, clinicalTrialCovered);
         assertEquals(event.applicableCancerType(), coveredEvent.applicableCancerType());
         assertEquals(event.blacklistCancerTypes(), coveredEvent.blacklistCancerTypes());
         assertEquals(event.level(), coveredEvent.level());

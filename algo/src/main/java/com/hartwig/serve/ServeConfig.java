@@ -94,7 +94,7 @@ public interface ServeConfig {
         options.addOption(CKB_REGION_TSV, true, "Path to the CKB regions tsv. Only trials from the configured regions will be used.");
         options.addOption(CKB_FACILITY_CURATION_NAME_TSV, true, "Path to the CKB facility curations based on name tsv");
         options.addOption(CKB_FACILITY_CURATION_ZIP_TSV, true, "Path to the CKB facility curations based on zip tsv");
-        options.addOption(CKB_FACILITY_CURATION_MANUAL_TSV, true, "Path to the CKB facility curations to filter tsv");
+        options.addOption(CKB_FACILITY_CURATION_MANUAL_TSV, true, "Path to the manual CKB facility curations tsv");
         options.addOption(USE_DOCM, false, "If provided, DoCM will be used as a source in SERVE");
         options.addOption(DOCM_TSV, true, "Path to the DoCM knowledgebase input TSV");
         options.addOption(USE_HARTWIG_COHORT_HOTSPOTS, false, "If provided, Hartwig Cohort Hotspots will be used as a source in SERVE");
@@ -265,9 +265,12 @@ public interface ServeConfig {
                 .ckbBlacklistEvidenceTsv(useCkbEvidence ? nonOptionalFile(cmd, CKB_BLACKLIST_EVIDENCE_TSV) : NOT_APPLICABLE)
                 .ckbDrugCurationTsv(useCkbEvidence ? nonOptionalFile(cmd, CKB_DRUG_CURATION_TSV) : NOT_APPLICABLE)
                 .ckbRegionTsv(useCkbTrials ? nonOptionalFile(cmd, CKB_REGION_TSV) : NOT_APPLICABLE)
-                .ckbFacilityCurationNameTsv(useCkbTrials ? nonOptionalFile(cmd, CKB_FACILITY_CURATION_NAME_TSV) : NOT_APPLICABLE)
-                .ckbFacilityCurationZipTsv(useCkbTrials ? nonOptionalFile(cmd, CKB_FACILITY_CURATION_ZIP_TSV) : NOT_APPLICABLE)
-                .ckbFacilityCurationManualTsv(useCkbTrials ? nonOptionalFile(cmd, CKB_FACILITY_CURATION_MANUAL_TSV) : NOT_APPLICABLE)
+                .ckbFacilityCurationNameTsv(
+                        useCkbTrials || useCkbEvidence ? nonOptionalFile(cmd, CKB_FACILITY_CURATION_NAME_TSV) : NOT_APPLICABLE)
+                .ckbFacilityCurationZipTsv(
+                        useCkbTrials || useCkbEvidence ? nonOptionalFile(cmd, CKB_FACILITY_CURATION_ZIP_TSV) : NOT_APPLICABLE)
+                .ckbFacilityCurationManualTsv(
+                        useCkbTrials || useCkbEvidence ? nonOptionalFile(cmd, CKB_FACILITY_CURATION_MANUAL_TSV) : NOT_APPLICABLE)
                 .useDocm(useDocm)
                 .docmTsv(useDocm ? nonOptionalFile(cmd, DOCM_TSV) : NOT_APPLICABLE)
                 .useHartwigCohortHotspots(useHartwigCohortHotspots)

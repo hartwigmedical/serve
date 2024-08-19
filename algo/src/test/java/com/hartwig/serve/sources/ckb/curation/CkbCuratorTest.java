@@ -18,11 +18,11 @@ import org.jetbrains.annotations.Nullable;
 import org.junit.Test;
 
 public class CkbCuratorTest {
-    CkbCurator curator = CkbCuratorTestFactory.createProperModel();
+
+    private final CkbCurator curator = CkbCuratorTestFactory.createProperModel();
 
     @Test
     public void canCurateVariants() {
-
         CkbVariantCurationEntry firstCurationKey = CkbVariantCurationFactory.VARIANT_MAPPINGS.keySet().iterator().next();
         CkbEntry entry = CkbTestFactory.createEntryWithGeneAndVariant(firstCurationKey.geneSymbol(), firstCurationKey.variant());
 

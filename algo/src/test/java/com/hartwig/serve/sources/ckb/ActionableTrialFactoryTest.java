@@ -35,13 +35,8 @@ import org.junit.Test;
 public class ActionableTrialFactoryTest {
 
     private static final CkbStudyBlacklistModel BLACKLIST_MODEL = CkbBlacklistTestFactory.createProperStudyBlacklist();
-    public static final Set<CkbRegion> REGIONS_TO_INCLUDE =
+    private static final Set<CkbRegion> REGIONS_TO_INCLUDE =
             Set.of(createRegion("netherlands"), createRegion("belgium"), createRegion("germany"), createRegion("united states", "maine"));
-
-    @NotNull
-    private static ImmutableCkbRegion createRegion(@NotNull String country, @NotNull String... states) {
-        return ImmutableCkbRegion.builder().country(country).addStates(states).build();
-    }
 
     @Test
     public void canCreateActionableEntryForOpenTrialInAllowedCountryWithRequiredMolecularProfileAndValidAgeGroup() {
@@ -381,5 +376,10 @@ public class ActionableTrialFactoryTest {
                 .build();
 
         return CkbBlacklistTestFactory.createSpecificStudyBlacklist(entry);
+    }
+
+    @NotNull
+    private static ImmutableCkbRegion createRegion(@NotNull String country, @NotNull String... states) {
+        return ImmutableCkbRegion.builder().country(country).addStates(states).build();
     }
 }

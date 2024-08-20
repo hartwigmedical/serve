@@ -50,7 +50,7 @@ public final class CkbReader {
 
         LOGGER.info("Reading facility manual curations from {}", ckbFacilityCurationManualTsv);
         List<CkbFacilityCurationManualEntry> facilityManualCurations = CkbFacilityCurationManualFile.read(ckbFacilityCurationManualTsv);
-        LOGGER.info(" Read {} facility filter curations to include", facilityManualCurations.size());
+        LOGGER.info(" Read {} facility manual curations to include", facilityManualCurations.size());
 
         return removeBlacklistedEntries(curate(ckbEntries, facilityNameCurations, facilityZipCurations, facilityManualCurations),
                 ckbBlacklistMolecularProfileEntries);
@@ -66,7 +66,7 @@ public final class CkbReader {
         LOGGER.info("Curating {} CKB entries", ckbEntries.size());
         List<CkbEntry> curatedEntries = curator.run(ckbEntries);
 
-        curator.reportUnusedCurationEntries();
+        curator.reportUnusedVariantCurationEntries();
         curator.reportUnusedFacilityCurationManualEntries();
 
         return curatedEntries;

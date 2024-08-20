@@ -141,10 +141,10 @@ public class CkbCurator {
         return location.facility() == null ? ImmutableLocation.builder()
                 .from(location)
                 .facility("Unknown [" + location.city() + "]")
-                .build() : ImmutableLocation.builder().from(location).facility(location.facility().replaceAll("[(),]", "")).build();
+                .build() : ImmutableLocation.builder().from(location).facility(location.facility().replaceAll("[(),;]", "")).build();
     }
 
-    public void reportUnusedCurationEntries() {
+    public void reportUnusedVariantCurationEntries() {
         int unusedEntryCount = 0;
         for (CkbVariantCurationEntry entry : CkbVariantCurationFactory.VARIANT_MAPPINGS.keySet()) {
             if (!evaluatedVariantCurationEntries.contains(entry)) {
@@ -153,7 +153,7 @@ public class CkbCurator {
             }
         }
 
-        LOGGER.debug(" Found {} unused CKB curation entries. {} keys have been requested against {} curation entries",
+        LOGGER.debug(" Found {} unused variant CKB curation entries. {} keys have been requested against {} curation entries",
                 unusedEntryCount,
                 evaluatedVariantCurationEntries.size(),
                 CkbVariantCurationFactory.VARIANT_MAPPINGS.size());

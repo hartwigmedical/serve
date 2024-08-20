@@ -34,7 +34,7 @@ public class CkbCuratorTest {
         assertEquals(firstCuratedValue.geneSymbol(), firstVariant.gene().geneSymbol());
         assertEquals(firstCuratedValue.variant(), firstVariant.variant());
 
-        curator.reportUnusedCurationEntries();
+        curator.reportUnusedVariantCurationEntries();
     }
 
     @Test

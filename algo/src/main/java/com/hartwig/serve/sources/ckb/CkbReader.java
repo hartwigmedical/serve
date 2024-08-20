@@ -9,6 +9,12 @@ import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistMolecularProfileEntry
 import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistMolecularProfileFile;
 import com.hartwig.serve.sources.ckb.blacklist.CkbMolecularProfileBlacklistModel;
 import com.hartwig.serve.sources.ckb.curation.CkbCurator;
+import com.hartwig.serve.sources.ckb.curation.CkbFacilityCurationManualEntry;
+import com.hartwig.serve.sources.ckb.curation.CkbFacilityCurationManualFile;
+import com.hartwig.serve.sources.ckb.curation.CkbFacilityCurationNameEntry;
+import com.hartwig.serve.sources.ckb.curation.CkbFacilityCurationNameFile;
+import com.hartwig.serve.sources.ckb.curation.CkbFacilityCurationZipEntry;
+import com.hartwig.serve.sources.ckb.curation.CkbFacilityCurationZipFile;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,7 +28,9 @@ public final class CkbReader {
     }
 
     @NotNull
-    public static List<CkbEntry> readAndCurate(@NotNull String ckbDir, @NotNull String ckbBlacklistMolecularProfileTsv) throws IOException {
+    public static List<CkbEntry> readAndCurate(@NotNull String ckbDir, @NotNull String ckbBlacklistMolecularProfileTsv,
+            @NotNull String ckbFacilityCurationNameTsv, @NotNull String ckbFacilityCurationZipTsv,
+            @NotNull String ckbFacilityCurationManualTsv) throws IOException {
         LOGGER.info("Reading CKB database from {}", ckbDir);
         List<CkbEntry> ckbEntries = CkbEntryReader.read(ckbDir);
         LOGGER.info(" Read {} entries", ckbEntries.size());
@@ -32,17 +40,34 @@ public final class CkbReader {
                 CkbBlacklistMolecularProfileFile.read(ckbBlacklistMolecularProfileTsv);
         LOGGER.info(" Read {} blacklist molecular profile entries", ckbBlacklistMolecularProfileEntries.size());
 
-        return removeBlacklistedEntries(curate(ckbEntries), ckbBlacklistMolecularProfileEntries);
+        LOGGER.info("Reading facility name curations from {}", ckbFacilityCurationNameTsv);
+        List<CkbFacilityCurationNameEntry> facilityNameCurations = CkbFacilityCurationNameFile.read(ckbFacilityCurationNameTsv);
+        LOGGER.info(" Read {} facility name curations to include", facilityNameCurations.size());
+
+        LOGGER.info("Reading facility zip curations from {}", ckbFacilityCurationZipTsv);
+        List<CkbFacilityCurationZipEntry> facilityZipCurations = CkbFacilityCurationZipFile.read(ckbFacilityCurationZipTsv);
+        LOGGER.info(" Read {} facility zip curations to include", facilityZipCurations.size());
+
+        LOGGER.info("Reading facility manual curations from {}", ckbFacilityCurationManualTsv);
+        List<CkbFacilityCurationManualEntry> facilityManualCurations = CkbFacilityCurationManualFile.read(ckbFacilityCurationManualTsv);
+        LOGGER.info(" Read {} facility manual curations to include", facilityManualCurations.size());
+
+        return removeBlacklistedEntries(curate(ckbEntries, facilityNameCurations, facilityZipCurations, facilityManualCurations),
+                ckbBlacklistMolecularProfileEntries);
     }
 
     @NotNull
-    private static List<CkbEntry> curate(@NotNull List<CkbEntry> ckbEntries) {
-        CkbCurator curator = new CkbCurator();
+    private static List<CkbEntry> curate(@NotNull List<CkbEntry> ckbEntries,
+            @NotNull List<CkbFacilityCurationNameEntry> facilityNameCurations,
+            @NotNull List<CkbFacilityCurationZipEntry> facilityZipCurations,
+            @NotNull List<CkbFacilityCurationManualEntry> facilityManualCurations) {
+        CkbCurator curator = new CkbCurator(facilityNameCurations, facilityZipCurations, facilityManualCurations);
 
         LOGGER.info("Curating {} CKB entries", ckbEntries.size());
         List<CkbEntry> curatedEntries = curator.run(ckbEntries);
 
-        curator.reportUnusedCurationEntries();
+        curator.reportUnusedVariantCurationEntries();
+        curator.reportUnusedFacilityCurationManualEntries();
 
         return curatedEntries;
     }

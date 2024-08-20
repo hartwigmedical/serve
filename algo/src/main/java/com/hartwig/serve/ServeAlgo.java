@@ -75,7 +75,10 @@ public class ServeAlgo {
     @NotNull
     public Map<RefGenome, ExtractionResult> run(@NotNull ServeConfig config) throws IOException {
         List<CkbEntry> ckbEntries = (config.useCkbEvidence() || config.useCkbTrials()) ? CkbReader.readAndCurate(config.ckbDir(),
-                config.ckbBlacklistMolecularProfileTsv()) : Collections.emptyList();
+                config.ckbBlacklistMolecularProfileTsv(),
+                config.ckbFacilityCurationNameTsv(),
+                config.ckbFacilityCurationZipTsv(),
+                config.ckbFacilityCurationManualTsv()) : Collections.emptyList();
 
         List<ExtractionResult> extractions =
                 Stream.of(config.useVicc() ? extractViccKnowledge(config.viccJson(), config.viccSources()) : null,
@@ -83,9 +86,9 @@ public class ServeAlgo {
                                 config.useCkbEvidence() ? extractCkbEvidenceKnowledge(config.ckbDrugCurationTsv(),
                                         config.ckbBlacklistEvidenceTsv(),
                                         ckbEntries) : null,
-                                config.useCkbTrials()
-                                        ? extractCkbTrialKnowledge(config.ckbBlacklistTrialTsv(), config.ckbRegionTsv(), ckbEntries)
-                                        : null,
+                                config.useCkbTrials() ? extractCkbTrialKnowledge(config.ckbBlacklistTrialTsv(),
+                                        config.ckbRegionTsv(),
+                                        ckbEntries) : null,
                                 config.useDocm() ? extractDocmKnowledge(config.docmTsv()) : null,
                                 config.useHartwigCohortHotspots() ? extractHartwigCohortHotspotKnowledge(config.hartwigCohortHotspotTsv(),
                                         !config.skipHotspotResolving()) : null,

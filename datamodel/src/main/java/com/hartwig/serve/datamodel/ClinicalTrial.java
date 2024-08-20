@@ -11,20 +11,20 @@ import org.jetbrains.annotations.Nullable;
 public abstract class ClinicalTrial implements Intervention {
 
     @NotNull
-    public abstract String studyNctId();
+    public abstract String nctId();
 
     @NotNull
-    public abstract String studyTitle();
+    public abstract String title();
 
     @Nullable
-    public abstract String studyAcronym();
+    public abstract String acronym();
 
     @NotNull
-    public abstract Set<String> countriesOfStudy();
+    public abstract Set<Country> countries();
 
     @NotNull
     public abstract Set<String> therapyNames();
 
     @Nullable
-    public abstract String gender();
+    public abstract String genderCriterium();
 }

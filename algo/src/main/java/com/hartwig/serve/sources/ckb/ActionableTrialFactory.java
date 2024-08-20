@@ -2,8 +2,10 @@ package com.hartwig.serve.sources.ckb;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
@@ -14,9 +16,11 @@ import com.hartwig.serve.ckb.datamodel.clinicaltrial.Location;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.VariantRequirementDetail;
 import com.hartwig.serve.ckb.datamodel.indication.Indication;
 import com.hartwig.serve.ckb.datamodel.therapy.Therapy;
+import com.hartwig.serve.datamodel.Country;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.ImmutableClinicalTrial;
+import com.hartwig.serve.datamodel.ImmutableCountry;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.sources.ckb.blacklist.CkbStudyBlacklistModel;
 import com.hartwig.serve.sources.ckb.region.CkbRegion;
@@ -54,7 +58,7 @@ class ActionableTrialFactory implements ActionableEntryFactory {
         Set<ActionableEntry> actionableTrials = Sets.newHashSet();
 
         for (ClinicalTrial trial : trialsToInclude(entry)) {
-            Set<String> countries = filterOnRegionsToInclude(trial, regionsToInclude);
+            Set<Country> countries = extractCountriesToInclude(trial, regionsToInclude);
 
             if (!countries.isEmpty()) {
                 Set<String> therapies = Sets.newHashSet();
@@ -78,12 +82,12 @@ class ActionableTrialFactory implements ActionableEntryFactory {
                                     .sourceEvent(sourceEvent)
                                     .sourceUrls(sourceUrls)
                                     .intervention(ImmutableClinicalTrial.builder()
-                                            .studyNctId(trial.nctId())
-                                            .studyTitle(trial.title())
-                                            .studyAcronym(trial.acronym())
-                                            .countriesOfStudy(countries)
+                                            .nctId(trial.nctId())
+                                            .title(trial.title())
+                                            .acronym(trial.acronym())
+                                            .countries(countries)
                                             .therapyNames(therapies)
-                                            .gender(trial.gender())
+                                            .genderCriterium(trial.gender())
                                             .build())
                                     .applicableCancerType(cancerTypeExtraction.applicableCancerType())
                                     .blacklistCancerTypes(cancerTypeExtraction.blacklistedCancerTypes())
@@ -123,16 +127,18 @@ class ActionableTrialFactory implements ActionableEntryFactory {
 
     @NotNull
     @VisibleForTesting
-    static Set<String> filterOnRegionsToInclude(@NotNull ClinicalTrial trial, @NotNull Set<CkbRegion> regionsToInclude) {
-        Set<String> countries = Sets.newHashSet();
-        for (Location location : trial.locations()) {
-            if (regionsToInclude.stream().anyMatch(region -> region.includes(location))
-                    && hasPotentiallyOpenRequirementToInclude(location.status())) {
-                countries.add(location.country());
-            }
-        }
+    static Set<Country> extractCountriesToInclude(@NotNull ClinicalTrial trial, @NotNull Set<CkbRegion> regionsToInclude) {
+        Map<String, Map<String, Set<String>>> countriesToCitiesToHospitalNames = trial.locations()
+                .stream()
+                .filter(location -> regionsToInclude.stream().anyMatch(region -> region.includes(location))
+                        && hasPotentiallyOpenRequirementToInclude(location.status()))
+                .collect(Collectors.groupingBy(Location::country,
+                        Collectors.groupingBy(Location::city, Collectors.mapping(Location::facility, Collectors.toSet()))));
 
-        return countries;
+        return countriesToCitiesToHospitalNames.entrySet()
+                .stream()
+                .map(entry -> ImmutableCountry.builder().countryName(entry.getKey()).hospitalsPerCity(entry.getValue()).build())
+                .collect(Collectors.toSet());
     }
 
     @VisibleForTesting

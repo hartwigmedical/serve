@@ -45,7 +45,7 @@ public class ActionableEventComparator implements Comparator<ActionableEvent> {
         }
 
         if (clinicalTrialEvent1 != null && clinicalTrialEvent2 != null) {
-            int trialCompare = clinicalTrialEvent1.studyNctId().compareTo(clinicalTrialEvent2.studyNctId());
+            int trialCompare = clinicalTrialEvent1.nctId().compareTo(clinicalTrialEvent2.nctId());
             if (trialCompare != 0) {
                 return trialCompare;
             }

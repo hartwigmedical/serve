@@ -3,10 +3,15 @@ package com.hartwig.serve.sources.ckb.curation;
 import java.util.List;
 import java.util.Set;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.ckb.datamodel.ImmutableCkbEntry;
+import com.hartwig.serve.ckb.datamodel.clinicaltrial.ClinicalTrial;
+import com.hartwig.serve.ckb.datamodel.clinicaltrial.ImmutableClinicalTrial;
+import com.hartwig.serve.ckb.datamodel.clinicaltrial.ImmutableLocation;
+import com.hartwig.serve.ckb.datamodel.clinicaltrial.Location;
 import com.hartwig.serve.ckb.datamodel.variant.ImmutableGene;
 import com.hartwig.serve.ckb.datamodel.variant.ImmutableVariant;
 import com.hartwig.serve.ckb.datamodel.variant.Variant;
@@ -14,15 +19,29 @@ import com.hartwig.serve.ckb.datamodel.variant.Variant;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class CkbCurator {
 
     private static final Logger LOGGER = LogManager.getLogger(CkbCurator.class);
 
     @NotNull
-    private final Set<CurationEntry> evaluatedCurationEntries = Sets.newHashSet();
+    private final List<CkbFacilityCurationNameEntry> facilityCurationNameEntries;
+    @NotNull
+    private final List<CkbFacilityCurationZipEntry> facilityCurationZipEntries;
+    @NotNull
+    private final List<CkbFacilityCurationManualEntry> facilityCurationManualEntries;
+    @NotNull
+    private final Set<CkbFacilityCurationManualEntry> usedFacilityCurationManualEntries = Sets.newHashSet();
+    @NotNull
+    private final Set<CkbVariantCurationEntry> evaluatedVariantCurationEntries = Sets.newHashSet();
 
-    public CkbCurator() {
+    public CkbCurator(@NotNull final List<CkbFacilityCurationNameEntry> facilityCurationNameList,
+            @NotNull final List<CkbFacilityCurationZipEntry> facilityCurationZipList,
+            @NotNull final List<CkbFacilityCurationManualEntry> facilityCurationManualList) {
+        this.facilityCurationNameEntries = facilityCurationNameList;
+        this.facilityCurationZipEntries = facilityCurationZipList;
+        this.facilityCurationManualEntries = facilityCurationManualList;
     }
 
     @NotNull
@@ -31,45 +50,42 @@ public class CkbCurator {
 
         for (CkbEntry ckbEntry : ckbEntries) {
             List<Variant> curatedVariants = Lists.newArrayList();
+            List<ClinicalTrial> curatedClinicalTrials = Lists.newArrayList();
             for (Variant variant : ckbEntry.variants()) {
-                curatedVariants.add(curate(variant));
+                curatedVariants.add(curateVariant(variant));
             }
-            curatedCkbEntries.add(ImmutableCkbEntry.builder().from(ckbEntry).variants(curatedVariants).build());
+            for (ClinicalTrial clinicalTrial : ckbEntry.clinicalTrials()) {
+                List<Location> curatedLocations = Lists.newArrayList();
+                for (Location location : clinicalTrial.locations()) {
+                    curatedLocations.add(curateFacilityName(location));
+                }
+                curatedClinicalTrials.add(ImmutableClinicalTrial.builder().from(clinicalTrial).locations(curatedLocations).build());
+            }
+            curatedCkbEntries.add(ImmutableCkbEntry.builder()
+                    .from(ckbEntry)
+                    .variants(curatedVariants)
+                    .clinicalTrials(curatedClinicalTrials)
+                    .build());
         }
 
         return curatedCkbEntries;
     }
 
-    public void reportUnusedCurationEntries() {
-        int unusedEntryCount = 0;
-        for (CurationEntry entry : CurationFactory.VARIANT_MAPPINGS.keySet()) {
-            if (!evaluatedCurationEntries.contains(entry)) {
-                unusedEntryCount++;
-                LOGGER.warn(" Entry '{}' hasn't been used during CKB curation", entry);
-            }
-        }
-
-        LOGGER.debug(" Found {} unused CKB curation entries. {} keys have been requested against {} curation entries",
-                unusedEntryCount,
-                evaluatedCurationEntries.size(),
-                CurationFactory.VARIANT_MAPPINGS.size());
-    }
-
     @NotNull
-    private Variant curate(@NotNull Variant variant) {
+    private Variant curateVariant(@NotNull Variant variant) {
         String geneSymbol = variant.gene() != null ? variant.gene().geneSymbol() : null;
         if (geneSymbol == null) {
             LOGGER.debug("No gene symbol known, skipping curation on '{}'", variant);
             return variant;
         }
 
-        CurationEntry entry = new CurationEntry(geneSymbol, variant.variant());
-        evaluatedCurationEntries.add(entry);
+        CkbVariantCurationEntry entry = new CkbVariantCurationEntry(geneSymbol, variant.variant());
+        evaluatedVariantCurationEntries.add(entry);
 
         Variant curatedVariant = variant;
-        if (CurationFactory.VARIANT_MAPPINGS.containsKey(entry)) {
-            String mappedVariant = CurationFactory.VARIANT_MAPPINGS.get(entry).variant();
-            String mappedGeneSymbol = CurationFactory.VARIANT_MAPPINGS.get(entry).geneSymbol();
+        if (CkbVariantCurationFactory.VARIANT_MAPPINGS.containsKey(entry)) {
+            String mappedVariant = CkbVariantCurationFactory.VARIANT_MAPPINGS.get(entry).variant();
+            String mappedGeneSymbol = CkbVariantCurationFactory.VARIANT_MAPPINGS.get(entry).geneSymbol();
 
             LOGGER.debug("Mapping variant '{}' on '{}' to '{}' on '{}'",
                     entry.variant(),
@@ -85,5 +101,89 @@ public class CkbCurator {
         }
 
         return curatedVariant;
+    }
+
+    @NotNull
+    @VisibleForTesting
+    Location curateFacilityName(@NotNull Location location) {
+        for (CkbFacilityCurationZipEntry facilityCurationZipEntry : facilityCurationZipEntries) {
+            if (containsWord(facilityCurationZipEntry.city(), location.city().toLowerCase())) {
+                String zip = location.zip() != null ? location.zip().toLowerCase().replaceAll("\\s", "") : "";
+                if ((facilityCurationZipEntry.zip().isEmpty()) || (zip.contains(facilityCurationZipEntry.zip()))) {
+                    return ImmutableLocation.builder().from(location).facility(facilityCurationZipEntry.curatedFacilityName()).build();
+                }
+            }
+        }
+
+        if (location.facility() != null) {
+            for (CkbFacilityCurationNameEntry facilityCurationNameEntry : facilityCurationNameEntries) {
+                if (containsWord(facilityCurationNameEntry.facilityName(), location.facility().toLowerCase()) && containsWord(
+                        facilityCurationNameEntry.city(),
+                        location.city().toLowerCase())) {
+                    return ImmutableLocation.builder().from(location).facility(facilityCurationNameEntry.curatedFacilityName()).build();
+                }
+            }
+        }
+
+        for (CkbFacilityCurationManualEntry facilityCurationManualEntry : facilityCurationManualEntries) {
+            boolean hasMatchingFacilityName = equalStringsOrNull(location.facility(), facilityCurationManualEntry.facilityName());
+            boolean hasMatchingCity = location.city().equals(facilityCurationManualEntry.city());
+            boolean hasMatchingZip = equalStringsOrNull(location.zip(), facilityCurationManualEntry.zip());
+            if (hasMatchingFacilityName && hasMatchingCity && hasMatchingZip) {
+                usedFacilityCurationManualEntries.add(facilityCurationManualEntry);
+                return ImmutableLocation.builder().from(location).facility(facilityCurationManualEntry.curatedFacilityName()).build();
+            }
+        }
+
+        if (location.country().equals("Netherlands")) {
+            LOGGER.warn(" Couldn't curate facility name for location '{}'", location);
+        }
+        return location.facility() == null ? ImmutableLocation.builder()
+                .from(location)
+                .facility("Unknown [" + location.city() + "]")
+                .build() : ImmutableLocation.builder().from(location).facility(location.facility().replaceAll("[(),;]", "")).build();
+    }
+
+    public void reportUnusedVariantCurationEntries() {
+        int unusedEntryCount = 0;
+        for (CkbVariantCurationEntry entry : CkbVariantCurationFactory.VARIANT_MAPPINGS.keySet()) {
+            if (!evaluatedVariantCurationEntries.contains(entry)) {
+                unusedEntryCount++;
+                LOGGER.warn(" Entry '{}' hasn't been used during CKB curation", entry);
+            }
+        }
+
+        LOGGER.debug(" Found {} unused variant CKB curation entries. {} keys have been requested against {} curation entries",
+                unusedEntryCount,
+                evaluatedVariantCurationEntries.size(),
+                CkbVariantCurationFactory.VARIANT_MAPPINGS.size());
+    }
+
+    public void reportUnusedFacilityCurationManualEntries() {
+        int unusedFacilityCurationManualCount = 0;
+        for (CkbFacilityCurationManualEntry entry : facilityCurationManualEntries) {
+            if (!usedFacilityCurationManualEntries.contains(entry)) {
+                unusedFacilityCurationManualCount++;
+                LOGGER.warn(" Facility curation manual entry '{}' hasn't been used for CKB filtering", entry);
+            }
+        }
+        LOGGER.debug(" Found {} unused manual facility curation entries during CKB filtering", unusedFacilityCurationManualCount);
+    }
+
+    @VisibleForTesting
+    boolean equalStringsOrNull(@Nullable String string1, @NotNull String string2) {
+        if (string1 == null && string2.isEmpty()) {
+            return true;
+        }
+        if (string1 == null) {
+            return false;
+        }
+        return string1.equals(string2);
+    }
+
+    @VisibleForTesting
+    boolean containsWord(@Nullable String string1, @NotNull String string2) {
+        String pattern = "\\b" + string1 + "\\b";
+        return string2.matches(".*" + pattern + ".*");
     }
 }

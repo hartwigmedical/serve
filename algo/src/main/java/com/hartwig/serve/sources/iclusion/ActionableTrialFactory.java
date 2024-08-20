@@ -1,6 +1,7 @@
 package com.hartwig.serve.sources.iclusion;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.google.common.annotations.VisibleForTesting;
@@ -12,6 +13,7 @@ import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.ImmutableCancerType;
 import com.hartwig.serve.datamodel.ImmutableClinicalTrial;
+import com.hartwig.serve.datamodel.ImmutableCountry;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.iclusion.datamodel.IclusionTrial;
 import com.hartwig.serve.iclusion.datamodel.IclusionTumorLocation;
@@ -66,11 +68,14 @@ public class ActionableTrialFactory {
                 .sourceEvent(sourceEvent)
                 .sourceUrls(Sets.newHashSet("https://www.trial-eye.com/hmf/" + trial.id()))
                 .intervention(ImmutableClinicalTrial.builder()
-                        .studyNctId(trial.nct())
-                        .studyTitle("")
-                        .studyAcronym(trial.acronym())
-                        .gender(null)
-                        .countriesOfStudy(Sets.newHashSet("The Netherlands"))
+                        .nctId(trial.nct())
+                        .title("")
+                        .acronym(trial.acronym())
+                        .genderCriterium(null)
+                        .countries(Sets.newHashSet(ImmutableCountry.builder()
+                                .countryName("The Netherlands")
+                                .hospitalsPerCity(Map.of("Unknown", Set.of("Unknown")))
+                                .build()))
                         .therapyNames(Sets.newHashSet())
                         .build())
                 .level(EvidenceLevel.B)

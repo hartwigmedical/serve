@@ -6,14 +6,14 @@ import com.google.common.annotations.VisibleForTesting;
 
 import org.jetbrains.annotations.NotNull;
 
-class CurationEntry {
+class CkbVariantCurationEntry {
 
     @NotNull
     private final String geneSymbol;
     @NotNull
     private final String variant;
 
-    public CurationEntry(@NotNull final String geneSymbol, @NotNull final String variant) {
+    public CkbVariantCurationEntry(@NotNull final String geneSymbol, @NotNull final String variant) {
         this.geneSymbol = geneSymbol;
         this.variant = variant;
     }
@@ -38,7 +38,7 @@ class CurationEntry {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        final CurationEntry that = (CurationEntry) o;
+        final CkbVariantCurationEntry that = (CkbVariantCurationEntry) o;
         return geneSymbol.equals(that.geneSymbol) && variant.equals(that.variant);
     }
 
@@ -51,4 +51,5 @@ class CurationEntry {
     public String toString() {
         return "CurationEntry{" + "geneSymbol='" + geneSymbol + '\'' + ", variant='" + variant + '\'' + '}';
     }
+
 }

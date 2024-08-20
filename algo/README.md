@@ -450,8 +450,9 @@ elsewhere.
 
 ## Version History and Download Links
 
-- Upcoming:
+- [5.0.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v5.0.0):
     - Add "Decreased response" and "No benefit" to evidence directions
+    - Add facility name curation and write cities and facility names to the output files
 - [4.1.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v4.1.0)
     - Add support for definition of regions using the `ckb_regions.tsv`
 - [4.0.1](https://github.com/hartwigmedical/serve/releases/tag/serve-v4.0.1)

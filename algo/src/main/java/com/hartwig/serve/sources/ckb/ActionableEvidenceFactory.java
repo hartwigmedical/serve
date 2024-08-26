@@ -151,8 +151,8 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
                             .level(level)
                             .direction(direction)
                             .evidenceUrls(evidenceUrls)
-                            .lastUpdated(entry.updateDate())
-                            .efficacyEvidence(evidence.efficacyEvidence())
+                            .date(entry.updateDate())
+                            .description(evidence.efficacyEvidence())
                             .build());
                 }
             }

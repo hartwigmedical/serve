@@ -1,5 +1,6 @@
 package com.hartwig.serve.datamodel;
 
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Set;
 import java.util.StringJoiner;
@@ -98,14 +99,15 @@ public final class DatamodelTestFactory {
                 Sets.newHashSet(),
                 EvidenceLevel.A,
                 EvidenceDirection.NO_BENEFIT,
-                Sets.newHashSet());
+                Sets.newHashSet(),
+                null, null);
     }
 
     @NotNull
     public static ActionableEvent createActionableEvent(@NotNull Knowledgebase source, @NotNull String sourceEvent,
             @NotNull Set<String> sourceUrls, @NotNull Intervention intervention, @NotNull CancerType applicableCancerType,
             @NotNull Set<CancerType> blacklistCancerTypes, @NotNull EvidenceLevel level, @NotNull EvidenceDirection direction,
-            @NotNull Set<String> evidenceUrls) {
+            @NotNull Set<String> evidenceUrls, @Nullable LocalDate date, @Nullable String description) {
         return new ActionableEventImpl(source,
                 sourceEvent,
                 sourceUrls,
@@ -114,7 +116,9 @@ public final class DatamodelTestFactory {
                 blacklistCancerTypes,
                 level,
                 direction,
-                evidenceUrls);
+                evidenceUrls,
+                date,
+                description);
     }
 
     private static class ActionableEventImpl implements ActionableEvent {
@@ -137,10 +141,15 @@ public final class DatamodelTestFactory {
         private final EvidenceDirection direction;
         @NotNull
         private final Set<String> evidenceUrls;
+        @Nullable
+        private final LocalDate date;
+        @Nullable
+        private final String description;
 
         public ActionableEventImpl(@NotNull Knowledgebase source, @NotNull String sourceEvent, @NotNull Set<String> sourceUrls,
                 @NotNull Intervention intervention, @NotNull CancerType applicableCancerType, @NotNull Set<CancerType> blacklistCancerTypes,
-                @NotNull EvidenceLevel level, @NotNull EvidenceDirection direction, @NotNull Set<String> evidenceUrls) {
+                @NotNull EvidenceLevel level, @NotNull EvidenceDirection direction, @NotNull Set<String> evidenceUrls,
+                @Nullable LocalDate date, @Nullable String description) {
             this.source = source;
             this.sourceEvent = sourceEvent;
             this.sourceUrls = sourceUrls;
@@ -150,6 +159,8 @@ public final class DatamodelTestFactory {
             this.level = level;
             this.direction = direction;
             this.evidenceUrls = evidenceUrls;
+            this.date = date;
+            this.description = description;
         }
 
         @NotNull
@@ -204,6 +215,18 @@ public final class DatamodelTestFactory {
         @Override
         public Set<String> evidenceUrls() {
             return evidenceUrls;
+        }
+
+        @Nullable
+        @Override
+        public LocalDate date() {
+            return date;
+        }
+
+        @Nullable
+        @Override
+        public String description() {
+            return description;
         }
 
         @Override

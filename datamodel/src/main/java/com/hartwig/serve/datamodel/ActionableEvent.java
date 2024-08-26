@@ -36,8 +36,8 @@ public interface ActionableEvent {
     Set<String> evidenceUrls();
 
     @Nullable
-    LocalDate lastUpdated();
+    LocalDate date();
 
     @Nullable
-    String efficacyEvidence();
+    String description();
 }

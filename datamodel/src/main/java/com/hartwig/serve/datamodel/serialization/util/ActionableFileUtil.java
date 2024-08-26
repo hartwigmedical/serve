@@ -58,8 +58,8 @@ public final class ActionableFileUtil {
                 .add("level")
                 .add("direction")
                 .add("evidenceUrls")
-                .add("lastUpdated")
-                .add("efficacyEvidence")
+                .add("date")
+                .add("description")
                 .toString();
     }
 
@@ -151,8 +151,8 @@ public final class ActionableFileUtil {
 
             @Nullable
             @Override
-            public LocalDate lastUpdated() {
-                String lastUpdated = values[fields.get("lastUpdated")];
+            public LocalDate date() {
+                String lastUpdated = values[fields.get("date")];
                 if (lastUpdated.isEmpty()) {
                     return null;
                 } else {
@@ -162,8 +162,8 @@ public final class ActionableFileUtil {
 
             @Nullable
             @Override
-            public String efficacyEvidence() {
-                String efficacyEvidence = values[fields.get("efficacyEvidence")];
+            public String description() {
+                String efficacyEvidence = values[fields.get("description")];
                 return efficacyEvidence.isEmpty() ? null : efficacyEvidence;
             }
         };
@@ -211,8 +211,8 @@ public final class ActionableFileUtil {
                 .add(event.level().toString())
                 .add(event.direction().toString())
                 .add(setToField(event.evidenceUrls()))
-                .add(formatDate(event.lastUpdated()))
-                .add(event.efficacyEvidence() != null ? event.efficacyEvidence() : Strings.EMPTY)
+                .add(formatDate(event.date()))
+                .add(event.description() != null ? event.description() : Strings.EMPTY)
                 .toString();
     }
 

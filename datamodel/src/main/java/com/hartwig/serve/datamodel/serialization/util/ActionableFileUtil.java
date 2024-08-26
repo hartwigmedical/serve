@@ -1,5 +1,6 @@
 package com.hartwig.serve.datamodel.serialization.util;
 
+import java.time.LocalDate;
 import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.Map;
@@ -25,6 +26,7 @@ import com.hartwig.serve.datamodel.Treatment;
 
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public final class ActionableFileUtil {
 
@@ -56,6 +58,8 @@ public final class ActionableFileUtil {
                 .add("level")
                 .add("direction")
                 .add("evidenceUrls")
+                .add("lastUpdated")
+                .add("efficacyEvidence")
                 .toString();
     }
 
@@ -144,6 +148,24 @@ public final class ActionableFileUtil {
                 int evidenceUrlPosition = fields.get("evidenceUrls");
                 return values.length > evidenceUrlPosition ? fieldToSet(values[evidenceUrlPosition]) : Sets.newHashSet();
             }
+
+            @Nullable
+            @Override
+            public LocalDate lastUpdated() {
+                String lastUpdated = values[fields.get("lastUpdated")];
+                if (lastUpdated.isEmpty()) {
+                    return null;
+                } else {
+                    return LocalDate.parse(lastUpdated);
+                }
+            }
+
+            @Nullable
+            @Override
+            public String efficacyEvidence() {
+                String efficacyEvidence = values[fields.get("efficacyEvidence")];
+                return efficacyEvidence.isEmpty() ? null : efficacyEvidence;
+            }
         };
     }
 
@@ -189,6 +211,8 @@ public final class ActionableFileUtil {
                 .add(event.level().toString())
                 .add(event.direction().toString())
                 .add(setToField(event.evidenceUrls()))
+                .add(formatDate(event.lastUpdated()))
+                .add(event.efficacyEvidence() != null ? event.efficacyEvidence() : Strings.EMPTY)
                 .toString();
     }
 
@@ -285,5 +309,10 @@ public final class ActionableFileUtil {
         }
 
         return cancerTypes;
+    }
+
+    @NotNull
+    static String formatDate(@Nullable LocalDate date) {
+        return date != null ? date.toString() : Strings.EMPTY;
     }
 }

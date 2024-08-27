@@ -3,6 +3,7 @@ package com.hartwig.serve.datamodel.serialization;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -43,6 +44,8 @@ public class ActionableHotspotFileTest {
         assertEquals("T", hotspot1.alt());
         assertEquals("Vemurafenib", DatamodelTestFactory.extractTreatment(hotspot1).name());
         assertEquals("Skin Melanoma", hotspot1.applicableCancerType().name());
+        assertEquals(LocalDate.of(2021, 2, 3), hotspot1.date());
+        assertEquals("efficacy evidence", hotspot1.description());
 
         ActionableHotspot hotspot2 = findBySource(hotspots, Knowledgebase.CKB_TRIAL);
         assertEquals("BRAF", hotspot2.gene());
@@ -52,6 +55,8 @@ public class ActionableHotspotFileTest {
         assertEquals("T", hotspot2.alt());
         assertEquals("Vemurafenib", DatamodelTestFactory.setToField(DatamodelTestFactory.extractClinicalTrial(hotspot2).therapyNames()));
         assertEquals("Solid tumor", hotspot2.applicableCancerType().name());
+        assertEquals(LocalDate.of(2021, 2, 3), hotspot2.date());
+        assertEquals("efficacy evidence", hotspot2.description());
     }
 
     @NotNull

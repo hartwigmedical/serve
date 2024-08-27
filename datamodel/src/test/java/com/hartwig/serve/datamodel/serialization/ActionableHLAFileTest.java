@@ -3,6 +3,7 @@ package com.hartwig.serve.datamodel.serialization;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -39,11 +40,15 @@ public class ActionableHLAFileTest {
         assertEquals("A*02", hla1.hlaAllele());
         assertEquals("Nivolumab", DatamodelTestFactory.extractTreatment(hla1).name());
         assertEquals("All cancer types", hla1.applicableCancerType().name());
+        assertEquals(LocalDate.of(2021, 2, 3), hla1.date());
+        assertEquals("efficacy evidence", hla1.description());
 
         ActionableHLA hla2 = findBySource(hlas, Knowledgebase.CKB_TRIAL);
         assertEquals("A*02", hla2.hlaAllele());
         assertEquals("Nivolumab", DatamodelTestFactory.setToField(DatamodelTestFactory.extractClinicalTrial(hla2).therapyNames()));
         assertEquals("Skin melanoma", hla2.applicableCancerType().name());
+        assertEquals(LocalDate.of(2021, 2, 3), hla2.date());
+        assertEquals("efficacy evidence", hla2.description());
     }
 
     @NotNull

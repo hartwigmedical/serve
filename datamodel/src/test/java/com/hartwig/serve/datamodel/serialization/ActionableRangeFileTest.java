@@ -3,6 +3,7 @@ package com.hartwig.serve.datamodel.serialization;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -52,6 +53,8 @@ public class ActionableRangeFileTest {
         assertEquals(55241707, (int) exon1.start());
         assertEquals(55279321, (int) exon1.end());
         assertEquals(MutationType.INFRAME, exon1.applicableMutationType());
+        assertEquals(LocalDate.of(2021, 2, 3), exon1.date());
+        assertEquals("efficacy evidence", exon1.description());
     }
 
     private static void assertActionableCodons(@NotNull List<ActionableRange> codons) {
@@ -63,6 +66,8 @@ public class ActionableRangeFileTest {
         assertEquals(140453136, (int) codon1.start());
         assertEquals(140453137, (int) codon1.end());
         assertEquals(MutationType.MISSENSE, codon1.applicableMutationType());
+        assertEquals(LocalDate.of(2021, 2, 3), codon1.date());
+        assertEquals("efficacy evidence", codon1.description());
     }
 
     @NotNull

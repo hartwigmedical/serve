@@ -3,6 +3,7 @@ package com.hartwig.serve.datamodel.serialization;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -40,42 +41,49 @@ public class ActionableGeneFileTest {
         assertEquals(GeneEvent.FUSION, gene1.event());
         assertEquals("Crizotinib", DatamodelTestFactory.extractTreatment(gene1).name());
         assertEquals("Lung Adenocarcinoma", gene1.applicableCancerType().name());
+        assertDateAndDescription(gene1);
 
         ActionableGene gene2 = findByGeneAndEvent(genes, "BRCA1", GeneEvent.INACTIVATION, "Solid Tumors");
         assertEquals("BRCA1", gene2.gene());
         assertEquals(GeneEvent.INACTIVATION, gene2.event());
         assertEquals("DRUP", DatamodelTestFactory.extractTreatment(gene2).name());
         assertEquals("Solid Tumors", gene2.applicableCancerType().name());
+        assertDateAndDescription(gene2);
 
         ActionableGene gene3 = findByGeneAndEvent(genes, "ERBB2", GeneEvent.AMPLIFICATION, "Breast Cancer");
         assertEquals("ERBB2", gene3.gene());
         assertEquals(GeneEvent.AMPLIFICATION, gene3.event());
         assertEquals("Trastuzumab", DatamodelTestFactory.extractTreatment(gene3).name());
         assertEquals("Breast Cancer", gene3.applicableCancerType().name());
+        assertDateAndDescription(gene3);
 
         ActionableGene gene4 = findByGeneAndEvent(genes, "ERBB2", GeneEvent.AMPLIFICATION, "Colorectal Cancer");
         assertEquals("ERBB2", gene4.gene());
         assertEquals(GeneEvent.AMPLIFICATION, gene4.event());
         assertEquals("Panitumumab", DatamodelTestFactory.extractTreatment(gene4).name());
         assertEquals("Colorectal Cancer", gene4.applicableCancerType().name());
+        assertDateAndDescription(gene4);
 
         ActionableGene gene5 = findByGeneAndEvent(genes, "FGFR2", GeneEvent.FUSION, "Bladder Cancer");
         assertEquals("FGFR2", gene5.gene());
         assertEquals(GeneEvent.FUSION, gene5.event());
         assertEquals("Erdafitinib", DatamodelTestFactory.extractTreatment(gene5).name());
         assertEquals("Bladder Cancer", gene5.applicableCancerType().name());
+        assertDateAndDescription(gene5);
 
         ActionableGene gene6 = findByGeneAndEvent(genes, "MET", GeneEvent.AMPLIFICATION, "Advanced Solid Tumor");
         assertEquals("MET", gene6.gene());
         assertEquals(GeneEvent.AMPLIFICATION, gene6.event());
         assertEquals("DRUP", DatamodelTestFactory.extractTreatment(gene6).name());
         assertEquals("Advanced Solid Tumor", gene6.applicableCancerType().name());
+        assertDateAndDescription(gene6);
 
         ActionableGene gene7 = findByGeneAndEvent(genes, "NRAS", GeneEvent.ACTIVATION, "Colorectal Cancer");
         assertEquals("NRAS", gene7.gene());
         assertEquals(GeneEvent.ACTIVATION, gene7.event());
         assertEquals("Cetuximab", DatamodelTestFactory.setToField(DatamodelTestFactory.extractClinicalTrial(gene7).therapyNames()));
         assertEquals("Colorectal Cancer", gene7.applicableCancerType().name());
+        assertDateAndDescription(gene7);
     }
 
     @NotNull
@@ -89,5 +97,10 @@ public class ActionableGeneFileTest {
 
         throw new IllegalStateException(
                 "Could not find data with gene " + geneName + " and event " + event + "and tumor location " + tumorLocation);
+    }
+
+    private static void assertDateAndDescription(@NotNull ActionableGene gene) {
+        assertEquals(LocalDate.of(2021, 2, 3), gene.date());
+        assertEquals("efficacy evidence", gene.description());
     }
 }

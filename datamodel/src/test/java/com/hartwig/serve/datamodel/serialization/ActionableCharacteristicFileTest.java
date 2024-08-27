@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -65,6 +66,8 @@ public class ActionableCharacteristicFileTest {
         assertEquals(EvidenceLevel.A, characteristic1.level());
         assertEquals(EvidenceDirection.RESPONSIVE, characteristic1.direction());
         assertEquals(2, characteristic1.evidenceUrls().size());
+        assertEquals(LocalDate.of(2021, 2, 3), characteristic1.date());
+        assertEquals("efficacy evidence", characteristic1.description());
 
         ActionableCharacteristic characteristic2 = findBySource(characteristics, Knowledgebase.CKB_TRIAL);
         ClinicalTrial trial = DatamodelTestFactory.extractClinicalTrial(characteristic2);
@@ -81,6 +84,8 @@ public class ActionableCharacteristicFileTest {
         assertEquals(EvidenceLevel.B, characteristic2.level());
         assertEquals(EvidenceDirection.RESPONSIVE, characteristic2.direction());
         assertEquals(2, characteristic2.evidenceUrls().size());
+        assertEquals(LocalDate.of(2021, 2, 3), characteristic2.date());
+        assertEquals("efficacy evidence", characteristic2.description());
     }
 
     @NotNull

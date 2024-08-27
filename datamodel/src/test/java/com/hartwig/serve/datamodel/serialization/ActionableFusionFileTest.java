@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -40,6 +41,8 @@ public class ActionableFusionFileTest {
         assertEquals("EGFR", fusion1.geneDown());
         assertEquals(8, (int) fusion1.minExonDown());
         assertEquals(9, (int) fusion1.maxExonDown());
+        assertEquals(LocalDate.of(2021, 2, 3), fusion1.date());
+        assertEquals("efficacy evidence", fusion1.description());
 
         ActionableFusion fusion2 = findByGeneUp(fusions, "EML4");
         assertNull(fusion2.minExonUp());
@@ -47,6 +50,8 @@ public class ActionableFusionFileTest {
         assertEquals("ALK", fusion2.geneDown());
         assertNull(fusion2.minExonDown());
         assertNull(fusion2.maxExonDown());
+        assertEquals(LocalDate.of(2021, 2, 3), fusion2.date());
+        assertEquals("efficacy evidence", fusion2.description());
     }
 
     @NotNull

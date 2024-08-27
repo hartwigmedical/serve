@@ -90,6 +90,6 @@ public class ActionableEventComparatorTest {
                 Sets.newHashSet(),
                 level,
                 direction,
-                Sets.newHashSet());
+                Sets.newHashSet(), null, null);
     }
 }

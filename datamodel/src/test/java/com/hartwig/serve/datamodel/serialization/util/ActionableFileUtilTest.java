@@ -2,6 +2,7 @@ package com.hartwig.serve.datamodel.serialization.util;
 
 import static org.junit.Assert.assertEquals;
 
+import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -34,7 +35,8 @@ public class ActionableFileUtilTest {
                 Sets.newHashSet(DatamodelTestFactory.cancerTypeBuilder().name("blacklist name").doid("blacklist doid").build()),
                 EvidenceLevel.C,
                 EvidenceDirection.RESISTANT,
-                Sets.newHashSet("url1", "url2"));
+                Sets.newHashSet("url1", "url2"),
+                LocalDate.of(2021, 2, 3), "description");
 
         String line = ActionableFileUtil.toLine(event);
         Map<String, Integer> fields = SerializationUtil.createFields(ActionableFileUtil.header(), ActionableFileUtil.FIELD_DELIMITER);
@@ -68,7 +70,8 @@ public class ActionableFileUtilTest {
                 Sets.newHashSet(DatamodelTestFactory.cancerTypeBuilder().name("blacklist name").doid("blacklist doid").build()),
                 EvidenceLevel.C,
                 EvidenceDirection.RESISTANT,
-                Sets.newHashSet("url1", "url2"));
+                Sets.newHashSet("url1", "url2"),
+                LocalDate.of(2021, 2, 3), "description");
 
         String line = ActionableFileUtil.toLine(event);
         Map<String, Integer> fields = SerializationUtil.createFields(ActionableFileUtil.header(), ActionableFileUtil.FIELD_DELIMITER);

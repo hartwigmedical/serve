@@ -78,7 +78,7 @@ public final class KnownHotspotFile {
 
     @NotNull
     private static KnownHotspot fromLine(@NotNull String line, @NotNull Map<String, Integer> fields) {
-        String[] values = line.split(FIELD_DELIMITER);
+        String[] values = line.split(FIELD_DELIMITER, -1);
 
         return ImmutableKnownHotspot.builder()
                 .gene(values[fields.get("gene")])

@@ -1,8 +1,8 @@
 gene	event	source	sourceEvent	sourceUrls	nctId	title	acronym	genderCriterium	countriesAndCities	hospitalsPerCity	treatment	treatmentApproachesDrugClass	treatmentApproachesTherapy	applicableCancerType	applicableDoid	blacklistCancerTypes	level	direction	evidenceUrls	date	description
-ALK	FUSION	CKB_EVIDENCE	fusion	http							Crizotinib			Lung Adenocarcinoma	X		A	RESPONSIVE	https	2021-02-03	efficacy evidence
-BRCA1	INACTIVATION	CKB_EVIDENCE	inact	http							DRUP			Solid Tumors	X	Hematologic cancer;2531	B	RESPONSIVE	http	2021-02-03	efficacy evidence
-ERBB2	AMPLIFICATION	CKB_EVIDENCE	amp	http							Trastuzumab			Breast Cancer	X		A	RESPONSIVE	http	2021-02-03	efficacy evidence
-ERBB2	AMPLIFICATION	CKB_EVIDENCE	amp	http							Panitumumab			Colorectal Cancer	X		B	RESISTANT	http	2021-02-03	efficacy evidence
-FGFR2	FUSION	CKB_EVIDENCE	fusion	http							Erdafitinib			Bladder Cancer	X		B	RESPONSIVE	http	2021-02-03	efficacy evidence
-MET	AMPLIFICATION	CKB_EVIDENCE	amp	http							DRUP			Advanced Solid Tumor	X	Hematologic cancer;2531	B	RESPONSIVE	http	2021-02-03	efficacy evidence
-NRAS	ACTIVATION	CKB_TRIAL	act	http	NCT1	study1	study1	male	Belgium(Antwerpen)	Antwerpen(ZAS Vincentius)	Cetuximab			Colorectal Cancer	X		A	RESISTANT	http	2021-02-03	efficacy evidence
+ALK	FUSION	CKB_EVIDENCE	fusion	http							Crizotinib			Lung Adenocarcinoma	X		A	RESPONSIVE	https	2021-02-03	efficacy evidence A
+BRCA1	INACTIVATION	CKB_EVIDENCE	inact	http							DRUP			Solid Tumors	X	Hematologic cancer;2531	B	RESPONSIVE	http	2021-02-04	efficacy evidence B
+ERBB2	AMPLIFICATION	CKB_EVIDENCE	amp	http							Trastuzumab			Breast Cancer	X		A	RESPONSIVE	http	2021-02-05	efficacy evidence C
+ERBB2	AMPLIFICATION	CKB_EVIDENCE	amp	http							Panitumumab			Colorectal Cancer	X		B	RESISTANT	http	2021-02-06	efficacy evidence D
+FGFR2	FUSION	CKB_EVIDENCE	fusion	http							Erdafitinib			Bladder Cancer	X		B	RESPONSIVE	http	2021-02-07	efficacy evidence E
+MET	AMPLIFICATION	CKB_EVIDENCE	amp	http							DRUP			Advanced Solid Tumor	X	Hematologic cancer;2531	B	RESPONSIVE	http	2021-02-08	efficacy evidence F
+NRAS	ACTIVATION	CKB_TRIAL	act	http	NCT1	study1	study1	male	Belgium(Antwerpen)	Antwerpen(ZAS Vincentius)	Cetuximab			Colorectal Cancer	X		A	RESISTANT	http		

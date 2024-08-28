@@ -100,7 +100,8 @@ public final class DatamodelTestFactory {
                 EvidenceLevel.A,
                 EvidenceDirection.NO_BENEFIT,
                 Sets.newHashSet(),
-                null, null);
+                null,
+                null);
     }
 
     @NotNull

@@ -42,7 +42,7 @@ public class ActionableFusionFileTest {
         assertEquals(8, (int) fusion1.minExonDown());
         assertEquals(9, (int) fusion1.maxExonDown());
         assertEquals(LocalDate.of(2021, 2, 3), fusion1.date());
-        assertEquals("efficacy evidence", fusion1.description());
+        assertEquals("efficacy evidence A", fusion1.description());
 
         ActionableFusion fusion2 = findByGeneUp(fusions, "EML4");
         assertNull(fusion2.minExonUp());
@@ -50,8 +50,8 @@ public class ActionableFusionFileTest {
         assertEquals("ALK", fusion2.geneDown());
         assertNull(fusion2.minExonDown());
         assertNull(fusion2.maxExonDown());
-        assertEquals(LocalDate.of(2021, 2, 3), fusion2.date());
-        assertEquals("efficacy evidence", fusion2.description());
+        assertEquals(LocalDate.of(2021, 2, 4), fusion2.date());
+        assertEquals("efficacy evidence B", fusion2.description());
     }
 
     @NotNull

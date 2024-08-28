@@ -1,6 +1,7 @@
 package com.hartwig.serve.datamodel.serialization;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -55,8 +56,8 @@ public class ActionableHotspotFileTest {
         assertEquals("T", hotspot2.alt());
         assertEquals("Vemurafenib", DatamodelTestFactory.setToField(DatamodelTestFactory.extractClinicalTrial(hotspot2).therapyNames()));
         assertEquals("Solid tumor", hotspot2.applicableCancerType().name());
-        assertEquals(LocalDate.of(2021, 2, 3), hotspot2.date());
-        assertEquals("efficacy evidence", hotspot2.description());
+        assertNull(hotspot2.date());
+        assertNull(hotspot2.description());
     }
 
     @NotNull

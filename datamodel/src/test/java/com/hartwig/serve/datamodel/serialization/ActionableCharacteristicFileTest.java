@@ -84,8 +84,8 @@ public class ActionableCharacteristicFileTest {
         assertEquals(EvidenceLevel.B, characteristic2.level());
         assertEquals(EvidenceDirection.RESPONSIVE, characteristic2.direction());
         assertEquals(2, characteristic2.evidenceUrls().size());
-        assertEquals(LocalDate.of(2021, 2, 3), characteristic2.date());
-        assertEquals("efficacy evidence", characteristic2.description());
+        assertNull(characteristic2.date());
+        assertNull(characteristic2.description());
     }
 
     @NotNull

@@ -97,6 +97,7 @@ public final class DatamodelTestFactory {
                 DatamodelTestFactory.cancerTypeBuilder().build(),
                 Sets.newHashSet(),
                 EvidenceLevel.A,
+                ApprovalStatus.FDA_APPROVED,
                 EvidenceDirection.NO_BENEFIT,
                 Sets.newHashSet());
     }
@@ -104,8 +105,8 @@ public final class DatamodelTestFactory {
     @NotNull
     public static ActionableEvent createActionableEvent(@NotNull Knowledgebase source, @NotNull String sourceEvent,
             @NotNull Set<String> sourceUrls, @NotNull Intervention intervention, @NotNull CancerType applicableCancerType,
-            @NotNull Set<CancerType> blacklistCancerTypes, @NotNull EvidenceLevel level, @NotNull EvidenceDirection direction,
-            @NotNull Set<String> evidenceUrls) {
+            @NotNull Set<CancerType> blacklistCancerTypes, @NotNull EvidenceLevel level, @NotNull ApprovalStatus approvalStatus,
+            @NotNull EvidenceDirection direction, @NotNull Set<String> evidenceUrls) {
         return new ActionableEventImpl(source,
                 sourceEvent,
                 sourceUrls,
@@ -113,6 +114,7 @@ public final class DatamodelTestFactory {
                 applicableCancerType,
                 blacklistCancerTypes,
                 level,
+                approvalStatus,
                 direction,
                 evidenceUrls);
     }
@@ -134,13 +136,16 @@ public final class DatamodelTestFactory {
         @NotNull
         private final EvidenceLevel level;
         @NotNull
+        private final ApprovalStatus approvalStatus;
+        @NotNull
         private final EvidenceDirection direction;
         @NotNull
         private final Set<String> evidenceUrls;
 
         public ActionableEventImpl(@NotNull Knowledgebase source, @NotNull String sourceEvent, @NotNull Set<String> sourceUrls,
                 @NotNull Intervention intervention, @NotNull CancerType applicableCancerType, @NotNull Set<CancerType> blacklistCancerTypes,
-                @NotNull EvidenceLevel level, @NotNull EvidenceDirection direction, @NotNull Set<String> evidenceUrls) {
+                @NotNull EvidenceLevel level, @NotNull ApprovalStatus approvalStatus, @NotNull EvidenceDirection direction,
+                @NotNull Set<String> evidenceUrls) {
             this.source = source;
             this.sourceEvent = sourceEvent;
             this.sourceUrls = sourceUrls;
@@ -148,6 +153,7 @@ public final class DatamodelTestFactory {
             this.applicableCancerType = applicableCancerType;
             this.blacklistCancerTypes = blacklistCancerTypes;
             this.level = level;
+            this.approvalStatus = approvalStatus;
             this.direction = direction;
             this.evidenceUrls = evidenceUrls;
         }
@@ -192,6 +198,12 @@ public final class DatamodelTestFactory {
         @Override
         public EvidenceLevel level() {
             return level;
+        }
+
+        @NotNull
+        @Override
+        public ApprovalStatus approvalStatus() {
+            return approvalStatus;
         }
 
         @NotNull

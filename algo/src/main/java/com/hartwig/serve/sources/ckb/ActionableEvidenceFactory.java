@@ -14,6 +14,7 @@ import com.hartwig.serve.ckb.datamodel.reference.Reference;
 import com.hartwig.serve.ckb.datamodel.therapy.Therapy;
 import com.hartwig.serve.ckb.datamodel.treatmentapproaches.DrugClassTreatmentApproach;
 import com.hartwig.serve.ckb.datamodel.treatmentapproaches.TherapyTreatmentApproach;
+import com.hartwig.serve.datamodel.ApprovalStatus;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.ImmutableTreatment;
@@ -82,6 +83,7 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
 
         for (Evidence evidence : evidencesWithUsableType(entry.evidences())) {
             EvidenceLevel level = resolveLevel(evidence.ampCapAscoEvidenceLevel());
+            ApprovalStatus approvalStatus = resolveApprovalStatus(evidence.approvalStatus());
             EvidenceDirection direction = resolveDirection(evidence.responseType());
             CancerTypeExtraction cancerTypeExtraction = ActionableFunctions.extractCancerTypeDetails(evidence.indication());
 
@@ -193,6 +195,20 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
             LOGGER.warn("Could not resolve CKB evidence level: '{}'", evidenceLabel);
         }
         return level;
+    }
+
+    @Nullable
+    @VisibleForTesting
+    static ApprovalStatus resolveApprovalStatus(@Nullable String approvalStatusLabel) {
+        if (approvalStatusLabel == null || approvalStatusLabel.equals("NA")) {
+            return null;
+        }
+
+        ApprovalStatus approvalStatus = ApprovalStatus.fromString(approvalStatusLabel);
+        if (approvalStatus == null) {
+            LOGGER.warn("Could not resolve CKB approval status: '{}'", approvalStatusLabel);
+        }
+        return approvalStatus;
     }
 
     @Nullable

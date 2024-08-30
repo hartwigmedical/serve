@@ -1,4 +1,4 @@
-geneUp	minExonUp	maxExonUp	geneDown	minExonDown	maxExonDown	source	sourceEvent	sourceUrls	nctId	title	acronym	genderCriterium	countriesAndCities	hospitalsPerCity	treatment	treatmentApproachesDrugClass	treatmentApproachesTherapy	applicableCancerType	applicableDoid	blacklistCancerTypes	level	direction	evidenceUrls
-EGFR	1	2	EGFR	8	9	CKB_EVIDENCE	fusion	http							Osimertinib			Lung Cancer	X		A	RESPONSIVE	http,http
-EML4			ALK			CKB_EVIDENCE	fusion	http							Crizotinib			Lung Cancer	X		A	RESPONSIVE	http,http
-PCM1			JAK2			CKB_TRIAL	fusion	http	NCT1	study1	study1	male	Germany(Koln;Frankfurt)	Koln(Cellitinnen-Krankenhaus St. Marien),Frankfurt(Burgerhospital Frankfurt)	Ruxolitinib			Leukemia	X		B	RESPONSIVE	http,http
+geneUp	minExonUp	maxExonUp	geneDown	minExonDown	maxExonDown	source	sourceEvent	sourceUrls	nctId	title	acronym	genderCriterium	countriesAndCities	hospitalsPerCity	treatment	treatmentApproachesDrugClass	treatmentApproachesTherapy	applicableCancerType	applicableDoid	blacklistCancerTypes	level	approvalStatus	direction	evidenceUrls
+EGFR	1	2	EGFR	8	9	CKB_EVIDENCE	fusion	http							Osimertinib			Lung Cancer	X		A	Guideline	RESPONSIVE	http,http
+EML4			ALK			CKB_EVIDENCE	fusion	http							Crizotinib			Lung Cancer	X		A	Guideline	RESPONSIVE	http,http
+PCM1			JAK2			CKB_TRIAL	fusion	http	NCT1	study1	study1	male	Germany(Koln;Frankfurt)	Koln(Cellitinnen-Krankenhaus St. Marien),Frankfurt(Burgerhospital Frankfurt)	Ruxolitinib			Leukemia	X		B	Guideline	RESPONSIVE	http,http

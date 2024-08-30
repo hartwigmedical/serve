@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.ActionableEvent;
+import com.hartwig.serve.datamodel.ApprovalStatus;
 import com.hartwig.serve.datamodel.CancerType;
 import com.hartwig.serve.datamodel.ClinicalTrial;
 import com.hartwig.serve.datamodel.Country;
@@ -54,6 +55,7 @@ public final class ActionableFileUtil {
                 .add("applicableDoid")
                 .add("blacklistCancerTypes")
                 .add("level")
+                .add("approvalStatus")
                 .add("direction")
                 .add("evidenceUrls")
                 .toString();
@@ -131,6 +133,10 @@ public final class ActionableFileUtil {
             public EvidenceLevel level() {
                 return EvidenceLevel.valueOf(values[fields.get("level")]);
             }
+
+            @NotNull
+            @Override
+            public ApprovalStatus approvalStatus() { return ApprovalStatus.fromString(values[fields.get("approvalStatus")]); }
 
             @NotNull
             @Override

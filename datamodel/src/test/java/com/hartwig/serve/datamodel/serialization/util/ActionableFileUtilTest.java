@@ -8,6 +8,7 @@ import java.util.Set;
 
 import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.ActionableEvent;
+import com.hartwig.serve.datamodel.ApprovalStatus;
 import com.hartwig.serve.datamodel.CancerType;
 import com.hartwig.serve.datamodel.ClinicalTrial;
 import com.hartwig.serve.datamodel.Country;
@@ -33,6 +34,7 @@ public class ActionableFileUtilTest {
                 DatamodelTestFactory.cancerTypeBuilder().name("applicable name").doid("applicable doid").build(),
                 Sets.newHashSet(DatamodelTestFactory.cancerTypeBuilder().name("blacklist name").doid("blacklist doid").build()),
                 EvidenceLevel.C,
+                ApprovalStatus.CLINICAL_STUDY,
                 EvidenceDirection.RESISTANT,
                 Sets.newHashSet("url1", "url2"));
 
@@ -67,6 +69,7 @@ public class ActionableFileUtilTest {
                 DatamodelTestFactory.cancerTypeBuilder().name("applicable name").doid("applicable doid").build(),
                 Sets.newHashSet(DatamodelTestFactory.cancerTypeBuilder().name("blacklist name").doid("blacklist doid").build()),
                 EvidenceLevel.C,
+                ApprovalStatus.CLINICAL_STUDY,
                 EvidenceDirection.RESISTANT,
                 Sets.newHashSet("url1", "url2"));
 

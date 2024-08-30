@@ -27,6 +27,8 @@ CREATE TABLE `actionableHotspot`
     `level` varchar(50) NOT NULL,
     `direction` varchar(50) NOT NULL,
     `evidenceUrls` varchar(1000),
+    `date` DATETIME,
+    `description` varchar(1000),
     PRIMARY KEY (`id`)
 );
 
@@ -57,6 +59,8 @@ CREATE TABLE `actionableCodon`
     `level` varchar(50) NOT NULL,
     `direction` varchar(50) NOT NULL,
     `evidenceUrls` varchar(1000),
+    `date` DATETIME,
+    `description` varchar(1000),
     PRIMARY KEY (`id`)
 );
 
@@ -87,6 +91,8 @@ CREATE TABLE `actionableExon`
     `level` varchar(50) NOT NULL,
     `direction` varchar(50) NOT NULL,
     `evidenceUrls` varchar(1000),
+    `date` DATETIME,
+    `description` varchar(1000),
     PRIMARY KEY (`id`)
 );
 
@@ -114,6 +120,8 @@ CREATE TABLE `actionableGene`
     `level` varchar(50) NOT NULL,
     `direction` varchar(50) NOT NULL,
     `evidenceUrls` varchar(1000),
+    `date` DATETIME,
+    `description` varchar(1000),
     PRIMARY KEY (`id`)
 );
 
@@ -145,6 +153,8 @@ CREATE TABLE `actionableFusion`
     `level` varchar(50) NOT NULL,
     `direction` varchar(50) NOT NULL,
     `evidenceUrls` varchar(1000),
+    `date` DATETIME,
+    `description` varchar(1000),
     PRIMARY KEY (`id`)
 );
 
@@ -173,6 +183,8 @@ CREATE TABLE `actionableCharacteristic`
     `level` varchar(50) NOT NULL,
     `direction` varchar(50) NOT NULL,
     `evidenceUrls` varchar(1000),
+    `date` DATETIME,
+    `description` varchar(1000),
     PRIMARY KEY (`id`)
 );
 
@@ -199,6 +211,8 @@ CREATE TABLE `actionableHla`
     `level` varchar(50) NOT NULL,
     `direction` varchar(50) NOT NULL,
     `evidenceUrls` varchar(1000),
+    `date` DATETIME,
+    `description` varchar(1000),
     PRIMARY KEY (`id`)
 );
 

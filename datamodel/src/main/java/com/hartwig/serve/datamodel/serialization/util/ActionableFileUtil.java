@@ -193,6 +193,7 @@ public final class ActionableFileUtil {
                 .add(event.applicableCancerType().doid())
                 .add(cancerTypesToField(event.blacklistCancerTypes()))
                 .add(event.level().toString())
+                .add(event.approvalStatus().getDescription())
                 .add(event.direction().toString())
                 .add(setToField(event.evidenceUrls()))
                 .toString();

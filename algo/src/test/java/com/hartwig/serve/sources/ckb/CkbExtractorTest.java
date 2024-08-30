@@ -145,6 +145,7 @@ public class CkbExtractorTest {
                 "any treatment",
                 "any indication",
                 "A",
+                "Guideline",
                 "DOID:162");
 
         return CkbTestFactory.builder()

@@ -34,7 +34,7 @@ public class ActionableFileUtilTest {
                 DatamodelTestFactory.cancerTypeBuilder().name("applicable name").doid("applicable doid").build(),
                 Sets.newHashSet(DatamodelTestFactory.cancerTypeBuilder().name("blacklist name").doid("blacklist doid").build()),
                 EvidenceLevel.C,
-                ApprovalStatus.CLINICAL_STUDY,
+                ApprovalStatus.GUIDELINE,
                 EvidenceDirection.RESISTANT,
                 Sets.newHashSet("url1", "url2"));
 

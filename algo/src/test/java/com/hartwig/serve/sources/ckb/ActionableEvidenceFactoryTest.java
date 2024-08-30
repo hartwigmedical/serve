@@ -34,8 +34,16 @@ public class ActionableEvidenceFactoryTest {
 
     @Test
     public void shouldIgnoreNonActionableKrasDeletion() {
-        CkbEntry entryDeletion =
-                CkbTestFactory.createEntry("KRAS", "deletion", "KRAS deletion", "sensitive", "Emerging", "AB", "AB", "A", "DOID:162");
+        CkbEntry entryDeletion = CkbTestFactory.createEntry("KRAS",
+                "deletion",
+                "KRAS deletion",
+                "sensitive",
+                "Emerging",
+                "AB",
+                "AB",
+                "A",
+                "Guideline",
+                "DOID:162");
         ActionableEvidenceFactory actionableEvidenceFactory = new ActionableEvidenceFactory(TREATMENT_APPROACH_CURATOR, BLACKLIST_MODEL);
         Set<ActionableEntry> entryDeletionSet = actionableEvidenceFactory.create(entryDeletion, "KRAS", "gene");
         assertEquals(0, entryDeletionSet.size());
@@ -44,7 +52,7 @@ public class ActionableEvidenceFactoryTest {
     @Test
     public void shouldCreateActionableMSIEntry() {
         CkbEntry entryCharacteristics =
-                CkbTestFactory.createEntry("-", "MSI neg", "MSI neg", "sensitive", "Actionable", "AB", "AB", "A", "DOID:162");
+                CkbTestFactory.createEntry("-", "MSI neg", "MSI neg", "sensitive", "Actionable", "AB", "AB", "A", "Guideline", "DOID:162");
         ActionableEvidenceFactory actionableEvidenceFactoryCharacteristic =
                 new ActionableEvidenceFactory(TREATMENT_APPROACH_CURATOR, BLACKLIST_MODEL);
         Set<ActionableEntry> entryCharacteristicsSet =
@@ -73,6 +81,7 @@ public class ActionableEvidenceFactoryTest {
                 "AB",
                 "AB",
                 "A",
+                "Guideline",
                 "DOID:163");
         ActionableEvidenceFactory actionableEvidenceFactoryAmplification =
                 new ActionableEvidenceFactory(TREATMENT_APPROACH_CURATOR, BLACKLIST_MODEL);
@@ -92,8 +101,16 @@ public class ActionableEvidenceFactoryTest {
 
     @Test
     public void shouldCreateActionableBrafHotspotEntry() {
-        CkbEntry entryHotspot =
-                CkbTestFactory.createEntry("BRAF", "BRAF V600E", "BRAF V600E", "sensitive", "Actionable", "AB", "AB", "A", "DOID:162");
+        CkbEntry entryHotspot = CkbTestFactory.createEntry("BRAF",
+                "BRAF V600E",
+                "BRAF V600E",
+                "sensitive",
+                "Actionable",
+                "AB",
+                "AB",
+                "A",
+                "Guideline",
+                "DOID:162");
         ActionableEvidenceFactory actionableEvidenceFactoryHotspot =
                 new ActionableEvidenceFactory(TREATMENT_APPROACH_CURATOR, BLACKLIST_MODEL);
         Set<ActionableEntry> entryHotspotSet = actionableEvidenceFactoryHotspot.create(entryHotspot, "BRAF", "BRAF");
@@ -164,6 +181,7 @@ public class ActionableEvidenceFactoryTest {
                 "Nivolumab",
                 "AB",
                 "B",
+                "Guideline",
                 "DOID:163");
         ActionableEvidenceFactory evidence = new ActionableEvidenceFactory(TREATMENT_APPROACH_CURATOR, model);
         Set<ActionableEntry> interpretEvidenceEntry = evidence.create(entryBlacklist, "KRAS", "KRAS");
@@ -182,6 +200,7 @@ public class ActionableEvidenceFactoryTest {
                 "AB",
                 "AB",
                 "B",
+                "Guideline",
                 "DOID:163");
         ActionableEvidenceFactory evidence = new ActionableEvidenceFactory(TREATMENT_APPROACH_CURATOR, model);
         Set<ActionableEntry> interpretEvidenceEntry = evidence.create(entryBlacklist, "BRAF", "BRAF");
@@ -200,6 +219,7 @@ public class ActionableEvidenceFactoryTest {
                 "Immuno",
                 "AB",
                 "A",
+                "Guideline",
                 "DOID:163");
         ActionableEvidenceFactory evidence = new ActionableEvidenceFactory(TREATMENT_APPROACH_CURATOR, model);
         Set<ActionableEntry> interpretEvidenceEntry = evidence.create(entry, "KRAS", "KRAS");
@@ -218,6 +238,7 @@ public class ActionableEvidenceFactoryTest {
                 "Nivolumab",
                 "AB",
                 "B",
+                "Guideline",
                 "DOID:163");
         ActionableEvidenceFactory evidence = new ActionableEvidenceFactory(TREATMENT_APPROACH_CURATOR, model);
         Set<ActionableEntry> interpretEvidenceEntry = evidence.create(entry, "KRAS", "KRAS");
@@ -236,6 +257,7 @@ public class ActionableEvidenceFactoryTest {
                 "Nivolumab",
                 "AB",
                 "B",
+                "Guideline",
                 "DOID:163");
         ActionableEvidenceFactory evidence = new ActionableEvidenceFactory(TREATMENT_APPROACH_CURATOR, model);
         Set<ActionableEntry> interpretEvidenceEntry = evidence.create(entry, "KRAS", "KRAS");

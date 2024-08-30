@@ -87,7 +87,7 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
             EvidenceDirection direction = resolveDirection(evidence.responseType());
             CancerTypeExtraction cancerTypeExtraction = ActionableFunctions.extractCancerTypeDetails(evidence.indication());
 
-            if (level != null && direction != null && cancerTypeExtraction != null) {
+            if (level != null && direction != null && cancerTypeExtraction != null && approvalStatus != null) {
                 String treatment = evidence.therapy().therapyName();
 
                 if (!blacklistEvidence.isBlacklistEvidence(treatment,
@@ -151,6 +151,7 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
                             .applicableCancerType(cancerTypeExtraction.applicableCancerType())
                             .blacklistCancerTypes(cancerTypeExtraction.blacklistedCancerTypes())
                             .level(level)
+                            .approvalStatus(approvalStatus)
                             .direction(direction)
                             .evidenceUrls(evidenceUrls)
                             .build());
@@ -203,12 +204,7 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
         if (approvalStatusLabel == null || approvalStatusLabel.equals("NA")) {
             return null;
         }
-
-        ApprovalStatus approvalStatus = ApprovalStatus.fromString(approvalStatusLabel);
-        if (approvalStatus == null) {
-            LOGGER.warn("Could not resolve CKB approval status: '{}'", approvalStatusLabel);
-        }
-        return approvalStatus;
+        return ApprovalStatus.fromString(approvalStatusLabel);
     }
 
     @Nullable

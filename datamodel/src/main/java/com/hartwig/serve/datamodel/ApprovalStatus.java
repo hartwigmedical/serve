@@ -1,7 +1,6 @@
 package com.hartwig.serve.datamodel;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public enum ApprovalStatus {
     PRECLINICAL("Preclinical"),
@@ -24,7 +23,8 @@ public enum ApprovalStatus {
     PHASE_IB_II("Phase Ib/II"),
     PHASE_0("Phase 0"),
     CLINICAL_STUDY_META_ANALYSIS("Clinical Study - Meta-analysis"),
-    FDA_CONTRAINDICATED("FDA contraindicated");
+    FDA_CONTRAINDICATED("FDA contraindicated"),
+    EMPTY("");
 
     private final String description;
 
@@ -36,13 +36,13 @@ public enum ApprovalStatus {
         return description;
     }
 
-    @Nullable
+    @NotNull
     public static ApprovalStatus fromString(@NotNull String description) {
         for (ApprovalStatus status : ApprovalStatus.values()) {
             if (status.getDescription().equalsIgnoreCase(description)) {
                 return status;
             }
         }
-        return null;
+        throw new IllegalArgumentException("Could not find enum value for approval status " + description);
     }
 }

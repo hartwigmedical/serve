@@ -52,6 +52,7 @@ public class ActionableFileUtilTest {
         assertEquals(event.applicableCancerType(), coveredEvent.applicableCancerType());
         assertEquals(event.blacklistCancerTypes(), coveredEvent.blacklistCancerTypes());
         assertEquals(event.level(), coveredEvent.level());
+        assertEquals(event.approvalStatus(), coveredEvent.approvalStatus());
         assertEquals(event.direction(), coveredEvent.direction());
         assertEquals(event.evidenceUrls(), coveredEvent.evidenceUrls());
     }
@@ -87,6 +88,7 @@ public class ActionableFileUtilTest {
         assertEquals(event.applicableCancerType(), coveredEvent.applicableCancerType());
         assertEquals(event.blacklistCancerTypes(), coveredEvent.blacklistCancerTypes());
         assertEquals(event.level(), coveredEvent.level());
+        assertEquals(event.approvalStatus(), coveredEvent.approvalStatus());
         assertEquals(event.direction(), coveredEvent.direction());
         assertEquals(event.evidenceUrls(), coveredEvent.evidenceUrls());
     }

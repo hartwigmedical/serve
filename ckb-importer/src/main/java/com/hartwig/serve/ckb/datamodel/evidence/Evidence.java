@@ -7,7 +7,6 @@ import com.hartwig.serve.ckb.datamodel.reference.Reference;
 import com.hartwig.serve.ckb.datamodel.therapy.Therapy;
 import com.hartwig.serve.ckb.datamodel.treatmentapproaches.DrugClassTreatmentApproach;
 import com.hartwig.serve.ckb.datamodel.treatmentapproaches.TherapyTreatmentApproach;
-import com.hartwig.serve.datamodel.ApprovalStatus;
 
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;

@@ -10,6 +10,7 @@ CREATE TABLE `actionableHotspot`
     `ref` varchar(100) NOT NULL,
     `alt` varchar(100) NOT NULL,
     `source` varchar(50) NOT NULL,
+    `date` DATETIME NOT NULL,
     `sourceEvent` varchar(50) NOT NULL,
     `sourceUrls` varchar(2000),
     `nctId` varchar(100),
@@ -24,12 +25,11 @@ CREATE TABLE `actionableHotspot`
     `applicableCancerType` varchar(100) NOT NULL,
     `applicableDoid` varchar(50) NOT NULL,
     `blacklistCancerTypes` varchar(500),
+    `description` varchar(1000) NOT NULL,
     `level` varchar(50) NOT NULL,
     `approvalStatus` varchar(100) NOT NULL,
     `direction` varchar(50) NOT NULL,
     `evidenceUrls` varchar(1000),
-    `date` DATETIME,
-    `description` varchar(1000),
     PRIMARY KEY (`id`)
 );
 
@@ -43,6 +43,7 @@ CREATE TABLE `actionableCodon`
     `end` int NOT NULL,
     `applicableMutationType` varchar(50) NOT NULL,
     `source` varchar(50) NOT NULL,
+    `date` DATETIME NOT NULL,
     `sourceEvent` varchar(50) NOT NULL,
     `sourceUrls` varchar(2000),
     `nctId` varchar(100),
@@ -57,12 +58,11 @@ CREATE TABLE `actionableCodon`
     `applicableCancerType` varchar(100) NOT NULL,
     `applicableDoid` varchar(50) NOT NULL,
     `blacklistCancerTypes` varchar(500),
+    `description` varchar(1000) NOT NULL,
     `level` varchar(50) NOT NULL,
     `approvalStatus` varchar(100) NOT NULL,
     `direction` varchar(50) NOT NULL,
     `evidenceUrls` varchar(1000),
-    `date` DATETIME,
-    `description` varchar(1000),
     PRIMARY KEY (`id`)
 );
 
@@ -76,6 +76,7 @@ CREATE TABLE `actionableExon`
     `end` int NOT NULL,
     `applicableMutationType` varchar(50) NOT NULL,
     `source` varchar(50) NOT NULL,
+    `date` DATETIME NOT NULL,
     `sourceEvent` varchar(50) NOT NULL,
     `sourceUrls` varchar(2000),
     `nctId` varchar(100),
@@ -90,12 +91,11 @@ CREATE TABLE `actionableExon`
     `applicableCancerType` varchar(100) NOT NULL,
     `applicableDoid` varchar(50) NOT NULL,
     `blacklistCancerTypes` varchar(500),
+    `description` varchar(1000) NOT NULL,
     `level` varchar(50) NOT NULL,
     `approvalStatus` varchar(100) NOT NULL,
     `direction` varchar(50) NOT NULL,
     `evidenceUrls` varchar(1000),
-    `date` DATETIME,
-    `description` varchar(1000),
     PRIMARY KEY (`id`)
 );
 
@@ -106,6 +106,7 @@ CREATE TABLE `actionableGene`
     `gene` varchar(50) NOT NULL,
     `event` varchar(50) NOT NULL,
     `source` varchar(50) NOT NULL,
+    `date` DATETIME NOT NULL,
     `sourceEvent` varchar(50) NOT NULL,
     `sourceUrls` varchar(2000),
     `nctId` varchar(100),
@@ -120,12 +121,11 @@ CREATE TABLE `actionableGene`
     `applicableCancerType` varchar(100) NOT NULL,
     `applicableDoid` varchar(50) NOT NULL,
     `blacklistCancerTypes` varchar(500),
+    `description` varchar(1000) NOT NULL,
     `level` varchar(50) NOT NULL,
     `approvalStatus` varchar(100) NOT NULL,
     `direction` varchar(50) NOT NULL,
     `evidenceUrls` varchar(1000),
-    `date` DATETIME,
-    `description` varchar(1000),
     PRIMARY KEY (`id`)
 );
 
@@ -140,6 +140,7 @@ CREATE TABLE `actionableFusion`
     `minExonDown` int,
     `maxExonDown` int,
     `source` varchar(50) NOT NULL,
+    `date` DATETIME NOT NULL,
     `sourceEvent` varchar(50) NOT NULL,
     `sourceUrls` varchar(2000),
     `nctId` varchar(100),
@@ -154,12 +155,11 @@ CREATE TABLE `actionableFusion`
     `applicableCancerType` varchar(100) NOT NULL,
     `applicableDoid` varchar(50) NOT NULL,
     `blacklistCancerTypes` varchar(500),
+    `description` varchar(1000) NOT NULL,
     `level` varchar(50) NOT NULL,
     `approvalStatus` varchar(100) NOT NULL,
     `direction` varchar(50) NOT NULL,
     `evidenceUrls` varchar(1000),
-    `date` DATETIME,
-    `description` varchar(1000),
     PRIMARY KEY (`id`)
 );
 
@@ -171,6 +171,7 @@ CREATE TABLE `actionableCharacteristic`
     `cutoffType` varchar(50),
     `cutoff` double precision,
     `source` varchar(50) NOT NULL,
+    `date` DATETIME NOT NULL,
     `sourceEvent` varchar(50) NOT NULL,
     `sourceUrls` varchar(2000),
     `nctId` varchar(100),
@@ -185,12 +186,11 @@ CREATE TABLE `actionableCharacteristic`
     `applicableCancerType` varchar(100) NOT NULL,
     `applicableDoid` varchar(50) NOT NULL,
     `blacklistCancerTypes` varchar(500),
+    `description` varchar(1000) NOT NULL,
     `level` varchar(50) NOT NULL,
     `approvalStatus` varchar(100) NOT NULL,
     `direction` varchar(50) NOT NULL,
     `evidenceUrls` varchar(1000),
-    `date` DATETIME,
-    `description` varchar(1000),
     PRIMARY KEY (`id`)
 );
 
@@ -200,6 +200,7 @@ CREATE TABLE `actionableHla`
     `modified` DATETIME NOT NULL,
     `hlaAllele` varchar(50) NOT NULL,
     `source` varchar(50) NOT NULL,
+    `date` DATETIME NOT NULL,
     `sourceEvent` varchar(50) NOT NULL,
     `sourceUrls` varchar(2000),
     `nctId` varchar(100),
@@ -214,12 +215,11 @@ CREATE TABLE `actionableHla`
     `applicableCancerType` varchar(100) NOT NULL,
     `applicableDoid` varchar(50) NOT NULL,
     `blacklistCancerTypes` varchar(500),
+    `description` varchar(1000) NOT NULL,
     `level` varchar(50) NOT NULL,
     `approvalStatus` varchar(100) NOT NULL,
     `direction` varchar(50) NOT NULL,
     `evidenceUrls` varchar(1000),
-    `date` DATETIME,
-    `description` varchar(1000),
     PRIMARY KEY (`id`)
 );
 

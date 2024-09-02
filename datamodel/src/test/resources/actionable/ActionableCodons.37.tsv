@@ -1,3 +1,3 @@
 gene	chromosome	start	end	applicableMutationType	source	sourceEvent	sourceUrls	nctId	title	acronym	genderCriterium	countriesAndCities	hospitalsPerCity	treatment	treatmentApproachesDrugClass	treatmentApproachesTherapy	applicableCancerType	applicableDoid	blacklistCancerTypes	level	approvalStatus	direction	evidenceUrls
-BRAF	7	140453136	140453137	MISSENSE	CKB_TRIAL	600X	NCT1	study1	study1			Netherlands(Rotterdam)	Rotterdam(EMC)	Vemurafenib			Breast cancer	X		A	Guideline	RESPONSIVE	http
-BRAF	7	140453136	140453137	MISSENSE	CKB_EVIDENCE	600X								Vemurafenib			Skin Melanoma	X		A	Guideline	RESPONSIVE	http
+BRAF	7	140453136	140453137	MISSENSE	CKB_TRIAL	600X	NCT1	study1	study1			Netherlands(Rotterdam)	Rotterdam(EMC)	Vemurafenib			Breast cancer	X		A	GUIDELINE	RESPONSIVE	http
+BRAF	7	140453136	140453137	MISSENSE	CKB_EVIDENCE	600X								Vemurafenib			Skin Melanoma	X		A	GUIDELINE	RESPONSIVE	http

@@ -9,6 +9,7 @@ import java.util.Set;
 
 import com.google.common.collect.Sets;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
+import com.hartwig.serve.datamodel.ApprovalStatus;
 import com.hartwig.serve.datamodel.DatamodelTestFactory;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
@@ -151,6 +152,14 @@ public class ActionableEvidenceFactoryTest {
         assertEquals(EvidenceLevel.B, ActionableEvidenceFactory.resolveLevel("B"));
         assertEquals(EvidenceLevel.C, ActionableEvidenceFactory.resolveLevel("C"));
         assertEquals(EvidenceLevel.D, ActionableEvidenceFactory.resolveLevel("D"));
+    }
+
+    @Test
+    public void canResolveApprovalStatus() {
+        assertEquals(ApprovalStatus.UNKNOWN, ActionableEvidenceFactory.resolveApprovalStatus(""));
+        assertEquals(ApprovalStatus.CLINICAL_STUDY, ActionableEvidenceFactory.resolveApprovalStatus("Clinical study"));
+        assertEquals(ApprovalStatus.GUIDELINE, ActionableEvidenceFactory.resolveApprovalStatus("Guideline"));
+        assertEquals(ApprovalStatus.CASE_REPORTS_SERIES, ActionableEvidenceFactory.resolveApprovalStatus("Case Reports/Case Series"));
     }
 
     @Test

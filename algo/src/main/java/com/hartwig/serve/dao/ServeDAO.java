@@ -144,6 +144,7 @@ public class ServeDAO {
                     ACTIONABLEHOTSPOT.APPLICABLEDOID,
                     ACTIONABLEHOTSPOT.BLACKLISTCANCERTYPES,
                     ACTIONABLEHOTSPOT.LEVEL,
+                    ACTIONABLEHOTSPOT.APPROVALSTATUS,
                     ACTIONABLEHOTSPOT.DIRECTION,
                     ACTIONABLEHOTSPOT.EVIDENCEURLS);
             batch.forEach(entry -> writeActionableHotspotBatch(timestamp, inserter, entry));

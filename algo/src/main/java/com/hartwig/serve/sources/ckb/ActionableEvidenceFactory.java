@@ -201,10 +201,14 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
     @Nullable
     @VisibleForTesting
     static ApprovalStatus resolveApprovalStatus(@Nullable String approvalStatusLabel) {
-        if (approvalStatusLabel == null || approvalStatusLabel.equals("NA")) {
+        if (approvalStatusLabel == null) {
             return null;
         }
-        return ApprovalStatus.fromString(approvalStatusLabel);
+        ApprovalStatus approvalStatus = ApprovalStatus.fromString(approvalStatusLabel);
+        if (approvalStatus == null) {
+            LOGGER.warn("Could not find enum value for approval status {}", approvalStatusLabel);
+        }
+        return approvalStatus;
     }
 
     @Nullable

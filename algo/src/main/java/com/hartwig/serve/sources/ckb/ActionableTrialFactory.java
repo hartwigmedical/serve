@@ -93,7 +93,7 @@ class ActionableTrialFactory implements ActionableEntryFactory {
                                     .applicableCancerType(cancerTypeExtraction.applicableCancerType())
                                     .blacklistCancerTypes(cancerTypeExtraction.blacklistedCancerTypes())
                                     .level(EvidenceLevel.B)
-                                    .approvalStatus(ApprovalStatus.GUIDELINE)
+                                    .approvalStatus(ApprovalStatus.CLINICAL_STUDY)
                                     .direction(EvidenceDirection.RESPONSIVE)
                                     .evidenceUrls(Sets.newHashSet("https://clinicaltrials.gov/study/" + trial.nctId()))
                                     .build());

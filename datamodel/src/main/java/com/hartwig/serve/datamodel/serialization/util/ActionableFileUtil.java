@@ -136,7 +136,7 @@ public final class ActionableFileUtil {
 
             @NotNull
             @Override
-            public ApprovalStatus approvalStatus() { return ApprovalStatus.fromString(values[fields.get("approvalStatus")]); }
+            public ApprovalStatus approvalStatus() { return ApprovalStatus.valueOf(values[fields.get("approvalStatus")]); }
 
             @NotNull
             @Override
@@ -193,7 +193,7 @@ public final class ActionableFileUtil {
                 .add(event.applicableCancerType().doid())
                 .add(cancerTypesToField(event.blacklistCancerTypes()))
                 .add(event.level().toString())
-                .add(event.approvalStatus().getDescription())
+                .add(event.approvalStatus().toString())
                 .add(event.direction().toString())
                 .add(setToField(event.evidenceUrls()))
                 .toString();

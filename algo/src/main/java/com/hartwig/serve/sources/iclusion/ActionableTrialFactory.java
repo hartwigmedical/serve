@@ -80,7 +80,7 @@ public class ActionableTrialFactory {
                         .therapyNames(Sets.newHashSet())
                         .build())
                 .level(EvidenceLevel.B)
-                .approvalStatus(ApprovalStatus.EMPTY)
+                .approvalStatus(ApprovalStatus.UNKNOWN)
                 .direction(EvidenceDirection.RESPONSIVE)
                 .evidenceUrls(Sets.newHashSet());
     }

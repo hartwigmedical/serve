@@ -25,6 +25,7 @@ CREATE TABLE `actionableHotspot`
     `applicableDoid` varchar(50) NOT NULL,
     `blacklistCancerTypes` varchar(500),
     `level` varchar(50) NOT NULL,
+    `approvalStatus` varchar(100) NOT NULL,
     `direction` varchar(50) NOT NULL,
     `evidenceUrls` varchar(1000),
     PRIMARY KEY (`id`)

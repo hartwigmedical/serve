@@ -113,7 +113,7 @@ class ActionableEvidenceFactory {
                     .sourceEvent(Strings.EMPTY)
                     .sourceUrls(Sets.newHashSet())
                     .level(level)
-                    .approvalStatus(ApprovalStatus.EMPTY)
+                    .approvalStatus(ApprovalStatus.UNKNOWN)
                     .direction(direction)
                     .evidenceUrls(urls);
 

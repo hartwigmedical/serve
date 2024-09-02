@@ -98,6 +98,7 @@ public final class DatamodelTestFactory {
                 DatamodelTestFactory.cancerTypeBuilder().build(),
                 Sets.newHashSet(),
                 EvidenceLevel.A,
+                ApprovalStatus.FDA_APPROVED,
                 EvidenceDirection.NO_BENEFIT,
                 Sets.newHashSet(),
                 LocalDate.EPOCH,
@@ -107,8 +108,8 @@ public final class DatamodelTestFactory {
     @NotNull
     public static ActionableEvent createActionableEvent(@NotNull Knowledgebase source, @NotNull String sourceEvent,
             @NotNull Set<String> sourceUrls, @NotNull Intervention intervention, @NotNull CancerType applicableCancerType,
-            @NotNull Set<CancerType> blacklistCancerTypes, @NotNull EvidenceLevel level, @NotNull EvidenceDirection direction,
-            @NotNull Set<String> evidenceUrls, @Nullable LocalDate date, @Nullable String description) {
+            @NotNull Set<CancerType> blacklistCancerTypes, @NotNull EvidenceLevel level, @NotNull ApprovalStatus approvalStatus,
+            @NotNull EvidenceDirection direction, @NotNull Set<String> evidenceUrls, @Nullable LocalDate date, @Nullable String description) {
         return new ActionableEventImpl(source,
                 date,
                 sourceEvent,
@@ -118,6 +119,7 @@ public final class DatamodelTestFactory {
                 blacklistCancerTypes,
                 description,
                 level,
+                approvalStatus,
                 direction,
                 evidenceUrls);
     }
@@ -139,6 +141,8 @@ public final class DatamodelTestFactory {
         @NotNull
         private final EvidenceLevel level;
         @NotNull
+        private final ApprovalStatus approvalStatus;
+        @NotNull
         private final EvidenceDirection direction;
         @NotNull
         private final Set<String> evidenceUrls;
@@ -147,10 +151,10 @@ public final class DatamodelTestFactory {
         @Nullable
         private final String description;
 
-        public ActionableEventImpl(@NotNull Knowledgebase source, @Nullable LocalDate date, @NotNull String sourceEvent,
-                @NotNull Set<String> sourceUrls, @NotNull Intervention intervention, @NotNull CancerType applicableCancerType,
-                @NotNull Set<CancerType> blacklistCancerTypes, @Nullable String description, @NotNull EvidenceLevel level,
-                @NotNull EvidenceDirection direction, @NotNull Set<String> evidenceUrls) {
+        public ActionableEventImpl(@NotNull Knowledgebase source, @Nullable LocalDate date, @NotNull String sourceEvent, @NotNull Set<String> sourceUrls,
+                @NotNull Intervention intervention, @NotNull CancerType applicableCancerType, @NotNull Set<CancerType> blacklistCancerTypes, @Nullable String description,
+                @NotNull EvidenceLevel level, @NotNull ApprovalStatus approvalStatus, @NotNull EvidenceDirection direction,
+                @NotNull Set<String> evidenceUrls) {
             this.source = source;
             this.date = date;
             this.sourceEvent = sourceEvent;
@@ -160,6 +164,7 @@ public final class DatamodelTestFactory {
             this.blacklistCancerTypes = blacklistCancerTypes;
             this.description = description;
             this.level = level;
+            this.approvalStatus = approvalStatus;
             this.direction = direction;
             this.evidenceUrls = evidenceUrls;
         }
@@ -204,6 +209,12 @@ public final class DatamodelTestFactory {
         @Override
         public EvidenceLevel level() {
             return level;
+        }
+
+        @NotNull
+        @Override
+        public ApprovalStatus approvalStatus() {
+            return approvalStatus;
         }
 
         @NotNull

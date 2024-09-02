@@ -54,6 +54,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jooq.DSLContext;
 import org.jooq.InsertValuesStep10;
 import org.jooq.InsertValuesStep12;
+import org.jooq.InsertValuesStep21;
 import org.jooq.InsertValuesStep22;
 import org.jooq.InsertValuesStep4;
 import org.jooq.InsertValuesStep6;
@@ -142,6 +143,7 @@ public class ServeDAO {
                     ACTIONABLEHOTSPOT.APPLICABLEDOID,
                     ACTIONABLEHOTSPOT.BLACKLISTCANCERTYPES,
                     ACTIONABLEHOTSPOT.LEVEL,
+                    ACTIONABLEHOTSPOT.APPROVALSTATUS,
                     ACTIONABLEHOTSPOT.DIRECTION,
                     ACTIONABLEHOTSPOT.EVIDENCEURLS,
                     ACTIONABLEHOTSPOT.DATE,
@@ -218,6 +220,7 @@ public class ServeDAO {
                 actionableHotspot.applicableCancerType().doid(),
                 concat(toStrings(actionableHotspot.blacklistCancerTypes())),
                 actionableHotspot.level(),
+                actionableHotspot.approvalStatus(),
                 actionableHotspot.direction(),
                 concat(actionableHotspot.evidenceUrls()),
                 actionableHotspot.date(),
@@ -249,6 +252,7 @@ public class ServeDAO {
                     ACTIONABLECODON.APPLICABLEDOID,
                     ACTIONABLECODON.BLACKLISTCANCERTYPES,
                     ACTIONABLECODON.LEVEL,
+                    ACTIONABLECODON.APPROVALSTATUS,
                     ACTIONABLECODON.DIRECTION,
                     ACTIONABLECODON.EVIDENCEURLS,
                     ACTIONABLECODON.DATE,
@@ -283,6 +287,7 @@ public class ServeDAO {
                     ACTIONABLEEXON.APPLICABLEDOID,
                     ACTIONABLEEXON.BLACKLISTCANCERTYPES,
                     ACTIONABLEEXON.LEVEL,
+                    ACTIONABLEEXON.APPROVALSTATUS,
                     ACTIONABLEEXON.DIRECTION,
                     ACTIONABLEEXON.EVIDENCEURLS,
                     ACTIONABLEEXON.DATE,
@@ -324,6 +329,7 @@ public class ServeDAO {
                 actionableRange.applicableCancerType().doid(),
                 concat(toStrings(actionableRange.blacklistCancerTypes())),
                 actionableRange.level(),
+                actionableRange.approvalStatus(),
                 actionableRange.direction(),
                 concat(actionableRange.evidenceUrls()),
                 actionableRange.date(),
@@ -352,6 +358,7 @@ public class ServeDAO {
                     ACTIONABLEGENE.APPLICABLEDOID,
                     ACTIONABLEGENE.BLACKLISTCANCERTYPES,
                     ACTIONABLEGENE.LEVEL,
+                    ACTIONABLEGENE.APPROVALSTATUS,
                     ACTIONABLEGENE.DIRECTION,
                     ACTIONABLEGENE.EVIDENCEURLS,
                     ACTIONABLEGENE.DATE,
@@ -390,6 +397,7 @@ public class ServeDAO {
                 actionableGene.applicableCancerType().doid(),
                 concat(toStrings(actionableGene.blacklistCancerTypes())),
                 actionableGene.level(),
+                actionableGene.approvalStatus(),
                 actionableGene.direction(),
                 concat(actionableGene.evidenceUrls()),
                 actionableGene.date(),
@@ -422,6 +430,7 @@ public class ServeDAO {
                     ACTIONABLEFUSION.APPLICABLEDOID,
                     ACTIONABLEFUSION.BLACKLISTCANCERTYPES,
                     ACTIONABLEFUSION.LEVEL,
+                    ACTIONABLEFUSION.APPROVALSTATUS,
                     ACTIONABLEFUSION.DIRECTION,
                     ACTIONABLEFUSION.EVIDENCEURLS,
                     ACTIONABLEFUSION.DATE,
@@ -464,6 +473,7 @@ public class ServeDAO {
                 actionableFusion.applicableCancerType().doid(),
                 concat(toStrings(actionableFusion.blacklistCancerTypes())),
                 actionableFusion.level(),
+                actionableFusion.approvalStatus(),
                 actionableFusion.direction(),
                 concat(actionableFusion.evidenceUrls()),
                 actionableFusion.date(),
@@ -493,6 +503,7 @@ public class ServeDAO {
                     ACTIONABLECHARACTERISTIC.APPLICABLEDOID,
                     ACTIONABLECHARACTERISTIC.BLACKLISTCANCERTYPES,
                     ACTIONABLECHARACTERISTIC.LEVEL,
+                    ACTIONABLECHARACTERISTIC.APPROVALSTATUS,
                     ACTIONABLECHARACTERISTIC.DIRECTION,
                     ACTIONABLECHARACTERISTIC.EVIDENCEURLS,
                     ACTIONABLECHARACTERISTIC.DATE,
@@ -532,6 +543,7 @@ public class ServeDAO {
                 actionableCharacteristic.applicableCancerType().doid(),
                 concat(toStrings(actionableCharacteristic.blacklistCancerTypes())),
                 actionableCharacteristic.level(),
+                actionableCharacteristic.approvalStatus(),
                 actionableCharacteristic.direction(),
                 concat(actionableCharacteristic.evidenceUrls()),
                 actionableCharacteristic.date(),
@@ -540,6 +552,7 @@ public class ServeDAO {
 
     private void writeActionableHLA(@NotNull Timestamp timestamp, @NotNull List<ActionableHLA> hla) {
         for (List<ActionableHLA> batch : Iterables.partition(hla, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
+            InsertValuesStep21 inserter = context.insertInto(ACTIONABLEHLA,
             InsertValuesStep22 inserter = context.insertInto(ACTIONABLEHLA,
                     ACTIONABLEHLA.MODIFIED,
                     ACTIONABLEHLA.HLAALLELE,
@@ -559,6 +572,7 @@ public class ServeDAO {
                     ACTIONABLEHLA.APPLICABLEDOID,
                     ACTIONABLEHLA.BLACKLISTCANCERTYPES,
                     ACTIONABLEHLA.LEVEL,
+                    ACTIONABLEHLA.APPROVALSTATUS,
                     ACTIONABLEHLA.DIRECTION,
                     ACTIONABLEHLA.EVIDENCEURLS,
                     ACTIONABLEHLA.DATE,
@@ -568,7 +582,7 @@ public class ServeDAO {
         }
     }
 
-    private static void writeActionableHLABatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep22 inserter,
+    private static void writeActionableHLABatch(@NotNull Timestamp timestamp, @NotNull InsertValuesN inserter,
             @NotNull ActionableHLA actionableHLA) {
         ClinicalTrial clinicalTrial = extractOptionalClinicalTrial(actionableHLA);
         Treatment treatment = extractOptionalTreatment(actionableHLA);
@@ -595,6 +609,7 @@ public class ServeDAO {
                 actionableHLA.applicableCancerType().doid(),
                 concat(toStrings(actionableHLA.blacklistCancerTypes())),
                 actionableHLA.level(),
+                actionableHLA.approvalStatus(),
                 actionableHLA.direction(),
                 concat(actionableHLA.evidenceUrls()),
                 actionableHLA.date(),

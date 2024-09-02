@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.io.Resources;
+import com.hartwig.serve.datamodel.ApprovalStatus;
 import com.hartwig.serve.datamodel.DatamodelTestFactory;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.immuno.ActionableHLA;
@@ -41,6 +42,7 @@ public class ActionableHLAFileTest {
         assertEquals("A*02", hla1.hlaAllele());
         assertEquals("Nivolumab", DatamodelTestFactory.extractTreatment(hla1).name());
         assertEquals("All cancer types", hla1.applicableCancerType().name());
+        assertEquals(ApprovalStatus.GUIDELINE, hla1.approvalStatus());
         assertEquals(LocalDate.of(2021, 2, 3), hla1.date());
         assertEquals("efficacy evidence", hla1.description());
 
@@ -48,6 +50,7 @@ public class ActionableHLAFileTest {
         assertEquals("A*02", hla2.hlaAllele());
         assertEquals("Nivolumab", DatamodelTestFactory.setToField(DatamodelTestFactory.extractClinicalTrial(hla2).therapyNames()));
         assertEquals("Skin melanoma", hla2.applicableCancerType().name());
+        assertEquals(ApprovalStatus.GUIDELINE, hla2.approvalStatus());
         assertEquals(LocalDate.EPOCH, hla2.date());
         assertEquals(Strings.EMPTY, hla2.description());
     }

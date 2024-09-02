@@ -71,7 +71,8 @@ public class ActionableTrialFactoryTest {
 
         IclusionTrial trialWithoutBlacklist =
                 IclusionTestFactory.trialWithTumors("trial", Lists.newArrayList(location), Lists.newArrayList());
-        List<ActionableTrial> actionableTrialsWithoutBlacklist = factory.toActionableTrials(trialWithoutBlacklist, Strings.EMPTY);
+        List<ActionableTrial> actionableTrialsWithoutBlacklist =
+                factory.toActionableTrials(trialWithoutBlacklist, Strings.EMPTY);
         assertEquals(1, actionableTrialsWithoutBlacklist.size());
         assertEquals("nct", DatamodelTestFactory.extractClinicalTrial(actionableTrialsWithoutBlacklist.get(0)).nctId());
         assertEquals("location", actionableTrialsWithoutBlacklist.get(0).applicableCancerType().name());

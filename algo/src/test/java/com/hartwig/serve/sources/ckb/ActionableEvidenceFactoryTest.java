@@ -156,7 +156,7 @@ public class ActionableEvidenceFactoryTest {
 
     @Test
     public void canResolveApprovalStatus() {
-        assertEquals(ApprovalStatus.UNKNOWN, ActionableEvidenceFactory.resolveApprovalStatus(""));
+        assertEquals(ApprovalStatus.UNKNOWN, ActionableEvidenceFactory.resolveApprovalStatus("Unknown"));
         assertEquals(ApprovalStatus.CLINICAL_STUDY, ActionableEvidenceFactory.resolveApprovalStatus("Clinical study"));
         assertEquals(ApprovalStatus.GUIDELINE, ActionableEvidenceFactory.resolveApprovalStatus("Guideline"));
         assertEquals(ApprovalStatus.CASE_REPORTS_SERIES, ActionableEvidenceFactory.resolveApprovalStatus("Case Reports/Case Series"));

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.io.Resources;
+import com.hartwig.serve.datamodel.ApprovalStatus;
 import com.hartwig.serve.datamodel.DatamodelTestFactory;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
@@ -44,6 +45,7 @@ public class ActionableHotspotFileTest {
         assertEquals("T", hotspot1.alt());
         assertEquals("Vemurafenib", DatamodelTestFactory.extractTreatment(hotspot1).name());
         assertEquals("Skin Melanoma", hotspot1.applicableCancerType().name());
+        assertEquals(ApprovalStatus.GUIDELINE, hotspot1.approvalStatus());
 
         ActionableHotspot hotspot2 = findBySource(hotspots, Knowledgebase.CKB_TRIAL);
         assertEquals("BRAF", hotspot2.gene());
@@ -53,6 +55,7 @@ public class ActionableHotspotFileTest {
         assertEquals("T", hotspot2.alt());
         assertEquals("Vemurafenib", DatamodelTestFactory.setToField(DatamodelTestFactory.extractClinicalTrial(hotspot2).therapyNames()));
         assertEquals("Solid tumor", hotspot2.applicableCancerType().name());
+        assertEquals(ApprovalStatus.GUIDELINE, hotspot1.approvalStatus());
     }
 
     @NotNull

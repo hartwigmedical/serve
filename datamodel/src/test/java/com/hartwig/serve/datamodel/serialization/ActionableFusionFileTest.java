@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.io.Resources;
+import com.hartwig.serve.datamodel.ApprovalStatus;
 import com.hartwig.serve.datamodel.fusion.ActionableFusion;
 import com.hartwig.serve.datamodel.serialization.util.ActionableFileUtil;
 import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
@@ -40,6 +41,7 @@ public class ActionableFusionFileTest {
         assertEquals("EGFR", fusion1.geneDown());
         assertEquals(8, (int) fusion1.minExonDown());
         assertEquals(9, (int) fusion1.maxExonDown());
+        assertEquals(ApprovalStatus.GUIDELINE, fusion1.approvalStatus());
 
         ActionableFusion fusion2 = findByGeneUp(fusions, "EML4");
         assertNull(fusion2.minExonUp());
@@ -47,6 +49,7 @@ public class ActionableFusionFileTest {
         assertEquals("ALK", fusion2.geneDown());
         assertNull(fusion2.minExonDown());
         assertNull(fusion2.maxExonDown());
+        assertEquals(ApprovalStatus.GUIDELINE, fusion2.approvalStatus());
     }
 
     @NotNull

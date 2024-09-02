@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.io.Resources;
+import com.hartwig.serve.datamodel.ApprovalStatus;
 import com.hartwig.serve.datamodel.DatamodelTestFactory;
 import com.hartwig.serve.datamodel.gene.ActionableGene;
 import com.hartwig.serve.datamodel.gene.GeneEvent;
@@ -40,42 +41,49 @@ public class ActionableGeneFileTest {
         assertEquals(GeneEvent.FUSION, gene1.event());
         assertEquals("Crizotinib", DatamodelTestFactory.extractTreatment(gene1).name());
         assertEquals("Lung Adenocarcinoma", gene1.applicableCancerType().name());
+        assertEquals(ApprovalStatus.GUIDELINE, gene1.approvalStatus());
 
         ActionableGene gene2 = findByGeneAndEvent(genes, "BRCA1", GeneEvent.INACTIVATION, "Solid Tumors");
         assertEquals("BRCA1", gene2.gene());
         assertEquals(GeneEvent.INACTIVATION, gene2.event());
         assertEquals("DRUP", DatamodelTestFactory.extractTreatment(gene2).name());
         assertEquals("Solid Tumors", gene2.applicableCancerType().name());
+        assertEquals(ApprovalStatus.GUIDELINE, gene2.approvalStatus());
 
         ActionableGene gene3 = findByGeneAndEvent(genes, "ERBB2", GeneEvent.AMPLIFICATION, "Breast Cancer");
         assertEquals("ERBB2", gene3.gene());
         assertEquals(GeneEvent.AMPLIFICATION, gene3.event());
         assertEquals("Trastuzumab", DatamodelTestFactory.extractTreatment(gene3).name());
         assertEquals("Breast Cancer", gene3.applicableCancerType().name());
+        assertEquals(ApprovalStatus.GUIDELINE, gene3.approvalStatus());
 
         ActionableGene gene4 = findByGeneAndEvent(genes, "ERBB2", GeneEvent.AMPLIFICATION, "Colorectal Cancer");
         assertEquals("ERBB2", gene4.gene());
         assertEquals(GeneEvent.AMPLIFICATION, gene4.event());
         assertEquals("Panitumumab", DatamodelTestFactory.extractTreatment(gene4).name());
         assertEquals("Colorectal Cancer", gene4.applicableCancerType().name());
+        assertEquals(ApprovalStatus.GUIDELINE, gene4.approvalStatus());
 
         ActionableGene gene5 = findByGeneAndEvent(genes, "FGFR2", GeneEvent.FUSION, "Bladder Cancer");
         assertEquals("FGFR2", gene5.gene());
         assertEquals(GeneEvent.FUSION, gene5.event());
         assertEquals("Erdafitinib", DatamodelTestFactory.extractTreatment(gene5).name());
         assertEquals("Bladder Cancer", gene5.applicableCancerType().name());
+        assertEquals(ApprovalStatus.GUIDELINE, gene5.approvalStatus());
 
         ActionableGene gene6 = findByGeneAndEvent(genes, "MET", GeneEvent.AMPLIFICATION, "Advanced Solid Tumor");
         assertEquals("MET", gene6.gene());
         assertEquals(GeneEvent.AMPLIFICATION, gene6.event());
         assertEquals("DRUP", DatamodelTestFactory.extractTreatment(gene6).name());
         assertEquals("Advanced Solid Tumor", gene6.applicableCancerType().name());
+        assertEquals(ApprovalStatus.GUIDELINE, gene6.approvalStatus());
 
         ActionableGene gene7 = findByGeneAndEvent(genes, "NRAS", GeneEvent.ACTIVATION, "Colorectal Cancer");
         assertEquals("NRAS", gene7.gene());
         assertEquals(GeneEvent.ACTIVATION, gene7.event());
         assertEquals("Cetuximab", DatamodelTestFactory.setToField(DatamodelTestFactory.extractClinicalTrial(gene7).therapyNames()));
         assertEquals("Colorectal Cancer", gene7.applicableCancerType().name());
+        assertEquals(ApprovalStatus.GUIDELINE, gene7.approvalStatus());
     }
 
     @NotNull

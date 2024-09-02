@@ -40,22 +40,22 @@ public final class CkbTestFactory {
 
     @NotNull
     public static CkbEntry createEntryWithGene(@NotNull String geneSymbol) {
-        return createEntry(geneSymbol, "", "", "", "", "", "", "", "");
+        return createEntry(geneSymbol, "", "", "", "", "", "", "", "", "");
     }
 
     @NotNull
     public static CkbEntry createEntryWithVariant(@NotNull String variant) {
-        return createEntry("", variant, "", "", "", "", "", "", "");
+        return createEntry("", variant, "", "", "", "", "", "", "", "");
     }
 
     @NotNull
     public static CkbEntry createEntryWithFullName(@NotNull String fullName) {
-        return createEntry("", "", fullName, "", "", "", "", "", "");
+        return createEntry("", "", fullName, "", "", "", "", "", "", "");
     }
 
     @NotNull
     public static CkbEntry createEntryWithGeneAndVariant(@NotNull String geneSymbol, @NotNull String variant) {
-        return createEntry(geneSymbol, variant, "", "", "", "", "", "", "");
+        return createEntry(geneSymbol, variant, "", "", "", "", "", "", "", "");
     }
 
     @NotNull
@@ -66,11 +66,11 @@ public final class CkbTestFactory {
     @NotNull
     public static CkbEntry createEntry(@NotNull String geneSymbol, @NotNull String variant, @NotNull String fullName,
             @NotNull String responseType, @NotNull String evidenceType, @NotNull String therapyName, @NotNull String indicationName,
-            @NotNull String level, @NotNull String termId) {
+            @NotNull String level, @NotNull String approvalStatus, @NotNull String termId) {
         Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting", "Rotterdam", "EMC");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(0, "required");
         return builder().addVariants(createVariant(geneSymbol, variant, fullName))
-                .addEvidences(createEvidence(responseType, evidenceType, therapyName, indicationName, level, termId))
+                .addEvidences(createEvidence(responseType, evidenceType, therapyName, indicationName, level, approvalStatus, termId))
                 .addClinicalTrials(createTrialWithTherapy("Recruiting",
                         List.of(requirementDetail),
                         List.of(location),
@@ -119,7 +119,7 @@ public final class CkbTestFactory {
 
     @NotNull
     private static Evidence createEvidence(@NotNull String responseType, @NotNull String evidenceType, @NotNull String therapyName,
-            @NotNull String indicationName, @NotNull String level, @NotNull String termId) {
+            @NotNull String indicationName, @NotNull String level, @NotNull String approvalStatus, @NotNull String termId) {
         return ImmutableEvidence.builder()
                 .id(0)
                 .therapy(createTherapy(therapyName))
@@ -127,7 +127,7 @@ public final class CkbTestFactory {
                 .responseType(responseType)
                 .evidenceType(evidenceType)
                 .efficacyEvidence("")
-                .approvalStatus("")
+                .approvalStatus(approvalStatus)
                 .ampCapAscoEvidenceLevel(level)
                 .ampCapAscoInferredTier("")
                 .references(Lists.newArrayList())

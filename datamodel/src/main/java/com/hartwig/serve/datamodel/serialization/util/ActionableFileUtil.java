@@ -41,6 +41,7 @@ public final class ActionableFileUtil {
     @NotNull
     public static String header() {
         return new StringJoiner(FIELD_DELIMITER).add("source")
+                .add("date")
                 .add("sourceEvent")
                 .add("sourceUrls")
                 .add("nctId")
@@ -55,12 +56,11 @@ public final class ActionableFileUtil {
                 .add("applicableCancerType")
                 .add("applicableDoid")
                 .add("blacklistCancerTypes")
+                .add("description")
                 .add("level")
                 .add("approvalStatus")
                 .add("direction")
                 .add("evidenceUrls")
-                .add("date")
-                .add("description")
                 .toString();
     }
 
@@ -196,6 +196,7 @@ public final class ActionableFileUtil {
             therapy.add(treatment.name());
         }
         return new StringJoiner(FIELD_DELIMITER).add(event.source().toString())
+                .add(event.date().toString())
                 .add(event.sourceEvent())
                 .add(setToField(event.sourceUrls()))
                 .add(clinicalTrial != null ? clinicalTrial.nctId() : Strings.EMPTY)
@@ -214,12 +215,11 @@ public final class ActionableFileUtil {
                 .add(event.applicableCancerType().name())
                 .add(event.applicableCancerType().doid())
                 .add(cancerTypesToField(event.blacklistCancerTypes()))
+                .add(event.description())
                 .add(event.level().toString())
                 .add(event.approvalStatus().toString())
                 .add(event.direction().toString())
                 .add(setToField(event.evidenceUrls()))
-                .add(event.date().toString())
-                .add(event.description())
                 .toString();
     }
 

@@ -211,7 +211,7 @@ public final class ActionableFileUtil {
                 .add(event.level().toString())
                 .add(event.direction().toString())
                 .add(setToField(event.evidenceUrls()))
-                .add(formatDate(event.date()))
+                .add(event.date() != null ? event.date().toString() : Strings.EMPTY)
                 .add(event.description() != null ? event.description() : Strings.EMPTY)
                 .toString();
     }
@@ -309,10 +309,5 @@ public final class ActionableFileUtil {
         }
 
         return cancerTypes;
-    }
-
-    @NotNull
-    static String formatDate(@Nullable LocalDate date) {
-        return date != null ? date.toString() : Strings.EMPTY;
     }
 }

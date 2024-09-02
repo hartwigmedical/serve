@@ -130,7 +130,6 @@ public final class CkbTestFactory {
                 .evidenceType(evidenceType)
                 .efficacyEvidence(EFFICACY_EVIDENCE)
                 .approvalStatus("")
-                .efficacyEvidence("")
                 .approvalStatus(approvalStatus)
                 .ampCapAscoEvidenceLevel(level)
                 .ampCapAscoInferredTier("")

@@ -54,7 +54,6 @@ import org.jetbrains.annotations.Nullable;
 import org.jooq.DSLContext;
 import org.jooq.InsertValuesStep10;
 import org.jooq.InsertValuesStep12;
-import org.jooq.InsertValuesStep20;
 import org.jooq.InsertValuesStep21;
 import org.jooq.InsertValuesStep22;
 import org.jooq.InsertValuesStep4;
@@ -218,6 +217,7 @@ public class ServeDAO {
                 actionableHotspot.applicableCancerType().doid(),
                 concat(toStrings(actionableHotspot.blacklistCancerTypes())),
                 actionableHotspot.level(),
+                actionableHotspot.approvalStatus(),
                 actionableHotspot.direction(),
                 concat(actionableHotspot.evidenceUrls()));
     }
@@ -247,6 +247,7 @@ public class ServeDAO {
                     ACTIONABLECODON.APPLICABLEDOID,
                     ACTIONABLECODON.BLACKLISTCANCERTYPES,
                     ACTIONABLECODON.LEVEL,
+                    ACTIONABLECODON.APPROVALSTATUS,
                     ACTIONABLECODON.DIRECTION,
                     ACTIONABLECODON.EVIDENCEURLS);
             batch.forEach(entry -> writeActionableRangeBatch(timestamp, inserter, entry));
@@ -279,6 +280,7 @@ public class ServeDAO {
                     ACTIONABLEEXON.APPLICABLEDOID,
                     ACTIONABLEEXON.BLACKLISTCANCERTYPES,
                     ACTIONABLEEXON.LEVEL,
+                    ACTIONABLEEXON.APPROVALSTATUS,
                     ACTIONABLEEXON.DIRECTION,
                     ACTIONABLEEXON.EVIDENCEURLS);
             batch.forEach(entry -> writeActionableRangeBatch(timestamp, inserter, entry));
@@ -318,13 +320,14 @@ public class ServeDAO {
                 actionableRange.applicableCancerType().doid(),
                 concat(toStrings(actionableRange.blacklistCancerTypes())),
                 actionableRange.level(),
+                actionableRange.approvalStatus(),
                 actionableRange.direction(),
                 concat(actionableRange.evidenceUrls()));
     }
 
     private void writeActionableGenes(@NotNull Timestamp timestamp, @NotNull List<ActionableGene> genes) {
         for (List<ActionableGene> batch : Iterables.partition(genes, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
-            InsertValuesStep21 inserter = context.insertInto(ACTIONABLEGENE,
+            InsertValuesStep22 inserter = context.insertInto(ACTIONABLEGENE,
                     ACTIONABLEGENE.MODIFIED,
                     ACTIONABLEGENE.GENE,
                     ACTIONABLEGENE.EVENT,
@@ -344,6 +347,7 @@ public class ServeDAO {
                     ACTIONABLEGENE.APPLICABLEDOID,
                     ACTIONABLEGENE.BLACKLISTCANCERTYPES,
                     ACTIONABLEGENE.LEVEL,
+                    ACTIONABLEGENE.APPROVALSTATUS,
                     ACTIONABLEGENE.DIRECTION,
                     ACTIONABLEGENE.EVIDENCEURLS);
             batch.forEach(entry -> writeActionableGeneBatch(timestamp, inserter, entry));
@@ -351,7 +355,7 @@ public class ServeDAO {
         }
     }
 
-    private static void writeActionableGeneBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep21 inserter,
+    private static void writeActionableGeneBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep22 inserter,
             @NotNull ActionableGene actionableGene) {
 
         ClinicalTrial clinicalTrial = extractOptionalClinicalTrial(actionableGene);
@@ -380,6 +384,7 @@ public class ServeDAO {
                 actionableGene.applicableCancerType().doid(),
                 concat(toStrings(actionableGene.blacklistCancerTypes())),
                 actionableGene.level(),
+                actionableGene.approvalStatus(),
                 actionableGene.direction(),
                 concat(actionableGene.evidenceUrls()));
     }
@@ -410,6 +415,7 @@ public class ServeDAO {
                     ACTIONABLEFUSION.APPLICABLEDOID,
                     ACTIONABLEFUSION.BLACKLISTCANCERTYPES,
                     ACTIONABLEFUSION.LEVEL,
+                    ACTIONABLEFUSION.APPROVALSTATUS,
                     ACTIONABLEFUSION.DIRECTION,
                     ACTIONABLEFUSION.EVIDENCEURLS);
             batch.forEach(entry -> writeActionableFusionBatch(timestamp, inserter, entry));
@@ -450,13 +456,14 @@ public class ServeDAO {
                 actionableFusion.applicableCancerType().doid(),
                 concat(toStrings(actionableFusion.blacklistCancerTypes())),
                 actionableFusion.level(),
+                actionableFusion.approvalStatus(),
                 actionableFusion.direction(),
                 concat(actionableFusion.evidenceUrls()));
     }
 
     private void writeActionableCharacteristics(@NotNull Timestamp timestamp, @NotNull List<ActionableCharacteristic> characteristics) {
         for (List<ActionableCharacteristic> batch : Iterables.partition(characteristics, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
-            InsertValuesStep22 inserter = context.insertInto(ACTIONABLECHARACTERISTIC,
+            InsertValuesStepN inserter = context.insertInto(ACTIONABLECHARACTERISTIC,
                     ACTIONABLECHARACTERISTIC.MODIFIED,
                     ACTIONABLECHARACTERISTIC.TYPE,
                     ACTIONABLECHARACTERISTIC.CUTOFFTYPE,
@@ -477,6 +484,7 @@ public class ServeDAO {
                     ACTIONABLECHARACTERISTIC.APPLICABLEDOID,
                     ACTIONABLECHARACTERISTIC.BLACKLISTCANCERTYPES,
                     ACTIONABLECHARACTERISTIC.LEVEL,
+                    ACTIONABLECHARACTERISTIC.APPROVALSTATUS,
                     ACTIONABLECHARACTERISTIC.DIRECTION,
                     ACTIONABLECHARACTERISTIC.EVIDENCEURLS);
             batch.forEach(entry -> writeActionableCharacteristicBatch(timestamp, inserter, entry));
@@ -484,7 +492,7 @@ public class ServeDAO {
         }
     }
 
-    private static void writeActionableCharacteristicBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep22 inserter,
+    private static void writeActionableCharacteristicBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStepN inserter,
             @NotNull ActionableCharacteristic actionableCharacteristic) {
 
         ClinicalTrial clinicalTrial = extractOptionalClinicalTrial(actionableCharacteristic);
@@ -514,13 +522,14 @@ public class ServeDAO {
                 actionableCharacteristic.applicableCancerType().doid(),
                 concat(toStrings(actionableCharacteristic.blacklistCancerTypes())),
                 actionableCharacteristic.level(),
+                actionableCharacteristic.approvalStatus(),
                 actionableCharacteristic.direction(),
                 concat(actionableCharacteristic.evidenceUrls()));
     }
 
     private void writeActionableHLA(@NotNull Timestamp timestamp, @NotNull List<ActionableHLA> hla) {
         for (List<ActionableHLA> batch : Iterables.partition(hla, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
-            InsertValuesStep20 inserter = context.insertInto(ACTIONABLEHLA,
+            InsertValuesStep21 inserter = context.insertInto(ACTIONABLEHLA,
                     ACTIONABLEHLA.MODIFIED,
                     ACTIONABLEHLA.HLAALLELE,
                     ACTIONABLEHLA.SOURCE,
@@ -539,6 +548,7 @@ public class ServeDAO {
                     ACTIONABLEHLA.APPLICABLEDOID,
                     ACTIONABLEHLA.BLACKLISTCANCERTYPES,
                     ACTIONABLEHLA.LEVEL,
+                    ACTIONABLEHLA.APPROVALSTATUS,
                     ACTIONABLEHLA.DIRECTION,
                     ACTIONABLEHLA.EVIDENCEURLS);
             batch.forEach(entry -> writeActionableHLABatch(timestamp, inserter, entry));
@@ -546,7 +556,7 @@ public class ServeDAO {
         }
     }
 
-    private static void writeActionableHLABatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep20 inserter,
+    private static void writeActionableHLABatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep21 inserter,
             @NotNull ActionableHLA actionableHLA) {
         ClinicalTrial clinicalTrial = extractOptionalClinicalTrial(actionableHLA);
         Treatment treatment = extractOptionalTreatment(actionableHLA);
@@ -573,6 +583,7 @@ public class ServeDAO {
                 actionableHLA.applicableCancerType().doid(),
                 concat(toStrings(actionableHLA.blacklistCancerTypes())),
                 actionableHLA.level(),
+                actionableHLA.approvalStatus(),
                 actionableHLA.direction(),
                 concat(actionableHLA.evidenceUrls()));
     }

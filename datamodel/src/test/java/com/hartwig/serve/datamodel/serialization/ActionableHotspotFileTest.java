@@ -29,9 +29,8 @@ public class ActionableHotspotFileTest {
         Map<String, Integer> fields = SerializationUtil.createFields(ActionableHotspotFile.header(), ActionableFileUtil.FIELD_DELIMITER);
         List<ActionableHotspot> regeneratedHotspots = ActionableHotspotFile.fromLines(ActionableHotspotFile.toLines(hotspots), fields);
 
-//        assertEquals(hotspots, regeneratedHotspots);
+        assertEquals(hotspots, regeneratedHotspots);
 
-        System.out.println(regeneratedHotspots);
     }
 
     private static void assertActionableHotspots(@NotNull List<ActionableHotspot> hotspots) {

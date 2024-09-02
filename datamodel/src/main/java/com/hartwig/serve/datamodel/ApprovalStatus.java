@@ -25,7 +25,7 @@ public enum ApprovalStatus {
     PHASE_0("Phase 0"),
     CLINICAL_STUDY_META_ANALYSIS("Clinical Study - Meta-analysis"),
     FDA_CONTRAINDICATED("FDA contraindicated"),
-    UNKNOWN("");
+    UNKNOWN("Unknown");
 
     @NotNull
     private final String description;

@@ -56,6 +56,7 @@ CREATE TABLE `actionableCodon`
     `applicableDoid` varchar(50) NOT NULL,
     `blacklistCancerTypes` varchar(500),
     `level` varchar(50) NOT NULL,
+    `approvalStatus` varchar(100) NOT NULL,
     `direction` varchar(50) NOT NULL,
     `evidenceUrls` varchar(1000),
     PRIMARY KEY (`id`)
@@ -86,6 +87,7 @@ CREATE TABLE `actionableExon`
     `applicableDoid` varchar(50) NOT NULL,
     `blacklistCancerTypes` varchar(500),
     `level` varchar(50) NOT NULL,
+    `approvalStatus` varchar(100) NOT NULL,
     `direction` varchar(50) NOT NULL,
     `evidenceUrls` varchar(1000),
     PRIMARY KEY (`id`)
@@ -113,6 +115,7 @@ CREATE TABLE `actionableGene`
     `applicableDoid` varchar(50) NOT NULL,
     `blacklistCancerTypes` varchar(500),
     `level` varchar(50) NOT NULL,
+    `approvalStatus` varchar(100) NOT NULL,
     `direction` varchar(50) NOT NULL,
     `evidenceUrls` varchar(1000),
     PRIMARY KEY (`id`)
@@ -144,6 +147,7 @@ CREATE TABLE `actionableFusion`
     `applicableDoid` varchar(50) NOT NULL,
     `blacklistCancerTypes` varchar(500),
     `level` varchar(50) NOT NULL,
+    `approvalStatus` varchar(100) NOT NULL,
     `direction` varchar(50) NOT NULL,
     `evidenceUrls` varchar(1000),
     PRIMARY KEY (`id`)
@@ -172,6 +176,7 @@ CREATE TABLE `actionableCharacteristic`
     `applicableDoid` varchar(50) NOT NULL,
     `blacklistCancerTypes` varchar(500),
     `level` varchar(50) NOT NULL,
+    `approvalStatus` varchar(100) NOT NULL,
     `direction` varchar(50) NOT NULL,
     `evidenceUrls` varchar(1000),
     PRIMARY KEY (`id`)
@@ -198,6 +203,7 @@ CREATE TABLE `actionableHla`
     `applicableDoid` varchar(50) NOT NULL,
     `blacklistCancerTypes` varchar(500),
     `level` varchar(50) NOT NULL,
+    `approvalStatus` varchar(100) NOT NULL,
     `direction` varchar(50) NOT NULL,
     `evidenceUrls` varchar(1000),
     PRIMARY KEY (`id`)

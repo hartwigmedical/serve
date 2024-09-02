@@ -1,5 +1,6 @@
 package com.hartwig.serve.sources.vicc;
 
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -113,7 +114,9 @@ class ActionableEvidenceFactory {
                     .sourceUrls(Sets.newHashSet())
                     .level(level)
                     .direction(direction)
-                    .evidenceUrls(urls);
+                    .evidenceUrls(urls)
+                    .date(LocalDate.EPOCH)
+                    .description(Strings.EMPTY);
 
             for (Map.Entry<String, Set<String>> cancerTypeEntry : cancerTypeToDoidsMap.entrySet()) {
                 String cancerType = cancerTypeEntry.getKey();

@@ -4,12 +4,14 @@ import java.time.LocalDate;
 import java.util.Set;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public interface ActionableEvent {
 
     @NotNull
     Knowledgebase source();
+
+    @NotNull
+    LocalDate date();
 
     @NotNull
     String sourceEvent();
@@ -27,6 +29,9 @@ public interface ActionableEvent {
     Set<CancerType> blacklistCancerTypes();
 
     @NotNull
+    String description();
+
+    @NotNull
     EvidenceLevel level();
 
     @NotNull
@@ -34,10 +39,4 @@ public interface ActionableEvent {
 
     @NotNull
     Set<String> evidenceUrls();
-
-    @Nullable
-    LocalDate date();
-
-    @Nullable
-    String description();
 }

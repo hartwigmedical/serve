@@ -1,7 +1,6 @@
 package com.hartwig.serve.datamodel.serialization;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -15,6 +14,7 @@ import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
 import com.hartwig.serve.datamodel.serialization.util.ActionableFileUtil;
 import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
+import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
@@ -56,8 +56,8 @@ public class ActionableHotspotFileTest {
         assertEquals("T", hotspot2.alt());
         assertEquals("Vemurafenib", DatamodelTestFactory.setToField(DatamodelTestFactory.extractClinicalTrial(hotspot2).therapyNames()));
         assertEquals("Solid tumor", hotspot2.applicableCancerType().name());
-        assertNull(hotspot2.date());
-        assertNull(hotspot2.description());
+        assertEquals(LocalDate.EPOCH, hotspot2.date());
+        assertEquals(Strings.EMPTY, hotspot2.description());
     }
 
     @NotNull

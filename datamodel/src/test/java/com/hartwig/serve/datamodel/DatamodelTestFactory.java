@@ -100,8 +100,8 @@ public final class DatamodelTestFactory {
                 EvidenceLevel.A,
                 EvidenceDirection.NO_BENEFIT,
                 Sets.newHashSet(),
-                null,
-                null);
+                LocalDate.EPOCH,
+                Strings.EMPTY);
     }
 
     @NotNull
@@ -110,16 +110,16 @@ public final class DatamodelTestFactory {
             @NotNull Set<CancerType> blacklistCancerTypes, @NotNull EvidenceLevel level, @NotNull EvidenceDirection direction,
             @NotNull Set<String> evidenceUrls, @Nullable LocalDate date, @Nullable String description) {
         return new ActionableEventImpl(source,
+                date,
                 sourceEvent,
                 sourceUrls,
                 intervention,
                 applicableCancerType,
                 blacklistCancerTypes,
+                description,
                 level,
                 direction,
-                evidenceUrls,
-                date,
-                description);
+                evidenceUrls);
     }
 
     private static class ActionableEventImpl implements ActionableEvent {
@@ -147,21 +147,21 @@ public final class DatamodelTestFactory {
         @Nullable
         private final String description;
 
-        public ActionableEventImpl(@NotNull Knowledgebase source, @NotNull String sourceEvent, @NotNull Set<String> sourceUrls,
-                @NotNull Intervention intervention, @NotNull CancerType applicableCancerType, @NotNull Set<CancerType> blacklistCancerTypes,
-                @NotNull EvidenceLevel level, @NotNull EvidenceDirection direction, @NotNull Set<String> evidenceUrls,
-                @Nullable LocalDate date, @Nullable String description) {
+        public ActionableEventImpl(@NotNull Knowledgebase source, @Nullable LocalDate date, @NotNull String sourceEvent,
+                @NotNull Set<String> sourceUrls, @NotNull Intervention intervention, @NotNull CancerType applicableCancerType,
+                @NotNull Set<CancerType> blacklistCancerTypes, @Nullable String description, @NotNull EvidenceLevel level,
+                @NotNull EvidenceDirection direction, @NotNull Set<String> evidenceUrls) {
             this.source = source;
+            this.date = date;
             this.sourceEvent = sourceEvent;
             this.sourceUrls = sourceUrls;
             this.intervention = intervention;
             this.applicableCancerType = applicableCancerType;
             this.blacklistCancerTypes = blacklistCancerTypes;
+            this.description = description;
             this.level = level;
             this.direction = direction;
             this.evidenceUrls = evidenceUrls;
-            this.date = date;
-            this.description = description;
         }
 
         @NotNull

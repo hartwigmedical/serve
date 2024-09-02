@@ -22,6 +22,7 @@ import com.hartwig.serve.datamodel.characteristic.TumorCharacteristicType;
 import com.hartwig.serve.datamodel.serialization.util.ActionableFileUtil;
 import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
+import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
@@ -84,8 +85,8 @@ public class ActionableCharacteristicFileTest {
         assertEquals(EvidenceLevel.B, characteristic2.level());
         assertEquals(EvidenceDirection.RESPONSIVE, characteristic2.direction());
         assertEquals(2, characteristic2.evidenceUrls().size());
-        assertNull(characteristic2.date());
-        assertNull(characteristic2.description());
+        assertEquals(LocalDate.EPOCH, characteristic2.date());
+        assertEquals(Strings.EMPTY, characteristic2.description());
     }
 
     @NotNull

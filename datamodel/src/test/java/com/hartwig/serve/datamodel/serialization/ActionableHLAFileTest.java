@@ -1,7 +1,6 @@
 package com.hartwig.serve.datamodel.serialization;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -15,6 +14,7 @@ import com.hartwig.serve.datamodel.immuno.ActionableHLA;
 import com.hartwig.serve.datamodel.serialization.util.ActionableFileUtil;
 import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
+import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
@@ -48,8 +48,8 @@ public class ActionableHLAFileTest {
         assertEquals("A*02", hla2.hlaAllele());
         assertEquals("Nivolumab", DatamodelTestFactory.setToField(DatamodelTestFactory.extractClinicalTrial(hla2).therapyNames()));
         assertEquals("Skin melanoma", hla2.applicableCancerType().name());
-        assertNull(hla2.date());
-        assertNull(hla2.description());
+        assertEquals(LocalDate.EPOCH, hla2.date());
+        assertEquals(Strings.EMPTY, hla2.description());
     }
 
     @NotNull

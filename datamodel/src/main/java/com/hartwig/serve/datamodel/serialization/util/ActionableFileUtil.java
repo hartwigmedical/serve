@@ -26,7 +26,6 @@ import com.hartwig.serve.datamodel.Treatment;
 
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public final class ActionableFileUtil {
 
@@ -149,22 +148,21 @@ public final class ActionableFileUtil {
                 return values.length > evidenceUrlPosition ? fieldToSet(values[evidenceUrlPosition]) : Sets.newHashSet();
             }
 
-            @Nullable
+            @NotNull
             @Override
             public LocalDate date() {
                 String lastUpdated = values[fields.get("date")];
                 if (lastUpdated.isEmpty()) {
-                    return null;
+                    return LocalDate.EPOCH;
                 } else {
                     return LocalDate.parse(lastUpdated);
                 }
             }
 
-            @Nullable
+            @NotNull
             @Override
             public String description() {
-                String efficacyEvidence = values[fields.get("description")];
-                return efficacyEvidence.isEmpty() ? null : efficacyEvidence;
+                return values[fields.get("description")];
             }
         };
     }

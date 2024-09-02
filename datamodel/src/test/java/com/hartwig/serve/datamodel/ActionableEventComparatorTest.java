@@ -90,16 +90,17 @@ public class ActionableEventComparatorTest {
             @NotNull ApprovalStatus approvalStatus, @NotNull EvidenceDirection direction, boolean isTrial, boolean isTreatment,
             @NotNull String treatmentName, @Nullable Country country) {
         return DatamodelTestFactory.createActionableEvent(source,
+                LocalDate.EPOCH,
                 Strings.EMPTY,
                 Sets.newHashSet(),
                 DatamodelTestFactory.interventionBuilder(isTrial, isTreatment, treatmentName, country),
                 DatamodelTestFactory.cancerTypeBuilder().name(applicableCancerType).build(),
                 Sets.newHashSet(),
+                Strings.EMPTY,
                 level,
                 approvalStatus,
                 direction,
-                Sets.newHashSet(),
-                LocalDate.EPOCH,
-                Strings.EMPTY);
+                Sets.newHashSet()
+        );
     }
 }

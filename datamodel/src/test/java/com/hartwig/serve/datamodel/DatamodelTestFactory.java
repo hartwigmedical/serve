@@ -109,7 +109,8 @@ public final class DatamodelTestFactory {
     public static ActionableEvent createActionableEvent(@NotNull Knowledgebase source, @NotNull String sourceEvent,
             @NotNull Set<String> sourceUrls, @NotNull Intervention intervention, @NotNull CancerType applicableCancerType,
             @NotNull Set<CancerType> blacklistCancerTypes, @NotNull EvidenceLevel level, @NotNull ApprovalStatus approvalStatus,
-            @NotNull EvidenceDirection direction, @NotNull Set<String> evidenceUrls, @Nullable LocalDate date, @Nullable String description) {
+            @NotNull EvidenceDirection direction, @NotNull Set<String> evidenceUrls, @Nullable LocalDate date,
+            @Nullable String description) {
         return new ActionableEventImpl(source,
                 date,
                 sourceEvent,
@@ -151,8 +152,10 @@ public final class DatamodelTestFactory {
         @Nullable
         private final String description;
 
-        public ActionableEventImpl(@NotNull Knowledgebase source, @Nullable LocalDate date, @NotNull String sourceEvent, @NotNull Set<String> sourceUrls,
-                @NotNull Intervention intervention, @NotNull CancerType applicableCancerType, @NotNull Set<CancerType> blacklistCancerTypes, @Nullable String description,
+        public ActionableEventImpl(@NotNull Knowledgebase source, @NotNull LocalDate date, @NotNull String sourceEvent,
+                @NotNull Set<String> sourceUrls,
+                @NotNull Intervention intervention, @NotNull CancerType applicableCancerType, @NotNull Set<CancerType> blacklistCancerTypes,
+                @NotNull String description,
                 @NotNull EvidenceLevel level, @NotNull ApprovalStatus approvalStatus, @NotNull EvidenceDirection direction,
                 @NotNull Set<String> evidenceUrls) {
             this.source = source;
@@ -229,13 +232,13 @@ public final class DatamodelTestFactory {
             return evidenceUrls;
         }
 
-        @Nullable
+        @NotNull
         @Override
         public LocalDate date() {
             return date;
         }
 
-        @Nullable
+        @NotNull
         @Override
         public String description() {
             return description;

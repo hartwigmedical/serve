@@ -2,6 +2,7 @@ package com.hartwig.serve.datamodel;
 
 import static org.junit.Assert.assertEquals;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -98,7 +99,7 @@ public class ActionableEventComparatorTest {
                 approvalStatus,
                 direction,
                 Sets.newHashSet(),
-                null,
-                null);
+                LocalDate.EPOCH,
+                Strings.EMPTY);
     }
 }

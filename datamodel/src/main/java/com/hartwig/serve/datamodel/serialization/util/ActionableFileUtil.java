@@ -139,7 +139,9 @@ public final class ActionableFileUtil {
 
             @NotNull
             @Override
-            public ApprovalStatus approvalStatus() { return ApprovalStatus.valueOf(values[fields.get("approvalStatus")]); }
+            public ApprovalStatus approvalStatus() {
+                return ApprovalStatus.valueOf(values[fields.get("approvalStatus")]);
+            }
 
             @NotNull
             @Override
@@ -216,8 +218,8 @@ public final class ActionableFileUtil {
                 .add(event.approvalStatus().toString())
                 .add(event.direction().toString())
                 .add(setToField(event.evidenceUrls()))
-                .add(event.date() != null ? event.date().toString() : Strings.EMPTY)
-                .add(event.description() != null ? event.description() : Strings.EMPTY)
+                .add(event.date().toString())
+                .add(event.description())
                 .toString();
     }
 

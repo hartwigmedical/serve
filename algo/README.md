@@ -449,8 +449,10 @@ The big files are the hg19 and hg37 reference genomes. They are too big to store
 elsewhere.
 
 ## Version History and Download Links
+
 - [5.1.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v5.1.0):
     - Added "ApprovalStatus" to ActionableEvent output files
+    - Added date and description to ActionableEvent and output files
 - [5.0.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v5.0.0):
     - Add "Decreased response" and "No benefit" to evidence directions
     - Add facility name curation and write cities and facility names to the output files

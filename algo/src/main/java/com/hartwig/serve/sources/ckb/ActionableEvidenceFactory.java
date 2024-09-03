@@ -141,6 +141,7 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
 
                     actionableEntries.add(ImmutableActionableEntry.builder()
                             .source(Knowledgebase.CKB_EVIDENCE)
+                            .date(entry.updateDate())
                             .sourceEvent(sourceEvent)
                             .sourceUrls(sourceUrls)
                             .intervention(ImmutableTreatment.builder()
@@ -150,6 +151,7 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
                                     .build())
                             .applicableCancerType(cancerTypeExtraction.applicableCancerType())
                             .blacklistCancerTypes(cancerTypeExtraction.blacklistedCancerTypes())
+                            .description(evidence.efficacyEvidence())
                             .level(level)
                             .approvalStatus(approvalStatus)
                             .direction(direction)

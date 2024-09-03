@@ -1,5 +1,6 @@
 package com.hartwig.serve.datamodel.serialization.util;
 
+import java.time.LocalDate;
 import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.Map;
@@ -40,6 +41,7 @@ public final class ActionableFileUtil {
     @NotNull
     public static String header() {
         return new StringJoiner(FIELD_DELIMITER).add("source")
+                .add("date")
                 .add("sourceEvent")
                 .add("sourceUrls")
                 .add("nctId")
@@ -54,6 +56,7 @@ public final class ActionableFileUtil {
                 .add("applicableCancerType")
                 .add("applicableDoid")
                 .add("blacklistCancerTypes")
+                .add("description")
                 .add("level")
                 .add("approvalStatus")
                 .add("direction")
@@ -136,7 +139,9 @@ public final class ActionableFileUtil {
 
             @NotNull
             @Override
-            public ApprovalStatus approvalStatus() { return ApprovalStatus.valueOf(values[fields.get("approvalStatus")]); }
+            public ApprovalStatus approvalStatus() {
+                return ApprovalStatus.valueOf(values[fields.get("approvalStatus")]);
+            }
 
             @NotNull
             @Override
@@ -149,6 +154,23 @@ public final class ActionableFileUtil {
             public Set<String> evidenceUrls() {
                 int evidenceUrlPosition = fields.get("evidenceUrls");
                 return values.length > evidenceUrlPosition ? fieldToSet(values[evidenceUrlPosition]) : Sets.newHashSet();
+            }
+
+            @NotNull
+            @Override
+            public LocalDate date() {
+                String lastUpdated = values[fields.get("date")];
+                if (lastUpdated.isEmpty()) {
+                    return LocalDate.EPOCH;
+                } else {
+                    return LocalDate.parse(lastUpdated);
+                }
+            }
+
+            @NotNull
+            @Override
+            public String description() {
+                return values[fields.get("description")];
             }
         };
     }
@@ -174,6 +196,7 @@ public final class ActionableFileUtil {
             therapy.add(treatment.name());
         }
         return new StringJoiner(FIELD_DELIMITER).add(event.source().toString())
+                .add(event.date().toString())
                 .add(event.sourceEvent())
                 .add(setToField(event.sourceUrls()))
                 .add(clinicalTrial != null ? clinicalTrial.nctId() : Strings.EMPTY)
@@ -192,6 +215,7 @@ public final class ActionableFileUtil {
                 .add(event.applicableCancerType().name())
                 .add(event.applicableCancerType().doid())
                 .add(cancerTypesToField(event.blacklistCancerTypes()))
+                .add(event.description())
                 .add(event.level().toString())
                 .add(event.approvalStatus().toString())
                 .add(event.direction().toString())

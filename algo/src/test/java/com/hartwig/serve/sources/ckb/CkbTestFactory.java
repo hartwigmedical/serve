@@ -28,14 +28,16 @@ import org.jetbrains.annotations.Nullable;
 
 public final class CkbTestFactory {
 
-    private static final LocalDate TEST_DATE = LocalDate.of(2021, 2, 20);
+    static final LocalDate TEST_CREATE_DATE = LocalDate.of(2021, 2, 20);
+    static final LocalDate TEST_UPDATE_DATE = LocalDate.of(2022, 3, 21);
+    static final String EFFICACY_EVIDENCE = "efficacy evidence";
 
     private CkbTestFactory() {
     }
 
     @NotNull
     public static ImmutableCkbEntry.Builder builder() {
-        return ImmutableCkbEntry.builder().profileId(0).createDate(TEST_DATE).updateDate(TEST_DATE).profileName("");
+        return ImmutableCkbEntry.builder().profileId(0).createDate(TEST_CREATE_DATE).updateDate(TEST_UPDATE_DATE).profileName("");
     }
 
     @NotNull
@@ -86,7 +88,7 @@ public final class CkbTestFactory {
     public static ClinicalTrial createTrial(@NotNull String recruitment, @NotNull List<VariantRequirementDetail> variantRequirementDetails,
             @NotNull List<Location> locations, @NotNull String nctId, @NotNull String title, @NotNull List<String> ageGroups) {
         return ImmutableClinicalTrial.builder()
-                .updateDate(TEST_DATE)
+                .updateDate(TEST_UPDATE_DATE)
                 .nctId(nctId)
                 .title(title)
                 .indications(List.of(createIndication("AB", "DOID:162")))
@@ -104,7 +106,7 @@ public final class CkbTestFactory {
             @NotNull String title, @NotNull List<Therapy> therapies, @NotNull List<Indication> indication,
             @NotNull List<String> ageGroups) {
         return ImmutableClinicalTrial.builder()
-                .updateDate(TEST_DATE)
+                .updateDate(TEST_UPDATE_DATE)
                 .nctId(nctId)
                 .title(title)
                 .therapies(therapies)
@@ -126,7 +128,8 @@ public final class CkbTestFactory {
                 .indication(createIndication(indicationName, termId))
                 .responseType(responseType)
                 .evidenceType(evidenceType)
-                .efficacyEvidence("")
+                .efficacyEvidence(EFFICACY_EVIDENCE)
+                .approvalStatus("")
                 .approvalStatus(approvalStatus)
                 .ampCapAscoEvidenceLevel(level)
                 .ampCapAscoInferredTier("")
@@ -138,8 +141,8 @@ public final class CkbTestFactory {
     public static Therapy createTherapy(@NotNull String therapyName) {
         return ImmutableTherapy.builder()
                 .id(0)
-                .createDate(TEST_DATE)
-                .updateDate(TEST_DATE)
+                .createDate(TEST_CREATE_DATE)
+                .updateDate(TEST_UPDATE_DATE)
                 .therapyName(therapyName)
                 .drugs(Lists.newArrayList())
                 .synonyms(Lists.newArrayList())
@@ -157,7 +160,7 @@ public final class CkbTestFactory {
                 .source("")
                 .definition("")
                 .currentPreferredTerm("")
-                .lastUpdateDateFromDO(TEST_DATE)
+                .lastUpdateDateFromDO(TEST_UPDATE_DATE)
                 .termId(termId)
                 .altIds(Lists.newArrayList())
                 .build();
@@ -184,8 +187,8 @@ public final class CkbTestFactory {
     private static Variant createVariant(@NotNull String geneSymbol, @NotNull String variant, @NotNull String fullName) {
         return ImmutableVariant.builder()
                 .id(0)
-                .createDate(TEST_DATE)
-                .updateDate(TEST_DATE)
+                .createDate(TEST_CREATE_DATE)
+                .updateDate(TEST_UPDATE_DATE)
                 .fullName(fullName)
                 .variant(variant)
                 .isHotspot(false)
@@ -195,6 +198,12 @@ public final class CkbTestFactory {
 
     @NotNull
     private static Gene createGene(@NotNull String geneSymbol) {
-        return ImmutableGene.builder().id(0).createDate(TEST_DATE).updateDate(TEST_DATE).geneSymbol(geneSymbol).geneRole("").build();
+        return ImmutableGene.builder()
+                .id(0)
+                .createDate(TEST_CREATE_DATE)
+                .updateDate(TEST_UPDATE_DATE)
+                .geneSymbol(geneSymbol)
+                .geneRole("")
+                .build();
     }
 }

@@ -70,6 +70,8 @@ public class ActionableEvidenceFactoryTest {
         assertEquals(Sets.newHashSet(), characteristics.blacklistCancerTypes());
         assertEquals(EvidenceLevel.A, characteristics.level());
         assertEquals(EvidenceDirection.RESPONSIVE, characteristics.direction());
+        assertEquals(CkbTestFactory.TEST_UPDATE_DATE, characteristics.date());
+        assertEquals(CkbTestFactory.EFFICACY_EVIDENCE, characteristics.description());
     }
 
     @Test
@@ -98,6 +100,8 @@ public class ActionableEvidenceFactoryTest {
         assertTrue(amplification.blacklistCancerTypes().isEmpty());
         assertEquals(EvidenceLevel.A, amplification.level());
         assertEquals(EvidenceDirection.RESPONSIVE, amplification.direction());
+        assertEquals(CkbTestFactory.TEST_UPDATE_DATE, amplification.date());
+        assertEquals(CkbTestFactory.EFFICACY_EVIDENCE, amplification.description());
     }
 
     @Test
@@ -126,6 +130,8 @@ public class ActionableEvidenceFactoryTest {
         assertEquals(Sets.newHashSet(), hotspot.blacklistCancerTypes());
         assertEquals(EvidenceLevel.A, hotspot.level());
         assertEquals(EvidenceDirection.RESPONSIVE, hotspot.direction());
+        assertEquals(CkbTestFactory.TEST_UPDATE_DATE, hotspot.date());
+        assertEquals(CkbTestFactory.EFFICACY_EVIDENCE, hotspot.description());
     }
 
     @Test

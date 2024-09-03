@@ -3,6 +3,7 @@ package com.hartwig.serve.datamodel.serialization;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +15,7 @@ import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
 import com.hartwig.serve.datamodel.serialization.util.ActionableFileUtil;
 import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
+import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
@@ -31,7 +33,6 @@ public class ActionableHotspotFileTest {
         List<ActionableHotspot> regeneratedHotspots = ActionableHotspotFile.fromLines(ActionableHotspotFile.toLines(hotspots), fields);
 
         assertEquals(hotspots, regeneratedHotspots);
-
     }
 
     private static void assertActionableHotspots(@NotNull List<ActionableHotspot> hotspots) {
@@ -46,6 +47,8 @@ public class ActionableHotspotFileTest {
         assertEquals("Vemurafenib", DatamodelTestFactory.extractTreatment(hotspot1).name());
         assertEquals("Skin Melanoma", hotspot1.applicableCancerType().name());
         assertEquals(ApprovalStatus.GUIDELINE, hotspot1.approvalStatus());
+        assertEquals(LocalDate.of(2021, 2, 3), hotspot1.date());
+        assertEquals("efficacy evidence", hotspot1.description());
 
         ActionableHotspot hotspot2 = findBySource(hotspots, Knowledgebase.CKB_TRIAL);
         assertEquals("BRAF", hotspot2.gene());
@@ -56,6 +59,8 @@ public class ActionableHotspotFileTest {
         assertEquals("Vemurafenib", DatamodelTestFactory.setToField(DatamodelTestFactory.extractClinicalTrial(hotspot2).therapyNames()));
         assertEquals("Solid tumor", hotspot2.applicableCancerType().name());
         assertEquals(ApprovalStatus.GUIDELINE, hotspot1.approvalStatus());
+        assertEquals(LocalDate.EPOCH, hotspot2.date());
+        assertEquals(Strings.EMPTY, hotspot2.description());
     }
 
     @NotNull

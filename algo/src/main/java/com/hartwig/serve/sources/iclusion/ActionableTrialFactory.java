@@ -1,5 +1,6 @@
 package com.hartwig.serve.sources.iclusion;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -22,6 +23,7 @@ import com.hartwig.serve.iclusion.datamodel.IclusionTumorLocation;
 import org.apache.commons.compress.utils.Lists;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 
 public class ActionableTrialFactory {
@@ -82,7 +84,9 @@ public class ActionableTrialFactory {
                 .level(EvidenceLevel.B)
                 .approvalStatus(ApprovalStatus.UNKNOWN)
                 .direction(EvidenceDirection.RESPONSIVE)
-                .evidenceUrls(Sets.newHashSet());
+                .evidenceUrls(Sets.newHashSet())
+                .date(LocalDate.EPOCH)
+                .description(Strings.EMPTY);
     }
 
     @NotNull

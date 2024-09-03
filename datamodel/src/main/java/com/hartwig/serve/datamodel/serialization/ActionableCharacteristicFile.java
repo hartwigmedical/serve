@@ -73,7 +73,7 @@ public final class ActionableCharacteristicFile {
 
     @NotNull
     private static ActionableCharacteristic fromLine(@NotNull String line, @NotNull Map<String, Integer> fields) {
-        String[] values = line.split(ActionableFileUtil.FIELD_DELIMITER);
+        String[] values = line.split(ActionableFileUtil.FIELD_DELIMITER, -1);
 
         String cutoffType = SerializationUtil.optionalString(values[fields.get("cutoffType")]);
 

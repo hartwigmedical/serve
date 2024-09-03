@@ -29,7 +29,7 @@ final class JsonDatabaseToCkbEntryConverter {
 
         VariantFactory variantFactory = new VariantFactory(ckbJsonDatabase);
         AtomicInteger current = new AtomicInteger(0);
-        int report = (int) Math.round(profileCount / 10D);
+        int report = Math.max((int) Math.round(profileCount / 10D), 1);
 
         return ckbJsonDatabase.molecularProfiles().parallelStream().map(molecularProfile -> {
             CkbEntry entry = ImmutableCkbEntry.builder()

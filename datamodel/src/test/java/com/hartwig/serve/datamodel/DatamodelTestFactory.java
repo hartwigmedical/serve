@@ -1,5 +1,6 @@
 package com.hartwig.serve.datamodel;
 
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Set;
 import java.util.StringJoiner;
@@ -91,28 +92,33 @@ public final class DatamodelTestFactory {
     public static ActionableEvent createTestActionableEvent() {
 
         return createActionableEvent(Knowledgebase.UNKNOWN,
+                LocalDate.EPOCH,
                 Strings.EMPTY,
                 Sets.newHashSet(),
                 interventionBuilder(false, true, "treatment1", null),
                 DatamodelTestFactory.cancerTypeBuilder().build(),
                 Sets.newHashSet(),
+                Strings.EMPTY,
                 EvidenceLevel.A,
                 ApprovalStatus.FDA_APPROVED,
                 EvidenceDirection.NO_BENEFIT,
-                Sets.newHashSet());
+                Sets.newHashSet()
+        );
     }
 
     @NotNull
-    public static ActionableEvent createActionableEvent(@NotNull Knowledgebase source, @NotNull String sourceEvent,
+    public static ActionableEvent createActionableEvent(@NotNull Knowledgebase source, @NotNull LocalDate date, @NotNull String sourceEvent,
             @NotNull Set<String> sourceUrls, @NotNull Intervention intervention, @NotNull CancerType applicableCancerType,
-            @NotNull Set<CancerType> blacklistCancerTypes, @NotNull EvidenceLevel level, @NotNull ApprovalStatus approvalStatus,
-            @NotNull EvidenceDirection direction, @NotNull Set<String> evidenceUrls) {
+            @NotNull Set<CancerType> blacklistCancerTypes, @NotNull String description, @NotNull EvidenceLevel level,
+            @NotNull ApprovalStatus approvalStatus, @NotNull EvidenceDirection direction, @NotNull Set<String> evidenceUrls) {
         return new ActionableEventImpl(source,
+                date,
                 sourceEvent,
                 sourceUrls,
                 intervention,
                 applicableCancerType,
                 blacklistCancerTypes,
+                description,
                 level,
                 approvalStatus,
                 direction,
@@ -141,17 +147,23 @@ public final class DatamodelTestFactory {
         private final EvidenceDirection direction;
         @NotNull
         private final Set<String> evidenceUrls;
+        @NotNull
+        private final LocalDate date;
+        @NotNull
+        private final String description;
 
-        public ActionableEventImpl(@NotNull Knowledgebase source, @NotNull String sourceEvent, @NotNull Set<String> sourceUrls,
-                @NotNull Intervention intervention, @NotNull CancerType applicableCancerType, @NotNull Set<CancerType> blacklistCancerTypes,
-                @NotNull EvidenceLevel level, @NotNull ApprovalStatus approvalStatus, @NotNull EvidenceDirection direction,
-                @NotNull Set<String> evidenceUrls) {
+        public ActionableEventImpl(@NotNull Knowledgebase source, @NotNull LocalDate date, @NotNull String sourceEvent,
+                @NotNull Set<String> sourceUrls, @NotNull Intervention intervention, @NotNull CancerType applicableCancerType,
+                @NotNull Set<CancerType> blacklistCancerTypes, @NotNull String description, @NotNull EvidenceLevel level,
+                @NotNull ApprovalStatus approvalStatus, @NotNull EvidenceDirection direction, @NotNull Set<String> evidenceUrls) {
             this.source = source;
+            this.date = date;
             this.sourceEvent = sourceEvent;
             this.sourceUrls = sourceUrls;
             this.intervention = intervention;
             this.applicableCancerType = applicableCancerType;
             this.blacklistCancerTypes = blacklistCancerTypes;
+            this.description = description;
             this.level = level;
             this.approvalStatus = approvalStatus;
             this.direction = direction;
@@ -216,6 +228,18 @@ public final class DatamodelTestFactory {
         @Override
         public Set<String> evidenceUrls() {
             return evidenceUrls;
+        }
+
+        @NotNull
+        @Override
+        public LocalDate date() {
+            return date;
+        }
+
+        @NotNull
+        @Override
+        public String description() {
+            return description;
         }
 
         @Override

@@ -2,6 +2,7 @@ package com.hartwig.serve.datamodel.serialization.util;
 
 import static org.junit.Assert.assertEquals;
 
+import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -19,6 +20,7 @@ import com.hartwig.serve.datamodel.ImmutableCountry;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.Treatment;
 
+import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.Test;
@@ -28,15 +30,18 @@ public class ActionableFileUtilTest {
     @Test
     public void canConvertActionableTreatment() {
         ActionableEvent event = DatamodelTestFactory.createActionableEvent(Knowledgebase.VICC_CGI,
+                LocalDate.EPOCH,
                 "source event",
                 Sets.newHashSet(),
                 DatamodelTestFactory.interventionBuilder(false, true, "treatment1", null),
                 DatamodelTestFactory.cancerTypeBuilder().name("applicable name").doid("applicable doid").build(),
                 Sets.newHashSet(DatamodelTestFactory.cancerTypeBuilder().name("blacklist name").doid("blacklist doid").build()),
+                Strings.EMPTY,
                 EvidenceLevel.C,
                 ApprovalStatus.GUIDELINE,
                 EvidenceDirection.RESISTANT,
-                Sets.newHashSet("url1", "url2"));
+                Sets.newHashSet("url1", "url2")
+        );
 
         String line = ActionableFileUtil.toLine(event);
         Map<String, Integer> fields = SerializationUtil.createFields(ActionableFileUtil.header(), ActionableFileUtil.FIELD_DELIMITER);
@@ -64,15 +69,18 @@ public class ActionableFileUtilTest {
                 .hospitalsPerCity(Map.of("Rotterdam", Set.of("EMC", "Ikazia"), "Nijmegen", Set.of("Radboud UMC", "CWZ")))
                 .build();
         ActionableEvent event = DatamodelTestFactory.createActionableEvent(Knowledgebase.VICC_CGI,
+                LocalDate.EPOCH,
                 "source event",
                 Sets.newHashSet(),
                 DatamodelTestFactory.interventionBuilder(true, false, "treatment1", country),
                 DatamodelTestFactory.cancerTypeBuilder().name("applicable name").doid("applicable doid").build(),
                 Sets.newHashSet(DatamodelTestFactory.cancerTypeBuilder().name("blacklist name").doid("blacklist doid").build()),
+                Strings.EMPTY,
                 EvidenceLevel.C,
                 ApprovalStatus.UNKNOWN,
                 EvidenceDirection.RESISTANT,
-                Sets.newHashSet("url1", "url2"));
+                Sets.newHashSet("url1", "url2")
+        );
 
         String line = ActionableFileUtil.toLine(event);
         Map<String, Integer> fields = SerializationUtil.createFields(ActionableFileUtil.header(), ActionableFileUtil.FIELD_DELIMITER);

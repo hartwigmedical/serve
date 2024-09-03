@@ -1,5 +1,6 @@
 package com.hartwig.serve.datamodel;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 import org.jetbrains.annotations.NotNull;
@@ -8,6 +9,9 @@ public interface ActionableEvent {
 
     @NotNull
     Knowledgebase source();
+
+    @NotNull
+    LocalDate date();
 
     @NotNull
     String sourceEvent();
@@ -23,6 +27,9 @@ public interface ActionableEvent {
 
     @NotNull
     Set<CancerType> blacklistCancerTypes();
+
+    @NotNull
+    String description();
 
     @NotNull
     EvidenceLevel level();

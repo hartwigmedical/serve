@@ -74,7 +74,7 @@ public final class KnownCopyNumberFile {
 
     @NotNull
     private static KnownCopyNumber fromLine(@NotNull String line, @NotNull Map<String, Integer> fields) {
-        String[] values = line.split(FIELD_DELIMITER);
+        String[] values = line.split(FIELD_DELIMITER, -1);
 
         return ImmutableKnownCopyNumber.builder()
                 .gene(values[fields.get("gene")])

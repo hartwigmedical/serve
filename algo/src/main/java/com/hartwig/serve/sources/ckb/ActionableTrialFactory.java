@@ -1,5 +1,6 @@
 package com.hartwig.serve.sources.ckb;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,7 @@ import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.sources.ckb.blacklist.CkbStudyBlacklistModel;
 import com.hartwig.serve.sources.ckb.region.CkbRegion;
 
+import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -96,6 +98,8 @@ class ActionableTrialFactory implements ActionableEntryFactory {
                                     .approvalStatus(ApprovalStatus.CLINICAL_STUDY)
                                     .direction(EvidenceDirection.RESPONSIVE)
                                     .evidenceUrls(Sets.newHashSet("https://clinicaltrials.gov/study/" + trial.nctId()))
+                                    .date(LocalDate.EPOCH)
+                                    .description(Strings.EMPTY)
                                     .build());
                         }
                     }

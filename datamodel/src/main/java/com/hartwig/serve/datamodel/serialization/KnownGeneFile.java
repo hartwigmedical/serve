@@ -64,7 +64,7 @@ public final class KnownGeneFile {
 
     @NotNull
     private static KnownGene fromLine(@NotNull String line, @NotNull Map<String, Integer> fields) {
-        String[] values = line.split(FIELD_DELIMITER);
+        String[] values = line.split(FIELD_DELIMITER, -1);
 
         return ImmutableKnownGene.builder()
                 .gene(values[fields.get("gene")])

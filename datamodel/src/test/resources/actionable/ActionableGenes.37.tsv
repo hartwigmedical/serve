@@ -1,8 +1,8 @@
-gene	event	source	sourceEvent	sourceUrls	nctId	title	acronym	genderCriterium	countriesAndCities	hospitalsPerCity	treatment	treatmentApproachesDrugClass	treatmentApproachesTherapy	applicableCancerType	applicableDoid	blacklistCancerTypes	level	approvalStatus	direction	evidenceUrls
-ALK	FUSION	CKB_EVIDENCE	fusion	http							Crizotinib			Lung Adenocarcinoma	X		A	GUIDELINE	RESPONSIVE	https
-BRCA1	INACTIVATION	CKB_EVIDENCE	inact	http							DRUP			Solid Tumors	X	Hematologic cancer;2531	B	GUIDELINE	RESPONSIVE	http
-ERBB2	AMPLIFICATION	CKB_EVIDENCE	amp	http							Trastuzumab			Breast Cancer	X		A	GUIDELINE	RESPONSIVE	http
-ERBB2	AMPLIFICATION	CKB_EVIDENCE	amp	http							Panitumumab			Colorectal Cancer	X		B	GUIDELINE	RESISTANT	http
-FGFR2	FUSION	CKB_EVIDENCE	fusion	http							Erdafitinib			Bladder Cancer	X		B	GUIDELINE	RESPONSIVE
-MET	AMPLIFICATION	CKB_EVIDENCE	amp	http							DRUP			Advanced Solid Tumor	X	Hematologic cancer;2531	B	GUIDELINE	RESPONSIVE
-NRAS	ACTIVATION	CKB_TRIAL	act	http	NCT1	study1	study1	male	Belgium(Antwerpen)	Antwerpen(ZAS Vincentius)	Cetuximab			Colorectal Cancer	X		A	GUIDELINE	RESISTANT	http
+gene	event	source	date	sourceEvent	sourceUrls	nctId	title	acronym	genderCriterium	countriesAndCities	hospitalsPerCity	treatment	treatmentApproachesDrugClass	treatmentApproachesTherapy	applicableCancerType	applicableDoid	blacklistCancerTypes	description	level	approvalStatus	direction	evidenceUrls
+ALK	FUSION	CKB_EVIDENCE	2021-02-03	fusion	http							Crizotinib			Lung Adenocarcinoma	X		efficacy evidence A	A	GUIDELINE	RESPONSIVE	https
+BRCA1	INACTIVATION	CKB_EVIDENCE	2021-02-04	inact	http							DRUP			Solid Tumors	X	Hematologic cancer;2531	efficacy evidence B	B	GUIDELINE	RESPONSIVE	http
+ERBB2	AMPLIFICATION	CKB_EVIDENCE	2021-02-05	amp	http							Trastuzumab			Breast Cancer	X		efficacy evidence C	A	GUIDELINE	RESPONSIVE	http
+ERBB2	AMPLIFICATION	CKB_EVIDENCE	2021-02-06	amp	http							Panitumumab			Colorectal Cancer	X		efficacy evidence D	B	GUIDELINE	RESISTANT	http
+FGFR2	FUSION	CKB_EVIDENCE	2021-02-07	fusion	http							Erdafitinib			Bladder Cancer	X		efficacy evidence E	B	GUIDELINE	RESPONSIVE
+MET	AMPLIFICATION	CKB_EVIDENCE	2021-02-08	amp	http							DRUP			Advanced Solid Tumor	X	Hematologic cancer;2531	efficacy evidence F	B	GUIDELINE	RESPONSIVE
+NRAS	ACTIVATION	CKB_TRIAL	1970-01-01	act	http	NCT1	study1	study1	male	Belgium(Antwerpen)	Antwerpen(ZAS Vincentius)	Cetuximab			Colorectal Cancer	X			A	GUIDELINE	RESISTANT	http

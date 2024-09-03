@@ -75,7 +75,7 @@ public final class KnownFusionFile {
 
     @NotNull
     private static KnownFusion fromLine(@NotNull String line, @NotNull Map<String, Integer> fields) {
-        String[] values = line.split(FIELD_DELIMITER);
+        String[] values = line.split(FIELD_DELIMITER, -1);
 
         return ImmutableKnownFusion.builder()
                 .geneUp(values[fields.get("geneUp")])

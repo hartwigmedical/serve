@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +23,7 @@ import com.hartwig.serve.datamodel.characteristic.TumorCharacteristicType;
 import com.hartwig.serve.datamodel.serialization.util.ActionableFileUtil;
 import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
+import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
@@ -67,6 +69,8 @@ public class ActionableCharacteristicFileTest {
         assertEquals(ApprovalStatus.GUIDELINE, characteristic1.approvalStatus());
         assertEquals(EvidenceDirection.RESPONSIVE, characteristic1.direction());
         assertEquals(2, characteristic1.evidenceUrls().size());
+        assertEquals(LocalDate.of(2021, 2, 3), characteristic1.date());
+        assertEquals("efficacy evidence", characteristic1.description());
 
         ActionableCharacteristic characteristic2 = findBySource(characteristics, Knowledgebase.CKB_TRIAL);
         ClinicalTrial trial = DatamodelTestFactory.extractClinicalTrial(characteristic2);
@@ -84,6 +88,8 @@ public class ActionableCharacteristicFileTest {
         assertEquals(ApprovalStatus.GUIDELINE, characteristic1.approvalStatus());
         assertEquals(EvidenceDirection.RESPONSIVE, characteristic2.direction());
         assertEquals(2, characteristic2.evidenceUrls().size());
+        assertEquals(LocalDate.EPOCH, characteristic2.date());
+        assertEquals(Strings.EMPTY, characteristic2.description());
     }
 
     @NotNull

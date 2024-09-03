@@ -54,8 +54,6 @@ import org.jetbrains.annotations.Nullable;
 import org.jooq.DSLContext;
 import org.jooq.InsertValuesStep10;
 import org.jooq.InsertValuesStep12;
-import org.jooq.InsertValuesStep21;
-import org.jooq.InsertValuesStep22;
 import org.jooq.InsertValuesStep4;
 import org.jooq.InsertValuesStep6;
 import org.jooq.InsertValuesStep7;
@@ -128,6 +126,7 @@ public class ServeDAO {
                     ACTIONABLEHOTSPOT.REF,
                     ACTIONABLEHOTSPOT.ALT,
                     ACTIONABLEHOTSPOT.SOURCE,
+                    ACTIONABLEHOTSPOT.DATE,
                     ACTIONABLEHOTSPOT.SOURCEEVENT,
                     ACTIONABLEHOTSPOT.SOURCEURLS,
                     ACTIONABLEHOTSPOT.NCTID,
@@ -142,6 +141,7 @@ public class ServeDAO {
                     ACTIONABLEHOTSPOT.APPLICABLECANCERTYPE,
                     ACTIONABLEHOTSPOT.APPLICABLEDOID,
                     ACTIONABLEHOTSPOT.BLACKLISTCANCERTYPES,
+                    ACTIONABLEHOTSPOT.DESCRIPTION,
                     ACTIONABLEHOTSPOT.LEVEL,
                     ACTIONABLEHOTSPOT.APPROVALSTATUS,
                     ACTIONABLEHOTSPOT.DIRECTION,
@@ -186,6 +186,7 @@ public class ServeDAO {
             return concat(clinicalTrial.therapyNames());
         }
     }
+
     private static void writeActionableHotspotBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStepN inserter,
             @NotNull ActionableHotspot actionableHotspot) {
         ClinicalTrial clinicalTrial = extractOptionalClinicalTrial(actionableHotspot);
@@ -198,6 +199,7 @@ public class ServeDAO {
                 actionableHotspot.ref(),
                 actionableHotspot.alt(),
                 actionableHotspot.source(),
+                actionableHotspot.date(),
                 actionableHotspot.sourceEvent(),
                 concat(actionableHotspot.sourceUrls()),
                 clinicalTrial != null ? clinicalTrial.nctId() : null,
@@ -216,6 +218,7 @@ public class ServeDAO {
                 actionableHotspot.applicableCancerType().name(),
                 actionableHotspot.applicableCancerType().doid(),
                 concat(toStrings(actionableHotspot.blacklistCancerTypes())),
+                actionableHotspot.description(),
                 actionableHotspot.level(),
                 actionableHotspot.approvalStatus(),
                 actionableHotspot.direction(),
@@ -232,6 +235,7 @@ public class ServeDAO {
                     ACTIONABLECODON.END,
                     ACTIONABLECODON.APPLICABLEMUTATIONTYPE,
                     ACTIONABLECODON.SOURCE,
+                    ACTIONABLECODON.DATE,
                     ACTIONABLECODON.SOURCEEVENT,
                     ACTIONABLECODON.SOURCEURLS,
                     ACTIONABLECODON.NCTID,
@@ -246,6 +250,7 @@ public class ServeDAO {
                     ACTIONABLECODON.APPLICABLECANCERTYPE,
                     ACTIONABLECODON.APPLICABLEDOID,
                     ACTIONABLECODON.BLACKLISTCANCERTYPES,
+                    ACTIONABLECODON.DESCRIPTION,
                     ACTIONABLECODON.LEVEL,
                     ACTIONABLECODON.APPROVALSTATUS,
                     ACTIONABLECODON.DIRECTION,
@@ -265,6 +270,7 @@ public class ServeDAO {
                     ACTIONABLEEXON.END,
                     ACTIONABLEEXON.APPLICABLEMUTATIONTYPE,
                     ACTIONABLEEXON.SOURCE,
+                    ACTIONABLEEXON.DATE,
                     ACTIONABLEEXON.SOURCEEVENT,
                     ACTIONABLEEXON.SOURCEURLS,
                     ACTIONABLEEXON.NCTID,
@@ -279,6 +285,7 @@ public class ServeDAO {
                     ACTIONABLEEXON.APPLICABLECANCERTYPE,
                     ACTIONABLEEXON.APPLICABLEDOID,
                     ACTIONABLEEXON.BLACKLISTCANCERTYPES,
+                    ACTIONABLEEXON.DESCRIPTION,
                     ACTIONABLEEXON.LEVEL,
                     ACTIONABLEEXON.APPROVALSTATUS,
                     ACTIONABLEEXON.DIRECTION,
@@ -301,6 +308,7 @@ public class ServeDAO {
                 actionableRange.end(),
                 actionableRange.applicableMutationType(),
                 actionableRange.source(),
+                actionableRange.date(),
                 actionableRange.sourceEvent(),
                 concat(actionableRange.sourceUrls()),
                 clinicalTrial != null ? clinicalTrial.nctId() : null,
@@ -319,6 +327,7 @@ public class ServeDAO {
                 actionableRange.applicableCancerType().name(),
                 actionableRange.applicableCancerType().doid(),
                 concat(toStrings(actionableRange.blacklistCancerTypes())),
+                actionableRange.description(),
                 actionableRange.level(),
                 actionableRange.approvalStatus(),
                 actionableRange.direction(),
@@ -327,11 +336,12 @@ public class ServeDAO {
 
     private void writeActionableGenes(@NotNull Timestamp timestamp, @NotNull List<ActionableGene> genes) {
         for (List<ActionableGene> batch : Iterables.partition(genes, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
-            InsertValuesStep22 inserter = context.insertInto(ACTIONABLEGENE,
+            InsertValuesStepN inserter = context.insertInto(ACTIONABLEGENE,
                     ACTIONABLEGENE.MODIFIED,
                     ACTIONABLEGENE.GENE,
                     ACTIONABLEGENE.EVENT,
                     ACTIONABLEGENE.SOURCE,
+                    ACTIONABLEGENE.DATE,
                     ACTIONABLEGENE.SOURCEEVENT,
                     ACTIONABLEGENE.SOURCEURLS,
                     ACTIONABLEGENE.NCTID,
@@ -346,6 +356,7 @@ public class ServeDAO {
                     ACTIONABLEGENE.APPLICABLECANCERTYPE,
                     ACTIONABLEGENE.APPLICABLEDOID,
                     ACTIONABLEGENE.BLACKLISTCANCERTYPES,
+                    ACTIONABLEGENE.DESCRIPTION,
                     ACTIONABLEGENE.LEVEL,
                     ACTIONABLEGENE.APPROVALSTATUS,
                     ACTIONABLEGENE.DIRECTION,
@@ -355,7 +366,7 @@ public class ServeDAO {
         }
     }
 
-    private static void writeActionableGeneBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep22 inserter,
+    private static void writeActionableGeneBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStepN inserter,
             @NotNull ActionableGene actionableGene) {
 
         ClinicalTrial clinicalTrial = extractOptionalClinicalTrial(actionableGene);
@@ -365,6 +376,7 @@ public class ServeDAO {
                 actionableGene.gene(),
                 actionableGene.event(),
                 actionableGene.source(),
+                actionableGene.date(),
                 actionableGene.sourceEvent(),
                 concat(actionableGene.sourceUrls()),
                 clinicalTrial != null ? clinicalTrial.nctId() : null,
@@ -383,6 +395,7 @@ public class ServeDAO {
                 actionableGene.applicableCancerType().name(),
                 actionableGene.applicableCancerType().doid(),
                 concat(toStrings(actionableGene.blacklistCancerTypes())),
+                actionableGene.description(),
                 actionableGene.level(),
                 actionableGene.approvalStatus(),
                 actionableGene.direction(),
@@ -400,6 +413,7 @@ public class ServeDAO {
                     ACTIONABLEFUSION.MINEXONDOWN,
                     ACTIONABLEFUSION.MAXEXONDOWN,
                     ACTIONABLEFUSION.SOURCE,
+                    ACTIONABLEFUSION.DATE,
                     ACTIONABLEFUSION.SOURCEEVENT,
                     ACTIONABLEFUSION.SOURCEURLS,
                     ACTIONABLEFUSION.NCTID,
@@ -414,6 +428,7 @@ public class ServeDAO {
                     ACTIONABLEFUSION.APPLICABLECANCERTYPE,
                     ACTIONABLEFUSION.APPLICABLEDOID,
                     ACTIONABLEFUSION.BLACKLISTCANCERTYPES,
+                    ACTIONABLEFUSION.DESCRIPTION,
                     ACTIONABLEFUSION.LEVEL,
                     ACTIONABLEFUSION.APPROVALSTATUS,
                     ACTIONABLEFUSION.DIRECTION,
@@ -437,6 +452,7 @@ public class ServeDAO {
                 actionableFusion.minExonDown(),
                 actionableFusion.maxExonDown(),
                 actionableFusion.source(),
+                actionableFusion.date(),
                 actionableFusion.sourceEvent(),
                 concat(actionableFusion.sourceUrls()),
                 clinicalTrial != null ? clinicalTrial.nctId() : null,
@@ -455,6 +471,7 @@ public class ServeDAO {
                 actionableFusion.applicableCancerType().name(),
                 actionableFusion.applicableCancerType().doid(),
                 concat(toStrings(actionableFusion.blacklistCancerTypes())),
+                actionableFusion.description(),
                 actionableFusion.level(),
                 actionableFusion.approvalStatus(),
                 actionableFusion.direction(),
@@ -469,6 +486,7 @@ public class ServeDAO {
                     ACTIONABLECHARACTERISTIC.CUTOFFTYPE,
                     ACTIONABLECHARACTERISTIC.CUTOFF,
                     ACTIONABLECHARACTERISTIC.SOURCE,
+                    ACTIONABLECHARACTERISTIC.DATE,
                     ACTIONABLECHARACTERISTIC.SOURCEEVENT,
                     ACTIONABLECHARACTERISTIC.SOURCEURLS,
                     ACTIONABLECHARACTERISTIC.NCTID,
@@ -483,6 +501,7 @@ public class ServeDAO {
                     ACTIONABLECHARACTERISTIC.APPLICABLECANCERTYPE,
                     ACTIONABLECHARACTERISTIC.APPLICABLEDOID,
                     ACTIONABLECHARACTERISTIC.BLACKLISTCANCERTYPES,
+                    ACTIONABLECHARACTERISTIC.DESCRIPTION,
                     ACTIONABLECHARACTERISTIC.LEVEL,
                     ACTIONABLECHARACTERISTIC.APPROVALSTATUS,
                     ACTIONABLECHARACTERISTIC.DIRECTION,
@@ -503,6 +522,7 @@ public class ServeDAO {
                 actionableCharacteristic.cutoffType(),
                 actionableCharacteristic.cutoff(),
                 actionableCharacteristic.source(),
+                actionableCharacteristic.date(),
                 actionableCharacteristic.sourceEvent(),
                 concat(actionableCharacteristic.sourceUrls()),
                 clinicalTrial != null ? clinicalTrial.nctId() : null,
@@ -521,6 +541,7 @@ public class ServeDAO {
                 actionableCharacteristic.applicableCancerType().name(),
                 actionableCharacteristic.applicableCancerType().doid(),
                 concat(toStrings(actionableCharacteristic.blacklistCancerTypes())),
+                actionableCharacteristic.description(),
                 actionableCharacteristic.level(),
                 actionableCharacteristic.approvalStatus(),
                 actionableCharacteristic.direction(),
@@ -529,10 +550,11 @@ public class ServeDAO {
 
     private void writeActionableHLA(@NotNull Timestamp timestamp, @NotNull List<ActionableHLA> hla) {
         for (List<ActionableHLA> batch : Iterables.partition(hla, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
-            InsertValuesStep21 inserter = context.insertInto(ACTIONABLEHLA,
+            InsertValuesStepN inserter = context.insertInto(ACTIONABLEHLA,
                     ACTIONABLEHLA.MODIFIED,
                     ACTIONABLEHLA.HLAALLELE,
                     ACTIONABLEHLA.SOURCE,
+                    ACTIONABLEHLA.DATE,
                     ACTIONABLEHLA.SOURCEEVENT,
                     ACTIONABLEHLA.SOURCEURLS,
                     ACTIONABLEHLA.NCTID,
@@ -547,6 +569,7 @@ public class ServeDAO {
                     ACTIONABLEHLA.APPLICABLECANCERTYPE,
                     ACTIONABLEHLA.APPLICABLEDOID,
                     ACTIONABLEHLA.BLACKLISTCANCERTYPES,
+                    ACTIONABLEHLA.DESCRIPTION,
                     ACTIONABLEHLA.LEVEL,
                     ACTIONABLEHLA.APPROVALSTATUS,
                     ACTIONABLEHLA.DIRECTION,
@@ -556,7 +579,7 @@ public class ServeDAO {
         }
     }
 
-    private static void writeActionableHLABatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep21 inserter,
+    private static void writeActionableHLABatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStepN inserter,
             @NotNull ActionableHLA actionableHLA) {
         ClinicalTrial clinicalTrial = extractOptionalClinicalTrial(actionableHLA);
         Treatment treatment = extractOptionalTreatment(actionableHLA);
@@ -564,6 +587,7 @@ public class ServeDAO {
         inserter.values(timestamp,
                 actionableHLA.hlaAllele(),
                 actionableHLA.source(),
+                actionableHLA.date(),
                 actionableHLA.sourceEvent(),
                 concat(actionableHLA.sourceUrls()),
                 clinicalTrial != null ? clinicalTrial.nctId() : null,
@@ -582,6 +606,7 @@ public class ServeDAO {
                 actionableHLA.applicableCancerType().name(),
                 actionableHLA.applicableCancerType().doid(),
                 concat(toStrings(actionableHLA.blacklistCancerTypes())),
+                actionableHLA.description(),
                 actionableHLA.level(),
                 actionableHLA.approvalStatus(),
                 actionableHLA.direction(),

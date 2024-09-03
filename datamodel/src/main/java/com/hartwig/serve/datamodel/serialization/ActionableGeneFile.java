@@ -65,7 +65,7 @@ public final class ActionableGeneFile {
 
     @NotNull
     private static ActionableGene fromLine(@NotNull String line, @NotNull Map<String, Integer> fields) {
-        String[] values = line.split(ActionableFileUtil.FIELD_DELIMITER);
+        String[] values = line.split(ActionableFileUtil.FIELD_DELIMITER, -1);
 
         return ImmutableActionableGene.builder()
                 .from(ActionableFileUtil.fromLine(values, fields))

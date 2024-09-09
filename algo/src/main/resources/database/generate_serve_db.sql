@@ -27,7 +27,7 @@ CREATE TABLE `actionableHotspot`
     `blacklistCancerTypes` varchar(500),
     `description` varchar(1000) NOT NULL,
     `level` varchar(50) NOT NULL,
-    `approvalStatus` varchar(100) NOT NULL,
+    `evidenceLevelDetails` varchar(100) NOT NULL,
     `direction` varchar(50) NOT NULL,
     `evidenceUrls` varchar(1000),
     PRIMARY KEY (`id`)
@@ -60,7 +60,7 @@ CREATE TABLE `actionableCodon`
     `blacklistCancerTypes` varchar(500),
     `description` varchar(1000) NOT NULL,
     `level` varchar(50) NOT NULL,
-    `approvalStatus` varchar(100) NOT NULL,
+    `evidenceLevelDetails` varchar(100) NOT NULL,
     `direction` varchar(50) NOT NULL,
     `evidenceUrls` varchar(1000),
     PRIMARY KEY (`id`)
@@ -93,7 +93,7 @@ CREATE TABLE `actionableExon`
     `blacklistCancerTypes` varchar(500),
     `description` varchar(1000) NOT NULL,
     `level` varchar(50) NOT NULL,
-    `approvalStatus` varchar(100) NOT NULL,
+    `evidenceLevelDetails` varchar(100) NOT NULL,
     `direction` varchar(50) NOT NULL,
     `evidenceUrls` varchar(1000),
     PRIMARY KEY (`id`)
@@ -123,7 +123,7 @@ CREATE TABLE `actionableGene`
     `blacklistCancerTypes` varchar(500),
     `description` varchar(1000) NOT NULL,
     `level` varchar(50) NOT NULL,
-    `approvalStatus` varchar(100) NOT NULL,
+    `evidenceLevelDetails` varchar(100) NOT NULL,
     `direction` varchar(50) NOT NULL,
     `evidenceUrls` varchar(1000),
     PRIMARY KEY (`id`)
@@ -157,7 +157,7 @@ CREATE TABLE `actionableFusion`
     `blacklistCancerTypes` varchar(500),
     `description` varchar(1000) NOT NULL,
     `level` varchar(50) NOT NULL,
-    `approvalStatus` varchar(100) NOT NULL,
+    `evidenceLevelDetails` varchar(100) NOT NULL,
     `direction` varchar(50) NOT NULL,
     `evidenceUrls` varchar(1000),
     PRIMARY KEY (`id`)
@@ -188,7 +188,7 @@ CREATE TABLE `actionableCharacteristic`
     `blacklistCancerTypes` varchar(500),
     `description` varchar(1000) NOT NULL,
     `level` varchar(50) NOT NULL,
-    `approvalStatus` varchar(100) NOT NULL,
+    `evidenceLevelDetails` varchar(100) NOT NULL,
     `direction` varchar(50) NOT NULL,
     `evidenceUrls` varchar(1000),
     PRIMARY KEY (`id`)
@@ -217,7 +217,7 @@ CREATE TABLE `actionableHla`
     `blacklistCancerTypes` varchar(500),
     `description` varchar(1000) NOT NULL,
     `level` varchar(50) NOT NULL,
-    `approvalStatus` varchar(100) NOT NULL,
+    `evidenceLevelDetails` varchar(100) NOT NULL,
     `direction` varchar(50) NOT NULL,
     `evidenceUrls` varchar(1000),
     PRIMARY KEY (`id`)

@@ -14,7 +14,7 @@ import com.hartwig.serve.ckb.datamodel.reference.Reference;
 import com.hartwig.serve.ckb.datamodel.therapy.Therapy;
 import com.hartwig.serve.ckb.datamodel.treatmentapproaches.DrugClassTreatmentApproach;
 import com.hartwig.serve.ckb.datamodel.treatmentapproaches.TherapyTreatmentApproach;
-import com.hartwig.serve.datamodel.ApprovalStatus;
+import com.hartwig.serve.datamodel.EvidenceLevelDetails;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.ImmutableTreatment;
@@ -83,11 +83,11 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
 
         for (Evidence evidence : evidencesWithUsableType(entry.evidences())) {
             EvidenceLevel level = resolveLevel(evidence.ampCapAscoEvidenceLevel());
-            ApprovalStatus approvalStatus = resolveApprovalStatus(evidence.approvalStatus());
+            EvidenceLevelDetails evidenceLevelDetails = resolveEvidenceLevelDetails(evidence.approvalStatus());
             EvidenceDirection direction = resolveDirection(evidence.responseType());
             CancerTypeExtraction cancerTypeExtraction = ActionableFunctions.extractCancerTypeDetails(evidence.indication());
 
-            if (level != null && direction != null && cancerTypeExtraction != null && approvalStatus != null) {
+            if (level != null && direction != null && cancerTypeExtraction != null && evidenceLevelDetails != null) {
                 String treatment = evidence.therapy().therapyName();
 
                 if (!blacklistEvidence.isBlacklistEvidence(treatment,
@@ -153,7 +153,7 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
                             .blacklistCancerTypes(cancerTypeExtraction.blacklistedCancerTypes())
                             .description(evidence.efficacyEvidence())
                             .level(level)
-                            .approvalStatus(approvalStatus)
+                            .evidenceLevelDetails(evidenceLevelDetails)
                             .direction(direction)
                             .evidenceUrls(evidenceUrls)
                             .build());
@@ -202,15 +202,34 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
 
     @Nullable
     @VisibleForTesting
-    static ApprovalStatus resolveApprovalStatus(@Nullable String approvalStatusLabel) {
-        if (approvalStatusLabel == null) {
+    static EvidenceLevelDetails resolveEvidenceLevelDetails(@Nullable String evidenceLevelDetails) {
+        if (evidenceLevelDetails == null) {
             return null;
         }
-        ApprovalStatus approvalStatus = ApprovalStatus.fromString(approvalStatusLabel);
-        if (approvalStatus == null) {
-            LOGGER.warn("Could not find enum value for approval status {}", approvalStatusLabel);
+
+        evidenceLevelDetails = evidenceLevelDetails.toLowerCase();
+        if (evidenceLevelDetails.contains("preclinical")) {
+            return EvidenceLevelDetails.PRECLINICAL.evidenceLevelDetailsCreator(evidenceLevelDetails);
         }
-        return approvalStatus;
+        else if (evidenceLevelDetails.contains("case report")) {
+            return EvidenceLevelDetails.CASE_REPORTS_SERIES.evidenceLevelDetailsCreator(evidenceLevelDetails);
+        }
+        else if (evidenceLevelDetails.contains("clinical study") || evidenceLevelDetails.contains("phase")) {
+            return EvidenceLevelDetails.CLINICAL_STUDY.evidenceLevelDetailsCreator(evidenceLevelDetails);
+        }
+        else if (evidenceLevelDetails.contains("guideline")) {
+            return EvidenceLevelDetails.GUIDELINE.evidenceLevelDetailsCreator(evidenceLevelDetails);
+        }
+        else if (evidenceLevelDetails.contains("fda approved")) {
+            return EvidenceLevelDetails.FDA_APPROVED.evidenceLevelDetailsCreator(evidenceLevelDetails);
+        }
+        else if (evidenceLevelDetails.contains("fda contraindicated")) {
+            return EvidenceLevelDetails.FDA_CONTRAINDICATED.evidenceLevelDetailsCreator(evidenceLevelDetails);
+        }
+        else {
+            LOGGER.warn("Could not resolve CKB evidence level details (approvalStatus) '{}'", evidenceLevelDetails);
+        }
+        return EvidenceLevelDetails.UNKNOWN;
     }
 
     @Nullable

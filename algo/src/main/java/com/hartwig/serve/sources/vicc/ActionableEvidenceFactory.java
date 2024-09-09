@@ -13,7 +13,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.cancertype.CancerTypeConstants;
 import com.hartwig.serve.curation.DoidLookup;
-import com.hartwig.serve.datamodel.ApprovalStatus;
+import com.hartwig.serve.datamodel.EvidenceLevelDetails;
 import com.hartwig.serve.datamodel.CancerType;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
@@ -114,7 +114,7 @@ class ActionableEvidenceFactory {
                     .sourceEvent(Strings.EMPTY)
                     .sourceUrls(Sets.newHashSet())
                     .level(level)
-                    .approvalStatus(ApprovalStatus.UNKNOWN)
+                    .evidenceLevelDetails(EvidenceLevelDetails.UNKNOWN)
                     .direction(direction)
                     .evidenceUrls(urls)
                     .date(LocalDate.EPOCH)

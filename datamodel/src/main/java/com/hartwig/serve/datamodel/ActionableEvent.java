@@ -35,7 +35,7 @@ public interface ActionableEvent {
     EvidenceLevel level();
 
     @NotNull
-    ApprovalStatus approvalStatus();
+    EvidenceLevelDetails evidenceLevelDetails();
 
     @NotNull
     EvidenceDirection direction();

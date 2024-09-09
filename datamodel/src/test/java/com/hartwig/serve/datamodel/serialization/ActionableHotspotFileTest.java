@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.io.Resources;
-import com.hartwig.serve.datamodel.ApprovalStatus;
+import com.hartwig.serve.datamodel.EvidenceLevelDetails;
 import com.hartwig.serve.datamodel.DatamodelTestFactory;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
@@ -46,7 +46,7 @@ public class ActionableHotspotFileTest {
         assertEquals("T", hotspot1.alt());
         assertEquals("Vemurafenib", DatamodelTestFactory.extractTreatment(hotspot1).name());
         assertEquals("Skin Melanoma", hotspot1.applicableCancerType().name());
-        assertEquals(ApprovalStatus.GUIDELINE, hotspot1.approvalStatus());
+        assertEquals(EvidenceLevelDetails.GUIDELINE, hotspot1.evidenceLevelDetails());
         assertEquals(LocalDate.of(2021, 2, 3), hotspot1.date());
         assertEquals("efficacy evidence", hotspot1.description());
 
@@ -58,7 +58,7 @@ public class ActionableHotspotFileTest {
         assertEquals("T", hotspot2.alt());
         assertEquals("Vemurafenib", DatamodelTestFactory.setToField(DatamodelTestFactory.extractClinicalTrial(hotspot2).therapyNames()));
         assertEquals("Solid tumor", hotspot2.applicableCancerType().name());
-        assertEquals(ApprovalStatus.GUIDELINE, hotspot1.approvalStatus());
+        assertEquals(EvidenceLevelDetails.GUIDELINE, hotspot1.evidenceLevelDetails());
         assertEquals(LocalDate.EPOCH, hotspot2.date());
         assertEquals(Strings.EMPTY, hotspot2.description());
     }

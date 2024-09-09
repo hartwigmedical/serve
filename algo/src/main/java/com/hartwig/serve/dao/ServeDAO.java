@@ -143,7 +143,7 @@ public class ServeDAO {
                     ACTIONABLEHOTSPOT.BLACKLISTCANCERTYPES,
                     ACTIONABLEHOTSPOT.DESCRIPTION,
                     ACTIONABLEHOTSPOT.LEVEL,
-                    ACTIONABLEHOTSPOT.APPROVALSTATUS,
+                    ACTIONABLEHOTSPOT.EVIDENCELEVELDETAILS,
                     ACTIONABLEHOTSPOT.DIRECTION,
                     ACTIONABLEHOTSPOT.EVIDENCEURLS);
             batch.forEach(entry -> writeActionableHotspotBatch(timestamp, inserter, entry));
@@ -220,7 +220,7 @@ public class ServeDAO {
                 concat(toStrings(actionableHotspot.blacklistCancerTypes())),
                 actionableHotspot.description(),
                 actionableHotspot.level(),
-                actionableHotspot.approvalStatus(),
+                actionableHotspot.evidenceLevelDetails(),
                 actionableHotspot.direction(),
                 concat(actionableHotspot.evidenceUrls()));
     }
@@ -252,7 +252,7 @@ public class ServeDAO {
                     ACTIONABLECODON.BLACKLISTCANCERTYPES,
                     ACTIONABLECODON.DESCRIPTION,
                     ACTIONABLECODON.LEVEL,
-                    ACTIONABLECODON.APPROVALSTATUS,
+                    ACTIONABLECODON.EVIDENCELEVELDETAILS,
                     ACTIONABLECODON.DIRECTION,
                     ACTIONABLECODON.EVIDENCEURLS);
             batch.forEach(entry -> writeActionableRangeBatch(timestamp, inserter, entry));
@@ -287,7 +287,7 @@ public class ServeDAO {
                     ACTIONABLEEXON.BLACKLISTCANCERTYPES,
                     ACTIONABLEEXON.DESCRIPTION,
                     ACTIONABLEEXON.LEVEL,
-                    ACTIONABLEEXON.APPROVALSTATUS,
+                    ACTIONABLEEXON.EVIDENCELEVELDETAILS,
                     ACTIONABLEEXON.DIRECTION,
                     ACTIONABLEEXON.EVIDENCEURLS);
             batch.forEach(entry -> writeActionableRangeBatch(timestamp, inserter, entry));
@@ -329,7 +329,7 @@ public class ServeDAO {
                 concat(toStrings(actionableRange.blacklistCancerTypes())),
                 actionableRange.description(),
                 actionableRange.level(),
-                actionableRange.approvalStatus(),
+                actionableRange.evidenceLevelDetails(),
                 actionableRange.direction(),
                 concat(actionableRange.evidenceUrls()));
     }
@@ -358,7 +358,7 @@ public class ServeDAO {
                     ACTIONABLEGENE.BLACKLISTCANCERTYPES,
                     ACTIONABLEGENE.DESCRIPTION,
                     ACTIONABLEGENE.LEVEL,
-                    ACTIONABLEGENE.APPROVALSTATUS,
+                    ACTIONABLEGENE.EVIDENCELEVELDETAILS,
                     ACTIONABLEGENE.DIRECTION,
                     ACTIONABLEGENE.EVIDENCEURLS);
             batch.forEach(entry -> writeActionableGeneBatch(timestamp, inserter, entry));
@@ -397,7 +397,7 @@ public class ServeDAO {
                 concat(toStrings(actionableGene.blacklistCancerTypes())),
                 actionableGene.description(),
                 actionableGene.level(),
-                actionableGene.approvalStatus(),
+                actionableGene.evidenceLevelDetails(),
                 actionableGene.direction(),
                 concat(actionableGene.evidenceUrls()));
     }
@@ -430,7 +430,7 @@ public class ServeDAO {
                     ACTIONABLEFUSION.BLACKLISTCANCERTYPES,
                     ACTIONABLEFUSION.DESCRIPTION,
                     ACTIONABLEFUSION.LEVEL,
-                    ACTIONABLEFUSION.APPROVALSTATUS,
+                    ACTIONABLEFUSION.EVIDENCELEVELDETAILS,
                     ACTIONABLEFUSION.DIRECTION,
                     ACTIONABLEFUSION.EVIDENCEURLS);
             batch.forEach(entry -> writeActionableFusionBatch(timestamp, inserter, entry));
@@ -473,7 +473,7 @@ public class ServeDAO {
                 concat(toStrings(actionableFusion.blacklistCancerTypes())),
                 actionableFusion.description(),
                 actionableFusion.level(),
-                actionableFusion.approvalStatus(),
+                actionableFusion.evidenceLevelDetails(),
                 actionableFusion.direction(),
                 concat(actionableFusion.evidenceUrls()));
     }
@@ -503,7 +503,7 @@ public class ServeDAO {
                     ACTIONABLECHARACTERISTIC.BLACKLISTCANCERTYPES,
                     ACTIONABLECHARACTERISTIC.DESCRIPTION,
                     ACTIONABLECHARACTERISTIC.LEVEL,
-                    ACTIONABLECHARACTERISTIC.APPROVALSTATUS,
+                    ACTIONABLECHARACTERISTIC.EVIDENCELEVELDETAILS,
                     ACTIONABLECHARACTERISTIC.DIRECTION,
                     ACTIONABLECHARACTERISTIC.EVIDENCEURLS);
             batch.forEach(entry -> writeActionableCharacteristicBatch(timestamp, inserter, entry));
@@ -543,7 +543,7 @@ public class ServeDAO {
                 concat(toStrings(actionableCharacteristic.blacklistCancerTypes())),
                 actionableCharacteristic.description(),
                 actionableCharacteristic.level(),
-                actionableCharacteristic.approvalStatus(),
+                actionableCharacteristic.evidenceLevelDetails(),
                 actionableCharacteristic.direction(),
                 concat(actionableCharacteristic.evidenceUrls()));
     }
@@ -571,7 +571,7 @@ public class ServeDAO {
                     ACTIONABLEHLA.BLACKLISTCANCERTYPES,
                     ACTIONABLEHLA.DESCRIPTION,
                     ACTIONABLEHLA.LEVEL,
-                    ACTIONABLEHLA.APPROVALSTATUS,
+                    ACTIONABLEHLA.EVIDENCELEVELDETAILS,
                     ACTIONABLEHLA.DIRECTION,
                     ACTIONABLEHLA.EVIDENCEURLS);
             batch.forEach(entry -> writeActionableHLABatch(timestamp, inserter, entry));
@@ -608,7 +608,7 @@ public class ServeDAO {
                 concat(toStrings(actionableHLA.blacklistCancerTypes())),
                 actionableHLA.description(),
                 actionableHLA.level(),
-                actionableHLA.approvalStatus(),
+                actionableHLA.evidenceLevelDetails(),
                 actionableHLA.direction(),
                 concat(actionableHLA.evidenceUrls()));
     }

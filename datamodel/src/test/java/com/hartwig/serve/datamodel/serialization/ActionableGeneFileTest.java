@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.io.Resources;
-import com.hartwig.serve.datamodel.ApprovalStatus;
+import com.hartwig.serve.datamodel.EvidenceLevelDetails;
 import com.hartwig.serve.datamodel.DatamodelTestFactory;
 import com.hartwig.serve.datamodel.gene.ActionableGene;
 import com.hartwig.serve.datamodel.gene.GeneEvent;
@@ -43,7 +43,7 @@ public class ActionableGeneFileTest {
         assertEquals(GeneEvent.FUSION, gene1.event());
         assertEquals("Crizotinib", DatamodelTestFactory.extractTreatment(gene1).name());
         assertEquals("Lung Adenocarcinoma", gene1.applicableCancerType().name());
-        assertEquals(ApprovalStatus.GUIDELINE, gene1.approvalStatus());
+        assertEquals(EvidenceLevelDetails.GUIDELINE, gene1.evidenceLevelDetails());
         assertEquals(LocalDate.of(2021, 2, 3), gene1.date());
         assertEquals("efficacy evidence A", gene1.description());
 
@@ -52,7 +52,7 @@ public class ActionableGeneFileTest {
         assertEquals(GeneEvent.INACTIVATION, gene2.event());
         assertEquals("DRUP", DatamodelTestFactory.extractTreatment(gene2).name());
         assertEquals("Solid Tumors", gene2.applicableCancerType().name());
-        assertEquals(ApprovalStatus.GUIDELINE, gene2.approvalStatus());
+        assertEquals(EvidenceLevelDetails.GUIDELINE, gene2.evidenceLevelDetails());
         assertEquals(LocalDate.of(2021, 2, 4), gene2.date());
         assertEquals("efficacy evidence B", gene2.description());
 
@@ -61,7 +61,7 @@ public class ActionableGeneFileTest {
         assertEquals(GeneEvent.AMPLIFICATION, gene3.event());
         assertEquals("Trastuzumab", DatamodelTestFactory.extractTreatment(gene3).name());
         assertEquals("Breast Cancer", gene3.applicableCancerType().name());
-        assertEquals(ApprovalStatus.GUIDELINE, gene3.approvalStatus());
+        assertEquals(EvidenceLevelDetails.GUIDELINE, gene3.evidenceLevelDetails());
         assertEquals(LocalDate.of(2021, 2, 5), gene3.date());
         assertEquals("efficacy evidence C", gene3.description());
 
@@ -70,7 +70,7 @@ public class ActionableGeneFileTest {
         assertEquals(GeneEvent.AMPLIFICATION, gene4.event());
         assertEquals("Panitumumab", DatamodelTestFactory.extractTreatment(gene4).name());
         assertEquals("Colorectal Cancer", gene4.applicableCancerType().name());
-        assertEquals(ApprovalStatus.GUIDELINE, gene4.approvalStatus());
+        assertEquals(EvidenceLevelDetails.GUIDELINE, gene4.evidenceLevelDetails());
         assertEquals(LocalDate.of(2021, 2, 6), gene4.date());
         assertEquals("efficacy evidence D", gene4.description());
 
@@ -79,7 +79,7 @@ public class ActionableGeneFileTest {
         assertEquals(GeneEvent.FUSION, gene5.event());
         assertEquals("Erdafitinib", DatamodelTestFactory.extractTreatment(gene5).name());
         assertEquals("Bladder Cancer", gene5.applicableCancerType().name());
-        assertEquals(ApprovalStatus.GUIDELINE, gene5.approvalStatus());
+        assertEquals(EvidenceLevelDetails.GUIDELINE, gene5.evidenceLevelDetails());
         assertEquals(LocalDate.of(2021, 2, 7), gene5.date());
         assertEquals("efficacy evidence E", gene5.description());
 
@@ -88,7 +88,7 @@ public class ActionableGeneFileTest {
         assertEquals(GeneEvent.AMPLIFICATION, gene6.event());
         assertEquals("DRUP", DatamodelTestFactory.extractTreatment(gene6).name());
         assertEquals("Advanced Solid Tumor", gene6.applicableCancerType().name());
-        assertEquals(ApprovalStatus.GUIDELINE, gene6.approvalStatus());
+        assertEquals(EvidenceLevelDetails.GUIDELINE, gene6.evidenceLevelDetails());
         assertEquals(LocalDate.of(2021, 2, 8), gene6.date());
         assertEquals("efficacy evidence F", gene6.description());
 
@@ -97,7 +97,7 @@ public class ActionableGeneFileTest {
         assertEquals(GeneEvent.ACTIVATION, gene7.event());
         assertEquals("Cetuximab", DatamodelTestFactory.setToField(DatamodelTestFactory.extractClinicalTrial(gene7).therapyNames()));
         assertEquals("Colorectal Cancer", gene7.applicableCancerType().name());
-        assertEquals(ApprovalStatus.GUIDELINE, gene7.approvalStatus());
+        assertEquals(EvidenceLevelDetails.GUIDELINE, gene7.evidenceLevelDetails());
         assertEquals(LocalDate.EPOCH, gene7.date());
         assertEquals(Strings.EMPTY, gene7.description());
     }

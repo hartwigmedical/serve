@@ -1,4 +1,4 @@
-gene	event	source	date	sourceEvent	sourceUrls	nctId	title	acronym	genderCriterium	countriesAndCities	hospitalsPerCity	treatment	treatmentApproachesDrugClass	treatmentApproachesTherapy	applicableCancerType	applicableDoid	blacklistCancerTypes	description	level	approvalStatus	direction	evidenceUrls
+gene	event	source	date	sourceEvent	sourceUrls	nctId	title	acronym	genderCriterium	countriesAndCities	hospitalsPerCity	treatment	treatmentApproachesDrugClass	treatmentApproachesTherapy	applicableCancerType	applicableDoid	blacklistCancerTypes	description	level	evidenceLevelDetails	direction	evidenceUrls
 ALK	FUSION	CKB_EVIDENCE	2021-02-03	fusion	http							Crizotinib			Lung Adenocarcinoma	X		efficacy evidence A	A	GUIDELINE	RESPONSIVE	https
 BRCA1	INACTIVATION	CKB_EVIDENCE	2021-02-04	inact	http							DRUP			Solid Tumors	X	Hematologic cancer;2531	efficacy evidence B	B	GUIDELINE	RESPONSIVE	http
 ERBB2	AMPLIFICATION	CKB_EVIDENCE	2021-02-05	amp	http							Trastuzumab			Breast Cancer	X		efficacy evidence C	A	GUIDELINE	RESPONSIVE	http

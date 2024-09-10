@@ -11,7 +11,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.cancertype.CancerTypeConstants;
 import com.hartwig.serve.curation.DoidLookupTestFactory;
-import com.hartwig.serve.datamodel.ApprovalStatus;
+import com.hartwig.serve.datamodel.EvidenceLevelDetails;
 import com.hartwig.serve.datamodel.DatamodelTestFactory;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
@@ -56,7 +56,7 @@ public class ActionableEvidenceFactoryTest {
         assertEquals("1", eventA.applicableCancerType().doid());
         assertTrue(eventA.blacklistCancerTypes().isEmpty());
         assertEquals(EvidenceLevel.A, eventA.level());
-        assertEquals(ApprovalStatus.UNKNOWN, eventA.approvalStatus());
+        assertEquals(EvidenceLevelDetails.UNKNOWN, eventA.evidenceLevelDetails());
         assertEquals(EvidenceDirection.RESPONSIVE, eventA.direction());
         assertEquals(Sets.newHashSet("url"), eventA.evidenceUrls());
 
@@ -66,7 +66,7 @@ public class ActionableEvidenceFactoryTest {
         assertEquals(cancerTypeB, eventB.applicableCancerType().name());
         assertEquals(CancerTypeConstants.CANCER_DOID, eventB.applicableCancerType().doid());
         assertEquals(EvidenceLevel.A, eventB.level());
-        assertEquals(ApprovalStatus.UNKNOWN, eventB.approvalStatus());
+        assertEquals(EvidenceLevelDetails.UNKNOWN, eventB.evidenceLevelDetails());
         assertEquals(EvidenceDirection.RESPONSIVE, eventB.direction());
         assertEquals(Sets.newHashSet("url"), eventB.evidenceUrls());
         assertEquals(Sets.newHashSet(CancerTypeConstants.REFRACTORY_HEMATOLOGIC_TYPE,

@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.ActionableEvent;
-import com.hartwig.serve.datamodel.ApprovalStatus;
+import com.hartwig.serve.datamodel.EvidenceLevelDetails;
 import com.hartwig.serve.datamodel.CancerType;
 import com.hartwig.serve.datamodel.ClinicalTrial;
 import com.hartwig.serve.datamodel.Country;
@@ -58,7 +58,7 @@ public final class ActionableFileUtil {
                 .add("blacklistCancerTypes")
                 .add("description")
                 .add("level")
-                .add("approvalStatus")
+                .add("evidenceLevelDetails")
                 .add("direction")
                 .add("evidenceUrls")
                 .toString();
@@ -139,8 +139,8 @@ public final class ActionableFileUtil {
 
             @NotNull
             @Override
-            public ApprovalStatus approvalStatus() {
-                return ApprovalStatus.valueOf(values[fields.get("approvalStatus")]);
+            public EvidenceLevelDetails evidenceLevelDetails() {
+                return EvidenceLevelDetails.valueOf(values[fields.get("evidenceLevelDetails")]);
             }
 
             @NotNull
@@ -217,7 +217,7 @@ public final class ActionableFileUtil {
                 .add(cancerTypesToField(event.blacklistCancerTypes()))
                 .add(event.description())
                 .add(event.level().toString())
-                .add(event.approvalStatus().toString())
+                .add(event.evidenceLevelDetails().name())
                 .add(event.direction().toString())
                 .add(setToField(event.evidenceUrls()))
                 .toString();

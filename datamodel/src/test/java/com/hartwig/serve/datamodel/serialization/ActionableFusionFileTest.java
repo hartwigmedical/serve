@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.io.Resources;
-import com.hartwig.serve.datamodel.ApprovalStatus;
+import com.hartwig.serve.datamodel.EvidenceLevelDetails;
 import com.hartwig.serve.datamodel.fusion.ActionableFusion;
 import com.hartwig.serve.datamodel.serialization.util.ActionableFileUtil;
 import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
@@ -42,7 +42,7 @@ public class ActionableFusionFileTest {
         assertEquals("EGFR", fusion1.geneDown());
         assertEquals(8, (int) fusion1.minExonDown());
         assertEquals(9, (int) fusion1.maxExonDown());
-        assertEquals(ApprovalStatus.GUIDELINE, fusion1.approvalStatus());
+        assertEquals(EvidenceLevelDetails.GUIDELINE, fusion1.evidenceLevelDetails());
         assertEquals(LocalDate.of(2021, 2, 3), fusion1.date());
         assertEquals("efficacy evidence A", fusion1.description());
 
@@ -52,7 +52,7 @@ public class ActionableFusionFileTest {
         assertEquals("ALK", fusion2.geneDown());
         assertNull(fusion2.minExonDown());
         assertNull(fusion2.maxExonDown());
-        assertEquals(ApprovalStatus.GUIDELINE, fusion2.approvalStatus());
+        assertEquals(EvidenceLevelDetails.GUIDELINE, fusion2.evidenceLevelDetails());
         assertEquals(LocalDate.of(2021, 2, 4), fusion2.date());
         assertEquals("efficacy evidence B", fusion2.description());
     }

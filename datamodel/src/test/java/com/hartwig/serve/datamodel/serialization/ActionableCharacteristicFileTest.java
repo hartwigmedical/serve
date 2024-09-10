@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.io.Resources;
-import com.hartwig.serve.datamodel.ApprovalStatus;
+import com.hartwig.serve.datamodel.EvidenceLevelDetails;
 import com.hartwig.serve.datamodel.ClinicalTrial;
 import com.hartwig.serve.datamodel.DatamodelTestFactory;
 import com.hartwig.serve.datamodel.EvidenceDirection;
@@ -66,7 +66,7 @@ public class ActionableCharacteristicFileTest {
         assertTrue(characteristic1.blacklistCancerTypes()
                 .contains(DatamodelTestFactory.cancerTypeBuilder().name("Hematologic cancer").doid("2531").build()));
         assertEquals(EvidenceLevel.A, characteristic1.level());
-        assertEquals(ApprovalStatus.GUIDELINE, characteristic1.approvalStatus());
+        assertEquals(EvidenceLevelDetails.GUIDELINE, characteristic1.evidenceLevelDetails());
         assertEquals(EvidenceDirection.RESPONSIVE, characteristic1.direction());
         assertEquals(2, characteristic1.evidenceUrls().size());
         assertEquals(LocalDate.of(2021, 2, 3), characteristic1.date());
@@ -85,7 +85,7 @@ public class ActionableCharacteristicFileTest {
         assertTrue(characteristic2.blacklistCancerTypes()
                 .contains(DatamodelTestFactory.cancerTypeBuilder().name("Hematologic cancer").doid("2531").build()));
         assertEquals(EvidenceLevel.B, characteristic2.level());
-        assertEquals(ApprovalStatus.GUIDELINE, characteristic1.approvalStatus());
+        assertEquals(EvidenceLevelDetails.GUIDELINE, characteristic1.evidenceLevelDetails());
         assertEquals(EvidenceDirection.RESPONSIVE, characteristic2.direction());
         assertEquals(2, characteristic2.evidenceUrls().size());
         assertEquals(LocalDate.EPOCH, characteristic2.date());

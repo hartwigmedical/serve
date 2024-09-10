@@ -9,7 +9,7 @@ import java.util.Set;
 
 import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.ActionableEvent;
-import com.hartwig.serve.datamodel.ApprovalStatus;
+import com.hartwig.serve.datamodel.EvidenceLevelDetails;
 import com.hartwig.serve.datamodel.CancerType;
 import com.hartwig.serve.datamodel.ClinicalTrial;
 import com.hartwig.serve.datamodel.Country;
@@ -38,7 +38,7 @@ public class ActionableFileUtilTest {
                 Sets.newHashSet(DatamodelTestFactory.cancerTypeBuilder().name("blacklist name").doid("blacklist doid").build()),
                 Strings.EMPTY,
                 EvidenceLevel.C,
-                ApprovalStatus.GUIDELINE,
+                EvidenceLevelDetails.GUIDELINE,
                 EvidenceDirection.RESISTANT,
                 Sets.newHashSet("url1", "url2")
         );
@@ -57,7 +57,7 @@ public class ActionableFileUtilTest {
         assertEquals(event.applicableCancerType(), coveredEvent.applicableCancerType());
         assertEquals(event.blacklistCancerTypes(), coveredEvent.blacklistCancerTypes());
         assertEquals(event.level(), coveredEvent.level());
-        assertEquals(event.approvalStatus(), coveredEvent.approvalStatus());
+        assertEquals(event.evidenceLevelDetails(), coveredEvent.evidenceLevelDetails());
         assertEquals(event.direction(), coveredEvent.direction());
         assertEquals(event.evidenceUrls(), coveredEvent.evidenceUrls());
     }
@@ -77,7 +77,7 @@ public class ActionableFileUtilTest {
                 Sets.newHashSet(DatamodelTestFactory.cancerTypeBuilder().name("blacklist name").doid("blacklist doid").build()),
                 Strings.EMPTY,
                 EvidenceLevel.C,
-                ApprovalStatus.UNKNOWN,
+                EvidenceLevelDetails.UNKNOWN,
                 EvidenceDirection.RESISTANT,
                 Sets.newHashSet("url1", "url2")
         );
@@ -96,7 +96,7 @@ public class ActionableFileUtilTest {
         assertEquals(event.applicableCancerType(), coveredEvent.applicableCancerType());
         assertEquals(event.blacklistCancerTypes(), coveredEvent.blacklistCancerTypes());
         assertEquals(event.level(), coveredEvent.level());
-        assertEquals(event.approvalStatus(), coveredEvent.approvalStatus());
+        assertEquals(event.evidenceLevelDetails(), coveredEvent.evidenceLevelDetails());
         assertEquals(event.direction(), coveredEvent.direction());
         assertEquals(event.evidenceUrls(), coveredEvent.evidenceUrls());
     }

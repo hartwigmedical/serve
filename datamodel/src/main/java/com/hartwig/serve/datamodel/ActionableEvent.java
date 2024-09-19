@@ -11,7 +11,7 @@ public interface ActionableEvent {
     Knowledgebase source();
 
     @NotNull
-    LocalDate date();
+    LocalDate ckbEntryDate();
 
     @NotNull
     String sourceEvent();
@@ -29,7 +29,10 @@ public interface ActionableEvent {
     Set<CancerType> blacklistCancerTypes();
 
     @NotNull
-    String description();
+    String efficacyDescription();
+
+    @NotNull
+    String efficacyDescriptionYear();
 
     @NotNull
     EvidenceLevel level();

@@ -5,10 +5,19 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
+import com.hartwig.serve.ckb.datamodel.evidence.Evidence;
+import com.hartwig.serve.ckb.datamodel.evidence.EvidenceFactory;
+import com.hartwig.serve.ckb.datamodel.reference.ImmutableReference;
+import com.hartwig.serve.ckb.datamodel.reference.Reference;
+import com.hartwig.serve.ckb.datamodel.reference.ReferenceFactory;
+import com.hartwig.serve.ckb.datamodel.therapy.ImmutableTherapy;
+import com.hartwig.serve.ckb.datamodel.therapy.Therapy;
 import com.hartwig.serve.datamodel.EvidenceLevelDetails;
 import com.hartwig.serve.datamodel.DatamodelTestFactory;
 import com.hartwig.serve.datamodel.EvidenceDirection;
@@ -70,8 +79,8 @@ public class ActionableEvidenceFactoryTest {
         assertEquals(Sets.newHashSet(), characteristics.blacklistCancerTypes());
         assertEquals(EvidenceLevel.A, characteristics.level());
         assertEquals(EvidenceDirection.RESPONSIVE, characteristics.direction());
-        assertEquals(CkbTestFactory.TEST_UPDATE_DATE, characteristics.date());
-        assertEquals(CkbTestFactory.EFFICACY_EVIDENCE, characteristics.description());
+        assertEquals(CkbTestFactory.TEST_UPDATE_DATE, characteristics.ckbEntryDate());
+        assertEquals(CkbTestFactory.EFFICACY_EVIDENCE, characteristics.efficacyDescription());
     }
 
     @Test
@@ -100,8 +109,8 @@ public class ActionableEvidenceFactoryTest {
         assertTrue(amplification.blacklistCancerTypes().isEmpty());
         assertEquals(EvidenceLevel.A, amplification.level());
         assertEquals(EvidenceDirection.RESPONSIVE, amplification.direction());
-        assertEquals(CkbTestFactory.TEST_UPDATE_DATE, amplification.date());
-        assertEquals(CkbTestFactory.EFFICACY_EVIDENCE, amplification.description());
+        assertEquals(CkbTestFactory.TEST_UPDATE_DATE, amplification.ckbEntryDate());
+        assertEquals(CkbTestFactory.EFFICACY_EVIDENCE, amplification.efficacyDescription());
     }
 
     @Test
@@ -130,8 +139,8 @@ public class ActionableEvidenceFactoryTest {
         assertEquals(Sets.newHashSet(), hotspot.blacklistCancerTypes());
         assertEquals(EvidenceLevel.A, hotspot.level());
         assertEquals(EvidenceDirection.RESPONSIVE, hotspot.direction());
-        assertEquals(CkbTestFactory.TEST_UPDATE_DATE, hotspot.date());
-        assertEquals(CkbTestFactory.EFFICACY_EVIDENCE, hotspot.description());
+        assertEquals(CkbTestFactory.TEST_UPDATE_DATE, hotspot.ckbEntryDate());
+        assertEquals(CkbTestFactory.EFFICACY_EVIDENCE, hotspot.efficacyDescription());
     }
 
     @Test
@@ -182,6 +191,18 @@ public class ActionableEvidenceFactoryTest {
         assertEquals(EvidenceDirection.PREDICTED_RESISTANT, ActionableEvidenceFactory.resolveDirection("predicted - resistant"));
         assertEquals(EvidenceDirection.NO_BENEFIT, ActionableEvidenceFactory.resolveDirection("no benefit"));
         assertEquals(EvidenceDirection.DECREASED_RESPONSE, ActionableEvidenceFactory.resolveDirection("decreased response"));
+    }
+
+    @Test
+    public void canExtractEvidenceYear() {
+        LocalDate entryDate = LocalDate.of(2015, 1, 1);
+        List<Reference> referencesWithDate = List.of(createReferenceObject("2021"), createReferenceObject("2023"));
+        List<Reference> referencesWithoutDate = List.of(createReferenceObject(null));
+        Therapy therapy = createTherapyObject(2018);
+
+        assertEquals("2023", ActionableEvidenceFactory.extractEvidenceYear(entryDate, referencesWithDate, therapy));
+        assertEquals("2018", ActionableEvidenceFactory.extractEvidenceYear(entryDate, referencesWithoutDate, therapy));
+        assertEquals("2015", ActionableEvidenceFactory.extractEvidenceYear(entryDate, referencesWithoutDate, null));
     }
 
     @Test
@@ -292,5 +313,39 @@ public class ActionableEvidenceFactoryTest {
                 .build();
 
         return CkbBlacklistTestFactory.createSpecificEvidenceBlacklist(entry);
+    }
+
+    @NotNull
+    private static Reference createReferenceObject(String year) {
+        return ImmutableReference.builder()
+                .id(0)
+                .pubMedId("123456")
+                .title("Title")
+                .shortJournalTitle("Short Journal Title")
+                .pages("1-2")
+                .abstractText("Abstract Text")
+                .url("http://www.url.com")
+                .journal("Journal")
+                .authors("Authors")
+                .volume("Volume")
+                .issue("Issue")
+                .date("Date")
+                .year(year)
+                .build();
+    }
+
+    @NotNull
+    private static Therapy createTherapyObject(int createYear) {
+        return ImmutableTherapy.builder()
+                .id(0)
+                .createDate(LocalDate.of(createYear, 1, 1))
+                .updateDate(LocalDate.of(2021, 1, 1))
+                .therapyName("Therapy")
+                .drugs(List.of())
+                .synonyms(List.of())
+                .globalApprovalStatuses(List.of())
+                .description("Description")
+                .references(List.of())
+                .build();
     }
 }

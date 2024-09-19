@@ -41,7 +41,7 @@ public final class ActionableFileUtil {
     @NotNull
     public static String header() {
         return new StringJoiner(FIELD_DELIMITER).add("source")
-                .add("date")
+                .add("ckbEntryDate")
                 .add("sourceEvent")
                 .add("sourceUrls")
                 .add("nctId")
@@ -56,7 +56,8 @@ public final class ActionableFileUtil {
                 .add("applicableCancerType")
                 .add("applicableDoid")
                 .add("blacklistCancerTypes")
-                .add("description")
+                .add("efficacyDescription")
+                .add("efficacyDescriptionYear")
                 .add("level")
                 .add("evidenceLevelDetails")
                 .add("direction")
@@ -158,8 +159,8 @@ public final class ActionableFileUtil {
 
             @NotNull
             @Override
-            public LocalDate date() {
-                String lastUpdated = values[fields.get("date")];
+            public LocalDate ckbEntryDate() {
+                String lastUpdated = values[fields.get("ckbEntryDate")];
                 if (lastUpdated.isEmpty()) {
                     return LocalDate.EPOCH;
                 } else {
@@ -169,8 +170,14 @@ public final class ActionableFileUtil {
 
             @NotNull
             @Override
-            public String description() {
-                return values[fields.get("description")];
+            public String efficacyDescription() {
+                return values[fields.get("efficacyDescription")];
+            }
+
+            @NotNull
+            @Override
+            public String efficacyDescriptionYear() {
+                return values[fields.get("efficacyDescriptionYear")];
             }
         };
     }
@@ -196,7 +203,7 @@ public final class ActionableFileUtil {
             therapy.add(treatment.name());
         }
         return new StringJoiner(FIELD_DELIMITER).add(event.source().toString())
-                .add(event.date().toString())
+                .add(event.ckbEntryDate().toString())
                 .add(event.sourceEvent())
                 .add(setToField(event.sourceUrls()))
                 .add(clinicalTrial != null ? clinicalTrial.nctId() : Strings.EMPTY)
@@ -215,7 +222,8 @@ public final class ActionableFileUtil {
                 .add(event.applicableCancerType().name())
                 .add(event.applicableCancerType().doid())
                 .add(cancerTypesToField(event.blacklistCancerTypes()))
-                .add(event.description())
+                .add(event.efficacyDescription())
+                .add(event.efficacyDescriptionYear())
                 .add(event.level().toString())
                 .add(event.evidenceLevelDetails().name())
                 .add(event.direction().toString())

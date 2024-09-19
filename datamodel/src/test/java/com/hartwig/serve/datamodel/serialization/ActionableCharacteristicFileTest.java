@@ -69,8 +69,8 @@ public class ActionableCharacteristicFileTest {
         assertEquals(EvidenceLevelDetails.GUIDELINE, characteristic1.evidenceLevelDetails());
         assertEquals(EvidenceDirection.RESPONSIVE, characteristic1.direction());
         assertEquals(2, characteristic1.evidenceUrls().size());
-        assertEquals(LocalDate.of(2021, 2, 3), characteristic1.date());
-        assertEquals("efficacy evidence", characteristic1.description());
+        assertEquals(LocalDate.of(2021, 2, 3), characteristic1.ckbEntryDate());
+        assertEquals("efficacy evidence", characteristic1.efficacyDescription());
 
         ActionableCharacteristic characteristic2 = findBySource(characteristics, Knowledgebase.CKB_TRIAL);
         ClinicalTrial trial = DatamodelTestFactory.extractClinicalTrial(characteristic2);
@@ -88,8 +88,8 @@ public class ActionableCharacteristicFileTest {
         assertEquals(EvidenceLevelDetails.GUIDELINE, characteristic1.evidenceLevelDetails());
         assertEquals(EvidenceDirection.RESPONSIVE, characteristic2.direction());
         assertEquals(2, characteristic2.evidenceUrls().size());
-        assertEquals(LocalDate.EPOCH, characteristic2.date());
-        assertEquals(Strings.EMPTY, characteristic2.description());
+        assertEquals(LocalDate.EPOCH, characteristic2.ckbEntryDate());
+        assertEquals(Strings.EMPTY, characteristic2.efficacyDescription());
     }
 
     @NotNull

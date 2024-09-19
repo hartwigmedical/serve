@@ -56,8 +56,8 @@ public class ActionableRangeFileTest {
         assertEquals(55279321, (int) exon1.end());
         assertEquals(MutationType.INFRAME, exon1.applicableMutationType());
         assertEquals(EvidenceLevelDetails.GUIDELINE, exon1.evidenceLevelDetails());
-        assertEquals(LocalDate.EPOCH, exon1.date());
-        assertEquals(Strings.EMPTY, exon1.description());
+        assertEquals(LocalDate.EPOCH, exon1.ckbEntryDate());
+        assertEquals(Strings.EMPTY, exon1.efficacyDescription());
     }
 
     private static void assertActionableCodons(@NotNull List<ActionableRange> codons) {
@@ -70,8 +70,8 @@ public class ActionableRangeFileTest {
         assertEquals(140453137, (int) codon1.end());
         assertEquals(MutationType.MISSENSE, codon1.applicableMutationType());
         assertEquals(EvidenceLevelDetails.GUIDELINE, codon1.evidenceLevelDetails());
-        assertEquals(LocalDate.EPOCH, codon1.date());
-        assertEquals(Strings.EMPTY, codon1.description());
+        assertEquals(LocalDate.EPOCH, codon1.ckbEntryDate());
+        assertEquals(Strings.EMPTY, codon1.efficacyDescription());
     }
 
     @NotNull

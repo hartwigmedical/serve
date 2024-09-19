@@ -117,8 +117,8 @@ class ActionableEvidenceFactory {
                     .evidenceLevelDetails(EvidenceLevelDetails.UNKNOWN)
                     .direction(direction)
                     .evidenceUrls(urls)
-                    .date(LocalDate.EPOCH)
-                    .description(Strings.EMPTY);
+                    .ckbEntryDate(LocalDate.EPOCH)
+                    .efficacyDescription(Strings.EMPTY);
 
             for (Map.Entry<String, Set<String>> cancerTypeEntry : cancerTypeToDoidsMap.entrySet()) {
                 String cancerType = cancerTypeEntry.getKey();

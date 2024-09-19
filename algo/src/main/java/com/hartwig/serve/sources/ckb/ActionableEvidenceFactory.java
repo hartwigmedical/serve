@@ -1,6 +1,10 @@
 package com.hartwig.serve.sources.ckb;
 
+import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -86,6 +90,7 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
             EvidenceLevelDetails evidenceLevelDetails = resolveEvidenceLevelDetails(evidence.approvalStatus());
             EvidenceDirection direction = resolveDirection(evidence.responseType());
             CancerTypeExtraction cancerTypeExtraction = ActionableFunctions.extractCancerTypeDetails(evidence.indication());
+            String evidenceYear = extractEvidenceYear(entry.createDate(), evidence.references(), evidence.therapy());
 
             if (level != null && direction != null && cancerTypeExtraction != null && evidenceLevelDetails != null) {
                 String treatment = evidence.therapy().therapyName();
@@ -141,7 +146,7 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
 
                     actionableEntries.add(ImmutableActionableEntry.builder()
                             .source(Knowledgebase.CKB_EVIDENCE)
-                            .date(entry.updateDate())
+                            .ckbEntryDate(entry.updateDate())
                             .sourceEvent(sourceEvent)
                             .sourceUrls(sourceUrls)
                             .intervention(ImmutableTreatment.builder()
@@ -151,7 +156,8 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
                                     .build())
                             .applicableCancerType(cancerTypeExtraction.applicableCancerType())
                             .blacklistCancerTypes(cancerTypeExtraction.blacklistedCancerTypes())
-                            .description(evidence.efficacyEvidence())
+                            .efficacyDescription(evidence.efficacyEvidence())
+                            .efficacyDescriptionYear(evidenceYear)
                             .level(level)
                             .evidenceLevelDetails(evidenceLevelDetails)
                             .direction(direction)
@@ -210,23 +216,17 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
         evidenceLevelDetails = evidenceLevelDetails.toLowerCase();
         if (evidenceLevelDetails.contains("preclinical")) {
             return EvidenceLevelDetails.PRECLINICAL.evidenceLevelDetailsCreator(evidenceLevelDetails);
-        }
-        else if (evidenceLevelDetails.contains("case report")) {
+        } else if (evidenceLevelDetails.contains("case report")) {
             return EvidenceLevelDetails.CASE_REPORTS_SERIES.evidenceLevelDetailsCreator(evidenceLevelDetails);
-        }
-        else if (evidenceLevelDetails.contains("clinical study") || evidenceLevelDetails.contains("phase")) {
+        } else if (evidenceLevelDetails.contains("clinical study") || evidenceLevelDetails.contains("phase")) {
             return EvidenceLevelDetails.CLINICAL_STUDY.evidenceLevelDetailsCreator(evidenceLevelDetails);
-        }
-        else if (evidenceLevelDetails.contains("guideline")) {
+        } else if (evidenceLevelDetails.contains("guideline")) {
             return EvidenceLevelDetails.GUIDELINE.evidenceLevelDetailsCreator(evidenceLevelDetails);
-        }
-        else if (evidenceLevelDetails.contains("fda approved")) {
+        } else if (evidenceLevelDetails.contains("fda approved")) {
             return EvidenceLevelDetails.FDA_APPROVED.evidenceLevelDetailsCreator(evidenceLevelDetails);
-        }
-        else if (evidenceLevelDetails.contains("fda contraindicated")) {
+        } else if (evidenceLevelDetails.contains("fda contraindicated")) {
             return EvidenceLevelDetails.FDA_CONTRAINDICATED.evidenceLevelDetailsCreator(evidenceLevelDetails);
-        }
-        else {
+        } else {
             LOGGER.warn("Could not resolve CKB evidence level details (approvalStatus) '{}'", evidenceLevelDetails);
         }
         return EvidenceLevelDetails.UNKNOWN;
@@ -258,6 +258,28 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
         }
         return null;
     }
+
+    @NotNull
+    @VisibleForTesting
+    static String extractEvidenceYear(@NotNull LocalDate entryDate, @NotNull List<Reference> references, Therapy therapy) {
+        Optional<String> mostRecentYear = references.stream()
+                .map(Reference::year)
+                .filter(Objects::nonNull)
+                .max(Comparator.naturalOrder());
+
+        if (mostRecentYear.isPresent()) {
+            return mostRecentYear.get();
+        }
+
+        int year;
+        if (therapy != null) {
+            year = !entryDate.isBefore(therapy.createDate()) ? entryDate.getYear() : therapy.createDate().getYear();
+        } else {
+            year = entryDate.getYear();
+        }
+        return Integer.toString(year);
+    }
+
 
     @NotNull
     @VisibleForTesting

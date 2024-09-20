@@ -11,11 +11,8 @@ import java.util.Set;
 
 import com.google.common.collect.Sets;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
-import com.hartwig.serve.ckb.datamodel.evidence.Evidence;
-import com.hartwig.serve.ckb.datamodel.evidence.EvidenceFactory;
 import com.hartwig.serve.ckb.datamodel.reference.ImmutableReference;
 import com.hartwig.serve.ckb.datamodel.reference.Reference;
-import com.hartwig.serve.ckb.datamodel.reference.ReferenceFactory;
 import com.hartwig.serve.ckb.datamodel.therapy.ImmutableTherapy;
 import com.hartwig.serve.ckb.datamodel.therapy.Therapy;
 import com.hartwig.serve.datamodel.EvidenceLevelDetails;

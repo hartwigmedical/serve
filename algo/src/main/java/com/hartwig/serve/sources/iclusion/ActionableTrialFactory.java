@@ -86,7 +86,8 @@ public class ActionableTrialFactory {
                 .direction(EvidenceDirection.RESPONSIVE)
                 .evidenceUrls(Sets.newHashSet())
                 .ckbEntryDate(LocalDate.EPOCH)
-                .efficacyDescription(Strings.EMPTY);
+                .efficacyDescription(Strings.EMPTY)
+                .efficacyDescriptionYear(Strings.EMPTY);
     }
 
     @NotNull

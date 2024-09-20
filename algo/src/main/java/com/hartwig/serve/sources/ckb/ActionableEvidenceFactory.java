@@ -208,26 +208,26 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
 
     @Nullable
     @VisibleForTesting
-    static EvidenceLevelDetails resolveEvidenceLevelDetails(@Nullable String evidenceLevelDetails) {
-        if (evidenceLevelDetails == null) {
+    static EvidenceLevelDetails resolveEvidenceLevelDetails(@Nullable String approvalStatus) {
+        if (approvalStatus == null) {
             return null;
         }
 
-        evidenceLevelDetails = evidenceLevelDetails.toLowerCase();
-        if (evidenceLevelDetails.contains("preclinical")) {
-            return EvidenceLevelDetails.PRECLINICAL.evidenceLevelDetailsCreator(evidenceLevelDetails);
-        } else if (evidenceLevelDetails.contains("case report")) {
-            return EvidenceLevelDetails.CASE_REPORTS_SERIES.evidenceLevelDetailsCreator(evidenceLevelDetails);
-        } else if (evidenceLevelDetails.contains("clinical study") || evidenceLevelDetails.contains("phase")) {
-            return EvidenceLevelDetails.CLINICAL_STUDY.evidenceLevelDetailsCreator(evidenceLevelDetails);
-        } else if (evidenceLevelDetails.contains("guideline")) {
-            return EvidenceLevelDetails.GUIDELINE.evidenceLevelDetailsCreator(evidenceLevelDetails);
-        } else if (evidenceLevelDetails.contains("fda approved")) {
-            return EvidenceLevelDetails.FDA_APPROVED.evidenceLevelDetailsCreator(evidenceLevelDetails);
-        } else if (evidenceLevelDetails.contains("fda contraindicated")) {
-            return EvidenceLevelDetails.FDA_CONTRAINDICATED.evidenceLevelDetailsCreator(evidenceLevelDetails);
+        approvalStatus = approvalStatus.toLowerCase();
+        if (approvalStatus.contains("preclinical")) {
+            return EvidenceLevelDetails.PRECLINICAL;
+        } else if (approvalStatus.contains("case report")) {
+            return EvidenceLevelDetails.CASE_REPORTS_SERIES;
+        } else if (approvalStatus.contains("clinical study") || approvalStatus.contains("phase")) {
+            return EvidenceLevelDetails.CLINICAL_STUDY;
+        } else if (approvalStatus.contains("guideline")) {
+            return EvidenceLevelDetails.GUIDELINE;
+        } else if (approvalStatus.contains("fda approved")) {
+            return EvidenceLevelDetails.FDA_APPROVED;
+        } else if (approvalStatus.contains("fda contraindicated")) {
+            return EvidenceLevelDetails.FDA_CONTRAINDICATED;
         } else {
-            LOGGER.warn("Could not resolve CKB evidence level details (approvalStatus) '{}'", evidenceLevelDetails);
+            LOGGER.warn("Could not resolve CKB evidence level details (approvalStatus) '{}'", approvalStatus);
         }
         return EvidenceLevelDetails.UNKNOWN;
     }

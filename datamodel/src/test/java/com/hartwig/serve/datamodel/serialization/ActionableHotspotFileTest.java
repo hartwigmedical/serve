@@ -47,7 +47,7 @@ public class ActionableHotspotFileTest {
         assertEquals("Vemurafenib", DatamodelTestFactory.extractTreatment(hotspot1).name());
         assertEquals("Skin Melanoma", hotspot1.applicableCancerType().name());
         assertEquals(EvidenceLevelDetails.GUIDELINE, hotspot1.evidenceLevelDetails());
-        assertEquals(LocalDate.of(2021, 2, 3), hotspot1.ckbEntryDate());
+        assertEquals(LocalDate.of(2021, 2, 3), hotspot1.entryDate());
         assertEquals("efficacy evidence", hotspot1.efficacyDescription());
 
         ActionableHotspot hotspot2 = findBySource(hotspots, Knowledgebase.CKB_TRIAL);
@@ -59,7 +59,7 @@ public class ActionableHotspotFileTest {
         assertEquals("Vemurafenib", DatamodelTestFactory.setToField(DatamodelTestFactory.extractClinicalTrial(hotspot2).therapyNames()));
         assertEquals("Solid tumor", hotspot2.applicableCancerType().name());
         assertEquals(EvidenceLevelDetails.GUIDELINE, hotspot1.evidenceLevelDetails());
-        assertEquals(LocalDate.EPOCH, hotspot2.ckbEntryDate());
+        assertEquals(LocalDate.EPOCH, hotspot2.entryDate());
         assertEquals(Strings.EMPTY, hotspot2.efficacyDescription());
     }
 

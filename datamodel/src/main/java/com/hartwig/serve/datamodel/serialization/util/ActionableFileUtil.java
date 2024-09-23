@@ -41,7 +41,7 @@ public final class ActionableFileUtil {
     @NotNull
     public static String header() {
         return new StringJoiner(FIELD_DELIMITER).add("source")
-                .add("ckbEntryDate")
+                .add("entryDate")
                 .add("sourceEvent")
                 .add("sourceUrls")
                 .add("nctId")
@@ -159,8 +159,8 @@ public final class ActionableFileUtil {
 
             @NotNull
             @Override
-            public LocalDate ckbEntryDate() {
-                String lastUpdated = values[fields.get("ckbEntryDate")];
+            public LocalDate entryDate() {
+                String lastUpdated = values[fields.get("entryDate")];
                 if (lastUpdated.isEmpty()) {
                     return LocalDate.EPOCH;
                 } else {
@@ -203,7 +203,7 @@ public final class ActionableFileUtil {
             therapy.add(treatment.name());
         }
         return new StringJoiner(FIELD_DELIMITER).add(event.source().toString())
-                .add(event.ckbEntryDate().toString())
+                .add(event.entryDate().toString())
                 .add(event.sourceEvent())
                 .add(setToField(event.sourceUrls()))
                 .add(clinicalTrial != null ? clinicalTrial.nctId() : Strings.EMPTY)

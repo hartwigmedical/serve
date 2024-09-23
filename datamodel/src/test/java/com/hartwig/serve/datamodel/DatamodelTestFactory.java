@@ -150,19 +150,19 @@ public final class DatamodelTestFactory {
         @NotNull
         private final Set<String> evidenceUrls;
         @NotNull
-        private final LocalDate ckbEntrydate;
+        private final LocalDate entryDate;
         @NotNull
         private final String efficacyDescription;
         @NotNull
         private final String efficacyDescriptionYear;
 
-        public ActionableEventImpl(@NotNull Knowledgebase source, @NotNull LocalDate ckbEntrydate, @NotNull String sourceEvent,
+        public ActionableEventImpl(@NotNull Knowledgebase source, @NotNull LocalDate entryDate, @NotNull String sourceEvent,
                 @NotNull Set<String> sourceUrls, @NotNull Intervention intervention, @NotNull CancerType applicableCancerType,
                 @NotNull Set<CancerType> blacklistCancerTypes, @NotNull String efficacyDescription,
                 @NotNull String efficacyDescriptionYear, @NotNull EvidenceLevel level, @NotNull EvidenceLevelDetails evidenceLevelDetails,
                 @NotNull EvidenceDirection direction, @NotNull Set<String> evidenceUrls) {
             this.source = source;
-            this.ckbEntrydate = ckbEntrydate;
+            this.entryDate = entryDate;
             this.sourceEvent = sourceEvent;
             this.sourceUrls = sourceUrls;
             this.intervention = intervention;
@@ -238,8 +238,8 @@ public final class DatamodelTestFactory {
 
         @NotNull
         @Override
-        public LocalDate ckbEntryDate() {
-            return ckbEntrydate;
+        public LocalDate entryDate() {
+            return entryDate;
         }
 
         @NotNull

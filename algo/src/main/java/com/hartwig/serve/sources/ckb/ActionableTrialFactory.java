@@ -98,7 +98,7 @@ class ActionableTrialFactory implements ActionableEntryFactory {
                                     .evidenceLevelDetails(EvidenceLevelDetails.CLINICAL_STUDY)
                                     .direction(EvidenceDirection.RESPONSIVE)
                                     .evidenceUrls(Sets.newHashSet("https://clinicaltrials.gov/study/" + trial.nctId()))
-                                    .ckbEntryDate(LocalDate.EPOCH)
+                                    .entryDate(LocalDate.EPOCH)
                                     .efficacyDescription(Strings.EMPTY)
                                     .efficacyDescriptionYear(Strings.EMPTY)
                                     .build());

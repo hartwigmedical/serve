@@ -117,7 +117,7 @@ class ActionableEvidenceFactory {
                     .evidenceLevelDetails(EvidenceLevelDetails.UNKNOWN)
                     .direction(direction)
                     .evidenceUrls(urls)
-                    .ckbEntryDate(LocalDate.EPOCH)
+                    .entryDate(LocalDate.EPOCH)
                     .efficacyDescription(Strings.EMPTY)
                     .efficacyDescriptionYear(Strings.EMPTY);
 

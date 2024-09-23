@@ -11,7 +11,7 @@ public interface ActionableEvent {
     Knowledgebase source();
 
     @NotNull
-    LocalDate ckbEntryDate();
+    LocalDate entryDate();
 
     @NotNull
     String sourceEvent();

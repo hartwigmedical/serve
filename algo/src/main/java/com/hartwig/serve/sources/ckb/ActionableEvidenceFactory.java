@@ -146,7 +146,7 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
 
                     actionableEntries.add(ImmutableActionableEntry.builder()
                             .source(Knowledgebase.CKB_EVIDENCE)
-                            .ckbEntryDate(entry.updateDate())
+                            .entryDate(entry.updateDate())
                             .sourceEvent(sourceEvent)
                             .sourceUrls(sourceUrls)
                             .intervention(ImmutableTreatment.builder()

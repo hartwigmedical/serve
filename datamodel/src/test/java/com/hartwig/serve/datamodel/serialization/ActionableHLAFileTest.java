@@ -43,7 +43,7 @@ public class ActionableHLAFileTest {
         assertEquals("Nivolumab", DatamodelTestFactory.extractTreatment(hla1).name());
         assertEquals("All cancer types", hla1.applicableCancerType().name());
         assertEquals(EvidenceLevelDetails.GUIDELINE, hla1.evidenceLevelDetails());
-        assertEquals(LocalDate.of(2021, 2, 3), hla1.ckbEntryDate());
+        assertEquals(LocalDate.of(2021, 2, 3), hla1.entryDate());
         assertEquals("efficacy evidence", hla1.efficacyDescription());
 
         ActionableHLA hla2 = findBySource(hlas, Knowledgebase.CKB_TRIAL);
@@ -51,7 +51,7 @@ public class ActionableHLAFileTest {
         assertEquals("Nivolumab", DatamodelTestFactory.setToField(DatamodelTestFactory.extractClinicalTrial(hla2).therapyNames()));
         assertEquals("Skin melanoma", hla2.applicableCancerType().name());
         assertEquals(EvidenceLevelDetails.GUIDELINE, hla2.evidenceLevelDetails());
-        assertEquals(LocalDate.EPOCH, hla2.ckbEntryDate());
+        assertEquals(LocalDate.EPOCH, hla2.entryDate());
         assertEquals(Strings.EMPTY, hla2.efficacyDescription());
     }
 

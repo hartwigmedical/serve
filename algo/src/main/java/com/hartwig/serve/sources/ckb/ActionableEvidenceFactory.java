@@ -3,7 +3,6 @@ package com.hartwig.serve.sources.ckb;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -264,7 +263,7 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
     static String extractEvidenceYear(@NotNull LocalDate entryDate, @NotNull List<Reference> references, Therapy therapy) {
         Optional<String> mostRecentYear = references.stream()
                 .map(Reference::year)
-                .filter(Objects::nonNull)
+                .filter(year -> year != null && !year.isEmpty() && !year.equals("0"))
                 .max(Comparator.naturalOrder());
 
         if (mostRecentYear.isPresent()) {

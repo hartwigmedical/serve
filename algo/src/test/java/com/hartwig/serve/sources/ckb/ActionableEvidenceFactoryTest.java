@@ -196,9 +196,12 @@ public class ActionableEvidenceFactoryTest {
         List<Reference> referencesWithDate = List.of(createReference("2021"), createReference("2023"));
         List<Reference> referencesWithoutDate = List.of(createReference(null));
         Therapy therapy = createTherapy(2018);
+        LocalDate mostRecentDate = LocalDate.of(2024, 1, 1);
 
         assertEquals("2023", ActionableEvidenceFactory.extractEvidenceYear(entryDate, referencesWithDate, therapy));
+        assertEquals("2023", ActionableEvidenceFactory.extractEvidenceYear(mostRecentDate, referencesWithDate, therapy));
         assertEquals("2018", ActionableEvidenceFactory.extractEvidenceYear(entryDate, referencesWithoutDate, therapy));
+        assertEquals("2024", ActionableEvidenceFactory.extractEvidenceYear(mostRecentDate, referencesWithoutDate, therapy));
         assertEquals("2015", ActionableEvidenceFactory.extractEvidenceYear(entryDate, referencesWithoutDate, null));
     }
 

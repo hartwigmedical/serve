@@ -450,6 +450,10 @@ elsewhere.
 
 ## Version History and Download Links
 
+- [5.2.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v5.2.0):
+    - Added evidenceYear to ActionableEvent -> reference createDate with fallback on most recent of profile/therapy createDate
+    - Refactored EvidenceLevelDetails (former ApprovalStatus) enum class and resolveEvidenceLevelDetails in ActionableEvidenceFactory
+    - Renamed "level" to evidenceLevel in ActionableEvent output files
 - [5.1.1](https://github.com/hartwigmedical/serve/releases/tag/serve-v5.1.1):
     - Renamed "ApprovalStatus" to EvidenceLevelDetails in ActionableEvent output files
     - Refactored EvidenceLevelDetails (former ApprovalStatus) enum class

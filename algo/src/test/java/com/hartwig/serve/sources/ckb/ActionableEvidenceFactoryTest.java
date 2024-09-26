@@ -15,10 +15,10 @@ import com.hartwig.serve.ckb.datamodel.reference.ImmutableReference;
 import com.hartwig.serve.ckb.datamodel.reference.Reference;
 import com.hartwig.serve.ckb.datamodel.therapy.ImmutableTherapy;
 import com.hartwig.serve.ckb.datamodel.therapy.Therapy;
-import com.hartwig.serve.datamodel.EvidenceLevelDetails;
 import com.hartwig.serve.datamodel.DatamodelTestFactory;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
+import com.hartwig.serve.datamodel.EvidenceLevelDetails;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.Treatment;
 import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistEvidenceEntry;
@@ -171,7 +171,8 @@ public class ActionableEvidenceFactoryTest {
         assertEquals(EvidenceLevelDetails.UNKNOWN, ActionableEvidenceFactory.resolveEvidenceLevelDetails("Unknown"));
         assertEquals(EvidenceLevelDetails.CLINICAL_STUDY, ActionableEvidenceFactory.resolveEvidenceLevelDetails("Clinical study"));
         assertEquals(EvidenceLevelDetails.GUIDELINE, ActionableEvidenceFactory.resolveEvidenceLevelDetails("Guideline"));
-        assertEquals(EvidenceLevelDetails.CASE_REPORTS_SERIES, ActionableEvidenceFactory.resolveEvidenceLevelDetails("Case Reports/Case Series"));
+        assertEquals(EvidenceLevelDetails.CASE_REPORTS_SERIES,
+                ActionableEvidenceFactory.resolveEvidenceLevelDetails("Case Reports/Case Series"));
     }
 
     @Test

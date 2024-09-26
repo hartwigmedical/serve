@@ -156,7 +156,7 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
                             .applicableCancerType(cancerTypeExtraction.applicableCancerType())
                             .blacklistCancerTypes(cancerTypeExtraction.blacklistedCancerTypes())
                             .efficacyDescription(evidence.efficacyEvidence())
-                            .efficacyDescriptionYear(evidenceYear)
+                            .evidenceYear(evidenceYear)
                             .evidenceLevel(level)
                             .evidenceLevelDetails(evidenceLevelDetails)
                             .direction(direction)
@@ -258,9 +258,8 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
         return null;
     }
 
-    @NotNull
     @VisibleForTesting
-    static Integer extractEvidenceYear(@NotNull LocalDate entryDate, @NotNull List<Reference> references, @Nullable Therapy therapy) {
+    static int extractEvidenceYear(@NotNull LocalDate entryDate, @NotNull List<Reference> references, @Nullable Therapy therapy) {
         Optional<Integer> mostRecentYear = references.stream()
                 .map(Reference::year)
                 .filter(year -> year != null && !year.isEmpty() && !year.equals("0"))

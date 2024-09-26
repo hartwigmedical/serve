@@ -154,12 +154,12 @@ public final class DatamodelTestFactory {
         @NotNull
         private final String efficacyDescription;
         @NotNull
-        private final Integer efficacyDescriptionYear;
+        private final Integer evidenceYear;
 
         public ActionableEventImpl(@NotNull Knowledgebase source, @NotNull LocalDate entryDate, @NotNull String sourceEvent,
                 @NotNull Set<String> sourceUrls, @NotNull Intervention intervention, @NotNull CancerType applicableCancerType,
                 @NotNull Set<CancerType> blacklistCancerTypes, @NotNull String efficacyDescription,
-                @NotNull Integer efficacyDescriptionYear, @NotNull EvidenceLevel level, @NotNull EvidenceLevelDetails evidenceLevelDetails,
+                @NotNull Integer evidenceYear, @NotNull EvidenceLevel level, @NotNull EvidenceLevelDetails evidenceLevelDetails,
                 @NotNull EvidenceDirection direction, @NotNull Set<String> evidenceUrls) {
             this.source = source;
             this.entryDate = entryDate;
@@ -169,7 +169,7 @@ public final class DatamodelTestFactory {
             this.applicableCancerType = applicableCancerType;
             this.blacklistCancerTypes = blacklistCancerTypes;
             this.efficacyDescription = efficacyDescription;
-            this.efficacyDescriptionYear = efficacyDescriptionYear;
+            this.evidenceYear = evidenceYear;
             this.level = level;
             this.evidenceLevelDetails = evidenceLevelDetails;
             this.direction = direction;
@@ -248,10 +248,9 @@ public final class DatamodelTestFactory {
             return efficacyDescription;
         }
 
-        @NotNull
         @Override
-        public Integer efficacyDescriptionYear() {
-            return efficacyDescriptionYear;
+        public int evidenceYear() {
+            return evidenceYear;
         }
 
         @Override

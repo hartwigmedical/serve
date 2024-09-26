@@ -57,7 +57,7 @@ public final class ActionableFileUtil {
                 .add("applicableDoid")
                 .add("blacklistCancerTypes")
                 .add("efficacyDescription")
-                .add("efficacyDescriptionYear")
+                .add("evidenceYear")
                 .add("evidenceLevel")
                 .add("evidenceLevelDetails")
                 .add("direction")
@@ -149,10 +149,9 @@ public final class ActionableFileUtil {
                 return values[fields.get("efficacyDescription")];
             }
 
-            @NotNull
             @Override
-            public Integer efficacyDescriptionYear() {
-                return Integer.valueOf(values[fields.get("efficacyDescriptionYear")]);
+            public int evidenceYear() {
+                return Integer.parseInt(values[fields.get("efficacyDescriptionYear")]);
             }
 
             @NotNull
@@ -223,7 +222,7 @@ public final class ActionableFileUtil {
                 .add(event.applicableCancerType().doid())
                 .add(cancerTypesToField(event.blacklistCancerTypes()))
                 .add(event.efficacyDescription())
-                .add(event.efficacyDescriptionYear().toString())
+                .add(String.valueOf(event.evidenceYear()))
                 .add(event.evidenceLevel().toString())
                 .add(event.evidenceLevelDetails().name())
                 .add(event.direction().toString())

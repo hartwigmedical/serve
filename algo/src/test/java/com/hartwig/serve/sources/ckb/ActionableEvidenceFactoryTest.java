@@ -11,9 +11,7 @@ import java.util.Set;
 
 import com.google.common.collect.Sets;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
-import com.hartwig.serve.ckb.datamodel.reference.ImmutableReference;
 import com.hartwig.serve.ckb.datamodel.reference.Reference;
-import com.hartwig.serve.ckb.datamodel.therapy.ImmutableTherapy;
 import com.hartwig.serve.ckb.datamodel.therapy.Therapy;
 import com.hartwig.serve.datamodel.DatamodelTestFactory;
 import com.hartwig.serve.datamodel.EvidenceDirection;
@@ -78,7 +76,7 @@ public class ActionableEvidenceFactoryTest {
         assertEquals(EvidenceDirection.RESPONSIVE, characteristics.direction());
         assertEquals(CkbTestFactory.TEST_CREATE_DATE, characteristics.entryDate());
         assertEquals(CkbTestFactory.EFFICACY_EVIDENCE, characteristics.efficacyDescription());
-        assertEquals(Integer.valueOf(CkbTestFactory.TEST_CREATE_DATE.getYear()), characteristics.efficacyDescriptionYear());
+        assertEquals(CkbTestFactory.TEST_CREATE_DATE.getYear(), characteristics.evidenceYear());
     }
 
     @Test
@@ -109,7 +107,7 @@ public class ActionableEvidenceFactoryTest {
         assertEquals(EvidenceLevel.A, amplification.evidenceLevel());
         assertEquals(EvidenceDirection.RESPONSIVE, amplification.direction());
         assertEquals(CkbTestFactory.EFFICACY_EVIDENCE, amplification.efficacyDescription());
-        assertEquals(Integer.valueOf(CkbTestFactory.TEST_CREATE_DATE.getYear()), amplification.efficacyDescriptionYear());
+        assertEquals(CkbTestFactory.TEST_CREATE_DATE.getYear(), amplification.evidenceYear());
     }
 
     @Test
@@ -140,7 +138,7 @@ public class ActionableEvidenceFactoryTest {
         assertEquals(EvidenceLevel.A, hotspot.evidenceLevel());
         assertEquals(EvidenceDirection.RESPONSIVE, hotspot.direction());
         assertEquals(CkbTestFactory.EFFICACY_EVIDENCE, hotspot.efficacyDescription());
-        assertEquals(Integer.valueOf(CkbTestFactory.TEST_CREATE_DATE.getYear()), hotspot.efficacyDescriptionYear());
+        assertEquals(CkbTestFactory.TEST_CREATE_DATE.getYear(), hotspot.evidenceYear());
     }
 
     @Test
@@ -202,11 +200,11 @@ public class ActionableEvidenceFactoryTest {
         Therapy therapy = CkbTestFactory.createTherapy(2018);
         LocalDate mostRecentDate = LocalDate.of(2024, 1, 1);
 
-        assertEquals(Integer.valueOf(2023), ActionableEvidenceFactory.extractEvidenceYear(entryDate, referencesWithDate, therapy));
-        assertEquals(Integer.valueOf(2023), ActionableEvidenceFactory.extractEvidenceYear(mostRecentDate, referencesWithDate, therapy));
-        assertEquals(Integer.valueOf(2018), ActionableEvidenceFactory.extractEvidenceYear(entryDate, referencesWithoutDate, therapy));
-        assertEquals(Integer.valueOf(2024), ActionableEvidenceFactory.extractEvidenceYear(mostRecentDate, referencesWithoutDate, therapy));
-        assertEquals(Integer.valueOf(2015), ActionableEvidenceFactory.extractEvidenceYear(entryDate, referencesWithoutDate, null));
+        assertEquals(2023, ActionableEvidenceFactory.extractEvidenceYear(entryDate, referencesWithDate, therapy));
+        assertEquals(2023, ActionableEvidenceFactory.extractEvidenceYear(mostRecentDate, referencesWithDate, therapy));
+        assertEquals(2018, ActionableEvidenceFactory.extractEvidenceYear(entryDate, referencesWithoutDate, therapy));
+        assertEquals(2024, ActionableEvidenceFactory.extractEvidenceYear(mostRecentDate, referencesWithoutDate, therapy));
+        assertEquals(2015, ActionableEvidenceFactory.extractEvidenceYear(entryDate, referencesWithoutDate, null));
     }
 
     @Test

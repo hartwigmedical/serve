@@ -115,7 +115,7 @@ class ActionableEvidenceFactory {
                     .entryDate(LocalDate.EPOCH)
                     .sourceUrls(Sets.newHashSet())
                     .efficacyDescription(Strings.EMPTY)
-                    .efficacyDescriptionYear(2024)
+                    .evidenceYear(2024)
                     .evidenceLevel(level)
                     .evidenceLevelDetails(EvidenceLevelDetails.UNKNOWN)
                     .direction(direction)

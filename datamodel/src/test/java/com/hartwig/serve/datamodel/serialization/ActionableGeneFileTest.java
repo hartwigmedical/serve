@@ -45,7 +45,7 @@ public class ActionableGeneFileTest {
         assertEquals("Crizotinib", DatamodelTestFactory.extractTreatment(gene1).name());
         assertEquals("Lung Adenocarcinoma", gene1.applicableCancerType().name());
         assertEquals("efficacy evidence A", gene1.efficacyDescription());
-        assertEquals(Integer.valueOf(2024), gene1.efficacyDescriptionYear());
+        assertEquals(2024, gene1.evidenceYear());
         assertEquals(EvidenceLevelDetails.GUIDELINE, gene1.evidenceLevelDetails());
 
         ActionableGene gene2 = findByGeneAndEvent(genes, "BRCA1", GeneEvent.INACTIVATION, "Solid Tumors");
@@ -55,7 +55,7 @@ public class ActionableGeneFileTest {
         assertEquals("DRUP", DatamodelTestFactory.extractTreatment(gene2).name());
         assertEquals("Solid Tumors", gene2.applicableCancerType().name());
         assertEquals("efficacy evidence B", gene2.efficacyDescription());
-        assertEquals(Integer.valueOf(2024), gene2.efficacyDescriptionYear());
+        assertEquals(2024, gene2.evidenceYear());
         assertEquals(EvidenceLevelDetails.GUIDELINE, gene2.evidenceLevelDetails());
 
         ActionableGene gene3 = findByGeneAndEvent(genes, "ERBB2", GeneEvent.AMPLIFICATION, "Breast Cancer");
@@ -65,7 +65,7 @@ public class ActionableGeneFileTest {
         assertEquals("Trastuzumab", DatamodelTestFactory.extractTreatment(gene3).name());
         assertEquals("Breast Cancer", gene3.applicableCancerType().name());
         assertEquals("efficacy evidence C", gene3.efficacyDescription());
-        assertEquals(Integer.valueOf(2024), gene3.efficacyDescriptionYear());
+        assertEquals(2024, gene3.evidenceYear());
         assertEquals(EvidenceLevelDetails.GUIDELINE, gene3.evidenceLevelDetails());
 
         ActionableGene gene4 = findByGeneAndEvent(genes, "ERBB2", GeneEvent.AMPLIFICATION, "Colorectal Cancer");
@@ -75,7 +75,7 @@ public class ActionableGeneFileTest {
         assertEquals("Panitumumab", DatamodelTestFactory.extractTreatment(gene4).name());
         assertEquals("Colorectal Cancer", gene4.applicableCancerType().name());
         assertEquals("efficacy evidence D", gene4.efficacyDescription());
-        assertEquals(Integer.valueOf(2024), gene4.efficacyDescriptionYear());
+        assertEquals(2024, gene4.evidenceYear());
         assertEquals(EvidenceLevelDetails.GUIDELINE, gene4.evidenceLevelDetails());
 
         ActionableGene gene5 = findByGeneAndEvent(genes, "FGFR2", GeneEvent.FUSION, "Bladder Cancer");
@@ -85,7 +85,7 @@ public class ActionableGeneFileTest {
         assertEquals("Erdafitinib", DatamodelTestFactory.extractTreatment(gene5).name());
         assertEquals("Bladder Cancer", gene5.applicableCancerType().name());
         assertEquals("efficacy evidence E", gene5.efficacyDescription());
-        assertEquals(Integer.valueOf(2024), gene5.efficacyDescriptionYear());
+        assertEquals(2024, gene5.evidenceYear());
         assertEquals(EvidenceLevelDetails.GUIDELINE, gene5.evidenceLevelDetails());
 
         ActionableGene gene6 = findByGeneAndEvent(genes, "MET", GeneEvent.AMPLIFICATION, "Advanced Solid Tumor");
@@ -95,7 +95,7 @@ public class ActionableGeneFileTest {
         assertEquals("DRUP", DatamodelTestFactory.extractTreatment(gene6).name());
         assertEquals("Advanced Solid Tumor", gene6.applicableCancerType().name());
         assertEquals("efficacy evidence F", gene6.efficacyDescription());
-        assertEquals(Integer.valueOf(2024), gene6.efficacyDescriptionYear());
+        assertEquals(2024, gene6.evidenceYear());
         assertEquals(EvidenceLevelDetails.GUIDELINE, gene6.evidenceLevelDetails());
 
         ActionableGene gene7 = findByGeneAndEvent(genes, "NRAS", GeneEvent.ACTIVATION, "Colorectal Cancer");
@@ -105,7 +105,7 @@ public class ActionableGeneFileTest {
         assertEquals("Cetuximab", DatamodelTestFactory.setToField(DatamodelTestFactory.extractClinicalTrial(gene7).therapyNames()));
         assertEquals("Colorectal Cancer", gene7.applicableCancerType().name());
         assertEquals(Strings.EMPTY, gene7.efficacyDescription());
-        assertEquals(Integer.valueOf(2024), gene7.efficacyDescriptionYear());
+        assertEquals(2024, gene7.evidenceYear());
         assertEquals(EvidenceLevelDetails.GUIDELINE, gene7.evidenceLevelDetails());
     }
 

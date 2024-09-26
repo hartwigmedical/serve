@@ -210,7 +210,7 @@ public final class CkbTestFactory {
     }
 
     @NotNull
-    public static Reference createReference(String year) {
+    public static Reference createReference(@Nullable String year) {
         return ImmutableReference.builder()
                 .id(0)
                 .pubMedId("123456")

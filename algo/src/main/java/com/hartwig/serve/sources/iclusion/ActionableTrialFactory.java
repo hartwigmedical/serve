@@ -83,7 +83,7 @@ public class ActionableTrialFactory {
                         .therapyNames(Sets.newHashSet())
                         .build())
                 .efficacyDescription(Strings.EMPTY)
-                .efficacyDescriptionYear(2024)
+                .evidenceYear(2024)
                 .evidenceLevel(EvidenceLevel.B)
                 .evidenceLevelDetails(EvidenceLevelDetails.UNKNOWN)
                 .direction(EvidenceDirection.RESPONSIVE)

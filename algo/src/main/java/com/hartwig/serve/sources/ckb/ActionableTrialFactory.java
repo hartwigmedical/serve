@@ -95,7 +95,7 @@ class ActionableTrialFactory implements ActionableEntryFactory {
                                     .applicableCancerType(cancerTypeExtraction.applicableCancerType())
                                     .blacklistCancerTypes(cancerTypeExtraction.blacklistedCancerTypes())
                                     .efficacyDescription(trial.title())
-                                    .efficacyDescriptionYear(trial.updateDate().getYear())
+                                    .evidenceYear(trial.updateDate().getYear())
                                     .evidenceLevel(EvidenceLevel.B)
                                     .evidenceLevelDetails(EvidenceLevelDetails.CLINICAL_STUDY)
                                     .direction(EvidenceDirection.RESPONSIVE)

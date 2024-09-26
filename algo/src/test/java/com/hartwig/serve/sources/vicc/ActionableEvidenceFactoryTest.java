@@ -55,7 +55,7 @@ public class ActionableEvidenceFactoryTest {
         assertEquals(cancerTypeA, eventA.applicableCancerType().name());
         assertEquals("1", eventA.applicableCancerType().doid());
         assertTrue(eventA.blacklistCancerTypes().isEmpty());
-        assertEquals(EvidenceLevel.A, eventA.level());
+        assertEquals(EvidenceLevel.A, eventA.evidenceLevel());
         assertEquals(EvidenceLevelDetails.UNKNOWN, eventA.evidenceLevelDetails());
         assertEquals(EvidenceDirection.RESPONSIVE, eventA.direction());
         assertEquals(Sets.newHashSet("url"), eventA.evidenceUrls());
@@ -65,7 +65,7 @@ public class ActionableEvidenceFactoryTest {
         assertEquals("Treatment", treatmentB.name());
         assertEquals(cancerTypeB, eventB.applicableCancerType().name());
         assertEquals(CancerTypeConstants.CANCER_DOID, eventB.applicableCancerType().doid());
-        assertEquals(EvidenceLevel.A, eventB.level());
+        assertEquals(EvidenceLevel.A, eventB.evidenceLevel());
         assertEquals(EvidenceLevelDetails.UNKNOWN, eventB.evidenceLevelDetails());
         assertEquals(EvidenceDirection.RESPONSIVE, eventB.direction());
         assertEquals(Sets.newHashSet("url"), eventB.evidenceUrls());

@@ -97,6 +97,7 @@ public class ActionableEventComparatorTest {
                 DatamodelTestFactory.cancerTypeBuilder().name(applicableCancerType).build(),
                 Sets.newHashSet(),
                 Strings.EMPTY,
+                2024,
                 level, evidenceLevelDetails,
                 direction,
                 Sets.newHashSet()

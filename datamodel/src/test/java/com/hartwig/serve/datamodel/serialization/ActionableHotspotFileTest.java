@@ -44,11 +44,12 @@ public class ActionableHotspotFileTest {
         assertEquals(140453136, hotspot1.position());
         assertEquals("A", hotspot1.ref());
         assertEquals("T", hotspot1.alt());
+        assertEquals(LocalDate.of(2021, 2, 3), hotspot1.entryDate());
         assertEquals("Vemurafenib", DatamodelTestFactory.extractTreatment(hotspot1).name());
         assertEquals("Skin Melanoma", hotspot1.applicableCancerType().name());
+        assertEquals("efficacy evidence", hotspot1.efficacyDescription());
+        assertEquals(2024, hotspot1.evidenceYear());
         assertEquals(EvidenceLevelDetails.GUIDELINE, hotspot1.evidenceLevelDetails());
-        assertEquals(LocalDate.of(2021, 2, 3), hotspot1.date());
-        assertEquals("efficacy evidence", hotspot1.description());
 
         ActionableHotspot hotspot2 = findBySource(hotspots, Knowledgebase.CKB_TRIAL);
         assertEquals("BRAF", hotspot2.gene());
@@ -56,11 +57,12 @@ public class ActionableHotspotFileTest {
         assertEquals(140453137, hotspot2.position());
         assertEquals("A", hotspot2.ref());
         assertEquals("T", hotspot2.alt());
+        assertEquals(LocalDate.EPOCH, hotspot2.entryDate());
         assertEquals("Vemurafenib", DatamodelTestFactory.setToField(DatamodelTestFactory.extractClinicalTrial(hotspot2).therapyNames()));
         assertEquals("Solid tumor", hotspot2.applicableCancerType().name());
+        assertEquals(Strings.EMPTY, hotspot2.efficacyDescription());
+        assertEquals(2024, hotspot2.evidenceYear());
         assertEquals(EvidenceLevelDetails.GUIDELINE, hotspot1.evidenceLevelDetails());
-        assertEquals(LocalDate.EPOCH, hotspot2.date());
-        assertEquals(Strings.EMPTY, hotspot2.description());
     }
 
     @NotNull

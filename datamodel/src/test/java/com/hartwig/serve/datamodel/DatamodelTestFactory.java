@@ -99,27 +99,30 @@ public final class DatamodelTestFactory {
                 DatamodelTestFactory.cancerTypeBuilder().build(),
                 Sets.newHashSet(),
                 Strings.EMPTY,
+                2024,
                 EvidenceLevel.A,
                 EvidenceLevelDetails.FDA_APPROVED,
                 EvidenceDirection.NO_BENEFIT,
-                Sets.newHashSet()
-        );
+                Sets.newHashSet());
     }
 
     @NotNull
-    public static ActionableEvent createActionableEvent(@NotNull Knowledgebase source, @NotNull LocalDate date, @NotNull String sourceEvent,
+    public static ActionableEvent createActionableEvent(@NotNull Knowledgebase source, @NotNull LocalDate entryDate, @NotNull String sourceEvent,
             @NotNull Set<String> sourceUrls, @NotNull Intervention intervention, @NotNull CancerType applicableCancerType,
-            @NotNull Set<CancerType> blacklistCancerTypes, @NotNull String description, @NotNull EvidenceLevel level,
-            @NotNull EvidenceLevelDetails evidenceLevelDetails, @NotNull EvidenceDirection direction, @NotNull Set<String> evidenceUrls) {
+            @NotNull Set<CancerType> blacklistCancerTypes, @NotNull String efficacyDescription, @NotNull Integer efficacyDescriptionYear,
+            @NotNull EvidenceLevel level, @NotNull EvidenceLevelDetails evidenceLevelDetails, @NotNull EvidenceDirection direction,
+            @NotNull Set<String> evidenceUrls) {
         return new ActionableEventImpl(source,
-                date,
+                entryDate,
                 sourceEvent,
                 sourceUrls,
                 intervention,
                 applicableCancerType,
                 blacklistCancerTypes,
-                description,
-                level, evidenceLevelDetails,
+                efficacyDescription,
+                efficacyDescriptionYear,
+                level,
+                evidenceLevelDetails,
                 direction,
                 evidenceUrls);
     }
@@ -147,22 +150,26 @@ public final class DatamodelTestFactory {
         @NotNull
         private final Set<String> evidenceUrls;
         @NotNull
-        private final LocalDate date;
+        private final LocalDate entryDate;
         @NotNull
-        private final String description;
+        private final String efficacyDescription;
+        @NotNull
+        private final Integer evidenceYear;
 
-        public ActionableEventImpl(@NotNull Knowledgebase source, @NotNull LocalDate date, @NotNull String sourceEvent,
+        public ActionableEventImpl(@NotNull Knowledgebase source, @NotNull LocalDate entryDate, @NotNull String sourceEvent,
                 @NotNull Set<String> sourceUrls, @NotNull Intervention intervention, @NotNull CancerType applicableCancerType,
-                @NotNull Set<CancerType> blacklistCancerTypes, @NotNull String description, @NotNull EvidenceLevel level,
-                @NotNull EvidenceLevelDetails evidenceLevelDetails, @NotNull EvidenceDirection direction, @NotNull Set<String> evidenceUrls) {
+                @NotNull Set<CancerType> blacklistCancerTypes, @NotNull String efficacyDescription,
+                @NotNull Integer evidenceYear, @NotNull EvidenceLevel level, @NotNull EvidenceLevelDetails evidenceLevelDetails,
+                @NotNull EvidenceDirection direction, @NotNull Set<String> evidenceUrls) {
             this.source = source;
-            this.date = date;
+            this.entryDate = entryDate;
             this.sourceEvent = sourceEvent;
             this.sourceUrls = sourceUrls;
             this.intervention = intervention;
             this.applicableCancerType = applicableCancerType;
             this.blacklistCancerTypes = blacklistCancerTypes;
-            this.description = description;
+            this.efficacyDescription = efficacyDescription;
+            this.evidenceYear = evidenceYear;
             this.level = level;
             this.evidenceLevelDetails = evidenceLevelDetails;
             this.direction = direction;
@@ -207,7 +214,7 @@ public final class DatamodelTestFactory {
 
         @NotNull
         @Override
-        public EvidenceLevel level() {
+        public EvidenceLevel evidenceLevel() {
             return level;
         }
 
@@ -231,14 +238,19 @@ public final class DatamodelTestFactory {
 
         @NotNull
         @Override
-        public LocalDate date() {
-            return date;
+        public LocalDate entryDate() {
+            return entryDate;
         }
 
         @NotNull
         @Override
-        public String description() {
-            return description;
+        public String efficacyDescription() {
+            return efficacyDescription;
+        }
+
+        @Override
+        public int evidenceYear() {
+            return evidenceYear;
         }
 
         @Override

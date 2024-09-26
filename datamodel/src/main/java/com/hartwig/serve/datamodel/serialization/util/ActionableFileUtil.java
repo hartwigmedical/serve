@@ -41,7 +41,7 @@ public final class ActionableFileUtil {
     @NotNull
     public static String header() {
         return new StringJoiner(FIELD_DELIMITER).add("source")
-                .add("date")
+                .add("entryDate")
                 .add("sourceEvent")
                 .add("sourceUrls")
                 .add("nctId")
@@ -56,8 +56,9 @@ public final class ActionableFileUtil {
                 .add("applicableCancerType")
                 .add("applicableDoid")
                 .add("blacklistCancerTypes")
-                .add("description")
-                .add("level")
+                .add("efficacyDescription")
+                .add("evidenceYear")
+                .add("evidenceLevel")
                 .add("evidenceLevelDetails")
                 .add("direction")
                 .add("evidenceUrls")
@@ -78,6 +79,17 @@ public final class ActionableFileUtil {
             @Override
             public String sourceEvent() {
                 return values[fields.get("sourceEvent")];
+            }
+
+            @NotNull
+            @Override
+            public LocalDate entryDate() {
+                String lastUpdated = values[fields.get("entryDate")];
+                if (lastUpdated.isEmpty()) {
+                    return LocalDate.EPOCH;
+                } else {
+                    return LocalDate.parse(lastUpdated);
+                }
             }
 
             @NotNull
@@ -133,8 +145,19 @@ public final class ActionableFileUtil {
 
             @NotNull
             @Override
-            public EvidenceLevel level() {
-                return EvidenceLevel.valueOf(values[fields.get("level")]);
+            public String efficacyDescription() {
+                return values[fields.get("efficacyDescription")];
+            }
+
+            @Override
+            public int evidenceYear() {
+                return Integer.parseInt(values[fields.get("evidenceYear")]);
+            }
+
+            @NotNull
+            @Override
+            public EvidenceLevel evidenceLevel() {
+                return EvidenceLevel.valueOf(values[fields.get("evidenceLevel")]);
             }
 
             @NotNull
@@ -154,23 +177,6 @@ public final class ActionableFileUtil {
             public Set<String> evidenceUrls() {
                 int evidenceUrlPosition = fields.get("evidenceUrls");
                 return values.length > evidenceUrlPosition ? fieldToSet(values[evidenceUrlPosition]) : Sets.newHashSet();
-            }
-
-            @NotNull
-            @Override
-            public LocalDate date() {
-                String lastUpdated = values[fields.get("date")];
-                if (lastUpdated.isEmpty()) {
-                    return LocalDate.EPOCH;
-                } else {
-                    return LocalDate.parse(lastUpdated);
-                }
-            }
-
-            @NotNull
-            @Override
-            public String description() {
-                return values[fields.get("description")];
             }
         };
     }
@@ -196,7 +202,7 @@ public final class ActionableFileUtil {
             therapy.add(treatment.name());
         }
         return new StringJoiner(FIELD_DELIMITER).add(event.source().toString())
-                .add(event.date().toString())
+                .add(event.entryDate().toString())
                 .add(event.sourceEvent())
                 .add(setToField(event.sourceUrls()))
                 .add(clinicalTrial != null ? clinicalTrial.nctId() : Strings.EMPTY)
@@ -215,8 +221,9 @@ public final class ActionableFileUtil {
                 .add(event.applicableCancerType().name())
                 .add(event.applicableCancerType().doid())
                 .add(cancerTypesToField(event.blacklistCancerTypes()))
-                .add(event.description())
-                .add(event.level().toString())
+                .add(event.efficacyDescription())
+                .add(String.valueOf(event.evidenceYear()))
+                .add(event.evidenceLevel().toString())
                 .add(event.evidenceLevelDetails().name())
                 .add(event.direction().toString())
                 .add(setToField(event.evidenceUrls()))

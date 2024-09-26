@@ -1,6 +1,5 @@
 package com.hartwig.serve.sources.ckb;
 
-import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -82,6 +81,7 @@ class ActionableTrialFactory implements ActionableEntryFactory {
 
                             actionableTrials.add(ImmutableActionableEntry.builder()
                                     .source(Knowledgebase.CKB_TRIAL)
+                                    .entryDate(entry.createDate())
                                     .sourceEvent(sourceEvent)
                                     .sourceUrls(sourceUrls)
                                     .intervention(ImmutableClinicalTrial.builder()
@@ -94,12 +94,12 @@ class ActionableTrialFactory implements ActionableEntryFactory {
                                             .build())
                                     .applicableCancerType(cancerTypeExtraction.applicableCancerType())
                                     .blacklistCancerTypes(cancerTypeExtraction.blacklistedCancerTypes())
-                                    .level(EvidenceLevel.B)
+                                    .efficacyDescription(trial.title())
+                                    .evidenceYear(trial.updateDate().getYear())
+                                    .evidenceLevel(EvidenceLevel.B)
                                     .evidenceLevelDetails(EvidenceLevelDetails.CLINICAL_STUDY)
                                     .direction(EvidenceDirection.RESPONSIVE)
                                     .evidenceUrls(Sets.newHashSet("https://clinicaltrials.gov/study/" + trial.nctId()))
-                                    .date(LocalDate.EPOCH)
-                                    .description(Strings.EMPTY)
                                     .build());
                         }
                     }

@@ -16,6 +16,8 @@ import com.hartwig.serve.ckb.datamodel.evidence.Evidence;
 import com.hartwig.serve.ckb.datamodel.evidence.ImmutableEvidence;
 import com.hartwig.serve.ckb.datamodel.indication.ImmutableIndication;
 import com.hartwig.serve.ckb.datamodel.indication.Indication;
+import com.hartwig.serve.ckb.datamodel.reference.ImmutableReference;
+import com.hartwig.serve.ckb.datamodel.reference.Reference;
 import com.hartwig.serve.ckb.datamodel.therapy.ImmutableTherapy;
 import com.hartwig.serve.ckb.datamodel.therapy.Therapy;
 import com.hartwig.serve.ckb.datamodel.variant.Gene;
@@ -68,11 +70,11 @@ public final class CkbTestFactory {
     @NotNull
     public static CkbEntry createEntry(@NotNull String geneSymbol, @NotNull String variant, @NotNull String fullName,
             @NotNull String responseType, @NotNull String evidenceType, @NotNull String therapyName, @NotNull String indicationName,
-            @NotNull String level, @NotNull String approvalStatus, @NotNull String termId) {
+            @NotNull String evidenceLevel, @NotNull String approvalStatus, @NotNull String termId) {
         Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting", "Rotterdam", "EMC");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(0, "required");
         return builder().addVariants(createVariant(geneSymbol, variant, fullName))
-                .addEvidences(createEvidence(responseType, evidenceType, therapyName, indicationName, level, approvalStatus, termId))
+                .addEvidences(createEvidence(responseType, evidenceType, therapyName, indicationName, evidenceLevel, approvalStatus, termId))
                 .addClinicalTrials(createTrialWithTherapy("Recruiting",
                         List.of(requirementDetail),
                         List.of(location),
@@ -204,6 +206,40 @@ public final class CkbTestFactory {
                 .updateDate(TEST_UPDATE_DATE)
                 .geneSymbol(geneSymbol)
                 .geneRole("")
+                .build();
+    }
+
+    @NotNull
+    public static Reference createReference(@Nullable String year) {
+        return ImmutableReference.builder()
+                .id(0)
+                .pubMedId("123456")
+                .title("Title")
+                .shortJournalTitle("Short Journal Title")
+                .pages("1-2")
+                .abstractText("Abstract Text")
+                .url("http://www.url.com")
+                .journal("Journal")
+                .authors("Authors")
+                .volume("Volume")
+                .issue("Issue")
+                .date("Date")
+                .year(year)
+                .build();
+    }
+
+    @NotNull
+    public static Therapy createTherapy(int createYear) {
+        return ImmutableTherapy.builder()
+                .id(0)
+                .createDate(LocalDate.of(createYear, 1, 1))
+                .updateDate(LocalDate.of(2021, 1, 1))
+                .therapyName("Therapy")
+                .drugs(List.of())
+                .synonyms(List.of())
+                .globalApprovalStatuses(List.of())
+                .description("Description")
+                .references(List.of())
                 .build();
     }
 }

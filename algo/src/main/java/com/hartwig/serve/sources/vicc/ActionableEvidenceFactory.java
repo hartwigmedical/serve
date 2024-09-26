@@ -112,13 +112,14 @@ class ActionableEvidenceFactory {
             ImmutableActionableEvidence.Builder builder = ImmutableActionableEvidence.builder()
                     .source(fromViccSource(entry.source()))
                     .sourceEvent(Strings.EMPTY)
+                    .entryDate(LocalDate.EPOCH)
                     .sourceUrls(Sets.newHashSet())
-                    .level(level)
+                    .efficacyDescription(Strings.EMPTY)
+                    .evidenceYear(2024)
+                    .evidenceLevel(level)
                     .evidenceLevelDetails(EvidenceLevelDetails.UNKNOWN)
                     .direction(direction)
-                    .evidenceUrls(urls)
-                    .date(LocalDate.EPOCH)
-                    .description(Strings.EMPTY);
+                    .evidenceUrls(urls);
 
             for (Map.Entry<String, Set<String>> cancerTypeEntry : cancerTypeToDoidsMap.entrySet()) {
                 String cancerType = cancerTypeEntry.getKey();

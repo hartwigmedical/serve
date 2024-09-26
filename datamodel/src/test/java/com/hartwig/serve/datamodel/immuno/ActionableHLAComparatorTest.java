@@ -13,9 +13,9 @@ public class ActionableHLAComparatorTest {
 
     @Test
     public void canSortActionableHLA() {
-        ActionableHLA hla1 = ImmunoTestFactory.actionableHLABuilder().hlaAllele("A1").level(EvidenceLevel.A).build();
-        ActionableHLA hla2 = ImmunoTestFactory.actionableHLABuilder().hlaAllele("A1").level(EvidenceLevel.B).build();
-        ActionableHLA hla3 = ImmunoTestFactory.actionableHLABuilder().hlaAllele("A2").level(EvidenceLevel.A).build();
+        ActionableHLA hla1 = ImmunoTestFactory.actionableHLABuilder().hlaAllele("A1").evidenceLevel(EvidenceLevel.A).build();
+        ActionableHLA hla2 = ImmunoTestFactory.actionableHLABuilder().hlaAllele("A1").evidenceLevel(EvidenceLevel.B).build();
+        ActionableHLA hla3 = ImmunoTestFactory.actionableHLABuilder().hlaAllele("A2").evidenceLevel(EvidenceLevel.A).build();
 
         List<ActionableHLA> hlas = Lists.newArrayList(hla1, hla3, hla2);
         hlas.sort(new ActionableHLAComparator());

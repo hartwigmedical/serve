@@ -8,7 +8,7 @@ public class ActionableEventComparator implements Comparator<ActionableEvent> {
 
     @Override
     public int compare(@NotNull ActionableEvent event1, @NotNull ActionableEvent event2) {
-        int levelCompare = event1.level().toString().compareTo(event2.level().toString());
+        int levelCompare = event1.evidenceLevel().toString().compareTo(event2.evidenceLevel().toString());
         if (levelCompare != 0) {
             return levelCompare;
         }

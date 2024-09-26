@@ -13,9 +13,9 @@ public class ActionableFusionComparatorTest {
 
     @Test
     public void canSortActionableFusions() {
-        ActionableFusion fusion1 = FusionTestFactory.actionableFusionBuilder().geneUp("X").level(EvidenceLevel.A).build();
-        ActionableFusion fusion2 = FusionTestFactory.actionableFusionBuilder().geneUp("X").level(EvidenceLevel.B).build();
-        ActionableFusion fusion3 = FusionTestFactory.actionableFusionBuilder().geneUp("Z").level(EvidenceLevel.A).build();
+        ActionableFusion fusion1 = FusionTestFactory.actionableFusionBuilder().geneUp("X").evidenceLevel(EvidenceLevel.A).build();
+        ActionableFusion fusion2 = FusionTestFactory.actionableFusionBuilder().geneUp("X").evidenceLevel(EvidenceLevel.B).build();
+        ActionableFusion fusion3 = FusionTestFactory.actionableFusionBuilder().geneUp("Z").evidenceLevel(EvidenceLevel.A).build();
 
         List<ActionableFusion> fusions = Lists.newArrayList(fusion2, fusion1, fusion3);
         fusions.sort(new ActionableFusionComparator());

@@ -1,6 +1,9 @@
 package com.hartwig.serve.sources.ckb;
 
+import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -86,6 +89,7 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
             EvidenceLevelDetails evidenceLevelDetails = resolveEvidenceLevelDetails(evidence.approvalStatus());
             EvidenceDirection direction = resolveDirection(evidence.responseType());
             CancerTypeExtraction cancerTypeExtraction = ActionableFunctions.extractCancerTypeDetails(evidence.indication());
+            Integer evidenceYear = extractEvidenceYear(entry.createDate(), evidence.references(), evidence.therapy());
 
             if (level != null && direction != null && cancerTypeExtraction != null && evidenceLevelDetails != null) {
                 String treatment = evidence.therapy().therapyName();
@@ -141,7 +145,7 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
 
                     actionableEntries.add(ImmutableActionableEntry.builder()
                             .source(Knowledgebase.CKB_EVIDENCE)
-                            .date(entry.updateDate())
+                            .entryDate(entry.createDate())
                             .sourceEvent(sourceEvent)
                             .sourceUrls(sourceUrls)
                             .intervention(ImmutableTreatment.builder()
@@ -151,8 +155,9 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
                                     .build())
                             .applicableCancerType(cancerTypeExtraction.applicableCancerType())
                             .blacklistCancerTypes(cancerTypeExtraction.blacklistedCancerTypes())
-                            .description(evidence.efficacyEvidence())
-                            .level(level)
+                            .efficacyDescription(evidence.efficacyEvidence())
+                            .evidenceYear(evidenceYear)
+                            .evidenceLevel(level)
                             .evidenceLevelDetails(evidenceLevelDetails)
                             .direction(direction)
                             .evidenceUrls(evidenceUrls)
@@ -202,32 +207,26 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
 
     @Nullable
     @VisibleForTesting
-    static EvidenceLevelDetails resolveEvidenceLevelDetails(@Nullable String evidenceLevelDetails) {
-        if (evidenceLevelDetails == null) {
+    static EvidenceLevelDetails resolveEvidenceLevelDetails(@Nullable String approvalStatus) {
+        if (approvalStatus == null) {
             return null;
         }
 
-        evidenceLevelDetails = evidenceLevelDetails.toLowerCase();
-        if (evidenceLevelDetails.contains("preclinical")) {
-            return EvidenceLevelDetails.PRECLINICAL.evidenceLevelDetailsCreator(evidenceLevelDetails);
-        }
-        else if (evidenceLevelDetails.contains("case report")) {
-            return EvidenceLevelDetails.CASE_REPORTS_SERIES.evidenceLevelDetailsCreator(evidenceLevelDetails);
-        }
-        else if (evidenceLevelDetails.contains("clinical study") || evidenceLevelDetails.contains("phase")) {
-            return EvidenceLevelDetails.CLINICAL_STUDY.evidenceLevelDetailsCreator(evidenceLevelDetails);
-        }
-        else if (evidenceLevelDetails.contains("guideline")) {
-            return EvidenceLevelDetails.GUIDELINE.evidenceLevelDetailsCreator(evidenceLevelDetails);
-        }
-        else if (evidenceLevelDetails.contains("fda approved")) {
-            return EvidenceLevelDetails.FDA_APPROVED.evidenceLevelDetailsCreator(evidenceLevelDetails);
-        }
-        else if (evidenceLevelDetails.contains("fda contraindicated")) {
-            return EvidenceLevelDetails.FDA_CONTRAINDICATED.evidenceLevelDetailsCreator(evidenceLevelDetails);
-        }
-        else {
-            LOGGER.warn("Could not resolve CKB evidence level details (approvalStatus) '{}'", evidenceLevelDetails);
+        approvalStatus = approvalStatus.toLowerCase();
+        if (approvalStatus.contains("preclinical")) {
+            return EvidenceLevelDetails.PRECLINICAL;
+        } else if (approvalStatus.contains("case report")) {
+            return EvidenceLevelDetails.CASE_REPORTS_SERIES;
+        } else if (approvalStatus.contains("clinical study") || approvalStatus.contains("phase")) {
+            return EvidenceLevelDetails.CLINICAL_STUDY;
+        } else if (approvalStatus.contains("guideline")) {
+            return EvidenceLevelDetails.GUIDELINE;
+        } else if (approvalStatus.contains("fda approved")) {
+            return EvidenceLevelDetails.FDA_APPROVED;
+        } else if (approvalStatus.contains("fda contraindicated")) {
+            return EvidenceLevelDetails.FDA_CONTRAINDICATED;
+        } else {
+            LOGGER.warn("Could not resolve CKB evidence level details (approvalStatus) '{}'", approvalStatus);
         }
         return EvidenceLevelDetails.UNKNOWN;
     }
@@ -258,6 +257,26 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
         }
         return null;
     }
+
+    @VisibleForTesting
+    static int extractEvidenceYear(@NotNull LocalDate entryDate, @NotNull List<Reference> references, @Nullable Therapy therapy) {
+        Optional<Integer> mostRecentYear = references.stream()
+                .map(Reference::year)
+                .filter(year -> year != null && !year.isEmpty() && !year.equals("0"))
+                .map(Integer::parseInt)
+                .max(Comparator.naturalOrder());
+
+        if (mostRecentYear.isPresent()) {
+            return mostRecentYear.get();
+        }
+
+        if (therapy != null) {
+           return entryDate.isAfter(therapy.createDate()) ? entryDate.getYear() : therapy.createDate().getYear();
+        } else {
+            return entryDate.getYear();
+        }
+    }
+
 
     @NotNull
     @VisibleForTesting

@@ -40,66 +40,73 @@ public class ActionableGeneFileTest {
 
         ActionableGene gene1 = findByGeneAndEvent(genes, "ALK", GeneEvent.FUSION, "Lung Adenocarcinoma");
         assertEquals("ALK", gene1.gene());
+        assertEquals(LocalDate.of(2021, 2, 3), gene1.entryDate());
         assertEquals(GeneEvent.FUSION, gene1.event());
         assertEquals("Crizotinib", DatamodelTestFactory.extractTreatment(gene1).name());
         assertEquals("Lung Adenocarcinoma", gene1.applicableCancerType().name());
+        assertEquals("efficacy evidence A", gene1.efficacyDescription());
+        assertEquals(2024, gene1.evidenceYear());
         assertEquals(EvidenceLevelDetails.GUIDELINE, gene1.evidenceLevelDetails());
-        assertEquals(LocalDate.of(2021, 2, 3), gene1.date());
-        assertEquals("efficacy evidence A", gene1.description());
 
         ActionableGene gene2 = findByGeneAndEvent(genes, "BRCA1", GeneEvent.INACTIVATION, "Solid Tumors");
         assertEquals("BRCA1", gene2.gene());
+        assertEquals(LocalDate.of(2021, 2, 4), gene2.entryDate());
         assertEquals(GeneEvent.INACTIVATION, gene2.event());
         assertEquals("DRUP", DatamodelTestFactory.extractTreatment(gene2).name());
         assertEquals("Solid Tumors", gene2.applicableCancerType().name());
+        assertEquals("efficacy evidence B", gene2.efficacyDescription());
+        assertEquals(2024, gene2.evidenceYear());
         assertEquals(EvidenceLevelDetails.GUIDELINE, gene2.evidenceLevelDetails());
-        assertEquals(LocalDate.of(2021, 2, 4), gene2.date());
-        assertEquals("efficacy evidence B", gene2.description());
 
         ActionableGene gene3 = findByGeneAndEvent(genes, "ERBB2", GeneEvent.AMPLIFICATION, "Breast Cancer");
         assertEquals("ERBB2", gene3.gene());
+        assertEquals(LocalDate.of(2021, 2, 5), gene3.entryDate());
         assertEquals(GeneEvent.AMPLIFICATION, gene3.event());
         assertEquals("Trastuzumab", DatamodelTestFactory.extractTreatment(gene3).name());
         assertEquals("Breast Cancer", gene3.applicableCancerType().name());
+        assertEquals("efficacy evidence C", gene3.efficacyDescription());
+        assertEquals(2024, gene3.evidenceYear());
         assertEquals(EvidenceLevelDetails.GUIDELINE, gene3.evidenceLevelDetails());
-        assertEquals(LocalDate.of(2021, 2, 5), gene3.date());
-        assertEquals("efficacy evidence C", gene3.description());
 
         ActionableGene gene4 = findByGeneAndEvent(genes, "ERBB2", GeneEvent.AMPLIFICATION, "Colorectal Cancer");
         assertEquals("ERBB2", gene4.gene());
+        assertEquals(LocalDate.of(2021, 2, 6), gene4.entryDate());
         assertEquals(GeneEvent.AMPLIFICATION, gene4.event());
         assertEquals("Panitumumab", DatamodelTestFactory.extractTreatment(gene4).name());
         assertEquals("Colorectal Cancer", gene4.applicableCancerType().name());
+        assertEquals("efficacy evidence D", gene4.efficacyDescription());
+        assertEquals(2024, gene4.evidenceYear());
         assertEquals(EvidenceLevelDetails.GUIDELINE, gene4.evidenceLevelDetails());
-        assertEquals(LocalDate.of(2021, 2, 6), gene4.date());
-        assertEquals("efficacy evidence D", gene4.description());
 
         ActionableGene gene5 = findByGeneAndEvent(genes, "FGFR2", GeneEvent.FUSION, "Bladder Cancer");
         assertEquals("FGFR2", gene5.gene());
+        assertEquals(LocalDate.of(2021, 2, 7), gene5.entryDate());
         assertEquals(GeneEvent.FUSION, gene5.event());
         assertEquals("Erdafitinib", DatamodelTestFactory.extractTreatment(gene5).name());
         assertEquals("Bladder Cancer", gene5.applicableCancerType().name());
+        assertEquals("efficacy evidence E", gene5.efficacyDescription());
+        assertEquals(2024, gene5.evidenceYear());
         assertEquals(EvidenceLevelDetails.GUIDELINE, gene5.evidenceLevelDetails());
-        assertEquals(LocalDate.of(2021, 2, 7), gene5.date());
-        assertEquals("efficacy evidence E", gene5.description());
 
         ActionableGene gene6 = findByGeneAndEvent(genes, "MET", GeneEvent.AMPLIFICATION, "Advanced Solid Tumor");
         assertEquals("MET", gene6.gene());
+        assertEquals(LocalDate.of(2021, 2, 8), gene6.entryDate());
         assertEquals(GeneEvent.AMPLIFICATION, gene6.event());
         assertEquals("DRUP", DatamodelTestFactory.extractTreatment(gene6).name());
         assertEquals("Advanced Solid Tumor", gene6.applicableCancerType().name());
+        assertEquals("efficacy evidence F", gene6.efficacyDescription());
+        assertEquals(2024, gene6.evidenceYear());
         assertEquals(EvidenceLevelDetails.GUIDELINE, gene6.evidenceLevelDetails());
-        assertEquals(LocalDate.of(2021, 2, 8), gene6.date());
-        assertEquals("efficacy evidence F", gene6.description());
 
         ActionableGene gene7 = findByGeneAndEvent(genes, "NRAS", GeneEvent.ACTIVATION, "Colorectal Cancer");
         assertEquals("NRAS", gene7.gene());
+        assertEquals(LocalDate.EPOCH, gene7.entryDate());
         assertEquals(GeneEvent.ACTIVATION, gene7.event());
         assertEquals("Cetuximab", DatamodelTestFactory.setToField(DatamodelTestFactory.extractClinicalTrial(gene7).therapyNames()));
         assertEquals("Colorectal Cancer", gene7.applicableCancerType().name());
+        assertEquals(Strings.EMPTY, gene7.efficacyDescription());
+        assertEquals(2024, gene7.evidenceYear());
         assertEquals(EvidenceLevelDetails.GUIDELINE, gene7.evidenceLevelDetails());
-        assertEquals(LocalDate.EPOCH, gene7.date());
-        assertEquals(Strings.EMPTY, gene7.description());
     }
 
     @NotNull

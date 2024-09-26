@@ -13,9 +13,9 @@ public class ActionableHotspotComparatorTest {
 
     @Test
     public void canSortActionableHotspots() {
-        ActionableHotspot hotspot1 = HotspotTestFactory.actionableHotspotBuilder().chromosome("1").level(EvidenceLevel.A).build();
-        ActionableHotspot hotspot2 = HotspotTestFactory.actionableHotspotBuilder().chromosome("1").level(EvidenceLevel.B).build();
-        ActionableHotspot hotspot3 = HotspotTestFactory.actionableHotspotBuilder().chromosome("2").level(EvidenceLevel.A).build();
+        ActionableHotspot hotspot1 = HotspotTestFactory.actionableHotspotBuilder().chromosome("1").evidenceLevel(EvidenceLevel.A).build();
+        ActionableHotspot hotspot2 = HotspotTestFactory.actionableHotspotBuilder().chromosome("1").evidenceLevel(EvidenceLevel.B).build();
+        ActionableHotspot hotspot3 = HotspotTestFactory.actionableHotspotBuilder().chromosome("2").evidenceLevel(EvidenceLevel.A).build();
 
         List<ActionableHotspot> hotspots = Lists.newArrayList(hotspot3, hotspot1, hotspot2);
         hotspots.sort(new ActionableHotspotComparator());

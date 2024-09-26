@@ -32,10 +32,10 @@ public interface ActionableEvent {
     String efficacyDescription();
 
     @NotNull
-    String efficacyDescriptionYear();
+    Integer efficacyDescriptionYear();
 
     @NotNull
-    EvidenceLevel level();
+    EvidenceLevel evidenceLevel();
 
     @NotNull
     EvidenceLevelDetails evidenceLevelDetails();

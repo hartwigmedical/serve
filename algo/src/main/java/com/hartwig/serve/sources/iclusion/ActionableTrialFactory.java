@@ -69,6 +69,7 @@ public class ActionableTrialFactory {
         return ImmutableActionableTrial.builder()
                 .source(Knowledgebase.ICLUSION)
                 .sourceEvent(sourceEvent)
+                .entryDate(LocalDate.EPOCH)
                 .sourceUrls(Sets.newHashSet("https://www.trial-eye.com/hmf/" + trial.id()))
                 .intervention(ImmutableClinicalTrial.builder()
                         .nctId(trial.nct())
@@ -81,13 +82,12 @@ public class ActionableTrialFactory {
                                 .build()))
                         .therapyNames(Sets.newHashSet())
                         .build())
-                .level(EvidenceLevel.B)
+                .efficacyDescription(Strings.EMPTY)
+                .efficacyDescriptionYear(2024)
+                .evidenceLevel(EvidenceLevel.B)
                 .evidenceLevelDetails(EvidenceLevelDetails.UNKNOWN)
                 .direction(EvidenceDirection.RESPONSIVE)
-                .evidenceUrls(Sets.newHashSet())
-                .entryDate(LocalDate.EPOCH)
-                .efficacyDescription(Strings.EMPTY)
-                .efficacyDescriptionYear(Strings.EMPTY);
+                .evidenceUrls(Sets.newHashSet());
     }
 
     @NotNull

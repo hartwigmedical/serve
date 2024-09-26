@@ -143,7 +143,7 @@ public class ServeDAO {
                     ACTIONABLEHOTSPOT.BLACKLISTCANCERTYPES,
                     ACTIONABLEHOTSPOT.EFFICACYDESCRIPTION,
                     ACTIONABLEHOTSPOT.EFFICACYDESCRIPTIONYEAR,
-                    ACTIONABLEHOTSPOT.LEVEL,
+                    ACTIONABLEHOTSPOT.EVIDENCELEVEL,
                     ACTIONABLEHOTSPOT.EVIDENCELEVELDETAILS,
                     ACTIONABLEHOTSPOT.DIRECTION,
                     ACTIONABLEHOTSPOT.EVIDENCEURLS);
@@ -220,7 +220,8 @@ public class ServeDAO {
                 actionableHotspot.applicableCancerType().doid(),
                 concat(toStrings(actionableHotspot.blacklistCancerTypes())),
                 actionableHotspot.efficacyDescription(),
-                actionableHotspot.level(),
+                actionableHotspot.efficacyDescriptionYear(),
+                actionableHotspot.evidenceLevel(),
                 actionableHotspot.evidenceLevelDetails(),
                 actionableHotspot.direction(),
                 concat(actionableHotspot.evidenceUrls()));
@@ -253,7 +254,7 @@ public class ServeDAO {
                     ACTIONABLECODON.BLACKLISTCANCERTYPES,
                     ACTIONABLECODON.EFFICACYDESCRIPTION,
                     ACTIONABLECODON.EFFICACYDESCRIPTIONYEAR,
-                    ACTIONABLECODON.LEVEL,
+                    ACTIONABLECODON.EVIDENCELEVEL,
                     ACTIONABLECODON.EVIDENCELEVELDETAILS,
                     ACTIONABLECODON.DIRECTION,
                     ACTIONABLECODON.EVIDENCEURLS);
@@ -289,7 +290,7 @@ public class ServeDAO {
                     ACTIONABLEEXON.BLACKLISTCANCERTYPES,
                     ACTIONABLEEXON.EFFICACYDESCRIPTION,
                     ACTIONABLEEXON.EFFICACYDESCRIPTIONYEAR,
-                    ACTIONABLEEXON.LEVEL,
+                    ACTIONABLEEXON.EVIDENCELEVEL,
                     ACTIONABLEEXON.EVIDENCELEVELDETAILS,
                     ACTIONABLEEXON.DIRECTION,
                     ACTIONABLEEXON.EVIDENCEURLS);
@@ -331,7 +332,8 @@ public class ServeDAO {
                 actionableRange.applicableCancerType().doid(),
                 concat(toStrings(actionableRange.blacklistCancerTypes())),
                 actionableRange.efficacyDescription(),
-                actionableRange.level(),
+                actionableRange.efficacyDescriptionYear(),
+                actionableRange.evidenceLevel(),
                 actionableRange.evidenceLevelDetails(),
                 actionableRange.direction(),
                 concat(actionableRange.evidenceUrls()));
@@ -361,7 +363,7 @@ public class ServeDAO {
                     ACTIONABLEGENE.BLACKLISTCANCERTYPES,
                     ACTIONABLEGENE.EFFICACYDESCRIPTION,
                     ACTIONABLEGENE.EFFICACYDESCRIPTIONYEAR,
-                    ACTIONABLEGENE.LEVEL,
+                    ACTIONABLEGENE.EVIDENCELEVEL,
                     ACTIONABLEGENE.EVIDENCELEVELDETAILS,
                     ACTIONABLEGENE.DIRECTION,
                     ACTIONABLEGENE.EVIDENCEURLS);
@@ -400,7 +402,8 @@ public class ServeDAO {
                 actionableGene.applicableCancerType().doid(),
                 concat(toStrings(actionableGene.blacklistCancerTypes())),
                 actionableGene.efficacyDescription(),
-                actionableGene.level(),
+                actionableGene.efficacyDescriptionYear(),
+                actionableGene.evidenceLevel(),
                 actionableGene.evidenceLevelDetails(),
                 actionableGene.direction(),
                 concat(actionableGene.evidenceUrls()));
@@ -434,7 +437,7 @@ public class ServeDAO {
                     ACTIONABLEFUSION.BLACKLISTCANCERTYPES,
                     ACTIONABLEFUSION.EFFICACYDESCRIPTION,
                     ACTIONABLEFUSION.EFFICACYDESCRIPTIONYEAR,
-                    ACTIONABLEFUSION.LEVEL,
+                    ACTIONABLEFUSION.EVIDENCELEVEL,
                     ACTIONABLEFUSION.EVIDENCELEVELDETAILS,
                     ACTIONABLEFUSION.DIRECTION,
                     ACTIONABLEFUSION.EVIDENCEURLS);
@@ -477,7 +480,8 @@ public class ServeDAO {
                 actionableFusion.applicableCancerType().doid(),
                 concat(toStrings(actionableFusion.blacklistCancerTypes())),
                 actionableFusion.efficacyDescription(),
-                actionableFusion.level(),
+                actionableFusion.efficacyDescriptionYear(),
+                actionableFusion.evidenceLevel(),
                 actionableFusion.evidenceLevelDetails(),
                 actionableFusion.direction(),
                 concat(actionableFusion.evidenceUrls()));
@@ -508,7 +512,7 @@ public class ServeDAO {
                     ACTIONABLECHARACTERISTIC.BLACKLISTCANCERTYPES,
                     ACTIONABLECHARACTERISTIC.EFFICACYDESCRIPTION,
                     ACTIONABLECHARACTERISTIC.EFFICACYDESCRIPTIONYEAR,
-                    ACTIONABLECHARACTERISTIC.LEVEL,
+                    ACTIONABLECHARACTERISTIC.EVIDENCELEVEL,
                     ACTIONABLECHARACTERISTIC.EVIDENCELEVELDETAILS,
                     ACTIONABLECHARACTERISTIC.DIRECTION,
                     ACTIONABLECHARACTERISTIC.EVIDENCEURLS);
@@ -548,7 +552,8 @@ public class ServeDAO {
                 actionableCharacteristic.applicableCancerType().doid(),
                 concat(toStrings(actionableCharacteristic.blacklistCancerTypes())),
                 actionableCharacteristic.efficacyDescription(),
-                actionableCharacteristic.level(),
+                actionableCharacteristic.efficacyDescriptionYear(),
+                actionableCharacteristic.evidenceLevel(),
                 actionableCharacteristic.evidenceLevelDetails(),
                 actionableCharacteristic.direction(),
                 concat(actionableCharacteristic.evidenceUrls()));
@@ -577,7 +582,7 @@ public class ServeDAO {
                     ACTIONABLEHLA.BLACKLISTCANCERTYPES,
                     ACTIONABLEHLA.EFFICACYDESCRIPTION,
                     ACTIONABLEHLA.EFFICACYDESCRIPTIONYEAR,
-                    ACTIONABLEHLA.LEVEL,
+                    ACTIONABLEHLA.EVIDENCELEVEL,
                     ACTIONABLEHLA.EVIDENCELEVELDETAILS,
                     ACTIONABLEHLA.DIRECTION,
                     ACTIONABLEHLA.EVIDENCEURLS);
@@ -614,7 +619,8 @@ public class ServeDAO {
                 actionableHLA.applicableCancerType().doid(),
                 concat(toStrings(actionableHLA.blacklistCancerTypes())),
                 actionableHLA.efficacyDescription(),
-                actionableHLA.level(),
+                actionableHLA.efficacyDescriptionYear(),
+                actionableHLA.evidenceLevel(),
                 actionableHLA.evidenceLevelDetails(),
                 actionableHLA.direction(),
                 concat(actionableHLA.evidenceUrls()));

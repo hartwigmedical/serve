@@ -65,7 +65,7 @@ public class ActionableCharacteristicFileTest {
         assertEquals("X", characteristic1.applicableCancerType().doid());
         assertTrue(characteristic1.blacklistCancerTypes()
                 .contains(DatamodelTestFactory.cancerTypeBuilder().name("Hematologic cancer").doid("2531").build()));
-        assertEquals(EvidenceLevel.A, characteristic1.level());
+        assertEquals(EvidenceLevel.A, characteristic1.evidenceLevel());
         assertEquals(EvidenceLevelDetails.GUIDELINE, characteristic1.evidenceLevelDetails());
         assertEquals(EvidenceDirection.RESPONSIVE, characteristic1.direction());
         assertEquals(2, characteristic1.evidenceUrls().size());
@@ -84,7 +84,7 @@ public class ActionableCharacteristicFileTest {
         assertEquals("X", characteristic2.applicableCancerType().doid());
         assertTrue(characteristic2.blacklistCancerTypes()
                 .contains(DatamodelTestFactory.cancerTypeBuilder().name("Hematologic cancer").doid("2531").build()));
-        assertEquals(EvidenceLevel.B, characteristic2.level());
+        assertEquals(EvidenceLevel.B, characteristic2.evidenceLevel());
         assertEquals(EvidenceLevelDetails.GUIDELINE, characteristic1.evidenceLevelDetails());
         assertEquals(EvidenceDirection.RESPONSIVE, characteristic2.direction());
         assertEquals(2, characteristic2.evidenceUrls().size());

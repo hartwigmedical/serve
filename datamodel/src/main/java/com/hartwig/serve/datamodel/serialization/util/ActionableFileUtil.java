@@ -58,7 +58,7 @@ public final class ActionableFileUtil {
                 .add("blacklistCancerTypes")
                 .add("efficacyDescription")
                 .add("efficacyDescriptionYear")
-                .add("level")
+                .add("evidenceLevel")
                 .add("evidenceLevelDetails")
                 .add("direction")
                 .add("evidenceUrls")
@@ -79,6 +79,17 @@ public final class ActionableFileUtil {
             @Override
             public String sourceEvent() {
                 return values[fields.get("sourceEvent")];
+            }
+
+            @NotNull
+            @Override
+            public LocalDate entryDate() {
+                String lastUpdated = values[fields.get("entryDate")];
+                if (lastUpdated.isEmpty()) {
+                    return LocalDate.EPOCH;
+                } else {
+                    return LocalDate.parse(lastUpdated);
+                }
             }
 
             @NotNull
@@ -134,8 +145,20 @@ public final class ActionableFileUtil {
 
             @NotNull
             @Override
-            public EvidenceLevel level() {
-                return EvidenceLevel.valueOf(values[fields.get("level")]);
+            public String efficacyDescription() {
+                return values[fields.get("efficacyDescription")];
+            }
+
+            @NotNull
+            @Override
+            public Integer efficacyDescriptionYear() {
+                return Integer.valueOf(values[fields.get("efficacyDescriptionYear")]);
+            }
+
+            @NotNull
+            @Override
+            public EvidenceLevel evidenceLevel() {
+                return EvidenceLevel.valueOf(values[fields.get("evidenceLevel")]);
             }
 
             @NotNull
@@ -155,29 +178,6 @@ public final class ActionableFileUtil {
             public Set<String> evidenceUrls() {
                 int evidenceUrlPosition = fields.get("evidenceUrls");
                 return values.length > evidenceUrlPosition ? fieldToSet(values[evidenceUrlPosition]) : Sets.newHashSet();
-            }
-
-            @NotNull
-            @Override
-            public LocalDate entryDate() {
-                String lastUpdated = values[fields.get("entryDate")];
-                if (lastUpdated.isEmpty()) {
-                    return LocalDate.EPOCH;
-                } else {
-                    return LocalDate.parse(lastUpdated);
-                }
-            }
-
-            @NotNull
-            @Override
-            public String efficacyDescription() {
-                return values[fields.get("efficacyDescription")];
-            }
-
-            @NotNull
-            @Override
-            public String efficacyDescriptionYear() {
-                return values[fields.get("efficacyDescriptionYear")];
             }
         };
     }
@@ -223,8 +223,8 @@ public final class ActionableFileUtil {
                 .add(event.applicableCancerType().doid())
                 .add(cancerTypesToField(event.blacklistCancerTypes()))
                 .add(event.efficacyDescription())
-                .add(event.efficacyDescriptionYear())
-                .add(event.level().toString())
+                .add(event.efficacyDescriptionYear().toString())
+                .add(event.evidenceLevel().toString())
                 .add(event.evidenceLevelDetails().name())
                 .add(event.direction().toString())
                 .add(setToField(event.evidenceUrls()))

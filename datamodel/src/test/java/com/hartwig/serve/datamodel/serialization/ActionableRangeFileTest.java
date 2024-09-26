@@ -54,9 +54,10 @@ public class ActionableRangeFileTest {
         assertEquals("7", exon1.chromosome());
         assertEquals(55241707, (int) exon1.start());
         assertEquals(55279321, (int) exon1.end());
-        assertEquals(MutationType.INFRAME, exon1.applicableMutationType());
-        assertEquals(EvidenceLevelDetails.GUIDELINE, exon1.evidenceLevelDetails());
         assertEquals(LocalDate.EPOCH, exon1.entryDate());
+        assertEquals(MutationType.INFRAME, exon1.applicableMutationType());
+        assertEquals(Integer.valueOf(2024), exon1.efficacyDescriptionYear());
+        assertEquals(EvidenceLevelDetails.GUIDELINE, exon1.evidenceLevelDetails());
         assertEquals(Strings.EMPTY, exon1.efficacyDescription());
     }
 
@@ -68,9 +69,10 @@ public class ActionableRangeFileTest {
         assertEquals("7", codon1.chromosome());
         assertEquals(140453136, (int) codon1.start());
         assertEquals(140453137, (int) codon1.end());
-        assertEquals(MutationType.MISSENSE, codon1.applicableMutationType());
-        assertEquals(EvidenceLevelDetails.GUIDELINE, codon1.evidenceLevelDetails());
         assertEquals(LocalDate.EPOCH, codon1.entryDate());
+        assertEquals(MutationType.MISSENSE, codon1.applicableMutationType());
+        assertEquals(Integer.valueOf(2024), codon1.efficacyDescriptionYear());
+        assertEquals(EvidenceLevelDetails.GUIDELINE, codon1.evidenceLevelDetails());
         assertEquals(Strings.EMPTY, codon1.efficacyDescription());
     }
 

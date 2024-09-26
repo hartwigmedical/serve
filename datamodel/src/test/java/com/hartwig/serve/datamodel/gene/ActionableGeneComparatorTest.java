@@ -30,6 +30,6 @@ public class ActionableGeneComparatorTest {
 
     @NotNull
     private static ActionableGene create(@NotNull String gene, @NotNull GeneEvent event, @NotNull EvidenceLevel level) {
-        return GeneTestFactory.actionableGeneBuilder().gene(gene).event(event).level(level).build();
+        return GeneTestFactory.actionableGeneBuilder().gene(gene).event(event).evidenceLevel(level).build();
     }
 }

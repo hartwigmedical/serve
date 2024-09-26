@@ -66,7 +66,7 @@ public class ActionableTrialFactoryTest {
         assertEquals(Sets.newHashSet("https://ckbhome.jax.org/profileResponse/advancedEvidenceFind?molecularProfileId=1"),
                 trial.sourceUrls());
         assertEquals("Phase I trial", clinicalTrial1.title());
-        assertEquals(EvidenceLevel.B, trial.level());
+        assertEquals(EvidenceLevel.B, trial.evidenceLevel());
         assertEquals(EvidenceDirection.RESPONSIVE, trial.direction());
         assertEquals(Sets.newHashSet("https://clinicaltrials.gov/study/NCT0102"), trial.evidenceUrls());
         assertEquals(Sets.newHashSet(ImmutableCountry.builder()

@@ -89,7 +89,7 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
             EvidenceLevelDetails evidenceLevelDetails = resolveEvidenceLevelDetails(evidence.approvalStatus());
             EvidenceDirection direction = resolveDirection(evidence.responseType());
             CancerTypeExtraction cancerTypeExtraction = ActionableFunctions.extractCancerTypeDetails(evidence.indication());
-            String evidenceYear = extractEvidenceYear(entry.createDate(), evidence.references(), evidence.therapy());
+            Integer evidenceYear = extractEvidenceYear(entry.createDate(), evidence.references(), evidence.therapy());
 
             if (level != null && direction != null && cancerTypeExtraction != null && evidenceLevelDetails != null) {
                 String treatment = evidence.therapy().therapyName();
@@ -145,7 +145,7 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
 
                     actionableEntries.add(ImmutableActionableEntry.builder()
                             .source(Knowledgebase.CKB_EVIDENCE)
-                            .entryDate(entry.updateDate())
+                            .entryDate(entry.createDate())
                             .sourceEvent(sourceEvent)
                             .sourceUrls(sourceUrls)
                             .intervention(ImmutableTreatment.builder()
@@ -157,7 +157,7 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
                             .blacklistCancerTypes(cancerTypeExtraction.blacklistedCancerTypes())
                             .efficacyDescription(evidence.efficacyEvidence())
                             .efficacyDescriptionYear(evidenceYear)
-                            .level(level)
+                            .evidenceLevel(level)
                             .evidenceLevelDetails(evidenceLevelDetails)
                             .direction(direction)
                             .evidenceUrls(evidenceUrls)
@@ -260,23 +260,22 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
 
     @NotNull
     @VisibleForTesting
-    static String extractEvidenceYear(@NotNull LocalDate entryDate, @NotNull List<Reference> references, Therapy therapy) {
-        Optional<String> mostRecentYear = references.stream()
+    static Integer extractEvidenceYear(@NotNull LocalDate entryDate, @NotNull List<Reference> references, @Nullable Therapy therapy) {
+        Optional<Integer> mostRecentYear = references.stream()
                 .map(Reference::year)
                 .filter(year -> year != null && !year.isEmpty() && !year.equals("0"))
+                .map(Integer::parseInt)
                 .max(Comparator.naturalOrder());
 
         if (mostRecentYear.isPresent()) {
             return mostRecentYear.get();
         }
 
-        int year;
         if (therapy != null) {
-            year = !entryDate.isBefore(therapy.createDate()) ? entryDate.getYear() : therapy.createDate().getYear();
+           return entryDate.isAfter(therapy.createDate()) ? entryDate.getYear() : therapy.createDate().getYear();
         } else {
-            year = entryDate.getYear();
+            return entryDate.getYear();
         }
-        return Integer.toString(year);
     }
 
 

@@ -37,7 +37,7 @@ public class ActionableFileUtilTest {
                 DatamodelTestFactory.cancerTypeBuilder().name("applicable name").doid("applicable doid").build(),
                 Sets.newHashSet(DatamodelTestFactory.cancerTypeBuilder().name("blacklist name").doid("blacklist doid").build()),
                 Strings.EMPTY,
-                "2024",
+                2024,
                 EvidenceLevel.C,
                 EvidenceLevelDetails.GUIDELINE,
                 EvidenceDirection.RESISTANT,
@@ -57,7 +57,7 @@ public class ActionableFileUtilTest {
         assertEquals(treatmentEvent, treatmentCovered);
         assertEquals(event.applicableCancerType(), coveredEvent.applicableCancerType());
         assertEquals(event.blacklistCancerTypes(), coveredEvent.blacklistCancerTypes());
-        assertEquals(event.level(), coveredEvent.level());
+        assertEquals(event.evidenceLevel(), coveredEvent.evidenceLevel());
         assertEquals(event.evidenceLevelDetails(), coveredEvent.evidenceLevelDetails());
         assertEquals(event.direction(), coveredEvent.direction());
         assertEquals(event.evidenceUrls(), coveredEvent.evidenceUrls());
@@ -77,7 +77,7 @@ public class ActionableFileUtilTest {
                 DatamodelTestFactory.cancerTypeBuilder().name("applicable name").doid("applicable doid").build(),
                 Sets.newHashSet(DatamodelTestFactory.cancerTypeBuilder().name("blacklist name").doid("blacklist doid").build()),
                 Strings.EMPTY,
-                "2024",
+                2024,
                 EvidenceLevel.C,
                 EvidenceLevelDetails.UNKNOWN,
                 EvidenceDirection.RESISTANT,
@@ -97,7 +97,7 @@ public class ActionableFileUtilTest {
         assertEquals(clinicalTrialEvent, clinicalTrialCovered);
         assertEquals(event.applicableCancerType(), coveredEvent.applicableCancerType());
         assertEquals(event.blacklistCancerTypes(), coveredEvent.blacklistCancerTypes());
-        assertEquals(event.level(), coveredEvent.level());
+        assertEquals(event.evidenceLevel(), coveredEvent.evidenceLevel());
         assertEquals(event.evidenceLevelDetails(), coveredEvent.evidenceLevelDetails());
         assertEquals(event.direction(), coveredEvent.direction());
         assertEquals(event.evidenceUrls(), coveredEvent.evidenceUrls());

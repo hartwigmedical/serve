@@ -151,7 +151,7 @@ public final class ActionableFileUtil {
 
             @Override
             public int evidenceYear() {
-                return Integer.parseInt(values[fields.get("efficacyDescriptionYear")]);
+                return Integer.parseInt(values[fields.get("evidenceYear")]);
             }
 
             @NotNull

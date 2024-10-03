@@ -14,14 +14,10 @@ import com.hartwig.serve.datamodel.ServeRecord;
 import org.jetbrains.annotations.NotNull;
 
 public final class ServeJson {
-    private static final ObjectMapper mapper;
-
-    static {
-        mapper = new ObjectMapper()
-                .registerModule(new GuavaModule())
-                .registerModule(new JavaTimeModule())
-                .setSerializationInclusion(JsonInclude.Include.NON_NULL);
-    }
+    private static final ObjectMapper mapper = new ObjectMapper()
+            .registerModule(new GuavaModule())
+            .registerModule(new JavaTimeModule())
+            .setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
     public static void write(@NotNull ServeRecord record, @NotNull String filePath) throws IOException {
         mapper.writeValue(new File(filePath), record);
@@ -32,12 +28,12 @@ public final class ServeJson {
         return mapper.readValue(new File(filePath), ServeRecord.class);
     }
 
-    public static void writeToStream(ServeRecord record, OutputStream outputStream) throws IOException {
+    public static void writeToStream(@NotNull ServeRecord record, @NotNull OutputStream outputStream) throws IOException {
         mapper.writeValue(outputStream, record);
     }
 
     @NotNull
-    public static ServeRecord readFromStream(InputStream inputStream) throws IOException {
+    public static ServeRecord readFromStream(@NotNull InputStream inputStream) throws IOException {
         return mapper.readValue(inputStream, ServeRecord.class);
     }
 }

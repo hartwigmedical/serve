@@ -9,9 +9,9 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 )
 @JsonSubTypes({
         @JsonSubTypes.Type(value = ImmutableClinicalTrial.class,
-                           name = "clinicalTrial"),
+                           name = "ClinicalTrial"),
         @JsonSubTypes.Type(value = ImmutableTreatment.class,
-                           name = "treatment")
+                           name = "Treatment")
 })
 public interface Intervention {
 }

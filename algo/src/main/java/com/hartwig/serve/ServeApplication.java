@@ -6,7 +6,10 @@ import java.util.Map;
 import com.hartwig.serve.common.commandline.CliAndPropertyParser;
 import com.hartwig.serve.curation.DoidLookup;
 import com.hartwig.serve.curation.DoidLookupFactory;
+import com.hartwig.serve.datamodel.ImmutableServeRecord;
 import com.hartwig.serve.datamodel.RefGenome;
+import com.hartwig.serve.datamodel.ServeRecord;
+import com.hartwig.serve.datamodel.serialization.ServeJson;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.ExtractionResultWriter;
 import com.hartwig.serve.refgenome.RefGenomeManager;
@@ -52,6 +55,13 @@ public class ServeApplication {
             new ExtractionResultWriter(config.outputDir(), version, refSequence).write(entry.getValue());
         }
 
+        for (Map.Entry<RefGenome, ExtractionResult> entry : resultMap.entrySet()) {
+            ServeRecord serveRecord = toServeRecord(entry.getValue());
+            String filePath = jsonFilePath(config.outputDir(), entry.getKey());
+            LOGGER.info("Writing {}", filePath);
+            ServeJson.write(serveRecord, filePath);
+        }
+
         LOGGER.info("Complete!");
     }
 
@@ -59,5 +69,25 @@ public class ServeApplication {
     private static DoidLookup buildDoidLookup(@NotNull String missingDoidsMappingTsv) throws IOException {
         LOGGER.info("Creating missing doid lookup mapping from {}", missingDoidsMappingTsv);
         return DoidLookupFactory.buildFromMappingTsv(missingDoidsMappingTsv);
+    }
+
+    @NotNull
+    private static String jsonFilePath(@NotNull String outputDir, @NotNull RefGenome refGenome) {
+        return refGenome.addVersionToFilePath(outputDir + "/serve.json");
+    }
+
+    @NotNull
+    private static ServeRecord toServeRecord(@NotNull ExtractionResult result) {
+        return ImmutableServeRecord.builder()
+                .refGenomeVersion(result.refGenomeVersion())
+                .addAllKnownHotspots(result.knownHotspots())
+                .addAllKnownCodons(result.knownCodons())
+                .addAllKnownExons(result.knownExons())
+                .addAllKnownGenes(result.knownGenes())
+                .addAllKnownCopyNumbers(result.knownCopyNumbers())
+                .addAllKnownFusions(result.knownFusions())
+                .addAllActionableGenes(result.actionableGenes())
+                .addAllActionableFusions(result.actionableFusions())
+                .build();
     }
 }

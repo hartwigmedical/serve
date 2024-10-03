@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.guava.GuavaModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.datamodel.ServeRecord;
 
 import org.jetbrains.annotations.NotNull;
@@ -35,5 +36,10 @@ public final class ServeJson {
     @NotNull
     public static ServeRecord readFromStream(@NotNull InputStream inputStream) throws IOException {
         return mapper.readValue(inputStream, ServeRecord.class);
+    }
+
+    @NotNull
+    public static String jsonFilePath(@NotNull String outputDir, @NotNull RefGenome refGenome) {
+        return refGenome.addVersionToFilePath(outputDir + "/serve.json");
     }
 }

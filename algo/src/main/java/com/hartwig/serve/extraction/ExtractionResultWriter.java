@@ -121,14 +121,9 @@ public class ExtractionResultWriter {
 
     public void writeJson(@NotNull ExtractionResult result) throws IOException {
         ServeRecord serveRecord = toServeRecord(result);
-        String filePath = jsonFilePath(outputDir, result.refGenomeVersion());
-        LOGGER.info(" Writing {}", filePath);
-        ServeJson.write(serveRecord, filePath);
-    }
-
-    @NotNull
-    private static String jsonFilePath(@NotNull String outputDir, @NotNull RefGenome refGenome) {
-        return refGenome.addVersionToFilePath(outputDir + "/serve.json");
+        String filepath = ServeJson.jsonFilePath(outputDir, refGenome);
+        LOGGER.info(" Writing {}", filepath);
+        ServeJson.write(serveRecord, filepath);
     }
 
     @NotNull

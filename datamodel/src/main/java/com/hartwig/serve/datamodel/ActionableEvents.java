@@ -2,6 +2,8 @@ package com.hartwig.serve.datamodel;
 
 import java.util.List;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.hartwig.serve.datamodel.characteristic.ActionableCharacteristic;
 import com.hartwig.serve.datamodel.fusion.ActionableFusion;
 import com.hartwig.serve.datamodel.gene.ActionableGene;
@@ -15,6 +17,8 @@ import org.jetbrains.annotations.Nullable;
 
 @Value.Immutable
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class })
+@JsonSerialize(as = ImmutableActionableEvents.class)
+@JsonDeserialize(as = ImmutableActionableEvents.class)
 public abstract class ActionableEvents {
 
     @NotNull

@@ -2,6 +2,8 @@ package com.hartwig.serve.extraction;
 
 import java.io.IOException;
 
+import com.hartwig.serve.datamodel.ImmutableActionableEvents;
+import com.hartwig.serve.datamodel.ImmutableKnownEvents;
 import com.hartwig.serve.datamodel.ImmutableServeRecord;
 import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.datamodel.ServeRecord;
@@ -133,19 +135,23 @@ public class ExtractionResultWriter {
     private static ServeRecord toServeRecord(@NotNull ExtractionResult result) {
         return ImmutableServeRecord.builder()
                 .refGenomeVersion(result.refGenomeVersion())
-                .addAllKnownHotspots(result.knownHotspots())
-                .addAllKnownCodons(result.knownCodons())
-                .addAllKnownExons(result.knownExons())
-                .addAllKnownGenes(result.knownGenes())
-                .addAllKnownCopyNumbers(result.knownCopyNumbers())
-                .addAllKnownFusions(result.knownFusions())
-                .addAllActionableHotspots(result.actionableHotspots())
-                .addAllActionableCodons(result.actionableCodons())
-                .addAllActionableExons(result.actionableExons())
-                .addAllActionableGenes(result.actionableGenes())
-                .addAllActionableFusions(result.actionableFusions())
-                .addAllActionableCharacteristics(result.actionableCharacteristics())
-                .addAllActionableHLA(result.actionableHLA())
+                .knownEvents(ImmutableKnownEvents.builder()
+                        .hotspots(result.knownHotspots())
+                        .codons(result.knownCodons())
+                        .exons(result.knownExons())
+                        .genes(result.knownGenes())
+                        .copyNumbers(result.knownCopyNumbers())
+                        .fusions(result.knownFusions())
+                        .build())
+                .actionableEvents(ImmutableActionableEvents.builder()
+                        .hotspots(result.actionableHotspots())
+                        .codons(result.actionableCodons())
+                        .exons(result.actionableExons())
+                        .genes(result.actionableGenes())
+                        .fusions(result.actionableFusions())
+                        .characteristics(result.actionableCharacteristics())
+                        .hla(result.actionableHLA())
+                        .build())
                 .build();
     }
 }

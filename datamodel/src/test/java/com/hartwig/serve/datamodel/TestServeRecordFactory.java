@@ -15,17 +15,30 @@ public class TestServeRecordFactory {
     public static ServeRecord create() {
         return ImmutableServeRecord.builder()
                 .refGenomeVersion(RefGenome.V37)
-                .addKnownHotspots(HotspotTestFactory.knownHotspotBuilder().gene(GENE).build())
-                .addKnownCodons(RangeTestFactory.knownCodonBuilder().gene(GENE).build())
-                .addKnownExons(RangeTestFactory.knownExonBuilder().gene(GENE).build())
-                .addKnownGenes(GeneTestFactory.knownGeneBuilder().gene(GENE).build())
-                .addKnownCopyNumbers(GeneTestFactory.knownCopyNumberBuilder().gene(GENE).build())
-                .addKnownFusions(FusionTestFactory.knownFusionBuilder().geneUp(GENE).build())
-                .addKnownFusions(FusionTestFactory.knownFusionBuilder().geneDown(GENE).build())
-                .addActionableGenes(GeneTestFactory.actionableGeneBuilder().gene(GENE).build())
-                .addActionableFusions(FusionTestFactory.actionableFusionBuilder().geneUp(GENE).build())
-                .addActionableFusions(FusionTestFactory.actionableFusionBuilder().geneDown(GENE).build())
+                .knownEvents(createKnownEvents())
+                .actionableEvents(createActionableEvents())
                 .build();
+    }
 
+    @NotNull
+    public static KnownEvents createKnownEvents() {
+        return ImmutableKnownEvents.builder()
+                .addHotspots(HotspotTestFactory.knownHotspotBuilder().gene(GENE).build())
+                .addCodons(RangeTestFactory.knownCodonBuilder().gene(GENE).build())
+                .addExons(RangeTestFactory.knownExonBuilder().gene(GENE).build())
+                .addGenes(GeneTestFactory.knownGeneBuilder().gene(GENE).build())
+                .addCopyNumbers(GeneTestFactory.knownCopyNumberBuilder().gene(GENE).build())
+                .addFusions(FusionTestFactory.knownFusionBuilder().geneUp(GENE).build())
+                .addFusions(FusionTestFactory.knownFusionBuilder().geneDown(GENE).build())
+                .build();
+    }
+
+    @NotNull
+    public static ActionableEvents createActionableEvents() {
+        return ImmutableActionableEvents.builder()
+                .addGenes(GeneTestFactory.actionableGeneBuilder().gene(GENE).build())
+                .addFusions(FusionTestFactory.actionableFusionBuilder().geneUp(GENE).build())
+                .addFusions(FusionTestFactory.actionableFusionBuilder().geneDown(GENE).build())
+                .build();
     }
 }

@@ -2,6 +2,8 @@ package com.hartwig.serve.datamodel;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.hartwig.serve.datamodel.fusion.KnownFusion;
 import com.hartwig.serve.datamodel.gene.KnownCopyNumber;
 import com.hartwig.serve.datamodel.gene.KnownGene;
@@ -15,6 +17,8 @@ import org.jetbrains.annotations.Nullable;
 
 @Value.Immutable
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class })
+@JsonSerialize(as = ImmutableKnownEvents.class)
+@JsonDeserialize(as = ImmutableKnownEvents.class)
 public abstract class KnownEvents {
 
     @NotNull

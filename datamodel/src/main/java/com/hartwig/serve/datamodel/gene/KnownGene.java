@@ -1,5 +1,7 @@
 package com.hartwig.serve.datamodel.gene;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.hartwig.serve.datamodel.KnownEvent;
 import com.hartwig.serve.datamodel.common.GeneRole;
 
@@ -9,6 +11,8 @@ import org.jetbrains.annotations.Nullable;
 
 @Value.Immutable
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class })
+@JsonSerialize(as = ImmutableKnownGene.class)
+@JsonDeserialize(as = ImmutableKnownGene.class)
 public abstract class KnownGene implements KnownEvent {
 
     @NotNull

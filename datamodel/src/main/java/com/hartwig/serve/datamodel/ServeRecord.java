@@ -30,9 +30,6 @@ public abstract class ServeRecord {
     @NotNull
     public abstract RefGenome refGenomeVersion();
 
-    //    @NotNull
-    //    public abstract Set<EventInterpretation> eventInterpretations();
-
     @NotNull
     public abstract Set<KnownHotspot> knownHotspots();
 

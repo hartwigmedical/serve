@@ -2,7 +2,9 @@ package com.hartwig.serve.extraction;
 
 import java.io.IOException;
 
+import com.hartwig.serve.datamodel.ImmutableServeRecord;
 import com.hartwig.serve.datamodel.RefGenome;
+import com.hartwig.serve.datamodel.ServeRecord;
 import com.hartwig.serve.datamodel.serialization.ActionableCharacteristicFile;
 import com.hartwig.serve.datamodel.serialization.ActionableFusionFile;
 import com.hartwig.serve.datamodel.serialization.ActionableGeneFile;
@@ -15,6 +17,7 @@ import com.hartwig.serve.datamodel.serialization.KnownExonFile;
 import com.hartwig.serve.datamodel.serialization.KnownFusionFile;
 import com.hartwig.serve.datamodel.serialization.KnownGeneFile;
 import com.hartwig.serve.datamodel.serialization.KnownHotspotFile;
+import com.hartwig.serve.datamodel.serialization.ServeJson;
 import com.hartwig.serve.extraction.events.EventInterpretationFile;
 import com.hartwig.serve.extraction.hotspot.KnownHotspotVCF;
 
@@ -43,6 +46,11 @@ public class ExtractionResultWriter {
     }
 
     public void write(@NotNull ExtractionResult result) throws IOException {
+        writeTsv(result);
+        writeJson(result);
+    }
+
+    public void writeTsv(@NotNull ExtractionResult result) throws IOException {
         LOGGER.info("Writing SERVE output to {}", outputDir);
 
         // We also write a hotspot VCF to be used in SAGE.
@@ -107,5 +115,37 @@ public class ExtractionResultWriter {
         String eventInterpretationTsv = EventInterpretationFile.eventInterpretationTsv(outputDir);
         LOGGER.info(" Writing {} event interpretations to {}", result.eventInterpretations().size(), eventInterpretationTsv);
         EventInterpretationFile.write(eventInterpretationTsv, result.eventInterpretations());
+    }
+
+    public void writeJson(@NotNull ExtractionResult result) throws IOException {
+        ServeRecord serveRecord = toServeRecord(result);
+        String filePath = jsonFilePath(outputDir, result.refGenomeVersion());
+        LOGGER.info(" Writing {}", filePath);
+        ServeJson.write(serveRecord, filePath);
+    }
+
+    @NotNull
+    private static String jsonFilePath(@NotNull String outputDir, @NotNull RefGenome refGenome) {
+        return refGenome.addVersionToFilePath(outputDir + "/serve.json");
+    }
+
+    @NotNull
+    private static ServeRecord toServeRecord(@NotNull ExtractionResult result) {
+        return ImmutableServeRecord.builder()
+                .refGenomeVersion(result.refGenomeVersion())
+                .addAllKnownHotspots(result.knownHotspots())
+                .addAllKnownCodons(result.knownCodons())
+                .addAllKnownExons(result.knownExons())
+                .addAllKnownGenes(result.knownGenes())
+                .addAllKnownCopyNumbers(result.knownCopyNumbers())
+                .addAllKnownFusions(result.knownFusions())
+                .addAllActionableHotspots(result.actionableHotspots())
+                .addAllActionableCodons(result.actionableCodons())
+                .addAllActionableExons(result.actionableExons())
+                .addAllActionableGenes(result.actionableGenes())
+                .addAllActionableFusions(result.actionableFusions())
+                .addAllActionableCharacteristics(result.actionableCharacteristics())
+                .addAllActionableHLA(result.actionableHLA())
+                .build();
     }
 }

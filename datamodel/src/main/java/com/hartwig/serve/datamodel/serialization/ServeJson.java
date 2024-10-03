@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.guava.GuavaModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -16,9 +17,10 @@ public final class ServeJson {
     private static final ObjectMapper mapper;
 
     static {
-        mapper = new ObjectMapper();
-        mapper.registerModule(new GuavaModule());
-        mapper.registerModule(new JavaTimeModule());
+        mapper = new ObjectMapper()
+                .registerModule(new GuavaModule())
+                .registerModule(new JavaTimeModule())
+                .setSerializationInclusion(JsonInclude.Include.NON_NULL);
     }
 
     public static void write(@NotNull ServeRecord record, @NotNull String filePath) throws IOException {

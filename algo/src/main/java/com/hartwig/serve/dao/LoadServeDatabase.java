@@ -7,10 +7,10 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.hartwig.serve.datamodel.ActionableEvents;
-import com.hartwig.serve.datamodel.ActionableEventsLoader;
 import com.hartwig.serve.datamodel.KnownEvents;
-import com.hartwig.serve.datamodel.KnownEventsLoader;
 import com.hartwig.serve.datamodel.RefGenome;
+import com.hartwig.serve.datamodel.ServeRecord;
+import com.hartwig.serve.datamodel.serialization.ServeJson;
 import com.hartwig.serve.extraction.events.EventInterpretation;
 import com.hartwig.serve.extraction.events.EventInterpretationFile;
 
@@ -36,8 +36,13 @@ public class LoadServeDatabase {
 
         String serveActionabilityDir = nonOptionalDir(cmd, SERVE_ACTIONABILITY_DIRECTORY);
         RefGenome refGenome = resolveRefGenomeVersion(nonOptionalValue(cmd, REF_GENOME_VERSION));
-        ActionableEvents actionableEvents = ActionableEventsLoader.readFromDir(serveActionabilityDir, refGenome);
-        KnownEvents knownEvents = KnownEventsLoader.readFromDir(serveActionabilityDir, refGenome);
+
+        String serveJsonFile = ServeJson.jsonFilePath(serveActionabilityDir, refGenome);
+        LOGGER.info("Loading SERVE from {}", serveJsonFile);
+        ServeRecord serveRecord = ServeJson.read(serveJsonFile);
+        ActionableEvents actionableEvents = serveRecord.actionableEvents();
+        KnownEvents knownEvents = serveRecord.knownEvents();
+
         List<EventInterpretation> eventInterpretation =
                 EventInterpretationFile.read(EventInterpretationFile.eventInterpretationTsv(serveActionabilityDir));
 

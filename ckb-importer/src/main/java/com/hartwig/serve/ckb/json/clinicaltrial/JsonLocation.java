@@ -16,10 +16,10 @@ public abstract class JsonLocation {
     @Nullable
     public abstract String facility();
 
-    @NotNull
+    @Nullable
     public abstract String city();
 
-    @NotNull
+    @Nullable
     public abstract String country();
 
     @Nullable

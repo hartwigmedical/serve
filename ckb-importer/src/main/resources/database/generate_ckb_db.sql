@@ -402,10 +402,10 @@ CREATE TABLE `location`
     `nctId` varchar(50) NOT NULL,
     `status` varchar(50),
     `facility` varchar(500),
-    `city` varchar(50) NOT NULL,
+    `city` varchar(50),
     `state` varchar(100),
     `zip` varchar(50),
-    `country` varchar(50) NOT NULL,
+    `country` varchar(50),
     PRIMARY KEY (`id`),
     FOREIGN KEY (`clinicalTrialId`) REFERENCES `clinicalTrial`(`id`)
 );

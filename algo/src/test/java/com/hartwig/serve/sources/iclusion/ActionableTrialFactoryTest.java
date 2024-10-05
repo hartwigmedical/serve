@@ -29,8 +29,8 @@ public class ActionableTrialFactoryTest {
         String loc2Doid1 = "loc2Doid2";
         String blacklistLocation1 = "blacklistLocation";
         String blacklistDoid1 = "blacklistDoid";
-        String treatment = Strings.EMPTY;
         String trialNCT = "nct";
+
         IclusionTumorLocation loc1 =
                 ImmutableIclusionTumorLocation.builder().primaryTumorLocation(location1).addDoids(loc1Doid1).addDoids(loc1Doid2).build();
         IclusionTumorLocation loc2 = ImmutableIclusionTumorLocation.builder().primaryTumorLocation(location2).addDoids(loc2Doid1).build();

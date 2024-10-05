@@ -16,17 +16,16 @@ import com.hartwig.serve.ckb.datamodel.clinicaltrial.Location;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.VariantRequirementDetail;
 import com.hartwig.serve.ckb.datamodel.indication.Indication;
 import com.hartwig.serve.ckb.datamodel.therapy.Therapy;
-import com.hartwig.serve.datamodel.EvidenceLevelDetails;
 import com.hartwig.serve.datamodel.Country;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
+import com.hartwig.serve.datamodel.EvidenceLevelDetails;
 import com.hartwig.serve.datamodel.ImmutableClinicalTrial;
 import com.hartwig.serve.datamodel.ImmutableCountry;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.sources.ckb.blacklist.CkbStudyBlacklistModel;
 import com.hartwig.serve.sources.ckb.region.CkbRegion;
 
-import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -136,6 +135,7 @@ class ActionableTrialFactory implements ActionableEntryFactory {
     static Set<Country> extractCountriesToInclude(@NotNull ClinicalTrial trial, @NotNull Set<CkbRegion> regionsToInclude) {
         Map<String, Map<String, Set<String>>> countriesToCitiesToHospitalNames = trial.locations()
                 .stream()
+                .filter(location -> location.country() != null && location.city() != null)
                 .filter(location -> regionsToInclude.stream().anyMatch(region -> region.includes(location))
                         && hasPotentiallyOpenRequirementToInclude(location.status()))
                 .collect(Collectors.groupingBy(Location::country,

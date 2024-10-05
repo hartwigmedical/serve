@@ -54,6 +54,12 @@ public class CkbCuratorTest {
     }
 
     @Test
+    public void canCurateFacilityWithMissingCountry() {
+        Location missingCountry = createLocation("city", "facility", "zip", null);
+        assertEquals(missingCountry, curator.curateFacilityName(missingCountry));
+    }
+
+    @Test
     public void canCurateFacilityNameBasedOnZip() {
         Location locationWithZip1 = createLocation("Groningen", "Research site", "9713 GZ");
         Location locationWithZip2 = createLocation("Groningen", "Research site", "9713");
@@ -109,6 +115,12 @@ public class CkbCuratorTest {
 
     @NotNull
     private static Location createLocation(@Nullable String city, @NotNull String facility, @Nullable String zip) {
-        return ImmutableLocation.builder().nctId("").city(city).country("Netherlands").facility(facility).zip(zip).build();
+        return createLocation(city, facility, zip, "Netherlands");
+    }
+
+    @NotNull
+    private static Location createLocation(@Nullable String city, @NotNull String facility, @Nullable String zip,
+            @Nullable String country) {
+        return ImmutableLocation.builder().nctId("").city(city).country(country).facility(facility).zip(zip).build();
     }
 }

@@ -450,6 +450,8 @@ elsewhere.
 
 ## Version History and Download Links
 
+- [5.3.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v5.3.0):
+    - Support for `null` cities or countries in clinical trial locations ingested from CKB
 - [5.2.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v5.2.0):
     - Added evidenceYear to ActionableEvent -> reference createDate with fallback on most recent of profile/therapy createDate
     - Refactored EvidenceLevelDetails (former ApprovalStatus) enum class and resolveEvidenceLevelDetails in ActionableEvidenceFactory

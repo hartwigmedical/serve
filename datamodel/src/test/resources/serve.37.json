@@ -1,0 +1,983 @@
+{
+  "refGenomeVersion": "V37",
+  "knownEvents": {
+    "hotspots": [
+      {
+        "inputTranscript": "trans1",
+        "inputProteinAnnotation": "F1389S",
+        "gene": "CREBBP",
+        "ref": "GA",
+        "alt": "TG",
+        "chromosome": "16",
+        "position": 3789692,
+        "geneRole": "BOTH",
+        "proteinEffect": "UNKNOWN",
+        "associatedWithDrugResistance": false,
+        "sources": [
+          "VICC_CGI"
+        ]
+      },
+      {
+        "inputProteinAnnotation": "C124*",
+        "gene": "TP53",
+        "ref": "G",
+        "alt": "T",
+        "chromosome": "17",
+        "position": 7579315,
+        "geneRole": "TSG",
+        "proteinEffect": "LOSS_OF_FUNCTION_PREDICTED",
+        "sources": [
+          "VICC_CGI"
+        ]
+      }
+    ],
+    "codons": [
+      {
+        "inputTranscript": "ENST00000369535",
+        "inputCodonRank": 179,
+        "gene": "NRAS",
+        "applicableMutationType": "MISSENSE",
+        "chromosome": "1",
+        "start": 115251189,
+        "end": 115251191,
+        "geneRole": "ONCO",
+        "proteinEffect": "GAIN_OF_FUNCTION",
+        "associatedWithDrugResistance": false,
+        "sources": [
+          "VICC_CIVIC"
+        ]
+      },
+      {
+        "inputTranscript": "ENST00000369535",
+        "inputCodonRank": 61,
+        "gene": "NRAS",
+        "applicableMutationType": "MISSENSE",
+        "chromosome": "1",
+        "start": 115256528,
+        "end": 115256530,
+        "geneRole": "ONCO",
+        "proteinEffect": "GAIN_OF_FUNCTION",
+        "sources": [
+          "VICC_CGI",
+          "VICC_CIVIC"
+        ]
+      }
+    ],
+    "exons": [
+      {
+        "inputTranscript": "ENST00000263967",
+        "inputExonRank": 10,
+        "gene": "PIK3CA",
+        "applicableMutationType": "MISSENSE",
+        "chromosome": "3",
+        "start": 178935993,
+        "end": 178936127,
+        "geneRole": "ONCO",
+        "proteinEffect": "GAIN_OF_FUNCTION",
+        "sources": [
+          "VICC_CIVIC"
+        ]
+      },
+      {
+        "inputTranscript": "ENST00000263967",
+        "inputExonRank": 21,
+        "gene": "PIK3CA",
+        "applicableMutationType": "MISSENSE",
+        "chromosome": "3",
+        "start": 178951877,
+        "end": 178957886,
+        "geneRole": "ONCO",
+        "proteinEffect": "GAIN_OF_FUNCTION",
+        "associatedWithDrugResistance": true,
+        "sources": [
+          "VICC_CIVIC"
+        ]
+      }
+    ],
+    "genes": [
+      {
+        "gene": "NRAS",
+        "geneRole": "ONCO",
+        "sources": [
+          "VICC_CIVIC"
+        ]
+      }
+    ],
+    "copyNumbers": [
+      {
+        "gene": "NF1",
+        "event": "DELETION",
+        "geneRole": "TSG",
+        "proteinEffect": "LOSS_OF_FUNCTION",
+        "sources": [
+          "VICC_CIVIC"
+        ]
+      },
+      {
+        "gene": "SND1",
+        "event": "OVEREXPRESSION",
+        "geneRole": "ONCO",
+        "proteinEffect": "NO_EFFECT",
+        "associatedWithDrugResistance": true,
+        "sources": [
+          "VICC_CIVIC"
+        ]
+      }
+    ],
+    "fusions": [
+      {
+        "proteinEffect": "UNKNOWN",
+        "geneUp": "ABCC4",
+        "geneDown": "ETV4",
+        "sources": [
+          "VICC_CIVIC"
+        ]
+      },
+      {
+        "proteinEffect": "GAIN_OF_FUNCTION",
+        "associatedWithDrugResistance": true,
+        "geneUp": "KIT",
+        "minExonUp": 11,
+        "maxExonUp": 11,
+        "geneDown": "KIT",
+        "minExonDown": 11,
+        "maxExonDown": 11,
+        "sources": [
+          "VICC_CGI"
+        ]
+      }
+    ]
+  },
+  "actionableEvents": {
+    "hotspots": [
+      {
+        "gene": "BRAF",
+        "ref": "A",
+        "alt": "T",
+        "chromosome": "7",
+        "position": 140453136,
+        "source": "CKB_EVIDENCE",
+        "entryDate": {
+          "year": 2021,
+          "month": 2,
+          "day": 3
+        },
+        "sourceEvent": "variant",
+        "sourceUrls": [
+          "http"
+        ],
+        "intervention": {
+          "type": "Treatment",
+          "name": "Vemurafenib",
+          "treatmentApproachesDrugClass": [],
+          "treatmentApproachesTherapy": []
+        },
+        "applicableCancerType": {
+          "name": "Skin Melanoma",
+          "doid": "X"
+        },
+        "blacklistCancerTypes": [],
+        "efficacyDescription": "efficacy evidence",
+        "evidenceYear": 2024,
+        "evidenceLevel": "A",
+        "evidenceLevelDetails": "GUIDELINE",
+        "direction": "RESPONSIVE",
+        "evidenceUrls": [
+          "http"
+        ]
+      },
+      {
+        "gene": "BRAF",
+        "ref": "A",
+        "alt": "T",
+        "chromosome": "7",
+        "position": 140453137,
+        "source": "CKB_TRIAL",
+        "entryDate": {
+          "year": 1970,
+          "month": 1,
+          "day": 1
+        },
+        "sourceEvent": "variant",
+        "sourceUrls": [
+          "http"
+        ],
+        "intervention": {
+          "type": "ClinicalTrial",
+          "nctId": "NCT1",
+          "title": "study1",
+          "acronym": "study11",
+          "countries": [
+            {
+              "countryName": "Netherlands",
+              "hospitalsPerCity": {
+                "Maastricht": [
+                  "MUMC"
+                ],
+                "Nijmegen": [
+                  "Radboud UMC"
+                ]
+              }
+            }
+          ],
+          "therapyNames": [
+            "Vemurafenib"
+          ],
+          "genderCriterium": "female"
+        },
+        "applicableCancerType": {
+          "name": "Solid tumor",
+          "doid": "X"
+        },
+        "blacklistCancerTypes": [],
+        "efficacyDescription": "",
+        "evidenceYear": 2024,
+        "evidenceLevel": "C",
+        "evidenceLevelDetails": "CLINICAL_STUDY",
+        "direction": "RESISTANT",
+        "evidenceUrls": [
+          "http"
+        ]
+      }
+    ],
+    "codons": [
+      {
+        "gene": "BRAF",
+        "applicableMutationType": "MISSENSE",
+        "chromosome": "7",
+        "start": 140453136,
+        "end": 140453137,
+        "source": "CKB_TRIAL",
+        "entryDate": {
+          "year": 1970,
+          "month": 1,
+          "day": 1
+        },
+        "sourceEvent": "600X",
+        "sourceUrls": [
+          "NCT1"
+        ],
+        "intervention": {
+          "type": "ClinicalTrial",
+          "nctId": "study1",
+          "title": "study1",
+          "countries": [
+            {
+              "countryName": "Netherlands",
+              "hospitalsPerCity": {
+                "Rotterdam": [
+                  "EMC"
+                ]
+              }
+            }
+          ],
+          "therapyNames": [
+            "Vemurafenib"
+          ]
+        },
+        "applicableCancerType": {
+          "name": "Breast cancer",
+          "doid": "X"
+        },
+        "blacklistCancerTypes": [],
+        "efficacyDescription": "",
+        "evidenceYear": 2024,
+        "evidenceLevel": "A",
+        "evidenceLevelDetails": "GUIDELINE",
+        "direction": "RESPONSIVE",
+        "evidenceUrls": [
+          "http"
+        ]
+      },
+      {
+        "gene": "BRAF",
+        "applicableMutationType": "MISSENSE",
+        "chromosome": "7",
+        "start": 140453136,
+        "end": 140453137,
+        "source": "CKB_EVIDENCE",
+        "entryDate": {
+          "year": 2021,
+          "month": 2,
+          "day": 3
+        },
+        "sourceEvent": "600X",
+        "sourceUrls": [],
+        "intervention": {
+          "type": "Treatment",
+          "name": "Vemurafenib",
+          "treatmentApproachesDrugClass": [],
+          "treatmentApproachesTherapy": []
+        },
+        "applicableCancerType": {
+          "name": "Skin Melanoma",
+          "doid": "X"
+        },
+        "blacklistCancerTypes": [],
+        "efficacyDescription": "efficacy evidence",
+        "evidenceYear": 2024,
+        "evidenceLevel": "A",
+        "evidenceLevelDetails": "GUIDELINE",
+        "direction": "RESPONSIVE",
+        "evidenceUrls": [
+          "http"
+        ]
+      }
+    ],
+    "exons": [
+      {
+        "gene": "EGFR",
+        "applicableMutationType": "INFRAME",
+        "chromosome": "7",
+        "start": 55241707,
+        "end": 55279321,
+        "source": "CKB_TRIAL",
+        "entryDate": {
+          "year": 1970,
+          "month": 1,
+          "day": 1
+        },
+        "sourceEvent": "exon 21",
+        "sourceUrls": [],
+        "intervention": {
+          "type": "ClinicalTrial",
+          "nctId": "NCT1",
+          "title": "study1",
+          "countries": [
+            {
+              "countryName": "Belgium",
+              "hospitalsPerCity": {
+                "Brussel": [
+                  "UZ Brussel"
+                ]
+              }
+            }
+          ],
+          "therapyNames": [
+            "Erlotinib"
+          ]
+        },
+        "applicableCancerType": {
+          "name": "Pancreas",
+          "doid": "X"
+        },
+        "blacklistCancerTypes": [],
+        "efficacyDescription": "",
+        "evidenceYear": 2024,
+        "evidenceLevel": "B",
+        "evidenceLevelDetails": "GUIDELINE",
+        "direction": "RESISTANT",
+        "evidenceUrls": [
+          "http"
+        ]
+      },
+      {
+        "gene": "EGFR",
+        "applicableMutationType": "INFRAME",
+        "chromosome": "7",
+        "start": 55241707,
+        "end": 55279321,
+        "source": "CKB_EVIDENCE",
+        "entryDate": {
+          "year": 1970,
+          "month": 1,
+          "day": 1
+        },
+        "sourceEvent": "exon 21",
+        "sourceUrls": [],
+        "intervention": {
+          "type": "Treatment",
+          "name": "Erlotinib",
+          "treatmentApproachesDrugClass": [],
+          "treatmentApproachesTherapy": []
+        },
+        "applicableCancerType": {
+          "name": "Lung Adeno",
+          "doid": "X"
+        },
+        "blacklistCancerTypes": [],
+        "efficacyDescription": "efficacy evidence",
+        "evidenceYear": 2024,
+        "evidenceLevel": "B",
+        "evidenceLevelDetails": "GUIDELINE",
+        "direction": "RESISTANT",
+        "evidenceUrls": [
+          "http"
+        ]
+      }
+    ],
+    "genes": [
+      {
+        "gene": "ALK",
+        "event": "FUSION",
+        "source": "CKB_EVIDENCE",
+        "entryDate": {
+          "year": 2021,
+          "month": 2,
+          "day": 3
+        },
+        "sourceEvent": "fusion",
+        "sourceUrls": [
+          "http"
+        ],
+        "intervention": {
+          "type": "Treatment",
+          "name": "Crizotinib",
+          "treatmentApproachesDrugClass": [],
+          "treatmentApproachesTherapy": []
+        },
+        "applicableCancerType": {
+          "name": "Lung Adenocarcinoma",
+          "doid": "X"
+        },
+        "blacklistCancerTypes": [],
+        "efficacyDescription": "efficacy evidence A",
+        "evidenceYear": 2024,
+        "evidenceLevel": "A",
+        "evidenceLevelDetails": "GUIDELINE",
+        "direction": "RESPONSIVE",
+        "evidenceUrls": [
+          "https"
+        ]
+      },
+      {
+        "gene": "BRCA1",
+        "event": "INACTIVATION",
+        "source": "CKB_EVIDENCE",
+        "entryDate": {
+          "year": 2021,
+          "month": 2,
+          "day": 4
+        },
+        "sourceEvent": "inact",
+        "sourceUrls": [
+          "http"
+        ],
+        "intervention": {
+          "type": "Treatment",
+          "name": "DRUP",
+          "treatmentApproachesDrugClass": [],
+          "treatmentApproachesTherapy": []
+        },
+        "applicableCancerType": {
+          "name": "Solid Tumors",
+          "doid": "X"
+        },
+        "blacklistCancerTypes": [
+          {
+            "name": "Hematologic cancer",
+            "doid": "2531"
+          }
+        ],
+        "efficacyDescription": "efficacy evidence B",
+        "evidenceYear": 2024,
+        "evidenceLevel": "B",
+        "evidenceLevelDetails": "GUIDELINE",
+        "direction": "RESPONSIVE",
+        "evidenceUrls": [
+          "http"
+        ]
+      },
+      {
+        "gene": "ERBB2",
+        "event": "AMPLIFICATION",
+        "source": "CKB_EVIDENCE",
+        "entryDate": {
+          "year": 2021,
+          "month": 2,
+          "day": 5
+        },
+        "sourceEvent": "amp",
+        "sourceUrls": [
+          "http"
+        ],
+        "intervention": {
+          "type": "Treatment",
+          "name": "Trastuzumab",
+          "treatmentApproachesDrugClass": [],
+          "treatmentApproachesTherapy": []
+        },
+        "applicableCancerType": {
+          "name": "Breast Cancer",
+          "doid": "X"
+        },
+        "blacklistCancerTypes": [],
+        "efficacyDescription": "efficacy evidence C",
+        "evidenceYear": 2024,
+        "evidenceLevel": "A",
+        "evidenceLevelDetails": "GUIDELINE",
+        "direction": "RESPONSIVE",
+        "evidenceUrls": [
+          "http"
+        ]
+      },
+      {
+        "gene": "ERBB2",
+        "event": "AMPLIFICATION",
+        "source": "CKB_EVIDENCE",
+        "entryDate": {
+          "year": 2021,
+          "month": 2,
+          "day": 6
+        },
+        "sourceEvent": "amp",
+        "sourceUrls": [
+          "http"
+        ],
+        "intervention": {
+          "type": "Treatment",
+          "name": "Panitumumab",
+          "treatmentApproachesDrugClass": [],
+          "treatmentApproachesTherapy": []
+        },
+        "applicableCancerType": {
+          "name": "Colorectal Cancer",
+          "doid": "X"
+        },
+        "blacklistCancerTypes": [],
+        "efficacyDescription": "efficacy evidence D",
+        "evidenceYear": 2024,
+        "evidenceLevel": "B",
+        "evidenceLevelDetails": "GUIDELINE",
+        "direction": "RESISTANT",
+        "evidenceUrls": [
+          "http"
+        ]
+      },
+      {
+        "gene": "FGFR2",
+        "event": "FUSION",
+        "source": "CKB_EVIDENCE",
+        "entryDate": {
+          "year": 2021,
+          "month": 2,
+          "day": 7
+        },
+        "sourceEvent": "fusion",
+        "sourceUrls": [
+          "http"
+        ],
+        "intervention": {
+          "type": "Treatment",
+          "name": "Erdafitinib",
+          "treatmentApproachesDrugClass": [],
+          "treatmentApproachesTherapy": []
+        },
+        "applicableCancerType": {
+          "name": "Bladder Cancer",
+          "doid": "X"
+        },
+        "blacklistCancerTypes": [],
+        "efficacyDescription": "efficacy evidence E",
+        "evidenceYear": 2024,
+        "evidenceLevel": "B",
+        "evidenceLevelDetails": "GUIDELINE",
+        "direction": "RESPONSIVE",
+        "evidenceUrls": []
+      },
+      {
+        "gene": "MET",
+        "event": "AMPLIFICATION",
+        "source": "CKB_EVIDENCE",
+        "entryDate": {
+          "year": 2021,
+          "month": 2,
+          "day": 8
+        },
+        "sourceEvent": "amp",
+        "sourceUrls": [
+          "http"
+        ],
+        "intervention": {
+          "type": "Treatment",
+          "name": "DRUP",
+          "treatmentApproachesDrugClass": [],
+          "treatmentApproachesTherapy": []
+        },
+        "applicableCancerType": {
+          "name": "Advanced Solid Tumor",
+          "doid": "X"
+        },
+        "blacklistCancerTypes": [
+          {
+            "name": "Hematologic cancer",
+            "doid": "2531"
+          }
+        ],
+        "efficacyDescription": "efficacy evidence F",
+        "evidenceYear": 2024,
+        "evidenceLevel": "B",
+        "evidenceLevelDetails": "GUIDELINE",
+        "direction": "RESPONSIVE",
+        "evidenceUrls": []
+      },
+      {
+        "gene": "NRAS",
+        "event": "ACTIVATION",
+        "source": "CKB_TRIAL",
+        "entryDate": {
+          "year": 1970,
+          "month": 1,
+          "day": 1
+        },
+        "sourceEvent": "act",
+        "sourceUrls": [
+          "http"
+        ],
+        "intervention": {
+          "type": "ClinicalTrial",
+          "nctId": "NCT1",
+          "title": "study1",
+          "acronym": "study1",
+          "countries": [
+            {
+              "countryName": "Belgium",
+              "hospitalsPerCity": {
+                "Antwerpen": [
+                  "ZAS Vincentius"
+                ]
+              }
+            }
+          ],
+          "therapyNames": [
+            "Cetuximab"
+          ],
+          "genderCriterium": "male"
+        },
+        "applicableCancerType": {
+          "name": "Colorectal Cancer",
+          "doid": "X"
+        },
+        "blacklistCancerTypes": [],
+        "efficacyDescription": "",
+        "evidenceYear": 2024,
+        "evidenceLevel": "A",
+        "evidenceLevelDetails": "GUIDELINE",
+        "direction": "RESISTANT",
+        "evidenceUrls": [
+          "http"
+        ]
+      }
+    ],
+    "fusions": [
+      {
+        "geneUp": "EGFR",
+        "minExonUp": 1,
+        "maxExonUp": 2,
+        "geneDown": "EGFR",
+        "minExonDown": 8,
+        "maxExonDown": 9,
+        "source": "CKB_EVIDENCE",
+        "entryDate": {
+          "year": 2021,
+          "month": 2,
+          "day": 3
+        },
+        "sourceEvent": "fusion",
+        "sourceUrls": [
+          "http"
+        ],
+        "intervention": {
+          "type": "Treatment",
+          "name": "Osimertinib",
+          "treatmentApproachesDrugClass": [],
+          "treatmentApproachesTherapy": []
+        },
+        "applicableCancerType": {
+          "name": "Lung Cancer",
+          "doid": "X"
+        },
+        "blacklistCancerTypes": [],
+        "efficacyDescription": "efficacy evidence A",
+        "evidenceYear": 2024,
+        "evidenceLevel": "A",
+        "evidenceLevelDetails": "GUIDELINE",
+        "direction": "RESPONSIVE",
+        "evidenceUrls": [
+          "http"
+        ]
+      },
+      {
+        "geneUp": "EML4",
+        "geneDown": "ALK",
+        "source": "CKB_EVIDENCE",
+        "entryDate": {
+          "year": 2021,
+          "month": 2,
+          "day": 4
+        },
+        "sourceEvent": "fusion",
+        "sourceUrls": [
+          "http"
+        ],
+        "intervention": {
+          "type": "Treatment",
+          "name": "Crizotinib",
+          "treatmentApproachesDrugClass": [],
+          "treatmentApproachesTherapy": []
+        },
+        "applicableCancerType": {
+          "name": "Lung Cancer",
+          "doid": "X"
+        },
+        "blacklistCancerTypes": [],
+        "efficacyDescription": "efficacy evidence B",
+        "evidenceYear": 2024,
+        "evidenceLevel": "A",
+        "evidenceLevelDetails": "GUIDELINE",
+        "direction": "RESPONSIVE",
+        "evidenceUrls": [
+          "http"
+        ]
+      },
+      {
+        "geneUp": "PCM1",
+        "geneDown": "JAK2",
+        "source": "CKB_TRIAL",
+        "entryDate": {
+          "year": 1970,
+          "month": 1,
+          "day": 1
+        },
+        "sourceEvent": "fusion",
+        "sourceUrls": [
+          "http"
+        ],
+        "intervention": {
+          "type": "ClinicalTrial",
+          "nctId": "NCT1",
+          "title": "study1",
+          "acronym": "study1",
+          "countries": [
+            {
+              "countryName": "Germany",
+              "hospitalsPerCity": {
+                "Frankfurt": [
+                  "Burgerhospital Frankfurt"
+                ],
+                "Koln": [
+                  "Cellitinnen-Krankenhaus St. Marien"
+                ]
+              }
+            }
+          ],
+          "therapyNames": [
+            "Ruxolitinib"
+          ],
+          "genderCriterium": "male"
+        },
+        "applicableCancerType": {
+          "name": "Leukemia",
+          "doid": "X"
+        },
+        "blacklistCancerTypes": [],
+        "efficacyDescription": "",
+        "evidenceYear": 2024,
+        "evidenceLevel": "B",
+        "evidenceLevelDetails": "GUIDELINE",
+        "direction": "RESPONSIVE",
+        "evidenceUrls": [
+          "http"
+        ]
+      }
+    ],
+    "characteristics": [
+      {
+        "type": "MICROSATELLITE_UNSTABLE",
+        "cutoffType": "EQUAL_OR_GREATER",
+        "cutoff": 4.0,
+        "source": "CKB_EVIDENCE",
+        "entryDate": {
+          "year": 2021,
+          "month": 2,
+          "day": 3
+        },
+        "sourceEvent": "msi",
+        "sourceUrls": [
+          "http"
+        ],
+        "intervention": {
+          "type": "Treatment",
+          "name": "Nivolumab",
+          "treatmentApproachesDrugClass": [],
+          "treatmentApproachesTherapy": []
+        },
+        "applicableCancerType": {
+          "name": "All cancer types",
+          "doid": "X"
+        },
+        "blacklistCancerTypes": [
+          {
+            "name": "Hematologic cancer",
+            "doid": "2531"
+          }
+        ],
+        "efficacyDescription": "efficacy evidence",
+        "evidenceYear": 2024,
+        "evidenceLevel": "A",
+        "evidenceLevelDetails": "GUIDELINE",
+        "direction": "RESPONSIVE",
+        "evidenceUrls": [
+          "http1",
+          "http2"
+        ]
+      },
+      {
+        "type": "MICROSATELLITE_UNSTABLE",
+        "source": "CKB_TRIAL",
+        "entryDate": {
+          "year": 1970,
+          "month": 1,
+          "day": 1
+        },
+        "sourceEvent": "msi",
+        "sourceUrls": [
+          "http"
+        ],
+        "intervention": {
+          "type": "ClinicalTrial",
+          "nctId": "NCT1",
+          "title": "study1",
+          "countries": [
+            {
+              "countryName": "Belgium",
+              "hospitalsPerCity": {
+                "Brussel": [
+                  "UZ Brussel"
+                ]
+              }
+            },
+            {
+              "countryName": "Netherlands",
+              "hospitalsPerCity": {
+                "Eindhoven": [
+                  "Catharina"
+                ],
+                "Rotterdam": [
+                  "EMC"
+                ]
+              }
+            }
+          ],
+          "therapyNames": [
+            "Immuno",
+            "Pembro"
+          ],
+          "genderCriterium": "both"
+        },
+        "applicableCancerType": {
+          "name": "All cancer types",
+          "doid": "X"
+        },
+        "blacklistCancerTypes": [
+          {
+            "name": "Hematologic cancer",
+            "doid": "2531"
+          }
+        ],
+        "efficacyDescription": "",
+        "evidenceYear": 2024,
+        "evidenceLevel": "B",
+        "evidenceLevelDetails": "GUIDELINE",
+        "direction": "RESPONSIVE",
+        "evidenceUrls": [
+          "http3",
+          "http4"
+        ]
+      }
+    ],
+    "hla": [
+      {
+        "hlaAllele": "A*02",
+        "source": "CKB_TRIAL",
+        "entryDate": {
+          "year": 1970,
+          "month": 1,
+          "day": 1
+        },
+        "sourceEvent": "A*02",
+        "sourceUrls": [
+          "http"
+        ],
+        "intervention": {
+          "type": "ClinicalTrial",
+          "nctId": "NCT1",
+          "title": "study1",
+          "acronym": "study1",
+          "countries": [
+            {
+              "countryName": "Netherlands",
+              "hospitalsPerCity": {
+                "Groningen": [
+                  "UMCG"
+                ],
+                "Utrecht": [
+                  "UMCU"
+                ]
+              }
+            }
+          ],
+          "therapyNames": [
+            "Nivolumab"
+          ],
+          "genderCriterium": "female"
+        },
+        "applicableCancerType": {
+          "name": "Skin melanoma",
+          "doid": "X"
+        },
+        "blacklistCancerTypes": [
+          {
+            "name": "Hematologic cancer",
+            "doid": "2531"
+          }
+        ],
+        "efficacyDescription": "",
+        "evidenceYear": 2024,
+        "evidenceLevel": "A",
+        "evidenceLevelDetails": "GUIDELINE",
+        "direction": "RESPONSIVE",
+        "evidenceUrls": [
+          "http"
+        ]
+      },
+      {
+        "hlaAllele": "A*02",
+        "source": "CKB_EVIDENCE",
+        "entryDate": {
+          "year": 2021,
+          "month": 2,
+          "day": 3
+        },
+        "sourceEvent": "A*02",
+        "sourceUrls": [
+          "http"
+        ],
+        "intervention": {
+          "type": "Treatment",
+          "name": "Nivolumab",
+          "treatmentApproachesDrugClass": [],
+          "treatmentApproachesTherapy": []
+        },
+        "applicableCancerType": {
+          "name": "All cancer types",
+          "doid": "X"
+        },
+        "blacklistCancerTypes": [
+          {
+            "name": "Hematologic cancer",
+            "doid": "2531"
+          }
+        ],
+        "efficacyDescription": "efficacy evidence",
+        "evidenceYear": 2024,
+        "evidenceLevel": "A",
+        "evidenceLevelDetails": "GUIDELINE",
+        "direction": "RESPONSIVE",
+        "evidenceUrls": [
+          "http"
+        ]
+      }
+    ]
+  }
+}

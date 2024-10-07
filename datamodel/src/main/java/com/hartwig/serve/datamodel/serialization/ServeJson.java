@@ -8,7 +8,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -78,11 +77,11 @@ public final class ServeJson {
 
         @Override
         public void serialize(LocalDate date, JsonGenerator gen, SerializerProvider provider) throws IOException {
-            Map<String, Integer> dateMap = new LinkedHashMap<>();
-            dateMap.put("year", date.getYear());
-            dateMap.put("month", date.getMonthValue());
-            dateMap.put("day", date.getDayOfMonth());
-            gen.writeObject(dateMap);
+            gen.writeStartObject();
+            gen.writeNumberField("year", date.getYear());
+            gen.writeNumberField("month", date.getMonthValue());
+            gen.writeNumberField("day", date.getDayOfMonth());
+            gen.writeEndObject();
         }
     }
 

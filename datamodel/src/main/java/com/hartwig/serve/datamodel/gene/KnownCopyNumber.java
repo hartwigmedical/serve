@@ -1,5 +1,7 @@
 package com.hartwig.serve.datamodel.gene;
 
+import java.util.Comparator;
+
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.hartwig.serve.datamodel.KnownEvent;
@@ -14,6 +16,12 @@ import org.jetbrains.annotations.Nullable;
              jdkOnly = true)
 @JsonSerialize(as = ImmutableKnownCopyNumber.class)
 @JsonDeserialize(as = ImmutableKnownCopyNumber.class)
-public abstract class KnownCopyNumber implements GeneAnnotation, GeneAlteration, KnownEvent {
+public abstract class KnownCopyNumber implements GeneAnnotation, GeneAlteration, KnownEvent, Comparable<KnownCopyNumber> {
 
+    private static final Comparator<KnownCopyNumber> COMPARATOR = new KnownCopyNumberComparator();
+
+    @Override
+    public int compareTo(KnownCopyNumber other) {
+        return COMPARATOR.compare(this, other);
+    }
 }

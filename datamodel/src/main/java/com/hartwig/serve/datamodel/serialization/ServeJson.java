@@ -5,15 +5,24 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -31,9 +40,11 @@ public final class ServeJson {
             .addModule(new SimpleModule()
                     .addSerializer(LocalDate.class, new LocalDateSerializer())
                     .addDeserializer(LocalDate.class, new LocalDateDeserializer())
+                    .addSerializer(Set.class, new SortedSetJsonSerializer())
+                    .addSerializer(Map.class, new SortedMapJsonSerializer())
+                    .addSerializer(List.class, new SortedListJsonSerializer())
             )
             .serializationInclusion(JsonInclude.Include.NON_NULL)
-            .enable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY)
             .build();
 
     public static void write(@NotNull ServeRecord record, @NotNull String filePath) throws IOException {
@@ -85,6 +96,90 @@ public final class ServeJson {
             Integer day = dateMap.get("day");
 
             return LocalDate.of(year, month, day);
+        }
+    }
+
+    static class SortedSetJsonSerializer extends JsonSerializer<Set> {
+
+        @Override
+        public void serialize(Set set, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+            if (set == null) {
+                gen.writeNull();
+                return;
+            }
+
+            gen.writeStartArray();
+            if (!set.isEmpty()) {
+                if (!SortedSet.class.isAssignableFrom(set.getClass())) {
+                    Object item = set.iterator().next();
+                    if (Comparable.class.isAssignableFrom(item.getClass())) {
+                        set = new TreeSet(set);
+                    }
+                }
+                for (Object item : set) {
+                    gen.writeObject(item);
+                }
+            }
+            gen.writeEndArray();
+        }
+    }
+
+    static class SortedMapJsonSerializer extends JsonSerializer<Map> {
+
+        @Override
+        public void serialize(Map map, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+            if (map == null) {
+                gen.writeNull();
+                return;
+            }
+
+            gen.writeStartObject();
+            if (!map.isEmpty()) {
+                if (!(map instanceof SortedMap)) {
+                    Object key = map.keySet().iterator().next();
+                    if (key instanceof Comparable) {
+                        map = new TreeMap<>(map);
+                    }
+                }
+                for (Object entryObj : map.entrySet()) {
+                    Map.Entry entry = (Map.Entry) entryObj;
+                    Object key = entry.getKey();
+                    Object value = entry.getValue();
+
+                    String fieldName = key.toString();
+                    gen.writeFieldName(fieldName);
+                    gen.writeObject(value);
+                }
+            }
+            gen.writeEndObject();
+        }
+    }
+
+    static class SortedListJsonSerializer extends JsonSerializer<List> {
+
+        @Override
+        public void serialize(List list, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+            if (list == null) {
+                gen.writeNull();
+                return;
+            }
+
+            gen.writeStartArray();
+            if (!list.isEmpty()) {
+                Object item = list.get(0);
+                if (item instanceof Comparable) {
+                    List<Object> sortedList = new ArrayList<>(list);
+                    Collections.sort(sortedList, Comparator.comparing(o -> (Comparable) o));
+                    for (Object element : sortedList) {
+                        gen.writeObject(element);
+                    }
+                } else {
+                    for (Object element : list) {
+                        gen.writeObject(element);
+                    }
+                }
+            }
+            gen.writeEndArray();
         }
     }
 }

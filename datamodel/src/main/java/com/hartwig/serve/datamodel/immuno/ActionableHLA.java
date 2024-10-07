@@ -1,5 +1,7 @@
 package com.hartwig.serve.datamodel.immuno;
 
+import java.util.Comparator;
+
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.hartwig.serve.datamodel.ActionableEvent;
@@ -13,6 +15,12 @@ import org.jetbrains.annotations.Nullable;
              jdkOnly = true)
 @JsonSerialize(as = ImmutableActionableHLA.class)
 @JsonDeserialize(as = ImmutableActionableHLA.class)
-public abstract class ActionableHLA implements ImmunoAnnotation, ActionableEvent {
+public abstract class ActionableHLA implements ImmunoAnnotation, ActionableEvent, Comparable<ActionableHLA> {
 
+    private static final Comparator<ActionableHLA> COMPARATOR = new ActionableHLAComparator();
+
+    @Override
+    public int compareTo(ActionableHLA other) {
+        return COMPARATOR.compare(this, other);
+    }
 }

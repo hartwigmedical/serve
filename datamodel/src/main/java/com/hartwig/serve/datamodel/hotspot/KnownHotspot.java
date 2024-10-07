@@ -1,5 +1,7 @@
 package com.hartwig.serve.datamodel.hotspot;
 
+import java.util.Comparator;
+
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.hartwig.serve.datamodel.KnownEvent;
@@ -14,7 +16,9 @@ import org.jetbrains.annotations.Nullable;
              jdkOnly = true)
 @JsonSerialize(as = ImmutableKnownHotspot.class)
 @JsonDeserialize(as = ImmutableKnownHotspot.class)
-public abstract class KnownHotspot implements VariantHotspot, GeneAlteration, KnownEvent {
+public abstract class KnownHotspot implements VariantHotspot, GeneAlteration, KnownEvent, Comparable<KnownHotspot> {
+
+    private static final Comparator<KnownHotspot> COMPARATOR = new KnownHotspotComparator();
 
     @Nullable
     public abstract String inputTranscript();
@@ -22,4 +26,8 @@ public abstract class KnownHotspot implements VariantHotspot, GeneAlteration, Kn
     @NotNull
     public abstract String inputProteinAnnotation();
 
+    @Override
+    public int compareTo(KnownHotspot other) {
+        return COMPARATOR.compare(this, other);
+    }
 }

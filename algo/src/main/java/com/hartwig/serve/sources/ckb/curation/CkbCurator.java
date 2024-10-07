@@ -106,28 +106,30 @@ public class CkbCurator {
     @NotNull
     @VisibleForTesting
     Location curateFacilityName(@NotNull Location location) {
-        for (CkbFacilityCurationZipEntry facilityCurationZipEntry : facilityCurationZipEntries) {
-            if (containsWord(facilityCurationZipEntry.city(), location.city().toLowerCase())) {
-                String zip = location.zip() != null ? location.zip().toLowerCase().replaceAll("\\s", "") : "";
-                if ((facilityCurationZipEntry.zip().isEmpty()) || (zip.contains(facilityCurationZipEntry.zip()))) {
-                    return ImmutableLocation.builder().from(location).facility(facilityCurationZipEntry.curatedFacilityName()).build();
+        if (location.city() != null) {
+            for (CkbFacilityCurationZipEntry facilityCurationZipEntry : facilityCurationZipEntries) {
+                if (containsWord(facilityCurationZipEntry.city(), location.city().toLowerCase())) {
+                    String zip = location.zip() != null ? location.zip().toLowerCase().replaceAll("\\s", "") : "";
+                    if ((facilityCurationZipEntry.zip().isEmpty()) || (zip.contains(facilityCurationZipEntry.zip()))) {
+                        return ImmutableLocation.builder().from(location).facility(facilityCurationZipEntry.curatedFacilityName()).build();
+                    }
                 }
             }
-        }
 
-        if (location.facility() != null) {
-            for (CkbFacilityCurationNameEntry facilityCurationNameEntry : facilityCurationNameEntries) {
-                if (containsWord(facilityCurationNameEntry.facilityName(), location.facility().toLowerCase()) && containsWord(
-                        facilityCurationNameEntry.city(),
-                        location.city().toLowerCase())) {
-                    return ImmutableLocation.builder().from(location).facility(facilityCurationNameEntry.curatedFacilityName()).build();
+            if (location.facility() != null) {
+                for (CkbFacilityCurationNameEntry facilityCurationNameEntry : facilityCurationNameEntries) {
+                    if (containsWord(facilityCurationNameEntry.facilityName(), location.facility().toLowerCase()) && containsWord(
+                            facilityCurationNameEntry.city(),
+                            location.city().toLowerCase())) {
+                        return ImmutableLocation.builder().from(location).facility(facilityCurationNameEntry.curatedFacilityName()).build();
+                    }
                 }
             }
         }
 
         for (CkbFacilityCurationManualEntry facilityCurationManualEntry : facilityCurationManualEntries) {
             boolean hasMatchingFacilityName = equalStringsOrNull(location.facility(), facilityCurationManualEntry.facilityName());
-            boolean hasMatchingCity = location.city().equals(facilityCurationManualEntry.city());
+            boolean hasMatchingCity = equalStringsOrNull(location.city(), facilityCurationManualEntry.city());
             boolean hasMatchingZip = equalStringsOrNull(location.zip(), facilityCurationManualEntry.zip());
             if (hasMatchingFacilityName && hasMatchingCity && hasMatchingZip) {
                 usedFacilityCurationManualEntries.add(facilityCurationManualEntry);
@@ -135,9 +137,10 @@ public class CkbCurator {
             }
         }
 
-        if (location.country().equals("Netherlands")) {
+        if (location.country() != null && location.country().equals("Netherlands")) {
             LOGGER.warn(" Couldn't curate facility name for location '{}'", location);
         }
+
         return location.facility() == null ? ImmutableLocation.builder()
                 .from(location)
                 .facility("Unknown [" + location.city() + "]")

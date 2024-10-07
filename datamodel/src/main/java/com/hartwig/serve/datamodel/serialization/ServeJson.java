@@ -8,7 +8,6 @@ import java.io.OutputStream;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.fasterxml.jackson.datatype.guava.GuavaModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.datamodel.ServeRecord;
@@ -17,7 +16,6 @@ import org.jetbrains.annotations.NotNull;
 
 public final class ServeJson {
     private static final JsonMapper MAPPER = JsonMapper.builder()
-            .addModule(new GuavaModule())
             .addModule(new JavaTimeModule())
             .serializationInclusion(JsonInclude.Include.NON_NULL)
             .enable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY)

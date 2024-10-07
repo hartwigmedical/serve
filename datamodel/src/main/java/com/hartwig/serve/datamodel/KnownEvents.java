@@ -16,7 +16,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @Value.Immutable
-@Value.Style(passAnnotations = { NotNull.class, Nullable.class })
+@Value.Style(passAnnotations = { NotNull.class, Nullable.class },
+             jdkOnly = true)
 @JsonSerialize(as = ImmutableKnownEvents.class)
 @JsonDeserialize(as = ImmutableKnownEvents.class)
 public abstract class KnownEvents {

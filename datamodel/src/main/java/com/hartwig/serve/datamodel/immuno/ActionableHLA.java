@@ -9,7 +9,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @Value.Immutable
-@Value.Style(passAnnotations = { NotNull.class, Nullable.class })
+@Value.Style(passAnnotations = { NotNull.class, Nullable.class },
+             jdkOnly = true)
 @JsonSerialize(as = ImmutableActionableHLA.class)
 @JsonDeserialize(as = ImmutableActionableHLA.class)
 public abstract class ActionableHLA implements ImmunoAnnotation, ActionableEvent {

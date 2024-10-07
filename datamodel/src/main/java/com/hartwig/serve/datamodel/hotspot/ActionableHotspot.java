@@ -9,7 +9,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @Value.Immutable
-@Value.Style(passAnnotations = { NotNull.class, Nullable.class })
+@Value.Style(passAnnotations = { NotNull.class, Nullable.class },
+             jdkOnly = true)
 @JsonSerialize(as = ImmutableActionableHotspot.class)
 @JsonDeserialize(as = ImmutableActionableHotspot.class)
 public abstract class ActionableHotspot implements VariantHotspot, ActionableEvent {

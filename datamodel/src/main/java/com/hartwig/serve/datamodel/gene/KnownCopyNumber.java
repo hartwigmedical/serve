@@ -10,7 +10,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @Value.Immutable
-@Value.Style(passAnnotations = { NotNull.class, Nullable.class })
+@Value.Style(passAnnotations = { NotNull.class, Nullable.class },
+             jdkOnly = true)
 @JsonSerialize(as = ImmutableKnownCopyNumber.class)
 @JsonDeserialize(as = ImmutableKnownCopyNumber.class)
 public abstract class KnownCopyNumber implements GeneAnnotation, GeneAlteration, KnownEvent {

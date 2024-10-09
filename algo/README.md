@@ -452,6 +452,7 @@ elsewhere.
 
 - [6.0.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v6.0.0)
     - Convert output to JSON format instead of TSV
+    - Add SERVE version to JSON output
 - [5.3.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v5.3.0):
     - Support for `null` cities or countries in clinical trial locations ingested from CKB
 - [5.2.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v5.2.0):

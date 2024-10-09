@@ -10,13 +10,16 @@ import org.jetbrains.annotations.Nullable;
 @Value.Immutable
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class },
              jdkOnly = true)
-@JsonSerialize(as = ImmutableCancerType.class)
-@JsonDeserialize(as = ImmutableCancerType.class)
-public abstract class CancerType {
+@JsonSerialize(as = ImmutableServeRecord.class)
+@JsonDeserialize(as = ImmutableServeRecord.class)
+public abstract class ServeRecord {
 
     @NotNull
-    public abstract String name();
+    public abstract RefGenome refGenomeVersion();
 
     @NotNull
-    public abstract String doid();
+    public abstract KnownEvents knownEvents();
+
+    @NotNull
+    public abstract ActionableEvents actionableEvents();
 }

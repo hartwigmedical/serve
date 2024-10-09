@@ -41,6 +41,7 @@
         <retrofit.version>2.4.0</retrofit.version>
         <moshi.version>1.6.0</moshi.version>
         <okhttp.version>3.9.0</okhttp.version>
+        <jackson.version>2.16.1</jackson.version>
 
         <junit.version>4.13.1</junit.version>
 
@@ -195,7 +196,16 @@
                 <version>${immutables.version}</version>
                 <scope>provided</scope>
             </dependency>
-
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.datatype</groupId>
+                <artifactId>jackson-datatype-jsr310</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
             <dependency>
                 <groupId>io.reactivex.rxjava2</groupId>
                 <artifactId>rxjava</artifactId>

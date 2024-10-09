@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -12,8 +13,9 @@ import com.hartwig.serve.ServeLocalConfigProvider;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.KnownEvent;
 import com.hartwig.serve.datamodel.RefGenome;
+import com.hartwig.serve.datamodel.ServeRecord;
 import com.hartwig.serve.datamodel.range.KnownExon;
-import com.hartwig.serve.datamodel.serialization.KnownExonFile;
+import com.hartwig.serve.datamodel.serialization.ServeJson;
 import com.hartwig.serve.extraction.util.GenerateAltBase;
 import com.hartwig.serve.extraction.util.KeyFormatter;
 import com.hartwig.serve.extraction.util.VCFWriterFactory;
@@ -46,11 +48,12 @@ public class ExonAnnotationToVCFConverter {
         ServeConfig config = ServeLocalConfigProvider.create();
         IndexedFastaSequenceFile refSequence37 = new IndexedFastaSequenceFile(new File(config.refGenome37FastaFile()));
 
-        String knownExonsTsv = System.getProperty("user.home") + "/hmf/tmp/KnownExons.SERVE.37.tsv";
+        String serveJson = System.getProperty("user.home") + "/hmf/tmp/serve.37.json";
         String outputVcf = System.getProperty("user.home") + "/hmf/tmp/exons.vcf.gz";
         GenerateAltBase altBaseGenerator = new GenerateAltBase(RefGenome.V37, refSequence37);
 
-        List<KnownExon> exons = KnownExonFile.read(knownExonsTsv);
+        ServeRecord serveRecord = ServeJson.read(serveJson);
+        List<KnownExon> exons = serveRecord.knownEvents().exons().stream().sorted().collect(Collectors.toList());
         LOGGER.info("The number of known exons in the known exon file is {}", exons.size());
 
         VariantContextWriter writer = VCFWriterFactory.openVCFWriter(outputVcf, uniqueSourcesString(exons));

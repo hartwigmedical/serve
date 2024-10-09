@@ -1,3 +1,0 @@
-gene	geneRole	proteinEffect	associatedWithDrugResistance	chromosome	start	end	applicableMutationType	inputTranscript	inputCodonRank	sources
-NRAS	ONCO	GAIN_OF_FUNCTION	false	1	115251189	115251191	MISSENSE	ENST00000369535	179	VICC_CIVIC
-NRAS	ONCO	GAIN_OF_FUNCTION		1	115256528	115256530	MISSENSE	ENST00000369535	61	VICC_CGI,VICC_CIVIC

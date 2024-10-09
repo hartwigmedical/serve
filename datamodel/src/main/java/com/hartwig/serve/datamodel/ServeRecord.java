@@ -18,6 +18,9 @@ public abstract class ServeRecord {
     public abstract RefGenome refGenomeVersion();
 
     @NotNull
+    public abstract String serveVersion();
+
+    @NotNull
     public abstract KnownEvents knownEvents();
 
     @NotNull

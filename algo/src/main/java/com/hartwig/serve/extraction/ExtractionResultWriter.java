@@ -27,12 +27,15 @@ public class ExtractionResultWriter {
     private final RefGenome refGenome;
     @NotNull
     private final IndexedFastaSequenceFile refSequence;
+    @NotNull
+    private final String serveVersion;
 
     public ExtractionResultWriter(@NotNull final String outputDir, @NotNull final RefGenome refGenome,
-            @NotNull final IndexedFastaSequenceFile refSequence) {
+            @NotNull final IndexedFastaSequenceFile refSequence, @NotNull String serveVersion) {
         this.outputDir = outputDir;
         this.refGenome = refGenome;
         this.refSequence = refSequence;
+        this.serveVersion = serveVersion;
     }
 
     public void write(@NotNull ExtractionResult result) throws IOException {
@@ -54,9 +57,10 @@ public class ExtractionResultWriter {
     }
 
     @NotNull
-    private static ServeRecord toServeRecord(@NotNull ExtractionResult result) {
+    private ServeRecord toServeRecord(@NotNull ExtractionResult result) {
         return ImmutableServeRecord.builder()
                 .refGenomeVersion(result.refGenomeVersion())
+                .serveVersion(serveVersion)
                 .knownEvents(ImmutableKnownEvents.builder()
                         .hotspots(result.knownHotspots())
                         .codons(result.knownCodons())

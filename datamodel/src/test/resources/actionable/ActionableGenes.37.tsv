@@ -1,8 +1,0 @@
-gene	event	source	entryDate	sourceEvent	sourceUrls	nctId	title	acronym	genderCriterium	countriesAndCities	hospitalsPerCity	treatment	treatmentApproachesDrugClass	treatmentApproachesTherapy	applicableCancerType	applicableDoid	blacklistCancerTypes	efficacyDescription	evidenceYear	evidenceLevel	evidenceLevelDetails	direction	evidenceUrls
-ALK	FUSION	CKB_EVIDENCE	2021-02-03	fusion	http							Crizotinib			Lung Adenocarcinoma	X		efficacy evidence A	2024	A	GUIDELINE	RESPONSIVE	https
-BRCA1	INACTIVATION	CKB_EVIDENCE	2021-02-04	inact	http							DRUP			Solid Tumors	X	Hematologic cancer;2531	efficacy evidence B	2024	B	GUIDELINE	RESPONSIVE	http
-ERBB2	AMPLIFICATION	CKB_EVIDENCE	2021-02-05	amp	http							Trastuzumab			Breast Cancer	X		efficacy evidence C	2024	A	GUIDELINE	RESPONSIVE	http
-ERBB2	AMPLIFICATION	CKB_EVIDENCE	2021-02-06	amp	http							Panitumumab			Colorectal Cancer	X		efficacy evidence D	2024	B	GUIDELINE	RESISTANT	http
-FGFR2	FUSION	CKB_EVIDENCE	2021-02-07	fusion	http							Erdafitinib			Bladder Cancer	X		efficacy evidence E	2024	B	GUIDELINE	RESPONSIVE
-MET	AMPLIFICATION	CKB_EVIDENCE	2021-02-08	amp	http							DRUP			Advanced Solid Tumor	X	Hematologic cancer;2531	efficacy evidence F	2024	B	GUIDELINE	RESPONSIVE
-NRAS	ACTIVATION	CKB_TRIAL	1970-01-01	act	http	NCT1	study1	study1	male	Belgium(Antwerpen)	Antwerpen(ZAS Vincentius)	Cetuximab			Colorectal Cancer	X			2024	A	GUIDELINE	RESISTANT	http

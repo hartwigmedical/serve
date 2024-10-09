@@ -18,6 +18,7 @@ public class TestServeRecordFactory {
         Knowledgebase source = Knowledgebase.CKB_EVIDENCE;
         return ImmutableServeRecord.builder()
                 .refGenomeVersion(RefGenome.V37)
+                .serveVersion("unittest")
                 .knownEvents(createKnownEvents(source))
                 .actionableEvents(createActionableEvents(source))
                 .build();

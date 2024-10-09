@@ -1,5 +1,6 @@
 {
   "refGenomeVersion": "V37",
+  "serveVersion": "local-SNAPSHOT",
   "knownEvents": {
     "hotspots": [
       {

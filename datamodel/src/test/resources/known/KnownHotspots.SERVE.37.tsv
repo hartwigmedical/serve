@@ -1,3 +1,0 @@
-gene	geneRole	proteinEffect	associatedWithDrugResistance	chromosome	position	ref	alt	inputTranscript	inputProteinAnnotation	sources
-CREBBP	BOTH	UNKNOWN	false	16	3789692	GA	TG	trans1	F1389S	VICC_CGI
-TP53	TSG	LOSS_OF_FUNCTION_PREDICTED		17	7579315	G	T		C124*	VICC_CGI

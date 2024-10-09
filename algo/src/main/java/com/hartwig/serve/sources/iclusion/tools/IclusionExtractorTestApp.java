@@ -41,6 +41,8 @@ public class IclusionExtractorTestApp {
 
     private static final Logger LOGGER = LogManager.getLogger(IclusionExtractorTestApp.class);
 
+    private static final String VERSION = IclusionExtractorTestApp.class.getPackage().getImplementationVersion();
+
     public static void main(String[] args) throws IOException {
         Configurator.setRootLevel(Level.INFO);
 
@@ -64,7 +66,10 @@ public class IclusionExtractorTestApp {
         String iclusionMutationTsv = config.outputDir() + File.separator + "IclusionEventClassification.tsv";
         IclusionUtil.writeIclusionMutationTypes(iclusionMutationTsv, trials);
 
-        new ExtractionResultWriter(config.outputDir(), Knowledgebase.ICLUSION.refGenomeVersion(), refGenomeResource.refSequence()).write(
+        new ExtractionResultWriter(config.outputDir(),
+                Knowledgebase.ICLUSION.refGenomeVersion(),
+                refGenomeResource.refSequence(),
+                VERSION).write(
                 result);
     }
 

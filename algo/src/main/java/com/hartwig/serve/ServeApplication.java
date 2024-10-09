@@ -49,7 +49,7 @@ public class ServeApplication {
         for (Map.Entry<RefGenome, ExtractionResult> entry : resultMap.entrySet()) {
             RefGenome version = entry.getKey();
             IndexedFastaSequenceFile refSequence = refGenomeManager.refSequenceForRefGenome(version);
-            new ExtractionResultWriter(config.outputDir(), version, refSequence).write(entry.getValue());
+            new ExtractionResultWriter(config.outputDir(), version, refSequence, VERSION).write(entry.getValue());
         }
 
         LOGGER.info("Complete!");

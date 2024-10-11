@@ -45,6 +45,8 @@ public class ViccExtractorTestApp {
 
     private static final Logger LOGGER = LogManager.getLogger(ViccExtractorTestApp.class);
 
+    private static final String VERSION = ViccExtractorTestApp.class.getPackage().getImplementationVersion();
+
     private static final Set<ViccSource> VICC_SOURCES_TO_INCLUDE =
             Sets.newHashSet(ViccSource.CIVIC, ViccSource.CGI, ViccSource.ONCOKB, ViccSource.JAX);
     private static final Integer MAX_VICC_ENTRIES = null;
@@ -70,8 +72,10 @@ public class ViccExtractorTestApp {
         String featureTsv = config.outputDir() + File.separator + "ViccEventClassification.tsv";
         ViccUtil.writeFeaturesToTsv(featureTsv, entries);
 
-        new ExtractionResultWriter(config.outputDir(), Knowledgebase.VICC_CIVIC.refGenomeVersion(), refGenomeResource.refSequence()).write(
-                result);
+        new ExtractionResultWriter(config.outputDir(),
+                Knowledgebase.VICC_CIVIC.refGenomeVersion(),
+                refGenomeResource.refSequence(),
+                VERSION).write(result);
     }
 
     @NotNull

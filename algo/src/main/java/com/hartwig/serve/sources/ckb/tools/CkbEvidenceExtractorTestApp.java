@@ -43,6 +43,8 @@ public class CkbEvidenceExtractorTestApp {
 
     private static final Logger LOGGER = LogManager.getLogger(CkbEvidenceExtractorTestApp.class);
 
+    private static final String VERSION = CkbEvidenceExtractorTestApp.class.getPackage().getImplementationVersion();
+
     public static void main(String[] args) throws IOException {
         Configurator.setRootLevel(Level.DEBUG);
 
@@ -76,7 +78,8 @@ public class CkbEvidenceExtractorTestApp {
 
         new ExtractionResultWriter(config.outputDir(),
                 Knowledgebase.CKB_EVIDENCE.refGenomeVersion(),
-                refGenomeResource.refSequence()).write(result);
+                refGenomeResource.refSequence(),
+                VERSION).write(result);
     }
 
     @NotNull

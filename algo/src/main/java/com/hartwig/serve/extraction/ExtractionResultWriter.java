@@ -30,8 +30,12 @@ public class ExtractionResultWriter {
     @NotNull
     private final String serveVersion;
 
-    public ExtractionResultWriter(@NotNull final String outputDir, @NotNull final RefGenome refGenome,
-            @NotNull final IndexedFastaSequenceFile refSequence, @NotNull String serveVersion) {
+    public ExtractionResultWriter(
+            @NotNull final String outputDir,
+            @NotNull final RefGenome refGenome,
+            @NotNull final IndexedFastaSequenceFile refSequence,
+            @NotNull String serveVersion
+    ) {
         this.outputDir = outputDir;
         this.refGenome = refGenome;
         this.refSequence = refSequence;

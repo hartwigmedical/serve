@@ -31,10 +31,10 @@ public class ServeJsonTest {
     @Test
     public void canReadRealServeJson() throws IOException {
         ServeRecord record = ServeJson.read(TEST_SERVE_JSON);
-        
+
         assertEquals(RefGenome.V37, record.refGenomeVersion());
         assertEquals("local-SNAPSHOT", record.serveVersion());
-        assertEquals(2, record.actionableEvents().hotspots().size());
         assertEquals(2, record.knownEvents().hotspots().size());
+        assertEquals(2, record.actionableEvents().hotspots().size());
     }
 }

@@ -1,6 +1,6 @@
 package com.hartwig.serve.datamodel;
 
-import java.util.Set;
+import java.util.Map;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -12,16 +12,13 @@ import org.jetbrains.annotations.Nullable;
 @Value.Immutable
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class },
              jdkOnly = true)
-@JsonSerialize(as = ImmutableTreatment.class)
-@JsonDeserialize(as = ImmutableTreatment.class)
-public abstract class Treatment {
+@JsonSerialize(as = ImmutableServeDatabase.class)
+@JsonDeserialize(as = ImmutableServeDatabase.class)
+public abstract class ServeDatabase {
 
     @NotNull
-    public abstract String name();
+    public abstract String serveVersion();
 
     @NotNull
-    public abstract Set<String> treatmentApproachesDrugClass();
-
-    @NotNull
-    public abstract Set<String> treatmentApproachesTherapy();
+    public abstract Map<RefGenome, ServeData> serveDataPerRefGenome();
 }

@@ -1,6 +1,6 @@
 package com.hartwig.serve.datamodel;
 
-import java.util.Set;
+import java.util.List;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -12,16 +12,16 @@ import org.jetbrains.annotations.Nullable;
 @Value.Immutable
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class },
              jdkOnly = true)
-@JsonSerialize(as = ImmutableTreatment.class)
-@JsonDeserialize(as = ImmutableTreatment.class)
-public abstract class Treatment {
+@JsonSerialize(as = ImmutableServeDatabase.class)
+@JsonDeserialize(as = ImmutableServeDatabase.class)
+public abstract class ServeData {
 
     @NotNull
-    public abstract String name();
+    abstract KnownEvents knownEvents();
 
     @NotNull
-    public abstract Set<String> treatmentApproachesDrugClass();
+    abstract List<ActionableTreatment> actionableTreatments(); // I'm doubting this is correct
 
     @NotNull
-    public abstract Set<String> treatmentApproachesTherapy();
+    abstract List<ClinicalTrial> clinicalTrials();
 }

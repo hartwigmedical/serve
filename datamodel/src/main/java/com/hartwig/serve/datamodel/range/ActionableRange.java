@@ -4,7 +4,7 @@ import java.util.Comparator;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.hartwig.serve.datamodel.ActionableEvent;
+import com.hartwig.serve.datamodel.MolecularEvent;
 
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;
@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
              jdkOnly = true)
 @JsonSerialize(as = ImmutableActionableRange.class)
 @JsonDeserialize(as = ImmutableActionableRange.class)
-public abstract class ActionableRange implements RangeAnnotation, ActionableEvent, Comparable<ActionableRange> {
+public abstract class ActionableRange implements RangeAnnotation, MolecularEvent, Comparable<ActionableRange> {
 
     private static final Comparator<ActionableRange> COMPARATOR = new ActionableRangeComparator();
 

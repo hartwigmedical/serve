@@ -21,5 +21,5 @@ public abstract class Country {
     public abstract String countryName();
 
     @NotNull
-    public abstract Map<String, Set<String>> hospitalsPerCity();
+    public abstract Map<String, Set<Hospital>> hospitalsPerCity();
 }

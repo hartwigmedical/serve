@@ -1,7 +1,5 @@
 package com.hartwig.serve.datamodel;
 
-import java.util.Set;
-
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -12,16 +10,12 @@ import org.jetbrains.annotations.Nullable;
 @Value.Immutable
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class },
              jdkOnly = true)
-@JsonSerialize(as = ImmutableTreatment.class)
-@JsonDeserialize(as = ImmutableTreatment.class)
-public abstract class Treatment {
+@JsonSerialize(as = ImmutableCountry.class)
+@JsonDeserialize(as = ImmutableCountry.class)
+public abstract class Hospital {
 
     @NotNull
     public abstract String name();
 
-    @NotNull
-    public abstract Set<String> treatmentApproachesDrugClass();
-
-    @NotNull
-    public abstract Set<String> treatmentApproachesTherapy();
+    public abstract boolean isChildrensHospital();
 }

@@ -1,5 +1,7 @@
 package com.hartwig.serve.datamodel;
 
+import java.util.Set;
+
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -10,19 +12,13 @@ import org.jetbrains.annotations.Nullable;
 @Value.Immutable
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class },
              jdkOnly = true)
-@JsonSerialize(as = ImmutableServeRecord.class)
-@JsonDeserialize(as = ImmutableServeRecord.class)
-public abstract class ServeRecord {
+@JsonSerialize(as = ImmutableTreatment.class)
+@JsonDeserialize(as = ImmutableTreatment.class)
+public abstract class Indication {
 
     @NotNull
-    public abstract RefGenome refGenomeVersion();
+    public abstract CancerType applicableCancerType();
 
     @NotNull
-    public abstract String serveVersion();
-
-    @NotNull
-    public abstract KnownEvents knownEvents();
-
-    @NotNull
-    public abstract ActionableEvents actionableEvents();
+    public abstract Set<CancerType> blacklistCancerTypes();
 }

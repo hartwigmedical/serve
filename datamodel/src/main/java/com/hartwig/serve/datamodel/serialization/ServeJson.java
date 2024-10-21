@@ -28,7 +28,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.hartwig.serve.datamodel.RefGenome;
-import com.hartwig.serve.datamodel.ServeRecord;
+import com.hartwig.serve.datamodel.ServeDatabase;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -46,22 +46,22 @@ public final class ServeJson {
             .serializationInclusion(JsonInclude.Include.NON_NULL)
             .build();
 
-    public static void write(@NotNull ServeRecord record, @NotNull String filePath) throws IOException {
-        MAPPER.writeValue(new File(filePath), record);
+    public static void write(@NotNull ServeDatabase database, @NotNull String filePath) throws IOException {
+        MAPPER.writeValue(new File(filePath), database);
     }
 
     @NotNull
-    public static ServeRecord read(@NotNull String filePath) throws IOException {
-        return MAPPER.readValue(new File(filePath), ServeRecord.class);
+    public static ServeDatabase read(@NotNull String filePath) throws IOException {
+        return MAPPER.readValue(new File(filePath), ServeDatabase.class);
     }
 
-    public static void writeToStream(@NotNull ServeRecord record, @NotNull OutputStream outputStream) throws IOException {
+    public static void writeToStream(@NotNull ServeDatabase record, @NotNull OutputStream outputStream) throws IOException {
         MAPPER.writeValue(outputStream, record);
     }
 
     @NotNull
-    public static ServeRecord readFromStream(@NotNull InputStream inputStream) throws IOException {
-        return MAPPER.readValue(inputStream, ServeRecord.class);
+    public static ServeDatabase readFromStream(@NotNull InputStream inputStream) throws IOException {
+        return MAPPER.readValue(inputStream, ServeDatabase.class);
     }
 
     @NotNull

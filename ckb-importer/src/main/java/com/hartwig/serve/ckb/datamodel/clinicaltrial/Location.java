@@ -22,7 +22,7 @@ public abstract class Location {
     @NotNull
     public abstract List<Contact> contacts();
 
-    @NotNull
+    @Nullable
     public abstract String city();
 
     @Nullable
@@ -31,6 +31,6 @@ public abstract class Location {
     @Nullable
     public abstract String zip();
 
-    @NotNull
+    @Nullable
     public abstract String country();
 }

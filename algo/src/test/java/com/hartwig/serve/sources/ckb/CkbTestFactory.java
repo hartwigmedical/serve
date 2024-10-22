@@ -195,7 +195,7 @@ public final class CkbTestFactory {
     }
 
     @NotNull
-    public static Location createLocation(@NotNull String country, @Nullable String status) {
+    public static Location createLocation(@Nullable String country, @Nullable String status) {
         return ImmutableLocation.builder().nctId("").city("").country(country).status(status).build();
     }
 

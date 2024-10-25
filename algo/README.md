@@ -440,7 +440,9 @@ The big files are the hg19 and hg37 reference genomes. They are too big to store
 elsewhere.
   
 ## Version History and Download Links
--[Upcoming]
+-Upcoming
+    - Support for `null` cities or countries in clinical trial locations ingested from CKB
+-[4.0.1](https://github.com/hartwigmedical/serve/releases/tag/serve-v4.0.1)
     - Optional for blacklisting clinical studies and evidence
     - Put clinical trial information into own model instead of using treatment model
     - Support for usage the drug class data of treatment approach model 

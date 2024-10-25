@@ -21,7 +21,9 @@
 | db_pass  | Required: The password needed for the DB user to authenticate on the URL. |
 
 ## Version History and Download Links
-- [Upcoming]
+-Upcoming
+  - Support for `null` cities or countries in clinical trial locations ingested from CKB
+- [4.0.1](https://github.com/hartwigmedical/serve/releases/tag/ckb-importer-v4.0.1)
   - Support ingestion of drug class treatment approach
 - [3.4.0](https://github.com/hartwigmedical/serve/releases/tag/ckb-importer-v3.4.0)
   - Support ingestion of new acronym field for clinical trials

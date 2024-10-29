@@ -45,8 +45,8 @@ public final class HotspotTestFactory {
     }
 
     @NotNull
-    public static ActionableHotspot createTestActionableHotspotForSource(@NotNull Knowledgebase source) {
-        return actionableHotspotBuilder().source(source).build();
+    public static ActionableHotspot createTestActionableHotspotForSource() {
+        return actionableHotspotBuilder().build();
     }
 
     private static class VariantHotspotImpl implements VariantHotspot {

@@ -1,6 +1,7 @@
 package com.hartwig.serve.datamodel.serialization;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -8,33 +9,34 @@ import java.io.IOException;
 
 import com.google.common.io.Resources;
 import com.hartwig.serve.datamodel.RefGenome;
-import com.hartwig.serve.datamodel.ServeRecord;
-import com.hartwig.serve.datamodel.TestServeRecordFactory;
+import com.hartwig.serve.datamodel.ServeDatabase;
+import com.hartwig.serve.datamodel.TestServeDatabaseFactory;
 
 import org.junit.Test;
 
 public class ServeJsonTest {
 
-    public static final String TEST_SERVE_JSON = Resources.getResource("serve.37.json").getPath();
+    public static final String TEST_SERVE_JSON = Resources.getResource("serve.json").getPath();
 
     @Test
     public void canRoundTripServeJson() throws IOException {
-        ServeRecord record = TestServeRecordFactory.create();
+        ServeDatabase database = TestServeDatabaseFactory.create();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
-        ServeJson.writeToStream(record, outputStream);
-        ServeRecord deserializedRecord = ServeJson.readFromStream(new ByteArrayInputStream(outputStream.toByteArray()));
+        ServeJson.writeToStream(database, outputStream);
+        ServeDatabase deserializedRecord = ServeJson.readFromStream(new ByteArrayInputStream(outputStream.toByteArray()));
 
-        assertEquals(record, deserializedRecord);
+        assertEquals(database, deserializedRecord);
     }
 
     @Test
     public void canReadRealServeJson() throws IOException {
-        ServeRecord record = ServeJson.read(TEST_SERVE_JSON);
+        ServeDatabase record = ServeJson.read(TEST_SERVE_JSON);
 
-        assertEquals(RefGenome.V37, record.refGenomeVersion());
         assertEquals("local-SNAPSHOT", record.serveVersion());
-        assertEquals(2, record.knownEvents().hotspots().size());
-        assertEquals(2, record.actionableEvents().hotspots().size());
+        assertTrue(record.serveDataPerRefGenome().containsKey(RefGenome.V37));
+        assertEquals(2, record.serveDataPerRefGenome().get(RefGenome.V37).knownEvents().hotspots().size());
+        assertEquals(13, record.serveDataPerRefGenome().get(RefGenome.V37).efficacyEvidences().size());
+        assertEquals(7, record.serveDataPerRefGenome().get(RefGenome.V37).clinicalTrials().size());
     }
 }

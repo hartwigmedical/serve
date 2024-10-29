@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import java.util.List;
 
 import com.google.common.collect.Lists;
-import com.hartwig.serve.datamodel.EvidenceLevel;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
@@ -14,10 +13,10 @@ public class ActionableGeneComparatorTest {
 
     @Test
     public void canSortActionableGenes() {
-        ActionableGene gene1 = create("gene 1", GeneEvent.ANY_MUTATION, EvidenceLevel.A);
-        ActionableGene gene2 = create("gene 1", GeneEvent.ANY_MUTATION, EvidenceLevel.B);
-        ActionableGene gene3 = create("gene 1", GeneEvent.DELETION, EvidenceLevel.A);
-        ActionableGene gene4 = create("gene 2", GeneEvent.ANY_MUTATION, EvidenceLevel.A);
+        ActionableGene gene1 = create("gene 1", GeneEvent.ANY_MUTATION, "event1");
+        ActionableGene gene2 = create("gene 1", GeneEvent.ANY_MUTATION, "event2");
+        ActionableGene gene3 = create("gene 1", GeneEvent.DELETION, "event3");
+        ActionableGene gene4 = create("gene 2", GeneEvent.ANY_MUTATION, "event4");
 
         List<ActionableGene> genes = Lists.newArrayList(gene1, gene4, gene3, gene2);
         genes.sort(new ActionableGeneComparator());
@@ -29,7 +28,7 @@ public class ActionableGeneComparatorTest {
     }
 
     @NotNull
-    private static ActionableGene create(@NotNull String gene, @NotNull GeneEvent event, @NotNull EvidenceLevel level) {
-        return GeneTestFactory.actionableGeneBuilder().gene(gene).event(event).evidenceLevel(level).build();
+    private static ActionableGene create(@NotNull String gene, @NotNull GeneEvent event, @NotNull String sourceEvent) {
+        return GeneTestFactory.actionableGeneBuilder().gene(gene).event(event).sourceEvent(sourceEvent).build();
     }
 }

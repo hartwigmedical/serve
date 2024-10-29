@@ -10,8 +10,8 @@ import org.jetbrains.annotations.Nullable;
 @Value.Immutable
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class },
              jdkOnly = true)
-@JsonSerialize(as = ImmutableCountry.class)
-@JsonDeserialize(as = ImmutableCountry.class)
+@JsonSerialize(as = ImmutableHospital.class)
+@JsonDeserialize(as = ImmutableHospital.class)
 public abstract class Hospital {
 
     @NotNull

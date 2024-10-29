@@ -1,9 +1,19 @@
 package com.hartwig.serve.datamodel;
 
 import java.util.Set;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+@Value.Immutable
+@Value.Style(passAnnotations = { NotNull.class, Nullable.class },
+             jdkOnly = true)
+@JsonSerialize(as = ImmutableClinicalTrial.class)
+@JsonDeserialize(as = ImmutableClinicalTrial.class)
 public abstract class ClinicalTrial {
 
     @NotNull
@@ -22,14 +32,14 @@ public abstract class ClinicalTrial {
     public abstract Set<String> therapyNames();
 
     @Nullable
-    public abstract String genderCriterium();
+    public abstract GenderCriterium genderCriterium();
 
     @NotNull
     public abstract Set<String> urls();
 
     @NotNull
-    public abstract Set<Indication> indication();
+    public abstract Set<Indication> indications();
 
     @NotNull
-    public abstract Set<MolecularEvent> inclusionEvents();
+    public abstract Set<MolecularProfile> molecularProfiles();
 }

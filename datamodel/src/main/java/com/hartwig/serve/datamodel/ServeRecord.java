@@ -12,16 +12,16 @@ import org.jetbrains.annotations.Nullable;
 @Value.Immutable
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class },
              jdkOnly = true)
-@JsonSerialize(as = ImmutableServeDatabase.class)
-@JsonDeserialize(as = ImmutableServeDatabase.class)
-public abstract class ServeData {
+@JsonSerialize(as = ImmutableServeRecord.class)
+@JsonDeserialize(as = ImmutableServeRecord.class)
+public abstract class ServeRecord {
 
     @NotNull
-    abstract KnownEvents knownEvents();
+    public abstract KnownEvents knownEvents();
 
     @NotNull
-    abstract List<ActionableTreatment> actionableTreatments(); // I'm doubting this is correct
+    public abstract List<EfficacyEvidence> efficacyEvidences();
 
     @NotNull
-    abstract List<ClinicalTrial> clinicalTrials();
+    public abstract List<ClinicalTrial> clinicalTrials();
 }

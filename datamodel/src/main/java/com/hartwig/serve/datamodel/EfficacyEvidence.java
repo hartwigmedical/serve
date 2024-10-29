@@ -2,13 +2,22 @@ package com.hartwig.serve.datamodel;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @Value.Immutable
-@Value.Style(passAnnotations = { NotNull.class, Nullable.class })
-public abstract class ActionableTreatment {
+@JsonSerialize(as = ImmutableEfficacyEvidence.class)
+@JsonDeserialize(as = ImmutableEfficacyEvidence.class)
+@Value.Style(passAnnotations = { NotNull.class, Nullable.class },
+             jdkOnly = true)
+public abstract class EfficacyEvidence {
+
+    @NotNull
+    public abstract Knowledgebase source();
 
     @NotNull
     public abstract Treatment treatment();
@@ -34,5 +43,5 @@ public abstract class ActionableTreatment {
     public abstract Indication indication();
 
     @NotNull
-    public abstract Set<MolecularEvent> inclusionEvents();
+    public abstract MolecularProfile molecularProfile();
 }

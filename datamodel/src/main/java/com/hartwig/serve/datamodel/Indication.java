@@ -12,13 +12,13 @@ import org.jetbrains.annotations.Nullable;
 @Value.Immutable
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class },
              jdkOnly = true)
-@JsonSerialize(as = ImmutableTreatment.class)
-@JsonDeserialize(as = ImmutableTreatment.class)
+@JsonSerialize(as = ImmutableIndication.class)
+@JsonDeserialize(as = ImmutableIndication.class)
 public abstract class Indication {
 
     @NotNull
     public abstract CancerType applicableCancerType();
 
     @NotNull
-    public abstract Set<CancerType> blacklistCancerTypes();
+    public abstract Set<CancerType> ignoredCancerTypes();
 }

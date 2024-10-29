@@ -20,5 +20,5 @@ public abstract class ServeDatabase {
     public abstract String serveVersion();
 
     @NotNull
-    public abstract Map<RefGenome, ServeData> serveDataPerRefGenome();
+    public abstract Map<RefGenome, ServeRecord> serveDataPerRefGenome();
 }

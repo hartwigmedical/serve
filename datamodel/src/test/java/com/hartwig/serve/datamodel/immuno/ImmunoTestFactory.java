@@ -1,7 +1,6 @@
 package com.hartwig.serve.datamodel.immuno;
 
 import com.hartwig.serve.datamodel.DatamodelTestFactory;
-import com.hartwig.serve.datamodel.Knowledgebase;
 
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +16,7 @@ public final class ImmunoTestFactory {
     }
 
     @NotNull
-    public static ActionableHLA createTestActionableHLAForSource(@NotNull Knowledgebase source) {
-        return actionableHLABuilder().source(source).build();
+    public static ActionableHLA createTestActionableHLAForSource() {
+        return actionableHLABuilder().build();
     }
 }

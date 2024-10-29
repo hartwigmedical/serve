@@ -51,8 +51,8 @@ public final class GeneTestFactory {
     }
 
     @NotNull
-    public static ActionableGene createTestActionableGeneForSource(@NotNull Knowledgebase source) {
-        return actionableGeneBuilder().source(source).build();
+    public static ActionableGene createTestActionableGeneForSource() {
+        return actionableGeneBuilder().build();
     }
 
     private static class GeneAnnotationImpl implements GeneAnnotation {

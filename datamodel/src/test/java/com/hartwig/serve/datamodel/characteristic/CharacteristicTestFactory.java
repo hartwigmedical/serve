@@ -3,7 +3,6 @@ package com.hartwig.serve.datamodel.characteristic;
 import java.util.Objects;
 
 import com.hartwig.serve.datamodel.DatamodelTestFactory;
-import com.hartwig.serve.datamodel.Knowledgebase;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -27,8 +26,8 @@ public final class CharacteristicTestFactory {
     }
 
     @NotNull
-    public static ActionableCharacteristic createTestActionableCharacteristicForSource(@NotNull Knowledgebase source) {
-        return actionableCharacteristicBuilder().source(source).build();
+    public static ActionableCharacteristic createTestActionableCharacteristicForSource() {
+        return actionableCharacteristicBuilder().build();
     }
 
     private static class TumorCharacteristicImpl implements TumorCharacteristic {

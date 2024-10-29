@@ -66,7 +66,7 @@ public final class ServeJson {
 
     @NotNull
     public static String jsonFilePath(@NotNull String outputDir, @NotNull RefGenome refGenome) {
-        return refGenome.addVersionToFilePath(outputDir + "/serve.json");
+        return outputDir + "/serve.json";
     }
 
     static class LocalDateSerializer extends StdSerializer<LocalDate> {

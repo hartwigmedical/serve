@@ -5,7 +5,7 @@ import java.util.Set;
 
 import org.jetbrains.annotations.NotNull;
 
-public interface MolecularEvent {
+public interface ActionableEvent {
 
     @NotNull
     LocalDate sourceDate();

@@ -40,8 +40,8 @@ public final class FusionTestFactory {
     }
 
     @NotNull
-    public static ActionableFusion createTestActionableFusionForSource(@NotNull Knowledgebase source) {
-        return actionableFusionBuilder().source(source).build();
+    public static ActionableFusion createTestActionableFusionForSource() {
+        return actionableFusionBuilder().build();
     }
 
     private static class FusionPairImpl implements FusionPair {

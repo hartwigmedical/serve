@@ -1,39 +1,24 @@
 package com.hartwig.serve.datamodel;
 
 import java.time.LocalDate;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.StringJoiner;
 
 import com.google.common.collect.Sets;
+import com.hartwig.serve.datamodel.range.RangeTestFactory;
+import com.hartwig.serve.datamodel.hotspot.HotspotTestFactory;
+import com.hartwig.serve.datamodel.fusion.FusionTestFactory;
+import com.hartwig.serve.datamodel.characteristic.CharacteristicTestFactory;
+import com.hartwig.serve.datamodel.gene.GeneTestFactory;
+import com.hartwig.serve.datamodel.immuno.ImmunoTestFactory;
 
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public final class DatamodelTestFactory {
 
     private DatamodelTestFactory() {
-    }
-
-    @NotNull
-    public static String setToField(@NotNull Set<String> strings) {
-        StringJoiner joiner = new StringJoiner(",");
-        for (String string : strings) {
-            joiner.add(string);
-        }
-        return joiner.toString();
-    }
-
-    @NotNull
-    public static ImmutableClinicalTrial.Builder clinicalTrialBuilderBuilder() {
-        return ImmutableClinicalTrial.builder()
-                .nctId("nctid")
-                .title(Strings.EMPTY)
-                .acronym(null)
-                .genderCriterium(null)
-                .countries(Sets.newHashSet())
-                .therapyNames(Sets.newHashSet());
     }
 
     @NotNull
@@ -47,139 +32,109 @@ public final class DatamodelTestFactory {
     }
 
     @NotNull
-    public static Treatment extractTreatment(@NotNull ActionableEvent event) {
-        Treatment treatment = null;
-        if (event.intervention() instanceof Treatment) {
-            treatment = (Treatment) event.intervention();
-        }
-
-        if (treatment == null) {
-            throw new IllegalStateException("This actionable event has to contain treatment: " + event);
-        }
-
-        return treatment;
+    public static ImmutableIndication.Builder indicationBuilder(@NotNull String applicableCancerType, @NotNull String ignoredCancerType) {
+        return ImmutableIndication.builder()
+                .applicableCancerType(cancerTypeBuilder().name(applicableCancerType).build())
+                .ignoredCancerTypes(Set.of(cancerTypeBuilder().name(ignoredCancerType).build()));
     }
 
     @NotNull
-    public static ClinicalTrial extractClinicalTrial(@NotNull ActionableEvent event) {
-        ClinicalTrial clinicalTrial = null;
-        if (event.intervention() instanceof ClinicalTrial) {
-            clinicalTrial = (ClinicalTrial) event.intervention();
-        }
-
-        if (clinicalTrial == null) {
-            throw new IllegalStateException("This actionable event has to contain clinical trial: " + event);
-        }
-
-        return clinicalTrial;
+    public static ImmutableCountry.Builder countryBuilder(@NotNull String country) {
+        return ImmutableCountry.builder()
+                .countryName(country)
+                .hospitalsPerCity(Map.of("city",
+                        Set.of(ImmutableHospital.builder().isChildrensHospital(false).name("hospital name").build())));
     }
 
     @NotNull
-    public static Intervention interventionBuilder(boolean isTrial, boolean isTreatment, @NotNull String treatmentName,
-            @Nullable Country country) {
-        ClinicalTrial clinicalTrial = isTrial
-                ? clinicalTrialBuilderBuilder().countries(Set.of(country)).therapyNames(Sets.newHashSet(treatmentName)).build()
-                : null;
-        Treatment treatment = isTreatment ? extractTreatment().name(treatmentName).build() : null;
-
-        if ((clinicalTrial == null && treatment == null) || (clinicalTrial != null && treatment != null)) {
-            throw new IllegalStateException("An actionable event has to contain either treatment or clinical trial");
-        }
-        return isTrial ? clinicalTrial : treatment;
+    public static ImmutableMolecularProfile.Builder molecularProfileBuilder() {
+        return ImmutableMolecularProfile.builder()
+                .addHotspots(HotspotTestFactory.createTestActionableHotspotForSource())
+                .addCodons(RangeTestFactory.createTestActionableRangeForSource())
+                .addExons(RangeTestFactory.createTestActionableRangeForSource())
+                .addGenes(GeneTestFactory.createTestActionableGeneForSource())
+                .addFusions(FusionTestFactory.createTestActionableFusionForSource())
+                .addCharacteristics(CharacteristicTestFactory.createTestActionableCharacteristicForSource())
+                .addHla(ImmunoTestFactory.createTestActionableHLAForSource());
     }
 
     @NotNull
-    public static ActionableEvent createTestActionableEvent() {
-
-        return createActionableEvent(Knowledgebase.UNKNOWN,
-                LocalDate.EPOCH,
-                Strings.EMPTY,
-                Sets.newHashSet(),
-                interventionBuilder(false, true, "treatment1", null),
-                DatamodelTestFactory.cancerTypeBuilder().build(),
-                Sets.newHashSet(),
+    public static EfficacyEvidence createTestEfficacyEvidence() {
+        return createEfficacyEvidence(Knowledgebase.CKB_EVIDENCE,
                 Strings.EMPTY,
                 2024,
                 EvidenceLevel.A,
                 EvidenceLevelDetails.FDA_APPROVED,
                 EvidenceDirection.NO_BENEFIT,
-                Sets.newHashSet());
+                Sets.newHashSet(),
+                Strings.EMPTY);
     }
 
     @NotNull
-    public static ActionableEvent createActionableEvent(@NotNull Knowledgebase source, @NotNull LocalDate entryDate, @NotNull String sourceEvent,
-            @NotNull Set<String> sourceUrls, @NotNull Intervention intervention, @NotNull CancerType applicableCancerType,
-            @NotNull Set<CancerType> blacklistCancerTypes, @NotNull String efficacyDescription, @NotNull Integer efficacyDescriptionYear,
-            @NotNull EvidenceLevel level, @NotNull EvidenceLevelDetails evidenceLevelDetails, @NotNull EvidenceDirection direction,
-            @NotNull Set<String> evidenceUrls) {
-        return new ActionableEventImpl(source,
-                entryDate,
-                sourceEvent,
-                sourceUrls,
-                intervention,
-                applicableCancerType,
-                blacklistCancerTypes,
-                efficacyDescription,
-                efficacyDescriptionYear,
-                level,
-                evidenceLevelDetails,
-                direction,
-                evidenceUrls);
+    public static ClinicalTrial createTestClinicalTrial() {
+        return ImmutableClinicalTrial.builder()
+                .nctId(Strings.EMPTY)
+                .acronym(Strings.EMPTY)
+                .title(Strings.EMPTY)
+                .countries(Sets.newHashSet())
+                .genderCriterium(GenderCriterium.BOTH)
+                .therapyNames(Sets.newHashSet())
+                .urls(Sets.newHashSet())
+                .indications(Sets.newHashSet())
+                .molecularProfiles(Set.of(molecularProfileBuilder().build()))
+                .build();
+    }
+
+    @NotNull
+    public static EfficacyEvidence createEfficacyEvidence(@NotNull Knowledgebase source, @NotNull String efficacyDescription,
+            @NotNull Integer efficacyDescriptionYear, @NotNull EvidenceLevel level, @NotNull EvidenceLevelDetails evidenceLevelDetails,
+            @NotNull EvidenceDirection direction, @NotNull Set<String> evidenceUrls, @NotNull String applicableCancerType) {
+        return ImmutableEfficacyEvidence.builder()
+                .treatment(extractTreatment().build())
+                .indication(indicationBuilder(applicableCancerType, Strings.EMPTY).build())
+                .source(source)
+                .evidenceDirection(direction)
+                .evidenceLevel(level)
+                .evidenceLevelDetails(evidenceLevelDetails)
+                .evidenceYear(efficacyDescriptionYear)
+                .efficacyDescription(efficacyDescription)
+                .evidenceUrls(evidenceUrls)
+                .molecularProfile(molecularProfileBuilder().build())
+                .build();
+    }
+
+    @NotNull
+    public static ClinicalTrial createClinicalTrial(@NotNull String nctId, @NotNull String title, @NotNull String countryName,
+            @NotNull Set<String> therapyNames, @NotNull GenderCriterium genderCriterium, @NotNull String applicableCancerType,
+            @NotNull String ignoredCancerType) {
+        return ImmutableClinicalTrial.builder()
+                .nctId(nctId)
+                .title(title)
+                .countries(Set.of(countryBuilder(countryName).build()))
+                .therapyNames(therapyNames)
+                .genderCriterium(genderCriterium)
+                .indications(Set.of(indicationBuilder(applicableCancerType, Strings.EMPTY).build()))
+                .build();
+    }
+
+    @NotNull
+    public static ActionableEvent createTestActionableEvent() {
+        return new ActionableEventImpl(LocalDate.EPOCH, Strings.EMPTY, Sets.newHashSet());
     }
 
     private static class ActionableEventImpl implements ActionableEvent {
 
         @NotNull
-        private final Knowledgebase source;
+        private final LocalDate sourceDate;
         @NotNull
         private final String sourceEvent;
         @NotNull
         private final Set<String> sourceUrls;
-        @NotNull
-        private final Intervention intervention;
-        @NotNull
-        private final CancerType applicableCancerType;
-        @NotNull
-        private final Set<CancerType> blacklistCancerTypes;
-        @NotNull
-        private final EvidenceLevel level;
-        @NotNull
-        private final EvidenceLevelDetails evidenceLevelDetails;
-        @NotNull
-        private final EvidenceDirection direction;
-        @NotNull
-        private final Set<String> evidenceUrls;
-        @NotNull
-        private final LocalDate entryDate;
-        @NotNull
-        private final String efficacyDescription;
-        @NotNull
-        private final Integer evidenceYear;
 
-        public ActionableEventImpl(@NotNull Knowledgebase source, @NotNull LocalDate entryDate, @NotNull String sourceEvent,
-                @NotNull Set<String> sourceUrls, @NotNull Intervention intervention, @NotNull CancerType applicableCancerType,
-                @NotNull Set<CancerType> blacklistCancerTypes, @NotNull String efficacyDescription,
-                @NotNull Integer evidenceYear, @NotNull EvidenceLevel level, @NotNull EvidenceLevelDetails evidenceLevelDetails,
-                @NotNull EvidenceDirection direction, @NotNull Set<String> evidenceUrls) {
-            this.source = source;
-            this.entryDate = entryDate;
+        public ActionableEventImpl(@NotNull LocalDate entryDate, @NotNull String sourceEvent, @NotNull Set<String> sourceUrls) {
             this.sourceEvent = sourceEvent;
+            this.sourceDate = entryDate;
             this.sourceUrls = sourceUrls;
-            this.intervention = intervention;
-            this.applicableCancerType = applicableCancerType;
-            this.blacklistCancerTypes = blacklistCancerTypes;
-            this.efficacyDescription = efficacyDescription;
-            this.evidenceYear = evidenceYear;
-            this.level = level;
-            this.evidenceLevelDetails = evidenceLevelDetails;
-            this.direction = direction;
-            this.evidenceUrls = evidenceUrls;
-        }
-
-        @NotNull
-        @Override
-        public Knowledgebase source() {
-            return source;
         }
 
         @NotNull
@@ -196,61 +151,8 @@ public final class DatamodelTestFactory {
 
         @NotNull
         @Override
-        public Intervention intervention() {
-            return intervention;
-        }
-
-        @NotNull
-        @Override
-        public CancerType applicableCancerType() {
-            return applicableCancerType;
-        }
-
-        @NotNull
-        @Override
-        public Set<CancerType> blacklistCancerTypes() {
-            return blacklistCancerTypes;
-        }
-
-        @NotNull
-        @Override
-        public EvidenceLevel evidenceLevel() {
-            return level;
-        }
-
-        @NotNull
-        @Override
-        public EvidenceLevelDetails evidenceLevelDetails() {
-            return evidenceLevelDetails;
-        }
-
-        @NotNull
-        @Override
-        public EvidenceDirection direction() {
-            return direction;
-        }
-
-        @NotNull
-        @Override
-        public Set<String> evidenceUrls() {
-            return evidenceUrls;
-        }
-
-        @NotNull
-        @Override
-        public LocalDate entryDate() {
-            return entryDate;
-        }
-
-        @NotNull
-        @Override
-        public String efficacyDescription() {
-            return efficacyDescription;
-        }
-
-        @Override
-        public int evidenceYear() {
-            return evidenceYear;
+        public LocalDate sourceDate() {
+            return sourceDate;
         }
 
         @Override
@@ -262,30 +164,19 @@ public final class DatamodelTestFactory {
                 return false;
             }
             ActionableEventImpl that = (ActionableEventImpl) o;
-            return source == that.source && Objects.equals(sourceEvent, that.sourceEvent) && Objects.equals(sourceUrls, that.sourceUrls)
-                    && Objects.equals(intervention, that.intervention) && Objects.equals(applicableCancerType, that.applicableCancerType)
-                    && Objects.equals(blacklistCancerTypes, that.blacklistCancerTypes) && level == that.level && direction == that.direction
-                    && Objects.equals(evidenceUrls, that.evidenceUrls);
+            return Objects.equals(sourceEvent, that.sourceEvent) && Objects.equals(sourceDate, that.sourceDate)
+                    && Objects.equals(sourceUrls, that.sourceUrls);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(source,
-                    sourceEvent,
-                    sourceUrls,
-                    intervention,
-                    applicableCancerType,
-                    blacklistCancerTypes,
-                    level,
-                    direction,
-                    evidenceUrls);
+            return Objects.hash(sourceEvent, sourceDate, sourceUrls);
         }
 
         @Override
         public String toString() {
-            return "ActionableEventImpl{" + "source=" + source + ", sourceEvent='" + sourceEvent + '\'' + ", sourceUrls=" + sourceUrls
-                    + ", intervention=" + intervention + ", applicableCancerType=" + applicableCancerType + ", blacklistCancerTypes="
-                    + blacklistCancerTypes + ", level=" + level + ", direction=" + direction + ", evidenceUrls=" + evidenceUrls + '}';
+            return "ActionableEventImpl{" + "sourceEvent='" + sourceEvent + '\'' + ", sourceDate" + sourceDate + '\'' + ", sourceUrls="
+                    + sourceUrls + '}';
         }
     }
 }

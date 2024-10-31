@@ -47,8 +47,8 @@ public final class DatamodelTestFactory {
     }
 
     @NotNull
-    public static ImmutableMolecularProfile.Builder molecularProfileBuilder() {
-        return ImmutableMolecularProfile.builder()
+    public static ImmutableMolecularCriterium.Builder molecularCriteriumBuilder() {
+        return ImmutableMolecularCriterium.builder()
                 .addHotspots(HotspotTestFactory.createTestActionableHotspotForSource())
                 .addCodons(RangeTestFactory.createTestActionableRangeForSource())
                 .addExons(RangeTestFactory.createTestActionableRangeForSource())
@@ -81,7 +81,7 @@ public final class DatamodelTestFactory {
                 .therapyNames(Sets.newHashSet())
                 .urls(Sets.newHashSet())
                 .indications(Sets.newHashSet())
-                .molecularProfiles(Set.of(molecularProfileBuilder().build()))
+                .molecularCriteria(Set.of(molecularCriteriumBuilder().build()))
                 .build();
     }
 
@@ -98,8 +98,8 @@ public final class DatamodelTestFactory {
                 .evidenceLevelDetails(evidenceLevelDetails)
                 .evidenceYear(efficacyDescriptionYear)
                 .efficacyDescription(efficacyDescription)
-                .evidenceUrls(evidenceUrls)
-                .molecularProfile(molecularProfileBuilder().build())
+                .urls(evidenceUrls)
+                .molecularCriterium(molecularCriteriumBuilder().build())
                 .build();
     }
 

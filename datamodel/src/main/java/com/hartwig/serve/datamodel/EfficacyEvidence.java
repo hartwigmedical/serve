@@ -23,6 +23,12 @@ public abstract class EfficacyEvidence {
     public abstract Treatment treatment();
 
     @NotNull
+    public abstract Indication indication();
+
+    @NotNull
+    public abstract MolecularCriterium molecularCriterium();
+
+    @NotNull
     public abstract String efficacyDescription();
 
     @NotNull
@@ -37,11 +43,5 @@ public abstract class EfficacyEvidence {
     public abstract int evidenceYear();
 
     @NotNull
-    public abstract Set<String> evidenceUrls();
-
-    @NotNull
-    public abstract Indication indication();
-
-    @NotNull
-    public abstract MolecularProfile molecularProfile();
+    public abstract Set<String> urls();
 }

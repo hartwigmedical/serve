@@ -35,11 +35,11 @@ public abstract class ClinicalTrial {
     public abstract GenderCriterium genderCriterium();
 
     @NotNull
-    public abstract Set<String> urls();
-
-    @NotNull
     public abstract Set<Indication> indications();
 
     @NotNull
-    public abstract Set<MolecularProfile> molecularProfiles();
+    public abstract Set<MolecularCriterium> molecularCriteria();
+
+    @NotNull
+    public abstract Set<String> urls();
 }

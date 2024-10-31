@@ -15,9 +15,7 @@ public class TestServeDatabaseFactory {
     @NotNull
     public static ServeDatabase create() {
         Knowledgebase source = Knowledgebase.CKB_EVIDENCE;
-        return ImmutableServeDatabase.builder()
-                .serveVersion("unittest")
-                .serveDataPerRefGenome(Map.of(RefGenome.V37, createServeRecord(source)))
+        return ImmutableServeDatabase.builder().version("unittest").records(Map.of(RefGenome.V37, createServeRecord(source)))
                 .build();
     }
 

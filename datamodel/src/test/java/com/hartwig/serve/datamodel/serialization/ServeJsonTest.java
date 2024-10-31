@@ -33,10 +33,10 @@ public class ServeJsonTest {
     public void canReadRealServeJson() throws IOException {
         ServeDatabase record = ServeJson.read(TEST_SERVE_JSON);
 
-        assertEquals("local-SNAPSHOT", record.serveVersion());
-        assertTrue(record.serveDataPerRefGenome().containsKey(RefGenome.V37));
-        assertEquals(2, record.serveDataPerRefGenome().get(RefGenome.V37).knownEvents().hotspots().size());
-        assertEquals(13, record.serveDataPerRefGenome().get(RefGenome.V37).efficacyEvidences().size());
-        assertEquals(7, record.serveDataPerRefGenome().get(RefGenome.V37).clinicalTrials().size());
+        assertEquals("local-SNAPSHOT", record.version());
+        assertTrue(record.records().containsKey(RefGenome.V37));
+        assertEquals(2, record.records().get(RefGenome.V37).knownEvents().hotspots().size());
+        assertEquals(13, record.records().get(RefGenome.V37).efficacyEvidences().size());
+        assertEquals(7, record.records().get(RefGenome.V37).clinicalTrials().size());
     }
 }

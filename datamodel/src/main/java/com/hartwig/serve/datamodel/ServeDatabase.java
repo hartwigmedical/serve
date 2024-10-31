@@ -17,8 +17,8 @@ import org.jetbrains.annotations.Nullable;
 public abstract class ServeDatabase {
 
     @NotNull
-    public abstract String serveVersion();
+    public abstract String version();
 
     @NotNull
-    public abstract Map<RefGenome, ServeRecord> serveDataPerRefGenome();
+    public abstract Map<RefGenome, ServeRecord> records();
 }

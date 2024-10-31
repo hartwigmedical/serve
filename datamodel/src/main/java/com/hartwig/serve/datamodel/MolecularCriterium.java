@@ -18,9 +18,9 @@ import org.jetbrains.annotations.Nullable;
 @Value.Immutable
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class },
              jdkOnly = true)
-@JsonSerialize(as = ImmutableMolecularProfile.class)
-@JsonDeserialize(as = ImmutableMolecularProfile.class)
-public abstract class MolecularProfile {
+@JsonSerialize(as = ImmutableMolecularCriterium.class)
+@JsonDeserialize(as = ImmutableMolecularCriterium.class)
+public abstract class MolecularCriterium {
 
     @NotNull
     public abstract List<ActionableHotspot> hotspots();

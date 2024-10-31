@@ -13,11 +13,11 @@ public class ActionableEventComparator implements Comparator<ActionableEvent> {
             return dateCompare;
         }
 
-        int urlsCompare = event1.sourceUrls().toString().compareTo(event2.sourceUrls().toString());
-        if (urlsCompare != 0) {
-            return urlsCompare;
+        int eventCompare = event1.sourceEvent().compareTo(event2.sourceEvent());
+        if (eventCompare != 0) {
+            return eventCompare;
         }
 
-        return event1.sourceEvent().compareTo(event2.sourceEvent());
+        return event1.sourceUrls().toString().compareTo(event2.sourceUrls().toString());
     }
 }

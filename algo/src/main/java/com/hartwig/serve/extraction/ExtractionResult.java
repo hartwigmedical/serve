@@ -1,7 +1,12 @@
 package com.hartwig.serve.extraction;
 
+import java.util.List;
 import java.util.Set;
 
+import com.hartwig.serve.datamodel.ClinicalTrial;
+import com.hartwig.serve.datamodel.EfficacyEvidence;
+import com.hartwig.serve.datamodel.KnownEvent;
+import com.hartwig.serve.datamodel.KnownEvents;
 import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.datamodel.characteristic.ActionableCharacteristic;
 import com.hartwig.serve.datamodel.fusion.ActionableFusion;
@@ -31,42 +36,12 @@ public abstract class ExtractionResult {
     @NotNull
     public abstract Set<EventInterpretation> eventInterpretations();
 
-    @NotNull
-    public abstract Set<KnownHotspot> knownHotspots();
+    @Nullable
+    public abstract KnownEvents knownEvents();
 
-    @NotNull
-    public abstract Set<KnownCodon> knownCodons();
+    @Nullable
+    public abstract List<EfficacyEvidence> efficacyEvidences();
 
-    @NotNull
-    public abstract Set<KnownExon> knownExons();
-
-    @NotNull
-    public abstract Set<KnownGene> knownGenes();
-
-    @NotNull
-    public abstract Set<KnownCopyNumber> knownCopyNumbers();
-
-    @NotNull
-    public abstract Set<KnownFusion> knownFusions();
-
-    @NotNull
-    public abstract Set<ActionableHotspot> actionableHotspots();
-
-    @NotNull
-    public abstract Set<ActionableRange> actionableCodons();
-
-    @NotNull
-    public abstract Set<ActionableRange> actionableExons();
-
-    @NotNull
-    public abstract Set<ActionableGene> actionableGenes();
-
-    @NotNull
-    public abstract Set<ActionableFusion> actionableFusions();
-
-    @NotNull
-    public abstract Set<ActionableCharacteristic> actionableCharacteristics();
-
-    @NotNull
-    public abstract Set<ActionableHLA> actionableHLA();
+    @Nullable
+    public abstract List<ClinicalTrial> clinicalTrials();
 }

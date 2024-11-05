@@ -42,32 +42,32 @@ final class ActionableFunctions {
             applicableCancerTypeBuilder.doid(id);
         } else if (source.equalsIgnoreCase("jax")) {
             switch (id) {
-                case CancerTypeConstants.JAX_ADVANCED_SOLID_TUMOR: {
+                case CancerTypeConstants.CKB_ADVANCED_SOLID_TUMOR: {
                     applicableCancerTypeBuilder.doid(CancerTypeConstants.CANCER_DOID);
                     blacklistedCancerTypes.add(CancerTypeConstants.LEUKEMIA_TYPE);
                     blacklistedCancerTypes.add(CancerTypeConstants.REFRACTORY_HEMATOLOGIC_TYPE);
                     blacklistedCancerTypes.add(CancerTypeConstants.BONE_MARROW_TYPE);
                     break;
                 }
-                case CancerTypeConstants.JAX_CANCER_OF_UNKNOWN_PRIMARY: {
+                case CancerTypeConstants.CKB_CANCER_OF_UNKNOWN_PRIMARY: {
                     applicableCancerTypeBuilder.doid(CancerTypeConstants.CANCER_DOID);
                     break;
                 }
-                case CancerTypeConstants.JAX_CARCINOMA_OF_UNKNOWN_PRIMARY: {
+                case CancerTypeConstants.CKB_CARCINOMA_OF_UNKNOWN_PRIMARY: {
                     applicableCancerTypeBuilder.doid(CancerTypeConstants.CARCINOMA_OF_UNKNOWN_PRIMARY);
                     break;
                 }
-                case CancerTypeConstants.JAX_ADENOCARCINOMA_OF_UNKNOWN_PRIMARY: {
+                case CancerTypeConstants.CKB_ADENOCARCINOMA_OF_UNKNOWN_PRIMARY: {
                     applicableCancerTypeBuilder.doid(CancerTypeConstants.ADENOCARCINOMA_OF_UNKNOWN_PRIMARY);
                     break;
                 }
-                case CancerTypeConstants.JAX_SQUAMOUS_CELL_CARCINOMA_OF_UNKNOWN_PRIMARY: {
+                case CancerTypeConstants.CKB_SQUAMOUS_CELL_CARCINOMA_OF_UNKNOWN_PRIMARY: {
                     applicableCancerTypeBuilder.doid(CancerTypeConstants.SQUAMOUS_CELL_CARCINOMA_OF_UNKNOWN_PRIMARY);
                     break;
                 }
                 default: {
                     // CKB uses 10000005 for configuring "Not a cancer". We can ignore these.
-                    if (!id.equals(CancerTypeConstants.JAX_NOT_CANCER)) {
+                    if (!id.equals(CancerTypeConstants.CKB_NOT_CANCER)) {
                         LOGGER.warn("Unexpected DOID string annotated by CKB: '{}'", source + ":" + id);
                     }
                     return null;

@@ -1,19 +1,19 @@
 package com.hartwig.serve;
 
 import java.util.List;
+import java.util.Set;
 
 import com.hartwig.serve.datamodel.DatamodelTestFactory;
 import com.hartwig.serve.datamodel.ImmutableKnownEvents;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.KnownEvents;
-import com.hartwig.serve.datamodel.characteristic.CharacteristicTestFactory;
 import com.hartwig.serve.datamodel.fusion.FusionTestFactory;
 import com.hartwig.serve.datamodel.gene.GeneTestFactory;
 import com.hartwig.serve.datamodel.hotspot.HotspotTestFactory;
-import com.hartwig.serve.datamodel.immuno.ImmunoTestFactory;
 import com.hartwig.serve.datamodel.range.RangeTestFactory;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.ImmutableExtractionResult;
+import com.hartwig.serve.extraction.events.TestEventInterpretationFactory;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -36,15 +36,9 @@ public final class ServeAlgoTestFactory {
         return ImmutableExtractionResult.builder()
                 .refGenomeVersion(source.refGenomeVersion())
                 .knownEvents(knownEvents)
+                .eventInterpretations(Set.of(TestEventInterpretationFactory.createTestEventInterpretationForSource(source)))
                 .efficacyEvidences(List.of(DatamodelTestFactory.efficacyEvidenceBuilder().source(source).build()))
-                .clinicalTrials(list.of(DatamodelTestFactory.clinicalTrialBuilder()))
-                .addActionableHotspots(HotspotTestFactory.createTestActionableHotspot(source))
-                .addActionableCodons(RangeTestFactory.createTestActionableRange(source))
-                .addActionableExons(RangeTestFactory.createTestActionableRange(source))
-                .addActionableGenes(GeneTestFactory.createTestActionableGene(source))
-                .addActionableFusions(FusionTestFactory.createTestActionableFusion(source))
-                .addActionableCharacteristics(CharacteristicTestFactory.createTestActionableCharacteristic(source))
-                .addActionableHLA(ImmunoTestFactory.createTestActionableHLA(source))
+                .clinicalTrials(List.of(DatamodelTestFactory.clinicalTrialBuilder().source(source).build()))
                 .build();
     }
 }

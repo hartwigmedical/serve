@@ -15,16 +15,11 @@ public class EfficacyEvidenceComparatorTest {
 
     @Test
     public void canSortEfficacyEvidences() {
-        EfficacyEvidence event1 =
-                create(Knowledgebase.CKB, "CancerA", EvidenceLevel.A, EvidenceLevelDetails.CLINICAL_STUDY, EvidenceDirection.RESISTANT);
-        EfficacyEvidence event2 =
-                create(Knowledgebase.CKB, "CancerA", EvidenceLevel.A, EvidenceLevelDetails.CLINICAL_STUDY, EvidenceDirection.RESPONSIVE);
-        EfficacyEvidence event3 =
-                create(Knowledgebase.CKB, "CancerA", EvidenceLevel.A, EvidenceLevelDetails.CLINICAL_STUDY, EvidenceDirection.RESPONSIVE);
-        EfficacyEvidence event4 =
-                create(Knowledgebase.CKB, "CancerB", EvidenceLevel.A, EvidenceLevelDetails.CLINICAL_STUDY, EvidenceDirection.RESPONSIVE);
-        EfficacyEvidence event5 =
-                create(Knowledgebase.CKB, "CancerA", EvidenceLevel.B, EvidenceLevelDetails.CLINICAL_STUDY, EvidenceDirection.RESPONSIVE);
+        EfficacyEvidence event1 = create("CancerA", EvidenceLevel.A, EvidenceLevelDetails.CLINICAL_STUDY, EvidenceDirection.RESISTANT);
+        EfficacyEvidence event2 = create("CancerA", EvidenceLevel.A, EvidenceLevelDetails.CLINICAL_STUDY, EvidenceDirection.RESPONSIVE);
+        EfficacyEvidence event3 = create("CancerA", EvidenceLevel.A, EvidenceLevelDetails.CLINICAL_STUDY, EvidenceDirection.RESPONSIVE);
+        EfficacyEvidence event4 = create("CancerB", EvidenceLevel.A, EvidenceLevelDetails.CLINICAL_STUDY, EvidenceDirection.RESPONSIVE);
+        EfficacyEvidence event5 = create("CancerA", EvidenceLevel.B, EvidenceLevelDetails.CLINICAL_STUDY, EvidenceDirection.RESPONSIVE);
 
         List<EfficacyEvidence> efficacyEvidences = Lists.newArrayList(event3, event5, event1, event4, event2);
         efficacyEvidences.sort(new EfficacyEvidenceComparator());
@@ -37,10 +32,9 @@ public class EfficacyEvidenceComparatorTest {
     }
 
     @NotNull
-    private static EfficacyEvidence create(@NotNull Knowledgebase source, @NotNull String applicableCancerType,
-            @NotNull EvidenceLevel evidenceLevel, @NotNull EvidenceLevelDetails evidenceLevelDetails,
-            @NotNull EvidenceDirection evidenceDirection) {
-        return DatamodelTestFactory.createTestEfficacyEvidence(source,
+    private static EfficacyEvidence create(@NotNull String applicableCancerType, @NotNull EvidenceLevel evidenceLevel,
+            @NotNull EvidenceLevelDetails evidenceLevelDetails, @NotNull EvidenceDirection evidenceDirection) {
+        return EfficacyEvidenceTestFactory.createTestEfficacyEvidence(Knowledgebase.UNKNOWN,
                 applicableCancerType,
                 Strings.EMPTY,
                 evidenceLevel,

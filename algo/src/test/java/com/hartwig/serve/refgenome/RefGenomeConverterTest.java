@@ -1,12 +1,21 @@
 package com.hartwig.serve.refgenome;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.List;
 import java.util.Set;
 
-import com.google.common.collect.Sets;
+import com.hartwig.serve.datamodel.ClinicalTrial;
+import com.hartwig.serve.datamodel.ClinicalTrialTestFactory;
+import com.hartwig.serve.datamodel.EfficacyEvidence;
+import com.hartwig.serve.datamodel.EfficacyEvidenceTestFactory;
+import com.hartwig.serve.datamodel.ImmutableKnownEvents;
 import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.datamodel.KnownEvents;
+import com.hartwig.serve.datamodel.MolecularCriterium;
+import com.hartwig.serve.datamodel.MolecularCriteriumTestFactory;
 import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
 import com.hartwig.serve.datamodel.hotspot.HotspotTestFactory;
@@ -32,6 +41,13 @@ public class RefGenomeConverterTest {
     private static final String TEST_CHROMOSOME = "chr1";
 
     @Test
+    public void canHandleMissingInputs() {
+        assertNull(NULL_CONVERTER.convertKnownEvents(null));
+        assertNull(NULL_CONVERTER.convertEfficacyEvidences(null));
+        assertNull(NULL_CONVERTER.convertClinicalTrials(null));
+    }
+
+    @Test
     public void canConvertKnownHotspots() {
         KnownHotspot hotspot = HotspotTestFactory.knownHotspotBuilder()
                 .gene(TEST_GENE)
@@ -42,10 +58,11 @@ public class RefGenomeConverterTest {
                 .addSources(Knowledgebase.HARTWIG_HOTSPOT_CURATED)
                 .build();
 
-        Set<KnownHotspot> convertedHotspots = DUMMY_CONVERTER.convertKnownHotspots(Sets.newHashSet(hotspot));
+        KnownEvents knownEvents = ImmutableKnownEvents.builder().addHotspots(hotspot).build();
+        Set<KnownHotspot> convertedHotspots = DUMMY_CONVERTER.convertKnownEvents(knownEvents).hotspots();
         assertEquals(hotspot, convertedHotspots.iterator().next());
 
-        assertTrue(NULL_CONVERTER.convertKnownHotspots(Sets.newHashSet(hotspot)).isEmpty());
+        assertTrue(NULL_CONVERTER.convertKnownEvents(knownEvents).hotspots().isEmpty());
     }
 
     @Test
@@ -58,10 +75,11 @@ public class RefGenomeConverterTest {
                 .addSources(Knowledgebase.HARTWIG_HOTSPOT_CURATED)
                 .build();
 
-        Set<KnownCodon> convertedCodons = DUMMY_CONVERTER.convertKnownCodons(Sets.newHashSet(codon));
+        KnownEvents knownEvents = ImmutableKnownEvents.builder().addCodons(codon).build();
+        Set<KnownCodon> convertedCodons = DUMMY_CONVERTER.convertKnownEvents(knownEvents).codons();
         assertEquals(codon, convertedCodons.iterator().next());
 
-        assertTrue(NULL_CONVERTER.convertKnownCodons(Sets.newHashSet(codon)).isEmpty());
+        assertTrue(NULL_CONVERTER.convertKnownEvents(knownEvents).codons().isEmpty());
     }
 
     @Test
@@ -74,53 +92,70 @@ public class RefGenomeConverterTest {
                 .addSources(Knowledgebase.HARTWIG_HOTSPOT_CURATED)
                 .build();
 
-        Set<KnownExon> convertedExons = DUMMY_CONVERTER.convertKnownExons(Sets.newHashSet(exon));
+        KnownEvents knownEvents = ImmutableKnownEvents.builder().addExons(exon).build();
+        Set<KnownExon> convertedExons = DUMMY_CONVERTER.convertKnownEvents(knownEvents).exons();
         assertEquals(exon, convertedExons.iterator().next());
 
-        assertTrue(NULL_CONVERTER.convertKnownExons(Sets.newHashSet(exon)).isEmpty());
+        assertTrue(NULL_CONVERTER.convertKnownEvents(knownEvents).exons().isEmpty());
     }
 
     @Test
-    public void canConvertActionableHotspots() {
+    public void canConvertEvidenceAndTrialsForHotspots() {
         ActionableHotspot actionableHotspot = HotspotTestFactory.actionableHotspotBuilder()
                 .gene(TEST_GENE)
                 .chromosome(TEST_CHROMOSOME)
                 .position(1)
                 .ref("G")
                 .alt("C")
-                .source(Knowledgebase.HARTWIG_HOTSPOT_CURATED)
                 .build();
 
-        Set<ActionableHotspot> convertedActionableHotspots = DUMMY_CONVERTER.convertActionableHotspots(Sets.newHashSet(actionableHotspot));
-        assertEquals(actionableHotspot, convertedActionableHotspots.iterator().next());
+        MolecularCriterium molecularCriterium = MolecularCriteriumTestFactory.createWithActionableHotspot(actionableHotspot);
+
+        List<EfficacyEvidence> evidences = List.of(EfficacyEvidenceTestFactory.createWithMolecularCriterium(molecularCriterium));
+        Set<ActionableHotspot> convertedActionableHotspotsFromEvidence =
+                DUMMY_CONVERTER.convertEfficacyEvidences(evidences).iterator().next().molecularCriterium().hotspots();
+        assertEquals(actionableHotspot, convertedActionableHotspotsFromEvidence.iterator().next());
+
+        List<ClinicalTrial> trials = List.of(ClinicalTrialTestFactory.createWithMolecularCriterium(molecularCriterium));
+        Set<ActionableHotspot> convertedActionableHotspotFromTrial =
+                DUMMY_CONVERTER.convertClinicalTrials(trials).iterator().next().molecularCriteria().iterator().next().hotspots();
+        assertEquals(actionableHotspot, convertedActionableHotspotFromTrial.iterator().next());
     }
 
     @Test
-    public void canConvertActionableCodon() {
-        ActionableRange actionableCodon = RangeTestFactory.actionableRangeBuilder()
-                .gene(TEST_GENE)
-                .chromosome(TEST_CHROMOSOME)
-                .start(3)
-                .end(4)
-                .source(Knowledgebase.HARTWIG_HOTSPOT_CURATED)
-                .build();
+    public void canConvertEvidenceAndTrialsForCodons() {
+        ActionableRange actionableCodon =
+                RangeTestFactory.actionableRangeBuilder().gene(TEST_GENE).chromosome(TEST_CHROMOSOME).start(3).end(4).build();
 
-        Set<ActionableRange> convertedActionableCodon = DUMMY_CONVERTER.convertActionableRanges(Sets.newHashSet(actionableCodon));
-        assertEquals(actionableCodon, convertedActionableCodon.iterator().next());
+        MolecularCriterium molecularCriterium = MolecularCriteriumTestFactory.createWithActionableCodon(actionableCodon);
+
+        List<EfficacyEvidence> evidences = List.of(EfficacyEvidenceTestFactory.createWithMolecularCriterium(molecularCriterium));
+        Set<ActionableRange> convertedActionableCodonFromEvidence =
+                DUMMY_CONVERTER.convertEfficacyEvidences(evidences).iterator().next().molecularCriterium().codons();
+        assertEquals(actionableCodon, convertedActionableCodonFromEvidence.iterator().next());
+
+        List<ClinicalTrial> trials = List.of(ClinicalTrialTestFactory.createWithMolecularCriterium(molecularCriterium));
+        Set<ActionableRange> convertedActionableCodonFromTrial =
+                DUMMY_CONVERTER.convertClinicalTrials(trials).iterator().next().molecularCriteria().iterator().next().codons();
+        assertEquals(actionableCodon, convertedActionableCodonFromTrial.iterator().next());
     }
 
     @Test
-    public void canConvertActionableExons() {
-        ActionableRange actionableExon = RangeTestFactory.actionableRangeBuilder()
-                .gene(TEST_GENE)
-                .chromosome(TEST_CHROMOSOME)
-                .start(3)
-                .end(4)
-                .source(Knowledgebase.HARTWIG_HOTSPOT_CURATED)
-                .build();
+    public void canConvertEvidenceAndTrialsForExons() {
+        ActionableRange actionableExon =
+                RangeTestFactory.actionableRangeBuilder().gene(TEST_GENE).chromosome(TEST_CHROMOSOME).start(3).end(4).build();
 
-        Set<ActionableRange> convertedActionableExon = DUMMY_CONVERTER.convertActionableRanges(Sets.newHashSet(actionableExon));
-        assertEquals(actionableExon, convertedActionableExon.iterator().next());
+        MolecularCriterium molecularCriterium = MolecularCriteriumTestFactory.createWithActionableCodon(actionableExon);
+
+        List<EfficacyEvidence> evidences = List.of(EfficacyEvidenceTestFactory.createWithMolecularCriterium(molecularCriterium));
+        Set<ActionableRange> convertedActionableExonFromEvidence =
+                DUMMY_CONVERTER.convertEfficacyEvidences(evidences).iterator().next().molecularCriterium().exons();
+        assertEquals(actionableExon, convertedActionableExonFromEvidence.iterator().next());
+
+        List<ClinicalTrial> trials = List.of(ClinicalTrialTestFactory.createWithMolecularCriterium(molecularCriterium));
+        Set<ActionableRange> convertedActionableExonFromTrial =
+                DUMMY_CONVERTER.convertClinicalTrials(trials).iterator().next().molecularCriteria().iterator().next().exons();
+        assertEquals(actionableExon, convertedActionableExonFromTrial.iterator().next());
     }
 
     @NotNull

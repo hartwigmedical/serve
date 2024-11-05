@@ -7,7 +7,6 @@ import java.util.Set;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.hartwig.serve.datamodel.hotspot.HotspotTestFactory;
 
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
@@ -20,11 +19,6 @@ public final class DatamodelTestFactory {
     @NotNull
     public static ImmutableTreatment.Builder treatmentBuilder() {
         return ImmutableTreatment.builder().name(Strings.EMPTY);
-    }
-
-    @NotNull
-    public static Treatment createTestTreatment() {
-        return treatmentBuilder().build();
     }
 
     @NotNull
@@ -43,9 +37,10 @@ public final class DatamodelTestFactory {
     }
 
     @NotNull
-    public static ImmutableIndication.Builder createTestIndication(@NotNull String applicableType, @NotNull String nonApplicableSubType) {
+    public static Indication createTestIndication(@NotNull String applicableType, @NotNull String nonApplicableSubType) {
         return indicationBuilder().applicableType(cancerTypeBuilder().name(applicableType).build())
-                .nonApplicableSubTypes(Set.of(cancerTypeBuilder().name(nonApplicableSubType).build()));
+                .nonApplicableSubTypes(Set.of(cancerTypeBuilder().name(nonApplicableSubType).build()))
+                .build();
     }
 
     @NotNull
@@ -58,68 +53,6 @@ public final class DatamodelTestFactory {
         return countryBuilder().countryName(countryName)
                 .hospitalsPerCity(Map.of("city",
                         Set.of(ImmutableHospital.builder().isChildrensHospital(false).name("hospital name").build())))
-                .build();
-    }
-
-    @NotNull
-    public static MolecularCriterium createTestMolecularCriterium() {
-        return ImmutableMolecularCriterium.builder().addHotspots(HotspotTestFactory.createTestActionableHotspot()).build();
-    }
-
-    @NotNull
-    public static ImmutableEfficacyEvidence.Builder efficacyEvidenceBuilder() {
-        return ImmutableEfficacyEvidence.builder()
-                .source(Knowledgebase.UNKNOWN)
-                .treatment(treatmentBuilder().build())
-                .indication(indicationBuilder().build())
-                .molecularCriterium(createTestMolecularCriterium())
-                .efficacyDescription(Strings.EMPTY)
-                .evidenceLevel(EvidenceLevel.A)
-                .evidenceLevelDetails(EvidenceLevelDetails.FDA_APPROVED)
-                .evidenceDirection(EvidenceDirection.RESPONSIVE)
-                .evidenceYear(2024)
-                .urls(Sets.newHashSet());
-    }
-
-    @NotNull
-    public static EfficacyEvidence createTestEfficacyEvidence(@NotNull Knowledgebase source, @NotNull String applicableCancerType,
-            @NotNull String efficacyDescription, @NotNull EvidenceLevel evidenceLevel, @NotNull EvidenceLevelDetails evidenceLevelDetails,
-            @NotNull EvidenceDirection evidenceDirection, @NotNull Integer evidenceYear, @NotNull Set<String> urls) {
-        return efficacyEvidenceBuilder().source(source)
-                .indication(createTestIndication(applicableCancerType, Strings.EMPTY).build())
-                .efficacyDescription(efficacyDescription)
-                .evidenceLevel(evidenceLevel)
-                .evidenceLevelDetails(evidenceLevelDetails)
-                .evidenceDirection(evidenceDirection)
-                .evidenceYear(evidenceYear)
-                .urls(urls)
-                .build();
-    }
-
-    @NotNull
-    public static ImmutableClinicalTrial.Builder clinicalTrialBuilder() {
-        return ImmutableClinicalTrial.builder()
-                .source(Knowledgebase.UNKNOWN)
-                .nctId(Strings.EMPTY)
-                .title(Strings.EMPTY)
-                .countries(Sets.newHashSet())
-                .therapyNames(Sets.newHashSet())
-                .genderCriterium(GenderCriterium.BOTH)
-                .indications(Sets.newHashSet())
-                .molecularCriteria(Sets.newHashSet())
-                .urls(Sets.newHashSet());
-    }
-
-    @NotNull
-    public static ClinicalTrial createTestClinicalTrial(@NotNull String nctId, @NotNull String title, @NotNull String countryName,
-            @NotNull Set<String> therapyNames, @NotNull GenderCriterium genderCriterium, @NotNull String applicableCancerType,
-            @NotNull String ignoredCancerType) {
-        return clinicalTrialBuilder().nctId(nctId)
-                .title(title)
-                .countries(Set.of(createTestCountry(countryName)))
-                .therapyNames(therapyNames)
-                .genderCriterium(genderCriterium)
-                .indications(Set.of(createTestIndication(applicableCancerType, Strings.EMPTY).build()))
                 .build();
     }
 

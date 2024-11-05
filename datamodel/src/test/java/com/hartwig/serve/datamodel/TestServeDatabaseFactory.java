@@ -41,11 +41,11 @@ public class TestServeDatabaseFactory {
 
     @NotNull
     public static List<EfficacyEvidence> createEfficacyEvidences() {
-        return List.of(DatamodelTestFactory.efficacyEvidenceBuilder().build());
+        return List.of(EfficacyEvidenceTestFactory.builder().build());
     }
 
     @NotNull
     public static List<ClinicalTrial> createClinicalTrials() {
-        return List.of(DatamodelTestFactory.clinicalTrialBuilder().build());
+        return List.of(ClinicalTrialTestFactory.builder().build());
     }
 }

@@ -8,10 +8,10 @@ import org.jetbrains.annotations.Nullable;
 
 @Value.Immutable
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class })
-public abstract class CkbBlacklistEvidenceEntry {
+public abstract class CkbEvidenceFilterEntry {
 
     @NotNull
-    public abstract CkbBlacklistEvidenceType type();
+    public abstract CkbEvidenceFilterType type();
 
     @Nullable
     public abstract String therapy();

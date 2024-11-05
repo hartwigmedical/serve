@@ -17,12 +17,12 @@ import com.hartwig.serve.ckb.datamodel.reference.Reference;
 import com.hartwig.serve.ckb.datamodel.therapy.Therapy;
 import com.hartwig.serve.ckb.datamodel.treatmentapproaches.DrugClassTreatmentApproach;
 import com.hartwig.serve.ckb.datamodel.treatmentapproaches.TherapyTreatmentApproach;
-import com.hartwig.serve.datamodel.EvidenceLevelDetails;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
+import com.hartwig.serve.datamodel.EvidenceLevelDetails;
 import com.hartwig.serve.datamodel.ImmutableTreatment;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.sources.ckb.blacklist.CkbEvidenceBlacklistModel;
+import com.hartwig.serve.sources.ckb.blacklist.CkbEvidenceFilterModel;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurator;
 
 import org.apache.logging.log4j.LogManager;
@@ -72,9 +72,9 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
     private final TreatmentApproachCurator curator;
 
     @NotNull
-    private final CkbEvidenceBlacklistModel blacklistEvidence;
+    private final CkbEvidenceFilterModel blacklistEvidence;
 
-    public ActionableEvidenceFactory(@NotNull TreatmentApproachCurator curator, @NotNull CkbEvidenceBlacklistModel blacklistEvidence) {
+    public ActionableEvidenceFactory(@NotNull TreatmentApproachCurator curator, @NotNull CkbEvidenceFilterModel blacklistEvidence) {
         this.curator = curator;
         this.blacklistEvidence = blacklistEvidence;
     }
@@ -94,7 +94,7 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
             if (level != null && direction != null && cancerTypeExtraction != null && evidenceLevelDetails != null) {
                 String treatment = evidence.therapy().therapyName();
 
-                if (!blacklistEvidence.isBlacklistEvidence(treatment,
+                if (!blacklistEvidence.shouldFilterEvidence(treatment,
                         cancerTypeExtraction.applicableCancerType().name(),
                         level,
                         sourceGene,

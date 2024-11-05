@@ -6,10 +6,10 @@ import org.jetbrains.annotations.Nullable;
 
 @Value.Immutable
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class })
-public abstract class CkbBlacklistStudyEntry {
+public abstract class CkbTrialFilterEntry {
 
     @NotNull
-    public abstract CkbBlacklistStudyType type();
+    public abstract CkbTrialFilterType type();
 
     @Nullable
     public abstract String nctId();

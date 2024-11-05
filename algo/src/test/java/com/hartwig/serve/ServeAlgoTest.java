@@ -21,9 +21,9 @@ public class ServeAlgoTest {
 
     private static final String CKB_DIR = Resources.getResource("ckb_data").getPath();
     private static final String CKB_BLACKLIST_MOLECULAR_PROFILE_TSV =
-            Resources.getResource("ckb_blacklist/ckb_blacklist_molecular_profile.tsv").getPath();
-    private static final String CKB_BLACKLIST_TRIAL_TSV = Resources.getResource("ckb_blacklist/ckb_blacklist_trial.tsv").getPath();
-    private static final String CKB_BLACKLIST_EVIDENCE_TSV = Resources.getResource("ckb_blacklist/ckb_blacklist_evidence.tsv").getPath();
+            Resources.getResource("ckb_filter/ckb_molecular_profile_filter.tsv").getPath();
+    private static final String CKB_BLACKLIST_TRIAL_TSV = Resources.getResource("ckb_filter/ckb_trial_filter.tsv").getPath();
+    private static final String CKB_BLACKLIST_EVIDENCE_TSV = Resources.getResource("ckb_filter/ckb_evidence_filter.tsv").getPath();
     private static final String CKB_DRUG_CLASS_CURATION_TSV =
             Resources.getResource("ckb_curation/ckb_treatment_approach_curation.tsv").getPath();
     private static final String CKB_REGION_TSV = Resources.getResource("ckb_region/ckb_regions.tsv").getPath();

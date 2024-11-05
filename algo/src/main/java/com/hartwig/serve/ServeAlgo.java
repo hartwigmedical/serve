@@ -23,12 +23,12 @@ import com.hartwig.serve.refgenome.RefGenomeResource;
 import com.hartwig.serve.sources.ckb.CkbExtractor;
 import com.hartwig.serve.sources.ckb.CkbExtractorFactory;
 import com.hartwig.serve.sources.ckb.CkbReader;
-import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistEvidenceEntry;
-import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistEvidenceFile;
-import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudyEntry;
-import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistStudyFile;
-import com.hartwig.serve.sources.ckb.blacklist.CkbEvidenceBlacklistModel;
-import com.hartwig.serve.sources.ckb.blacklist.CkbStudyBlacklistModel;
+import com.hartwig.serve.sources.ckb.blacklist.CkbEvidenceFilterEntry;
+import com.hartwig.serve.sources.ckb.blacklist.CkbEvidenceFilterFile;
+import com.hartwig.serve.sources.ckb.blacklist.CkbEvidenceFilterModel;
+import com.hartwig.serve.sources.ckb.blacklist.CkbTrialFilterEntry;
+import com.hartwig.serve.sources.ckb.blacklist.CkbTrialFilterFile;
+import com.hartwig.serve.sources.ckb.blacklist.CkbTrialFilterModel;
 import com.hartwig.serve.sources.ckb.region.CkbRegion;
 import com.hartwig.serve.sources.ckb.region.CkbRegionFile;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurationEntry;
@@ -74,7 +74,7 @@ public class ServeAlgo {
 
     @NotNull
     public Map<RefGenome, ExtractionResult> run(@NotNull ServeConfig config) throws IOException {
-        List<CkbEntry> ckbEntries = (config.useCkbEvidence() || config.useCkbTrials()) ? CkbReader.readAndCurate(config.ckbDir(),
+        List<CkbEntry> ckbEntries = (config.useCkb()) ? CkbReader.readAndCurate(config.ckbDir(),
                 config.ckbMolecularProfileFilterTsv(),
                 config.ckbFacilityCurationNameTsv(),
                 config.ckbFacilityCurationZipTsv(),
@@ -86,9 +86,9 @@ public class ServeAlgo {
                                 config.useCkbEvidence() ? extractCkbEvidenceKnowledge(config.ckbDrugCurationTsv(),
                                         config.ckbEvidenceFilterTsv(),
                                         ckbEntries) : null,
-                                config.useCkbTrials() ? extractCkbTrialKnowledge(config.ckbTrialFilterTsv(),
-                                        config.ckbRegionTsv(),
-                                        ckbEntries) : null,
+                                config.useCkbTrials()
+                                        ? extractCkbTrialKnowledge(config.ckbTrialFilterTsv(), config.ckbRegionTsv(), ckbEntries)
+                                        : null,
                                 config.useDocm() ? extractDocmKnowledge(config.docmTsv()) : null,
                                 config.useHartwigCohortHotspots() ? extractHartwigCohortHotspotKnowledge(config.hartwigCohortHotspotTsv(),
                                         !config.skipHotspotResolving()) : null,
@@ -144,16 +144,16 @@ public class ServeAlgo {
 
         TreatmentApproachCurator curator = new TreatmentApproachCurator(treatmentApproachMap);
 
-        List<CkbBlacklistEvidenceEntry> ckbBlacklistEvidenceEntries = CkbBlacklistEvidenceFile.read(ckbBlacklistEvidenceTsv);
+        List<CkbEvidenceFilterEntry> ckbBlacklistEvidenceEntries = CkbEvidenceFilterFile.read(ckbBlacklistEvidenceTsv);
         LOGGER.info(" Read {} blacklisting evidence entries", ckbBlacklistEvidenceEntries.size());
-        CkbEvidenceBlacklistModel blacklistEvidence = new CkbEvidenceBlacklistModel(ckbBlacklistEvidenceEntries);
+        CkbEvidenceFilterModel blacklistEvidence = new CkbEvidenceFilterModel(ckbBlacklistEvidenceEntries);
 
         CkbExtractor extractor = CkbExtractorFactory.createEvidenceExtractor(config, refGenomeResource, curator, blacklistEvidence);
 
         LOGGER.info("Running CKB evidence knowledge extraction");
         ExtractionResult result = extractor.extract(ckbEntries);
 
-        blacklistEvidence.reportUnusedBlacklistEntries();
+        blacklistEvidence.reportUnusedFilterEntries();
         curator.reportUnusedCuratedEntries();
 
         return result;
@@ -165,10 +165,10 @@ public class ServeAlgo {
         EventClassifierConfig config = CkbClassificationConfig.build();
         RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.CKB);
 
-        List<CkbBlacklistStudyEntry> ckbBlacklistStudyEntriesEntries = CkbBlacklistStudyFile.read(ckbBlacklistStudyTsv);
+        List<CkbTrialFilterEntry> ckbBlacklistStudyEntriesEntries = CkbTrialFilterFile.read(ckbBlacklistStudyTsv);
         LOGGER.info(" Read {} blacklisting studies entries", ckbBlacklistStudyEntriesEntries.size());
 
-        CkbStudyBlacklistModel blacklistStudy = new CkbStudyBlacklistModel(ckbBlacklistStudyEntriesEntries);
+        CkbTrialFilterModel blacklistStudy = new CkbTrialFilterModel(ckbBlacklistStudyEntriesEntries);
 
         LOGGER.info("Reading regions to include from {}", ckbRegionTsv);
         Set<CkbRegion> regionsToInclude = CkbRegionFile.read(ckbRegionTsv);
@@ -179,7 +179,7 @@ public class ServeAlgo {
         LOGGER.info("Running CKB trial knowledge extraction");
         ExtractionResult result = extractor.extract(ckbEntries);
 
-        blacklistStudy.reportUnusedBlacklistEntries();
+        blacklistStudy.reportUnusedFilterEntries();
 
         return result;
     }

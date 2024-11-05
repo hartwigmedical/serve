@@ -15,26 +15,26 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
-public class CkbMolecularProfileBlacklistModel {
+public class CkbMolecularProfileFilterModel {
 
-    private static final Logger LOGGER = LogManager.getLogger(CkbMolecularProfileBlacklistModel.class);
+    private static final Logger LOGGER = LogManager.getLogger(CkbMolecularProfileFilterModel.class);
 
     @NotNull
-    private final List<CkbBlacklistMolecularProfileEntry> blacklistEntries;
+    private final List<CkbMolecularProfileFilterEntry> filterEntries;
     @NotNull
-    private final Set<CkbBlacklistMolecularProfileEntry> usedBlacklistEntries = Sets.newHashSet();
+    private final Set<CkbMolecularProfileFilterEntry> usedFilterEntries = Sets.newHashSet();
 
-    public CkbMolecularProfileBlacklistModel(@NotNull final List<CkbBlacklistMolecularProfileEntry> blacklistEntries) {
-        this.blacklistEntries = blacklistEntries;
+    public CkbMolecularProfileFilterModel(@NotNull final List<CkbMolecularProfileFilterEntry> filterEntries) {
+        this.filterEntries = filterEntries;
     }
 
     @NotNull
     public List<CkbEntry> run(@NotNull List<CkbEntry> ckbEntries) {
-        List<CkbEntry> filteredCkbEntries = Lists.newArrayList();
+        List<CkbEntry> cleanedCkbEntries = Lists.newArrayList();
         for (CkbEntry entry : ckbEntries) {
             if (entry.variants().size() > 1) {
                 // Do not filter variants when in combination event, since this might make them a non-combined event.
-                filteredCkbEntries.add(entry);
+                cleanedCkbEntries.add(entry);
             } else if (entry.variants().isEmpty()) {
                 // Always filter entries with no variants. Should never happen in practice!
                 LOGGER.warn("Filtering '{}' because no variants have been defined for this entry!", entry);
@@ -49,34 +49,33 @@ public class CkbMolecularProfileBlacklistModel {
                 }
 
                 if (!filteredVariants.isEmpty()) {
-                    filteredCkbEntries.add(ImmutableCkbEntry.builder().from(entry).variants(filteredVariants).build());
+                    cleanedCkbEntries.add(ImmutableCkbEntry.builder().from(entry).variants(filteredVariants).build());
                 }
             }
         }
 
-        return filteredCkbEntries;
+        return cleanedCkbEntries;
     }
 
-    public void reportUnusedBlacklistEntries() {
-        int unusedBlacklistEntryCount = 0;
-        for (CkbBlacklistMolecularProfileEntry entry : blacklistEntries) {
-            if (!usedBlacklistEntries.contains(entry)) {
-                unusedBlacklistEntryCount++;
-                LOGGER.warn(" Blacklist molecular profile entry '{}' hasn't been used for CKB blacklisting", entry);
+    public void reportUnusedFilterEntries() {
+        int unusedFilterEntryCount = 0;
+        for (CkbMolecularProfileFilterEntry entry : filterEntries) {
+            if (!usedFilterEntries.contains(entry)) {
+                unusedFilterEntryCount++;
+                LOGGER.warn(" Molecular profile filter entry '{}' hasn't been used for CKB filtering", entry);
             }
         }
 
-        LOGGER.debug(" Found {} unused blacklisting entries during CKB blacklisting", unusedBlacklistEntryCount);
+        LOGGER.debug(" Found {} unused filtering entries during CKB molecular profile filtering", unusedFilterEntryCount);
     }
 
     private boolean include(@NotNull EventType type, @NotNull Variant variant) {
         String gene = CkbEventAndGeneExtractor.extractGene(variant);
         String event = CkbEventAndGeneExtractor.extractEvent(variant);
 
-        for (CkbBlacklistMolecularProfileEntry blacklistEntry : blacklistEntries) {
-            boolean blacklistMatches = isMatch(blacklistEntry, type, gene, event, variant.fullName());
-            if (blacklistMatches) {
-                usedBlacklistEntries.add(blacklistEntry);
+        for (CkbMolecularProfileFilterEntry filterEntry : filterEntries) {
+            if (isMatch(filterEntry, type, gene, event, variant.fullName())) {
+                usedFilterEntries.add(filterEntry);
                 return false;
             }
         }
@@ -84,29 +83,29 @@ public class CkbMolecularProfileBlacklistModel {
         return true;
     }
 
-    private boolean isMatch(@NotNull CkbBlacklistMolecularProfileEntry blacklistEntry, @NotNull EventType type, @NotNull String gene,
+    private boolean isMatch(@NotNull CkbMolecularProfileFilterEntry filterEntry, @NotNull EventType type, @NotNull String gene,
             @NotNull String event, @NotNull String fullName) {
-        switch (blacklistEntry.type()) {
+        switch (filterEntry.type()) {
             case FILTER_EVENT_WITH_KEYWORD: {
-                return event.contains(blacklistEntry.value());
+                return event.contains(filterEntry.value());
             }
             case FILTER_ALL_EVIDENCE_ON_GENE: {
-                return gene.equals(blacklistEntry.value());
+                return gene.equals(filterEntry.value());
             }
             case FILTER_EVIDENCE_FOR_EXONS_ON_GENE: {
-                return gene.equals(blacklistEntry.value()) && type == EventType.EXON;
+                return gene.equals(filterEntry.value()) && type == EventType.EXON;
             }
             case ALLOW_GENE_IN_FUSIONS_EXCLUSIVELY: {
-                return gene.equals(blacklistEntry.value()) && type != EventType.FUSION_PAIR && type != EventType.PROMISCUOUS_FUSION;
+                return gene.equals(filterEntry.value()) && type != EventType.FUSION_PAIR && type != EventType.PROMISCUOUS_FUSION;
             }
             case FILTER_SECONDARY_GENE_WHEN_FUSION_LEG: {
-                return type == EventType.FUSION_PAIR && !gene.equals(blacklistEntry.value()) && event.contains(blacklistEntry.value());
+                return type == EventType.FUSION_PAIR && !gene.equals(filterEntry.value()) && event.contains(filterEntry.value());
             }
             case FILTER_EXACT_VARIANT_FULLNAME: {
-                return fullName.equals(blacklistEntry.value());
+                return fullName.equals(filterEntry.value());
             }
             default: {
-                LOGGER.warn("Blacklist entry found with unrecognized type: {}", blacklistEntry);
+                LOGGER.warn("Molecular profile filter entry found with unrecognized type: {}", filterEntry);
                 return false;
             }
         }

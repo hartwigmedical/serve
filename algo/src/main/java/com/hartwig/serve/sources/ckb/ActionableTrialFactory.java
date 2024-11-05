@@ -23,7 +23,7 @@ import com.hartwig.serve.datamodel.EvidenceLevelDetails;
 import com.hartwig.serve.datamodel.ImmutableClinicalTrial;
 import com.hartwig.serve.datamodel.ImmutableCountry;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.sources.ckb.blacklist.CkbStudyBlacklistModel;
+import com.hartwig.serve.sources.ckb.blacklist.CkbTrialFilterModel;
 import com.hartwig.serve.sources.ckb.region.CkbRegion;
 
 import org.jetbrains.annotations.NotNull;
@@ -44,11 +44,11 @@ class ActionableTrialFactory implements ActionableEntryFactory {
     private static final Set<String> AGE_GROUPS_TO_INCLUDE = Set.of("adult", "senior");
 
     @NotNull
-    private final CkbStudyBlacklistModel blacklistStudy;
+    private final CkbTrialFilterModel blacklistStudy;
     @NotNull
     private final Set<CkbRegion> regionsToInclude;
 
-    public ActionableTrialFactory(@NotNull CkbStudyBlacklistModel blacklistStudy, @NotNull Set<CkbRegion> regionsToInclude) {
+    public ActionableTrialFactory(@NotNull CkbTrialFilterModel blacklistStudy, @NotNull Set<CkbRegion> regionsToInclude) {
         this.blacklistStudy = blacklistStudy;
         this.regionsToInclude = regionsToInclude;
     }
@@ -69,7 +69,7 @@ class ActionableTrialFactory implements ActionableEntryFactory {
                 for (Indication indication : trial.indications()) {
                     CancerTypeExtraction cancerTypeExtraction = ActionableFunctions.extractCancerTypeDetails(indication);
                     if (cancerTypeExtraction != null) {
-                        if (!blacklistStudy.isBlacklistStudy(trial.nctId(),
+                        if (!blacklistStudy.shouldFilterTrial(trial.nctId(),
                                 setToField(therapies),
                                 cancerTypeExtraction.applicableCancerType().name(),
                                 sourceGene,

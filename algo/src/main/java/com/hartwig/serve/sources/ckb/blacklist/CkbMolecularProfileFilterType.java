@@ -1,6 +1,6 @@
 package com.hartwig.serve.sources.ckb.blacklist;
 
-public enum CkbBlacklistMolecularProfileType {
+public enum CkbMolecularProfileFilterType {
     ALLOW_GENE_IN_FUSIONS_EXCLUSIVELY,
     FILTER_EVENT_WITH_KEYWORD,
     FILTER_EXACT_VARIANT_FULLNAME,

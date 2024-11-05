@@ -1,6 +1,6 @@
 package com.hartwig.serve.sources.ckb.blacklist;
 
-public enum CkbBlacklistEvidenceType {
+public enum CkbEvidenceFilterType {
     ALL_EVIDENCE_BASED_ON_GENE,
     ALL_EVIDENCE_BASED_ON_GENE_AND_EVENT,
     EVIDENCE_BASED_ON_THERAPY,

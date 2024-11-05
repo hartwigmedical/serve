@@ -14,7 +14,8 @@ public class CkbRegionFileTest {
 
     @Test
     public void shouldLoadFileWithAndWithoutStates() throws Exception {
-        Set<CkbRegion> regions = CkbRegionFile.read(Resources.getResource("ckb_region/ckb_regions.tsv").getPath());
+        Set<CkbRegion> regions = CkbRegionFile.read(Resources.getResource("ckb_region/ckb_regions_to_include.tsv").getPath());
+
         CkbRegion netherlands = regions.stream().filter(r -> r.country().equals("netherlands")).findFirst().orElseThrow();
         CkbRegion us = regions.stream().filter(r -> r.country().equals("united states")).findFirst().orElseThrow();
 

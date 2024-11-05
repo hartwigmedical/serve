@@ -22,10 +22,9 @@ public class ServeAlgoTest {
             Resources.getResource("ckb_filter/ckb_molecular_profile_filter.tsv").getPath();
     private static final String CKB_TRIAL_FILTER_TSV = Resources.getResource("ckb_filter/ckb_trial_filter.tsv").getPath();
     private static final String CKB_EVIDENCE_FILTER_TSV = Resources.getResource("ckb_filter/ckb_evidence_filter.tsv").getPath();
+    private static final String CKB_REGIONS_TO_INCLUDE_TSV = Resources.getResource("ckb_region/ckb_regions_to_include.tsv").getPath();
     private static final String CKB_DRUG_CLASS_CURATION_TSV =
             Resources.getResource("ckb_curation/ckb_treatment_approach_curation.tsv").getPath();
-    private static final String CKB_REGION_TSV = Resources.getResource("ckb_region/ckb_regions.tsv").getPath();
-
     private static final String CKB_FACILITY_CURATION_NAME_TSV = Resources.getResource("ckb_curation/ckb_facility_name.tsv").getPath();
     private static final String CKB_FACILITY_CURATION_ZIP_TSV = Resources.getResource("ckb_curation/ckb_facility_zip.tsv").getPath();
     private static final String CKB_FACILITY_CURATION_MANUAL_TSV = Resources.getResource("ckb_curation/ckb_facility_manual.tsv").getPath();
@@ -58,8 +57,8 @@ public class ServeAlgoTest {
                 .ckbMolecularProfileFilterTsv(CKB_MOLECULAR_PROFILE_FILTER_TSV)
                 .ckbEvidenceFilterTsv(CKB_EVIDENCE_FILTER_TSV)
                 .ckbTrialFilterTsv(CKB_TRIAL_FILTER_TSV)
+                .ckbRegionsToIncludeTsv(CKB_REGIONS_TO_INCLUDE_TSV)
                 .ckbDrugCurationTsv(CKB_DRUG_CLASS_CURATION_TSV)
-                .ckbRegionTsv(CKB_REGION_TSV)
                 .ckbFacilityCurationNameTsv(CKB_FACILITY_CURATION_NAME_TSV)
                 .ckbFacilityCurationZipTsv(CKB_FACILITY_CURATION_ZIP_TSV)
                 .ckbFacilityCurationManualTsv(CKB_FACILITY_CURATION_MANUAL_TSV)

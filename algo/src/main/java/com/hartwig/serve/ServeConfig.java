@@ -240,7 +240,7 @@ public interface ServeConfig {
                 .ckbMolecularProfileFilterTsv(useCkb ? nonOptionalFile(cmd, CKB_MOLECULAR_PROFILE_FILTER_TSV) : NOT_APPLICABLE)
                 .ckbEvidenceFilterTsv(useCkb ? nonOptionalFile(cmd, CKB_EVIDENCE_FILTER_TSV) : NOT_APPLICABLE)
                 .ckbTrialFilterTsv(useCkb ? nonOptionalFile(cmd, CKB_TRIAL_FILTER_TSV) : NOT_APPLICABLE)
-                .ckbRegionsToInclude(useCkb ? nonOptionalFile(cmd, CKB_REGIONS_TO_INCLUDE_TSV) : NOT_APPLICABLE)
+                .ckbRegionsToIncludeTsv(useCkb ? nonOptionalFile(cmd, CKB_REGIONS_TO_INCLUDE_TSV) : NOT_APPLICABLE)
                 .ckbDrugCurationTsv(useCkb ? nonOptionalFile(cmd, CKB_DRUG_CURATION_TSV) : NOT_APPLICABLE)
                 .ckbFacilityCurationNameTsv(useCkb ? nonOptionalFile(cmd, CKB_FACILITY_CURATION_NAME_TSV) : NOT_APPLICABLE)
                 .ckbFacilityCurationZipTsv(useCkb ? nonOptionalFile(cmd, CKB_FACILITY_CURATION_ZIP_TSV) : NOT_APPLICABLE)

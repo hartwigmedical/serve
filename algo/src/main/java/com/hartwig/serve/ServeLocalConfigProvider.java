@@ -41,8 +41,8 @@ public final class ServeLocalConfigProvider {
             builder.ckbMolecularProfileFilterTsv("/data/resources/crunch/serve/curation/ckb_blacklist_molecular_profile.tsv");
             builder.ckbEvidenceFilterTsv("/data/resources/crunch/serve/curation/ckb_blacklist_evidence.tsv");
             builder.ckbTrialFilterTsv("/data/resources/crunch/serve/curation/ckb_blacklist_trial.tsv");
+            builder.ckbRegionsToIncludeTsv("/data/resources/crunch/serve/region/ckb_regions.tsv");
             builder.ckbDrugCurationTsv("/data/resources/crunch/serve/curation/ckb_drugs_class_curation.tsv");
-            builder.ckbRegionTsv("/data/resources/crunch/serve/region/ckb_regions.tsv");
 
             builder.outputDir(System.getProperty("user.home") + "/tmp/serve");
             builder.missingDoidsMappingTsv("/data/resources/crunch/serve/curation/public_missing_doids_mapping.tsv");
@@ -64,8 +64,8 @@ public final class ServeLocalConfigProvider {
             builder.ckbMolecularProfileFilterTsv(baseDir + "actionable/curation/ckb_blacklist_molecular_profile.tsv");
             builder.ckbEvidenceFilterTsv(baseDir + "actionable/curation/ckb_blacklist_evidence.tsv");
             builder.ckbTrialFilterTsv(baseDir + "actionable/curation/ckb_blacklist_trial.tsv");
+            builder.ckbRegionsToIncludeTsv(baseDir + "region/ckb_regions.tsv");
             builder.ckbDrugCurationTsv(baseDir + "actionable/curation/ckb_drugs_class_curation.tsv");
-            builder.ckbRegionTsv(baseDir + "region/ckb_regions.tsv");
             builder.ckbFacilityCurationNameTsv(baseDir + "facility_curation/ckb_facility_curation_name.tsv");
             builder.ckbFacilityCurationZipTsv(baseDir + "facility_curation/ckb_facility_curation_zip.tsv");
             builder.ckbFacilityCurationManualTsv(baseDir + "facility_curation/ckb_facility_curation_manual.tsv");

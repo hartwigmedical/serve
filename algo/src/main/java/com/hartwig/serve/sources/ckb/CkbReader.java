@@ -38,7 +38,7 @@ public final class CkbReader {
         LOGGER.info("Reading CBK molecular profile filter entries from {}", ckbMolecularProfileFilterTsv);
         List<CkbMolecularProfileFilterEntry> ckbMolecularProfileFilterEntries =
                 CkbMolecularProfileFilterFile.read(ckbMolecularProfileFilterTsv);
-        LOGGER.info(" Read {} blacklist molecular profile entries", ckbMolecularProfileFilterEntries.size());
+        LOGGER.info(" Read {} molecular profile filter entries", ckbMolecularProfileFilterEntries.size());
 
         LOGGER.info("Reading facility name curations from {}", ckbFacilityCurationNameTsv);
         List<CkbFacilityCurationNameEntry> facilityNameCurations = CkbFacilityCurationNameFile.read(ckbFacilityCurationNameTsv);
@@ -52,7 +52,7 @@ public final class CkbReader {
         List<CkbFacilityCurationManualEntry> facilityManualCurations = CkbFacilityCurationManualFile.read(ckbFacilityCurationManualTsv);
         LOGGER.info(" Read {} facility manual curations to include", facilityManualCurations.size());
 
-        return removeBlacklistedEntries(curate(ckbEntries, facilityNameCurations, facilityZipCurations, facilityManualCurations),
+        return removeFilteredEntries(curate(ckbEntries, facilityNameCurations, facilityZipCurations, facilityManualCurations),
                 ckbMolecularProfileFilterEntries);
     }
 
@@ -73,18 +73,18 @@ public final class CkbReader {
     }
 
     @NotNull
-    private static List<CkbEntry> removeBlacklistedEntries(@NotNull List<CkbEntry> entries,
-            @NotNull List<CkbMolecularProfileFilterEntry> ckbBlacklistEntries) {
-        CkbMolecularProfileFilterModel blacklist = new CkbMolecularProfileFilterModel(ckbBlacklistEntries);
+    private static List<CkbEntry> removeFilteredEntries(@NotNull List<CkbEntry> inputEntries,
+            @NotNull List<CkbMolecularProfileFilterEntry> ckbFilterEntries) {
+        CkbMolecularProfileFilterModel filterModel = new CkbMolecularProfileFilterModel(ckbFilterEntries);
 
-        LOGGER.info("Blacklisting {} CKB entries", entries.size());
-        List<CkbEntry> whitelistedEntries = blacklist.run(entries);
-        LOGGER.info(" Finished CKB blacklisting. {} entries remaining, {} entries have been removed",
-                whitelistedEntries.size(),
-                entries.size() - whitelistedEntries.size());
+        LOGGER.info("Filtering {} CKB entries", inputEntries.size());
+        List<CkbEntry> cleanedEntries = filterModel.run(inputEntries);
+        LOGGER.info(" Finished CKB filtering. {} entries remaining, {} entries have been removed",
+                cleanedEntries.size(),
+                inputEntries.size() - cleanedEntries.size());
 
-        blacklist.reportUnusedFilterEntries();
+        filterModel.reportUnusedFilterEntries();
 
-        return whitelistedEntries;
+        return cleanedEntries;
     }
 }

@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 public final class CkbFacilityCurationManualFile {
 
-    public static final String FIELD_DELIMITER = "\t";
+    private static final String FIELD_DELIMITER = "\t";
 
     @NotNull
     public static List<CkbFacilityCurationManualEntry> read(@NotNull String ckbFacilityCurationManualTsv) throws IOException {

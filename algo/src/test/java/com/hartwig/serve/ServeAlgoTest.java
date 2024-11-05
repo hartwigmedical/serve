@@ -16,14 +16,12 @@ import org.junit.Test;
 public class ServeAlgoTest {
 
     private static final String VICC_JSON = Resources.getResource("vicc/empty.vicc.json").getPath();
-    private static final String ICLUSION_TRIAL_TSV = Resources.getResource("iclusion/empty.iclusion.tsv").getPath();
-    private static final String ICLUSION_FILTER_TSV = Resources.getResource("iclusion/filter.tsv").getPath();
 
     private static final String CKB_DIR = Resources.getResource("ckb_data").getPath();
-    private static final String CKB_BLACKLIST_MOLECULAR_PROFILE_TSV =
+    private static final String CKB_MOLECULAR_PROFILE_FILTER_TSV =
             Resources.getResource("ckb_filter/ckb_molecular_profile_filter.tsv").getPath();
-    private static final String CKB_BLACKLIST_TRIAL_TSV = Resources.getResource("ckb_filter/ckb_trial_filter.tsv").getPath();
-    private static final String CKB_BLACKLIST_EVIDENCE_TSV = Resources.getResource("ckb_filter/ckb_evidence_filter.tsv").getPath();
+    private static final String CKB_TRIAL_FILTER_TSV = Resources.getResource("ckb_filter/ckb_trial_filter.tsv").getPath();
+    private static final String CKB_EVIDENCE_FILTER_TSV = Resources.getResource("ckb_filter/ckb_evidence_filter.tsv").getPath();
     private static final String CKB_DRUG_CLASS_CURATION_TSV =
             Resources.getResource("ckb_curation/ckb_treatment_approach_curation.tsv").getPath();
     private static final String CKB_REGION_TSV = Resources.getResource("ckb_region/ckb_regions.tsv").getPath();
@@ -55,15 +53,11 @@ public class ServeAlgoTest {
         ServeConfig config = algoBuilder().useVicc(true)
                 .viccJson(VICC_JSON)
                 .addViccSources(ViccSource.CIVIC, ViccSource.CGI)
-                .useIclusion(true)
-                .iClusionTrialTsv(ICLUSION_TRIAL_TSV)
-                .iClusionFilterTsv(ICLUSION_FILTER_TSV)
-                .useCkbEvidence(true)
-                .useCkbTrials(true)
+                .useCkb(true)
                 .ckbDir(CKB_DIR)
-                .ckbBlacklistMolecularProfileTsv(CKB_BLACKLIST_MOLECULAR_PROFILE_TSV)
-                .ckbBlacklistTrialTsv(CKB_BLACKLIST_TRIAL_TSV)
-                .ckbBlacklistEvidenceTsv(CKB_BLACKLIST_EVIDENCE_TSV)
+                .ckbMolecularProfileFilterTsv(CKB_MOLECULAR_PROFILE_FILTER_TSV)
+                .ckbEvidenceFilterTsv(CKB_EVIDENCE_FILTER_TSV)
+                .ckbTrialFilterTsv(CKB_TRIAL_FILTER_TSV)
                 .ckbDrugCurationTsv(CKB_DRUG_CLASS_CURATION_TSV)
                 .ckbRegionTsv(CKB_REGION_TSV)
                 .ckbFacilityCurationNameTsv(CKB_FACILITY_CURATION_NAME_TSV)

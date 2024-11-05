@@ -11,9 +11,9 @@ import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 import org.apache.commons.compress.utils.Lists;
 import org.jetbrains.annotations.NotNull;
 
-public class CkbFacilityCurationZipFile {
+public final class CkbFacilityCurationZipFile {
 
-    public static final String FIELD_DELIMITER = "\t";
+    private static final String FIELD_DELIMITER = "\t";
 
     @NotNull
     public static List<CkbFacilityCurationZipEntry> read(@NotNull String ckbFacilityCurationZipTsv) throws IOException {

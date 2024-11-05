@@ -17,6 +17,9 @@ import org.jetbrains.annotations.Nullable;
 public abstract class ClinicalTrial {
 
     @NotNull
+    public abstract Knowledgebase source();
+
+    @NotNull
     public abstract String nctId();
 
     @NotNull

@@ -1,5 +1,7 @@
 package com.hartwig.serve;
 
+import java.util.List;
+
 import com.hartwig.serve.datamodel.DatamodelTestFactory;
 import com.hartwig.serve.datamodel.ImmutableKnownEvents;
 import com.hartwig.serve.datamodel.Knowledgebase;
@@ -34,7 +36,8 @@ public final class ServeAlgoTestFactory {
         return ImmutableExtractionResult.builder()
                 .refGenomeVersion(source.refGenomeVersion())
                 .knownEvents(knownEvents)
-                .efficacyEvidences(DatamodelTestFactory.efficacyEvidenceBuilder())
+                .efficacyEvidences(List.of(DatamodelTestFactory.efficacyEvidenceBuilder().source(source).build()))
+                .clinicalTrials(list.of(DatamodelTestFactory.clinicalTrialBuilder()))
                 .addActionableHotspots(HotspotTestFactory.createTestActionableHotspot(source))
                 .addActionableCodons(RangeTestFactory.createTestActionableRange(source))
                 .addActionableExons(RangeTestFactory.createTestActionableRange(source))

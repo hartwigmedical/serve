@@ -53,14 +53,15 @@ public class EfficacyEvidenceComparatorTest {
 
     @NotNull
     private static EfficacyEvidence create(@NotNull Knowledgebase source, @NotNull String applicableCancerType,
-            @NotNull EvidenceLevel level, @NotNull EvidenceLevelDetails evidenceLevelDetails, @NotNull EvidenceDirection direction) {
+            @NotNull EvidenceLevel evidenceLevel, @NotNull EvidenceLevelDetails evidenceLevelDetails,
+            @NotNull EvidenceDirection evidenceDirection) {
         return DatamodelTestFactory.createTestEfficacyEvidence(source,
+                applicableCancerType,
                 Strings.EMPTY,
-                2024,
-                level,
+                evidenceLevel,
                 evidenceLevelDetails,
-                direction,
-                Sets.newHashSet(),
-                applicableCancerType);
+                evidenceDirection,
+                2024,
+                Sets.newHashSet());
     }
 }

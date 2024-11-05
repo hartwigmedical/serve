@@ -80,32 +80,32 @@ public final class DatamodelTestFactory {
     }
 
     @NotNull
-    public static EfficacyEvidence createTestEfficacyEvidence() {
-        return createTestEfficacyEvidence(Knowledgebase.CKB_EVIDENCE,
-                Strings.EMPTY,
-                2024,
-                EvidenceLevel.A,
-                EvidenceLevelDetails.FDA_APPROVED,
-                EvidenceDirection.NO_BENEFIT,
-                Sets.newHashSet(),
-                Strings.EMPTY);
+    public static ImmutableEfficacyEvidence.Builder efficacyEvidenceBuilder() {
+        return ImmutableEfficacyEvidence.builder()
+                .source(Knowledgebase.UNKNOWN)
+                .treatment(treatmentBuilder().build())
+                .indication(indicationBuilder().build())
+                .molecularCriterium(createTestMolecularCriterium())
+                .efficacyDescription(Strings.EMPTY)
+                .evidenceLevel(EvidenceLevel.A)
+                .evidenceLevelDetails(EvidenceLevelDetails.FDA_APPROVED)
+                .evidenceDirection(EvidenceDirection.RESPONSIVE)
+                .evidenceYear(2024)
+                .urls(Sets.newHashSet());
     }
 
     @NotNull
-    public static EfficacyEvidence createTestEfficacyEvidence(@NotNull Knowledgebase source, @NotNull String efficacyDescription,
-            @NotNull Integer efficacyDescriptionYear, @NotNull EvidenceLevel level, @NotNull EvidenceLevelDetails evidenceLevelDetails,
-            @NotNull EvidenceDirection direction, @NotNull Set<String> evidenceUrls, @NotNull String applicableCancerType) {
-        return ImmutableEfficacyEvidence.builder()
-                .treatment(treatmentBuilder().build())
+    public static EfficacyEvidence createTestEfficacyEvidence(@NotNull Knowledgebase source, @NotNull String applicableCancerType,
+            @NotNull String efficacyDescription, @NotNull EvidenceLevel evidenceLevel, @NotNull EvidenceLevelDetails evidenceLevelDetails,
+            @NotNull EvidenceDirection evidenceDirection, @NotNull Integer evidenceYear, @NotNull Set<String> urls) {
+        return efficacyEvidenceBuilder().source(source)
                 .indication(createTestIndication(applicableCancerType, Strings.EMPTY).build())
-                .source(source)
-                .evidenceDirection(direction)
-                .evidenceLevel(level)
-                .evidenceLevelDetails(evidenceLevelDetails)
-                .evidenceYear(efficacyDescriptionYear)
                 .efficacyDescription(efficacyDescription)
-                .urls(evidenceUrls)
-                .molecularCriterium(createTestMolecularCriterium())
+                .evidenceLevel(evidenceLevel)
+                .evidenceLevelDetails(evidenceLevelDetails)
+                .evidenceDirection(evidenceDirection)
+                .evidenceYear(evidenceYear)
+                .urls(urls)
                 .build();
     }
 

@@ -152,7 +152,7 @@
       },
       "efficacyEvidences": [
         {
-          "source": "CKB_EVIDENCE",
+          "source": "VICC_CGI",
           "treatment": {
             "name": "Vemurafenib",
             "treatmentApproachesDrugClass": [],
@@ -201,7 +201,7 @@
           }
         },
         {
-          "source": "CKB_EVIDENCE",
+          "source": "VICC_CGI",
           "treatment": {
             "name": "Vemurafenib",
             "treatmentApproachesDrugClass": [],
@@ -248,7 +248,7 @@
           }
         },
         {
-          "source": "CKB_EVIDENCE",
+          "source": "VICC_CGI",
           "treatment": {
             "name": "Erlotinib",
             "treatmentApproachesDrugClass": [],
@@ -295,7 +295,7 @@
           }
         },
         {
-          "source": "CKB_EVIDENCE",
+          "source": "VICC_CGI",
           "treatment": {
             "name": "Crizotinib",
             "treatmentApproachesDrugClass": [],
@@ -339,7 +339,7 @@
           }
         },
         {
-          "source": "CKB_EVIDENCE",
+          "source": "VICC_CGI",
           "treatment": {
             "name": "DRUP",
             "treatmentApproachesDrugClass": [],
@@ -388,7 +388,7 @@
           }
         },
         {
-          "source": "CKB_EVIDENCE",
+          "source": "VICC_CGI",
           "treatment": {
             "name": "Trastuzumab",
             "treatmentApproachesDrugClass": [],
@@ -432,7 +432,7 @@
           }
         },
         {
-          "source": "CKB_EVIDENCE",
+          "source": "VICC_CGI",
           "treatment": {
             "name": "Panitumumab",
             "treatmentApproachesDrugClass": [],
@@ -476,7 +476,7 @@
           }
         },
         {
-          "source": "CKB_EVIDENCE",
+          "source": "VICC_CGI",
           "treatment": {
             "name": "Erdafitinib",
             "treatmentApproachesDrugClass": [],
@@ -520,7 +520,7 @@
           }
         },
         {
-          "source": "CKB_EVIDENCE",
+          "source": "VICC_CGI",
           "treatment": {
             "name": "DRUP",
             "treatmentApproachesDrugClass": [],
@@ -569,7 +569,7 @@
           }
         },
         {
-          "source": "CKB_EVIDENCE",
+          "source": "VICC_CGI",
           "treatment": {
             "name": "Osimertinib",
             "treatmentApproachesDrugClass": [],
@@ -617,7 +617,7 @@
           }
         },
         {
-          "source": "CKB_EVIDENCE",
+          "source": "VICC_CGI",
           "treatment": {
             "name": "Crizotinib",
             "treatmentApproachesDrugClass": [],
@@ -661,7 +661,7 @@
           }
         },
         {
-          "source": "CKB_EVIDENCE",
+          "source": "VICC_CGI",
           "treatment": {
             "name": "Nivolumab",
             "treatmentApproachesDrugClass": [],
@@ -712,7 +712,7 @@
           }
         },
         {
-          "source": "CKB_EVIDENCE",
+          "source": "VICC_CGI",
           "treatment": {
             "name": "Nivolumab",
             "treatmentApproachesDrugClass": [],

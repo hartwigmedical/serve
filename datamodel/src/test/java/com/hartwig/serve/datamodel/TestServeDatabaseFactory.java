@@ -14,9 +14,8 @@ public class TestServeDatabaseFactory {
 
     @NotNull
     public static ServeDatabase create() {
-        Knowledgebase source = Knowledgebase.CKB_EVIDENCE;
-        return ImmutableServeDatabase.builder().version("unittest").records(Map.of(RefGenome.V37, createServeRecord(source)))
-                .build();
+        Knowledgebase source = Knowledgebase.UNKNOWN;
+        return ImmutableServeDatabase.builder().version("unittest").records(Map.of(RefGenome.V37, createServeRecord(source))).build();
     }
 
     @NotNull
@@ -42,7 +41,7 @@ public class TestServeDatabaseFactory {
 
     @NotNull
     public static List<EfficacyEvidence> createEfficacyEvidences() {
-        return List.of(DatamodelTestFactory.createTestEfficacyEvidence());
+        return List.of(DatamodelTestFactory.efficacyEvidenceBuilder().build());
     }
 
     @NotNull

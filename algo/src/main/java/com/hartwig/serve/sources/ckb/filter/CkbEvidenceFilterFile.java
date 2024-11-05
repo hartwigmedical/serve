@@ -1,4 +1,4 @@
-package com.hartwig.serve.sources.ckb.blacklist;
+package com.hartwig.serve.sources.ckb.filter;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,6 +10,7 @@ import java.util.Set;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
+import com.hartwig.serve.sources.ckb.blacklist.ImmutableCkbEvidenceFilterEntry;
 
 import org.apache.commons.compress.utils.Lists;
 import org.jetbrains.annotations.NotNull;

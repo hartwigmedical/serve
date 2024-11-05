@@ -8,8 +8,8 @@ import com.hartwig.serve.extraction.EventExtractor;
 import com.hartwig.serve.extraction.EventExtractorFactory;
 import com.hartwig.serve.extraction.util.DriverInconsistencyMode;
 import com.hartwig.serve.refgenome.RefGenomeResource;
-import com.hartwig.serve.sources.ckb.blacklist.CkbEvidenceFilterModel;
-import com.hartwig.serve.sources.ckb.blacklist.CkbTrialFilterModel;
+import com.hartwig.serve.sources.ckb.filter.CkbEvidenceFilterModel;
+import com.hartwig.serve.sources.ckb.filter.CkbTrialFilterModel;
 import com.hartwig.serve.sources.ckb.region.CkbRegion;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurator;
 

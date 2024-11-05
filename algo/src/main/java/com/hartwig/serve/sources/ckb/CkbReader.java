@@ -5,9 +5,6 @@ import java.util.List;
 
 import com.hartwig.serve.ckb.CkbEntryReader;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
-import com.hartwig.serve.sources.ckb.blacklist.CkbMolecularProfileFilterEntry;
-import com.hartwig.serve.sources.ckb.blacklist.CkbMolecularProfileFilterFile;
-import com.hartwig.serve.sources.ckb.blacklist.CkbMolecularProfileFilterModel;
 import com.hartwig.serve.sources.ckb.curation.CkbCurator;
 import com.hartwig.serve.sources.ckb.curation.CkbFacilityCurationManualEntry;
 import com.hartwig.serve.sources.ckb.curation.CkbFacilityCurationManualFile;
@@ -15,6 +12,9 @@ import com.hartwig.serve.sources.ckb.curation.CkbFacilityCurationNameEntry;
 import com.hartwig.serve.sources.ckb.curation.CkbFacilityCurationNameFile;
 import com.hartwig.serve.sources.ckb.curation.CkbFacilityCurationZipEntry;
 import com.hartwig.serve.sources.ckb.curation.CkbFacilityCurationZipFile;
+import com.hartwig.serve.sources.ckb.filter.CkbMolecularProfileFilterEntry;
+import com.hartwig.serve.sources.ckb.filter.CkbMolecularProfileFilterFile;
+import com.hartwig.serve.sources.ckb.filter.CkbMolecularProfileFilterModel;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

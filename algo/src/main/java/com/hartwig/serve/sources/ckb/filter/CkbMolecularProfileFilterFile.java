@@ -1,9 +1,11 @@
-package com.hartwig.serve.sources.ckb.blacklist;
+package com.hartwig.serve.sources.ckb.filter;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
+
+import com.hartwig.serve.sources.ckb.blacklist.ImmutableCkbMolecularProfileFilterEntry;
 
 import org.apache.commons.compress.utils.Lists;
 import org.jetbrains.annotations.NotNull;

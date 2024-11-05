@@ -18,11 +18,11 @@ import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.ImmutableCountry;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.sources.ckb.blacklist.CkbFilteringTestFactory;
-import com.hartwig.serve.sources.ckb.blacklist.CkbTrialFilterEntry;
-import com.hartwig.serve.sources.ckb.blacklist.CkbTrialFilterModel;
-import com.hartwig.serve.sources.ckb.blacklist.CkbTrialFilterType;
 import com.hartwig.serve.sources.ckb.blacklist.ImmutableCkbTrialFilterEntry;
+import com.hartwig.serve.sources.ckb.filter.CkbFilteringTestFactory;
+import com.hartwig.serve.sources.ckb.filter.CkbTrialFilterEntry;
+import com.hartwig.serve.sources.ckb.filter.CkbTrialFilterModel;
+import com.hartwig.serve.sources.ckb.filter.CkbTrialFilterType;
 import com.hartwig.serve.sources.ckb.region.CkbRegion;
 import com.hartwig.serve.sources.ckb.region.ImmutableCkbRegion;
 

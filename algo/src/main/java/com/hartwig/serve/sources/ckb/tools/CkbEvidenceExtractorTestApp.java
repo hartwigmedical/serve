@@ -26,8 +26,8 @@ import com.hartwig.serve.refgenome.RefGenomeResource;
 import com.hartwig.serve.sources.ckb.CkbExtractor;
 import com.hartwig.serve.sources.ckb.CkbExtractorFactory;
 import com.hartwig.serve.sources.ckb.CkbReader;
-import com.hartwig.serve.sources.ckb.blacklist.CkbEvidenceFilterFile;
-import com.hartwig.serve.sources.ckb.blacklist.CkbEvidenceFilterModel;
+import com.hartwig.serve.sources.ckb.filter.CkbEvidenceFilterFile;
+import com.hartwig.serve.sources.ckb.filter.CkbEvidenceFilterModel;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurationFile;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurator;
 

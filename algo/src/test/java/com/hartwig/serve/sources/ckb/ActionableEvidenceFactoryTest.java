@@ -19,11 +19,11 @@ import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.EvidenceLevelDetails;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.Treatment;
-import com.hartwig.serve.sources.ckb.blacklist.CkbEvidenceFilterEntry;
-import com.hartwig.serve.sources.ckb.blacklist.CkbEvidenceFilterModel;
-import com.hartwig.serve.sources.ckb.blacklist.CkbEvidenceFilterType;
-import com.hartwig.serve.sources.ckb.blacklist.CkbFilteringTestFactory;
 import com.hartwig.serve.sources.ckb.blacklist.ImmutableCkbEvidenceFilterEntry;
+import com.hartwig.serve.sources.ckb.filter.CkbEvidenceFilterEntry;
+import com.hartwig.serve.sources.ckb.filter.CkbEvidenceFilterModel;
+import com.hartwig.serve.sources.ckb.filter.CkbEvidenceFilterType;
+import com.hartwig.serve.sources.ckb.filter.CkbFilteringTestFactory;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurator;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachTestFactory;
 

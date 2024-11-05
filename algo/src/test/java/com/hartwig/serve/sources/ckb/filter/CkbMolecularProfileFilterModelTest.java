@@ -1,4 +1,4 @@
-package com.hartwig.serve.sources.ckb.blacklist;
+package com.hartwig.serve.sources.ckb.filter;
 
 import static org.junit.Assert.assertTrue;
 
@@ -7,6 +7,7 @@ import java.util.List;
 import com.google.common.collect.Lists;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.sources.ckb.CkbTestFactory;
+import com.hartwig.serve.sources.ckb.blacklist.ImmutableCkbMolecularProfileFilterEntry;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;

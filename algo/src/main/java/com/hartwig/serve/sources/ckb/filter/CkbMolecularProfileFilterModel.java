@@ -1,4 +1,4 @@
-package com.hartwig.serve.sources.ckb.blacklist;
+package com.hartwig.serve.sources.ckb.filter;
 
 import java.util.List;
 import java.util.Set;

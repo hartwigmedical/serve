@@ -1,4 +1,4 @@
-package com.hartwig.serve.sources.ckb.blacklist;
+package com.hartwig.serve.sources.ckb.filter;
 
 public enum CkbEvidenceFilterType {
     ALL_EVIDENCE_BASED_ON_GENE,

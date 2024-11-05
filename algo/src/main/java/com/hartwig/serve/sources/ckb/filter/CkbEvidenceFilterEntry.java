@@ -1,4 +1,6 @@
-package com.hartwig.serve.sources.ckb.blacklist;
+package com.hartwig.serve.sources.ckb.filter;
+
+import com.hartwig.serve.datamodel.EvidenceLevel;
 
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;
@@ -6,13 +8,10 @@ import org.jetbrains.annotations.Nullable;
 
 @Value.Immutable
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class })
-public abstract class CkbTrialFilterEntry {
+public abstract class CkbEvidenceFilterEntry {
 
     @NotNull
-    public abstract CkbTrialFilterType type();
-
-    @Nullable
-    public abstract String nctId();
+    public abstract CkbEvidenceFilterType type();
 
     @Nullable
     public abstract String therapy();
@@ -25,4 +24,7 @@ public abstract class CkbTrialFilterEntry {
 
     @Nullable
     public abstract String event();
+
+    @Nullable
+    public abstract EvidenceLevel level();
 }

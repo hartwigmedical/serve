@@ -1,4 +1,4 @@
-package com.hartwig.serve.sources.ckb.blacklist;
+package com.hartwig.serve.sources.ckb.filter;
 
 public enum CkbTrialFilterType {
     ALL_TRIALS_BASED_ON_GENE,

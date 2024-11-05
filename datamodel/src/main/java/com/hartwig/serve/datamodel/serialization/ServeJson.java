@@ -27,7 +27,6 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.datamodel.ServeDatabase;
 
 import org.jetbrains.annotations.NotNull;
@@ -65,8 +64,8 @@ public final class ServeJson {
     }
 
     @NotNull
-    public static String jsonFilePath(@NotNull String outputDir, @NotNull RefGenome refGenome) {
-        return outputDir + "/serve.json";
+    public static String jsonFilePath(@NotNull String outputDir) {
+        return outputDir + File.separator + "serve.json";
     }
 
     static class LocalDateSerializer extends StdSerializer<LocalDate> {

@@ -75,7 +75,7 @@ public class ServeAlgo {
     @NotNull
     public Map<RefGenome, ExtractionResult> run(@NotNull ServeConfig config) throws IOException {
         List<CkbEntry> ckbEntries = (config.useCkbEvidence() || config.useCkbTrials()) ? CkbReader.readAndCurate(config.ckbDir(),
-                config.ckbBlacklistMolecularProfileTsv(),
+                config.ckbMolecularProfileFilterTsv(),
                 config.ckbFacilityCurationNameTsv(),
                 config.ckbFacilityCurationZipTsv(),
                 config.ckbFacilityCurationManualTsv()) : Collections.emptyList();
@@ -84,9 +84,9 @@ public class ServeAlgo {
                 Stream.of(config.useVicc() ? extractViccKnowledge(config.viccJson(), config.viccSources()) : null,
                                 config.useIclusion() ? extractIclusionKnowledge(config.iClusionTrialTsv(), config.iClusionFilterTsv()) : null,
                                 config.useCkbEvidence() ? extractCkbEvidenceKnowledge(config.ckbDrugCurationTsv(),
-                                        config.ckbBlacklistEvidenceTsv(),
+                                        config.ckbEvidenceFilterTsv(),
                                         ckbEntries) : null,
-                                config.useCkbTrials() ? extractCkbTrialKnowledge(config.ckbBlacklistTrialTsv(),
+                                config.useCkbTrials() ? extractCkbTrialKnowledge(config.ckbTrialFilterTsv(),
                                         config.ckbRegionTsv(),
                                         ckbEntries) : null,
                                 config.useDocm() ? extractDocmKnowledge(config.docmTsv()) : null,

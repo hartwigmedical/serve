@@ -59,13 +59,13 @@ public class CkbEvidenceExtractorTestApp {
         RefGenomeResource refGenomeResource = buildRefGenomeResource(config);
         TreatmentApproachCurator curator = new TreatmentApproachCurator(TreatmentApproachCurationFile.read(config.ckbDrugCurationTsv()));
         CkbEvidenceBlacklistModel blacklistEvidence =
-                new CkbEvidenceBlacklistModel(CkbBlacklistEvidenceFile.read(config.ckbBlacklistEvidenceTsv()));
+                new CkbEvidenceBlacklistModel(CkbBlacklistEvidenceFile.read(config.ckbEvidenceFilterTsv()));
 
         CkbExtractor extractor =
                 CkbExtractorFactory.createEvidenceExtractor(CkbClassificationConfig.build(), refGenomeResource, curator, blacklistEvidence);
 
         List<CkbEntry> entries = CkbReader.readAndCurate(config.ckbDir(),
-                config.ckbBlacklistMolecularProfileTsv(),
+                config.ckbMolecularProfileFilterTsv(),
                 config.ckbFacilityCurationNameTsv(),
                 config.ckbFacilityCurationZipTsv(),
                 config.ckbFacilityCurationManualTsv());

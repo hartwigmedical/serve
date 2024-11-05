@@ -29,15 +29,11 @@ public interface ServeConfig {
     String USE_VICC = "use_vicc";
     String VICC_JSON = "vicc_json";
     String VICC_SOURCES = "vicc_sources";
-    String USE_ICLUSION = "use_iclusion";
-    String ICLUSION_TRIAL_TSV = "iclusion_trial_tsv";
-    String ICLUSION_FILTER_TSV = "iclusion_filter_tsv";
-    String USE_CKB_EVIDENCE = "use_ckb_evidence";
-    String USE_CKB_TRIALS = "use_ckb_trials";
+    String USE_CKB = "use_ckb";
     String CKB_DIR = "ckb_dir";
-    String CKB_BLACKLIST_MOLECULAR_PROFILE_TSV = "ckb_blacklist_molecular_profile_tsv";
-    String CKB_BLACKLIST_TRIAL_TSV = "ckb_blacklist_trial_tsv";
-    String CKB_BLACKLIST_EVIDENCE_TSV = "ckb_blacklist_evidence_tsv";
+    String CKB_MOLECULAR_PROFILE_FILTER_TSV = "ckb_molecular_profile_filter_tsv";
+    String CKB_EVIDENCE_FILTER_TSV = "ckb_evidence_filter_tsv";
+    String CKB_TRIAL_FILTER_TSV = "ckb_trial_filter_tsv";
     String CKB_DRUG_CURATION_TSV = "ckb_drug_curation_tsv";
     String CKB_REGION_TSV = "ckb_region_tsv";
     String CKB_FACILITY_CURATION_NAME_TSV = "ckb_facility_curation_name_tsv";
@@ -81,15 +77,11 @@ public interface ServeConfig {
         options.addOption(USE_VICC, false, "If provided, VICC will be used as a source in SERVE");
         options.addOption(VICC_JSON, true, "Path to the VICC JSON knowledgebase");
         options.addOption(VICC_SOURCES, true, "Comma-separated list of (lowercase) VICC sources to include");
-        options.addOption(USE_ICLUSION, false, "If provided, iClusion will be used as a source in SERVE");
-        options.addOption(ICLUSION_TRIAL_TSV, true, "Path to the iClusion input trial TSV");
-        options.addOption(ICLUSION_FILTER_TSV, true, "Path to the iClusion filter tsv");
-        options.addOption(USE_CKB_EVIDENCE, false, "If provided, evidence from CKB FLEX will be used as a source in SERVE");
-        options.addOption(USE_CKB_TRIALS, false, "If provided, clinical trials from CKB FLEX will be used as a source in SERVE");
+        options.addOption(USE_CKB, false, "If provided, evidence and trials from CKB FLEX will be used as a source in SERVE");
         options.addOption(CKB_DIR, true, "Path to the CKB FLEX json input dir");
-        options.addOption(CKB_BLACKLIST_MOLECULAR_PROFILE_TSV, true, "Path to the CKB blacklist molecular profile tsv");
-        options.addOption(CKB_BLACKLIST_TRIAL_TSV, true, "Path to the CKB blacklist trial tsv");
-        options.addOption(CKB_BLACKLIST_EVIDENCE_TSV, true, "Path to the CKB blacklist evidence tsv");
+        options.addOption(CKB_MOLECULAR_PROFILE_FILTER_TSV, true, "Path to the CKB molecular profile filter tsv");
+        options.addOption(CKB_EVIDENCE_FILTER_TSV, true, "Path to the CKB evidence filter tsv");
+        options.addOption(CKB_TRIAL_FILTER_TSV, true, "Path to the CKB trial filter tsv");
         options.addOption(CKB_DRUG_CURATION_TSV, true, "Path to the CKB drug curation tsv");
         options.addOption(CKB_REGION_TSV, true, "Path to the CKB regions tsv. Only trials from the configured regions will be used.");
         options.addOption(CKB_FACILITY_CURATION_NAME_TSV, true, "Path to the CKB facility curations based on name tsv");
@@ -134,29 +126,19 @@ public interface ServeConfig {
     @NotNull
     Set<ViccSource> viccSources();
 
-    boolean useIclusion();
-
-    @NotNull
-    String iClusionTrialTsv();
-
-    @NotNull
-    String iClusionFilterTsv();
-
-    boolean useCkbEvidence();
-
-    boolean useCkbTrials();
+    boolean useCkb();
 
     @NotNull
     String ckbDir();
 
     @NotNull
-    String ckbBlacklistMolecularProfileTsv();
+    String ckbMolecularProfileFilterTsv();
 
     @NotNull
-    String ckbBlacklistTrialTsv();
+    String ckbEvidenceFilterTsv();
 
     @NotNull
-    String ckbBlacklistEvidenceTsv();
+    String ckbTrialFilterTsv();
 
     @NotNull
     String ckbDrugCurationTsv();
@@ -240,9 +222,7 @@ public interface ServeConfig {
         }
 
         boolean useVicc = cmd.hasOption(USE_VICC);
-        boolean useIclusion = cmd.hasOption(USE_ICLUSION);
-        boolean useCkbEvidence = cmd.hasOption(USE_CKB_EVIDENCE);
-        boolean useCkbTrials = cmd.hasOption(USE_CKB_TRIALS);
+        boolean useCkb = cmd.hasOption(USE_CKB);
         boolean useDocm = cmd.hasOption(USE_DOCM);
         boolean useHartwigCohortHotspots = cmd.hasOption(USE_HARTWIG_COHORT_HOTSPOTS);
         boolean useHartwigCuratedHotspots = cmd.hasOption(USE_HARTWIG_CURATED_HOTSPOTS);
@@ -253,24 +233,16 @@ public interface ServeConfig {
                 .useVicc(useVicc)
                 .viccJson(useVicc ? nonOptionalFile(cmd, VICC_JSON) : NOT_APPLICABLE)
                 .viccSources(useVicc ? readViccSources(cmd) : Sets.newHashSet())
-                .useIclusion(useIclusion)
-                .iClusionTrialTsv(useIclusion ? nonOptionalFile(cmd, ICLUSION_TRIAL_TSV) : NOT_APPLICABLE)
-                .iClusionFilterTsv(useIclusion ? nonOptionalFile(cmd, ICLUSION_FILTER_TSV) : NOT_APPLICABLE)
-                .useCkbEvidence(useCkbEvidence)
-                .useCkbTrials(useCkbTrials)
-                .ckbDir(useCkbEvidence || useCkbTrials ? nonOptionalDir(cmd, CKB_DIR) : NOT_APPLICABLE)
-                .ckbBlacklistMolecularProfileTsv(
-                        useCkbEvidence || useCkbTrials ? nonOptionalFile(cmd, CKB_BLACKLIST_MOLECULAR_PROFILE_TSV) : NOT_APPLICABLE)
-                .ckbBlacklistTrialTsv(useCkbTrials ? nonOptionalFile(cmd, CKB_BLACKLIST_TRIAL_TSV) : NOT_APPLICABLE)
-                .ckbBlacklistEvidenceTsv(useCkbEvidence ? nonOptionalFile(cmd, CKB_BLACKLIST_EVIDENCE_TSV) : NOT_APPLICABLE)
-                .ckbDrugCurationTsv(useCkbEvidence ? nonOptionalFile(cmd, CKB_DRUG_CURATION_TSV) : NOT_APPLICABLE)
-                .ckbRegionTsv(useCkbTrials ? nonOptionalFile(cmd, CKB_REGION_TSV) : NOT_APPLICABLE)
-                .ckbFacilityCurationNameTsv(
-                        useCkbTrials || useCkbEvidence ? nonOptionalFile(cmd, CKB_FACILITY_CURATION_NAME_TSV) : NOT_APPLICABLE)
-                .ckbFacilityCurationZipTsv(
-                        useCkbTrials || useCkbEvidence ? nonOptionalFile(cmd, CKB_FACILITY_CURATION_ZIP_TSV) : NOT_APPLICABLE)
-                .ckbFacilityCurationManualTsv(
-                        useCkbTrials || useCkbEvidence ? nonOptionalFile(cmd, CKB_FACILITY_CURATION_MANUAL_TSV) : NOT_APPLICABLE)
+                .useCkb(useCkb)
+                .ckbDir(useCkb ? nonOptionalDir(cmd, CKB_DIR) : NOT_APPLICABLE)
+                .ckbMolecularProfileFilterTsv(useCkb ? nonOptionalFile(cmd, CKB_MOLECULAR_PROFILE_FILTER_TSV) : NOT_APPLICABLE)
+                .ckbEvidenceFilterTsv(useCkb ? nonOptionalFile(cmd, CKB_EVIDENCE_FILTER_TSV) : NOT_APPLICABLE)
+                .ckbTrialFilterTsv(useCkb ? nonOptionalFile(cmd, CKB_TRIAL_FILTER_TSV) : NOT_APPLICABLE)
+                .ckbDrugCurationTsv(useCkb ? nonOptionalFile(cmd, CKB_DRUG_CURATION_TSV) : NOT_APPLICABLE)
+                .ckbRegionTsv(useCkb ? nonOptionalFile(cmd, CKB_REGION_TSV) : NOT_APPLICABLE)
+                .ckbFacilityCurationNameTsv(useCkb ? nonOptionalFile(cmd, CKB_FACILITY_CURATION_NAME_TSV) : NOT_APPLICABLE)
+                .ckbFacilityCurationZipTsv(useCkb ? nonOptionalFile(cmd, CKB_FACILITY_CURATION_ZIP_TSV) : NOT_APPLICABLE)
+                .ckbFacilityCurationManualTsv(useCkb ? nonOptionalFile(cmd, CKB_FACILITY_CURATION_MANUAL_TSV) : NOT_APPLICABLE)
                 .useDocm(useDocm)
                 .docmTsv(useDocm ? nonOptionalFile(cmd, DOCM_TSV) : NOT_APPLICABLE)
                 .useHartwigCohortHotspots(useHartwigCohortHotspots)

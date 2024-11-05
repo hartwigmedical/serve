@@ -27,7 +27,6 @@ SERVE supports the ingestion of the following knowledgebases:
 - [CKB FLEX](https://ckbhome.jax.org) - The complete CKB clinical database.
 - [OncoKB](https://www.oncokb.org) - general purpose knowledgebase that is supported through [VICC](http://cancervariants.org)
 - [DoCM](http://www.docm.info) - database containing pathogenic mutations in cancer
-- [iClusion](https://iclusion.org) - a database with all actively recruiting clinical trials in the Netherlands
 - HMF Cohort - a database of recurrent somatic mutations in cancer-related genes from the Hartwig database.
 - HMF Curated - a database of known driver mutations curated by the Hartwig team.
 
@@ -39,8 +38,6 @@ Support for the following knowledgebases is under development:
 A number of other Hartwig modules support the ingestion (and analysis) of these knowledgebases:
 
 - [VICC Importer](../vicc-importer/README.md): A module supporting the ingestion of any knowledgebase ingested into VICC.
-- [iClusion Importer](../iclusion-importer/README.md): A client implementation of the iClusion API which transforms iClusion API output to
-  data that can be ingested into SERVE.
 - [CKB Importer](../ckb-importer/README.md): A module supporting the ingestion and analysis of CKB FLEX.
 
 Do note that SERVE does not provide the actual data that is input to the algorithm, but only provides support for its ingestion.
@@ -273,21 +270,6 @@ DoCM is used exclusively for known hotspot generation. The filtering is therefor
 - Mutations that don't exist on the transcript specified by DoCM are removed.
 
 Also, genes that do not follow HGNC model are renamed to their HGNC name.
-
-### iClusion Curation
-
-iClusion contributes to actionability only. SERVE configures every trial to B-level evidence with `RESPONSIVE` direction.
-SERVE only considers trials with one or more molecular inclusion criterion. The filtering is predominantly configurable rather than fixed
-in SERVE. The fixed curation of iClusion that is done in SERVE is mapping gene names and signatures.
-
-The following filters can be configured in iClusion:
-
-| Filter                    | Description                                                                                                    |
-|---------------------------|----------------------------------------------------------------------------------------------------------------|
-| FILTER_EVENT_WITH_KEYWORD | Can be used to remove evidence of a type that is not observable in DNA (eg "hypermethylation")                 |
-| FILTER_VARIANT_ON_GENE    | Can be used to remove evidence of a gene (eg. Mutations that are inconsistent with the Hartwig driver catalog) |
-
-Finally, cancer types for which no DOIDs have been specified get a DOID assigned by SERVE.
 
 ### CKB FLEX Curation
 

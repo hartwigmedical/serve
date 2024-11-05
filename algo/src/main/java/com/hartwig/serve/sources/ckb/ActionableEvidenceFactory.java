@@ -17,12 +17,16 @@ import com.hartwig.serve.ckb.datamodel.reference.Reference;
 import com.hartwig.serve.ckb.datamodel.therapy.Therapy;
 import com.hartwig.serve.ckb.datamodel.treatmentapproaches.DrugClassTreatmentApproach;
 import com.hartwig.serve.ckb.datamodel.treatmentapproaches.TherapyTreatmentApproach;
+import com.hartwig.serve.datamodel.EfficacyEvidence;
+import com.hartwig.serve.datamodel.EvidenceLevelDetails;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
-import com.hartwig.serve.datamodel.EvidenceLevelDetails;
+import com.hartwig.serve.datamodel.ImmutableEfficacyEvidence;
 import com.hartwig.serve.datamodel.ImmutableTreatment;
+import com.hartwig.serve.datamodel.Indication;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.sources.ckb.filter.CkbEvidenceFilterModel;
+import com.hartwig.serve.datamodel.MolecularCriterium;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurator;
 
 import org.apache.logging.log4j.LogManager;
@@ -30,7 +34,7 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-class ActionableEvidenceFactory implements ActionableEntryFactory {
+class ActionableEvidenceFactory {
 
     private static final Logger LOGGER = LogManager.getLogger(ActionableEvidenceFactory.class);
 
@@ -80,22 +84,22 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
     }
 
     @NotNull
-    @Override
-    public Set<ActionableEntry> create(@NotNull CkbEntry entry, @NotNull String sourceEvent, @NotNull String sourceGene) {
-        Set<ActionableEntry> actionableEntries = Sets.newHashSet();
+    public List<EfficacyEvidence> create(@NotNull CkbEntry entry, @NotNull MolecularCriterium molecularCriterium,
+            @NotNull String sourceEvent, @NotNull String sourceGene) {
+        List<EfficacyEvidence> efficacyEvidences = Lists.newArrayList();
 
         for (Evidence evidence : evidencesWithUsableType(entry.evidences())) {
             EvidenceLevel level = resolveLevel(evidence.ampCapAscoEvidenceLevel());
             EvidenceLevelDetails evidenceLevelDetails = resolveEvidenceLevelDetails(evidence.approvalStatus());
             EvidenceDirection direction = resolveDirection(evidence.responseType());
-            CancerTypeExtraction cancerTypeExtraction = ActionableFunctions.extractCancerTypeDetails(evidence.indication());
+            Indication indication = ActionableFunctions.extractIndication(evidence.indication());
             Integer evidenceYear = extractEvidenceYear(entry.createDate(), evidence.references(), evidence.therapy());
 
-            if (level != null && direction != null && cancerTypeExtraction != null && evidenceLevelDetails != null) {
+            if (level != null && direction != null && indication != null && evidenceLevelDetails != null) {
                 String treatment = evidence.therapy().therapyName();
 
                 if (!blacklistEvidence.shouldFilterEvidence(treatment,
-                        cancerTypeExtraction.applicableCancerType().name(),
+                        indication.applicableType().name(),
                         level,
                         sourceGene,
                         sourceEvent)) {
@@ -105,9 +109,6 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
                             evidenceUrls.add(reference.url());
                         }
                     }
-
-                    Set<String> sourceUrls = Sets.newHashSet();
-                    sourceUrls.add("https://ckbhome.jax.org/profileResponse/advancedEvidenceFind?molecularProfileId=" + entry.profileId());
 
                     Set<String> treatmentApproachDrugClasses = evidence.drugTreatmentApproaches()
                             .stream()
@@ -143,29 +144,26 @@ class ActionableEvidenceFactory implements ActionableEntryFactory {
                     //
                     //                    Set<String> curatedRelevantTreatmentApproaches = Sets.newHashSet(curator.isMatch(key));
 
-                    actionableEntries.add(ImmutableActionableEntry.builder()
-                            .source(Knowledgebase.CKB_EVIDENCE)
-                            .entryDate(entry.createDate())
-                            .sourceEvent(sourceEvent)
-                            .sourceUrls(sourceUrls)
-                            .intervention(ImmutableTreatment.builder()
+                    efficacyEvidences.add(ImmutableEfficacyEvidence.builder()
+                            .source(Knowledgebase.CKB)
+                            .treatment(ImmutableTreatment.builder()
                                     .name(treatment)
                                     .treatmentApproachesDrugClass(treatmentApproachDrugClasses)
                                     .treatmentApproachesTherapy(treatmentApproachTherapies)
                                     .build())
-                            .applicableCancerType(cancerTypeExtraction.applicableCancerType())
-                            .blacklistCancerTypes(cancerTypeExtraction.blacklistedCancerTypes())
+                            .indication(indication)
+                            .molecularCriterium(molecularCriterium)
                             .efficacyDescription(evidence.efficacyEvidence())
-                            .evidenceYear(evidenceYear)
                             .evidenceLevel(level)
                             .evidenceLevelDetails(evidenceLevelDetails)
-                            .direction(direction)
-                            .evidenceUrls(evidenceUrls)
+                            .evidenceDirection(direction)
+                            .evidenceYear(evidenceYear)
+                            .urls(evidenceUrls)
                             .build());
                 }
             }
         }
-        return actionableEntries;
+        return efficacyEvidences;
     }
 
     @NotNull

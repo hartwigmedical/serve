@@ -1,6 +1,6 @@
 package com.hartwig.serve.sources.ckb;
 
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -17,19 +17,21 @@ import com.hartwig.serve.ckb.datamodel.clinicaltrial.VariantRequirementDetail;
 import com.hartwig.serve.ckb.datamodel.indication.Indication;
 import com.hartwig.serve.ckb.datamodel.therapy.Therapy;
 import com.hartwig.serve.datamodel.Country;
-import com.hartwig.serve.datamodel.EvidenceDirection;
-import com.hartwig.serve.datamodel.EvidenceLevel;
-import com.hartwig.serve.datamodel.EvidenceLevelDetails;
+import com.hartwig.serve.datamodel.GenderCriterium;
+import com.hartwig.serve.datamodel.Hospital;
 import com.hartwig.serve.datamodel.ImmutableClinicalTrial;
 import com.hartwig.serve.datamodel.ImmutableCountry;
+import com.hartwig.serve.datamodel.ImmutableHospital;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.sources.ckb.filter.CkbTrialFilterModel;
+import com.hartwig.serve.datamodel.MolecularCriterium;
 import com.hartwig.serve.sources.ckb.region.CkbRegion;
 
+import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-class ActionableTrialFactory implements ActionableEntryFactory {
+class ActionableTrialFactory {
 
     private static final String SUB_FIELD_DELIMITER = ",";
     private static final Set<String> POTENTIALLY_OPEN_RECRUITMENT_TYPES = Set.of("recruiting",
@@ -43,70 +45,81 @@ class ActionableTrialFactory implements ActionableEntryFactory {
 
     private static final Set<String> AGE_GROUPS_TO_INCLUDE = Set.of("adult", "senior");
 
+    private static final Set<String> CHILDREN_HOSPITALS = Set.of("PMC",
+            "WKZ",
+            "EKZ",
+            "JKZ",
+            "BKZ",
+            "WAKZ",
+            "Sophia Kinderziekenhuis",
+            "Amalia Kinderziekenhuis",
+            "MosaKids Kinderziekenhuis");
+
     @NotNull
-    private final CkbTrialFilterModel blacklistStudy;
+    private final CkbTrialFilterModel filterTrial;
     @NotNull
     private final Set<CkbRegion> regionsToInclude;
 
-    public ActionableTrialFactory(@NotNull CkbTrialFilterModel blacklistStudy, @NotNull Set<CkbRegion> regionsToInclude) {
-        this.blacklistStudy = blacklistStudy;
+    public ActionableTrialFactory(@NotNull CkbTrialFilterModel filterTrial, @NotNull Set<CkbRegion> regionsToInclude) {
+        this.filterTrial = filterTrial;
         this.regionsToInclude = regionsToInclude;
     }
 
     @NotNull
-    @Override
-    public Set<ActionableEntry> create(@NotNull CkbEntry entry, @NotNull String sourceEvent, @NotNull String sourceGene) {
-        Set<ActionableEntry> actionableTrials = Sets.newHashSet();
+    public List<com.hartwig.serve.datamodel.ClinicalTrial> create(@NotNull CkbEntry entry, @NotNull MolecularCriterium molecularCriterium,
+            @NotNull String sourceEvent, @NotNull String sourceGene) {
+        List<com.hartwig.serve.datamodel.ClinicalTrial> actionableTrials = Lists.newArrayList();
 
         for (ClinicalTrial trial : trialsToInclude(entry)) {
             Set<Country> countries = extractCountriesToInclude(trial, regionsToInclude);
+            Set<String> therapies = Sets.newHashSet();
+            for (Therapy therapy : trial.therapies()) {
+                therapies.add(therapy.therapyName());
+            }
 
-            if (!countries.isEmpty()) {
-                Set<String> therapies = Sets.newHashSet();
-                for (Therapy therapy : trial.therapies()) {
-                    therapies.add(therapy.therapyName());
-                }
+            if (!filterTrial.shouldFilterTrial(trial.nctId(), setToField(therapies), Strings.EMPTY, sourceGene, sourceEvent)
+                    && !countries.isEmpty()) {
+                List<Indication> filteredIndications = Lists.newArrayList();
                 for (Indication indication : trial.indications()) {
-                    CancerTypeExtraction cancerTypeExtraction = ActionableFunctions.extractCancerTypeDetails(indication);
-                    if (cancerTypeExtraction != null) {
-                        if (!blacklistStudy.shouldFilterTrial(trial.nctId(),
-                                setToField(therapies),
-                                cancerTypeExtraction.applicableCancerType().name(),
-                                sourceGene,
-                                sourceEvent)) {
-
-                            Set<String> sourceUrls = Collections.singleton(
-                                    "https://ckbhome.jax.org/profileResponse/advancedEvidenceFind?molecularProfileId=" + entry.profileId());
-
-                            actionableTrials.add(ImmutableActionableEntry.builder()
-                                    .source(Knowledgebase.CKB_TRIAL)
-                                    .entryDate(entry.createDate())
-                                    .sourceEvent(sourceEvent)
-                                    .sourceUrls(sourceUrls)
-                                    .intervention(ImmutableClinicalTrial.builder()
-                                            .nctId(trial.nctId())
-                                            .title(trial.title())
-                                            .acronym(trial.acronym())
-                                            .countries(countries)
-                                            .therapyNames(therapies)
-                                            .genderCriterium(trial.gender())
-                                            .build())
-                                    .applicableCancerType(cancerTypeExtraction.applicableCancerType())
-                                    .blacklistCancerTypes(cancerTypeExtraction.blacklistedCancerTypes())
-                                    .efficacyDescription(trial.title())
-                                    .evidenceYear(trial.updateDate().getYear())
-                                    .evidenceLevel(EvidenceLevel.B)
-                                    .evidenceLevelDetails(EvidenceLevelDetails.CLINICAL_STUDY)
-                                    .direction(EvidenceDirection.RESPONSIVE)
-                                    .evidenceUrls(Sets.newHashSet("https://clinicaltrials.gov/study/" + trial.nctId()))
-                                    .build());
-                        }
+                    // TODO (CB): look into this filtering. Seems like this was previously not done properly
+                    if (!filterTrial.shouldFilterCancerType(trial.nctId(),
+                            setToField(therapies),
+                            indication.name(),
+                            sourceGene,
+                            sourceEvent)) {
+                        filteredIndications.add(indication);
                     }
+                }
+                Set<com.hartwig.serve.datamodel.Indication> indications = getIndications(filteredIndications);
+                if (indications != null) {
+                    actionableTrials.add(ImmutableClinicalTrial.builder()
+                            .source(Knowledgebase.CKB)
+                            .nctId(trial.nctId())
+                            .title(trial.title())
+                            .acronym(trial.acronym())
+                            .countries(countries)
+                            .therapyNames(therapies)
+                            .genderCriterium(GenderCriterium.valueOf(trial.gender()))
+                            .indications(indications)
+                            .molecularCriteria(List.of(molecularCriterium))
+                            .urls(Sets.newHashSet("https://clinicaltrials.gov/study/" + trial.nctId()))
+                            .build());
                 }
             }
         }
-
         return actionableTrials;
+    }
+
+    @NotNull
+    private static Set<com.hartwig.serve.datamodel.Indication> getIndications(@NotNull List<Indication> ckbIndications) {
+        Set<com.hartwig.serve.datamodel.Indication> indications = new HashSet<>();
+        for (Indication indication : ckbIndications) {
+            com.hartwig.serve.datamodel.Indication cancerTypeExtraction = ActionableFunctions.extractIndication(indication);
+            if (cancerTypeExtraction != null) {
+                indications.add(cancerTypeExtraction);
+            }
+        }
+        return indications;
     }
 
     @NotNull
@@ -133,18 +146,27 @@ class ActionableTrialFactory implements ActionableEntryFactory {
     @NotNull
     @VisibleForTesting
     static Set<Country> extractCountriesToInclude(@NotNull ClinicalTrial trial, @NotNull Set<CkbRegion> regionsToInclude) {
-        Map<String, Map<String, Set<String>>> countriesToCitiesToHospitalNames = trial.locations()
+        Map<String, Map<String, Set<Hospital>>> countriesToCitiesToHospitalNames = trial.locations()
                 .stream()
                 .filter(location -> location.country() != null && location.city() != null)
                 .filter(location -> regionsToInclude.stream().anyMatch(region -> region.includes(location))
                         && hasPotentiallyOpenRequirementToInclude(location.status()))
                 .collect(Collectors.groupingBy(Location::country,
-                        Collectors.groupingBy(Location::city, Collectors.mapping(Location::facility, Collectors.toSet()))));
+                        Collectors.groupingBy(Location::city,
+                                Collectors.mapping(location -> ImmutableHospital.builder()
+                                        .name(location.facility())
+                                        .isChildrensHospital(isChildrensHospital(location.facility()))
+                                        .build(), Collectors.toSet()))));
 
         return countriesToCitiesToHospitalNames.entrySet()
                 .stream()
                 .map(entry -> ImmutableCountry.builder().countryName(entry.getKey()).hospitalsPerCity(entry.getValue()).build())
                 .collect(Collectors.toSet());
+    }
+
+    @VisibleForTesting
+    static boolean isChildrensHospital(@NotNull String hospitalName) {
+        return CHILDREN_HOSPITALS.contains(hospitalName);
     }
 
     @VisibleForTesting

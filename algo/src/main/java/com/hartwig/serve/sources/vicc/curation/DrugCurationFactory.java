@@ -16,7 +16,7 @@ final class DrugCurationFactory {
 
     static final Map<DrugCurationKey, DrugCurationValues> DRUG_MAPPINGS = Maps.newHashMap();
 
-    static final Set<DrugCurationKey> DRUG_BLACKLIST = Sets.newHashSet();
+    static final Set<DrugCurationKey> DRUG_FILTERS = Sets.newHashSet();
 
     private DrugCurationFactory() {
     }
@@ -30,11 +30,11 @@ final class DrugCurationFactory {
     }
 
     private static void populateBlacklist() {
-        DRUG_BLACKLIST.add(civicB("119"));
+        DRUG_FILTERS.add(civicB("119"));
 
         // The below drugs are supposed to be given sequentially.
-        DRUG_BLACKLIST.add(civicB("Sunitinib,Everolimus"));
-        DRUG_BLACKLIST.add(civicB("Vismodegib,Erismodegib"));
+        DRUG_FILTERS.add(civicB("Sunitinib,Everolimus"));
+        DRUG_FILTERS.add(civicB("Vismodegib,Erismodegib"));
     }
 
     private static void populateRenames() {

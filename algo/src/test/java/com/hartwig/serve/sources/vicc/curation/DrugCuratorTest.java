@@ -35,7 +35,7 @@ public class DrugCuratorTest {
     public void canBlacklistDrugs() {
         DrugCurator curator = new DrugCurator();
 
-        DrugCurationKey firstKey = DrugCurationFactory.DRUG_BLACKLIST.iterator().next();
+        DrugCurationKey firstKey = DrugCurationFactory.DRUG_FILTERS.iterator().next();
 
         assertTrue(curator.curate(firstKey.source(), firstKey.level(), firstKey.treatment()).isEmpty());
 

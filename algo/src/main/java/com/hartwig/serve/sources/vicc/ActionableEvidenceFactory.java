@@ -13,10 +13,10 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.cancertype.CancerTypeConstants;
 import com.hartwig.serve.curation.DoidLookup;
-import com.hartwig.serve.datamodel.EvidenceLevelDetails;
 import com.hartwig.serve.datamodel.CancerType;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
+import com.hartwig.serve.datamodel.EvidenceLevelDetails;
 import com.hartwig.serve.datamodel.ImmutableCancerType;
 import com.hartwig.serve.datamodel.ImmutableTreatment;
 import com.hartwig.serve.datamodel.Knowledgebase;
@@ -124,17 +124,17 @@ class ActionableEvidenceFactory {
             for (Map.Entry<String, Set<String>> cancerTypeEntry : cancerTypeToDoidsMap.entrySet()) {
                 String cancerType = cancerTypeEntry.getKey();
                 for (String doid : cancerTypeEntry.getValue()) {
-                    Set<CancerType> blacklistedCancerTypes = Sets.newHashSet();
+                    Set<CancerType> nonApplicableCancerSubTypes = Sets.newHashSet();
                     if (doid.equals(CancerTypeConstants.CANCER_DOID)) {
-                        blacklistedCancerTypes.add(CancerTypeConstants.LEUKEMIA_TYPE);
-                        blacklistedCancerTypes.add(CancerTypeConstants.REFRACTORY_HEMATOLOGIC_TYPE);
-                        blacklistedCancerTypes.add(CancerTypeConstants.BONE_MARROW_TYPE);
+                        nonApplicableCancerSubTypes.add(CancerTypeConstants.LEUKEMIA_TYPE);
+                        nonApplicableCancerSubTypes.add(CancerTypeConstants.REFRACTORY_HEMATOLOGIC_TYPE);
+                        nonApplicableCancerSubTypes.add(CancerTypeConstants.BONE_MARROW_TYPE);
                     }
 
                     for (List<String> drugList : drugLists) {
                         actionableEvidences.add(builder.intervention(ImmutableTreatment.builder().name(formatDrugList(drugList)).build())
                                 .applicableCancerType(ImmutableCancerType.builder().name(cancerType).doid(doid).build())
-                                .blacklistCancerTypes(blacklistedCancerTypes)
+                                .blacklistCancerTypes(nonApplicableCancerSubTypes)
                                 .build());
                     }
                 }

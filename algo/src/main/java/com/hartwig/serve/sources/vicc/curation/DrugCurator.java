@@ -31,8 +31,8 @@ public class DrugCurator {
         if (DrugCurationFactory.DRUG_MAPPINGS.containsKey(key)) {
             curated = DrugCurationFactory.DRUG_MAPPINGS.get(key).drugs();
             LOGGER.debug("Mapping VICC drug '{}' to '{}'", key, curated);
-        } else if (DrugCurationFactory.DRUG_BLACKLIST.contains(key)) {
-            LOGGER.debug("Blacklisting VICC drug '{}'", key);
+        } else if (DrugCurationFactory.DRUG_FILTERS.contains(key)) {
+            LOGGER.debug("Filtering VICC drug '{}'", key);
         } else {
             curated.add(Lists.newArrayList(treatment.split(",")));
         }
@@ -42,10 +42,10 @@ public class DrugCurator {
 
     public void reportUnusedCurationKeys() {
         int unusedKeyCount = 0;
-        for (DrugCurationKey key : DrugCurationFactory.DRUG_BLACKLIST) {
+        for (DrugCurationKey key : DrugCurationFactory.DRUG_FILTERS) {
             if (!evaluatedDrugCurationKeys.contains(key)) {
                 unusedKeyCount++;
-                LOGGER.debug("Key '{}' hasn't been used during VICC drug blacklisting", key);
+                LOGGER.debug("Key '{}' hasn't been used during VICC drug filtering", key);
             }
         }
 
@@ -56,7 +56,7 @@ public class DrugCurator {
             }
         }
 
-        int totalKeyCount = DrugCurationFactory.DRUG_BLACKLIST.size() + DrugCurationFactory.DRUG_MAPPINGS.keySet().size();
+        int totalKeyCount = DrugCurationFactory.DRUG_FILTERS.size() + DrugCurationFactory.DRUG_MAPPINGS.keySet().size();
         LOGGER.debug("Found {} unused VICC drug curation entries. {} keys have been requested against {} entries",
                 unusedKeyCount,
                 evaluatedDrugCurationKeys.size(),

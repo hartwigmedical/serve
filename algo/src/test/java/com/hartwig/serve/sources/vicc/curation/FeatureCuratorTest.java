@@ -66,7 +66,7 @@ public class FeatureCuratorTest {
 
     @NotNull
     private static FeatureCurationKey firstOncoKbBlacklistKey() {
-        for (FeatureCurationKey key : FeatureCurationFactory.FEATURE_BLACKLIST) {
+        for (FeatureCurationKey key : FeatureCurationFactory.FEATURE_FILTERS) {
             if (key.source() == ViccSource.ONCOKB) {
                 return key;
             }

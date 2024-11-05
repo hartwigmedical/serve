@@ -42,7 +42,7 @@ public class FeatureCurator {
                 }
             }
 
-            // We want to exclude entries completely with at least one blacklisted feature.
+            // We want to exclude entries completely with at least one filtered feature
             if (includeEntry) {
                 curatedViccEntries.add(ImmutableViccEntry.builder().from(entry).features(curatedFeatures).build());
             }
@@ -52,10 +52,10 @@ public class FeatureCurator {
 
     public void reportUnusedCurationKeys() {
         int unusedKeyCount = 0;
-        for (FeatureCurationKey key : FeatureCurationFactory.FEATURE_BLACKLIST) {
+        for (FeatureCurationKey key : FeatureCurationFactory.FEATURE_FILTERS) {
             if (!evaluatedFeatureCurationKeys.contains(key)) {
                 unusedKeyCount++;
-                LOGGER.debug("Key '{}' hasn't been used during VICC blacklist curation", key);
+                LOGGER.debug("Key '{}' hasn't been used during VICC filtering", key);
             }
         }
 
@@ -66,7 +66,7 @@ public class FeatureCurator {
             }
         }
 
-        int totalKeyCount = FeatureCurationFactory.FEATURE_BLACKLIST.size() + FeatureCurationFactory.FEATURE_MAPPINGS.keySet().size();
+        int totalKeyCount = FeatureCurationFactory.FEATURE_FILTERS.size() + FeatureCurationFactory.FEATURE_MAPPINGS.keySet().size();
         LOGGER.debug("Found {} unused VICC feature curation entries. {} keys have been requested against {} entries",
                 unusedKeyCount,
                 evaluatedFeatureCurationKeys.size(),
@@ -79,8 +79,8 @@ public class FeatureCurator {
         FeatureCurationKey key = new FeatureCurationKey(entry.source(), feature.geneSymbol(), entry.transcriptId(), feature.name());
         evaluatedFeatureCurationKeys.add(key);
 
-        if (FeatureCurationFactory.FEATURE_BLACKLIST.contains(key)) {
-            LOGGER.debug("Blacklisting feature '{}' for gene {} in {}", feature.name(), feature.geneSymbol(), entry.source());
+        if (FeatureCurationFactory.FEATURE_FILTERS.contains(key)) {
+            LOGGER.debug("Filtering feature '{}' for gene {} in {}", feature.name(), feature.geneSymbol(), entry.source());
             return null;
         } else if (FeatureCurationFactory.FEATURE_MAPPINGS.containsKey(key)) {
             String mappedGeneSymbol = FeatureCurationFactory.FEATURE_MAPPINGS.get(key).geneSymbol();

@@ -137,7 +137,7 @@ public class ServeAlgo {
     private ExtractionResult extractCkbEvidenceKnowledge(@NotNull String ckbDrugCurationTsv, @NotNull String ckbBlacklistEvidenceTsv,
             @NotNull List<CkbEntry> ckbEntries) throws IOException {
         EventClassifierConfig config = CkbClassificationConfig.build();
-        RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.CKB_EVIDENCE);
+        RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.CKB);
 
         Map<TreatmentApproachCurationEntryKey, TreatmentApproachCurationEntry> treatmentApproachMap =
                 TreatmentApproachCurationFile.read(ckbDrugCurationTsv);
@@ -163,7 +163,7 @@ public class ServeAlgo {
     private ExtractionResult extractCkbTrialKnowledge(@NotNull String ckbBlacklistStudyTsv, @NotNull String ckbRegionTsv,
             @NotNull List<CkbEntry> ckbEntries) throws IOException {
         EventClassifierConfig config = CkbClassificationConfig.build();
-        RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.CKB_TRIAL);
+        RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.CKB);
 
         List<CkbBlacklistStudyEntry> ckbBlacklistStudyEntriesEntries = CkbBlacklistStudyFile.read(ckbBlacklistStudyTsv);
         LOGGER.info(" Read {} blacklisting studies entries", ckbBlacklistStudyEntriesEntries.size());

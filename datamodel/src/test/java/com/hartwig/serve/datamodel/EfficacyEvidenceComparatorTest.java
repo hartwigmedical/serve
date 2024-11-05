@@ -15,31 +15,16 @@ public class EfficacyEvidenceComparatorTest {
 
     @Test
     public void canSortEfficacyEvidences() {
-        EfficacyEvidence event1 = create(Knowledgebase.CKB_EVIDENCE,
-                "CancerA",
-                EvidenceLevel.A,
-                EvidenceLevelDetails.CLINICAL_STUDY,
-                EvidenceDirection.RESISTANT);
-        EfficacyEvidence event2 = create(Knowledgebase.CKB_EVIDENCE,
-                "CancerA",
-                EvidenceLevel.A,
-                EvidenceLevelDetails.CLINICAL_STUDY,
-                EvidenceDirection.RESPONSIVE);
-        EfficacyEvidence event3 = create(Knowledgebase.CKB_EVIDENCE,
-                "CancerA",
-                EvidenceLevel.A,
-                EvidenceLevelDetails.CLINICAL_STUDY,
-                EvidenceDirection.RESPONSIVE);
-        EfficacyEvidence event4 = create(Knowledgebase.CKB_EVIDENCE,
-                "CancerB",
-                EvidenceLevel.A,
-                EvidenceLevelDetails.CLINICAL_STUDY,
-                EvidenceDirection.RESPONSIVE);
-        EfficacyEvidence event5 = create(Knowledgebase.CKB_EVIDENCE,
-                "CancerA",
-                EvidenceLevel.B,
-                EvidenceLevelDetails.CLINICAL_STUDY,
-                EvidenceDirection.RESPONSIVE);
+        EfficacyEvidence event1 =
+                create(Knowledgebase.CKB, "CancerA", EvidenceLevel.A, EvidenceLevelDetails.CLINICAL_STUDY, EvidenceDirection.RESISTANT);
+        EfficacyEvidence event2 =
+                create(Knowledgebase.CKB, "CancerA", EvidenceLevel.A, EvidenceLevelDetails.CLINICAL_STUDY, EvidenceDirection.RESPONSIVE);
+        EfficacyEvidence event3 =
+                create(Knowledgebase.CKB, "CancerA", EvidenceLevel.A, EvidenceLevelDetails.CLINICAL_STUDY, EvidenceDirection.RESPONSIVE);
+        EfficacyEvidence event4 =
+                create(Knowledgebase.CKB, "CancerB", EvidenceLevel.A, EvidenceLevelDetails.CLINICAL_STUDY, EvidenceDirection.RESPONSIVE);
+        EfficacyEvidence event5 =
+                create(Knowledgebase.CKB, "CancerA", EvidenceLevel.B, EvidenceLevelDetails.CLINICAL_STUDY, EvidenceDirection.RESPONSIVE);
 
         List<EfficacyEvidence> efficacyEvidences = Lists.newArrayList(event3, event5, event1, event4, event2);
         efficacyEvidences.sort(new EfficacyEvidenceComparator());

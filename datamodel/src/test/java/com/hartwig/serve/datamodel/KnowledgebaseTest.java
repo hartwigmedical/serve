@@ -12,7 +12,7 @@ public class KnowledgebaseTest {
 
     @Test
     public void canConvertBackAndForth() {
-        Set<Knowledgebase> sources = Sets.newHashSet(Knowledgebase.ICLUSION, Knowledgebase.CKB_EVIDENCE);
+        Set<Knowledgebase> sources = Sets.newHashSet(Knowledgebase.ICLUSION, Knowledgebase.CKB);
         assertEquals(sources, Knowledgebase.fromCommaSeparatedSourceString(Knowledgebase.toCommaSeparatedSourceString(sources)));
     }
 

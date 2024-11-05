@@ -54,7 +54,7 @@ public class EfficacyEvidenceComparatorTest {
     @NotNull
     private static EfficacyEvidence create(@NotNull Knowledgebase source, @NotNull String applicableCancerType,
             @NotNull EvidenceLevel level, @NotNull EvidenceLevelDetails evidenceLevelDetails, @NotNull EvidenceDirection direction) {
-        return DatamodelTestFactory.createEfficacyEvidence(source,
+        return DatamodelTestFactory.createTestEfficacyEvidence(source,
                 Strings.EMPTY,
                 2024,
                 level,

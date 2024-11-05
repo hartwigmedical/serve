@@ -11,10 +11,10 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.cancertype.CancerTypeConstants;
 import com.hartwig.serve.curation.DoidLookupTestFactory;
-import com.hartwig.serve.datamodel.EvidenceLevelDetails;
 import com.hartwig.serve.datamodel.DatamodelTestFactory;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
+import com.hartwig.serve.datamodel.EvidenceLevelDetails;
 import com.hartwig.serve.datamodel.Treatment;
 import com.hartwig.serve.sources.vicc.curation.DrugCurator;
 import com.hartwig.serve.sources.vicc.curation.EvidenceLevelCurator;
@@ -50,7 +50,7 @@ public class ActionableEvidenceFactoryTest {
         assertEquals(2, evidences.size());
 
         ActionableEvidence eventA = findByCancerType(evidences, cancerTypeA);
-        Treatment treatmentA = DatamodelTestFactory.extractTreatment(eventA);
+        Treatment treatmentA = DatamodelTestFactory.treatmentBuilder(eventA);
         assertEquals("Treatment", treatmentA.name());
         assertEquals(cancerTypeA, eventA.applicableCancerType().name());
         assertEquals("1", eventA.applicableCancerType().doid());
@@ -61,7 +61,7 @@ public class ActionableEvidenceFactoryTest {
         assertEquals(Sets.newHashSet("url"), eventA.evidenceUrls());
 
         ActionableEvidence eventB = findByCancerType(evidences, cancerTypeB);
-        Treatment treatmentB = DatamodelTestFactory.extractTreatment(eventB);
+        Treatment treatmentB = DatamodelTestFactory.treatmentBuilder(eventB);
         assertEquals("Treatment", treatmentB.name());
         assertEquals(cancerTypeB, eventB.applicableCancerType().name());
         assertEquals(CancerTypeConstants.CANCER_DOID, eventB.applicableCancerType().doid());

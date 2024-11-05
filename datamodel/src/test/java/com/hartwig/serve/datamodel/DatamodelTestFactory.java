@@ -5,13 +5,14 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.hartwig.serve.datamodel.range.RangeTestFactory;
-import com.hartwig.serve.datamodel.hotspot.HotspotTestFactory;
-import com.hartwig.serve.datamodel.fusion.FusionTestFactory;
 import com.hartwig.serve.datamodel.characteristic.CharacteristicTestFactory;
+import com.hartwig.serve.datamodel.fusion.FusionTestFactory;
 import com.hartwig.serve.datamodel.gene.GeneTestFactory;
+import com.hartwig.serve.datamodel.hotspot.HotspotTestFactory;
 import com.hartwig.serve.datamodel.immuno.ImmunoTestFactory;
+import com.hartwig.serve.datamodel.range.RangeTestFactory;
 
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
@@ -22,8 +23,13 @@ public final class DatamodelTestFactory {
     }
 
     @NotNull
-    public static ImmutableTreatment.Builder extractTreatment() {
+    public static ImmutableTreatment.Builder treatmentBuilder() {
         return ImmutableTreatment.builder().name(Strings.EMPTY);
+    }
+
+    @NotNull
+    public static Treatment createTestTreatment() {
+        return treatmentBuilder().build();
     }
 
     @NotNull
@@ -32,35 +38,50 @@ public final class DatamodelTestFactory {
     }
 
     @NotNull
-    public static ImmutableIndication.Builder indicationBuilder(@NotNull String applicableCancerType, @NotNull String ignoredCancerType) {
-        return ImmutableIndication.builder()
-                .applicableCancerType(cancerTypeBuilder().name(applicableCancerType).build())
-                .ignoredCancerTypes(Set.of(cancerTypeBuilder().name(ignoredCancerType).build()));
+    public static CancerType createTestCancerBuilder() {
+        return cancerTypeBuilder().build();
     }
 
     @NotNull
-    public static ImmutableCountry.Builder countryBuilder(@NotNull String country) {
-        return ImmutableCountry.builder()
-                .countryName(country)
+    public static ImmutableIndication.Builder indicationBuilder() {
+        return ImmutableIndication.builder().applicableType(createTestCancerBuilder());
+    }
+
+    @NotNull
+    public static ImmutableIndication.Builder createTestIndication(@NotNull String applicableType, @NotNull String nonApplicableSubType) {
+        return indicationBuilder().applicableType(cancerTypeBuilder().name(applicableType).build())
+                .nonApplicableSubTypes(Set.of(cancerTypeBuilder().name(nonApplicableSubType).build()));
+    }
+
+    @NotNull
+    public static ImmutableCountry.Builder countryBuilder() {
+        return ImmutableCountry.builder().countryName(Strings.EMPTY).hospitalsPerCity(Maps.newHashMap());
+    }
+
+    @NotNull
+    public static Country createTestCountry(@NotNull String countryName) {
+        return countryBuilder().countryName(countryName)
                 .hospitalsPerCity(Map.of("city",
-                        Set.of(ImmutableHospital.builder().isChildrensHospital(false).name("hospital name").build())));
+                        Set.of(ImmutableHospital.builder().isChildrensHospital(false).name("hospital name").build())))
+                .build();
     }
 
     @NotNull
-    public static ImmutableMolecularCriterium.Builder molecularCriteriumBuilder() {
+    public static MolecularCriterium createTestMolecularCriterium() {
         return ImmutableMolecularCriterium.builder()
-                .addHotspots(HotspotTestFactory.createTestActionableHotspotForSource())
-                .addCodons(RangeTestFactory.createTestActionableRangeForSource())
-                .addExons(RangeTestFactory.createTestActionableRangeForSource())
-                .addGenes(GeneTestFactory.createTestActionableGeneForSource())
-                .addFusions(FusionTestFactory.createTestActionableFusionForSource())
-                .addCharacteristics(CharacteristicTestFactory.createTestActionableCharacteristicForSource())
-                .addHla(ImmunoTestFactory.createTestActionableHLAForSource());
+                .addHotspots(HotspotTestFactory.createTestActionableHotspot())
+                .addCodons(RangeTestFactory.createTestActionableRange())
+                .addExons(RangeTestFactory.createTestActionableRange())
+                .addGenes(GeneTestFactory.createTestActionableGene())
+                .addFusions(FusionTestFactory.createTestActionableFusion())
+                .addCharacteristics(CharacteristicTestFactory.createTestActionableCharacteristic())
+                .addHla(ImmunoTestFactory.createTestActionableHLA())
+                .build();
     }
 
     @NotNull
     public static EfficacyEvidence createTestEfficacyEvidence() {
-        return createEfficacyEvidence(Knowledgebase.CKB_EVIDENCE,
+        return createTestEfficacyEvidence(Knowledgebase.CKB_EVIDENCE,
                 Strings.EMPTY,
                 2024,
                 EvidenceLevel.A,
@@ -71,27 +92,12 @@ public final class DatamodelTestFactory {
     }
 
     @NotNull
-    public static ClinicalTrial createTestClinicalTrial() {
-        return ImmutableClinicalTrial.builder()
-                .nctId(Strings.EMPTY)
-                .acronym(Strings.EMPTY)
-                .title(Strings.EMPTY)
-                .countries(Sets.newHashSet())
-                .genderCriterium(GenderCriterium.BOTH)
-                .therapyNames(Sets.newHashSet())
-                .urls(Sets.newHashSet())
-                .indications(Sets.newHashSet())
-                .molecularCriteria(Set.of(molecularCriteriumBuilder().build()))
-                .build();
-    }
-
-    @NotNull
-    public static EfficacyEvidence createEfficacyEvidence(@NotNull Knowledgebase source, @NotNull String efficacyDescription,
+    public static EfficacyEvidence createTestEfficacyEvidence(@NotNull Knowledgebase source, @NotNull String efficacyDescription,
             @NotNull Integer efficacyDescriptionYear, @NotNull EvidenceLevel level, @NotNull EvidenceLevelDetails evidenceLevelDetails,
             @NotNull EvidenceDirection direction, @NotNull Set<String> evidenceUrls, @NotNull String applicableCancerType) {
         return ImmutableEfficacyEvidence.builder()
-                .treatment(extractTreatment().build())
-                .indication(indicationBuilder(applicableCancerType, Strings.EMPTY).build())
+                .treatment(treatmentBuilder().build())
+                .indication(createTestIndication(applicableCancerType, Strings.EMPTY).build())
                 .source(source)
                 .evidenceDirection(direction)
                 .evidenceLevel(level)
@@ -99,21 +105,34 @@ public final class DatamodelTestFactory {
                 .evidenceYear(efficacyDescriptionYear)
                 .efficacyDescription(efficacyDescription)
                 .urls(evidenceUrls)
-                .molecularCriterium(molecularCriteriumBuilder().build())
+                .molecularCriterium(createTestMolecularCriterium())
                 .build();
     }
 
     @NotNull
-    public static ClinicalTrial createClinicalTrial(@NotNull String nctId, @NotNull String title, @NotNull String countryName,
+    public static ImmutableClinicalTrial.Builder clinicalTrialBuilder() {
+        return ImmutableClinicalTrial.builder()
+                .nctId(Strings.EMPTY)
+                .title(Strings.EMPTY)
+                .acronym(Strings.EMPTY)
+                .countries(Sets.newHashSet())
+                .therapyNames(Sets.newHashSet())
+                .genderCriterium(GenderCriterium.BOTH)
+                .indications(Sets.newHashSet())
+                .molecularCriteria(Sets.newHashSet())
+                .urls(Sets.newHashSet());
+    }
+
+    @NotNull
+    public static ClinicalTrial createTestClinicalTrial(@NotNull String nctId, @NotNull String title, @NotNull String countryName,
             @NotNull Set<String> therapyNames, @NotNull GenderCriterium genderCriterium, @NotNull String applicableCancerType,
             @NotNull String ignoredCancerType) {
-        return ImmutableClinicalTrial.builder()
-                .nctId(nctId)
+        return clinicalTrialBuilder().nctId(nctId)
                 .title(title)
-                .countries(Set.of(countryBuilder(countryName).build()))
+                .countries(Set.of(createTestCountry(countryName)))
                 .therapyNames(therapyNames)
                 .genderCriterium(genderCriterium)
-                .indications(Set.of(indicationBuilder(applicableCancerType, Strings.EMPTY).build()))
+                .indications(Set.of(createTestIndication(applicableCancerType, Strings.EMPTY).build()))
                 .build();
     }
 
@@ -131,10 +150,17 @@ public final class DatamodelTestFactory {
         @NotNull
         private final Set<String> sourceUrls;
 
-        public ActionableEventImpl(@NotNull LocalDate entryDate, @NotNull String sourceEvent, @NotNull Set<String> sourceUrls) {
+        public ActionableEventImpl(@NotNull final LocalDate sourceDate, @NotNull final String sourceEvent,
+                @NotNull final Set<String> sourceUrls) {
+            this.sourceDate = sourceDate;
             this.sourceEvent = sourceEvent;
-            this.sourceDate = entryDate;
             this.sourceUrls = sourceUrls;
+        }
+
+        @NotNull
+        @Override
+        public LocalDate sourceDate() {
+            return sourceDate;
         }
 
         @NotNull
@@ -149,33 +175,27 @@ public final class DatamodelTestFactory {
             return sourceUrls;
         }
 
-        @NotNull
         @Override
-        public LocalDate sourceDate() {
-            return sourceDate;
-        }
-
-        @Override
-        public boolean equals(Object o) {
+        public boolean equals(final Object o) {
             if (this == o) {
                 return true;
             }
             if (o == null || getClass() != o.getClass()) {
                 return false;
             }
-            ActionableEventImpl that = (ActionableEventImpl) o;
-            return Objects.equals(sourceEvent, that.sourceEvent) && Objects.equals(sourceDate, that.sourceDate)
+            final ActionableEventImpl that = (ActionableEventImpl) o;
+            return Objects.equals(sourceDate, that.sourceDate) && Objects.equals(sourceEvent, that.sourceEvent)
                     && Objects.equals(sourceUrls, that.sourceUrls);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(sourceEvent, sourceDate, sourceUrls);
+            return Objects.hash(sourceDate, sourceEvent, sourceUrls);
         }
 
         @Override
         public String toString() {
-            return "ActionableEventImpl{" + "sourceEvent='" + sourceEvent + '\'' + ", sourceDate" + sourceDate + '\'' + ", sourceUrls="
+            return "ActionableEventImpl{" + "sourceDate=" + sourceDate + ", sourceEvent='" + sourceEvent + '\'' + ", sourceUrls="
                     + sourceUrls + '}';
         }
     }

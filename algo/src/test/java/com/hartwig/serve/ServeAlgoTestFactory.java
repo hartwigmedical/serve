@@ -1,6 +1,8 @@
 package com.hartwig.serve;
 
+import com.hartwig.serve.datamodel.ImmutableKnownEvents;
 import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.datamodel.KnownEvents;
 import com.hartwig.serve.datamodel.characteristic.CharacteristicTestFactory;
 import com.hartwig.serve.datamodel.fusion.FusionTestFactory;
 import com.hartwig.serve.datamodel.gene.GeneTestFactory;
@@ -19,20 +21,25 @@ public final class ServeAlgoTestFactory {
 
     @NotNull
     public static ExtractionResult createResultForSource(@NotNull Knowledgebase source) {
+        KnownEvents knownEvents = ImmutableKnownEvents.builder()
+                .addHotspots(HotspotTestFactory.createTestKnownHotspotForSource(source))
+                .addCodons(RangeTestFactory.createTestKnownCodonForSource(source))
+                .addExons(RangeTestFactory.createTestKnownExonForSource(source))
+                .addGenes(GeneTestFactory.createTestKnownGeneForSource(source))
+                .addCopyNumbers(GeneTestFactory.createTestKnownCopyNumberForSource(source))
+                .addFusions(FusionTestFactory.createTestKnownFusionForSource(source))
+                .build();
+
         return ImmutableExtractionResult.builder()
                 .refGenomeVersion(source.refGenomeVersion())
-                .addKnownHotspots(HotspotTestFactory.createTestKnownHotspotForSource(source))
-                .addKnownCodons(RangeTestFactory.createTestKnownCodonForSource(source))
-                .addKnownExons(RangeTestFactory.createTestKnownExonForSource(source))
-                .addKnownCopyNumbers(GeneTestFactory.createTestKnownCopyNumberForSource(source))
-                .addKnownFusions(FusionTestFactory.createTestKnownFusionForSource(source))
-                .addActionableHotspots(HotspotTestFactory.createTestActionableHotspotForSource(source))
-                .addActionableCodons(RangeTestFactory.createTestActionableRangeForSource(source))
-                .addActionableExons(RangeTestFactory.createTestActionableRangeForSource(source))
-                .addActionableGenes(GeneTestFactory.createTestActionableGeneForSource(source))
-                .addActionableFusions(FusionTestFactory.createTestActionableFusionForSource(source))
-                .addActionableCharacteristics(CharacteristicTestFactory.createTestActionableCharacteristicForSource(source))
-                .addActionableHLA(ImmunoTestFactory.createTestActionableHLAForSource(source))
+                .knownEvents(knownEvents)
+                .addActionableHotspots(HotspotTestFactory.createTestActionableHotspot(source))
+                .addActionableCodons(RangeTestFactory.createTestActionableRange(source))
+                .addActionableExons(RangeTestFactory.createTestActionableRange(source))
+                .addActionableGenes(GeneTestFactory.createTestActionableGene(source))
+                .addActionableFusions(FusionTestFactory.createTestActionableFusion(source))
+                .addActionableCharacteristics(CharacteristicTestFactory.createTestActionableCharacteristic(source))
+                .addActionableHLA(ImmunoTestFactory.createTestActionableHLA(source))
                 .build();
     }
 }

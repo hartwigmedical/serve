@@ -167,11 +167,11 @@
             "http"
           ],
           "indication": {
-            "applicableCancerType": {
+            "applicableType": {
               "name": "Skin Melanoma",
               "doid": "X"
             },
-            "ignoredCancerTypes": []
+            "nonApplicableSubTypes": []
           },
           "molecularCriterium": {
             "hotspots": [
@@ -216,11 +216,11 @@
             "http"
           ],
           "indication": {
-            "applicableCancerType": {
+            "applicableType": {
               "name": "Skin Melanoma",
               "doid": "X"
             },
-            "ignoredCancerTypes": []
+            "nonApplicableSubTypes": []
           },
           "molecularCriterium": {
             "hotspots": [],
@@ -263,11 +263,11 @@
             "http"
           ],
           "indication": {
-            "applicableCancerType": {
+            "applicableType": {
               "name": "Lung Adeno",
               "doid": "X"
             },
-            "ignoredCancerTypes": []
+            "nonApplicableSubTypes": []
           },
           "molecularCriterium": {
             "hotspots": [],
@@ -310,11 +310,11 @@
             "http"
           ],
           "indication": {
-            "applicableCancerType": {
+            "applicableType": {
               "name": "Lung Adenocarcinoma",
               "doid": "X"
             },
-            "ignoredCancerTypes": []
+            "nonApplicableSubTypes": []
           },
           "molecularCriterium": {
             "hotspots": [],
@@ -354,11 +354,11 @@
             "http"
           ],
           "indication": {
-            "applicableCancerType": {
+            "applicableType": {
               "name": "Solid tumors",
               "doid": "X"
             },
-            "ignoredCancerTypes": [
+            "nonApplicableSubTypes": [
               {
                 "name": "Hematologic cancer",
                 "doid": "2531"
@@ -403,11 +403,11 @@
             "http"
           ],
           "indication": {
-            "applicableCancerType": {
+            "applicableType": {
               "name": "Breast cancer",
               "doid": "X"
             },
-            "ignoredCancerTypes": []
+            "nonApplicableSubTypes": []
           },
           "molecularCriterium": {
             "hotspots": [],
@@ -447,11 +447,11 @@
             "http"
           ],
           "indication": {
-            "applicableCancerType": {
+            "applicableType": {
               "name": "Colorectal cancer",
               "doid": "X"
             },
-            "ignoredCancerTypes": []
+            "nonApplicableSubTypes": []
           },
           "molecularCriterium": {
             "hotspots": [],
@@ -491,11 +491,11 @@
             "http"
           ],
           "indication": {
-            "applicableCancerType": {
+            "applicableType": {
               "name": "Bladder cancer",
               "doid": "X"
             },
-            "ignoredCancerTypes": []
+            "nonApplicableSubTypes": []
           },
           "molecularCriterium": {
             "hotspots": [],
@@ -535,11 +535,11 @@
             "http"
           ],
           "indication": {
-            "applicableCancerType": {
+            "applicableType": {
               "name": "Advanced Solid Tumor",
               "doid": "X"
             },
-            "ignoredCancerTypes": [
+            "nonApplicableSubTypes": [
               {
                 "name": "Hematologic cancer",
                 "doid": "2531"
@@ -584,11 +584,11 @@
             "http"
           ],
           "indication": {
-            "applicableCancerType": {
+            "applicableType": {
               "name": "Lung Cancer",
               "doid": "X"
             },
-            "ignoredCancerTypes": []
+            "nonApplicableSubTypes": []
           },
           "molecularCriterium": {
             "hotspots": [],
@@ -632,11 +632,11 @@
             "http"
           ],
           "indication": {
-            "applicableCancerType": {
+            "applicableType": {
               "name": "Lung Cancer",
               "doid": "X"
             },
-            "ignoredCancerTypes": []
+            "nonApplicableSubTypes": []
           },
           "molecularCriterium": {
             "hotspots": [],
@@ -677,11 +677,11 @@
             "http2"
           ],
           "indication": {
-            "applicableCancerType": {
+            "applicableType": {
               "name": "All cancer types",
               "doid": "X"
             },
-            "ignoredCancerTypes": [
+            "nonApplicableSubTypes": [
               {
                 "name": "Hematologic cancer",
                 "doid": "2531"
@@ -728,11 +728,11 @@
             "http2"
           ],
           "indication": {
-            "applicableCancerType": {
+            "applicableType": {
               "name": "All cancer types",
               "doid": "X"
             },
-            "ignoredCancerTypes": [
+            "nonApplicableSubTypes": [
               {
                 "name": "Hematologic cancer",
                 "doid": "2531"
@@ -796,11 +796,11 @@
           ],
           "indications": [
             {
-              "applicableCancerType": {
+              "applicableType": {
                 "name": "Solid tumor",
                 "doid": "X"
               },
-              "ignoredCancerTypes": []
+              "nonApplicableSubTypes": []
             }
           ],
           "molecularCriteria": [
@@ -856,11 +856,11 @@
           ],
           "indications": [
             {
-              "applicableCancerType": {
+              "applicableType": {
                 "name": "Breast cancer",
                 "doid": "X"
               },
-              "ignoredCancerTypes": []
+              "nonApplicableSubTypes": []
             }
           ],
           "molecularCriteria": [
@@ -916,11 +916,11 @@
           ],
           "indications": [
             {
-              "applicableCancerType": {
+              "applicableType": {
                 "name": "Pancreas",
                 "doid": "X"
               },
-              "ignoredCancerTypes": []
+              "nonApplicableSubTypes": []
             }
           ],
           "molecularCriteria": [
@@ -975,11 +975,11 @@
           ],
           "indications": [
             {
-              "applicableCancerType": {
+              "applicableType": {
                 "name": "Colorectal Cancer",
                 "doid": "X"
               },
-              "ignoredCancerTypes": []
+              "nonApplicableSubTypes": []
             }
           ],
           "molecularCriteria": [
@@ -1037,11 +1037,11 @@
           ],
           "indications": [
             {
-              "applicableCancerType": {
+              "applicableType": {
                 "name": "Leukemia",
                 "doid": "X"
               },
-              "ignoredCancerTypes": []
+              "nonApplicableSubTypes": []
             }
           ],
           "molecularCriteria": [
@@ -1111,11 +1111,11 @@
           ],
           "indications": [
             {
-              "applicableCancerType": {
+              "applicableType": {
                 "name": "All cancer types",
                 "doid": "X"
               },
-              "ignoredCancerTypes": [
+              "nonApplicableSubTypes": [
                 {
                   "name": "Hematologic cancer",
                   "doid": "2531"
@@ -1177,11 +1177,11 @@
           ],
           "indications": [
             {
-              "applicableCancerType": {
+              "applicableType": {
                 "name": "Skin melanoma",
                 "doid": "X"
               },
-              "ignoredCancerTypes": [
+              "nonApplicableSubTypes": [
                 {
                   "name": "Hematologic cancer",
                   "doid": "2531"

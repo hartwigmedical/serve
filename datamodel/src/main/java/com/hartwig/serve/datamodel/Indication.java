@@ -17,8 +17,8 @@ import org.jetbrains.annotations.Nullable;
 public abstract class Indication {
 
     @NotNull
-    public abstract CancerType applicableCancerType();
+    public abstract CancerType applicableType();
 
     @NotNull
-    public abstract Set<CancerType> ignoredCancerTypes();
+    public abstract Set<CancerType> nonApplicableSubTypes();
 }

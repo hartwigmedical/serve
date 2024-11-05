@@ -64,7 +64,7 @@ public class ActionableEvidenceFactoryTest {
                 actionableEvidenceFactoryCharacteristic.create(entryCharacteristics, Strings.EMPTY, "-");
         assertEquals(1, entryCharacteristicsSet.size());
         ActionableEntry characteristics = entryCharacteristicsSet.iterator().next();
-        Treatment treatment = DatamodelTestFactory.extractTreatment(characteristics);
+        Treatment treatment = DatamodelTestFactory.treatmentBuilder(characteristics);
 
         assertEquals(Strings.EMPTY, characteristics.sourceEvent());
         assertEquals(Knowledgebase.CKB_EVIDENCE, characteristics.source());
@@ -96,7 +96,7 @@ public class ActionableEvidenceFactoryTest {
         Set<ActionableEntry> entryAmplificationSet = actionableEvidenceFactoryAmplification.create(entryAmplification, "KRAS", "KRAS");
         assertEquals(1, entryAmplificationSet.size());
         ActionableEntry amplification = entryAmplificationSet.iterator().next();
-        Treatment treatment = DatamodelTestFactory.extractTreatment(amplification);
+        Treatment treatment = DatamodelTestFactory.treatmentBuilder(amplification);
         assertEquals("KRAS", amplification.sourceEvent());
         assertEquals(CkbTestFactory.TEST_CREATE_DATE, amplification.entryDate());
         assertEquals(Knowledgebase.CKB_EVIDENCE, amplification.source());
@@ -127,7 +127,7 @@ public class ActionableEvidenceFactoryTest {
         Set<ActionableEntry> entryHotspotSet = actionableEvidenceFactoryHotspot.create(entryHotspot, "BRAF", "BRAF");
         assertEquals(1, entryHotspotSet.size());
         ActionableEntry hotspot = entryHotspotSet.iterator().next();
-        Treatment treatment = DatamodelTestFactory.extractTreatment(hotspot);
+        Treatment treatment = DatamodelTestFactory.treatmentBuilder(hotspot);
         assertEquals("BRAF", hotspot.sourceEvent());
         assertEquals(CkbTestFactory.TEST_CREATE_DATE, hotspot.entryDate());
         assertEquals(Knowledgebase.CKB_EVIDENCE, hotspot.source());

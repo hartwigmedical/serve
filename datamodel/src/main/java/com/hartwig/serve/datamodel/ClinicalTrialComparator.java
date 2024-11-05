@@ -71,7 +71,7 @@ public class ClinicalTrialComparator implements Comparator<ClinicalTrial> {
         Iterator<Indication> iterator2 = indication2.iterator();
 
         while (iterator1.hasNext() && iterator2.hasNext()) {
-            int compare = iterator1.next().applicableCancerType().name().compareTo(iterator2.next().applicableCancerType().name());
+            int compare = iterator1.next().applicableType().name().compareTo(iterator2.next().applicableType().name());
             if (compare != 0) {
                 return compare;
             }

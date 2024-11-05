@@ -40,7 +40,7 @@ public final class FusionTestFactory {
     }
 
     @NotNull
-    public static ActionableFusion createTestActionableFusionForSource() {
+    public static ActionableFusion createTestActionableFusion() {
         return actionableFusionBuilder().build();
     }
 

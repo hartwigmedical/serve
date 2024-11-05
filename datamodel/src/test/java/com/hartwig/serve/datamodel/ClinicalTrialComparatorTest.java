@@ -36,7 +36,7 @@ public class ClinicalTrialComparatorTest {
     private static ClinicalTrial create(@NotNull String nctId, @NotNull String title, @NotNull String countryName,
             @NotNull Set<String> therapyNames, @NotNull GenderCriterium genderCriterium, @NotNull String applicableCancerType,
             @NotNull String ignoredCancerType) {
-        return DatamodelTestFactory.createClinicalTrial(nctId,
+        return DatamodelTestFactory.createTestClinicalTrial(nctId,
                 title,
                 countryName,
                 therapyNames,

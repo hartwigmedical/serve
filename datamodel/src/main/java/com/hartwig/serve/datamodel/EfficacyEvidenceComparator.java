@@ -43,7 +43,7 @@ public class EfficacyEvidenceComparator implements Comparator<EfficacyEvidence> 
             return yearCompare;
         }
 
-        return compareCancerTypes(event1.indication().applicableCancerType(), event2.indication().applicableCancerType());
+        return compareCancerTypes(event1.indication().applicableType(), event2.indication().applicableType());
     }
 
     private static int compareCancerTypes(@NotNull CancerType cancerType1, @NotNull CancerType cancerType2) {

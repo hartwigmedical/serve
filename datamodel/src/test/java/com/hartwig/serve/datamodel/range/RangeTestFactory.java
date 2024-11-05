@@ -55,7 +55,7 @@ public final class RangeTestFactory {
     }
 
     @NotNull
-    public static ActionableRange createTestActionableRangeForSource() {
+    public static ActionableRange createTestActionableRange() {
         return actionableRangeBuilder().build();
     }
 

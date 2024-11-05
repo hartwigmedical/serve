@@ -51,7 +51,7 @@ public final class GeneTestFactory {
     }
 
     @NotNull
-    public static ActionableGene createTestActionableGeneForSource() {
+    public static ActionableGene createTestActionableGene() {
         return actionableGeneBuilder().build();
     }
 

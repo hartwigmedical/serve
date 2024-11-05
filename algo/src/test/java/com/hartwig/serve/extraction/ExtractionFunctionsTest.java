@@ -25,28 +25,28 @@ public class ExtractionFunctionsTest {
 
         ExtractionResult merged = ExtractionFunctions.merge(Lists.newArrayList(result1, result2));
 
-        assertEquals(1, merged.knownHotspots().size());
-        KnownHotspot hotspot = merged.knownHotspots().iterator().next();
+        assertEquals(1, merged.knownEvents().hotspots().size());
+        KnownHotspot hotspot = merged.knownEvents().hotspots().iterator().next();
         assertTrue(hotspot.sources().contains(source1));
         assertTrue(hotspot.sources().contains(source2));
 
-        assertEquals(1, merged.knownCodons().size());
-        KnownCodon codon = merged.knownCodons().iterator().next();
+        assertEquals(1, merged.knownEvents().codons().size());
+        KnownCodon codon = merged.knownEvents().codons().iterator().next();
         assertTrue(codon.sources().contains(source1));
         assertTrue(codon.sources().contains(source2));
 
-        assertEquals(1, merged.knownExons().size());
-        KnownExon exon = merged.knownExons().iterator().next();
+        assertEquals(1, merged.knownEvents().exons().size());
+        KnownExon exon = merged.knownEvents().exons().iterator().next();
         assertTrue(exon.sources().contains(source1));
         assertTrue(exon.sources().contains(source2));
 
-        assertEquals(1, merged.knownCopyNumbers().size());
-        KnownCopyNumber copyNumber = merged.knownCopyNumbers().iterator().next();
+        assertEquals(1, merged.knownEvents().copyNumbers().size());
+        KnownCopyNumber copyNumber = merged.knownEvents().copyNumbers().iterator().next();
         assertTrue(copyNumber.sources().contains(source1));
         assertTrue(copyNumber.sources().contains(source2));
 
-        assertEquals(1, merged.knownFusions().size());
-        KnownFusion fusion = merged.knownFusions().iterator().next();
+        assertEquals(1, merged.knownEvents().fusions().size());
+        KnownFusion fusion = merged.knownEvents().fusions().iterator().next();
         assertTrue(fusion.sources().contains(source1));
         assertTrue(fusion.sources().contains(source2));
 

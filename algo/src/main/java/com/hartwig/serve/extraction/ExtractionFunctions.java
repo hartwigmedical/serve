@@ -1,23 +1,17 @@
 package com.hartwig.serve.extraction;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.hartwig.serve.actionability.ActionableCharacteristicUrlConsolidator;
-import com.hartwig.serve.actionability.ActionableEventUrlMerger;
-import com.hartwig.serve.actionability.ActionableFusionUrlConsolidator;
-import com.hartwig.serve.actionability.ActionableGeneUrlConsolidator;
-import com.hartwig.serve.actionability.ActionableHLAUrlConsolidator;
-import com.hartwig.serve.actionability.ActionableHotspotUrlConsolidator;
-import com.hartwig.serve.actionability.ActionableRangeUrlConsolidator;
+import com.hartwig.serve.datamodel.ClinicalTrial;
+import com.hartwig.serve.datamodel.EfficacyEvidence;
+import com.hartwig.serve.datamodel.ImmutableEfficacyEvidence;
+import com.hartwig.serve.datamodel.ImmutableKnownEvents;
+import com.hartwig.serve.datamodel.KnownEvents;
 import com.hartwig.serve.datamodel.RefGenome;
-import com.hartwig.serve.datamodel.fusion.KnownFusion;
-import com.hartwig.serve.datamodel.gene.KnownCopyNumber;
-import com.hartwig.serve.datamodel.gene.KnownGene;
-import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
-import com.hartwig.serve.datamodel.range.KnownCodon;
-import com.hartwig.serve.datamodel.range.KnownExon;
 import com.hartwig.serve.extraction.codon.CodonConsolidation;
 import com.hartwig.serve.extraction.copynumber.CopyNumberConsolidation;
 import com.hartwig.serve.extraction.events.EventInterpretation;
@@ -26,6 +20,7 @@ import com.hartwig.serve.extraction.fusion.FusionConsolidation;
 import com.hartwig.serve.extraction.gene.GeneConsolidation;
 import com.hartwig.serve.extraction.hotspot.HotspotConsolidation;
 
+import org.apache.commons.compress.utils.Lists;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -40,58 +35,31 @@ public final class ExtractionFunctions {
     @NotNull
     public static ExtractionResult merge(@NotNull List<ExtractionResult> results) {
         RefGenome version = uniqueVersion(results);
-        ImmutableExtractionResult.Builder mergedBuilder = ImmutableExtractionResult.builder().refGenomeVersion(version);
-
-        Set<EventInterpretation> allEventInterpretations = Sets.newHashSet();
-        Set<KnownHotspot> allHotspots = Sets.newHashSet();
-        Set<KnownCodon> allCodons = Sets.newHashSet();
-        Set<KnownExon> allExons = Sets.newHashSet();
-        Set<KnownGene> allGenes = Sets.newHashSet();
-        Set<KnownCopyNumber> allCopyNumbers = Sets.newHashSet();
-        Set<KnownFusion> allFusions = Sets.newHashSet();
+        Set<EventInterpretation> mergedInterpretations = Sets.newHashSet();
+        ImmutableKnownEvents.Builder unconsolidatedKnownEventsBuilder = ImmutableKnownEvents.builder();
+        List<EfficacyEvidence> unconsolidatedEvidences = Lists.newArrayList();
+        List<ClinicalTrial> mergedTrials = Lists.newArrayList();
 
         for (ExtractionResult result : results) {
-            allEventInterpretations.addAll(result.eventInterpretations());
-            allHotspots.addAll(result.knownHotspots());
-            allCodons.addAll(result.knownCodons());
-            allExons.addAll(result.knownExons());
-            allGenes.addAll(result.knownGenes());
-            allCopyNumbers.addAll(result.knownCopyNumbers());
-            allFusions.addAll(result.knownFusions());
-
-            mergedBuilder.addAllActionableHotspots(result.actionableHotspots());
-            mergedBuilder.addAllActionableCodons(result.actionableCodons());
-            mergedBuilder.addAllActionableExons(result.actionableExons());
-            mergedBuilder.addAllActionableGenes(result.actionableGenes());
-            mergedBuilder.addAllActionableFusions(result.actionableFusions());
-            mergedBuilder.addAllActionableCharacteristics(result.actionableCharacteristics());
-            mergedBuilder.addAllActionableHLA(result.actionableHLA());
+            mergedInterpretations.addAll(result.eventInterpretations());
+            if (result.knownEvents() != null) {
+                unconsolidatedKnownEventsBuilder.from(result.knownEvents());
+            }
+            if (result.efficacyEvidences() != null) {
+                unconsolidatedEvidences.addAll(result.efficacyEvidences());
+            }
+            if (result.clinicalTrials() != null) {
+                mergedTrials.addAll(result.clinicalTrials());
+            }
         }
 
-        ExtractionResult mergedResult = mergedBuilder.eventInterpretations(allEventInterpretations)
-                .knownHotspots(HotspotConsolidation.consolidate(allHotspots))
-                .knownCodons(CodonConsolidation.consolidate(allCodons))
-                .knownExons(ExonConsolidation.consolidate(allExons))
-                .knownCopyNumbers(CopyNumberConsolidation.consolidate(allCopyNumbers))
-                .knownFusions(FusionConsolidation.consolidate(allFusions))
-                .knownGenes(GeneConsolidation.consolidate(allGenes))
-                .build();
-
-        return consolidateActionableEvents(mergedResult);
-    }
-
-    @NotNull
-    private static ExtractionResult consolidateActionableEvents(@NotNull ExtractionResult result) {
+        // TODO (KD): We used to consolidate URLs for evidence in the past but not sure that is still necessary.
         return ImmutableExtractionResult.builder()
-                .from(result)
-                .actionableHotspots(ActionableEventUrlMerger.merge(result.actionableHotspots(), new ActionableHotspotUrlConsolidator()))
-                .actionableCodons(ActionableEventUrlMerger.merge(result.actionableCodons(), new ActionableRangeUrlConsolidator()))
-                .actionableExons(ActionableEventUrlMerger.merge(result.actionableExons(), new ActionableRangeUrlConsolidator()))
-                .actionableGenes(ActionableEventUrlMerger.merge(result.actionableGenes(), new ActionableGeneUrlConsolidator()))
-                .actionableFusions(ActionableEventUrlMerger.merge(result.actionableFusions(), new ActionableFusionUrlConsolidator()))
-                .actionableCharacteristics(ActionableEventUrlMerger.merge(result.actionableCharacteristics(),
-                        new ActionableCharacteristicUrlConsolidator()))
-                .actionableHLA(ActionableEventUrlMerger.merge(result.actionableHLA(), new ActionableHLAUrlConsolidator()))
+                .refGenomeVersion(version)
+                .eventInterpretations(mergedInterpretations)
+                .knownEvents(consolidateKnownEvents(unconsolidatedKnownEventsBuilder.build()))
+                .efficacyEvidences(consolidateEvidences(unconsolidatedEvidences))
+                .clinicalTrials(mergedTrials)
                 .build();
     }
 
@@ -112,4 +80,37 @@ public final class ExtractionFunctions {
 
         return version;
     }
+
+    @NotNull
+    private static KnownEvents consolidateKnownEvents(@NotNull KnownEvents unconsolidated) {
+        return ImmutableKnownEvents.builder()
+                .hotspots(HotspotConsolidation.consolidate(unconsolidated.hotspots()))
+                .codons(CodonConsolidation.consolidate(unconsolidated.codons()))
+                .exons(ExonConsolidation.consolidate(unconsolidated.exons()))
+                .genes(GeneConsolidation.consolidate(unconsolidated.genes()))
+                .copyNumbers(CopyNumberConsolidation.consolidate(unconsolidated.copyNumbers()))
+                .fusions(FusionConsolidation.consolidate(unconsolidated.fusions()))
+                .build();
+    }
+
+    @NotNull
+    private static List<EfficacyEvidence> consolidateEvidences(@NotNull List<EfficacyEvidence> unconsolidatedEvidences) {
+        Map<EfficacyEvidence, Set<String>> urlsPerEvidence = Maps.newHashMap();
+        for (EfficacyEvidence evidence : unconsolidatedEvidences) {
+            EfficacyEvidence stripped = ImmutableEfficacyEvidence.builder().from(evidence).urls(Set.of()).build();
+            Set<String> urls = urlsPerEvidence.get(stripped);
+            if (urls == null) {
+                urls = Sets.newTreeSet();
+            }
+            urls.addAll(evidence.urls());
+            urlsPerEvidence.put(stripped, urls);
+        }
+
+        List<EfficacyEvidence> consolidatedEvents = Lists.newArrayList();
+        for (Map.Entry<EfficacyEvidence, Set<String>> entry : urlsPerEvidence.entrySet()) {
+            consolidatedEvents.add(ImmutableEfficacyEvidence.builder().from(entry.getKey()).urls(entry.getValue()).build());
+        }
+        return consolidatedEvents;
+    }
 }
+

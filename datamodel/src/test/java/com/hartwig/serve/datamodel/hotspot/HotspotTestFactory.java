@@ -45,7 +45,7 @@ public final class HotspotTestFactory {
     }
 
     @NotNull
-    public static ActionableHotspot createTestActionableHotspotForSource() {
+    public static ActionableHotspot createTestActionableHotspot() {
         return actionableHotspotBuilder().build();
     }
 

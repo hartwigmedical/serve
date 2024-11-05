@@ -765,9 +765,10 @@
       ],
       "clinicalTrials": [
         {
+          "source": "VICC_CGI",
           "nctId": "NCT1",
-          "title": "study1",
-          "acronym": "study11",
+          "title": "study 1",
+          "acronym": "acronym for study 1",
           "countries": [
             {
               "countryName": "Netherlands",
@@ -833,8 +834,9 @@
           ]
         },
         {
-          "nctId": "study1",
-          "title": "study1",
+          "source": "VICC_CGI",
+          "nctId": "NCT2",
+          "title": "study 2",
           "countries": [
             {
               "countryName": "Netherlands",
@@ -893,8 +895,9 @@
           ]
         },
         {
-          "nctId": "NCT1",
-          "title": "study1",
+          "source": "VICC_CGI",
+          "nctId": "NCT3",
+          "title": "study 3",
           "countries": [
             {
               "countryName": "Belgium",
@@ -951,8 +954,9 @@
           ]
         },
         {
-          "nctId": "NCT1",
-          "title": "study1",
+          "source": "VICC_CGI",
+          "nctId": "NCT4",
+          "title": "study 4",
           "countries": [
             {
               "countryName": "Belgium",
@@ -1007,8 +1011,9 @@
           ]
         },
         {
-          "nctId": "NCT1",
-          "title": "study1",
+          "source": "VICC_CGI",
+          "nctId": "NCT5",
+          "title": "study 5",
           "countries": [
             {
               "countryName": "Germany",
@@ -1069,8 +1074,9 @@
           ]
         },
         {
-          "nctId": "NCT1",
-          "title": "study1",
+          "source": "VICC_CGI",
+          "nctId": "NCT6",
+          "title": "study 6",
           "countries": [
             {
               "countryName": "Belgium",
@@ -1147,8 +1153,9 @@
           ]
         },
         {
-          "nctId": "NCT1",
-          "title": "study1",
+          "source": "VICC_CGI",
+          "nctId": "NCT7",
+          "title": "study 7",
           "countries": [
             {
               "countryName": "Netherlands",

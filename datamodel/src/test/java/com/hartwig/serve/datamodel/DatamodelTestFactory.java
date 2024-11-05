@@ -7,12 +7,7 @@ import java.util.Set;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.hartwig.serve.datamodel.characteristic.CharacteristicTestFactory;
-import com.hartwig.serve.datamodel.fusion.FusionTestFactory;
-import com.hartwig.serve.datamodel.gene.GeneTestFactory;
 import com.hartwig.serve.datamodel.hotspot.HotspotTestFactory;
-import com.hartwig.serve.datamodel.immuno.ImmunoTestFactory;
-import com.hartwig.serve.datamodel.range.RangeTestFactory;
 
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
@@ -68,15 +63,7 @@ public final class DatamodelTestFactory {
 
     @NotNull
     public static MolecularCriterium createTestMolecularCriterium() {
-        return ImmutableMolecularCriterium.builder()
-                .addHotspots(HotspotTestFactory.createTestActionableHotspot())
-                .addCodons(RangeTestFactory.createTestActionableRange())
-                .addExons(RangeTestFactory.createTestActionableRange())
-                .addGenes(GeneTestFactory.createTestActionableGene())
-                .addFusions(FusionTestFactory.createTestActionableFusion())
-                .addCharacteristics(CharacteristicTestFactory.createTestActionableCharacteristic())
-                .addHla(ImmunoTestFactory.createTestActionableHLA())
-                .build();
+        return ImmutableMolecularCriterium.builder().addHotspots(HotspotTestFactory.createTestActionableHotspot()).build();
     }
 
     @NotNull
@@ -112,9 +99,9 @@ public final class DatamodelTestFactory {
     @NotNull
     public static ImmutableClinicalTrial.Builder clinicalTrialBuilder() {
         return ImmutableClinicalTrial.builder()
+                .source(Knowledgebase.UNKNOWN)
                 .nctId(Strings.EMPTY)
                 .title(Strings.EMPTY)
-                .acronym(Strings.EMPTY)
                 .countries(Sets.newHashSet())
                 .therapyNames(Sets.newHashSet())
                 .genderCriterium(GenderCriterium.BOTH)

@@ -1,7 +1,6 @@
 package com.hartwig.serve;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -16,8 +15,6 @@ import com.hartwig.serve.curation.DoidLookup;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.extraction.ExtractionResult;
-import com.hartwig.serve.iclusion.classification.IclusionClassificationConfig;
-import com.hartwig.serve.iclusion.datamodel.IclusionTrial;
 import com.hartwig.serve.refgenome.RefGenomeManager;
 import com.hartwig.serve.refgenome.RefGenomeResource;
 import com.hartwig.serve.sources.ckb.CkbExtractor;
@@ -44,9 +41,6 @@ import com.hartwig.serve.sources.hartwig.gene.HartwigGeneFileReader;
 import com.hartwig.serve.sources.hartwig.hotspot.HartwigHotspotEntry;
 import com.hartwig.serve.sources.hartwig.hotspot.HartwigHotspotExtractor;
 import com.hartwig.serve.sources.hartwig.hotspot.HartwigHotspotFileReader;
-import com.hartwig.serve.sources.iclusion.IclusionExtractor;
-import com.hartwig.serve.sources.iclusion.IclusionExtractorFactory;
-import com.hartwig.serve.sources.iclusion.IclusionReader;
 import com.hartwig.serve.sources.vicc.ViccExtractor;
 import com.hartwig.serve.sources.vicc.ViccExtractorFactory;
 import com.hartwig.serve.sources.vicc.ViccReader;
@@ -74,21 +68,17 @@ public class ServeAlgo {
 
     @NotNull
     public Map<RefGenome, ExtractionResult> run(@NotNull ServeConfig config) throws IOException {
-        List<CkbEntry> ckbEntries = (config.useCkb()) ? CkbReader.readAndCurate(config.ckbDir(),
-                config.ckbMolecularProfileFilterTsv(),
-                config.ckbFacilityCurationNameTsv(),
-                config.ckbFacilityCurationZipTsv(),
-                config.ckbFacilityCurationManualTsv()) : Collections.emptyList();
-
         List<ExtractionResult> extractions =
                 Stream.of(config.useVicc() ? extractViccKnowledge(config.viccJson(), config.viccSources()) : null,
-                                config.useIclusion() ? extractIclusionKnowledge(config.iClusionTrialTsv(), config.iClusionFilterTsv()) : null,
-                                config.useCkbEvidence() ? extractCkbEvidenceKnowledge(config.ckbDrugCurationTsv(),
+                                config.useCkb() ? extractCkbKnowledge(config.ckbDir(),
+                                        config.ckbMolecularProfileFilterTsv(),
                                         config.ckbEvidenceFilterTsv(),
-                                        ckbEntries) : null,
-                                config.useCkbTrials()
-                                        ? extractCkbTrialKnowledge(config.ckbTrialFilterTsv(), config.ckbRegionTsv(), ckbEntries)
-                                        : null,
+                                        config.ckbTrialFilterTsv(),
+                                        config.ckbDrugCurationTsv(),
+                                        config.ckbRegionsToIncludeTsv(),
+                                        config.ckbFacilityCurationNameTsv(),
+                                        config.ckbFacilityCurationZipTsv(),
+                                        config.ckbFacilityCurationManualTsv()) : null,
                                 config.useDocm() ? extractDocmKnowledge(config.docmTsv()) : null,
                                 config.useHartwigCohortHotspots() ? extractHartwigCohortHotspotKnowledge(config.hartwigCohortHotspotTsv(),
                                         !config.skipHotspotResolving()) : null,
@@ -121,65 +111,48 @@ public class ServeAlgo {
     }
 
     @NotNull
-    private ExtractionResult extractIclusionKnowledge(@NotNull String iClusionTrialTsv, @NotNull String iClusionFilterTsv)
-            throws IOException {
-        List<IclusionTrial> trials = IclusionReader.readAndCurate(iClusionTrialTsv, iClusionFilterTsv);
-
-        EventClassifierConfig config = IclusionClassificationConfig.build();
-        RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.ICLUSION);
-        IclusionExtractor extractor = IclusionExtractorFactory.create(config, refGenomeResource, missingDoidLookup);
-
-        LOGGER.info("Running iClusion knowledge extraction");
-        return extractor.extract(trials);
-    }
-
-    @NotNull
-    private ExtractionResult extractCkbEvidenceKnowledge(@NotNull String ckbDrugCurationTsv, @NotNull String ckbBlacklistEvidenceTsv,
-            @NotNull List<CkbEntry> ckbEntries) throws IOException {
-        EventClassifierConfig config = CkbClassificationConfig.build();
-        RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.CKB);
+    private ExtractionResult extractCkbKnowledge(@NotNull String ckbDir, @NotNull String molecularProfileFilterTsv,
+            @NotNull String ckbEvidenceFilterTsv, @NotNull String ckbTrialFilterTsv, @NotNull String ckbDrugCurationTsv,
+            @NotNull String ckbRegionTsv, @NotNull String facilityCurationNameTsv, @NotNull String facilityCurationZipTsv,
+            @NotNull String facilityCurationManualTsv) throws IOException {
+        List<CkbEntry> ckbEntries = CkbReader.readAndCurate(ckbDir,
+                molecularProfileFilterTsv,
+                facilityCurationNameTsv,
+                facilityCurationZipTsv,
+                facilityCurationManualTsv);
 
         Map<TreatmentApproachCurationEntryKey, TreatmentApproachCurationEntry> treatmentApproachMap =
                 TreatmentApproachCurationFile.read(ckbDrugCurationTsv);
+        TreatmentApproachCurator treatmentApproachCurator = new TreatmentApproachCurator(treatmentApproachMap);
 
-        TreatmentApproachCurator curator = new TreatmentApproachCurator(treatmentApproachMap);
+        List<CkbEvidenceFilterEntry> ckbEvidenceFilterEntries = CkbEvidenceFilterFile.read(ckbEvidenceFilterTsv);
+        LOGGER.info(" Read {} evidence filter entries", ckbEvidenceFilterEntries.size());
+        CkbEvidenceFilterModel evidenceFilter = new CkbEvidenceFilterModel(ckbEvidenceFilterEntries);
 
-        List<CkbEvidenceFilterEntry> ckbBlacklistEvidenceEntries = CkbEvidenceFilterFile.read(ckbBlacklistEvidenceTsv);
-        LOGGER.info(" Read {} blacklisting evidence entries", ckbBlacklistEvidenceEntries.size());
-        CkbEvidenceFilterModel blacklistEvidence = new CkbEvidenceFilterModel(ckbBlacklistEvidenceEntries);
-
-        CkbExtractor extractor = CkbExtractorFactory.createEvidenceExtractor(config, refGenomeResource, curator, blacklistEvidence);
-
-        LOGGER.info("Running CKB evidence knowledge extraction");
-        ExtractionResult result = extractor.extract(ckbEntries);
-
-        blacklistEvidence.reportUnusedFilterEntries();
-        curator.reportUnusedCuratedEntries();
-
-        return result;
-    }
-
-    @NotNull
-    private ExtractionResult extractCkbTrialKnowledge(@NotNull String ckbBlacklistStudyTsv, @NotNull String ckbRegionTsv,
-            @NotNull List<CkbEntry> ckbEntries) throws IOException {
-        EventClassifierConfig config = CkbClassificationConfig.build();
-        RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.CKB);
-
-        List<CkbTrialFilterEntry> ckbBlacklistStudyEntriesEntries = CkbTrialFilterFile.read(ckbBlacklistStudyTsv);
-        LOGGER.info(" Read {} blacklisting studies entries", ckbBlacklistStudyEntriesEntries.size());
-
-        CkbTrialFilterModel blacklistStudy = new CkbTrialFilterModel(ckbBlacklistStudyEntriesEntries);
+        List<CkbTrialFilterEntry> ckbTrialFilterEntries = CkbTrialFilterFile.read(ckbTrialFilterTsv);
+        LOGGER.info(" Read {} trial filter entries", ckbTrialFilterEntries.size());
+        CkbTrialFilterModel trialFilter = new CkbTrialFilterModel(ckbTrialFilterEntries);
 
         LOGGER.info("Reading regions to include from {}", ckbRegionTsv);
         Set<CkbRegion> regionsToInclude = CkbRegionFile.read(ckbRegionTsv);
         LOGGER.info(" Read {} regions to include", regionsToInclude.size());
 
-        CkbExtractor extractor = CkbExtractorFactory.createTrialExtractor(config, refGenomeResource, blacklistStudy, regionsToInclude);
+        EventClassifierConfig config = CkbClassificationConfig.build();
+        RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.CKB);
 
-        LOGGER.info("Running CKB trial knowledge extraction");
+        CkbExtractor extractor = CkbExtractorFactory.createExtractor(config,
+                refGenomeResource,
+                treatmentApproachCurator,
+                evidenceFilter,
+                trialFilter,
+                regionsToInclude);
+
+        LOGGER.info("Running CKB knowledge extraction");
         ExtractionResult result = extractor.extract(ckbEntries);
 
-        blacklistStudy.reportUnusedFilterEntries();
+        evidenceFilter.reportUnusedFilterEntries();
+        trialFilter.reportUnusedFilterEntries();
+        treatmentApproachCurator.reportUnusedCuratedEntries();
 
         return result;
     }

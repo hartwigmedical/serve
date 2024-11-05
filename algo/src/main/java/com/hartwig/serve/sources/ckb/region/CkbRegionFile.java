@@ -19,8 +19,8 @@ public class CkbRegionFile {
     public static final String FIELD_DELIMITER = "\t";
 
     @NotNull
-    public static Set<CkbRegion> read(@NotNull String ckbRegionTsv) throws IOException {
-        List<String> lines = Files.readAllLines(new File(ckbRegionTsv).toPath());
+    public static Set<CkbRegion> read(@NotNull String ckbRegionsToIncludeTsv) throws IOException {
+        List<String> lines = Files.readAllLines(new File(ckbRegionsToIncludeTsv).toPath());
         Map<String, Integer> fields = SerializationUtil.createFields(lines.get(0), FIELD_DELIMITER);
 
         return fromLines(lines.subList(1, lines.size()), fields);

@@ -21,18 +21,21 @@ public final class CkbExtractorFactory {
     }
 
     @NotNull
-    public static CkbExtractor createEvidenceExtractor(@NotNull EventClassifierConfig config, @NotNull RefGenomeResource refGenomeResource,
-            @NotNull TreatmentApproachCurator treatmentApproachCurator, @NotNull CkbEvidenceFilterModel blacklistEvidence) {
-        return new CkbExtractor(Knowledgebase.CKB_EVIDENCE,
+    public static CkbExtractor createExtractor(@NotNull EventClassifierConfig config, @NotNull RefGenomeResource refGenomeResource,
+            @NotNull TreatmentApproachCurator treatmentApproachCurator, @NotNull CkbEvidenceFilterModel evidenceFilter,
+            @NotNull CkbTrialFilterModel trialFilter, @NotNull Set<CkbRegion> regionsToInclude) {
+        // TODO (CB): Implement properly!
+        return new CkbExtractor(Knowledgebase.CKB,
                 createEventExtractor(config, refGenomeResource),
-                new ActionableEvidenceFactory(treatmentApproachCurator, blacklistEvidence),
+                new ActionableEvidenceFactory(treatmentApproachCurator, evidenceFilter),
                 true);
     }
 
     @NotNull
     public static CkbExtractor createTrialExtractor(@NotNull EventClassifierConfig config, @NotNull RefGenomeResource refGenomeResource,
             @NotNull CkbTrialFilterModel blacklistStudy, @NotNull Set<CkbRegion> regionsToInclude) {
-        return new CkbExtractor(Knowledgebase.CKB_TRIAL,
+        // TODO (CB): Remove when extractor has been implemented properly.
+        return new CkbExtractor(Knowledgebase.CKB,
                 createEventExtractor(config, refGenomeResource),
                 new ActionableTrialFactory(blacklistStudy, regionsToInclude),
                 false);

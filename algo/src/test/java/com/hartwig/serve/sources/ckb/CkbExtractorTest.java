@@ -30,7 +30,7 @@ public class CkbExtractorTest {
 
     @Test
     public void canExtractEvidenceFromCkbEntries() {
-        CkbExtractor evidenceExtractor = CkbExtractorFactory.createEvidenceExtractor(CkbClassificationConfig.build(),
+        CkbExtractor evidenceExtractor = CkbExtractorFactory.createExtractor(CkbClassificationConfig.build(),
                 RefGenomeResourceTestFactory.buildTestResource37(),
                 TreatmentApproachTestFactory.createEmptyCurator(),
                 CkbFilteringTestFactory.createEmptyEvidenceFilterModel());

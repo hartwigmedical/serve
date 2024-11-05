@@ -35,7 +35,7 @@ public interface ServeConfig {
     String CKB_EVIDENCE_FILTER_TSV = "ckb_evidence_filter_tsv";
     String CKB_TRIAL_FILTER_TSV = "ckb_trial_filter_tsv";
     String CKB_DRUG_CURATION_TSV = "ckb_drug_curation_tsv";
-    String CKB_REGION_TSV = "ckb_region_tsv";
+    String CKB_REGIONS_TO_INCLUDE_TSV = "ckb_regions_to_include_tsv";
     String CKB_FACILITY_CURATION_NAME_TSV = "ckb_facility_curation_name_tsv";
     String CKB_FACILITY_CURATION_ZIP_TSV = "ckb_facility_curation_zip_tsv";
     String CKB_FACILITY_CURATION_MANUAL_TSV = "ckb_facility_curation_manual_tsv";
@@ -82,8 +82,10 @@ public interface ServeConfig {
         options.addOption(CKB_MOLECULAR_PROFILE_FILTER_TSV, true, "Path to the CKB molecular profile filter tsv");
         options.addOption(CKB_EVIDENCE_FILTER_TSV, true, "Path to the CKB evidence filter tsv");
         options.addOption(CKB_TRIAL_FILTER_TSV, true, "Path to the CKB trial filter tsv");
+        options.addOption(CKB_REGIONS_TO_INCLUDE_TSV,
+                true,
+                "Path to the CKB regions to include tsv. Only trials from the configured regions will be ingested.");
         options.addOption(CKB_DRUG_CURATION_TSV, true, "Path to the CKB drug curation tsv");
-        options.addOption(CKB_REGION_TSV, true, "Path to the CKB regions tsv. Only trials from the configured regions will be used.");
         options.addOption(CKB_FACILITY_CURATION_NAME_TSV, true, "Path to the CKB facility curations based on name tsv");
         options.addOption(CKB_FACILITY_CURATION_ZIP_TSV, true, "Path to the CKB facility curations based on zip tsv");
         options.addOption(CKB_FACILITY_CURATION_MANUAL_TSV, true, "Path to the manual CKB facility curations tsv");
@@ -141,10 +143,10 @@ public interface ServeConfig {
     String ckbTrialFilterTsv();
 
     @NotNull
-    String ckbDrugCurationTsv();
+    String ckbRegionsToIncludeTsv();
 
     @NotNull
-    String ckbRegionTsv();
+    String ckbDrugCurationTsv();
 
     @NotNull
     String ckbFacilityCurationNameTsv();
@@ -238,8 +240,8 @@ public interface ServeConfig {
                 .ckbMolecularProfileFilterTsv(useCkb ? nonOptionalFile(cmd, CKB_MOLECULAR_PROFILE_FILTER_TSV) : NOT_APPLICABLE)
                 .ckbEvidenceFilterTsv(useCkb ? nonOptionalFile(cmd, CKB_EVIDENCE_FILTER_TSV) : NOT_APPLICABLE)
                 .ckbTrialFilterTsv(useCkb ? nonOptionalFile(cmd, CKB_TRIAL_FILTER_TSV) : NOT_APPLICABLE)
+                .ckbRegionsToInclude(useCkb ? nonOptionalFile(cmd, CKB_REGIONS_TO_INCLUDE_TSV) : NOT_APPLICABLE)
                 .ckbDrugCurationTsv(useCkb ? nonOptionalFile(cmd, CKB_DRUG_CURATION_TSV) : NOT_APPLICABLE)
-                .ckbRegionTsv(useCkb ? nonOptionalFile(cmd, CKB_REGION_TSV) : NOT_APPLICABLE)
                 .ckbFacilityCurationNameTsv(useCkb ? nonOptionalFile(cmd, CKB_FACILITY_CURATION_NAME_TSV) : NOT_APPLICABLE)
                 .ckbFacilityCurationZipTsv(useCkb ? nonOptionalFile(cmd, CKB_FACILITY_CURATION_ZIP_TSV) : NOT_APPLICABLE)
                 .ckbFacilityCurationManualTsv(useCkb ? nonOptionalFile(cmd, CKB_FACILITY_CURATION_MANUAL_TSV) : NOT_APPLICABLE)

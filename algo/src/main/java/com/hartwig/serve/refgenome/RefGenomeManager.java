@@ -28,7 +28,7 @@ public class RefGenomeManager {
     @NotNull
     private final ConversionFilter conversionFilter;
 
-    RefGenomeManager(@NotNull final Map<RefGenome, RefGenomeResource> refGenomeResourceMap) {
+    public RefGenomeManager(@NotNull final Map<RefGenome, RefGenomeResource> refGenomeResourceMap) {
         this.refGenomeResourceMap = refGenomeResourceMap;
         this.conversionFilter = new ConversionFilter();
     }

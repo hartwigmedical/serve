@@ -1,9 +1,18 @@
 package com.hartwig.serve.refgenome;
 
+import java.util.List;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
 import com.hartwig.serve.common.RefGenomeFunctions;
+import com.hartwig.serve.datamodel.ClinicalTrial;
+import com.hartwig.serve.datamodel.EfficacyEvidence;
+import com.hartwig.serve.datamodel.ImmutableClinicalTrial;
+import com.hartwig.serve.datamodel.ImmutableEfficacyEvidence;
+import com.hartwig.serve.datamodel.ImmutableKnownEvents;
+import com.hartwig.serve.datamodel.ImmutableMolecularCriterium;
+import com.hartwig.serve.datamodel.KnownEvents;
+import com.hartwig.serve.datamodel.MolecularCriterium;
 import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.datamodel.common.GenomeRegion;
 import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
@@ -23,6 +32,7 @@ import com.hartwig.serve.refgenome.liftover.LiftOverAlgo;
 import com.hartwig.serve.refgenome.liftover.LiftOverChecker;
 import com.hartwig.serve.refgenome.liftover.LiftOverResult;
 
+import org.apache.commons.compress.utils.Lists;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -51,8 +61,48 @@ class RefGenomeConverter {
         this.liftOverAlgo = liftOverAlgo;
     }
 
+    @Nullable
+    public KnownEvents convertKnownEvents(@Nullable KnownEvents knownEvents) {
+        if (knownEvents == null) {
+            return null;
+        }
+
+        return ImmutableKnownEvents.builder()
+                .from(knownEvents)
+                .hotspots(convertKnownHotspots(knownEvents.hotspots()))
+                .codons(convertKnownCodons(knownEvents.codons()))
+                .exons(convertKnownExons(knownEvents.exons()))
+                .build();
+    }
+
+    @Nullable
+    public List<EfficacyEvidence> convertEfficacyEvidences(@Nullable List<EfficacyEvidence> evidences) {
+        if (evidences == null) {
+            return null;
+        }
+
+        List<EfficacyEvidence> converted = Lists.newArrayList();
+        for (EfficacyEvidence evidence : evidences) {
+            converted.add(convertEfficacyEvidence(evidence));
+        }
+        return converted;
+    }
+
+    @Nullable
+    public List<ClinicalTrial> convertClinicalTrials(@Nullable List<ClinicalTrial> clinicalTrials) {
+        if (clinicalTrials == null) {
+            return null;
+        }
+
+        List<ClinicalTrial> converted = Lists.newArrayList();
+        for (ClinicalTrial clinicalTrial : clinicalTrials) {
+            converted.add(convertClinicalTrial(clinicalTrial));
+        }
+        return converted;
+    }
+
     @NotNull
-    public Set<KnownHotspot> convertKnownHotspots(@NotNull Set<KnownHotspot> hotspots) {
+    private Set<KnownHotspot> convertKnownHotspots(@NotNull Set<KnownHotspot> hotspots) {
         Set<KnownHotspot> convertedHotspots = Sets.newHashSet();
         for (KnownHotspot hotspot : hotspots) {
             KnownHotspot lifted = liftOverKnownHotspot(hotspot);
@@ -66,7 +116,7 @@ class RefGenomeConverter {
     }
 
     @NotNull
-    public Set<KnownCodon> convertKnownCodons(@NotNull Set<KnownCodon> codons) {
+    private Set<KnownCodon> convertKnownCodons(@NotNull Set<KnownCodon> codons) {
         Set<KnownCodon> convertedCodons = Sets.newHashSet();
         for (KnownCodon codon : codons) {
             KnownCodon lifted = liftOverKnownCodon(codon);
@@ -87,7 +137,7 @@ class RefGenomeConverter {
     }
 
     @NotNull
-    public Set<KnownExon> convertKnownExons(@NotNull Set<KnownExon> exons) {
+    private Set<KnownExon> convertKnownExons(@NotNull Set<KnownExon> exons) {
         Set<KnownExon> convertedExons = Sets.newHashSet();
         for (KnownExon exon : exons) {
             KnownExon lifted = liftOverKnownExon(exon);
@@ -100,7 +150,34 @@ class RefGenomeConverter {
     }
 
     @NotNull
-    public Set<ActionableHotspot> convertActionableHotspots(@NotNull Set<ActionableHotspot> actionableHotspots) {
+    private EfficacyEvidence convertEfficacyEvidence(@NotNull EfficacyEvidence evidence) {
+        return ImmutableEfficacyEvidence.builder()
+                .from(evidence)
+                .molecularCriterium(convertMolecularCriterium(evidence.molecularCriterium()))
+                .build();
+    }
+
+    @NotNull
+    private ClinicalTrial convertClinicalTrial(@NotNull ClinicalTrial clinicalTrial) {
+        Set<MolecularCriterium> convertedCriteria = Sets.newHashSet();
+        for (MolecularCriterium criterium : clinicalTrial.molecularCriteria()) {
+            convertedCriteria.add(convertMolecularCriterium(criterium));
+        }
+        return ImmutableClinicalTrial.builder().from(clinicalTrial).molecularCriteria(convertedCriteria).build();
+    }
+
+    @NotNull
+    private MolecularCriterium convertMolecularCriterium(@NotNull MolecularCriterium molecularCriterium) {
+        return ImmutableMolecularCriterium.builder()
+                .from(molecularCriterium)
+                .hotspots(convertActionableHotspots(molecularCriterium.hotspots()))
+                .codons(convertActionableRanges(molecularCriterium.codons()))
+                .exons(convertActionableRanges(molecularCriterium.exons()))
+                .build();
+    }
+
+    @NotNull
+    private Set<ActionableHotspot> convertActionableHotspots(@NotNull Set<ActionableHotspot> actionableHotspots) {
         Set<ActionableHotspot> convertedActionableHotspots = Sets.newHashSet();
         for (ActionableHotspot actionableHotspot : actionableHotspots) {
             ActionableHotspot lifted = liftOverActionableHotspot(actionableHotspot);
@@ -112,7 +189,7 @@ class RefGenomeConverter {
     }
 
     @NotNull
-    public Set<ActionableRange> convertActionableRanges(@NotNull Set<ActionableRange> actionableRanges) {
+    private Set<ActionableRange> convertActionableRanges(@NotNull Set<ActionableRange> actionableRanges) {
         Set<ActionableRange> convertedActionableRanges = Sets.newHashSet();
         for (ActionableRange actionableRange : actionableRanges) {
             ActionableRange lifted = liftOverActionableRange(actionableRange);

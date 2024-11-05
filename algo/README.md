@@ -379,7 +379,6 @@ A knowledgebase can contribute to known and/or actionable events. Current config
 | DoCM            | v37                | Yes                          | No                                |
 | Hartwig Cohort  | v37                | Yes                          | No                                |
 | Hartwig Curated | v37                | Yes                          | No                                |
-| iClusion        | v37                | No                           | Yes                               |
 | VICC            | v37                | Yes                          | Yes                               |
 
 Knowledge extraction is performed on a per-knowledgebase level after which all events are consolidated as follows:
@@ -432,6 +431,10 @@ elsewhere.
 
 ## Version History and Download Links
 
+- Upcoming
+    - New datamodel with main change the separation of trials and efficacy evidence.
+    - `CKB_EVIDENCE` and `CKB_TRIALS` are merged back into one source.
+    - iClusion is no longer supported.
 - [6.0.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v6.0.0)
     - Convert output to JSON format instead of TSV
     - Add SERVE version to JSON output

@@ -75,21 +75,11 @@ public class RefGenomeManager {
         ExtractionResult filteredExtraction = conversionFilter.filter(extraction);
 
         return ImmutableExtractionResult.builder()
-                .eventInterpretations(filteredExtraction.eventInterpretations())
                 .refGenomeVersion(targetVersion)
-                .knownHotspots(converter.convertKnownHotspots(filteredExtraction.knownHotspots()))
-                .knownCodons(converter.convertKnownCodons(filteredExtraction.knownCodons()))
-                .knownExons(converter.convertKnownExons(filteredExtraction.knownExons()))
-                .knownGenes(filteredExtraction.knownGenes())
-                .knownCopyNumbers(filteredExtraction.knownCopyNumbers())
-                .knownFusions(filteredExtraction.knownFusions())
-                .actionableHotspots(converter.convertActionableHotspots(filteredExtraction.actionableHotspots()))
-                .actionableCodons(converter.convertActionableRanges(filteredExtraction.actionableCodons()))
-                .actionableExons(converter.convertActionableRanges(filteredExtraction.actionableExons()))
-                .actionableGenes(filteredExtraction.actionableGenes())
-                .actionableFusions(filteredExtraction.actionableFusions())
-                .actionableCharacteristics(filteredExtraction.actionableCharacteristics())
-                .actionableHLA(filteredExtraction.actionableHLA())
+                .eventInterpretations(filteredExtraction.eventInterpretations())
+                .knownEvents(converter.convertKnownEvents(filteredExtraction.knownEvents()))
+                .efficacyEvidences(converter.convertEfficacyEvidences(filteredExtraction.efficacyEvidences()))
+                .clinicalTrials(converter.convertClinicalTrials(filteredExtraction.clinicalTrials()))
                 .build();
     }
 

@@ -1,6 +1,6 @@
 package com.hartwig.serve.datamodel;
 
-import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -23,24 +23,24 @@ import org.jetbrains.annotations.Nullable;
 public abstract class MolecularCriterium {
 
     @NotNull
-    public abstract List<ActionableHotspot> hotspots();
+    public abstract Set<ActionableHotspot> hotspots();
 
     @NotNull
-    public abstract List<ActionableRange> codons();
+    public abstract Set<ActionableRange> codons();
 
     @NotNull
-    public abstract List<ActionableRange> exons();
+    public abstract Set<ActionableRange> exons();
 
     @NotNull
-    public abstract List<ActionableGene> genes();
+    public abstract Set<ActionableGene> genes();
 
     @NotNull
-    public abstract List<ActionableFusion> fusions();
+    public abstract Set<ActionableFusion> fusions();
 
     @NotNull
-    public abstract List<ActionableCharacteristic> characteristics();
+    public abstract Set<ActionableCharacteristic> characteristics();
 
     @NotNull
-    public abstract List<ActionableHLA> hla();
+    public abstract Set<ActionableHLA> hla();
 
 }

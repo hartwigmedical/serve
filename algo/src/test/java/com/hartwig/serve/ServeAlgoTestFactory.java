@@ -19,11 +19,13 @@ import org.jetbrains.annotations.NotNull;
 
 public final class ServeAlgoTestFactory {
 
-    private ServeAlgoTestFactory() {
+    @NotNull
+    public static ExtractionResult createMinimalResultForSource(@NotNull Knowledgebase source) {
+        return ImmutableExtractionResult.builder().refGenomeVersion(source.refGenomeVersion()).build();
     }
 
     @NotNull
-    public static ExtractionResult createResultForSource(@NotNull Knowledgebase source) {
+    public static ExtractionResult createProperResultForSource(@NotNull Knowledgebase source) {
         KnownEvents knownEvents = ImmutableKnownEvents.builder()
                 .addHotspots(HotspotTestFactory.createTestKnownHotspotForSource(source))
                 .addCodons(RangeTestFactory.createTestKnownCodonForSource(source))

@@ -24,6 +24,7 @@ import org.apache.commons.compress.utils.Lists;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public final class ExtractionFunctions {
 
@@ -36,28 +37,39 @@ public final class ExtractionFunctions {
     public static ExtractionResult merge(@NotNull List<ExtractionResult> results) {
         RefGenome version = uniqueVersion(results);
         Set<EventInterpretation> mergedInterpretations = Sets.newHashSet();
-        ImmutableKnownEvents.Builder unconsolidatedKnownEventsBuilder = ImmutableKnownEvents.builder();
-        List<EfficacyEvidence> unconsolidatedEvidences = Lists.newArrayList();
-        List<ClinicalTrial> mergedTrials = Lists.newArrayList();
+        ImmutableKnownEvents.Builder unconsolidatedKnownEventsBuilder = null;
+        List<EfficacyEvidence> unconsolidatedEvidences = null;
+        List<ClinicalTrial> mergedTrials = null;
 
         for (ExtractionResult result : results) {
             mergedInterpretations.addAll(result.eventInterpretations());
             if (result.knownEvents() != null) {
+                if (unconsolidatedKnownEventsBuilder == null) {
+                    unconsolidatedKnownEventsBuilder = ImmutableKnownEvents.builder();
+                }
                 unconsolidatedKnownEventsBuilder.from(result.knownEvents());
             }
             if (result.efficacyEvidences() != null) {
+                if (unconsolidatedEvidences == null) {
+                    unconsolidatedEvidences = Lists.newArrayList();
+                }
                 unconsolidatedEvidences.addAll(result.efficacyEvidences());
             }
             if (result.clinicalTrials() != null) {
+                if (mergedTrials == null) {
+                    mergedTrials = Lists.newArrayList();
+                }
                 mergedTrials.addAll(result.clinicalTrials());
             }
         }
+
+        KnownEvents unconsolidatedKnownEvents = unconsolidatedKnownEventsBuilder != null ? unconsolidatedKnownEventsBuilder.build() : null;
 
         // TODO (KD): We used to consolidate URLs for evidence in the past but not sure that is still necessary.
         return ImmutableExtractionResult.builder()
                 .refGenomeVersion(version)
                 .eventInterpretations(mergedInterpretations)
-                .knownEvents(consolidateKnownEvents(unconsolidatedKnownEventsBuilder.build()))
+                .knownEvents(consolidateKnownEvents(unconsolidatedKnownEvents))
                 .efficacyEvidences(consolidateEvidences(unconsolidatedEvidences))
                 .clinicalTrials(mergedTrials)
                 .build();
@@ -82,7 +94,11 @@ public final class ExtractionFunctions {
     }
 
     @NotNull
-    private static KnownEvents consolidateKnownEvents(@NotNull KnownEvents unconsolidated) {
+    private static KnownEvents consolidateKnownEvents(@Nullable KnownEvents unconsolidated) {
+        if (unconsolidated == null) {
+            return null;
+        }
+
         return ImmutableKnownEvents.builder()
                 .hotspots(HotspotConsolidation.consolidate(unconsolidated.hotspots()))
                 .codons(CodonConsolidation.consolidate(unconsolidated.codons()))
@@ -94,7 +110,11 @@ public final class ExtractionFunctions {
     }
 
     @NotNull
-    private static List<EfficacyEvidence> consolidateEvidences(@NotNull List<EfficacyEvidence> unconsolidatedEvidences) {
+    private static List<EfficacyEvidence> consolidateEvidences(@Nullable List<EfficacyEvidence> unconsolidatedEvidences) {
+        if (unconsolidatedEvidences == null) {
+            return null;
+        }
+
         Map<EfficacyEvidence, Set<String>> urlsPerEvidence = Maps.newHashMap();
         for (EfficacyEvidence evidence : unconsolidatedEvidences) {
             EfficacyEvidence stripped = ImmutableEfficacyEvidence.builder().from(evidence).urls(Set.of()).build();

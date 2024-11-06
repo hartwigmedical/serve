@@ -13,7 +13,7 @@ import org.junit.Test;
 public class ClinicalTrialComparatorTest {
 
     @Test
-    public void canSortEfficacyEvidences() {
+    public void canSortClinicalTrials() {
         ClinicalTrial clinicalTrial1 =
                 create("nct1", "title 1", "Belgium", "therapy 1", GenderCriterium.FEMALE, "cancerType1", "excludedCancerSubType1");
         ClinicalTrial clinicalTrial2 =

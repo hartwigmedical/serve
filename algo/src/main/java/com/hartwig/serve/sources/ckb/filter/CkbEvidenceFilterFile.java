@@ -8,8 +8,8 @@ import java.util.Map;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
+import com.hartwig.serve.common.serialization.SerializationUtil;
 import com.hartwig.serve.datamodel.EvidenceLevel;
-import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
 import org.apache.commons.compress.utils.Lists;
 import org.jetbrains.annotations.NotNull;

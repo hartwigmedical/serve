@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
+import com.hartwig.serve.common.serialization.SerializationUtil;
 
 import org.jetbrains.annotations.NotNull;
 

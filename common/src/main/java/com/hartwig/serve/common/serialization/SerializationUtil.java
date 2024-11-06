@@ -1,4 +1,4 @@
-package com.hartwig.serve.datamodel.serialization.util;
+package com.hartwig.serve.common.serialization;
 
 import java.util.Map;
 

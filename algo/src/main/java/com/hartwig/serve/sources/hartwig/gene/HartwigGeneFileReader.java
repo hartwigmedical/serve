@@ -2,7 +2,7 @@ package com.hartwig.serve.sources.hartwig.gene;
 
 import static java.util.stream.Collectors.toList;
 
-import static com.hartwig.serve.datamodel.serialization.util.SerializationUtil.createFields;
+import static com.hartwig.serve.common.serialization.SerializationUtil.createFields;
 
 import java.io.File;
 import java.io.IOException;

@@ -6,7 +6,7 @@ import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
 
-import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
+import com.hartwig.serve.common.serialization.SerializationUtil;
 
 import org.apache.commons.compress.utils.Lists;
 import org.jetbrains.annotations.NotNull;

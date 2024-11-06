@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
+import com.hartwig.serve.common.serialization.SerializationUtil;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

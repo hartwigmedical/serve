@@ -10,8 +10,8 @@ import java.util.Map;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.hartwig.serve.common.RefGenomeFunctions;
+import com.hartwig.serve.common.serialization.SerializationUtil;
 import com.hartwig.serve.datamodel.RefGenome;
-import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

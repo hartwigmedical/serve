@@ -1,4 +1,4 @@
-package com.hartwig.serve.datamodel.serialization.util;
+package com.hartwig.serve.common.serialization;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

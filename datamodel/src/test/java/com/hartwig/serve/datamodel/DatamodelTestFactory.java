@@ -37,9 +37,9 @@ public final class DatamodelTestFactory {
     }
 
     @NotNull
-    public static Indication createTestIndication(@NotNull String applicableType, @NotNull String nonApplicableSubType) {
+    public static Indication createTestIndication(@NotNull String applicableType, @NotNull String excludedSubType) {
         return indicationBuilder().applicableType(cancerTypeBuilder().name(applicableType).build())
-                .nonApplicableSubTypes(Set.of(cancerTypeBuilder().name(nonApplicableSubType).build()))
+                .excludedSubTypes(Set.of(cancerTypeBuilder().name(excludedSubType).build()))
                 .build();
     }
 

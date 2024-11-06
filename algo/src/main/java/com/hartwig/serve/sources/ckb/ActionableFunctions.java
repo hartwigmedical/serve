@@ -35,7 +35,7 @@ final class ActionableFunctions {
         }
 
         ImmutableCancerType.Builder applicableTypeBuilder = ImmutableCancerType.builder().name(indication.name());
-        Set<CancerType> nonApplicableSubTypes = Sets.newHashSet();
+        Set<CancerType> excludedSubTypes = Sets.newHashSet();
 
         String source = sourceDoidValues[0];
         String id = sourceDoidValues[1];
@@ -45,9 +45,9 @@ final class ActionableFunctions {
             switch (id) {
                 case CancerTypeConstants.CKB_ADVANCED_SOLID_TUMOR: {
                     applicableTypeBuilder.doid(CancerTypeConstants.CANCER_DOID);
-                    nonApplicableSubTypes.add(CancerTypeConstants.LEUKEMIA_TYPE);
-                    nonApplicableSubTypes.add(CancerTypeConstants.REFRACTORY_HEMATOLOGIC_TYPE);
-                    nonApplicableSubTypes.add(CancerTypeConstants.BONE_MARROW_TYPE);
+                    excludedSubTypes.add(CancerTypeConstants.LEUKEMIA_TYPE);
+                    excludedSubTypes.add(CancerTypeConstants.REFRACTORY_HEMATOLOGIC_TYPE);
+                    excludedSubTypes.add(CancerTypeConstants.BONE_MARROW_TYPE);
                     break;
                 }
                 case CancerTypeConstants.CKB_CANCER_OF_UNKNOWN_PRIMARY: {
@@ -79,10 +79,7 @@ final class ActionableFunctions {
             return null;
         }
 
-        return ImmutableIndication.builder()
-                .applicableType(applicableTypeBuilder.build())
-                .nonApplicableSubTypes(nonApplicableSubTypes)
-                .build();
+        return ImmutableIndication.builder().applicableType(applicableTypeBuilder.build()).excludedSubTypes(excludedSubTypes).build();
     }
 
     @Nullable

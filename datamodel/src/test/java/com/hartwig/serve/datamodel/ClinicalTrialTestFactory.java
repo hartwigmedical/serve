@@ -34,13 +34,13 @@ public final class ClinicalTrialTestFactory {
     @NotNull
     public static ClinicalTrial createTestClinicalTrial(@NotNull String nctId, @NotNull String title, @NotNull String countryName,
             @NotNull Set<String> therapyNames, @NotNull GenderCriterium genderCriterium, @NotNull String applicableCancerType,
-            @NotNull String nonApplicableCancerSubType) {
+            @NotNull String excludedCancerSubType) {
         return builder().nctId(nctId)
                 .title(title)
                 .countries(Set.of(DatamodelTestFactory.createTestCountry(countryName)))
                 .therapyNames(therapyNames)
                 .genderCriterium(genderCriterium)
-                .indications(Set.of(DatamodelTestFactory.createTestIndication(applicableCancerType, nonApplicableCancerSubType)))
+                .indications(Set.of(DatamodelTestFactory.createTestIndication(applicableCancerType, excludedCancerSubType)))
                 .build();
     }
 }

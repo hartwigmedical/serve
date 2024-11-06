@@ -20,5 +20,5 @@ public abstract class Indication {
     public abstract CancerType applicableType();
 
     @NotNull
-    public abstract Set<CancerType> nonApplicableSubTypes();
+    public abstract Set<CancerType> excludedSubTypes();
 }

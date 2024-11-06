@@ -124,17 +124,17 @@ class ActionableEvidenceFactory {
             for (Map.Entry<String, Set<String>> cancerTypeEntry : cancerTypeToDoidsMap.entrySet()) {
                 String cancerType = cancerTypeEntry.getKey();
                 for (String doid : cancerTypeEntry.getValue()) {
-                    Set<CancerType> nonApplicableCancerSubTypes = Sets.newHashSet();
+                    Set<CancerType> excludedCancerSubTypes = Sets.newHashSet();
                     if (doid.equals(CancerTypeConstants.CANCER_DOID)) {
-                        nonApplicableCancerSubTypes.add(CancerTypeConstants.LEUKEMIA_TYPE);
-                        nonApplicableCancerSubTypes.add(CancerTypeConstants.REFRACTORY_HEMATOLOGIC_TYPE);
-                        nonApplicableCancerSubTypes.add(CancerTypeConstants.BONE_MARROW_TYPE);
+                        excludedCancerSubTypes.add(CancerTypeConstants.LEUKEMIA_TYPE);
+                        excludedCancerSubTypes.add(CancerTypeConstants.REFRACTORY_HEMATOLOGIC_TYPE);
+                        excludedCancerSubTypes.add(CancerTypeConstants.BONE_MARROW_TYPE);
                     }
 
                     for (List<String> drugList : drugLists) {
                         actionableEvidences.add(builder.intervention(ImmutableTreatment.builder().name(formatDrugList(drugList)).build())
                                 .applicableCancerType(ImmutableCancerType.builder().name(cancerType).doid(doid).build())
-                                .blacklistCancerTypes(nonApplicableCancerSubTypes)
+                                .blacklistCancerTypes(excludedCancerSubTypes)
                                 .build());
                     }
                 }

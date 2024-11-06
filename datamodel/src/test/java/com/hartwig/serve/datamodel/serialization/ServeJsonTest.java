@@ -16,7 +16,7 @@ import org.junit.Test;
 
 public class ServeJsonTest {
 
-    public static final String TEST_SERVE_JSON = Resources.getResource("example.serve.json").getPath();
+    private static final String TEST_SERVE_JSON = Resources.getResource("example.serve.json").getPath();
 
     @Test
     public void canRoundTripServeJson() throws IOException {

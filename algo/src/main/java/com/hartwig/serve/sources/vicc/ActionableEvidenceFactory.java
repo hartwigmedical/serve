@@ -1,6 +1,5 @@
 package com.hartwig.serve.sources.vicc;
 
-import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -14,12 +13,16 @@ import com.google.common.collect.Sets;
 import com.hartwig.serve.cancertype.CancerTypeConstants;
 import com.hartwig.serve.curation.DoidLookup;
 import com.hartwig.serve.datamodel.CancerType;
+import com.hartwig.serve.datamodel.EfficacyEvidence;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.EvidenceLevelDetails;
 import com.hartwig.serve.datamodel.ImmutableCancerType;
+import com.hartwig.serve.datamodel.ImmutableEfficacyEvidence;
+import com.hartwig.serve.datamodel.ImmutableIndication;
 import com.hartwig.serve.datamodel.ImmutableTreatment;
 import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.datamodel.MolecularCriterium;
 import com.hartwig.serve.sources.vicc.curation.DrugCurator;
 import com.hartwig.serve.sources.vicc.curation.EvidenceLevelCurator;
 import com.hartwig.serve.vicc.datamodel.EvidenceInfo;
@@ -91,8 +94,8 @@ class ActionableEvidenceFactory {
     }
 
     @NotNull
-    public Set<ActionableEvidence> toActionableEvidence(@NotNull ViccEntry entry) {
-        Set<ActionableEvidence> actionableEvidences = Sets.newHashSet();
+    public Set<EfficacyEvidence> toActionableEvidence(@NotNull ViccEntry entry, @NotNull List<MolecularCriterium> molecularCriteria) {
+        Set<EfficacyEvidence> evidences = Sets.newHashSet();
 
         boolean isSupportive = isSupportiveEntry(entry);
         String treatment = reformatDrugLabels(entry.association().drugLabels());
@@ -100,26 +103,18 @@ class ActionableEvidenceFactory {
         EvidenceDirection direction = resolveDirection(entry.association().responseType());
 
         if (isSupportive && treatment != null && level != null && direction != null) {
-            Set<String> urls = resolveUrls(entry.association().evidence().info());
+            ImmutableEfficacyEvidence.Builder builder = ImmutableEfficacyEvidence.builder()
+                    .source(fromViccSource(entry.source()))
+                    .efficacyDescription(Strings.EMPTY)
+                    .evidenceLevel(evidenceLevelCurator.curate(entry.source(), entry.genes(), treatment, level, direction))
+                    .evidenceLevelDetails(EvidenceLevelDetails.UNKNOWN)
+                    .evidenceDirection(direction)
+                    .evidenceYear(2024)
+                    .urls(resolveUrls(entry.association().evidence().info()));
 
+            List<List<String>> drugLists = drugCurator.curate(entry.source(), level, treatment);
             Map<String, Set<String>> cancerTypeToDoidsMap = buildCancerTypeToDoidsMap(resolveCancerType(entry.association().phenotype()),
                     resolveDoid(entry.association().phenotype()));
-
-            level = evidenceLevelCurator.curate(entry.source(), entry.genes(), treatment, level, direction);
-            List<List<String>> drugLists = drugCurator.curate(entry.source(), level, treatment);
-
-            // Source event is populated later for VICC
-            ImmutableActionableEvidence.Builder builder = ImmutableActionableEvidence.builder()
-                    .source(fromViccSource(entry.source()))
-                    .sourceEvent(Strings.EMPTY)
-                    .entryDate(LocalDate.EPOCH)
-                    .sourceUrls(Sets.newHashSet())
-                    .efficacyDescription(Strings.EMPTY)
-                    .evidenceYear(2024)
-                    .evidenceLevel(level)
-                    .evidenceLevelDetails(EvidenceLevelDetails.UNKNOWN)
-                    .direction(direction)
-                    .evidenceUrls(urls);
 
             for (Map.Entry<String, Set<String>> cancerTypeEntry : cancerTypeToDoidsMap.entrySet()) {
                 String cancerType = cancerTypeEntry.getKey();
@@ -130,18 +125,21 @@ class ActionableEvidenceFactory {
                         excludedCancerSubTypes.add(CancerTypeConstants.REFRACTORY_HEMATOLOGIC_TYPE);
                         excludedCancerSubTypes.add(CancerTypeConstants.BONE_MARROW_TYPE);
                     }
+                    builder.indication(ImmutableIndication.builder()
+                            .applicableType(ImmutableCancerType.builder().name(cancerType).doid(doid).build())
+                            .excludedSubTypes(excludedCancerSubTypes)
+                            .build());
 
                     for (List<String> drugList : drugLists) {
-                        actionableEvidences.add(builder.intervention(ImmutableTreatment.builder().name(formatDrugList(drugList)).build())
-                                .applicableCancerType(ImmutableCancerType.builder().name(cancerType).doid(doid).build())
-                                .blacklistCancerTypes(excludedCancerSubTypes)
-                                .build());
+                        evidences.add(builder.treatment(ImmutableTreatment.builder().name(formatDrugList(drugList)).build()).build());
                     }
                 }
             }
         }
 
-        return actionableEvidences;
+        // TODO Add molecular criteria
+
+        return evidences;
     }
 
     private static boolean isSupportiveEntry(@NotNull ViccEntry entry) {

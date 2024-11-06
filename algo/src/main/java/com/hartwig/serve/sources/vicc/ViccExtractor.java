@@ -1,5 +1,6 @@
 package com.hartwig.serve.sources.vicc;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -7,30 +8,32 @@ import java.util.Set;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.hartwig.serve.datamodel.ImmutableKnownEvents;
+import com.hartwig.serve.datamodel.ImmutableMolecularCriterium;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.datamodel.characteristic.ActionableCharacteristic;
+import com.hartwig.serve.datamodel.KnownEvents;
+import com.hartwig.serve.datamodel.MolecularCriterium;
+import com.hartwig.serve.datamodel.characteristic.ImmutableActionableCharacteristic;
 import com.hartwig.serve.datamodel.characteristic.TumorCharacteristic;
 import com.hartwig.serve.datamodel.common.GeneRole;
 import com.hartwig.serve.datamodel.common.ProteinEffect;
-import com.hartwig.serve.datamodel.fusion.ActionableFusion;
 import com.hartwig.serve.datamodel.fusion.FusionPair;
+import com.hartwig.serve.datamodel.fusion.ImmutableActionableFusion;
 import com.hartwig.serve.datamodel.fusion.ImmutableKnownFusion;
 import com.hartwig.serve.datamodel.fusion.KnownFusion;
-import com.hartwig.serve.datamodel.gene.ActionableGene;
 import com.hartwig.serve.datamodel.gene.GeneAnnotation;
+import com.hartwig.serve.datamodel.gene.ImmutableActionableGene;
 import com.hartwig.serve.datamodel.gene.ImmutableKnownCopyNumber;
 import com.hartwig.serve.datamodel.gene.KnownCopyNumber;
-import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
+import com.hartwig.serve.datamodel.hotspot.ImmutableActionableHotspot;
 import com.hartwig.serve.datamodel.hotspot.ImmutableKnownHotspot;
 import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
-import com.hartwig.serve.datamodel.range.ActionableRange;
+import com.hartwig.serve.datamodel.range.ImmutableActionableRange;
 import com.hartwig.serve.datamodel.range.ImmutableKnownCodon;
 import com.hartwig.serve.datamodel.range.ImmutableKnownExon;
 import com.hartwig.serve.datamodel.range.KnownCodon;
 import com.hartwig.serve.datamodel.range.KnownExon;
-import com.hartwig.serve.datamodel.range.RangeAnnotation;
-import com.hartwig.serve.extraction.ActionableEventFactory;
 import com.hartwig.serve.extraction.EventExtractor;
 import com.hartwig.serve.extraction.EventExtractorOutput;
 import com.hartwig.serve.extraction.ExtractionFunctions;
@@ -152,7 +155,7 @@ public final class ViccExtractor {
             }
         }
 
-        return ImmutableViccExtractionResult.builder()
+        ViccExtractionResult molecularExtraction = ImmutableViccExtractionResult.builder()
                 .eventInterpretationPerFeature(eventInterpretationPerFeature)
                 .hotspotsPerFeature(hotspotsPerFeature)
                 .codonsPerFeature(codonsPerFeature)
@@ -162,7 +165,13 @@ public final class ViccExtractor {
                 .fusionsPerFeature(fusionsPerFeature)
                 .characteristicsPerFeature(characteristicsPerFeature)
                 .HLAPerFeature(hlaPerFeature)
-                .actionableEvidence(actionableEvidenceFactory.toActionableEvidence(entry))
+                .build();
+
+        List<MolecularCriterium> molecularCriteria = toMolecularCriteria(molecularExtraction);
+
+        return ImmutableViccExtractionResult.builder()
+                .from(molecularExtraction)
+                .actionableEvidence(actionableEvidenceFactory.toActionableEvidence(entry, molecularCriteria))
                 .build();
     }
 
@@ -172,15 +181,22 @@ public final class ViccExtractor {
         ImmutableExtractionResult.Builder outputBuilder = ImmutableExtractionResult.builder()
                 .refGenomeVersion(Knowledgebase.VICC_CGI.refGenomeVersion())
                 .addAllEventInterpretations(extraction.eventInterpretationPerFeature().values())
-                .knownHotspots(convertToHotspots(entry, extraction))
-                .knownCodons(convertToCodons(entry, extraction))
-                .knownExons(convertToExons(entry, extraction))
-                .knownCopyNumbers(convertToKnownCopyNumbers(entry, extraction))
-                .knownFusions(convertToKnownFusions(entry, extraction));
-
-        addActionability(outputBuilder, extraction);
+                .knownEvents(toKnownEvents(entry, extraction))
+                .efficacyEvidences(extraction.actionableEvidence())
+                .clinicalTrials(Sets.newHashSet());
 
         return outputBuilder.build();
+    }
+
+    @NotNull
+    private static KnownEvents toKnownEvents(@NotNull ViccEntry entry, @NotNull ViccExtractionResult extraction) {
+        return ImmutableKnownEvents.builder()
+                .hotspots(convertToHotspots(entry, extraction))
+                .codons(convertToCodons(entry, extraction))
+                .exons(convertToExons(entry, extraction))
+                .copyNumbers(convertToKnownCopyNumbers(entry, extraction))
+                .fusions(convertToKnownFusions(entry, extraction))
+                .build();
     }
 
     @NotNull
@@ -274,130 +290,132 @@ public final class ViccExtractor {
         return FusionConsolidation.consolidate(fusions);
     }
 
-    private static void addActionability(@NotNull ImmutableExtractionResult.Builder outputBuilder,
-            @NotNull ViccExtractionResult extraction) {
-        Set<ActionableHotspot> actionableHotspots = Sets.newHashSet();
-        Set<ActionableRange> actionableCodons = Sets.newHashSet();
-        Set<ActionableRange> actionableExons = Sets.newHashSet();
-        Set<ActionableGene> actionableGenes = Sets.newHashSet();
-        Set<ActionableFusion> actionableFusions = Sets.newHashSet();
-        Set<ActionableCharacteristic> actionableCharacteristics = Sets.newHashSet();
+    @NotNull
+    private static List<MolecularCriterium> toMolecularCriteria(@NotNull ViccExtractionResult molecularExtraction) {
+        Map<Feature, EventInterpretation> interpretationPerFeature = molecularExtraction.eventInterpretationPerFeature();
 
-        actionableHotspots.addAll(extractActionableHotspots(extraction, extraction.hotspotsPerFeature()));
-        actionableCodons.addAll(extractActionableRange(extraction, extraction.codonsPerFeature()));
-        actionableExons.addAll(extractActionableRange(extraction, extraction.exonsPerFeature()));
-        actionableGenes.addAll(extractActionableAmpsDels(extraction, extraction.ampsDelsPerFeature()));
-        actionableGenes.addAll(extractActionableGenes(extraction, extraction.geneLevelEventsPerFeature()));
-        actionableFusions.addAll(extractActionableFusions(extraction, extraction.fusionsPerFeature()));
-        actionableCharacteristics.addAll(extractActionableCharacteristics(extraction, extraction.characteristicsPerFeature()));
+        List<MolecularCriterium> molecularCriteria = Lists.newArrayList();
+        molecularCriteria.addAll(extractActionableHotspots(interpretationPerFeature, molecularExtraction.hotspotsPerFeature()));
+        molecularCriteria.addAll(extractActionableCodons(interpretationPerFeature, molecularExtraction.codonsPerFeature()));
+        molecularCriteria.addAll(extractActionableExons(interpretationPerFeature, molecularExtraction.exonsPerFeature()));
+        molecularCriteria.addAll(extractActionableGenes(interpretationPerFeature, molecularExtraction.ampsDelsPerFeature()));
+        molecularCriteria.addAll(extractActionableGenes(interpretationPerFeature, molecularExtraction.geneLevelEventsPerFeature()));
+        molecularCriteria.addAll(extractActionableFusions(interpretationPerFeature, molecularExtraction.fusionsPerFeature()));
+        molecularCriteria.addAll(extractActionableCharacteristics(interpretationPerFeature,
+                molecularExtraction.characteristicsPerFeature()));
 
-        outputBuilder.actionableHotspots(actionableHotspots);
-        outputBuilder.actionableCodons(actionableCodons);
-        outputBuilder.actionableExons(actionableExons);
-        outputBuilder.actionableGenes(actionableGenes);
-        outputBuilder.actionableFusions(actionableFusions);
-        outputBuilder.actionableCharacteristics(actionableCharacteristics);
+        return molecularCriteria;
     }
 
     @NotNull
-    private static Set<ActionableHotspot> extractActionableHotspots(@NotNull ViccExtractionResult extraction,
+    private static Set<MolecularCriterium> extractActionableHotspots(@NotNull Map<Feature, EventInterpretation> interpretationPerFeature,
             @NotNull Map<Feature, List<VariantHotspot>> hotspotPerFeature) {
-        Set<ActionableHotspot> actionableHotspots = Sets.newHashSet();
+        Set<MolecularCriterium> criteriaForHotspots = Sets.newHashSet();
         for (Map.Entry<Feature, List<VariantHotspot>> entry : hotspotPerFeature.entrySet()) {
             List<VariantHotspot> hotspots = entry.getValue();
             if (hotspots != null) {
-                for (ActionableEvidence evidence : extraction.actionableEvidence()) {
-                    ActionableEvidence modified = withSourceEvent(evidence, extraction.eventInterpretationPerFeature().get(entry.getKey()));
-                    actionableHotspots.addAll(ActionableEventFactory.toActionableHotspots(modified, hotspots));
+                ActionableEvidence evidence = toActionableEvidence(interpretationPerFeature.get(entry.getKey()));
+                for (VariantHotspot hotspot : hotspots) {
+                    criteriaForHotspots.add(ImmutableMolecularCriterium.builder()
+                            .addHotspots(ImmutableActionableHotspot.builder().from(hotspot).from(evidence).build())
+                            .build());
                 }
             }
         }
-        return actionableHotspots;
+        return criteriaForHotspots;
     }
 
     @NotNull
-    private static <T extends RangeAnnotation> Set<ActionableRange> extractActionableRange(@NotNull ViccExtractionResult extraction,
-            @NotNull Map<Feature, List<T>> rangesPerFeature) {
-        Set<ActionableRange> actionableRanges = Sets.newHashSet();
-        for (Map.Entry<Feature, List<T>> entry : rangesPerFeature.entrySet()) {
-            List<T> ranges = entry.getValue();
-            if (ranges != null) {
-                for (ActionableEvidence evidence : extraction.actionableEvidence()) {
-                    ActionableEvidence modified = withSourceEvent(evidence, extraction.eventInterpretationPerFeature().get(entry.getKey()));
-                    actionableRanges.addAll(ActionableEventFactory.toActionableRanges(modified, ranges));
+    private static Set<MolecularCriterium> extractActionableCodons(@NotNull Map<Feature, EventInterpretation> interpretationPerFeature,
+            @NotNull Map<Feature, List<CodonAnnotation>> codonsPerFeature) {
+        Set<MolecularCriterium> criteriaForCodons = Sets.newHashSet();
+        for (Map.Entry<Feature, List<CodonAnnotation>> entry : codonsPerFeature.entrySet()) {
+            List<CodonAnnotation> codons = entry.getValue();
+            if (codons != null) {
+                ActionableEvidence evidence = toActionableEvidence(interpretationPerFeature.get(entry.getKey()));
+                for (CodonAnnotation codon : codons) {
+                    criteriaForCodons.add(ImmutableMolecularCriterium.builder()
+                            .addCodons(ImmutableActionableRange.builder().from(codon).from(evidence).build())
+                            .build());
                 }
             }
         }
-        return actionableRanges;
+        return criteriaForCodons;
     }
 
     @NotNull
-    private static Set<ActionableGene> extractActionableAmpsDels(@NotNull ViccExtractionResult extraction,
-            @NotNull Map<Feature, GeneAnnotation> copyNumbersPerFeature) {
-        Set<ActionableGene> actionableGenes = Sets.newHashSet();
-        for (Map.Entry<Feature, GeneAnnotation> entry : copyNumbersPerFeature.entrySet()) {
-            GeneAnnotation copyNumber = entry.getValue();
-            if (copyNumber != null) {
-                for (ActionableEvidence evidence : extraction.actionableEvidence()) {
-                    ActionableEvidence modified = withSourceEvent(evidence, extraction.eventInterpretationPerFeature().get(entry.getKey()));
-                    actionableGenes.add(ActionableEventFactory.geneAnnotationToActionableGene(modified, copyNumber));
+    private static Set<MolecularCriterium> extractActionableExons(@NotNull Map<Feature, EventInterpretation> interpretationPerFeature,
+            @NotNull Map<Feature, List<ExonAnnotation>> rangesPerFeature) {
+        Set<MolecularCriterium> criteriaForExons = Sets.newHashSet();
+        for (Map.Entry<Feature, List<ExonAnnotation>> entry : rangesPerFeature.entrySet()) {
+            List<ExonAnnotation> exons = entry.getValue();
+            if (exons != null) {
+                ActionableEvidence evidence = toActionableEvidence(interpretationPerFeature.get(entry.getKey()));
+                for (ExonAnnotation exon : exons) {
+                    criteriaForExons.add(ImmutableMolecularCriterium.builder()
+                            .addExons(ImmutableActionableRange.builder().from(exon).from(evidence).build())
+                            .build());
                 }
             }
         }
-        return actionableGenes;
+        return criteriaForExons;
     }
 
     @NotNull
-    private static Set<ActionableGene> extractActionableGenes(@NotNull ViccExtractionResult extraction,
-            @NotNull Map<Feature, GeneAnnotation> geneLevelEventsPerFeature) {
-        Set<ActionableGene> actionableGenes = Sets.newHashSet();
-        for (Map.Entry<Feature, GeneAnnotation> entry : geneLevelEventsPerFeature.entrySet()) {
-            GeneAnnotation geneAnnotation = entry.getValue();
-            if (geneAnnotation != null) {
-                for (ActionableEvidence evidence : extraction.actionableEvidence()) {
-                    ActionableEvidence modified = withSourceEvent(evidence, extraction.eventInterpretationPerFeature().get(entry.getKey()));
-                    actionableGenes.add(ActionableEventFactory.geneAnnotationToActionableGene(modified, geneAnnotation));
-                }
+    private static Set<MolecularCriterium> extractActionableGenes(@NotNull Map<Feature, EventInterpretation> interpretationPerFeature,
+            @NotNull Map<Feature, GeneAnnotation> genesPerFeature) {
+        Set<MolecularCriterium> criteriaForGenes = Sets.newHashSet();
+        for (Map.Entry<Feature, GeneAnnotation> entry : genesPerFeature.entrySet()) {
+            GeneAnnotation annotation = entry.getValue();
+            if (annotation != null) {
+                ActionableEvidence evidence = toActionableEvidence(interpretationPerFeature.get(entry.getKey()));
+                criteriaForGenes.add(ImmutableMolecularCriterium.builder()
+                        .addGenes(ImmutableActionableGene.builder().from(annotation).from(evidence).build())
+                        .build());
             }
         }
-        return actionableGenes;
+        return criteriaForGenes;
     }
 
     @NotNull
-    private static Set<ActionableFusion> extractActionableFusions(@NotNull ViccExtractionResult extraction,
+    private static Set<MolecularCriterium> extractActionableFusions(@NotNull Map<Feature, EventInterpretation> interpretationPerFeature,
             @NotNull Map<Feature, FusionPair> fusionsPerFeature) {
-        Set<ActionableFusion> actionableFusions = Sets.newHashSet();
+        Set<MolecularCriterium> criteriaForFusions = Sets.newHashSet();
         for (Map.Entry<Feature, FusionPair> entry : fusionsPerFeature.entrySet()) {
             FusionPair fusionPair = entry.getValue();
             if (fusionPair != null) {
-                for (ActionableEvidence evidence : extraction.actionableEvidence()) {
-                    ActionableEvidence modified = withSourceEvent(evidence, extraction.eventInterpretationPerFeature().get(entry.getKey()));
-                    actionableFusions.add(ActionableEventFactory.toActionableFusion(modified, fusionPair));
-                }
+                ActionableEvidence evidence = toActionableEvidence(interpretationPerFeature.get(entry.getKey()));
+                criteriaForFusions.add(ImmutableMolecularCriterium.builder()
+                        .addFusions(ImmutableActionableFusion.builder().from(fusionPair).from(evidence).build())
+                        .build());
             }
         }
-        return actionableFusions;
+        return criteriaForFusions;
     }
 
     @NotNull
-    private static Set<ActionableCharacteristic> extractActionableCharacteristics(@NotNull ViccExtractionResult extraction,
+    private static Set<MolecularCriterium> extractActionableCharacteristics(
+            @NotNull Map<Feature, EventInterpretation> interpretationPerFeature,
             @NotNull Map<Feature, TumorCharacteristic> characteristicPerFeature) {
-        Set<ActionableCharacteristic> actionableCharacteristics = Sets.newHashSet();
+        Set<MolecularCriterium> criteriaForCharacteristics = Sets.newHashSet();
         for (Map.Entry<Feature, TumorCharacteristic> entry : characteristicPerFeature.entrySet()) {
             TumorCharacteristic characteristic = entry.getValue();
             if (characteristic != null) {
-                for (ActionableEvidence evidence : extraction.actionableEvidence()) {
-                    ActionableEvidence modified = withSourceEvent(evidence, extraction.eventInterpretationPerFeature().get(entry.getKey()));
-                    actionableCharacteristics.add(ActionableEventFactory.toActionableCharacteristic(modified, characteristic));
-                }
+                ActionableEvidence evidence = toActionableEvidence(interpretationPerFeature.get(entry.getKey()));
+                criteriaForCharacteristics.add(ImmutableMolecularCriterium.builder()
+                        .addCharacteristics(ImmutableActionableCharacteristic.builder().from(characteristic).from(evidence).build())
+                        .build());
             }
         }
-        return actionableCharacteristics;
+        return criteriaForCharacteristics;
     }
 
     @NotNull
-    private static ActionableEvidence withSourceEvent(@NotNull ActionableEvidence evidence,
-            @NotNull EventInterpretation eventInterpretation) {
-        return ImmutableActionableEvidence.builder().from(evidence).sourceEvent(eventInterpretation.sourceEvent()).build();
+    private static ActionableEvidence toActionableEvidence(@NotNull EventInterpretation interpretation) {
+        return ImmutableActionableEvidence.builder()
+                .sourceDate(LocalDate.EPOCH)
+                .sourceEvent(interpretation.sourceEvent())
+                .sourceUrls(Sets.newHashSet())
+                .build();
     }
 }

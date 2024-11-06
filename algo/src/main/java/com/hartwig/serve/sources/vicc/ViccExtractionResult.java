@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.hartwig.serve.datamodel.EfficacyEvidence;
 import com.hartwig.serve.datamodel.characteristic.TumorCharacteristic;
 import com.hartwig.serve.datamodel.fusion.FusionPair;
 import com.hartwig.serve.datamodel.gene.GeneAnnotation;
@@ -50,5 +51,5 @@ public abstract class ViccExtractionResult {
     public abstract Map<Feature, ImmunoHLA> HLAPerFeature();
 
     @NotNull
-    public abstract Set<ActionableEvidence> actionableEvidence();
+    public abstract Set<EfficacyEvidence> actionableEvidence();
 }

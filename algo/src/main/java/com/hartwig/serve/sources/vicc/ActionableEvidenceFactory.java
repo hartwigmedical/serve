@@ -131,13 +131,14 @@ class ActionableEvidenceFactory {
                             .build());
 
                     for (List<String> drugList : drugLists) {
-                        evidences.add(builder.treatment(ImmutableTreatment.builder().name(formatDrugList(drugList)).build()).build());
+                        builder.treatment(ImmutableTreatment.builder().name(formatDrugList(drugList)).build());
+                        for (MolecularCriterium molecularCriterium : molecularCriteria) {
+                            evidences.add(builder.molecularCriterium(molecularCriterium).build());
+                        }
                     }
                 }
             }
         }
-
-        // TODO Add molecular criteria
 
         return evidences;
     }

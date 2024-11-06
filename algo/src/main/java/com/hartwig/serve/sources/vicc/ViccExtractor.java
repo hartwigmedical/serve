@@ -292,29 +292,28 @@ public final class ViccExtractor {
 
     @NotNull
     private static List<MolecularCriterium> toMolecularCriteria(@NotNull ViccExtractionResult molecularExtraction) {
-        Map<Feature, EventInterpretation> interpretationPerFeature = molecularExtraction.eventInterpretationPerFeature();
+        Map<Feature, EventInterpretation> interpretations = molecularExtraction.eventInterpretationPerFeature();
 
         List<MolecularCriterium> molecularCriteria = Lists.newArrayList();
-        molecularCriteria.addAll(extractActionableHotspots(interpretationPerFeature, molecularExtraction.hotspotsPerFeature()));
-        molecularCriteria.addAll(extractActionableCodons(interpretationPerFeature, molecularExtraction.codonsPerFeature()));
-        molecularCriteria.addAll(extractActionableExons(interpretationPerFeature, molecularExtraction.exonsPerFeature()));
-        molecularCriteria.addAll(extractActionableGenes(interpretationPerFeature, molecularExtraction.ampsDelsPerFeature()));
-        molecularCriteria.addAll(extractActionableGenes(interpretationPerFeature, molecularExtraction.geneLevelEventsPerFeature()));
-        molecularCriteria.addAll(extractActionableFusions(interpretationPerFeature, molecularExtraction.fusionsPerFeature()));
-        molecularCriteria.addAll(extractActionableCharacteristics(interpretationPerFeature,
-                molecularExtraction.characteristicsPerFeature()));
+        molecularCriteria.addAll(extractActionableHotspots(interpretations, molecularExtraction.hotspotsPerFeature()));
+        molecularCriteria.addAll(extractActionableCodons(interpretations, molecularExtraction.codonsPerFeature()));
+        molecularCriteria.addAll(extractActionableExons(interpretations, molecularExtraction.exonsPerFeature()));
+        molecularCriteria.addAll(extractActionableGenes(interpretations, molecularExtraction.ampsDelsPerFeature()));
+        molecularCriteria.addAll(extractActionableGenes(interpretations, molecularExtraction.geneLevelEventsPerFeature()));
+        molecularCriteria.addAll(extractActionableFusions(interpretations, molecularExtraction.fusionsPerFeature()));
+        molecularCriteria.addAll(extractActionableCharacteristics(interpretations, molecularExtraction.characteristicsPerFeature()));
 
         return molecularCriteria;
     }
 
     @NotNull
-    private static Set<MolecularCriterium> extractActionableHotspots(@NotNull Map<Feature, EventInterpretation> interpretationPerFeature,
+    private static Set<MolecularCriterium> extractActionableHotspots(@NotNull Map<Feature, EventInterpretation> interpretations,
             @NotNull Map<Feature, List<VariantHotspot>> hotspotPerFeature) {
         Set<MolecularCriterium> criteriaForHotspots = Sets.newHashSet();
         for (Map.Entry<Feature, List<VariantHotspot>> entry : hotspotPerFeature.entrySet()) {
             List<VariantHotspot> hotspots = entry.getValue();
             if (hotspots != null) {
-                ActionableEvidence evidence = toActionableEvidence(interpretationPerFeature.get(entry.getKey()));
+                ActionableEvidence evidence = toActionableEvidence(interpretations.get(entry.getKey()));
                 for (VariantHotspot hotspot : hotspots) {
                     criteriaForHotspots.add(ImmutableMolecularCriterium.builder()
                             .addHotspots(ImmutableActionableHotspot.builder().from(hotspot).from(evidence).build())
@@ -326,13 +325,13 @@ public final class ViccExtractor {
     }
 
     @NotNull
-    private static Set<MolecularCriterium> extractActionableCodons(@NotNull Map<Feature, EventInterpretation> interpretationPerFeature,
+    private static Set<MolecularCriterium> extractActionableCodons(@NotNull Map<Feature, EventInterpretation> interpretations,
             @NotNull Map<Feature, List<CodonAnnotation>> codonsPerFeature) {
         Set<MolecularCriterium> criteriaForCodons = Sets.newHashSet();
         for (Map.Entry<Feature, List<CodonAnnotation>> entry : codonsPerFeature.entrySet()) {
             List<CodonAnnotation> codons = entry.getValue();
             if (codons != null) {
-                ActionableEvidence evidence = toActionableEvidence(interpretationPerFeature.get(entry.getKey()));
+                ActionableEvidence evidence = toActionableEvidence(interpretations.get(entry.getKey()));
                 for (CodonAnnotation codon : codons) {
                     criteriaForCodons.add(ImmutableMolecularCriterium.builder()
                             .addCodons(ImmutableActionableRange.builder().from(codon).from(evidence).build())
@@ -344,13 +343,13 @@ public final class ViccExtractor {
     }
 
     @NotNull
-    private static Set<MolecularCriterium> extractActionableExons(@NotNull Map<Feature, EventInterpretation> interpretationPerFeature,
+    private static Set<MolecularCriterium> extractActionableExons(@NotNull Map<Feature, EventInterpretation> interpretations,
             @NotNull Map<Feature, List<ExonAnnotation>> rangesPerFeature) {
         Set<MolecularCriterium> criteriaForExons = Sets.newHashSet();
         for (Map.Entry<Feature, List<ExonAnnotation>> entry : rangesPerFeature.entrySet()) {
             List<ExonAnnotation> exons = entry.getValue();
             if (exons != null) {
-                ActionableEvidence evidence = toActionableEvidence(interpretationPerFeature.get(entry.getKey()));
+                ActionableEvidence evidence = toActionableEvidence(interpretations.get(entry.getKey()));
                 for (ExonAnnotation exon : exons) {
                     criteriaForExons.add(ImmutableMolecularCriterium.builder()
                             .addExons(ImmutableActionableRange.builder().from(exon).from(evidence).build())
@@ -362,13 +361,13 @@ public final class ViccExtractor {
     }
 
     @NotNull
-    private static Set<MolecularCriterium> extractActionableGenes(@NotNull Map<Feature, EventInterpretation> interpretationPerFeature,
+    private static Set<MolecularCriterium> extractActionableGenes(@NotNull Map<Feature, EventInterpretation> interpretations,
             @NotNull Map<Feature, GeneAnnotation> genesPerFeature) {
         Set<MolecularCriterium> criteriaForGenes = Sets.newHashSet();
         for (Map.Entry<Feature, GeneAnnotation> entry : genesPerFeature.entrySet()) {
             GeneAnnotation annotation = entry.getValue();
             if (annotation != null) {
-                ActionableEvidence evidence = toActionableEvidence(interpretationPerFeature.get(entry.getKey()));
+                ActionableEvidence evidence = toActionableEvidence(interpretations.get(entry.getKey()));
                 criteriaForGenes.add(ImmutableMolecularCriterium.builder()
                         .addGenes(ImmutableActionableGene.builder().from(annotation).from(evidence).build())
                         .build());
@@ -378,13 +377,13 @@ public final class ViccExtractor {
     }
 
     @NotNull
-    private static Set<MolecularCriterium> extractActionableFusions(@NotNull Map<Feature, EventInterpretation> interpretationPerFeature,
+    private static Set<MolecularCriterium> extractActionableFusions(@NotNull Map<Feature, EventInterpretation> interpretations,
             @NotNull Map<Feature, FusionPair> fusionsPerFeature) {
         Set<MolecularCriterium> criteriaForFusions = Sets.newHashSet();
         for (Map.Entry<Feature, FusionPair> entry : fusionsPerFeature.entrySet()) {
             FusionPair fusionPair = entry.getValue();
             if (fusionPair != null) {
-                ActionableEvidence evidence = toActionableEvidence(interpretationPerFeature.get(entry.getKey()));
+                ActionableEvidence evidence = toActionableEvidence(interpretations.get(entry.getKey()));
                 criteriaForFusions.add(ImmutableMolecularCriterium.builder()
                         .addFusions(ImmutableActionableFusion.builder().from(fusionPair).from(evidence).build())
                         .build());

@@ -7,7 +7,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.hartwig.serve.datamodel.ImmutableKnownEvents;
 import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.datamodel.KnownEvents;
 import com.hartwig.serve.datamodel.common.GeneRole;
 import com.hartwig.serve.datamodel.common.ProteinEffect;
 import com.hartwig.serve.datamodel.hotspot.ImmutableKnownHotspot;
@@ -49,10 +51,9 @@ public class HartwigHotspotExtractor {
                 entries.parallelStream().flatMap(entry -> resolveHotspotsForEntry(entry, tracker)).collect(Collectors.toSet());
 
         // Even for Hartwig sources the extractor may generate duplicate hotspots, so we need to consolidate them.
-        return ImmutableExtractionResult.builder()
-                .refGenomeVersion(source.refGenomeVersion())
-                .knownHotspots(HotspotConsolidation.consolidate(knownHotspots))
-                .build();
+        KnownEvents knownEvents = ImmutableKnownEvents.builder().hotspots(HotspotConsolidation.consolidate(knownHotspots)).build();
+
+        return ImmutableExtractionResult.builder().refGenomeVersion(source.refGenomeVersion()).knownEvents(knownEvents).build();
     }
 
     @NotNull

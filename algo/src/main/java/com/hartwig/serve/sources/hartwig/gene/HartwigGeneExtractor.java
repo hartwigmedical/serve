@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
+import com.hartwig.serve.datamodel.ImmutableKnownEvents;
 import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.datamodel.KnownEvents;
 import com.hartwig.serve.datamodel.common.GeneRole;
 import com.hartwig.serve.datamodel.gene.ImmutableKnownGene;
 import com.hartwig.serve.datamodel.gene.KnownGene;
@@ -32,6 +34,7 @@ public class HartwigGeneExtractor {
             tracker.update();
         }
 
-        return ImmutableExtractionResult.builder().refGenomeVersion(source.refGenomeVersion()).knownGenes(knownGenes).build();
+        KnownEvents knownEvents = ImmutableKnownEvents.builder().genes(knownGenes).build();
+        return ImmutableExtractionResult.builder().refGenomeVersion(source.refGenomeVersion()).knownEvents(knownEvents).build();
     }
 }

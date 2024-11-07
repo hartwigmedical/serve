@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.Iterables;
@@ -32,9 +33,12 @@ import com.hartwig.serve.datamodel.EfficacyEvidence;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.EvidenceLevelDetails;
+import com.hartwig.serve.datamodel.Hospital;
+import com.hartwig.serve.datamodel.ImmutableClinicalTrial;
 import com.hartwig.serve.datamodel.Indication;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.KnownEvents;
+import com.hartwig.serve.datamodel.MolecularCriterium;
 import com.hartwig.serve.datamodel.ServeRecord;
 import com.hartwig.serve.datamodel.Treatment;
 import com.hartwig.serve.datamodel.characteristic.ActionableCharacteristic;
@@ -51,6 +55,7 @@ import com.hartwig.serve.datamodel.range.KnownCodon;
 import com.hartwig.serve.datamodel.range.KnownExon;
 import com.hartwig.serve.extraction.events.EventInterpretation;
 
+import org.apache.commons.compress.utils.Lists;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -323,22 +328,17 @@ public class ServeDAO {
     }
 
     private void writeEfficacyEvidences(@NotNull Timestamp timestamp, @NotNull List<EfficacyEvidence> efficacyEvidences) {
-        writeHotspotEfficacyEvidence(timestamp, extractHotspotEfficacyEvidence(efficacyEvidences));
-        writeActionableCodons(timestamp, serveRecord.codons());
-        writeActionableExons(timestamp, serveRecord.exons());
-        writeActionableGenes(timestamp, serveRecord.genes());
-        writeActionableFusions(timestamp, serveRecord.fusions());
-        writeActionableCharacteristics(timestamp, serveRecord.characteristics());
-        writeActionableHLA(timestamp, serveRecord.hla());
-    }
-
-    @NotNull
-    private static List<EfficacyEvidence> extractHotspotEfficacyEvidence(@NotNull List<EfficacyEvidence> evidences) {
-        return evidences.stream().filter(evidence -> !evidence.molecularCriterium().hotspots().isEmpty()).collect(Collectors.toList());
+        writeHotspotEfficacyEvidence(timestamp, filterEfficacyEvidence(efficacyEvidences, hotspotFilter()));
+        writeActionableCodons(timestamp, filterEfficacyEvidence(efficacyEvidences, codonFilter()));
+        writeActionableExons(timestamp, filterEfficacyEvidence(efficacyEvidences, exonFilter()));
+        writeActionableGenes(timestamp, filterEfficacyEvidence(efficacyEvidences, geneFilter()));
+        writeActionableFusions(timestamp, filterEfficacyEvidence(efficacyEvidences, fusionFilter()));
+        writeActionableCharacteristics(timestamp, filterEfficacyEvidence(efficacyEvidences, characteristicsFilter()));
+        writeActionableHLA(timestamp, filterEfficacyEvidence(efficacyEvidences, hlaFilter()));
     }
 
     private void writeClinicalTrials(@NotNull Timestamp timestamp, @NotNull List<ClinicalTrial> clinicalTrials) {
-        writeHotspotClinicalTrials(timestamp, clinicalTrials);
+        writeHotspotClinicalTrials(timestamp, filterAndExpandHotspotTrials(clinicalTrials, hotspotFilter()));
     }
 
     private void writeHotspotEfficacyEvidence(@NotNull Timestamp timestamp, @NotNull List<EfficacyEvidence> evidenceWithHotspots) {
@@ -352,7 +352,7 @@ public class ServeDAO {
     private void writeHotspotClinicalTrials(@NotNull Timestamp timestamp, @NotNull List<ClinicalTrial> trialsWithHotspots) {
         for (List<ClinicalTrial> batch : Iterables.partition(trialsWithHotspots, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
             InsertValuesStepN inserter = createActionableHotspotInserter();
-            batch.forEach(entry -> writeEvidenceForHotspotBatch(timestamp, inserter, entry));
+            batch.forEach(entry -> writeEvidenceForTrialBatch(timestamp, inserter, entry));
             inserter.execute();
         }
     }
@@ -461,7 +461,7 @@ public class ServeDAO {
                 concat(trialForHotspot.urls()));
     }
 
-    private void writeActionableCodons(@NotNull Timestamp timestamp, @NotNull List<ActionableRange> codons) {
+    private void writeActionableCodons(@NotNull Timestamp timestamp, @NotNull List<EfficacyEvidence> codons) {
         for (List<ActionableRange> batch : Iterables.partition(codons, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
             InsertValuesStepN inserter = context.insertInto(ACTIONABLECODON,
                     ACTIONABLECODON.MODIFIED,
@@ -497,7 +497,7 @@ public class ServeDAO {
         }
     }
 
-    private void writeActionableExons(@NotNull Timestamp timestamp, @NotNull List<ActionableRange> exons) {
+    private void writeActionableExons(@NotNull Timestamp timestamp, @NotNull List<EfficacyEvidence> exons) {
         for (List<ActionableRange> batch : Iterables.partition(exons, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
             InsertValuesStepN inserter = context.insertInto(ACTIONABLEEXON,
                     ACTIONABLEEXON.MODIFIED,
@@ -573,7 +573,7 @@ public class ServeDAO {
                 concat(actionableRange.evidenceUrls()));
     }
 
-    private void writeActionableGenes(@NotNull Timestamp timestamp, @NotNull List<ActionableGene> genes) {
+    private void writeActionableGenes(@NotNull Timestamp timestamp, @NotNull List<EfficacyEvidence> genes) {
         for (List<ActionableGene> batch : Iterables.partition(genes, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
             InsertValuesStepN inserter = context.insertInto(ACTIONABLEGENE,
                     ACTIONABLEGENE.MODIFIED,
@@ -643,7 +643,7 @@ public class ServeDAO {
                 concat(actionableGene.evidenceUrls()));
     }
 
-    private void writeActionableFusions(@NotNull Timestamp timestamp, @NotNull List<ActionableFusion> fusions) {
+    private void writeActionableFusions(@NotNull Timestamp timestamp, @NotNull List<EfficacyEvidence> fusions) {
         for (List<ActionableFusion> batch : Iterables.partition(fusions, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
             InsertValuesStepN inserter = context.insertInto(ACTIONABLEFUSION,
                     ACTIONABLEFUSION.MODIFIED,
@@ -721,7 +721,7 @@ public class ServeDAO {
                 concat(actionableFusion.evidenceUrls()));
     }
 
-    private void writeActionableCharacteristics(@NotNull Timestamp timestamp, @NotNull List<ActionableCharacteristic> characteristics) {
+    private void writeActionableCharacteristics(@NotNull Timestamp timestamp, @NotNull List<EfficacyEvidence> characteristics) {
         for (List<ActionableCharacteristic> batch : Iterables.partition(characteristics, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
             InsertValuesStepN inserter = context.insertInto(ACTIONABLECHARACTERISTIC,
                     ACTIONABLECHARACTERISTIC.MODIFIED,
@@ -793,7 +793,7 @@ public class ServeDAO {
                 concat(actionableCharacteristic.evidenceUrls()));
     }
 
-    private void writeActionableHLA(@NotNull Timestamp timestamp, @NotNull List<ActionableHLA> hla) {
+    private void writeActionableHLA(@NotNull Timestamp timestamp, @NotNull List<EfficacyEvidence> hla) {
         for (List<ActionableHLA> batch : Iterables.partition(hla, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
             InsertValuesStepN inserter = context.insertInto(ACTIONABLEHLA,
                     ACTIONABLEHLA.MODIFIED,
@@ -861,6 +861,76 @@ public class ServeDAO {
     }
 
     @NotNull
+    private static Predicate<MolecularCriterium> hotspotFilter() {
+        return molecularCriterium -> !molecularCriterium.hotspots().isEmpty();
+    }
+
+    @NotNull
+    private static Predicate<MolecularCriterium> codonFilter() {
+        return molecularCriterium -> !molecularCriterium.codons().isEmpty();
+    }
+
+    @NotNull
+    private static Predicate<MolecularCriterium> exonFilter() {
+        return molecularCriterium -> !molecularCriterium.exons().isEmpty();
+    }
+
+    @NotNull
+    private static Predicate<MolecularCriterium> geneFilter() {
+        return molecularCriterium -> !molecularCriterium.genes().isEmpty();
+    }
+
+    @NotNull
+    private static Predicate<MolecularCriterium> fusionFilter() {
+        return molecularCriterium -> !molecularCriterium.fusions().isEmpty();
+    }
+
+    @NotNull
+    private static Predicate<MolecularCriterium> characteristicsFilter() {
+        return molecularCriterium -> !molecularCriterium.characteristics().isEmpty();
+    }
+
+    @NotNull
+    private static Predicate<MolecularCriterium> hlaFilter() {
+        return molecularCriterium -> !molecularCriterium.hla().isEmpty();
+    }
+
+    @NotNull
+    private static List<EfficacyEvidence> filterEfficacyEvidence(@NotNull List<EfficacyEvidence> evidences,
+            @NotNull Predicate<MolecularCriterium> molecularCriteriumPredicate) {
+        return evidences.stream()
+                .filter(evidence -> molecularCriteriumPredicate.test(evidence.molecularCriterium()))
+                .collect(Collectors.toList());
+    }
+
+    @NotNull
+    private static List<ClinicalTrial> filterAndExpandHotspotTrials(@NotNull List<ClinicalTrial> trials,
+            @NotNull Predicate<MolecularCriterium> molecularCriteriumPredicate) {
+        List<ClinicalTrial> expandedFilteredTrials = Lists.newArrayList();
+        for (ClinicalTrial trial : trials) {
+            for (MolecularCriterium criterium : trial.molecularCriteria()) {
+                if (molecularCriteriumPredicate.test(criterium)) {
+                    expandedFilteredTrials.addAll(expandWithIndicationAndCriterium(trial, criterium));
+                }
+            }
+        }
+        return expandedFilteredTrials;
+    }
+
+    @NotNull
+    private static List<ClinicalTrial> expandWithIndicationAndCriterium(@NotNull ClinicalTrial baseTrial,
+            @NotNull MolecularCriterium criterium) {
+        List<ClinicalTrial> expandedTrials = Lists.newArrayList();
+        ImmutableClinicalTrial.Builder trialBuilder =
+                ImmutableClinicalTrial.builder().from(baseTrial).molecularCriteria(List.of(criterium));
+
+        for (Indication indication : baseTrial.indications()) {
+            expandedTrials.add(trialBuilder.indications(List.of(indication)).build());
+        }
+        return expandedTrials;
+    }
+
+    @NotNull
     private static Set<String> toStrings(@NotNull Set<CancerType> cancerTypes) {
         Set<String> strings = Sets.newHashSet();
         for (CancerType cancerType : cancerTypes) {
@@ -880,10 +950,10 @@ public class ServeDAO {
     private static String toHospitals(@NotNull Set<Country> countries) {
         StringJoiner joiner = new StringJoiner(MAIN_JOINER);
         for (Country country : countries) {
-            for (Map.Entry<String, Set<String>> entry : country.hospitalsPerCity().entrySet()) {
+            for (Map.Entry<String, Set<Hospital>> entry : country.hospitalsPerCity().entrySet()) {
                 String city = entry.getKey();
-                Set<String> hospitals = entry.getValue();
-                joiner.add(city + "(" + String.join(SUB_JOINER, hospitals) + ")");
+                Set<String> hospitalNames = entry.getValue().stream().map(Hospital::name).collect(Collectors.toSet());
+                joiner.add(city + "(" + String.join(SUB_JOINER, hospitalNames) + ")");
             }
         }
         return joiner.toString();
@@ -891,7 +961,6 @@ public class ServeDAO {
 
     @NotNull
     private static String concat(@NotNull Set<String> strings) {
-
         StringJoiner joiner = new StringJoiner(MAIN_JOINER);
         for (String string : strings) {
             joiner.add(string);

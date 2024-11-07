@@ -1,6 +1,7 @@
 package com.hartwig.serve.sources.vicc;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.util.List;
 
@@ -36,14 +37,13 @@ public class ViccExtractorTest {
         entries.add(ViccTestFactory.testEntryWithGeneEventAndAssociation("-", "Microsatellite_Instability_High", association));
 
         ExtractionResult result = extractor.extract(entries);
-        assertEquals(1, result.knownHotspots().size());
-        assertEquals(1, result.knownCopyNumbers().size());
-        assertEquals(1, result.knownFusions().size());
-        assertEquals(1, result.actionableHotspots().size());
-        assertEquals(1, result.actionableCodons().size());
-        assertEquals(1, result.actionableExons().size());
-        assertEquals(2, result.actionableGenes().size());
-        assertEquals(1, result.actionableFusions().size());
-        assertEquals(1, result.actionableCharacteristics().size());
+        assertEquals(1, result.knownEvents().hotspots().size());
+        assertEquals(1, result.knownEvents().copyNumbers().size());
+        assertEquals(1, result.knownEvents().fusions().size());
+
+        // TODO (KD) Consider checking the molecular criteria (1 hotspot, 1 codon, 1 exon, 2 genes, 1 fusion, 1 characteristic
+        assertEquals(7, result.efficacyEvidences().size());
+
+        assertNull(result.clinicalTrials());
     }
 }

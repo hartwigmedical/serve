@@ -183,7 +183,7 @@ public final class ViccExtractor {
                 .addAllEventInterpretations(extraction.eventInterpretationPerFeature().values())
                 .knownEvents(toKnownEvents(entry, extraction))
                 .efficacyEvidences(extraction.actionableEvidence())
-                .clinicalTrials(Sets.newHashSet());
+                .clinicalTrials(null);
 
         return outputBuilder.build();
     }

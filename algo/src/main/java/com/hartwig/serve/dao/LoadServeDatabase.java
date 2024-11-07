@@ -6,9 +6,8 @@ import java.nio.file.Files;
 import java.sql.SQLException;
 import java.util.List;
 
-import com.hartwig.serve.datamodel.ActionableEvents;
-import com.hartwig.serve.datamodel.KnownEvents;
 import com.hartwig.serve.datamodel.RefGenome;
+import com.hartwig.serve.datamodel.ServeDatabase;
 import com.hartwig.serve.datamodel.ServeRecord;
 import com.hartwig.serve.datamodel.serialization.ServeJson;
 import com.hartwig.serve.extraction.events.EventInterpretation;
@@ -37,11 +36,14 @@ public class LoadServeDatabase {
         String serveActionabilityDir = nonOptionalDir(cmd, SERVE_ACTIONABILITY_DIRECTORY);
         RefGenome refGenome = resolveRefGenomeVersion(nonOptionalValue(cmd, REF_GENOME_VERSION));
 
-        String serveJsonFile = ServeJson.jsonFilePath(serveActionabilityDir, refGenome);
+        String serveJsonFile = ServeJson.jsonFilePath(serveActionabilityDir);
         LOGGER.info("Loading SERVE from {}", serveJsonFile);
-        ServeRecord serveRecord = ServeJson.read(serveJsonFile);
-        ActionableEvents actionableEvents = serveRecord.actionableEvents();
-        KnownEvents knownEvents = serveRecord.knownEvents();
+        ServeDatabase serveDatabase = ServeJson.read(serveJsonFile);
+        ServeRecord serveRecord = serveDatabase.records().get(refGenome);
+
+        if (serveRecord == null) {
+            throw new IllegalStateException("Could not find SERVE record for ref genome version '" + refGenome + "'");
+        }
 
         List<EventInterpretation> eventInterpretation =
                 EventInterpretationFile.read(EventInterpretationFile.eventInterpretationTsv(serveActionabilityDir));
@@ -52,7 +54,7 @@ public class LoadServeDatabase {
 
         ServeDatabaseAccess dbWriter = ServeDatabaseAccess.databaseAccess(cmd);
 
-        dbWriter.writeServeData(actionableEvents, knownEvents, eventInterpretation);
+        dbWriter.writeServeRecord(serveRecord, eventInterpretation);
         LOGGER.info("Written SERVE output to database");
     }
 

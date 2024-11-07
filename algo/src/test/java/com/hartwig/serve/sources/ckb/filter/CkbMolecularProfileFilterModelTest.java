@@ -7,7 +7,6 @@ import java.util.List;
 import com.google.common.collect.Lists;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.sources.ckb.CkbTestFactory;
-import com.hartwig.serve.sources.ckb.blacklist.ImmutableCkbMolecularProfileFilterEntry;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;

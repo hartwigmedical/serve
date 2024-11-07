@@ -13,6 +13,7 @@ import com.hartwig.serve.ServeLocalConfigProvider;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.KnownEvent;
 import com.hartwig.serve.datamodel.RefGenome;
+import com.hartwig.serve.datamodel.ServeDatabase;
 import com.hartwig.serve.datamodel.ServeRecord;
 import com.hartwig.serve.datamodel.range.KnownCodon;
 import com.hartwig.serve.datamodel.serialization.ServeJson;
@@ -52,7 +53,8 @@ public class CodonAnnotationToVCFConverter {
         String outputVcf = System.getProperty("user.home") + "/hmf/tmp/codons.vcf.gz";
         GenerateAltBase altBaseGenerator = new GenerateAltBase(RefGenome.V37, refSequence37);
 
-        ServeRecord serveRecord = ServeJson.read(serveJson);
+        ServeDatabase serveDatabase = ServeJson.read(serveJson);
+        ServeRecord serveRecord = serveDatabase.records().get(RefGenome.V37);
         List<KnownCodon> codons = serveRecord.knownEvents().codons().stream().sorted().collect(Collectors.toList());
         LOGGER.info("The number of codons in known codon file is {}", codons.size());
 

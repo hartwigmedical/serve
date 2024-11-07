@@ -4,7 +4,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import com.hartwig.serve.datamodel.EvidenceLevel;
-import com.hartwig.serve.sources.ckb.blacklist.ImmutableCkbEvidenceFilterEntry;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

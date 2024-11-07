@@ -5,8 +5,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.ServeConfig;
 import com.hartwig.serve.ServeLocalConfigProvider;
@@ -18,12 +20,13 @@ import com.hartwig.serve.common.knownfusion.KnownFusionCache;
 import com.hartwig.serve.common.knownfusion.KnownFusionCacheLoader;
 import com.hartwig.serve.curation.DoidLookup;
 import com.hartwig.serve.curation.DoidLookupFactory;
-import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.ExtractionResultWriter;
 import com.hartwig.serve.extraction.hotspot.ProteinResolverFactory;
 import com.hartwig.serve.refgenome.ImmutableRefGenomeResource;
+import com.hartwig.serve.refgenome.RefGenomeManager;
+import com.hartwig.serve.refgenome.RefGenomeManagerFactory;
 import com.hartwig.serve.refgenome.RefGenomeResource;
 import com.hartwig.serve.sources.vicc.ViccExtractor;
 import com.hartwig.serve.sources.vicc.ViccExtractorFactory;
@@ -62,20 +65,20 @@ public class ViccExtractorTestApp {
             Files.createDirectory(outputPath);
         }
 
+        RefGenomeManager refGenomeManager = RefGenomeManagerFactory.createFromServeConfig(config);
         RefGenomeResource refGenomeResource = buildRefGenomeResource(config);
         DoidLookup doidLookup = DoidLookupFactory.buildFromMappingTsv(config.missingDoidsMappingTsv());
         ViccExtractor viccExtractor = ViccExtractorFactory.create(ViccClassificationConfig.build(), refGenomeResource, doidLookup);
 
         List<ViccEntry> entries = ViccReader.readAndCurateRelevantEntries(config.viccJson(), VICC_SOURCES_TO_INCLUDE, MAX_VICC_ENTRIES);
         ExtractionResult result = viccExtractor.extract(entries);
+        Map<RefGenome, ExtractionResult> results = Maps.newHashMap();
+        results.put(RefGenome.V38, result);
 
         String featureTsv = config.outputDir() + File.separator + "ViccEventClassification.tsv";
         ViccUtil.writeFeaturesToTsv(featureTsv, entries);
 
-        new ExtractionResultWriter(config.outputDir(),
-                Knowledgebase.VICC_CIVIC.refGenomeVersion(),
-                refGenomeResource.refSequence(),
-                VERSION).write(result);
+        new ExtractionResultWriter(VERSION, refGenomeManager, config.outputDir()).write(results);
     }
 
     @NotNull

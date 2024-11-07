@@ -2,8 +2,6 @@ package com.hartwig.serve.sources.ckb.filter;
 
 import com.google.common.collect.Lists;
 import com.hartwig.serve.datamodel.EvidenceLevel;
-import com.hartwig.serve.sources.ckb.blacklist.ImmutableCkbEvidenceFilterEntry;
-import com.hartwig.serve.sources.ckb.blacklist.ImmutableCkbTrialFilterEntry;
 
 import org.jetbrains.annotations.NotNull;
 

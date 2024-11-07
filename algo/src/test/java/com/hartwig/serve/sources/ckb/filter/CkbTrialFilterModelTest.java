@@ -3,8 +3,6 @@ package com.hartwig.serve.sources.ckb.filter;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import com.hartwig.serve.sources.ckb.blacklist.ImmutableCkbTrialFilterEntry;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.Test;

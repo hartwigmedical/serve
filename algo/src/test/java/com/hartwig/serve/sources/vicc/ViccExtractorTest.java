@@ -7,9 +7,9 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 import com.hartwig.serve.common.classification.EventClassifierConfig;
-import com.hartwig.serve.curation.DoidLookupTestFactory;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.refgenome.RefGenomeResourceTestFactory;
+import com.hartwig.serve.sources.vicc.doid.DoidLookupTestFactory;
 import com.hartwig.serve.vicc.annotation.ViccClassificationConfig;
 import com.hartwig.serve.vicc.datamodel.Association;
 import com.hartwig.serve.vicc.datamodel.ViccEntry;

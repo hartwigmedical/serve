@@ -1,4 +1,4 @@
-package com.hartwig.serve.curation;
+package com.hartwig.serve.sources.vicc.doid;
 
 import java.util.Map;
 import java.util.Set;

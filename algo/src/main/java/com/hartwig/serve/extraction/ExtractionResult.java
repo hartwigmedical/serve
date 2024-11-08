@@ -27,7 +27,7 @@ public abstract class ExtractionResult {
     public abstract KnownEvents knownEvents();
 
     @Nullable
-    public abstract List<EfficacyEvidence> efficacyEvidences();
+    public abstract List<EfficacyEvidence> evidences();
 
     @Nullable
     public abstract List<ActionableTrial> trials();

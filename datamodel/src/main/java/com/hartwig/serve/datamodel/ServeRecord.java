@@ -20,7 +20,7 @@ public abstract class ServeRecord {
     public abstract KnownEvents knownEvents();
 
     @NotNull
-    public abstract List<EfficacyEvidence> efficacyEvidences();
+    public abstract List<EfficacyEvidence> evidences();
 
     @NotNull
     public abstract List<ActionableTrial> trials();

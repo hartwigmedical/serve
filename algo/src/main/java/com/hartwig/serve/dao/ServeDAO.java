@@ -106,7 +106,7 @@ public class ServeDAO {
 
         writeEventInterpretations(timestamp, eventInterpretations);
         writeKnownEvents(timestamp, serveRecord.knownEvents());
-        writeEfficacyEvidences(timestamp, serveRecord.efficacyEvidences());
+        writeEfficacyEvidences(timestamp, serveRecord.evidences());
         writeActionableTrials(timestamp, serveRecord.trials());
     }
 

@@ -38,7 +38,7 @@ public class ConversionFilterTest {
         assertTrue(filtered.knownEvents().genes().isEmpty());
         assertTrue(filtered.knownEvents().copyNumbers().isEmpty());
         assertTrue(filtered.knownEvents().fusions().isEmpty());
-        assertTrue(filtered.efficacyEvidences().isEmpty());
+        assertTrue(filtered.evidences().isEmpty());
         assertTrue(filtered.trials().isEmpty());
 
         filter.reportUnusedFilterEntries();
@@ -49,9 +49,9 @@ public class ConversionFilterTest {
         return ImmutableExtractionResult.builder()
                 .refGenomeVersion(RefGenome.V38)
                 .knownEvents(createExhaustiveKnownEvents(gene))
-                .addEfficacyEvidences(evidenceForGene(GeneTestFactory.actionableGeneBuilder().gene(gene).build()))
-                .addEfficacyEvidences(evidenceForFusion(FusionTestFactory.actionableFusionBuilder().geneUp(gene).build()))
-                .addEfficacyEvidences(evidenceForFusion(FusionTestFactory.actionableFusionBuilder().geneDown(gene).build()))
+                .addEvidences(evidenceForGene(GeneTestFactory.actionableGeneBuilder().gene(gene).build()))
+                .addEvidences(evidenceForFusion(FusionTestFactory.actionableFusionBuilder().geneUp(gene).build()))
+                .addEvidences(evidenceForFusion(FusionTestFactory.actionableFusionBuilder().geneDown(gene).build()))
                 .addTrials(trialForGene(GeneTestFactory.actionableGeneBuilder().gene(gene).build()))
                 .addTrials(trialForFusion(FusionTestFactory.actionableFusionBuilder().geneUp(gene).build()))
                 .addTrials(trialForFusion(FusionTestFactory.actionableFusionBuilder().geneDown(gene).build()))

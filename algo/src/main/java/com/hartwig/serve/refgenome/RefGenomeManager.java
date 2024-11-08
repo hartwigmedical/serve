@@ -78,7 +78,7 @@ public class RefGenomeManager {
                 .refGenomeVersion(targetVersion)
                 .eventInterpretations(filteredExtraction.eventInterpretations())
                 .knownEvents(converter.convertKnownEvents(filteredExtraction.knownEvents()))
-                .efficacyEvidences(converter.convertEfficacyEvidences(filteredExtraction.efficacyEvidences()))
+                .evidences(converter.convertEfficacyEvidences(filteredExtraction.evidences()))
                 .trials(converter.convertTrials(filteredExtraction.trials()))
                 .build();
     }

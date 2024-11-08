@@ -22,7 +22,7 @@ public class TestServeDatabaseFactory {
     public static ServeRecord createServeRecord(@NotNull Knowledgebase source) {
         return ImmutableServeRecord.builder()
                 .knownEvents(createKnownEvents(source))
-                .efficacyEvidences(createEfficacyEvidences())
+                .evidences(createEfficacyEvidences())
                 .trials(createClinicalTrials())
                 .build();
     }

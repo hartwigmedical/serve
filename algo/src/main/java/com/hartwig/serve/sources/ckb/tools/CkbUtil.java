@@ -30,7 +30,7 @@ final class CkbUtil {
 
     public static void printExtractionResults(@NotNull ExtractionResult result) {
         LOGGER.info("Analysis performed on CKB extraction result");
-        LOGGER.info(" {} efficacy evidences generated", result.efficacyEvidences().size());
+        LOGGER.info(" {} efficacy evidences generated", result.evidences().size());
         LOGGER.info(" {} clinical trials generated", result.trials().size());
     }
 

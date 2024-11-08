@@ -182,7 +182,7 @@ public final class ViccExtractor {
                 .refGenomeVersion(Knowledgebase.VICC_CGI.refGenomeVersion())
                 .addAllEventInterpretations(extraction.eventInterpretationPerFeature().values())
                 .knownEvents(toKnownEvents(entry, extraction))
-                .efficacyEvidences(extraction.actionableEvidence())
+                .evidences(extraction.actionableEvidence())
                 .trials(null);
 
         return outputBuilder.build();

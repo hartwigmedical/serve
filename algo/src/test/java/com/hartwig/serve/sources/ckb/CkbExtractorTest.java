@@ -39,7 +39,7 @@ public class CkbExtractorTest {
 
         ExtractionResult trialResult = trialExtractor.extract(createCkbEntryTestDatabase());
         assertEquals(7, trialResult.trials().size());
-        assertEquals(7, trialResult.efficacyEvidences().size());
+        assertEquals(7, trialResult.evidences().size());
         assertEquals(1, trialResult.knownEvents().hotspots().size());
         assertEquals(1, trialResult.knownEvents().exons().size());
         assertEquals(1, trialResult.knownEvents().codons().size());

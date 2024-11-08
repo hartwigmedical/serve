@@ -34,7 +34,7 @@ public class ExtractionFunctionsTest {
         assertMergedKnownEvents(merged.knownEvents().fusions());
 
         assertEquals(2, merged.eventInterpretations().size());
-        assertEquals(2, merged.efficacyEvidences().size());
+        assertEquals(2, merged.evidences().size());
         assertEquals(2, merged.trials().size());
     }
 
@@ -45,7 +45,7 @@ public class ExtractionFunctionsTest {
         ExtractionResult merged = ExtractionFunctions.merge(Lists.newArrayList(result1, result2));
 
         assertNull(merged.knownEvents());
-        assertNull(merged.efficacyEvidences());
+        assertNull(merged.evidences());
         assertNull(merged.trials());
     }
 

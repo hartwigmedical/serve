@@ -150,7 +150,7 @@ public class CkbExtractor {
                     .refGenomeVersion(Knowledgebase.CKB.refGenomeVersion())
                     .eventInterpretations(Set.of(interpretation))
                     .knownEvents(generateKnownEvents(extractionOutput, efficacyEvidences.isEmpty(), variant, event, gene))
-                    .efficacyEvidences(efficacyEvidences)
+                    .evidences(efficacyEvidences)
                     .trials(actionableTrials)
                     .build();
         }

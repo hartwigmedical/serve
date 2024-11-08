@@ -40,7 +40,7 @@ public final class ServeAlgoTestFactory {
                 .refGenomeVersion(source.refGenomeVersion())
                 .knownEvents(knownEvents)
                 .eventInterpretations(Set.of(TestEventInterpretationFactory.createTestEventInterpretationForSource(source)))
-                .efficacyEvidences(List.of(EfficacyEvidenceTestFactory.builder().source(source).build()))
+                .evidences(List.of(EfficacyEvidenceTestFactory.builder().source(source).build()))
                 .trials(List.of(ActionableTrialTestFactory.builder().source(source).build()))
                 .build();
     }

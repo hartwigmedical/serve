@@ -43,7 +43,7 @@ class ConversionFilter {
         return ImmutableExtractionResult.builder()
                 .from(extractionResult)
                 .knownEvents(filterKnownEvents(extractionResult.knownEvents()))
-                .efficacyEvidences(filterEfficacyEvidences(extractionResult.efficacyEvidences()))
+                .evidences(filterEfficacyEvidences(extractionResult.evidences()))
                 .trials(filterTrials(extractionResult.trials()))
                 .build();
     }

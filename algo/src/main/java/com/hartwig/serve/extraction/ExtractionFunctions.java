@@ -49,11 +49,11 @@ public final class ExtractionFunctions {
                 }
                 unconsolidatedKnownEventsBuilder.from(result.knownEvents());
             }
-            if (result.efficacyEvidences() != null) {
+            if (result.evidences() != null) {
                 if (unconsolidatedEvidences == null) {
                     unconsolidatedEvidences = Lists.newArrayList();
                 }
-                unconsolidatedEvidences.addAll(result.efficacyEvidences());
+                unconsolidatedEvidences.addAll(result.evidences());
             }
             if (result.trials() != null) {
                 if (mergedTrials == null) {
@@ -70,7 +70,7 @@ public final class ExtractionFunctions {
                 .refGenomeVersion(version)
                 .eventInterpretations(mergedInterpretations)
                 .knownEvents(consolidateKnownEvents(unconsolidatedKnownEvents))
-                .efficacyEvidences(consolidateEvidences(unconsolidatedEvidences))
+                .evidences(consolidateEvidences(unconsolidatedEvidences))
                 .trials(mergedTrials)
                 .build();
     }

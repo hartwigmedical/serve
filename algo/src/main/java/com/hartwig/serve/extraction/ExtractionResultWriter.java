@@ -75,7 +75,7 @@ public class ExtractionResultWriter {
     private static ServeRecord toServeRecord(@NotNull ExtractionResult result) {
         return ImmutableServeRecord.builder()
                 .knownEvents(result.knownEvents() != null ? result.knownEvents() : ImmutableKnownEvents.builder().build())
-                .efficacyEvidences(result.efficacyEvidences() != null ? result.efficacyEvidences() : Lists.newArrayList())
+                .evidences(result.evidences() != null ? result.evidences() : Lists.newArrayList())
                 .trials(result.trials() != null ? result.trials() : Lists.newArrayList())
                 .build();
     }

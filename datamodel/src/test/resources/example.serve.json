@@ -150,7 +150,7 @@
           }
         ]
       },
-      "efficacyEvidences": [
+      "evidences": [
         {
           "source": "VICC_CGI",
           "treatment": {

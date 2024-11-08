@@ -42,7 +42,7 @@ public class ViccExtractorTest {
         assertEquals(1, result.knownEvents().fusions().size());
 
         // TODO (KD) Consider checking the molecular criteria (1 hotspot, 1 codon, 1 exon, 2 genes, 1 fusion, 1 characteristic
-        assertEquals(7, result.efficacyEvidences().size());
+        assertEquals(7, result.evidences().size());
 
         assertNull(result.trials());
     }

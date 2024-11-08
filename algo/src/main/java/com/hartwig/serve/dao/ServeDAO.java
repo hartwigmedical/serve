@@ -26,21 +26,20 @@ import java.util.stream.Collectors;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
+import com.hartwig.serve.datamodel.ActionableTrial;
 import com.hartwig.serve.datamodel.CancerType;
-import com.hartwig.serve.datamodel.ClinicalTrial;
 import com.hartwig.serve.datamodel.Country;
 import com.hartwig.serve.datamodel.EfficacyEvidence;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
 import com.hartwig.serve.datamodel.EvidenceLevelDetails;
 import com.hartwig.serve.datamodel.Hospital;
-import com.hartwig.serve.datamodel.ImmutableClinicalTrial;
+import com.hartwig.serve.datamodel.ImmutableActionableTrial;
 import com.hartwig.serve.datamodel.Indication;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.KnownEvents;
 import com.hartwig.serve.datamodel.MolecularCriterium;
 import com.hartwig.serve.datamodel.ServeRecord;
-import com.hartwig.serve.datamodel.Treatment;
 import com.hartwig.serve.datamodel.characteristic.ActionableCharacteristic;
 import com.hartwig.serve.datamodel.fusion.ActionableFusion;
 import com.hartwig.serve.datamodel.fusion.KnownFusion;
@@ -108,7 +107,7 @@ public class ServeDAO {
         writeEventInterpretations(timestamp, eventInterpretations);
         writeKnownEvents(timestamp, serveRecord.knownEvents());
         writeEfficacyEvidences(timestamp, serveRecord.efficacyEvidences());
-        writeClinicalTrials(timestamp, serveRecord.clinicalTrials());
+        writeActionableTrials(timestamp, serveRecord.trials());
     }
 
     private void writeEventInterpretations(@NotNull Timestamp timestamp, @NotNull List<EventInterpretation> eventInterpretations) {
@@ -329,65 +328,68 @@ public class ServeDAO {
 
     private void writeEfficacyEvidences(@NotNull Timestamp timestamp, @NotNull List<EfficacyEvidence> efficacyEvidences) {
         writeHotspotEfficacyEvidence(timestamp, filterEfficacyEvidence(efficacyEvidences, hotspotFilter()));
-        writeActionableCodons(timestamp, filterEfficacyEvidence(efficacyEvidences, codonFilter()));
-        writeActionableExons(timestamp, filterEfficacyEvidence(efficacyEvidences, exonFilter()));
-        writeActionableGenes(timestamp, filterEfficacyEvidence(efficacyEvidences, geneFilter()));
-        writeActionableFusions(timestamp, filterEfficacyEvidence(efficacyEvidences, fusionFilter()));
-        writeActionableCharacteristics(timestamp, filterEfficacyEvidence(efficacyEvidences, characteristicsFilter()));
-        writeActionableHLA(timestamp, filterEfficacyEvidence(efficacyEvidences, hlaFilter()));
+        writeCodonEfficacyEvidence(timestamp, filterEfficacyEvidence(efficacyEvidences, codonFilter()));
+        writeExonEfficacyEvidence(timestamp, filterEfficacyEvidence(efficacyEvidences, exonFilter()));
+        writeGeneEfficacyEvidence(timestamp, filterEfficacyEvidence(efficacyEvidences, geneFilter()));
+        writeFusionEfficacyEvidence(timestamp, filterEfficacyEvidence(efficacyEvidences, fusionFilter()));
+        writeCharacteristicEfficacyEvidence(timestamp, filterEfficacyEvidence(efficacyEvidences, characteristicsFilter()));
+        writeHLAEfficacyEvidence(timestamp, filterEfficacyEvidence(efficacyEvidences, hlaFilter()));
     }
 
-    private void writeClinicalTrials(@NotNull Timestamp timestamp, @NotNull List<ClinicalTrial> clinicalTrials) {
-        writeHotspotClinicalTrials(timestamp, filterAndExpandHotspotTrials(clinicalTrials, hotspotFilter()));
-    }
-
-    private void writeHotspotEfficacyEvidence(@NotNull Timestamp timestamp, @NotNull List<EfficacyEvidence> evidenceWithHotspots) {
-        for (List<EfficacyEvidence> batch : Iterables.partition(evidenceWithHotspots, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
+    private void writeHotspotEfficacyEvidence(@NotNull Timestamp timestamp, @NotNull List<EfficacyEvidence> evidenceForHotspots) {
+        for (List<EfficacyEvidence> batch : Iterables.partition(evidenceForHotspots, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
             InsertValuesStepN inserter = createActionableHotspotInserter();
             batch.forEach(entry -> writeEvidenceForHotspotBatch(timestamp, inserter, entry));
             inserter.execute();
         }
     }
 
-    private void writeHotspotClinicalTrials(@NotNull Timestamp timestamp, @NotNull List<ClinicalTrial> trialsWithHotspots) {
-        for (List<ClinicalTrial> batch : Iterables.partition(trialsWithHotspots, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
-            InsertValuesStepN inserter = createActionableHotspotInserter();
-            batch.forEach(entry -> writeEvidenceForTrialBatch(timestamp, inserter, entry));
+    private void writeCodonEfficacyEvidence(@NotNull Timestamp timestamp, @NotNull List<EfficacyEvidence> evidenceForCodons) {
+        for (List<EfficacyEvidence> batch : Iterables.partition(evidenceForCodons, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
+            InsertValuesStepN inserter = createActionableCodonInserter();
+            batch.forEach(entry -> writeEvidenceForRangeBatch(timestamp, inserter, entry));
             inserter.execute();
         }
     }
 
-    @NotNull
-    private InsertValuesStepN createActionableHotspotInserter() {
-        return context.insertInto(ACTIONABLEHOTSPOT,
-                ACTIONABLEHOTSPOT.MODIFIED,
-                ACTIONABLEHOTSPOT.GENE,
-                ACTIONABLEHOTSPOT.CHROMOSOME,
-                ACTIONABLEHOTSPOT.POSITION,
-                ACTIONABLEHOTSPOT.REF,
-                ACTIONABLEHOTSPOT.ALT,
-                ACTIONABLEHOTSPOT.SOURCE,
-                ACTIONABLEHOTSPOT.ENTRYDATE,
-                ACTIONABLEHOTSPOT.SOURCEEVENT,
-                ACTIONABLEHOTSPOT.SOURCEURLS,
-                ACTIONABLEHOTSPOT.NCTID,
-                ACTIONABLEHOTSPOT.TITLE,
-                ACTIONABLEHOTSPOT.ACRONYM,
-                ACTIONABLEHOTSPOT.GENDERCRITERIUM,
-                ACTIONABLEHOTSPOT.COUNTRIESANDCITIES,
-                ACTIONABLEHOTSPOT.HOSPITALSPERCITY,
-                ACTIONABLEHOTSPOT.TREATMENT,
-                ACTIONABLEHOTSPOT.TREATMENTAPPROACHESDRUGCLASS,
-                ACTIONABLEHOTSPOT.TREATMENTAPPROACHESTHERAPY,
-                ACTIONABLEHOTSPOT.APPLICABLECANCERTYPE,
-                ACTIONABLEHOTSPOT.APPLICABLEDOID,
-                ACTIONABLEHOTSPOT.BLACKLISTCANCERTYPES,
-                ACTIONABLEHOTSPOT.EFFICACYDESCRIPTION,
-                ACTIONABLEHOTSPOT.EVIDENCEYEAR,
-                ACTIONABLEHOTSPOT.EVIDENCELEVEL,
-                ACTIONABLEHOTSPOT.EVIDENCELEVELDETAILS,
-                ACTIONABLEHOTSPOT.DIRECTION,
-                ACTIONABLEHOTSPOT.EVIDENCEURLS);
+    private void writeExonEfficacyEvidence(@NotNull Timestamp timestamp, @NotNull List<EfficacyEvidence> evidenceForExons) {
+        for (List<EfficacyEvidence> batch : Iterables.partition(evidenceForExons, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
+            InsertValuesStepN inserter = createActionableExonInserter();
+            batch.forEach(entry -> writeEvidenceForRangeBatch(timestamp, inserter, entry));
+            inserter.execute();
+        }
+    }
+
+    private void writeGeneEfficacyEvidence(@NotNull Timestamp timestamp, @NotNull List<EfficacyEvidence> evidenceForGenes) {
+        for (List<EfficacyEvidence> batch : Iterables.partition(evidenceForGenes, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
+            InsertValuesStepN inserter = createActionableGeneInserter();
+            batch.forEach(entry -> writeEvidenceForGeneBatch(timestamp, inserter, entry));
+            inserter.execute();
+        }
+    }
+
+    private void writeFusionEfficacyEvidence(@NotNull Timestamp timestamp, @NotNull List<EfficacyEvidence> fusions) {
+        for (List<EfficacyEvidence> batch : Iterables.partition(fusions, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
+            InsertValuesStepN inserter = createActionableFusionInserter();
+            batch.forEach(entry -> writeEvidenceForFusionBatch(timestamp, inserter, entry));
+            inserter.execute();
+        }
+    }
+
+    private void writeCharacteristicEfficacyEvidence(@NotNull Timestamp timestamp, @NotNull List<EfficacyEvidence> characteristics) {
+        for (List<EfficacyEvidence> batch : Iterables.partition(characteristics, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
+            InsertValuesStepN inserter = createActionableCharacteristicInserter();
+            batch.forEach(entry -> writeEvidenceForCharacteristicBatch(timestamp, inserter, entry));
+            inserter.execute();
+        }
+    }
+
+    private void writeHLAEfficacyEvidence(@NotNull Timestamp timestamp, @NotNull List<EfficacyEvidence> hla) {
+        for (List<EfficacyEvidence> batch : Iterables.partition(hla, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
+            InsertValuesStepN inserter = createActionableHLAInserter();
+            batch.forEach(entry -> writeEvidenceForHLABatch(timestamp, inserter, entry));
+            inserter.execute();
+        }
     }
 
     private static void writeEvidenceForHotspotBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStepN inserter,
@@ -425,10 +427,202 @@ public class ServeDAO {
                 concat(evidenceForHotspot.urls()));
     }
 
-    private static void writeEvidenceForTrialBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStepN inserter,
-            @NotNull ClinicalTrial trialForHotspot) {
+    private static void writeEvidenceForRangeBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStepN inserter,
+            @NotNull EfficacyEvidence evidenceForRange) {
+        MolecularCriterium molecularCriterium = evidenceForRange.molecularCriterium();
+        ActionableRange range;
+        if (!molecularCriterium.codons().isEmpty()) {
+            range = molecularCriterium.codons().iterator().next();
+        } else if (!molecularCriterium.exons().isEmpty()) {
+            range = molecularCriterium.exons().iterator().next();
+        } else {
+            throw new IllegalStateException("Neither codon nor range present in evidence on actionable range: " + molecularCriterium);
+        }
+        inserter.values(timestamp,
+                range.gene(),
+                range.chromosome(),
+                range.start(),
+                range.end(),
+                range.applicableMutationType(),
+                evidenceForRange.source(),
+                range.sourceDate(),
+                range.sourceEvent(),
+                concat(range.sourceUrls()),
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                evidenceForRange.treatment().name(),
+                !evidenceForRange.treatment().treatmentApproachesDrugClass().isEmpty() ? concat(evidenceForRange.treatment()
+                        .treatmentApproachesDrugClass()) : null,
+                !evidenceForRange.treatment().treatmentApproachesTherapy().isEmpty() ? concat(evidenceForRange.treatment()
+                        .treatmentApproachesTherapy()) : null,
+                evidenceForRange.indication().applicableType().name(),
+                evidenceForRange.indication().applicableType().doid(),
+                concat(toStrings(evidenceForRange.indication().excludedSubTypes())),
+                evidenceForRange.efficacyDescription(),
+                evidenceForRange.evidenceYear(),
+                evidenceForRange.evidenceLevel(),
+                evidenceForRange.evidenceLevelDetails(),
+                evidenceForRange.evidenceDirection(),
+                concat(evidenceForRange.urls()));
+    }
+
+    private static void writeEvidenceForGeneBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStepN inserter,
+            @NotNull EfficacyEvidence evidenceForGene) {
+        ActionableGene gene = evidenceForGene.molecularCriterium().genes().iterator().next();
+
+        inserter.values(timestamp,
+                gene.gene(),
+                gene.event(),
+                evidenceForGene.source(),
+                gene.sourceDate(),
+                gene.sourceEvent(),
+                concat(gene.sourceUrls()),
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                evidenceForGene.treatment().name(),
+                !evidenceForGene.treatment().treatmentApproachesDrugClass().isEmpty() ? concat(evidenceForGene.treatment()
+                        .treatmentApproachesDrugClass()) : null,
+                !evidenceForGene.treatment().treatmentApproachesTherapy().isEmpty() ? concat(evidenceForGene.treatment()
+                        .treatmentApproachesTherapy()) : null,
+                evidenceForGene.indication().applicableType().name(),
+                evidenceForGene.indication().applicableType().doid(),
+                concat(toStrings(evidenceForGene.indication().excludedSubTypes())),
+                evidenceForGene.efficacyDescription(),
+                evidenceForGene.evidenceYear(),
+                evidenceForGene.evidenceLevel(),
+                evidenceForGene.evidenceLevelDetails(),
+                evidenceForGene.evidenceDirection(),
+                concat(evidenceForGene.urls()));
+    }
+
+    private static void writeEvidenceForFusionBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStepN inserter,
+            @NotNull EfficacyEvidence evidenceForFusion) {
+        ActionableFusion fusion = evidenceForFusion.molecularCriterium().fusions().iterator().next();
+
+        inserter.values(timestamp,
+                fusion.geneUp(),
+                fusion.minExonUp(),
+                fusion.maxExonUp(),
+                fusion.geneDown(),
+                fusion.minExonDown(),
+                fusion.maxExonDown(),
+                evidenceForFusion.source(),
+                fusion.sourceDate(),
+                fusion.sourceEvent(),
+                concat(fusion.sourceUrls()),
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                evidenceForFusion.treatment().name(),
+                !evidenceForFusion.treatment().treatmentApproachesDrugClass().isEmpty() ? concat(evidenceForFusion.treatment()
+                        .treatmentApproachesDrugClass()) : null,
+                !evidenceForFusion.treatment().treatmentApproachesTherapy().isEmpty() ? concat(evidenceForFusion.treatment()
+                        .treatmentApproachesTherapy()) : null,
+                evidenceForFusion.indication().applicableType().name(),
+                evidenceForFusion.indication().applicableType().doid(),
+                concat(toStrings(evidenceForFusion.indication().excludedSubTypes())),
+                evidenceForFusion.efficacyDescription(),
+                evidenceForFusion.evidenceYear(),
+                evidenceForFusion.evidenceLevel(),
+                evidenceForFusion.evidenceLevelDetails(),
+                evidenceForFusion.evidenceDirection(),
+                concat(evidenceForFusion.urls()));
+    }
+
+    private static void writeEvidenceForCharacteristicBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStepN inserter,
+            @NotNull EfficacyEvidence evidenceForCharacteristic) {
+        ActionableCharacteristic characteristic = evidenceForCharacteristic.molecularCriterium().characteristics().iterator().next();
+
+        inserter.values(timestamp,
+                characteristic.type(),
+                characteristic.cutoffType(),
+                characteristic.cutoff(),
+                evidenceForCharacteristic.source(),
+                characteristic.sourceDate(),
+                characteristic.sourceEvent(),
+                concat(characteristic.sourceUrls()),
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                evidenceForCharacteristic.treatment().name(),
+                !evidenceForCharacteristic.treatment().treatmentApproachesDrugClass().isEmpty() ? concat(evidenceForCharacteristic.treatment()
+                        .treatmentApproachesDrugClass()) : null,
+                !evidenceForCharacteristic.treatment().treatmentApproachesTherapy().isEmpty() ? concat(evidenceForCharacteristic.treatment()
+                        .treatmentApproachesTherapy()) : null,
+                evidenceForCharacteristic.indication().applicableType().name(),
+                evidenceForCharacteristic.indication().applicableType().doid(),
+                concat(toStrings(evidenceForCharacteristic.indication().excludedSubTypes())),
+                evidenceForCharacteristic.efficacyDescription(),
+                evidenceForCharacteristic.evidenceYear(),
+                evidenceForCharacteristic.evidenceLevel(),
+                evidenceForCharacteristic.evidenceLevelDetails(),
+                evidenceForCharacteristic.evidenceDirection(),
+                concat(evidenceForCharacteristic.urls()));
+    }
+
+    private static void writeEvidenceForHLABatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStepN inserter,
+            @NotNull EfficacyEvidence evidenceForHLA) {
+        ActionableHLA hla = evidenceForHLA.molecularCriterium().hla().iterator().next();
+
+        inserter.values(timestamp,
+                hla.hlaAllele(),
+                evidenceForHLA.source(),
+                hla.sourceDate(),
+                hla.sourceEvent(),
+                concat(hla.sourceUrls()),
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                evidenceForHLA.treatment().name(),
+                !evidenceForHLA.treatment().treatmentApproachesDrugClass().isEmpty() ? concat(evidenceForHLA.treatment()
+                        .treatmentApproachesDrugClass()) : null,
+                !evidenceForHLA.treatment().treatmentApproachesTherapy().isEmpty() ? concat(evidenceForHLA.treatment()
+                        .treatmentApproachesTherapy()) : null,
+                evidenceForHLA.indication().applicableType().name(),
+                evidenceForHLA.indication().applicableType().doid(),
+                concat(toStrings(evidenceForHLA.indication().excludedSubTypes())),
+                evidenceForHLA.efficacyDescription(),
+                evidenceForHLA.evidenceYear(),
+                evidenceForHLA.evidenceLevel(),
+                evidenceForHLA.evidenceLevelDetails(),
+                evidenceForHLA.evidenceDirection(),
+                concat(evidenceForHLA.urls()));
+    }
+
+    private void writeActionableTrials(@NotNull Timestamp timestamp, @NotNull List<ActionableTrial> actionableTrials) {
+        writeHotspotActionableTrials(timestamp, filterAndExpandHotspotTrials(actionableTrials, hotspotFilter()));
+    }
+
+
+    private void writeHotspotActionableTrials(@NotNull Timestamp timestamp, @NotNull List<ActionableTrial> trialsWithHotspots) {
+        for (List<ActionableTrial> batch : Iterables.partition(trialsWithHotspots, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
+            InsertValuesStepN inserter = createActionableHotspotInserter();
+            batch.forEach(entry -> writeTrialsForHotspotBatch(timestamp, inserter, entry));
+            inserter.execute();
+        }
+    }
+
+    private static void writeTrialsForHotspotBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStepN inserter,
+            @NotNull ActionableTrial trialForHotspot) {
         // KD: This assumes we have split up trials into one entry per criterium and indication.
-        ActionableHotspot hotspot = trialForHotspot.molecularCriteria().iterator().next().hotspots().iterator().next();
+        ActionableHotspot hotspot = trialForHotspot.anyMolecularCriteria().iterator().next().hotspots().iterator().next();
         Indication indication = trialForHotspot.indications().iterator().next();
 
         inserter.values(timestamp,
@@ -461,403 +655,227 @@ public class ServeDAO {
                 concat(trialForHotspot.urls()));
     }
 
-    private void writeActionableCodons(@NotNull Timestamp timestamp, @NotNull List<EfficacyEvidence> codons) {
-        for (List<ActionableRange> batch : Iterables.partition(codons, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
-            InsertValuesStepN inserter = context.insertInto(ACTIONABLECODON,
-                    ACTIONABLECODON.MODIFIED,
-                    ACTIONABLECODON.GENE,
-                    ACTIONABLECODON.CHROMOSOME,
-                    ACTIONABLECODON.START,
-                    ACTIONABLECODON.END,
-                    ACTIONABLECODON.APPLICABLEMUTATIONTYPE,
-                    ACTIONABLECODON.SOURCE,
-                    ACTIONABLECODON.ENTRYDATE,
-                    ACTIONABLECODON.SOURCEEVENT,
-                    ACTIONABLECODON.SOURCEURLS,
-                    ACTIONABLECODON.NCTID,
-                    ACTIONABLECODON.TITLE,
-                    ACTIONABLECODON.ACRONYM,
-                    ACTIONABLECODON.GENDERCRITERIUM,
-                    ACTIONABLECODON.COUNTRIESANDCITIES,
-                    ACTIONABLECODON.HOSPITALSPERCITY,
-                    ACTIONABLECODON.TREATMENT,
-                    ACTIONABLECODON.TREATMENTAPPROACHESDRUGCLASS,
-                    ACTIONABLECODON.TREATMENTAPPROACHESTHERAPY,
-                    ACTIONABLECODON.APPLICABLECANCERTYPE,
-                    ACTIONABLECODON.APPLICABLEDOID,
-                    ACTIONABLECODON.BLACKLISTCANCERTYPES,
-                    ACTIONABLECODON.EFFICACYDESCRIPTION,
-                    ACTIONABLECODON.EVIDENCEYEAR,
-                    ACTIONABLECODON.EVIDENCELEVEL,
-                    ACTIONABLECODON.EVIDENCELEVELDETAILS,
-                    ACTIONABLECODON.DIRECTION,
-                    ACTIONABLECODON.EVIDENCEURLS);
-            batch.forEach(entry -> writeActionableRangeBatch(timestamp, inserter, entry));
-            inserter.execute();
-        }
+    @NotNull
+    private InsertValuesStepN createActionableHotspotInserter() {
+        return context.insertInto(ACTIONABLEHOTSPOT,
+                ACTIONABLEHOTSPOT.MODIFIED,
+                ACTIONABLEHOTSPOT.GENE,
+                ACTIONABLEHOTSPOT.CHROMOSOME,
+                ACTIONABLEHOTSPOT.POSITION,
+                ACTIONABLEHOTSPOT.REF,
+                ACTIONABLEHOTSPOT.ALT,
+                ACTIONABLEHOTSPOT.SOURCE,
+                ACTIONABLEHOTSPOT.ENTRYDATE,
+                ACTIONABLEHOTSPOT.SOURCEEVENT,
+                ACTIONABLEHOTSPOT.SOURCEURLS,
+                ACTIONABLEHOTSPOT.NCTID,
+                ACTIONABLEHOTSPOT.TITLE,
+                ACTIONABLEHOTSPOT.ACRONYM,
+                ACTIONABLEHOTSPOT.GENDERCRITERIUM,
+                ACTIONABLEHOTSPOT.COUNTRIESANDCITIES,
+                ACTIONABLEHOTSPOT.HOSPITALSPERCITY,
+                ACTIONABLEHOTSPOT.TREATMENT,
+                ACTIONABLEHOTSPOT.TREATMENTAPPROACHESDRUGCLASS,
+                ACTIONABLEHOTSPOT.TREATMENTAPPROACHESTHERAPY,
+                ACTIONABLEHOTSPOT.APPLICABLECANCERTYPE,
+                ACTIONABLEHOTSPOT.APPLICABLEDOID,
+                ACTIONABLEHOTSPOT.BLACKLISTCANCERTYPES,
+                ACTIONABLEHOTSPOT.EFFICACYDESCRIPTION,
+                ACTIONABLEHOTSPOT.EVIDENCEYEAR,
+                ACTIONABLEHOTSPOT.EVIDENCELEVEL,
+                ACTIONABLEHOTSPOT.EVIDENCELEVELDETAILS,
+                ACTIONABLEHOTSPOT.DIRECTION,
+                ACTIONABLEHOTSPOT.EVIDENCEURLS);
     }
 
-    private void writeActionableExons(@NotNull Timestamp timestamp, @NotNull List<EfficacyEvidence> exons) {
-        for (List<ActionableRange> batch : Iterables.partition(exons, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
-            InsertValuesStepN inserter = context.insertInto(ACTIONABLEEXON,
-                    ACTIONABLEEXON.MODIFIED,
-                    ACTIONABLEEXON.GENE,
-                    ACTIONABLEEXON.CHROMOSOME,
-                    ACTIONABLEEXON.START,
-                    ACTIONABLEEXON.END,
-                    ACTIONABLEEXON.APPLICABLEMUTATIONTYPE,
-                    ACTIONABLEEXON.SOURCE,
-                    ACTIONABLEEXON.ENTRYDATE,
-                    ACTIONABLEEXON.SOURCEEVENT,
-                    ACTIONABLEEXON.SOURCEURLS,
-                    ACTIONABLEEXON.NCTID,
-                    ACTIONABLEEXON.TITLE,
-                    ACTIONABLEEXON.ACRONYM,
-                    ACTIONABLEEXON.GENDERCRITERIUM,
-                    ACTIONABLEEXON.COUNTRIESANDCITIES,
-                    ACTIONABLEEXON.HOSPITALSPERCITY,
-                    ACTIONABLEEXON.TREATMENT,
-                    ACTIONABLEEXON.TREATMENTAPPROACHESDRUGCLASS,
-                    ACTIONABLEEXON.TREATMENTAPPROACHESTHERAPY,
-                    ACTIONABLEEXON.APPLICABLECANCERTYPE,
-                    ACTIONABLEEXON.APPLICABLEDOID,
-                    ACTIONABLEEXON.BLACKLISTCANCERTYPES,
-                    ACTIONABLEEXON.EFFICACYDESCRIPTION,
-                    ACTIONABLEEXON.EVIDENCEYEAR,
-                    ACTIONABLEEXON.EVIDENCELEVEL,
-                    ACTIONABLEEXON.EVIDENCELEVELDETAILS,
-                    ACTIONABLEEXON.DIRECTION,
-                    ACTIONABLEEXON.EVIDENCEURLS);
-            batch.forEach(entry -> writeActionableRangeBatch(timestamp, inserter, entry));
-            inserter.execute();
-        }
+    @NotNull
+    private InsertValuesStepN createActionableCodonInserter() {
+        return context.insertInto(ACTIONABLECODON,
+                ACTIONABLECODON.MODIFIED,
+                ACTIONABLECODON.GENE,
+                ACTIONABLECODON.CHROMOSOME,
+                ACTIONABLECODON.START,
+                ACTIONABLECODON.END,
+                ACTIONABLECODON.APPLICABLEMUTATIONTYPE,
+                ACTIONABLECODON.SOURCE,
+                ACTIONABLECODON.ENTRYDATE,
+                ACTIONABLECODON.SOURCEEVENT,
+                ACTIONABLECODON.SOURCEURLS,
+                ACTIONABLECODON.NCTID,
+                ACTIONABLECODON.TITLE,
+                ACTIONABLECODON.ACRONYM,
+                ACTIONABLECODON.GENDERCRITERIUM,
+                ACTIONABLECODON.COUNTRIESANDCITIES,
+                ACTIONABLECODON.HOSPITALSPERCITY,
+                ACTIONABLECODON.TREATMENT,
+                ACTIONABLECODON.TREATMENTAPPROACHESDRUGCLASS,
+                ACTIONABLECODON.TREATMENTAPPROACHESTHERAPY,
+                ACTIONABLECODON.APPLICABLECANCERTYPE,
+                ACTIONABLECODON.APPLICABLEDOID,
+                ACTIONABLECODON.BLACKLISTCANCERTYPES,
+                ACTIONABLECODON.EFFICACYDESCRIPTION,
+                ACTIONABLECODON.EVIDENCEYEAR,
+                ACTIONABLECODON.EVIDENCELEVEL,
+                ACTIONABLECODON.EVIDENCELEVELDETAILS,
+                ACTIONABLECODON.DIRECTION,
+                ACTIONABLECODON.EVIDENCEURLS);
     }
 
-    private static void writeActionableRangeBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStepN inserter,
-            @NotNull ActionableRange actionableRange) {
-
-        ClinicalTrial clinicalTrial = extractOptionalClinicalTrial(actionableRange);
-        Treatment treatment = extractOptionalTreatment(actionableRange);
-
-        inserter.values(timestamp,
-                actionableRange.gene(),
-                actionableRange.chromosome(),
-                actionableRange.start(),
-                actionableRange.end(),
-                actionableRange.applicableMutationType(),
-                actionableRange.source(),
-                actionableRange.entryDate(),
-                actionableRange.sourceEvent(),
-                concat(actionableRange.sourceUrls()),
-                clinicalTrial != null ? clinicalTrial.nctId() : null,
-                clinicalTrial != null ? clinicalTrial.title() : null,
-                clinicalTrial != null && clinicalTrial.acronym() != null ? clinicalTrial.acronym() : null,
-                clinicalTrial != null && clinicalTrial.genderCriterium() != null ? clinicalTrial.genderCriterium() : null,
-                clinicalTrial != null ? toCountryWithCities(clinicalTrial.countries()) : null,
-                clinicalTrial != null ? toHospitals(clinicalTrial.countries()) : null,
-                therapyName(clinicalTrial, treatment),
-                treatment != null && !treatment.treatmentApproachesDrugClass().isEmpty()
-                        ? concat(treatment.treatmentApproachesDrugClass())
-                        : null,
-                treatment != null && !treatment.treatmentApproachesTherapy().isEmpty()
-                        ? concat(treatment.treatmentApproachesTherapy())
-                        : null,
-                actionableRange.applicableCancerType().name(),
-                actionableRange.applicableCancerType().doid(),
-                concat(toStrings(actionableRange.blacklistCancerTypes())),
-                actionableRange.efficacyDescription(),
-                actionableRange.evidenceYear(),
-                actionableRange.evidenceLevel(),
-                actionableRange.evidenceLevelDetails(),
-                actionableRange.direction(),
-                concat(actionableRange.evidenceUrls()));
+    @NotNull
+    private InsertValuesStepN createActionableExonInserter() {
+        return context.insertInto(ACTIONABLEEXON,
+                ACTIONABLEEXON.MODIFIED,
+                ACTIONABLEEXON.GENE,
+                ACTIONABLEEXON.CHROMOSOME,
+                ACTIONABLEEXON.START,
+                ACTIONABLEEXON.END,
+                ACTIONABLEEXON.APPLICABLEMUTATIONTYPE,
+                ACTIONABLEEXON.SOURCE,
+                ACTIONABLEEXON.ENTRYDATE,
+                ACTIONABLEEXON.SOURCEEVENT,
+                ACTIONABLEEXON.SOURCEURLS,
+                ACTIONABLEEXON.NCTID,
+                ACTIONABLEEXON.TITLE,
+                ACTIONABLEEXON.ACRONYM,
+                ACTIONABLEEXON.GENDERCRITERIUM,
+                ACTIONABLEEXON.COUNTRIESANDCITIES,
+                ACTIONABLEEXON.HOSPITALSPERCITY,
+                ACTIONABLEEXON.TREATMENT,
+                ACTIONABLEEXON.TREATMENTAPPROACHESDRUGCLASS,
+                ACTIONABLEEXON.TREATMENTAPPROACHESTHERAPY,
+                ACTIONABLEEXON.APPLICABLECANCERTYPE,
+                ACTIONABLEEXON.APPLICABLEDOID,
+                ACTIONABLEEXON.BLACKLISTCANCERTYPES,
+                ACTIONABLEEXON.EFFICACYDESCRIPTION,
+                ACTIONABLEEXON.EVIDENCEYEAR,
+                ACTIONABLEEXON.EVIDENCELEVEL,
+                ACTIONABLEEXON.EVIDENCELEVELDETAILS,
+                ACTIONABLEEXON.DIRECTION,
+                ACTIONABLEEXON.EVIDENCEURLS);
     }
 
-    private void writeActionableGenes(@NotNull Timestamp timestamp, @NotNull List<EfficacyEvidence> genes) {
-        for (List<ActionableGene> batch : Iterables.partition(genes, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
-            InsertValuesStepN inserter = context.insertInto(ACTIONABLEGENE,
-                    ACTIONABLEGENE.MODIFIED,
-                    ACTIONABLEGENE.GENE,
-                    ACTIONABLEGENE.EVENT,
-                    ACTIONABLEGENE.SOURCE,
-                    ACTIONABLEGENE.ENTRYDATE,
-                    ACTIONABLEGENE.SOURCEEVENT,
-                    ACTIONABLEGENE.SOURCEURLS,
-                    ACTIONABLEGENE.NCTID,
-                    ACTIONABLEGENE.TITLE,
-                    ACTIONABLEGENE.ACRONYM,
-                    ACTIONABLEGENE.GENDERCRITERIUM,
-                    ACTIONABLEGENE.COUNTRIESANDCITIES,
-                    ACTIONABLEGENE.HOSPITALSPERCITY,
-                    ACTIONABLEGENE.TREATMENT,
-                    ACTIONABLEGENE.TREATMENTAPPROACHESDRUGCLASS,
-                    ACTIONABLEGENE.TREATMENTAPPROACHESTHERAPY,
-                    ACTIONABLEGENE.APPLICABLECANCERTYPE,
-                    ACTIONABLEGENE.APPLICABLEDOID,
-                    ACTIONABLEGENE.BLACKLISTCANCERTYPES,
-                    ACTIONABLEGENE.EFFICACYDESCRIPTION,
-                    ACTIONABLEGENE.EVIDENCEYEAR,
-                    ACTIONABLEGENE.EVIDENCELEVEL,
-                    ACTIONABLEGENE.EVIDENCELEVELDETAILS,
-                    ACTIONABLEGENE.DIRECTION,
-                    ACTIONABLEGENE.EVIDENCEURLS);
-            batch.forEach(entry -> writeActionableGeneBatch(timestamp, inserter, entry));
-            inserter.execute();
-        }
+    @NotNull
+    private InsertValuesStepN createActionableGeneInserter() {
+        return context.insertInto(ACTIONABLEGENE,
+                ACTIONABLEGENE.MODIFIED,
+                ACTIONABLEGENE.GENE,
+                ACTIONABLEGENE.EVENT,
+                ACTIONABLEGENE.SOURCE,
+                ACTIONABLEGENE.ENTRYDATE,
+                ACTIONABLEGENE.SOURCEEVENT,
+                ACTIONABLEGENE.SOURCEURLS,
+                ACTIONABLEGENE.NCTID,
+                ACTIONABLEGENE.TITLE,
+                ACTIONABLEGENE.ACRONYM,
+                ACTIONABLEGENE.GENDERCRITERIUM,
+                ACTIONABLEGENE.COUNTRIESANDCITIES,
+                ACTIONABLEGENE.HOSPITALSPERCITY,
+                ACTIONABLEGENE.TREATMENT,
+                ACTIONABLEGENE.TREATMENTAPPROACHESDRUGCLASS,
+                ACTIONABLEGENE.TREATMENTAPPROACHESTHERAPY,
+                ACTIONABLEGENE.APPLICABLECANCERTYPE,
+                ACTIONABLEGENE.APPLICABLEDOID,
+                ACTIONABLEGENE.BLACKLISTCANCERTYPES,
+                ACTIONABLEGENE.EFFICACYDESCRIPTION,
+                ACTIONABLEGENE.EVIDENCEYEAR,
+                ACTIONABLEGENE.EVIDENCELEVEL,
+                ACTIONABLEGENE.EVIDENCELEVELDETAILS,
+                ACTIONABLEGENE.DIRECTION,
+                ACTIONABLEGENE.EVIDENCEURLS);
     }
 
-    private static void writeActionableGeneBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStepN inserter,
-            @NotNull ActionableGene actionableGene) {
-
-        ClinicalTrial clinicalTrial = extractOptionalClinicalTrial(actionableGene);
-        Treatment treatment = extractOptionalTreatment(actionableGene);
-
-        inserter.values(timestamp,
-                actionableGene.gene(),
-                actionableGene.event(),
-                actionableGene.source(),
-                actionableGene.entryDate(),
-                actionableGene.sourceEvent(),
-                concat(actionableGene.sourceUrls()),
-                clinicalTrial != null ? clinicalTrial.nctId() : null,
-                clinicalTrial != null ? clinicalTrial.title() : null,
-                clinicalTrial != null && clinicalTrial.acronym() != null ? clinicalTrial.acronym() : null,
-                clinicalTrial != null && clinicalTrial.genderCriterium() != null ? clinicalTrial.genderCriterium() : null,
-                clinicalTrial != null ? toCountryWithCities(clinicalTrial.countries()) : null,
-                clinicalTrial != null ? toHospitals(clinicalTrial.countries()) : null,
-                therapyName(clinicalTrial, treatment),
-                treatment != null && !treatment.treatmentApproachesDrugClass().isEmpty()
-                        ? concat(treatment.treatmentApproachesDrugClass())
-                        : null,
-                treatment != null && !treatment.treatmentApproachesTherapy().isEmpty()
-                        ? concat(treatment.treatmentApproachesTherapy())
-                        : null,
-                actionableGene.applicableCancerType().name(),
-                actionableGene.applicableCancerType().doid(),
-                concat(toStrings(actionableGene.blacklistCancerTypes())),
-                actionableGene.efficacyDescription(),
-                actionableGene.evidenceYear(),
-                actionableGene.evidenceLevel(),
-                actionableGene.evidenceLevelDetails(),
-                actionableGene.direction(),
-                concat(actionableGene.evidenceUrls()));
+    @NotNull
+    private InsertValuesStepN createActionableFusionInserter() {
+        return context.insertInto(ACTIONABLEFUSION,
+                ACTIONABLEFUSION.MODIFIED,
+                ACTIONABLEFUSION.GENEUP,
+                ACTIONABLEFUSION.MINEXONUP,
+                ACTIONABLEFUSION.MAXEXONUP,
+                ACTIONABLEFUSION.GENEDOWN,
+                ACTIONABLEFUSION.MINEXONDOWN,
+                ACTIONABLEFUSION.MAXEXONDOWN,
+                ACTIONABLEFUSION.SOURCE,
+                ACTIONABLEFUSION.ENTRYDATE,
+                ACTIONABLEFUSION.SOURCEEVENT,
+                ACTIONABLEFUSION.SOURCEURLS,
+                ACTIONABLEFUSION.NCTID,
+                ACTIONABLEFUSION.TITLE,
+                ACTIONABLEFUSION.ACRONYM,
+                ACTIONABLEFUSION.GENDERCRITERIUM,
+                ACTIONABLEFUSION.COUNTRIESANDCITIES,
+                ACTIONABLEFUSION.HOSPITALSPERCITY,
+                ACTIONABLEFUSION.TREATMENT,
+                ACTIONABLEFUSION.TREATMENTAPPROACHESDRUGCLASS,
+                ACTIONABLEFUSION.TREATMENTAPPROACHESTHERAPY,
+                ACTIONABLEFUSION.APPLICABLECANCERTYPE,
+                ACTIONABLEFUSION.APPLICABLEDOID,
+                ACTIONABLEFUSION.BLACKLISTCANCERTYPES,
+                ACTIONABLEFUSION.EFFICACYDESCRIPTION,
+                ACTIONABLEFUSION.EVIDENCEYEAR,
+                ACTIONABLEFUSION.EVIDENCELEVEL,
+                ACTIONABLEFUSION.EVIDENCELEVELDETAILS,
+                ACTIONABLEFUSION.DIRECTION,
+                ACTIONABLEFUSION.EVIDENCEURLS);
     }
 
-    private void writeActionableFusions(@NotNull Timestamp timestamp, @NotNull List<EfficacyEvidence> fusions) {
-        for (List<ActionableFusion> batch : Iterables.partition(fusions, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
-            InsertValuesStepN inserter = context.insertInto(ACTIONABLEFUSION,
-                    ACTIONABLEFUSION.MODIFIED,
-                    ACTIONABLEFUSION.GENEUP,
-                    ACTIONABLEFUSION.MINEXONUP,
-                    ACTIONABLEFUSION.MAXEXONUP,
-                    ACTIONABLEFUSION.GENEDOWN,
-                    ACTIONABLEFUSION.MINEXONDOWN,
-                    ACTIONABLEFUSION.MAXEXONDOWN,
-                    ACTIONABLEFUSION.SOURCE,
-                    ACTIONABLEFUSION.ENTRYDATE,
-                    ACTIONABLEFUSION.SOURCEEVENT,
-                    ACTIONABLEFUSION.SOURCEURLS,
-                    ACTIONABLEFUSION.NCTID,
-                    ACTIONABLEFUSION.TITLE,
-                    ACTIONABLEFUSION.ACRONYM,
-                    ACTIONABLEFUSION.GENDERCRITERIUM,
-                    ACTIONABLEFUSION.COUNTRIESANDCITIES,
-                    ACTIONABLEFUSION.HOSPITALSPERCITY,
-                    ACTIONABLEFUSION.TREATMENT,
-                    ACTIONABLEFUSION.TREATMENTAPPROACHESDRUGCLASS,
-                    ACTIONABLEFUSION.TREATMENTAPPROACHESTHERAPY,
-                    ACTIONABLEFUSION.APPLICABLECANCERTYPE,
-                    ACTIONABLEFUSION.APPLICABLEDOID,
-                    ACTIONABLEFUSION.BLACKLISTCANCERTYPES,
-                    ACTIONABLEFUSION.EFFICACYDESCRIPTION,
-                    ACTIONABLEFUSION.EVIDENCEYEAR,
-                    ACTIONABLEFUSION.EVIDENCELEVEL,
-                    ACTIONABLEFUSION.EVIDENCELEVELDETAILS,
-                    ACTIONABLEFUSION.DIRECTION,
-                    ACTIONABLEFUSION.EVIDENCEURLS);
-            batch.forEach(entry -> writeActionableFusionBatch(timestamp, inserter, entry));
-            inserter.execute();
-        }
+    @NotNull
+    private InsertValuesStepN createActionableCharacteristicInserter() {
+        return context.insertInto(ACTIONABLECHARACTERISTIC,
+                ACTIONABLECHARACTERISTIC.MODIFIED,
+                ACTIONABLECHARACTERISTIC.TYPE,
+                ACTIONABLECHARACTERISTIC.CUTOFFTYPE,
+                ACTIONABLECHARACTERISTIC.CUTOFF,
+                ACTIONABLECHARACTERISTIC.SOURCE,
+                ACTIONABLECHARACTERISTIC.ENTRYDATE,
+                ACTIONABLECHARACTERISTIC.SOURCEEVENT,
+                ACTIONABLECHARACTERISTIC.SOURCEURLS,
+                ACTIONABLECHARACTERISTIC.NCTID,
+                ACTIONABLECHARACTERISTIC.TITLE,
+                ACTIONABLECHARACTERISTIC.ACRONYM,
+                ACTIONABLECHARACTERISTIC.GENDERCRITERIUM,
+                ACTIONABLECHARACTERISTIC.COUNTRIESANDCITIES,
+                ACTIONABLECHARACTERISTIC.HOSPITALSPERCITY,
+                ACTIONABLECHARACTERISTIC.TREATMENT,
+                ACTIONABLECHARACTERISTIC.TREATMENTAPPROACHESDRUGCLASS,
+                ACTIONABLECHARACTERISTIC.TREATMENTAPPROACHESTHERAPY,
+                ACTIONABLECHARACTERISTIC.APPLICABLECANCERTYPE,
+                ACTIONABLECHARACTERISTIC.APPLICABLEDOID,
+                ACTIONABLECHARACTERISTIC.BLACKLISTCANCERTYPES,
+                ACTIONABLECHARACTERISTIC.EFFICACYDESCRIPTION,
+                ACTIONABLECHARACTERISTIC.EVIDENCEYEAR,
+                ACTIONABLECHARACTERISTIC.EVIDENCELEVEL,
+                ACTIONABLECHARACTERISTIC.EVIDENCELEVELDETAILS,
+                ACTIONABLECHARACTERISTIC.DIRECTION,
+                ACTIONABLECHARACTERISTIC.EVIDENCEURLS);
     }
 
-    private static void writeActionableFusionBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStepN inserter,
-            @NotNull ActionableFusion actionableFusion) {
-
-        ClinicalTrial clinicalTrial = extractOptionalClinicalTrial(actionableFusion);
-        Treatment treatment = extractOptionalTreatment(actionableFusion);
-
-        inserter.values(timestamp,
-                actionableFusion.geneUp(),
-                actionableFusion.minExonUp(),
-                actionableFusion.maxExonUp(),
-                actionableFusion.geneDown(),
-                actionableFusion.minExonDown(),
-                actionableFusion.maxExonDown(),
-                actionableFusion.source(),
-                actionableFusion.entryDate(),
-                actionableFusion.sourceEvent(),
-                concat(actionableFusion.sourceUrls()),
-                clinicalTrial != null ? clinicalTrial.nctId() : null,
-                clinicalTrial != null ? clinicalTrial.title() : null,
-                clinicalTrial != null && clinicalTrial.acronym() != null ? clinicalTrial.acronym() : null,
-                clinicalTrial != null && clinicalTrial.genderCriterium() != null ? clinicalTrial.genderCriterium() : null,
-                clinicalTrial != null ? toCountryWithCities(clinicalTrial.countries()) : null,
-                clinicalTrial != null ? toHospitals(clinicalTrial.countries()) : null,
-                therapyName(clinicalTrial, treatment),
-                treatment != null && !treatment.treatmentApproachesDrugClass().isEmpty()
-                        ? concat(treatment.treatmentApproachesDrugClass())
-                        : null,
-                treatment != null && !treatment.treatmentApproachesTherapy().isEmpty()
-                        ? concat(treatment.treatmentApproachesTherapy())
-                        : null,
-                actionableFusion.applicableCancerType().name(),
-                actionableFusion.applicableCancerType().doid(),
-                concat(toStrings(actionableFusion.blacklistCancerTypes())),
-                actionableFusion.efficacyDescription(),
-                actionableFusion.evidenceYear(),
-                actionableFusion.evidenceLevel(),
-                actionableFusion.evidenceLevelDetails(),
-                actionableFusion.direction(),
-                concat(actionableFusion.evidenceUrls()));
-    }
-
-    private void writeActionableCharacteristics(@NotNull Timestamp timestamp, @NotNull List<EfficacyEvidence> characteristics) {
-        for (List<ActionableCharacteristic> batch : Iterables.partition(characteristics, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
-            InsertValuesStepN inserter = context.insertInto(ACTIONABLECHARACTERISTIC,
-                    ACTIONABLECHARACTERISTIC.MODIFIED,
-                    ACTIONABLECHARACTERISTIC.TYPE,
-                    ACTIONABLECHARACTERISTIC.CUTOFFTYPE,
-                    ACTIONABLECHARACTERISTIC.CUTOFF,
-                    ACTIONABLECHARACTERISTIC.SOURCE,
-                    ACTIONABLECHARACTERISTIC.ENTRYDATE,
-                    ACTIONABLECHARACTERISTIC.SOURCEEVENT,
-                    ACTIONABLECHARACTERISTIC.SOURCEURLS,
-                    ACTIONABLECHARACTERISTIC.NCTID,
-                    ACTIONABLECHARACTERISTIC.TITLE,
-                    ACTIONABLECHARACTERISTIC.ACRONYM,
-                    ACTIONABLECHARACTERISTIC.GENDERCRITERIUM,
-                    ACTIONABLECHARACTERISTIC.COUNTRIESANDCITIES,
-                    ACTIONABLECHARACTERISTIC.HOSPITALSPERCITY,
-                    ACTIONABLECHARACTERISTIC.TREATMENT,
-                    ACTIONABLECHARACTERISTIC.TREATMENTAPPROACHESDRUGCLASS,
-                    ACTIONABLECHARACTERISTIC.TREATMENTAPPROACHESTHERAPY,
-                    ACTIONABLECHARACTERISTIC.APPLICABLECANCERTYPE,
-                    ACTIONABLECHARACTERISTIC.APPLICABLEDOID,
-                    ACTIONABLECHARACTERISTIC.BLACKLISTCANCERTYPES,
-                    ACTIONABLECHARACTERISTIC.EFFICACYDESCRIPTION,
-                    ACTIONABLECHARACTERISTIC.EVIDENCEYEAR,
-                    ACTIONABLECHARACTERISTIC.EVIDENCELEVEL,
-                    ACTIONABLECHARACTERISTIC.EVIDENCELEVELDETAILS,
-                    ACTIONABLECHARACTERISTIC.DIRECTION,
-                    ACTIONABLECHARACTERISTIC.EVIDENCEURLS);
-            batch.forEach(entry -> writeActionableCharacteristicBatch(timestamp, inserter, entry));
-            inserter.execute();
-        }
-    }
-
-    private static void writeActionableCharacteristicBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStepN inserter,
-            @NotNull ActionableCharacteristic actionableCharacteristic) {
-
-        ClinicalTrial clinicalTrial = extractOptionalClinicalTrial(actionableCharacteristic);
-        Treatment treatment = extractOptionalTreatment(actionableCharacteristic);
-
-        inserter.values(timestamp,
-                actionableCharacteristic.type(),
-                actionableCharacteristic.cutoffType(),
-                actionableCharacteristic.cutoff(),
-                actionableCharacteristic.source(),
-                actionableCharacteristic.entryDate(),
-                actionableCharacteristic.sourceEvent(),
-                concat(actionableCharacteristic.sourceUrls()),
-                clinicalTrial != null ? clinicalTrial.nctId() : null,
-                clinicalTrial != null ? clinicalTrial.title() : null,
-                clinicalTrial != null && clinicalTrial.acronym() != null ? clinicalTrial.acronym() : null,
-                clinicalTrial != null && clinicalTrial.genderCriterium() != null ? clinicalTrial.genderCriterium() : null,
-                clinicalTrial != null ? toCountryWithCities(clinicalTrial.countries()) : null,
-                clinicalTrial != null ? toHospitals(clinicalTrial.countries()) : null,
-                therapyName(clinicalTrial, treatment),
-                treatment != null && !treatment.treatmentApproachesDrugClass().isEmpty()
-                        ? concat(treatment.treatmentApproachesDrugClass())
-                        : null,
-                treatment != null && !treatment.treatmentApproachesTherapy().isEmpty()
-                        ? concat(treatment.treatmentApproachesTherapy())
-                        : null,
-                actionableCharacteristic.applicableCancerType().name(),
-                actionableCharacteristic.applicableCancerType().doid(),
-                concat(toStrings(actionableCharacteristic.blacklistCancerTypes())),
-                actionableCharacteristic.efficacyDescription(),
-                actionableCharacteristic.evidenceYear(),
-                actionableCharacteristic.evidenceLevel(),
-                actionableCharacteristic.evidenceLevelDetails(),
-                actionableCharacteristic.direction(),
-                concat(actionableCharacteristic.evidenceUrls()));
-    }
-
-    private void writeActionableHLA(@NotNull Timestamp timestamp, @NotNull List<EfficacyEvidence> hla) {
-        for (List<ActionableHLA> batch : Iterables.partition(hla, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
-            InsertValuesStepN inserter = context.insertInto(ACTIONABLEHLA,
-                    ACTIONABLEHLA.MODIFIED,
-                    ACTIONABLEHLA.HLAALLELE,
-                    ACTIONABLEHLA.SOURCE,
-                    ACTIONABLEHLA.ENTRYDATE,
-                    ACTIONABLEHLA.SOURCEEVENT,
-                    ACTIONABLEHLA.SOURCEURLS,
-                    ACTIONABLEHLA.NCTID,
-                    ACTIONABLEHLA.TITLE,
-                    ACTIONABLEHLA.ACRONYM,
-                    ACTIONABLEHLA.GENDERCRITERIUM,
-                    ACTIONABLEHLA.COUNTRIESANDCITIES,
-                    ACTIONABLEHLA.HOSPITALSPERCITY,
-                    ACTIONABLEHLA.TREATMENT,
-                    ACTIONABLEHLA.TREATMENTAPPROACHESDRUGCLASS,
-                    ACTIONABLEHLA.TREATMENTAPPROACHESTHERAPY,
-                    ACTIONABLEHLA.APPLICABLECANCERTYPE,
-                    ACTIONABLEHLA.APPLICABLEDOID,
-                    ACTIONABLEHLA.BLACKLISTCANCERTYPES,
-                    ACTIONABLEHLA.EFFICACYDESCRIPTION,
-                    ACTIONABLEHLA.EVIDENCEYEAR,
-                    ACTIONABLEHLA.EVIDENCELEVEL,
-                    ACTIONABLEHLA.EVIDENCELEVELDETAILS,
-                    ACTIONABLEHLA.DIRECTION,
-                    ACTIONABLEHLA.EVIDENCEURLS);
-            batch.forEach(entry -> writeActionableHLABatch(timestamp, inserter, entry));
-            inserter.execute();
-        }
-    }
-
-    private static void writeActionableHLABatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStepN inserter,
-            @NotNull ActionableHLA actionableHLA) {
-        ClinicalTrial clinicalTrial = extractOptionalClinicalTrial(actionableHLA);
-        Treatment treatment = extractOptionalTreatment(actionableHLA);
-
-        inserter.values(timestamp,
-                actionableHLA.hlaAllele(),
-                actionableHLA.source(),
-                actionableHLA.entryDate(),
-                actionableHLA.sourceEvent(),
-                concat(actionableHLA.sourceUrls()),
-                clinicalTrial != null ? clinicalTrial.nctId() : null,
-                clinicalTrial != null ? clinicalTrial.title() : null,
-                clinicalTrial != null && clinicalTrial.acronym() != null ? clinicalTrial.acronym() : null,
-                clinicalTrial != null && clinicalTrial.genderCriterium() != null ? clinicalTrial.genderCriterium() : null,
-                clinicalTrial != null ? toCountryWithCities(clinicalTrial.countries()) : null,
-                clinicalTrial != null ? toHospitals(clinicalTrial.countries()) : null,
-                therapyName(clinicalTrial, treatment),
-                treatment != null && !treatment.treatmentApproachesDrugClass().isEmpty()
-                        ? concat(treatment.treatmentApproachesDrugClass())
-                        : null,
-                treatment != null && !treatment.treatmentApproachesTherapy().isEmpty()
-                        ? concat(treatment.treatmentApproachesTherapy())
-                        : null,
-                actionableHLA.applicableCancerType().name(),
-                actionableHLA.applicableCancerType().doid(),
-                concat(toStrings(actionableHLA.blacklistCancerTypes())),
-                actionableHLA.efficacyDescription(),
-                actionableHLA.evidenceYear(),
-                actionableHLA.evidenceLevel(),
-                actionableHLA.evidenceLevelDetails(),
-                actionableHLA.direction(),
-                concat(actionableHLA.evidenceUrls()));
+    @NotNull
+    private InsertValuesStepN createActionableHLAInserter() {
+        return context.insertInto(ACTIONABLEHLA,
+                ACTIONABLEHLA.MODIFIED,
+                ACTIONABLEHLA.HLAALLELE,
+                ACTIONABLEHLA.SOURCE,
+                ACTIONABLEHLA.ENTRYDATE,
+                ACTIONABLEHLA.SOURCEEVENT,
+                ACTIONABLEHLA.SOURCEURLS,
+                ACTIONABLEHLA.NCTID,
+                ACTIONABLEHLA.TITLE,
+                ACTIONABLEHLA.ACRONYM,
+                ACTIONABLEHLA.GENDERCRITERIUM,
+                ACTIONABLEHLA.COUNTRIESANDCITIES,
+                ACTIONABLEHLA.HOSPITALSPERCITY,
+                ACTIONABLEHLA.TREATMENT,
+                ACTIONABLEHLA.TREATMENTAPPROACHESDRUGCLASS,
+                ACTIONABLEHLA.TREATMENTAPPROACHESTHERAPY,
+                ACTIONABLEHLA.APPLICABLECANCERTYPE,
+                ACTIONABLEHLA.APPLICABLEDOID,
+                ACTIONABLEHLA.BLACKLISTCANCERTYPES,
+                ACTIONABLEHLA.EFFICACYDESCRIPTION,
+                ACTIONABLEHLA.EVIDENCEYEAR,
+                ACTIONABLEHLA.EVIDENCELEVEL,
+                ACTIONABLEHLA.EVIDENCELEVELDETAILS,
+                ACTIONABLEHLA.DIRECTION,
+                ACTIONABLEHLA.EVIDENCEURLS);
     }
 
     @NotNull
@@ -904,11 +922,11 @@ public class ServeDAO {
     }
 
     @NotNull
-    private static List<ClinicalTrial> filterAndExpandHotspotTrials(@NotNull List<ClinicalTrial> trials,
+    private static List<ActionableTrial> filterAndExpandHotspotTrials(@NotNull List<ActionableTrial> trials,
             @NotNull Predicate<MolecularCriterium> molecularCriteriumPredicate) {
-        List<ClinicalTrial> expandedFilteredTrials = Lists.newArrayList();
-        for (ClinicalTrial trial : trials) {
-            for (MolecularCriterium criterium : trial.molecularCriteria()) {
+        List<ActionableTrial> expandedFilteredTrials = Lists.newArrayList();
+        for (ActionableTrial trial : trials) {
+            for (MolecularCriterium criterium : trial.anyMolecularCriteria()) {
                 if (molecularCriteriumPredicate.test(criterium)) {
                     expandedFilteredTrials.addAll(expandWithIndicationAndCriterium(trial, criterium));
                 }
@@ -918,11 +936,11 @@ public class ServeDAO {
     }
 
     @NotNull
-    private static List<ClinicalTrial> expandWithIndicationAndCriterium(@NotNull ClinicalTrial baseTrial,
+    private static List<ActionableTrial> expandWithIndicationAndCriterium(@NotNull ActionableTrial baseTrial,
             @NotNull MolecularCriterium criterium) {
-        List<ClinicalTrial> expandedTrials = Lists.newArrayList();
-        ImmutableClinicalTrial.Builder trialBuilder =
-                ImmutableClinicalTrial.builder().from(baseTrial).molecularCriteria(List.of(criterium));
+        List<ActionableTrial> expandedTrials = Lists.newArrayList();
+        ImmutableActionableTrial.Builder trialBuilder =
+                ImmutableActionableTrial.builder().from(baseTrial).anyMolecularCriteria(List.of(criterium));
 
         for (Indication indication : baseTrial.indications()) {
             expandedTrials.add(trialBuilder.indications(List.of(indication)).build());

@@ -145,7 +145,7 @@ public class RefGenomeConverterTest {
         ActionableRange actionableExon =
                 RangeTestFactory.actionableRangeBuilder().gene(TEST_GENE).chromosome(TEST_CHROMOSOME).start(3).end(4).build();
 
-        MolecularCriterium molecularCriterium = MolecularCriteriumTestFactory.createWithActionableCodon(actionableExon);
+        MolecularCriterium molecularCriterium = MolecularCriteriumTestFactory.createWithActionableExons(actionableExon);
 
         List<EfficacyEvidence> evidences = List.of(EfficacyEvidenceTestFactory.createWithMolecularCriterium(molecularCriterium));
         Set<ActionableRange> convertedActionableExonFromEvidence =

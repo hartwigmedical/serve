@@ -55,4 +55,9 @@ public final class MolecularCriteriumTestFactory {
     public static MolecularCriterium createWithActionableCharacteristics(@NotNull ActionableCharacteristic characteristic) {
         return ImmutableMolecularCriterium.builder().addCharacteristics(characteristic).build();
     }
+
+    @NotNull
+    public static MolecularCriterium createWithActionableExons(@NotNull ActionableRange exon) {
+        return ImmutableMolecularCriterium.builder().addExons(exon).build();
+    }
 }

@@ -67,7 +67,7 @@ public class ViccExtractorTestApp {
 
         RefGenomeManager refGenomeManager = RefGenomeManagerFactory.createFromServeConfig(config);
         RefGenomeResource refGenomeResource = buildRefGenomeResource(config);
-        DoidLookup doidLookup = DoidLookupFactory.buildFromMappingTsv(config.missingDoidsMappingTsv());
+        DoidLookup doidLookup = DoidLookupFactory.buildFromMappingTsv(config.viccMissingDoidsMappingTsv());
         ViccExtractor viccExtractor = ViccExtractorFactory.create(ViccClassificationConfig.build(), refGenomeResource, doidLookup);
 
         List<ViccEntry> entries = ViccReader.readAndCurateRelevantEntries(config.viccJson(), VICC_SOURCES_TO_INCLUDE, MAX_VICC_ENTRIES);

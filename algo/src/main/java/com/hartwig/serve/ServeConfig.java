@@ -29,6 +29,7 @@ public interface ServeConfig {
     String USE_VICC = "use_vicc";
     String VICC_JSON = "vicc_json";
     String VICC_SOURCES = "vicc_sources";
+    String VICC_MISSING_DOIDS_MAPPING_TSV = "vicc_missing_doids_mapping_tsv";
     String USE_CKB = "use_ckb";
     String CKB_DIR = "ckb_dir";
     String CKB_MOLECULAR_PROFILE_FILTER_TSV = "ckb_molecular_profile_filter_tsv";
@@ -48,8 +49,6 @@ public interface ServeConfig {
     String USE_HARTWIG_DRIVER_GENES = "use_hartwig_driver_genes";
     String USE_HARTWIG_CURATED_GENES = "use_hartwig_curated_genes";
     String HARTWIG_CURATED_GENE_TSV = "hartwig_curated_gene_tsv";
-    // Config for curation of evidence
-    String MISSING_DOIDS_MAPPING_TSV = "missing_doids_mapping_tsv";
 
     // Additional config for knowledge generation
     String ENSEMBL_DATA_DIR_37 = "ensembl_data_dir_37";
@@ -77,6 +76,7 @@ public interface ServeConfig {
         options.addOption(USE_VICC, false, "If provided, VICC will be used as a source in SERVE");
         options.addOption(VICC_JSON, true, "Path to the VICC JSON knowledgebase");
         options.addOption(VICC_SOURCES, true, "Comma-separated list of (lowercase) VICC sources to include");
+        options.addOption(VICC_MISSING_DOIDS_MAPPING_TSV, true, "Path to a mapping TSV containing entries for missing DOIDs");
         options.addOption(USE_CKB, false, "If provided, evidence and trials from CKB FLEX will be used as a source in SERVE");
         options.addOption(CKB_DIR, true, "Path to the CKB FLEX json input dir");
         options.addOption(CKB_MOLECULAR_PROFILE_FILTER_TSV, true, "Path to the CKB molecular profile filter tsv");
@@ -98,8 +98,6 @@ public interface ServeConfig {
         options.addOption(USE_HARTWIG_DRIVER_GENES, false, "If provided, Hartwig Driver Genes will be used as a source in SERVE");
         options.addOption(USE_HARTWIG_CURATED_GENES, false, "If provided, Hartwig Curated Genes will be used as a source in SERVE");
         options.addOption(HARTWIG_CURATED_GENE_TSV, true, "Path to the Hartwig Curated Genes input TSV");
-
-        options.addOption(MISSING_DOIDS_MAPPING_TSV, true, "Path to the mapping TSV containing entries for missing DOIDs");
 
         options.addOption(ENSEMBL_DATA_DIR_37, true, "Ensembl data file directory for ref genome V37");
         options.addOption(ENSEMBL_DATA_DIR_38, true, "Ensembl data file directory for ref genome V38");
@@ -127,6 +125,9 @@ public interface ServeConfig {
 
     @NotNull
     Set<ViccSource> viccSources();
+
+    @NotNull
+    String viccMissingDoidsMappingTsv();
 
     boolean useCkb();
 
@@ -177,9 +178,6 @@ public interface ServeConfig {
     boolean useHartwigCuratedGenes();
 
     String hartwigCuratedGeneTsv();
-
-    @NotNull
-    String missingDoidsMappingTsv();
 
     @NotNull
     String ensemblDataDir37();
@@ -235,6 +233,7 @@ public interface ServeConfig {
                 .useVicc(useVicc)
                 .viccJson(useVicc ? nonOptionalFile(cmd, VICC_JSON) : NOT_APPLICABLE)
                 .viccSources(useVicc ? readViccSources(cmd) : Sets.newHashSet())
+                .viccMissingDoidsMappingTsv(useVicc ? nonOptionalFile(cmd, VICC_MISSING_DOIDS_MAPPING_TSV) : NOT_APPLICABLE)
                 .useCkb(useCkb)
                 .ckbDir(useCkb ? nonOptionalDir(cmd, CKB_DIR) : NOT_APPLICABLE)
                 .ckbMolecularProfileFilterTsv(useCkb ? nonOptionalFile(cmd, CKB_MOLECULAR_PROFILE_FILTER_TSV) : NOT_APPLICABLE)
@@ -254,7 +253,6 @@ public interface ServeConfig {
                 .useHartwigDriverGenes(useHartwigDriverGenes)
                 .useHartwigCuratedGenes(useHartwigCuratedGenes)
                 .hartwigCuratedGeneTsv(useHartwigCuratedGenes ? nonOptionalFile(cmd, HARTWIG_CURATED_GENE_TSV) : NOT_APPLICABLE)
-                .missingDoidsMappingTsv(nonOptionalFile(cmd, MISSING_DOIDS_MAPPING_TSV))
                 .ensemblDataDir37(nonOptionalDir(cmd, ENSEMBL_DATA_DIR_37))
                 .ensemblDataDir38(nonOptionalDir(cmd, ENSEMBL_DATA_DIR_38))
                 .refGenome37FastaFile(nonOptionalFile(cmd, REF_GENOME_37_FASTA_FILE))

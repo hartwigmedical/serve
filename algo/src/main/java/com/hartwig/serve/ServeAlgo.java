@@ -12,6 +12,7 @@ import com.hartwig.serve.ckb.classification.CkbClassificationConfig;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.common.classification.EventClassifierConfig;
 import com.hartwig.serve.curation.DoidLookup;
+import com.hartwig.serve.curation.DoidLookupFactory;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.extraction.ExtractionResult;
@@ -58,47 +59,48 @@ public class ServeAlgo {
 
     @NotNull
     private final RefGenomeManager refGenomeManager;
-    @NotNull
-    private final DoidLookup missingDoidLookup;
 
-    public ServeAlgo(@NotNull final RefGenomeManager refGenomeManager, @NotNull final DoidLookup missingDoidLookup) {
+    public ServeAlgo(@NotNull final RefGenomeManager refGenomeManager) {
         this.refGenomeManager = refGenomeManager;
-        this.missingDoidLookup = missingDoidLookup;
     }
 
     @NotNull
     public Map<RefGenome, ExtractionResult> run(@NotNull ServeConfig config) throws IOException {
-        List<ExtractionResult> extractions =
-                Stream.of(config.useVicc() ? extractViccKnowledge(config.viccJson(), config.viccSources()) : null,
-                                config.useCkb() ? extractCkbKnowledge(config.ckbDir(),
-                                        config.ckbMolecularProfileFilterTsv(),
-                                        config.ckbEvidenceFilterTsv(),
-                                        config.ckbTrialFilterTsv(),
-                                        config.ckbDrugCurationTsv(),
-                                        config.ckbRegionsToIncludeTsv(),
-                                        config.ckbFacilityCurationNameTsv(),
-                                        config.ckbFacilityCurationZipTsv(),
-                                        config.ckbFacilityCurationManualTsv()) : null,
-                                config.useDocm() ? extractDocmKnowledge(config.docmTsv()) : null,
-                                config.useHartwigCohortHotspots() ? extractHartwigCohortHotspotKnowledge(config.hartwigCohortHotspotTsv(),
-                                        !config.skipHotspotResolving()) : null,
-                                config.useHartwigCuratedHotspots() ? extractHartwigCuratedHotspotKnowledge(config.hartwigCuratedHotspotTsv(),
-                                        !config.skipHotspotResolving()) : null,
-                                config.useHartwigDriverGenes() ? extractHartwigDriverGeneKnowledge(config.driverGene37Tsv()) : null,
-                                config.useHartwigCuratedGenes() ? extractHartwigCuratedGeneKnowledge(config.hartwigCuratedGeneTsv()) : null)
-                        .filter(Objects::nonNull)
-                        .collect(Collectors.toList());
+        List<ExtractionResult> extractions = Stream.of(config.useVicc()
+                                ? extractViccKnowledge(config.viccJson(), config.viccSources(), config.viccMissingDoidsMappingTsv())
+                                : null,
+                        config.useCkb() ? extractCkbKnowledge(config.ckbDir(),
+                                config.ckbMolecularProfileFilterTsv(),
+                                config.ckbEvidenceFilterTsv(),
+                                config.ckbTrialFilterTsv(),
+                                config.ckbDrugCurationTsv(),
+                                config.ckbRegionsToIncludeTsv(),
+                                config.ckbFacilityCurationNameTsv(),
+                                config.ckbFacilityCurationZipTsv(),
+                                config.ckbFacilityCurationManualTsv()) : null,
+                        config.useDocm() ? extractDocmKnowledge(config.docmTsv()) : null,
+                        config.useHartwigCohortHotspots() ? extractHartwigCohortHotspotKnowledge(config.hartwigCohortHotspotTsv(),
+                                !config.skipHotspotResolving()) : null,
+                        config.useHartwigCuratedHotspots() ? extractHartwigCuratedHotspotKnowledge(config.hartwigCuratedHotspotTsv(),
+                                !config.skipHotspotResolving()) : null,
+                        config.useHartwigDriverGenes() ? extractHartwigDriverGeneKnowledge(config.driverGene37Tsv()) : null,
+                        config.useHartwigCuratedGenes() ? extractHartwigCuratedGeneKnowledge(config.hartwigCuratedGeneTsv()) : null)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
 
         Map<RefGenome, ExtractionResult> versionedMap = refGenomeManager.makeVersioned(extractions);
 
-        missingDoidLookup.evaluate();
         refGenomeManager.evaluate();
 
         return versionedMap;
     }
 
     @NotNull
-    private ExtractionResult extractViccKnowledge(@NotNull String viccJson, @NotNull Set<ViccSource> viccSources) throws IOException {
+    private ExtractionResult extractViccKnowledge(@NotNull String viccJson, @NotNull Set<ViccSource> viccSources,
+            @NotNull String viccMissingDoidsMappingTsv) throws IOException {
+        LOGGER.info("Creating missing doid lookup mapping from {}", viccMissingDoidsMappingTsv);
+        DoidLookup missingDoidLookup = DoidLookupFactory.buildFromMappingTsv(viccMissingDoidsMappingTsv);
+
         List<ViccEntry> entries = ViccReader.readAndCurateRelevantEntries(viccJson, viccSources, null);
 
         EventClassifierConfig config = ViccClassificationConfig.build();
@@ -107,7 +109,10 @@ public class ServeAlgo {
         ViccExtractor extractor = ViccExtractorFactory.create(config, refGenomeResource, missingDoidLookup);
 
         LOGGER.info("Running VICC knowledge extraction");
-        return extractor.extract(entries);
+        ExtractionResult result = extractor.extract(entries);
+
+        missingDoidLookup.evaluate();
+        return result;
     }
 
     @NotNull

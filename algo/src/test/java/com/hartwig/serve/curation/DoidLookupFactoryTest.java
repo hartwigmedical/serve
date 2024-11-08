@@ -11,7 +11,7 @@ import org.junit.Test;
 
 public class DoidLookupFactoryTest {
 
-    private static final String EXAMPLE_TSV = Resources.getResource("curation/doid_mapping_example.tsv").getPath();
+    private static final String EXAMPLE_TSV = Resources.getResource("vicc/doid_mapping_example.tsv").getPath();
 
     @Test
     public void canCreateFromTestResource() throws IOException {

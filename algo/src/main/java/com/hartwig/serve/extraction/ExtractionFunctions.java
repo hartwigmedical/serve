@@ -93,7 +93,7 @@ public final class ExtractionFunctions {
         return version;
     }
 
-    @NotNull
+    @Nullable
     private static KnownEvents consolidateKnownEvents(@Nullable KnownEvents unconsolidated) {
         if (unconsolidated == null) {
             return null;
@@ -109,7 +109,7 @@ public final class ExtractionFunctions {
                 .build();
     }
 
-    @NotNull
+    @Nullable
     private static List<EfficacyEvidence> consolidateEvidences(@Nullable List<EfficacyEvidence> unconsolidatedEvidences) {
         if (unconsolidatedEvidences == null) {
             return null;

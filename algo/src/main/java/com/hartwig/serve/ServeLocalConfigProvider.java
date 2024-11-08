@@ -37,6 +37,7 @@ public final class ServeLocalConfigProvider {
         // SERVE-VM is a shared vm tailored for running SERVE on GCP.
         if (hostname.toLowerCase().contains("serve-vm")) {
             builder.viccJson("/data/resources/crunch/serve/vicc/all.json");
+            builder.viccMissingDoidsMappingTsv("/data/resources/crunch/serve/curation/public_missing_doids_mapping.tsv");
             builder.ckbDir("/data/resources/custom/ckb/latest");
             builder.ckbMolecularProfileFilterTsv("/data/resources/crunch/serve/curation/ckb_blacklist_molecular_profile.tsv");
             builder.ckbEvidenceFilterTsv("/data/resources/crunch/serve/curation/ckb_blacklist_evidence.tsv");
@@ -45,7 +46,7 @@ public final class ServeLocalConfigProvider {
             builder.ckbDrugCurationTsv("/data/resources/crunch/serve/curation/ckb_drugs_class_curation.tsv");
 
             builder.outputDir(System.getProperty("user.home") + "/tmp/serve");
-            builder.missingDoidsMappingTsv("/data/resources/crunch/serve/curation/public_missing_doids_mapping.tsv");
+
             builder.ensemblDataDir37("/data/resources/public/ensembl_data_cache/37");
             builder.ensemblDataDir38("/data/resources/public/ensembl_data_cache/38");
             builder.driverGene37Tsv("/data/resources/public/gene_panel/37/DriverGenePanel.37.tsv");
@@ -60,6 +61,7 @@ public final class ServeLocalConfigProvider {
             // Assume we run on local machine with fixed paths
             String baseDir = System.getProperty("user.home") + "/hmf/";
             builder.viccJson(baseDir + "actionable/static_sources/vicc/all.json");
+            builder.viccMissingDoidsMappingTsv(baseDir + "actionable/curation/missing_doids_mapping.tsv");
             builder.ckbDir(baseDir + "actionable/ckb");
             builder.ckbMolecularProfileFilterTsv(baseDir + "actionable/curation/ckb_blacklist_molecular_profile.tsv");
             builder.ckbEvidenceFilterTsv(baseDir + "actionable/curation/ckb_blacklist_evidence.tsv");
@@ -71,7 +73,6 @@ public final class ServeLocalConfigProvider {
             builder.ckbFacilityCurationManualTsv(baseDir + "facility_curation/ckb_facility_curation_manual.tsv");
 
             builder.outputDir(baseDir + "tmp/serve");
-            builder.missingDoidsMappingTsv(baseDir + "actionable/curation/missing_doids_mapping.tsv");
 
             builder.ensemblDataDir37(baseDir + "repos/common-resources-public/ensembl_data_cache/37");
             builder.ensemblDataDir38(baseDir + "repos/common-resources-public/ensembl_data_cache/38");

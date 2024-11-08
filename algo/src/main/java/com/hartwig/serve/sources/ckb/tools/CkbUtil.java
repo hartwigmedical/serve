@@ -31,7 +31,7 @@ final class CkbUtil {
     public static void printExtractionResults(@NotNull ExtractionResult result) {
         LOGGER.info("Analysis performed on CKB extraction result");
         LOGGER.info(" {} efficacy evidences generated", result.efficacyEvidences().size());
-        LOGGER.info(" {} clinical trials generated", result.clinicalTrials().size());
+        LOGGER.info(" {} clinical trials generated", result.trials().size());
     }
 
     public static void writeEventsToTsv(@NotNull String eventTsv, @NotNull List<CkbEntry> entries) throws IOException {

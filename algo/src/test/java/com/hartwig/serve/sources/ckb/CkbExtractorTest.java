@@ -38,7 +38,7 @@ public class CkbExtractorTest {
                 Set.of(ImmutableCkbRegion.builder().country("netherlands").states(Collections.emptySet()).build()));
 
         ExtractionResult trialResult = trialExtractor.extract(createCkbEntryTestDatabase());
-        assertEquals(7, trialResult.clinicalTrials().size());
+        assertEquals(7, trialResult.trials().size());
         assertEquals(7, trialResult.efficacyEvidences().size());
         assertEquals(1, trialResult.knownEvents().hotspots().size());
         assertEquals(1, trialResult.knownEvents().exons().size());

@@ -151,7 +151,7 @@ public class CkbExtractor {
                     .eventInterpretations(Set.of(interpretation))
                     .knownEvents(generateKnownEvents(extractionOutput, efficacyEvidences.isEmpty(), variant, event, gene))
                     .efficacyEvidences(efficacyEvidences)
-                    .clinicalTrials(actionableTrials)
+                    .trials(actionableTrials)
                     .build();
         }
     }

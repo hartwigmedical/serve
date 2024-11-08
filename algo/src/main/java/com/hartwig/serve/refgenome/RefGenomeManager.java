@@ -79,7 +79,7 @@ public class RefGenomeManager {
                 .eventInterpretations(filteredExtraction.eventInterpretations())
                 .knownEvents(converter.convertKnownEvents(filteredExtraction.knownEvents()))
                 .efficacyEvidences(converter.convertEfficacyEvidences(filteredExtraction.efficacyEvidences()))
-                .clinicalTrials(converter.convertClinicalTrials(filteredExtraction.clinicalTrials()))
+                .trials(converter.convertTrials(filteredExtraction.trials()))
                 .build();
     }
 

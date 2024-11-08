@@ -44,7 +44,7 @@ public class RefGenomeConverterTest {
     public void canHandleMissingInputs() {
         assertNull(NULL_CONVERTER.convertKnownEvents(null));
         assertNull(NULL_CONVERTER.convertEfficacyEvidences(null));
-        assertNull(NULL_CONVERTER.convertClinicalTrials(null));
+        assertNull(NULL_CONVERTER.convertTrials(null));
     }
 
     @Test
@@ -118,7 +118,7 @@ public class RefGenomeConverterTest {
 
         List<ActionableTrial> trials = List.of(ActionableTrialTestFactory.createWithMolecularCriterium(molecularCriterium));
         Set<ActionableHotspot> convertedActionableHotspotFromTrial =
-                DUMMY_CONVERTER.convertClinicalTrials(trials).iterator().next().anyMolecularCriteria().iterator().next().hotspots();
+                DUMMY_CONVERTER.convertTrials(trials).iterator().next().anyMolecularCriteria().iterator().next().hotspots();
         assertEquals(actionableHotspot, convertedActionableHotspotFromTrial.iterator().next());
     }
 
@@ -136,7 +136,7 @@ public class RefGenomeConverterTest {
 
         List<ActionableTrial> trials = List.of(ActionableTrialTestFactory.createWithMolecularCriterium(molecularCriterium));
         Set<ActionableRange> convertedActionableCodonFromTrial =
-                DUMMY_CONVERTER.convertClinicalTrials(trials).iterator().next().anyMolecularCriteria().iterator().next().codons();
+                DUMMY_CONVERTER.convertTrials(trials).iterator().next().anyMolecularCriteria().iterator().next().codons();
         assertEquals(actionableCodon, convertedActionableCodonFromTrial.iterator().next());
     }
 
@@ -154,7 +154,7 @@ public class RefGenomeConverterTest {
 
         List<ActionableTrial> trials = List.of(ActionableTrialTestFactory.createWithMolecularCriterium(molecularCriterium));
         Set<ActionableRange> convertedActionableExonFromTrial =
-                DUMMY_CONVERTER.convertClinicalTrials(trials).iterator().next().anyMolecularCriteria().iterator().next().exons();
+                DUMMY_CONVERTER.convertTrials(trials).iterator().next().anyMolecularCriteria().iterator().next().exons();
         assertEquals(actionableExon, convertedActionableExonFromTrial.iterator().next());
     }
 

@@ -39,7 +39,7 @@ public class ConversionFilterTest {
         assertTrue(filtered.knownEvents().copyNumbers().isEmpty());
         assertTrue(filtered.knownEvents().fusions().isEmpty());
         assertTrue(filtered.efficacyEvidences().isEmpty());
-        assertTrue(filtered.clinicalTrials().isEmpty());
+        assertTrue(filtered.trials().isEmpty());
 
         filter.reportUnusedFilterEntries();
     }
@@ -52,9 +52,9 @@ public class ConversionFilterTest {
                 .addEfficacyEvidences(evidenceForGene(GeneTestFactory.actionableGeneBuilder().gene(gene).build()))
                 .addEfficacyEvidences(evidenceForFusion(FusionTestFactory.actionableFusionBuilder().geneUp(gene).build()))
                 .addEfficacyEvidences(evidenceForFusion(FusionTestFactory.actionableFusionBuilder().geneDown(gene).build()))
-                .addClinicalTrials(trialForGene(GeneTestFactory.actionableGeneBuilder().gene(gene).build()))
-                .addClinicalTrials(trialForFusion(FusionTestFactory.actionableFusionBuilder().geneUp(gene).build()))
-                .addClinicalTrials(trialForFusion(FusionTestFactory.actionableFusionBuilder().geneDown(gene).build()))
+                .addTrials(trialForGene(GeneTestFactory.actionableGeneBuilder().gene(gene).build()))
+                .addTrials(trialForFusion(FusionTestFactory.actionableFusionBuilder().geneUp(gene).build()))
+                .addTrials(trialForFusion(FusionTestFactory.actionableFusionBuilder().geneDown(gene).build()))
                 .build();
     }
 

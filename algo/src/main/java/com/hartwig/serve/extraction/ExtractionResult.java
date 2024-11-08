@@ -30,5 +30,5 @@ public abstract class ExtractionResult {
     public abstract List<EfficacyEvidence> efficacyEvidences();
 
     @Nullable
-    public abstract List<ActionableTrial> clinicalTrials();
+    public abstract List<ActionableTrial> trials();
 }

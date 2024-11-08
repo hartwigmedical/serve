@@ -23,5 +23,5 @@ public abstract class ServeRecord {
     public abstract List<EfficacyEvidence> efficacyEvidences();
 
     @NotNull
-    public abstract List<ActionableTrial> clinicalTrials();
+    public abstract List<ActionableTrial> trials();
 }

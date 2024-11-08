@@ -44,7 +44,7 @@ class ConversionFilter {
                 .from(extractionResult)
                 .knownEvents(filterKnownEvents(extractionResult.knownEvents()))
                 .efficacyEvidences(filterEfficacyEvidences(extractionResult.efficacyEvidences()))
-                .clinicalTrials(filterClinicalTrials(extractionResult.clinicalTrials()))
+                .trials(filterTrials(extractionResult.trials()))
                 .build();
     }
 
@@ -171,15 +171,15 @@ class ConversionFilter {
     }
 
     @Nullable
-    private List<ActionableTrial> filterClinicalTrials(@Nullable List<ActionableTrial> clinicalTrials) {
-        if (clinicalTrials == null) {
+    private List<ActionableTrial> filterTrials(@Nullable List<ActionableTrial> trials) {
+        if (trials == null) {
             return null;
         }
 
         List<ActionableTrial> filtered = Lists.newArrayList();
-        for (ActionableTrial clinicalTrial : clinicalTrials) {
+        for (ActionableTrial trial : trials) {
             List<MolecularCriterium> cleanedCriteria = Lists.newArrayList();
-            for (MolecularCriterium criterium : clinicalTrial.anyMolecularCriteria()) {
+            for (MolecularCriterium criterium : trial.anyMolecularCriteria()) {
                 MolecularCriterium cleaned = cleanMolecularCriterium(criterium);
                 if (hasAtLeastOneCriterium(cleaned)) {
                     cleanedCriteria.add(cleaned);
@@ -187,7 +187,7 @@ class ConversionFilter {
             }
 
             if (!cleanedCriteria.isEmpty()) {
-                filtered.add(ImmutableActionableTrial.builder().from(clinicalTrial).anyMolecularCriteria(cleanedCriteria).build());
+                filtered.add(ImmutableActionableTrial.builder().from(trial).anyMolecularCriteria(cleanedCriteria).build());
             }
         }
         return filtered;

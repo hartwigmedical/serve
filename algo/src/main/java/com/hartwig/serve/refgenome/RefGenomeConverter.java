@@ -89,13 +89,13 @@ class RefGenomeConverter {
     }
 
     @Nullable
-    public List<ActionableTrial> convertClinicalTrials(@Nullable List<ActionableTrial> clinicalTrials) {
-        if (clinicalTrials == null) {
+    public List<ActionableTrial> convertTrials(@Nullable List<ActionableTrial> trials) {
+        if (trials == null) {
             return null;
         }
 
         List<ActionableTrial> converted = Lists.newArrayList();
-        for (ActionableTrial clinicalTrial : clinicalTrials) {
+        for (ActionableTrial clinicalTrial : trials) {
             converted.add(convertClinicalTrial(clinicalTrial));
         }
         return converted;

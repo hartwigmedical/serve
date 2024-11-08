@@ -23,7 +23,7 @@ public class TestServeDatabaseFactory {
         return ImmutableServeRecord.builder()
                 .knownEvents(createKnownEvents(source))
                 .efficacyEvidences(createEfficacyEvidences())
-                .clinicalTrials(createClinicalTrials())
+                .trials(createClinicalTrials())
                 .build();
     }
 

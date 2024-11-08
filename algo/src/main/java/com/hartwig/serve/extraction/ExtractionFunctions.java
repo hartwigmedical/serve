@@ -55,11 +55,11 @@ public final class ExtractionFunctions {
                 }
                 unconsolidatedEvidences.addAll(result.efficacyEvidences());
             }
-            if (result.clinicalTrials() != null) {
+            if (result.trials() != null) {
                 if (mergedTrials == null) {
                     mergedTrials = Lists.newArrayList();
                 }
-                mergedTrials.addAll(result.clinicalTrials());
+                mergedTrials.addAll(result.trials());
             }
         }
 
@@ -71,7 +71,7 @@ public final class ExtractionFunctions {
                 .eventInterpretations(mergedInterpretations)
                 .knownEvents(consolidateKnownEvents(unconsolidatedKnownEvents))
                 .efficacyEvidences(consolidateEvidences(unconsolidatedEvidences))
-                .clinicalTrials(mergedTrials)
+                .trials(mergedTrials)
                 .build();
     }
 

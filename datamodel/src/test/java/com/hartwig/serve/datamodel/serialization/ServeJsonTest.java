@@ -37,6 +37,6 @@ public class ServeJsonTest {
         assertTrue(record.records().containsKey(RefGenome.V37));
         assertEquals(2, record.records().get(RefGenome.V37).knownEvents().hotspots().size());
         assertEquals(13, record.records().get(RefGenome.V37).efficacyEvidences().size());
-        assertEquals(7, record.records().get(RefGenome.V37).clinicalTrials().size());
+        assertEquals(7, record.records().get(RefGenome.V37).trials().size());
     }
 }

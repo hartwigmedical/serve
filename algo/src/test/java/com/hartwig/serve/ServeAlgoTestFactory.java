@@ -41,7 +41,7 @@ public final class ServeAlgoTestFactory {
                 .knownEvents(knownEvents)
                 .eventInterpretations(Set.of(TestEventInterpretationFactory.createTestEventInterpretationForSource(source)))
                 .efficacyEvidences(List.of(EfficacyEvidenceTestFactory.builder().source(source).build()))
-                .clinicalTrials(List.of(ActionableTrialTestFactory.builder().source(source).build()))
+                .trials(List.of(ActionableTrialTestFactory.builder().source(source).build()))
                 .build();
     }
 }

@@ -76,7 +76,7 @@ public class ExtractionResultWriter {
         return ImmutableServeRecord.builder()
                 .knownEvents(result.knownEvents() != null ? result.knownEvents() : ImmutableKnownEvents.builder().build())
                 .efficacyEvidences(result.efficacyEvidences() != null ? result.efficacyEvidences() : Lists.newArrayList())
-                .clinicalTrials(result.clinicalTrials() != null ? result.clinicalTrials() : Lists.newArrayList())
+                .trials(result.trials() != null ? result.trials() : Lists.newArrayList())
                 .build();
     }
 }

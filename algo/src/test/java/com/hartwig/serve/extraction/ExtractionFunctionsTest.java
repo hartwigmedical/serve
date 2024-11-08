@@ -35,7 +35,7 @@ public class ExtractionFunctionsTest {
 
         assertEquals(2, merged.eventInterpretations().size());
         assertEquals(2, merged.efficacyEvidences().size());
-        assertEquals(2, merged.clinicalTrials().size());
+        assertEquals(2, merged.trials().size());
     }
 
     @Test
@@ -46,7 +46,7 @@ public class ExtractionFunctionsTest {
 
         assertNull(merged.knownEvents());
         assertNull(merged.efficacyEvidences());
-        assertNull(merged.clinicalTrials());
+        assertNull(merged.trials());
     }
 
     private static void assertMergedKnownEvents(@NotNull Set<? extends KnownEvent> known) {

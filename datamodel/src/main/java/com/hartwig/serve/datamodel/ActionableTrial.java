@@ -41,7 +41,7 @@ public abstract class ActionableTrial {
     public abstract Set<Indication> indications();
 
     @NotNull
-    public abstract Set<MolecularCriterium> molecularCriteria();
+    public abstract Set<MolecularCriterium> anyMolecularCriteria();
 
     @NotNull
     public abstract Set<String> urls();

@@ -70,7 +70,7 @@ public class ActionableTrialFactoryTest {
                 .hospitalsPerCity(Map.of("Rotterdam",
                         Sets.newHashSet(ImmutableHospital.builder().name("EMC").isChildrensHospital(false).build())))
                 .build()), clinicalTrial1.countries());
-        assertEquals(Set.of(TEST_MOLECULAR_CRITERIUM), clinicalTrial1.molecularCriteria());
+        assertEquals(Set.of(TEST_MOLECULAR_CRITERIUM), clinicalTrial1.anyMolecularCriteria());
     }
 
     @Test

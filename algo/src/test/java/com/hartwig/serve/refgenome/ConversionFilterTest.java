@@ -3,7 +3,7 @@ package com.hartwig.serve.refgenome;
 import static org.junit.Assert.assertTrue;
 
 import com.hartwig.serve.datamodel.ActionableTrial;
-import com.hartwig.serve.datamodel.ClinicalTrialTestFactory;
+import com.hartwig.serve.datamodel.ActionableTrialTestFactory;
 import com.hartwig.serve.datamodel.EfficacyEvidence;
 import com.hartwig.serve.datamodel.EfficacyEvidenceTestFactory;
 import com.hartwig.serve.datamodel.ImmutableKnownEvents;
@@ -88,16 +88,16 @@ public class ConversionFilterTest {
 
     @NotNull
     private static ActionableTrial trialForHotspot(@NotNull ActionableHotspot hotspot) {
-        return ClinicalTrialTestFactory.createWithMolecularCriterium(MolecularCriteriumTestFactory.createWithActionableHotspot(hotspot));
+        return ActionableTrialTestFactory.createWithMolecularCriterium(MolecularCriteriumTestFactory.createWithActionableHotspot(hotspot));
     }
 
     @NotNull
     private static ActionableTrial trialForGene(@NotNull ActionableGene gene) {
-        return ClinicalTrialTestFactory.createWithMolecularCriterium(MolecularCriteriumTestFactory.createWithActionableGene(gene));
+        return ActionableTrialTestFactory.createWithMolecularCriterium(MolecularCriteriumTestFactory.createWithActionableGene(gene));
     }
 
     @NotNull
     private static ActionableTrial trialForFusion(@NotNull ActionableFusion fusion) {
-        return ClinicalTrialTestFactory.createWithMolecularCriterium(MolecularCriteriumTestFactory.createWithActionableFusion(fusion));
+        return ActionableTrialTestFactory.createWithMolecularCriterium(MolecularCriteriumTestFactory.createWithActionableFusion(fusion));
     }
 }

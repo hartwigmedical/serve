@@ -36,7 +36,7 @@ public class ActionableTrialComparatorTest {
     private static ActionableTrial create(@NotNull String nctId, @NotNull String title, @NotNull String countryName,
             @NotNull String therapy, @NotNull GenderCriterium genderCriterium, @NotNull String applicableCancerType,
             @NotNull String excludedCancerSubType) {
-        return ClinicalTrialTestFactory.createTestClinicalTrial(nctId,
+        return ActionableTrialTestFactory.createTestClinicalTrial(nctId,
                 title,
                 countryName,
                 Set.of(therapy),

@@ -3,7 +3,7 @@ package com.hartwig.serve;
 import java.util.List;
 import java.util.Set;
 
-import com.hartwig.serve.datamodel.ClinicalTrialTestFactory;
+import com.hartwig.serve.datamodel.ActionableTrialTestFactory;
 import com.hartwig.serve.datamodel.EfficacyEvidenceTestFactory;
 import com.hartwig.serve.datamodel.ImmutableKnownEvents;
 import com.hartwig.serve.datamodel.Knowledgebase;
@@ -41,7 +41,7 @@ public final class ServeAlgoTestFactory {
                 .knownEvents(knownEvents)
                 .eventInterpretations(Set.of(TestEventInterpretationFactory.createTestEventInterpretationForSource(source)))
                 .efficacyEvidences(List.of(EfficacyEvidenceTestFactory.builder().source(source).build()))
-                .clinicalTrials(List.of(ClinicalTrialTestFactory.builder().source(source).build()))
+                .clinicalTrials(List.of(ActionableTrialTestFactory.builder().source(source).build()))
                 .build();
     }
 }

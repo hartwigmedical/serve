@@ -179,7 +179,7 @@ class ConversionFilter {
         List<ActionableTrial> filtered = Lists.newArrayList();
         for (ActionableTrial clinicalTrial : clinicalTrials) {
             List<MolecularCriterium> cleanedCriteria = Lists.newArrayList();
-            for (MolecularCriterium criterium : clinicalTrial.molecularCriteria()) {
+            for (MolecularCriterium criterium : clinicalTrial.anyMolecularCriteria()) {
                 MolecularCriterium cleaned = cleanMolecularCriterium(criterium);
                 if (hasAtLeastOneCriterium(cleaned)) {
                     cleanedCriteria.add(cleaned);
@@ -187,7 +187,7 @@ class ConversionFilter {
             }
 
             if (!cleanedCriteria.isEmpty()) {
-                filtered.add(ImmutableActionableTrial.builder().from(clinicalTrial).molecularCriteria(cleanedCriteria).build());
+                filtered.add(ImmutableActionableTrial.builder().from(clinicalTrial).anyMolecularCriteria(cleanedCriteria).build());
             }
         }
         return filtered;

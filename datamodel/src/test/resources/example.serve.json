@@ -804,7 +804,7 @@
               "excludedSubTypes": []
             }
           ],
-          "molecularCriteria": [
+          "anyMolecularCriteria": [
             {
               "hotspots": [
                 {
@@ -865,7 +865,7 @@
               "excludedSubTypes": []
             }
           ],
-          "molecularCriteria": [
+          "anyMolecularCriteria": [
             {
               "hotspots": [],
               "codons": [
@@ -926,7 +926,7 @@
               "excludedSubTypes": []
             }
           ],
-          "molecularCriteria": [
+          "anyMolecularCriteria": [
             {
               "hotspots": [],
               "codons": [
@@ -986,7 +986,7 @@
               "excludedSubTypes": []
             }
           ],
-          "molecularCriteria": [
+          "anyMolecularCriteria": [
             {
               "hotspots": [],
               "codons": [],
@@ -1049,7 +1049,7 @@
               "excludedSubTypes": []
             }
           ],
-          "molecularCriteria": [
+          "anyMolecularCriteria": [
             {
               "hotspots": [],
               "codons": [],
@@ -1129,7 +1129,7 @@
               ]
             }
           ],
-          "molecularCriteria": [
+          "anyMolecularCriteria": [
             {
               "hotspots": [],
               "codons": [],
@@ -1196,7 +1196,7 @@
               ]
             }
           ],
-          "molecularCriteria": [
+          "anyMolecularCriteria": [
             {
               "hotspots": [],
               "codons": [],

@@ -102,7 +102,7 @@ class ActionableTrialFactory {
                         .genderCriterium(trial.gender() != null ? GenderCriterium.valueOf(trial.gender()) : null)
                         .indications(indications)
                         // TODO (CB): trial can have multiple molecular criteria. One for each CkbEntry. Should be merged somewhere?
-                        .molecularCriteria(List.of(molecularCriterium))
+                        .anyMolecularCriteria(List.of(molecularCriterium))
                         .urls(Sets.newHashSet("https://clinicaltrials.gov/study/" + trial.nctId()))
                         .build());
             }

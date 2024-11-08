@@ -7,9 +7,9 @@ import com.google.common.collect.Sets;
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 
-public final class ClinicalTrialTestFactory {
+public final class ActionableTrialTestFactory {
 
-    private ClinicalTrialTestFactory() {
+    private ActionableTrialTestFactory() {
     }
 
     @NotNull
@@ -22,13 +22,13 @@ public final class ClinicalTrialTestFactory {
                 .therapyNames(Sets.newHashSet())
                 .genderCriterium(GenderCriterium.BOTH)
                 .indications(Sets.newHashSet())
-                .molecularCriteria(Sets.newHashSet())
+                .anyMolecularCriteria(Sets.newHashSet())
                 .urls(Sets.newHashSet());
     }
 
     @NotNull
     public static ActionableTrial createWithMolecularCriterium(@NotNull MolecularCriterium molecularCriterium) {
-        return builder().addMolecularCriteria(molecularCriterium).build();
+        return builder().addAnyMolecularCriteria(molecularCriterium).build();
     }
 
     @NotNull

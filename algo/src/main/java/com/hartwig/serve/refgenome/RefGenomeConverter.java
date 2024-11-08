@@ -160,10 +160,10 @@ class RefGenomeConverter {
     @NotNull
     private ActionableTrial convertClinicalTrial(@NotNull ActionableTrial clinicalTrial) {
         Set<MolecularCriterium> convertedCriteria = Sets.newHashSet();
-        for (MolecularCriterium criterium : clinicalTrial.molecularCriteria()) {
+        for (MolecularCriterium criterium : clinicalTrial.anyMolecularCriteria()) {
             convertedCriteria.add(convertMolecularCriterium(criterium));
         }
-        return ImmutableActionableTrial.builder().from(clinicalTrial).molecularCriteria(convertedCriteria).build();
+        return ImmutableActionableTrial.builder().from(clinicalTrial).anyMolecularCriteria(convertedCriteria).build();
     }
 
     @NotNull

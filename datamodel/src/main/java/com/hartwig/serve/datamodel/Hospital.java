@@ -17,5 +17,6 @@ public abstract class Hospital {
     @NotNull
     public abstract String name();
 
-    public abstract boolean isChildrensHospital();
+    @Nullable
+    public abstract Boolean isChildrensHospital();
 }

@@ -45,7 +45,7 @@ public class TestServeDatabaseFactory {
     }
 
     @NotNull
-    public static List<ClinicalTrial> createClinicalTrials() {
+    public static List<ActionableTrial> createClinicalTrials() {
         return List.of(ClinicalTrialTestFactory.builder().build());
     }
 }

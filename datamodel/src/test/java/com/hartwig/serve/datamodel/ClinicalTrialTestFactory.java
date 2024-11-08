@@ -13,8 +13,8 @@ public final class ClinicalTrialTestFactory {
     }
 
     @NotNull
-    public static ImmutableClinicalTrial.Builder builder() {
-        return ImmutableClinicalTrial.builder()
+    public static ImmutableActionableTrial.Builder builder() {
+        return ImmutableActionableTrial.builder()
                 .source(Knowledgebase.UNKNOWN)
                 .nctId(Strings.EMPTY)
                 .title(Strings.EMPTY)
@@ -27,12 +27,12 @@ public final class ClinicalTrialTestFactory {
     }
 
     @NotNull
-    public static ClinicalTrial createWithMolecularCriterium(@NotNull MolecularCriterium molecularCriterium) {
+    public static ActionableTrial createWithMolecularCriterium(@NotNull MolecularCriterium molecularCriterium) {
         return builder().addMolecularCriteria(molecularCriterium).build();
     }
 
     @NotNull
-    public static ClinicalTrial createTestClinicalTrial(@NotNull String nctId, @NotNull String title, @NotNull String countryName,
+    public static ActionableTrial createTestClinicalTrial(@NotNull String nctId, @NotNull String title, @NotNull String countryName,
             @NotNull Set<String> therapyNames, @NotNull GenderCriterium genderCriterium, @NotNull String applicableCancerType,
             @NotNull String excludedCancerSubType) {
         return builder().nctId(nctId)

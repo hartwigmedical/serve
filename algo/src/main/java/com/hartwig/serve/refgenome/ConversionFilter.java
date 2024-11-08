@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
-import com.hartwig.serve.datamodel.ClinicalTrial;
+import com.hartwig.serve.datamodel.ActionableTrial;
 import com.hartwig.serve.datamodel.EfficacyEvidence;
-import com.hartwig.serve.datamodel.ImmutableClinicalTrial;
+import com.hartwig.serve.datamodel.ImmutableActionableTrial;
 import com.hartwig.serve.datamodel.ImmutableEfficacyEvidence;
 import com.hartwig.serve.datamodel.ImmutableKnownEvents;
 import com.hartwig.serve.datamodel.ImmutableMolecularCriterium;
@@ -171,13 +171,13 @@ class ConversionFilter {
     }
 
     @Nullable
-    private List<ClinicalTrial> filterClinicalTrials(@Nullable List<ClinicalTrial> clinicalTrials) {
+    private List<ActionableTrial> filterClinicalTrials(@Nullable List<ActionableTrial> clinicalTrials) {
         if (clinicalTrials == null) {
             return null;
         }
 
-        List<ClinicalTrial> filtered = Lists.newArrayList();
-        for (ClinicalTrial clinicalTrial : clinicalTrials) {
+        List<ActionableTrial> filtered = Lists.newArrayList();
+        for (ActionableTrial clinicalTrial : clinicalTrials) {
             List<MolecularCriterium> cleanedCriteria = Lists.newArrayList();
             for (MolecularCriterium criterium : clinicalTrial.molecularCriteria()) {
                 MolecularCriterium cleaned = cleanMolecularCriterium(criterium);
@@ -187,7 +187,7 @@ class ConversionFilter {
             }
 
             if (!cleanedCriteria.isEmpty()) {
-                filtered.add(ImmutableClinicalTrial.builder().from(clinicalTrial).molecularCriteria(cleanedCriteria).build());
+                filtered.add(ImmutableActionableTrial.builder().from(clinicalTrial).molecularCriteria(cleanedCriteria).build());
             }
         }
         return filtered;

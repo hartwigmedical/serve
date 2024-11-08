@@ -6,10 +6,10 @@ import java.util.Set;
 
 import org.jetbrains.annotations.NotNull;
 
-public class ClinicalTrialComparator implements Comparator<ClinicalTrial> {
+public class ClinicalTrialComparator implements Comparator<ActionableTrial> {
 
     @Override
-    public int compare(@NotNull ClinicalTrial clinicalTrial1, @NotNull ClinicalTrial clinicalTrial2) {
+    public int compare(@NotNull ActionableTrial clinicalTrial1, @NotNull ActionableTrial clinicalTrial2) {
         int nctIdCompare = clinicalTrial1.nctId().compareTo(clinicalTrial2.nctId());
         if (nctIdCompare != 0) {
             return nctIdCompare;

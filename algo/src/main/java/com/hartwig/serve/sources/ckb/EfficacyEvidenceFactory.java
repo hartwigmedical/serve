@@ -34,9 +34,9 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-class ActionableEvidenceFactory {
+class EfficacyEvidenceFactory {
 
-    private static final Logger LOGGER = LogManager.getLogger(ActionableEvidenceFactory.class);
+    private static final Logger LOGGER = LogManager.getLogger(EfficacyEvidenceFactory.class);
 
     private static final Set<String> RESPONSIVE_DIRECTIONS = Sets.newHashSet();
     private static final Set<String> PREDICTED_RESPONSIVE_DIRECTIONS = Sets.newHashSet();
@@ -76,17 +76,17 @@ class ActionableEvidenceFactory {
     private final TreatmentApproachCurator curator;
 
     @NotNull
-    private final CkbEvidenceFilterModel blacklistEvidence;
+    private final CkbEvidenceFilterModel filterEvidence;
 
-    public ActionableEvidenceFactory(@NotNull TreatmentApproachCurator curator, @NotNull CkbEvidenceFilterModel blacklistEvidence) {
+    public EfficacyEvidenceFactory(@NotNull TreatmentApproachCurator curator, @NotNull CkbEvidenceFilterModel filterEvidence) {
         this.curator = curator;
-        this.blacklistEvidence = blacklistEvidence;
+        this.filterEvidence = filterEvidence;
     }
 
     @NotNull
-    public List<EfficacyEvidence> create(@NotNull CkbEntry entry, @NotNull MolecularCriterium molecularCriterium,
+    public Set<EfficacyEvidence> create(@NotNull CkbEntry entry, @NotNull MolecularCriterium molecularCriterium,
             @NotNull String sourceEvent, @NotNull String sourceGene) {
-        List<EfficacyEvidence> efficacyEvidences = Lists.newArrayList();
+        Set<EfficacyEvidence> efficacyEvidences = Sets.newHashSet();
 
         for (Evidence evidence : evidencesWithUsableType(entry.evidences())) {
             EvidenceLevel level = resolveLevel(evidence.ampCapAscoEvidenceLevel());
@@ -98,11 +98,8 @@ class ActionableEvidenceFactory {
             if (level != null && direction != null && indication != null && evidenceLevelDetails != null) {
                 String treatment = evidence.therapy().therapyName();
 
-                if (!blacklistEvidence.shouldFilterEvidence(treatment,
-                        indication.applicableType().name(),
-                        level,
-                        sourceGene,
-                        sourceEvent)) {
+                // TODO (CB): this filtering is also done incorrectly.
+                if (!filterEvidence.shouldFilterEvidence(treatment, indication.applicableType().name(), level, sourceGene, sourceEvent)) {
                     Set<String> evidenceUrls = Sets.newHashSet();
                     for (Reference reference : evidence.references()) {
                         if (reference.url() != null) {
@@ -110,9 +107,8 @@ class ActionableEvidenceFactory {
                         }
                     }
 
-                    Set<String> treatmentApproachDrugClasses = evidence.drugTreatmentApproaches()
-                            .stream()
-                            .map(DrugClassTreatmentApproach::drugClass)
+                    Set<String> treatmentApproachDrugClasses =
+                            evidence.drugTreatmentApproaches().stream().map(DrugClassTreatmentApproach::drugClass)
                             .map(DrugClass::drugClass)
                             .collect(Collectors.toSet());
 

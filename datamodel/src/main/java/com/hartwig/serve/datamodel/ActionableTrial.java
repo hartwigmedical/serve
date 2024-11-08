@@ -12,9 +12,9 @@ import org.jetbrains.annotations.Nullable;
 @Value.Immutable
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class },
              jdkOnly = true)
-@JsonSerialize(as = ImmutableClinicalTrial.class)
-@JsonDeserialize(as = ImmutableClinicalTrial.class)
-public abstract class ClinicalTrial {
+@JsonSerialize(as = ImmutableActionableTrial.class)
+@JsonDeserialize(as = ImmutableActionableTrial.class)
+public abstract class ActionableTrial {
 
     @NotNull
     public abstract Knowledgebase source();

@@ -55,19 +55,19 @@ public class CkbTrialFilterModelTest {
     }
 
     @Test
-    public void canFilterTrialBasedOnTherapyAndCancerType() {
+    public void canFilterCancerTypeBasedOnTherapyAndCancerType() {
         CkbTrialFilterEntry filterEntry =
                 create(CkbTrialFilterType.TRIAL_BASED_ON_THERAPY_AND_CANCER_TYPE, "NCT1", "Nivolumab", "Solid tumor", null, null);
         CkbTrialFilterModel model = CkbFilteringTestFactory.createSpecificTrialFilterModel(filterEntry);
 
         assertTrue(model.isMatch("NCT1", "Nivolumab", "Solid tumor", "KRAS", "amplification", filterEntry));
         assertFalse(model.isMatch("NCT1", "Chemo", "Breast", "KRAS", "deletion", filterEntry));
-        assertTrue(model.shouldFilterTrial("NCT1", "Nivolumab", "Solid tumor", "KRAS", "amplification"));
-        assertFalse(model.shouldFilterTrial("NCT1", "Chemo", "Breast", "KRAS", "deletion"));
+        assertTrue(model.shouldFilterCancerType("NCT1", "Nivolumab", "Solid tumor", "KRAS", "amplification"));
+        assertFalse(model.shouldFilterCancerType("NCT1", "Chemo", "Breast", "KRAS", "deletion"));
     }
 
     @Test
-    public void canFilterTrialBasedOnTherapyAndCancerTypeAndGene() {
+    public void canFilterCancerTypeBasedOnTherapyAndCancerTypeAndGene() {
         CkbTrialFilterEntry filterEntry = create(CkbTrialFilterType.TRIAL_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE,
                 "NCT1",
                 "Nivolumab",
@@ -78,12 +78,12 @@ public class CkbTrialFilterModelTest {
 
         assertTrue(model.isMatch("NCT1", "Nivolumab", "Solid tumor", "KRAS", "amplification", filterEntry));
         assertFalse(model.isMatch("NCT1", "Chemo", "Breast", "PTEN", "deletion", filterEntry));
-        assertTrue(model.shouldFilterTrial("NCT1", "Nivolumab", "Solid tumor", "KRAS", "amplification"));
-        assertFalse(model.shouldFilterTrial("NCT1", "Chemo", "Breast", "PTEN", "deletion"));
+        assertTrue(model.shouldFilterCancerType("NCT1", "Nivolumab", "Solid tumor", "KRAS", "amplification"));
+        assertFalse(model.shouldFilterCancerType("NCT1", "Chemo", "Breast", "PTEN", "deletion"));
     }
 
     @Test
-    public void canFilterTrialBasedOnTherapyAndCancerTypeAndGeneAndEvent() {
+    public void canFilterCancerTypeBasedOnTherapyAndCancerTypeAndGeneAndEvent() {
         CkbTrialFilterEntry filterEntry = create(CkbTrialFilterType.TRIAL_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE_AND_EVENT,
                 "NCT1",
                 "Nivolumab",
@@ -94,8 +94,8 @@ public class CkbTrialFilterModelTest {
 
         assertTrue(model.isMatch("NCT1", "Nivolumab", "Solid tumor", "KRAS", "amplification", filterEntry));
         assertFalse(model.isMatch("NCT1", "Chemo", "Breast", "PTEN", "deletion", filterEntry));
-        assertTrue(model.shouldFilterTrial("NCT1", "Nivolumab", "Solid tumor", "KRAS", "amplification"));
-        assertFalse(model.shouldFilterTrial("NCT1", "Chemo", "Breast", "PTEN", "deletion"));
+        assertTrue(model.shouldFilterCancerType("NCT1", "Nivolumab", "Solid tumor", "KRAS", "amplification"));
+        assertFalse(model.shouldFilterCancerType("NCT1", "Chemo", "Breast", "PTEN", "deletion"));
     }
 
     @NotNull

@@ -16,10 +16,11 @@ import com.hartwig.serve.ckb.datamodel.clinicaltrial.Location;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.VariantRequirementDetail;
 import com.hartwig.serve.ckb.datamodel.indication.Indication;
 import com.hartwig.serve.ckb.datamodel.therapy.Therapy;
+import com.hartwig.serve.datamodel.ActionableTrial;
 import com.hartwig.serve.datamodel.Country;
 import com.hartwig.serve.datamodel.GenderCriterium;
 import com.hartwig.serve.datamodel.Hospital;
-import com.hartwig.serve.datamodel.ImmutableClinicalTrial;
+import com.hartwig.serve.datamodel.ImmutableActionableTrial;
 import com.hartwig.serve.datamodel.ImmutableCountry;
 import com.hartwig.serve.datamodel.ImmutableHospital;
 import com.hartwig.serve.datamodel.Knowledgebase;
@@ -45,7 +46,7 @@ class ActionableTrialFactory {
 
     private static final Set<String> AGE_GROUPS_TO_INCLUDE = Set.of("adult", "senior");
 
-    private static final Set<String> CHILDREN_HOSPITALS = Set.of("PMC",
+    private static final Set<String> DUTCH_CHILDREN_HOSPITALS = Set.of("PMC",
             "WKZ",
             "EKZ",
             "JKZ",
@@ -66,9 +67,9 @@ class ActionableTrialFactory {
     }
 
     @NotNull
-    public List<com.hartwig.serve.datamodel.ClinicalTrial> create(@NotNull CkbEntry entry, @NotNull MolecularCriterium molecularCriterium,
-            @NotNull String sourceEvent, @NotNull String sourceGene) {
-        List<com.hartwig.serve.datamodel.ClinicalTrial> actionableTrials = Lists.newArrayList();
+    public Set<ActionableTrial> create(@NotNull CkbEntry entry, @NotNull MolecularCriterium molecularCriterium, @NotNull String sourceEvent,
+            @NotNull String sourceGene) {
+        Set<ActionableTrial> actionableTrials = Sets.newHashSet();
 
         for (ClinicalTrial trial : trialsToInclude(entry)) {
             Set<Country> countries = extractCountriesToInclude(trial, regionsToInclude);
@@ -77,11 +78,11 @@ class ActionableTrialFactory {
                 therapies.add(therapy.therapyName());
             }
 
+            // TODO (CB): This filtering was previously not done properly. Discussed with Lieke. If we want these complex filters we should have the clinical trial in the json multiple times, one for each combination of tumor type and therapy.
             if (!filterTrial.shouldFilterTrial(trial.nctId(), setToField(therapies), Strings.EMPTY, sourceGene, sourceEvent)
                     && !countries.isEmpty()) {
                 List<Indication> filteredIndications = Lists.newArrayList();
                 for (Indication indication : trial.indications()) {
-                    // TODO (CB): look into this filtering. Seems like this was previously not done properly
                     if (!filterTrial.shouldFilterCancerType(trial.nctId(),
                             setToField(therapies),
                             indication.name(),
@@ -91,20 +92,19 @@ class ActionableTrialFactory {
                     }
                 }
                 Set<com.hartwig.serve.datamodel.Indication> indications = getIndications(filteredIndications);
-                if (indications != null) {
-                    actionableTrials.add(ImmutableClinicalTrial.builder()
-                            .source(Knowledgebase.CKB)
-                            .nctId(trial.nctId())
-                            .title(trial.title())
-                            .acronym(trial.acronym())
-                            .countries(countries)
-                            .therapyNames(therapies)
-                            .genderCriterium(GenderCriterium.valueOf(trial.gender()))
-                            .indications(indications)
-                            .molecularCriteria(List.of(molecularCriterium))
-                            .urls(Sets.newHashSet("https://clinicaltrials.gov/study/" + trial.nctId()))
-                            .build());
-                }
+                actionableTrials.add(ImmutableActionableTrial.builder()
+                        .source(Knowledgebase.CKB)
+                        .nctId(trial.nctId())
+                        .title(trial.title())
+                        .acronym(trial.acronym())
+                        .countries(countries)
+                        .therapyNames(therapies)
+                        .genderCriterium(trial.gender() != null ? GenderCriterium.valueOf(trial.gender()) : null)
+                        .indications(indications)
+                        // TODO (CB): trial can have multiple molecular criteria. One for each CkbEntry. Should be merged somewhere?
+                        .molecularCriteria(List.of(molecularCriterium))
+                        .urls(Sets.newHashSet("https://clinicaltrials.gov/study/" + trial.nctId()))
+                        .build());
             }
         }
         return actionableTrials;
@@ -153,9 +153,9 @@ class ActionableTrialFactory {
                         && hasPotentiallyOpenRequirementToInclude(location.status()))
                 .collect(Collectors.groupingBy(Location::country,
                         Collectors.groupingBy(Location::city,
-                                Collectors.mapping(location -> ImmutableHospital.builder()
-                                        .name(location.facility())
-                                        .isChildrensHospital(isChildrensHospital(location.facility()))
+                                Collectors.mapping((Location location) -> ImmutableHospital.builder()
+                                        .name(location.facility() != null ? location.facility() : "")
+                                        .isChildrensHospital(isChildrensHospital(location.facility(), location.country()))
                                         .build(), Collectors.toSet()))));
 
         return countriesToCitiesToHospitalNames.entrySet()
@@ -165,8 +165,12 @@ class ActionableTrialFactory {
     }
 
     @VisibleForTesting
-    static boolean isChildrensHospital(@NotNull String hospitalName) {
-        return CHILDREN_HOSPITALS.contains(hospitalName);
+    static Boolean isChildrensHospital(@Nullable String hospitalName, @NotNull String country) {
+        if (country.equals("Netherlands")) {
+            return DUTCH_CHILDREN_HOSPITALS.contains(hospitalName);
+        } else {
+            return null;
+        }
     }
 
     @VisibleForTesting

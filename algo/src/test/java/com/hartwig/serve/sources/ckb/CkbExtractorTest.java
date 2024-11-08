@@ -29,43 +29,23 @@ import org.junit.Test;
 public class CkbExtractorTest {
 
     @Test
-    public void canExtractEvidenceFromCkbEntries() {
-        CkbExtractor evidenceExtractor = CkbExtractorFactory.createExtractor(CkbClassificationConfig.build(),
+    public void canExtractEvidenceAndTrialsFromCkbEntries() {
+        CkbExtractor trialExtractor = CkbExtractorFactory.createExtractor(CkbClassificationConfig.build(),
                 RefGenomeResourceTestFactory.buildTestResource37(),
                 TreatmentApproachTestFactory.createEmptyCurator(),
-                CkbFilteringTestFactory.createEmptyEvidenceFilterModel());
-
-        ExtractionResult evidenceResult = evidenceExtractor.extract(createCkbEntryTestDatabase());
-        assertEquals(1, evidenceResult.knownHotspots().size());
-        assertEquals(3, evidenceResult.knownGenes().size());
-        assertEquals(1, evidenceResult.knownCopyNumbers().size());
-        assertEquals(1, evidenceResult.knownFusions().size());
-        assertEquals(1, evidenceResult.actionableHotspots().size());
-        assertEquals(1, evidenceResult.actionableCodons().size());
-        assertEquals(1, evidenceResult.actionableExons().size());
-        assertEquals(2, evidenceResult.actionableGenes().size());
-        assertEquals(1, evidenceResult.actionableFusions().size());
-        assertEquals(1, evidenceResult.actionableCharacteristics().size());
-    }
-
-    @Test
-    public void canExtractTrialsFromCkbEntries() {
-        CkbExtractor trialExtractor = CkbExtractorFactory.createTrialExtractor(CkbClassificationConfig.build(),
-                RefGenomeResourceTestFactory.buildTestResource37(),
+                CkbFilteringTestFactory.createEmptyEvidenceFilterModel(),
                 CkbFilteringTestFactory.createEmptyTrialFilterModel(),
                 Set.of(ImmutableCkbRegion.builder().country("netherlands").states(Collections.emptySet()).build()));
 
         ExtractionResult trialResult = trialExtractor.extract(createCkbEntryTestDatabase());
-        assertEquals(0, trialResult.knownHotspots().size());
-        assertEquals(0, trialResult.knownGenes().size());
-        assertEquals(0, trialResult.knownCopyNumbers().size());
-        assertEquals(0, trialResult.knownFusions().size());
-        assertEquals(1, trialResult.actionableHotspots().size());
-        assertEquals(1, trialResult.actionableCodons().size());
-        assertEquals(1, trialResult.actionableExons().size());
-        assertEquals(2, trialResult.actionableGenes().size());
-        assertEquals(1, trialResult.actionableFusions().size());
-        assertEquals(1, trialResult.actionableCharacteristics().size());
+        assertEquals(7, trialResult.clinicalTrials().size());
+        assertEquals(7, trialResult.efficacyEvidences().size());
+        assertEquals(1, trialResult.knownEvents().hotspots().size());
+        assertEquals(1, trialResult.knownEvents().exons().size());
+        assertEquals(1, trialResult.knownEvents().codons().size());
+        assertEquals(1, trialResult.knownEvents().fusions().size());
+        assertEquals(1, trialResult.knownEvents().copyNumbers().size());
+        assertEquals(3, trialResult.knownEvents().genes().size());
     }
 
     @Test

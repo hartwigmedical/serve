@@ -27,7 +27,7 @@ import com.hartwig.serve.vicc.datamodel.ViccEntry;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
-public class ActionableEvidenceFactoryTest {
+public class EfficacyEvidenceFactoryTest {
 
     @Test
     public void canResolveActionableEventWithMultipleCancerTypes() {

@@ -6,7 +6,7 @@ import java.util.Set;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.hartwig.serve.datamodel.ClinicalTrial;
+import com.hartwig.serve.datamodel.ActionableTrial;
 import com.hartwig.serve.datamodel.EfficacyEvidence;
 import com.hartwig.serve.datamodel.ImmutableEfficacyEvidence;
 import com.hartwig.serve.datamodel.ImmutableKnownEvents;
@@ -39,7 +39,7 @@ public final class ExtractionFunctions {
         Set<EventInterpretation> mergedInterpretations = Sets.newHashSet();
         ImmutableKnownEvents.Builder unconsolidatedKnownEventsBuilder = null;
         List<EfficacyEvidence> unconsolidatedEvidences = null;
-        List<ClinicalTrial> mergedTrials = null;
+        List<ActionableTrial> mergedTrials = null;
 
         for (ExtractionResult result : results) {
             mergedInterpretations.addAll(result.eventInterpretations());

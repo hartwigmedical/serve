@@ -18,13 +18,13 @@ public class ActionableFunctionsTest {
 
     @Test
     public void canExtractCancerTypeDetails() {
-        assertNull(ActionableFunctions.extractCancerTypeDetails(CkbTestFactory.createIndication("test", "JAX:not a doid")));
+        assertNull(ActionableFunctions.extractIndication(CkbTestFactory.createIndication("test", "JAX:not a doid")));
 
         assertEquals("0060463", extractDoidForApplicableCancerType("DOID:0060463"));
         assertEquals(CancerTypeConstants.CANCER_DOID, extractDoidForApplicableCancerType("JAX:10000003"));
         assertEquals(CancerTypeConstants.SQUAMOUS_CELL_CARCINOMA_OF_UNKNOWN_PRIMARY, extractDoidForApplicableCancerType("JAX:10000009"));
         assertEquals(CancerTypeConstants.ADENOCARCINOMA_OF_UNKNOWN_PRIMARY, extractDoidForApplicableCancerType("JAX:10000008"));
-        assertNull(ActionableFunctions.extractCancerTypeDetails(CkbTestFactory.createIndication("test", "JAX:10000004")));
+        assertNull(ActionableFunctions.extractIndication(CkbTestFactory.createIndication("test", "JAX:10000004")));
 
         assertEquals(Sets.newHashSet(CancerTypeConstants.REFRACTORY_HEMATOLOGIC_TYPE,
                 CancerTypeConstants.BONE_MARROW_TYPE,
@@ -44,11 +44,11 @@ public class ActionableFunctionsTest {
 
     @NotNull
     private static String extractDoidForApplicableCancerType(@NotNull String termId) {
-        return ActionableFunctions.extractCancerTypeDetails(CkbTestFactory.createIndication("test", termId)).applicableCancerType().doid();
+        return ActionableFunctions.extractIndication(CkbTestFactory.createIndication("test", termId)).applicableType().doid();
     }
 
     @NotNull
     private static Set<CancerType> extractBlacklistedCancerTypes(@NotNull String termId) {
-        return ActionableFunctions.extractCancerTypeDetails(CkbTestFactory.createIndication("test", termId)).blacklistedCancerTypes();
+        return ActionableFunctions.extractIndication(CkbTestFactory.createIndication("test", termId)).excludedSubTypes();
     }
 }

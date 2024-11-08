@@ -5,9 +5,9 @@ import java.util.Set;
 
 import com.google.common.collect.Sets;
 import com.hartwig.serve.common.RefGenomeFunctions;
-import com.hartwig.serve.datamodel.ClinicalTrial;
+import com.hartwig.serve.datamodel.ActionableTrial;
 import com.hartwig.serve.datamodel.EfficacyEvidence;
-import com.hartwig.serve.datamodel.ImmutableClinicalTrial;
+import com.hartwig.serve.datamodel.ImmutableActionableTrial;
 import com.hartwig.serve.datamodel.ImmutableEfficacyEvidence;
 import com.hartwig.serve.datamodel.ImmutableKnownEvents;
 import com.hartwig.serve.datamodel.ImmutableMolecularCriterium;
@@ -89,13 +89,13 @@ class RefGenomeConverter {
     }
 
     @Nullable
-    public List<ClinicalTrial> convertClinicalTrials(@Nullable List<ClinicalTrial> clinicalTrials) {
+    public List<ActionableTrial> convertClinicalTrials(@Nullable List<ActionableTrial> clinicalTrials) {
         if (clinicalTrials == null) {
             return null;
         }
 
-        List<ClinicalTrial> converted = Lists.newArrayList();
-        for (ClinicalTrial clinicalTrial : clinicalTrials) {
+        List<ActionableTrial> converted = Lists.newArrayList();
+        for (ActionableTrial clinicalTrial : clinicalTrials) {
             converted.add(convertClinicalTrial(clinicalTrial));
         }
         return converted;
@@ -158,12 +158,12 @@ class RefGenomeConverter {
     }
 
     @NotNull
-    private ClinicalTrial convertClinicalTrial(@NotNull ClinicalTrial clinicalTrial) {
+    private ActionableTrial convertClinicalTrial(@NotNull ActionableTrial clinicalTrial) {
         Set<MolecularCriterium> convertedCriteria = Sets.newHashSet();
         for (MolecularCriterium criterium : clinicalTrial.molecularCriteria()) {
             convertedCriteria.add(convertMolecularCriterium(criterium));
         }
-        return ImmutableClinicalTrial.builder().from(clinicalTrial).molecularCriteria(convertedCriteria).build();
+        return ImmutableActionableTrial.builder().from(clinicalTrial).molecularCriteria(convertedCriteria).build();
     }
 
     @NotNull

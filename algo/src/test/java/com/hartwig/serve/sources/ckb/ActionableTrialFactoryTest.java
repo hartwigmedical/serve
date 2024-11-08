@@ -13,16 +13,17 @@ import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.ClinicalTrial;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.Location;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.VariantRequirementDetail;
-import com.hartwig.serve.datamodel.DatamodelTestFactory;
-import com.hartwig.serve.datamodel.EvidenceDirection;
-import com.hartwig.serve.datamodel.EvidenceLevel;
+import com.hartwig.serve.datamodel.ActionableTrial;
 import com.hartwig.serve.datamodel.ImmutableCountry;
+import com.hartwig.serve.datamodel.ImmutableHospital;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.sources.ckb.blacklist.ImmutableCkbTrialFilterEntry;
+import com.hartwig.serve.datamodel.MolecularCriterium;
+import com.hartwig.serve.datamodel.MolecularCriteriumTestFactory;
 import com.hartwig.serve.sources.ckb.filter.CkbFilteringTestFactory;
 import com.hartwig.serve.sources.ckb.filter.CkbTrialFilterEntry;
 import com.hartwig.serve.sources.ckb.filter.CkbTrialFilterModel;
 import com.hartwig.serve.sources.ckb.filter.CkbTrialFilterType;
+import com.hartwig.serve.sources.ckb.filter.ImmutableCkbTrialFilterEntry;
 import com.hartwig.serve.sources.ckb.region.CkbRegion;
 import com.hartwig.serve.sources.ckb.region.ImmutableCkbRegion;
 
@@ -37,6 +38,7 @@ public class ActionableTrialFactoryTest {
     private static final CkbTrialFilterModel BLACKLIST_MODEL = CkbFilteringTestFactory.createProperTrialFilterModel();
     private static final Set<CkbRegion> REGIONS_TO_INCLUDE =
             Set.of(createRegion("netherlands"), createRegion("belgium"), createRegion("germany"), createRegion("united states", "maine"));
+    private static final MolecularCriterium TEST_MOLECULAR_CRITERIUM = MolecularCriteriumTestFactory.createWithTestActionableGene();
 
     @Test
     public void canCreateActionableEntryForOpenTrialInAllowedCountryWithRequiredMolecularProfileAndValidAgeGroup() {
@@ -55,24 +57,20 @@ public class ActionableTrialFactoryTest {
         CkbEntry entry = CkbTestFactory.createEntryWithClinicalTrial(profileId, profileName, clinicalTrial);
 
         ActionableTrialFactory actionableTrialFactory = new ActionableTrialFactory(BLACKLIST_MODEL, REGIONS_TO_INCLUDE);
-        Set<ActionableEntry> trials = actionableTrialFactory.create(entry, "KRAS", "gene");
+        Set<ActionableTrial> trials = actionableTrialFactory.create(entry, TEST_MOLECULAR_CRITERIUM, "KRAS", "gene");
 
         assertEquals(1, trials.size());
-        ActionableEntry trial = trials.iterator().next();
-        com.hartwig.serve.datamodel.ClinicalTrial clinicalTrial1 = DatamodelTestFactory.extractClinicalTrial(trial);
+        ActionableTrial clinicalTrial1 = trials.iterator().next();
 
-        assertEquals(Knowledgebase.CKB_TRIAL, trial.source());
-        assertEquals("KRAS", trial.sourceEvent());
-        assertEquals(Sets.newHashSet("https://ckbhome.jax.org/profileResponse/advancedEvidenceFind?molecularProfileId=1"),
-                trial.sourceUrls());
+        assertEquals(Knowledgebase.CKB, clinicalTrial1.source());
         assertEquals("Phase I trial", clinicalTrial1.title());
-        assertEquals(EvidenceLevel.B, trial.evidenceLevel());
-        assertEquals(EvidenceDirection.RESPONSIVE, trial.direction());
-        assertEquals(Sets.newHashSet("https://clinicaltrials.gov/study/NCT0102"), trial.evidenceUrls());
+        assertEquals(Sets.newHashSet("https://clinicaltrials.gov/study/NCT0102"), clinicalTrial1.urls());
         assertEquals(Sets.newHashSet(ImmutableCountry.builder()
                 .countryName("Netherlands")
-                .hospitalsPerCity(Map.of("Rotterdam", Sets.newHashSet("EMC")))
+                .hospitalsPerCity(Map.of("Rotterdam",
+                        Sets.newHashSet(ImmutableHospital.builder().name("EMC").isChildrensHospital(false).build())))
                 .build()), clinicalTrial1.countries());
+        assertEquals(Set.of(TEST_MOLECULAR_CRITERIUM), clinicalTrial1.molecularCriteria());
     }
 
     @Test
@@ -93,7 +91,7 @@ public class ActionableTrialFactoryTest {
 
         CkbTrialFilterModel model = createBlacklistModel(CkbTrialFilterType.COMPLETE_TRIAL, "NCT0456", null, null, null, null);
         ActionableTrialFactory actionableTrialFactory = new ActionableTrialFactory(model, REGIONS_TO_INCLUDE);
-        Set<ActionableEntry> trials = actionableTrialFactory.create(entry, "KRAS", "gene");
+        Set<ActionableTrial> trials = actionableTrialFactory.create(entry, TEST_MOLECULAR_CRITERIUM, "KRAS", "gene");
         assertEquals(0, trials.size());
     }
 
@@ -115,7 +113,7 @@ public class ActionableTrialFactoryTest {
 
         CkbTrialFilterModel model = createBlacklistModel(CkbTrialFilterType.COMPLETE_TRIAL, "NCT123", null, null, null, null);
         ActionableTrialFactory actionableTrialFactory = new ActionableTrialFactory(model, REGIONS_TO_INCLUDE);
-        Set<ActionableEntry> trials = actionableTrialFactory.create(entry, "KRAS", "gene");
+        Set<ActionableTrial> trials = actionableTrialFactory.create(entry, TEST_MOLECULAR_CRITERIUM, "KRAS", "gene");
         assertEquals(1, trials.size());
     }
 
@@ -138,7 +136,7 @@ public class ActionableTrialFactoryTest {
         CkbTrialFilterModel model =
                 createBlacklistModel(CkbTrialFilterType.ALL_TRIALS_BASED_ON_GENE, null, null, null, "EGFR", null);
         ActionableTrialFactory actionableTrialFactory = new ActionableTrialFactory(model, REGIONS_TO_INCLUDE);
-        Set<ActionableEntry> trials = actionableTrialFactory.create(entry, "EGFR", "EGFR");
+        Set<ActionableTrial> trials = actionableTrialFactory.create(entry, TEST_MOLECULAR_CRITERIUM, "EGFR", "EGFR");
         assertEquals(0, trials.size());
     }
 
@@ -160,7 +158,7 @@ public class ActionableTrialFactoryTest {
 
         CkbTrialFilterModel model = createBlacklistModel(CkbTrialFilterType.ALL_TRIALS_BASED_ON_GENE, null, null, null, "ATM", null);
         ActionableTrialFactory actionableTrialFactory = new ActionableTrialFactory(model, REGIONS_TO_INCLUDE);
-        Set<ActionableEntry> trials = actionableTrialFactory.create(entry, "EGFR", "EGFR");
+        Set<ActionableTrial> trials = actionableTrialFactory.create(entry, TEST_MOLECULAR_CRITERIUM, "EGFR", "EGFR");
         assertEquals(1, trials.size());
     }
 
@@ -177,7 +175,7 @@ public class ActionableTrialFactoryTest {
         CkbEntry entry = CkbTestFactory.createEntryWithClinicalTrial(1, Strings.EMPTY, clinicalTrial);
 
         ActionableTrialFactory actionableTrialFactory = new ActionableTrialFactory(BLACKLIST_MODEL, new HashSet<>());
-        Set<ActionableEntry> trials = actionableTrialFactory.create(entry, "KRAS", "gene");
+        Set<ActionableTrial> trials = actionableTrialFactory.create(entry, TEST_MOLECULAR_CRITERIUM, "KRAS", "gene");
 
         assertEquals(0, trials.size());
     }
@@ -267,7 +265,7 @@ public class ActionableTrialFactoryTest {
                 createTrialWithOneLocation("Recruiting", "Belgium", "Brussel", "Recruiting", "Unknown(Brussel)");
         assertEquals(Set.of(ImmutableCountry.builder()
                 .countryName("Belgium")
-                .hospitalsPerCity(Map.of("Brussel", Set.of("Unknown(Brussel)")))
+                .hospitalsPerCity(Map.of("Brussel", Set.of(ImmutableHospital.builder().name("Unknown(Brussel)").build())))
                 .build()), ActionableTrialFactory.extractCountriesToInclude(trialWithOneLocation, REGIONS_TO_INCLUDE));
 
         ClinicalTrial trialWithMultipleLocations = createTrialWithMultipleLocations("Recruiting",
@@ -280,11 +278,14 @@ public class ActionableTrialFactoryTest {
                 "Rotterdam",
                 "EMC");
         assertEquals(Set.of(ImmutableCountry.builder()
-                                .countryName("Belgium")
-                                .hospitalsPerCity(Map.of("Brussel", Set.of("UZ Brussel")))
-                                .build(),
-                        ImmutableCountry.builder().countryName("Netherlands").hospitalsPerCity(Map.of("Rotterdam", Set.of("EMC"))).build()),
-                ActionableTrialFactory.extractCountriesToInclude(trialWithMultipleLocations, REGIONS_TO_INCLUDE));
+                        .countryName("Belgium")
+                        .hospitalsPerCity(Map.of("Brussel", Set.of(ImmutableHospital.builder().name("UZ Brussel").build())))
+                        .build(),
+                ImmutableCountry.builder()
+                        .countryName("Netherlands")
+                        .hospitalsPerCity(Map.of("Rotterdam",
+                                Set.of(ImmutableHospital.builder().name("EMC").isChildrensHospital(false).build())))
+                        .build()), ActionableTrialFactory.extractCountriesToInclude(trialWithMultipleLocations, REGIONS_TO_INCLUDE));
     }
 
     @Test

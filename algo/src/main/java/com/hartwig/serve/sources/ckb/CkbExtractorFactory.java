@@ -23,7 +23,7 @@ public final class CkbExtractorFactory {
             @NotNull TreatmentApproachCurator treatmentApproachCurator, @NotNull CkbEvidenceFilterModel evidenceFilter,
             @NotNull CkbTrialFilterModel trialFilter, @NotNull Set<CkbRegion> regionsToInclude) {
         return new CkbExtractor(createEventExtractor(config, refGenomeResource),
-                new ActionableEvidenceFactory(treatmentApproachCurator, evidenceFilter),
+                new EfficacyEvidenceFactory(treatmentApproachCurator, evidenceFilter),
                 new ActionableTrialFactory(trialFilter, regionsToInclude));
     }
 

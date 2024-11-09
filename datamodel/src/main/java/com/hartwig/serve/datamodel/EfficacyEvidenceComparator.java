@@ -2,51 +2,58 @@ package com.hartwig.serve.datamodel;
 
 import java.util.Comparator;
 
+import com.hartwig.serve.datamodel.util.CompareFunctions;
+
 import org.jetbrains.annotations.NotNull;
 
 public class EfficacyEvidenceComparator implements Comparator<EfficacyEvidence> {
 
     @Override
-    public int compare(@NotNull EfficacyEvidence event1, @NotNull EfficacyEvidence event2) {
-        int sourceCompare = event1.source().toString().compareTo(event2.source().toString());
+    public int compare(@NotNull EfficacyEvidence evidence1, @NotNull EfficacyEvidence evidence2) {
+        int sourceCompare = evidence1.source().compareTo(evidence2.source());
         if (sourceCompare != 0) {
             return sourceCompare;
         }
 
-        int treatmentCompare = event1.treatment().name().compareTo(event2.treatment().name());
+        int treatmentCompare = evidence1.treatment().name().compareTo(evidence2.treatment().name());
         if (treatmentCompare != 0) {
             return treatmentCompare;
         }
 
-        int efficacyDescriptionCompare = event1.efficacyDescription().compareTo(event2.efficacyDescription());
+        int indicationCompare = compareIndications(evidence1.indication().applicableType(), evidence2.indication().applicableType());
+        if (indicationCompare != 0) {
+            return indicationCompare;
+        }
+
+        int efficacyDescriptionCompare = evidence1.efficacyDescription().compareTo(evidence2.efficacyDescription());
         if (efficacyDescriptionCompare != 0) {
             return efficacyDescriptionCompare;
         }
 
-        int levelCompare = event1.evidenceLevel().toString().compareTo(event2.evidenceLevel().toString());
-        if (levelCompare != 0) {
-            return levelCompare;
+        int evidenceLevelCompare = evidence1.evidenceLevel().toString().compareTo(evidence2.evidenceLevel().toString());
+        if (evidenceLevelCompare != 0) {
+            return evidenceLevelCompare;
         }
 
-        int evidenceLevelDetailsCompare = event1.evidenceLevelDetails().toString().compareTo(event2.evidenceLevelDetails().toString());
+        int evidenceLevelDetailsCompare = evidence1.evidenceLevelDetails().toString().compareTo(evidence2.evidenceLevelDetails().toString());
         if (evidenceLevelDetailsCompare != 0) {
             return evidenceLevelDetailsCompare;
         }
 
-        int directionCompare = event1.evidenceDirection().toString().compareTo(event2.evidenceDirection().toString());
-        if (directionCompare != 0) {
-            return directionCompare;
+        int evidenceDirectionCompare = evidence1.evidenceDirection().toString().compareTo(evidence2.evidenceDirection().toString());
+        if (evidenceDirectionCompare != 0) {
+            return evidenceDirectionCompare;
         }
 
-        int yearCompare = Integer.compare(event1.evidenceYear(), event2.evidenceYear());
-        if (yearCompare != 0) {
-            return yearCompare;
+        int evidenceYearCompare = Integer.compare(evidence1.evidenceYear(), evidence2.evidenceYear());
+        if (evidenceYearCompare != 0) {
+            return evidenceYearCompare;
         }
 
-        return compareCancerTypes(event1.indication().applicableType(), event2.indication().applicableType());
+        return CompareFunctions.compareSetOfStrings(evidence1.urls(), evidence2.urls());
     }
 
-    private static int compareCancerTypes(@NotNull CancerType cancerType1, @NotNull CancerType cancerType2) {
+    private static int compareIndications(@NotNull CancerType cancerType1, @NotNull CancerType cancerType2) {
         int nameCompare = cancerType1.name().compareTo(cancerType2.name());
         if (nameCompare != 0) {
             return nameCompare;

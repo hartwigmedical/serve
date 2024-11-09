@@ -15,20 +15,18 @@ public class EfficacyEvidenceComparatorTest {
 
     @Test
     public void canSortEfficacyEvidences() {
-        EfficacyEvidence event1 = create("CancerA", EvidenceLevel.A, EvidenceLevelDetails.CLINICAL_STUDY, EvidenceDirection.RESISTANT);
-        EfficacyEvidence event2 = create("CancerA", EvidenceLevel.A, EvidenceLevelDetails.CLINICAL_STUDY, EvidenceDirection.RESPONSIVE);
-        EfficacyEvidence event3 = create("CancerA", EvidenceLevel.A, EvidenceLevelDetails.CLINICAL_STUDY, EvidenceDirection.RESPONSIVE);
-        EfficacyEvidence event4 = create("CancerB", EvidenceLevel.A, EvidenceLevelDetails.CLINICAL_STUDY, EvidenceDirection.RESPONSIVE);
-        EfficacyEvidence event5 = create("CancerA", EvidenceLevel.B, EvidenceLevelDetails.CLINICAL_STUDY, EvidenceDirection.RESPONSIVE);
+        EfficacyEvidence evidence1 = create("CancerA", EvidenceLevel.A, EvidenceLevelDetails.CLINICAL_STUDY, EvidenceDirection.RESISTANT);
+        EfficacyEvidence evidence2 = create("CancerA", EvidenceLevel.A, EvidenceLevelDetails.CLINICAL_STUDY, EvidenceDirection.RESPONSIVE);
+        EfficacyEvidence evidence3 = create("CancerA", EvidenceLevel.B, EvidenceLevelDetails.CLINICAL_STUDY, EvidenceDirection.RESPONSIVE);
+        EfficacyEvidence evidence4 = create("CancerB", EvidenceLevel.A, EvidenceLevelDetails.CLINICAL_STUDY, EvidenceDirection.RESPONSIVE);
 
-        List<EfficacyEvidence> efficacyEvidences = Lists.newArrayList(event3, event5, event1, event4, event2);
+        List<EfficacyEvidence> efficacyEvidences = Lists.newArrayList(evidence4, evidence1, evidence3, evidence2);
         efficacyEvidences.sort(new EfficacyEvidenceComparator());
 
-        assertEquals(event1, efficacyEvidences.get(0));
-        assertEquals(event2, efficacyEvidences.get(1));
-        assertEquals(event3, efficacyEvidences.get(2));
-        assertEquals(event4, efficacyEvidences.get(3));
-        assertEquals(event5, efficacyEvidences.get(4));
+        assertEquals(evidence1, efficacyEvidences.get(0));
+        assertEquals(evidence2, efficacyEvidences.get(1));
+        assertEquals(evidence3, efficacyEvidences.get(2));
+        assertEquals(evidence4, efficacyEvidences.get(3));
     }
 
     @NotNull

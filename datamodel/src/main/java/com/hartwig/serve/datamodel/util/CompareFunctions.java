@@ -27,16 +27,16 @@ public final class CompareFunctions {
         return Integer.compare(set2.size(), set1.size());
     }
 
-    public static int compareNullableDoubles(@Nullable Double double1, @Nullable Double double2) {
-        return compareNullable(double1, double2);
-    }
-
     public static int compareNullableStrings(@Nullable String string1, @Nullable String string2) {
         return compareNullable(string1, string2);
     }
 
     public static int compareNullableBoolean(@Nullable Boolean bool1, @Nullable Boolean bool2) {
         return compareNullable(bool1, bool2);
+    }
+
+    public static int compareNullableDoubles(@Nullable Double double1, @Nullable Double double2) {
+        return compareNullable(double1, double2);
     }
 
     public static int compareNullableIntegers(@Nullable Integer int1, @Nullable Integer int2) {

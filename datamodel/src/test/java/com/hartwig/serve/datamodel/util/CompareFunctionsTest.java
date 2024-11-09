@@ -17,9 +17,10 @@ public class CompareFunctionsTest {
 
     @Test
     public void canCompareNullableObjects() {
+        assertEquals(0, CompareFunctions.compareNullableStrings(null, null));
+        assertEquals(0, CompareFunctions.compareNullableBoolean(null, null));
         assertEquals(0, CompareFunctions.compareNullableDoubles(null, null));
         assertEquals(0, CompareFunctions.compareNullableIntegers(null, null));
-        assertEquals(0, CompareFunctions.compareNullableBoolean(null, null));
     }
 
     @Test

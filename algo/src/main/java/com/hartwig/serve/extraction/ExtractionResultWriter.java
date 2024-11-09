@@ -9,6 +9,7 @@ import com.hartwig.serve.datamodel.ImmutableKnownEvents;
 import com.hartwig.serve.datamodel.ImmutableServeDatabase;
 import com.hartwig.serve.datamodel.ImmutableServeRecord;
 import com.hartwig.serve.datamodel.RefGenome;
+import com.hartwig.serve.datamodel.ServeDatabase;
 import com.hartwig.serve.datamodel.ServeRecord;
 import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.serialization.ServeJson;
@@ -41,6 +42,17 @@ public class ExtractionResultWriter {
     }
 
     public void write(@NotNull Map<RefGenome, ExtractionResult> resultMap) throws IOException {
+        LOGGER.info("Generating SERVE database with version {}", serveVersion);
+        ImmutableServeDatabase.Builder databaseBuilder = ImmutableServeDatabase.builder().version(serveVersion);
+        for (Map.Entry<RefGenome, ExtractionResult> entry : resultMap.entrySet()) {
+            RefGenome refGenome = entry.getKey();
+            ServeRecord record = toServeRecord(entry.getValue());
+
+            databaseBuilder.putRecords(refGenome, record);
+            logServeDatabaseEntry(refGenome, record);
+        }
+        ServeDatabase serveDatabase = databaseBuilder.build();
+
         LOGGER.info("Writing SERVE output to {}", outputDir);
 
         // Hotspot VCF is generated to be used in SAGE for every version of ref genome.
@@ -60,15 +72,9 @@ public class ExtractionResultWriter {
         LOGGER.info(" Writing {} event interpretations to {}", eventInterpretations.size(), eventInterpretationTsv);
         EventInterpretationFile.write(eventInterpretationTsv, eventInterpretations);
 
-        ImmutableServeDatabase.Builder databaseBuilder = ImmutableServeDatabase.builder().version(serveVersion);
-
-        for (Map.Entry<RefGenome, ExtractionResult> entry : resultMap.entrySet()) {
-            databaseBuilder.putRecords(entry.getKey(), toServeRecord(entry.getValue()));
-        }
-
         String filepath = ServeJson.jsonFilePath(outputDir);
         LOGGER.info(" Writing SERVE database to '{}'", filepath);
-        ServeJson.write(databaseBuilder.build(), filepath);
+        ServeJson.write(serveDatabase, filepath);
     }
 
     @NotNull
@@ -78,5 +84,17 @@ public class ExtractionResultWriter {
                 .evidences(result.evidences() != null ? result.evidences() : Lists.newArrayList())
                 .trials(result.trials() != null ? result.trials() : Lists.newArrayList())
                 .build();
+    }
+
+    private static void logServeDatabaseEntry(@NotNull RefGenome refGenome, @NotNull ServeRecord serveRecord) {
+        LOGGER.info(" Generated SERVE record for {}", refGenome);
+        LOGGER.info("  {} known hotspots generated", serveRecord.knownEvents().hotspots().size());
+        LOGGER.info("  {} known hotspots generated", serveRecord.knownEvents().codons().size());
+        LOGGER.info("  {} known hotspots generated", serveRecord.knownEvents().exons().size());
+        LOGGER.info("  {} known hotspots generated", serveRecord.knownEvents().genes().size());
+        LOGGER.info("  {} known hotspots generated", serveRecord.knownEvents().copyNumbers().size());
+        LOGGER.info("  {} known hotspots generated", serveRecord.knownEvents().fusions().size());
+        LOGGER.info("  {} efficacy evidences generated", serveRecord.evidences().size());
+        LOGGER.info("  {} actionable trials generated", serveRecord.trials().size());
     }
 }

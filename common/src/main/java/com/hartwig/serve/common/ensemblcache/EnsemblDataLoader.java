@@ -191,7 +191,7 @@ public final class EnsemblDataLoader {
             line = fileReader.readLine();
         }
 
-        // The final record doesn't get added automatically, if is exists
+        // The final record doesn't get added automatically, if it exists
         if (previousTranscript != null && currentGeneId != null) {
             currentTranscripts.add(ImmutableTranscriptData.builder().from(previousTranscript).exons(currentExons).build());
             transcriptsPerGeneId.put(currentGeneId, currentTranscripts);

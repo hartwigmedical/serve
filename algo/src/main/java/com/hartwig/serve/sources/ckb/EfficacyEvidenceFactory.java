@@ -18,15 +18,15 @@ import com.hartwig.serve.ckb.datamodel.therapy.Therapy;
 import com.hartwig.serve.ckb.datamodel.treatmentapproaches.DrugClassTreatmentApproach;
 import com.hartwig.serve.ckb.datamodel.treatmentapproaches.TherapyTreatmentApproach;
 import com.hartwig.serve.datamodel.EfficacyEvidence;
-import com.hartwig.serve.datamodel.EvidenceLevelDetails;
 import com.hartwig.serve.datamodel.EvidenceDirection;
 import com.hartwig.serve.datamodel.EvidenceLevel;
+import com.hartwig.serve.datamodel.EvidenceLevelDetails;
 import com.hartwig.serve.datamodel.ImmutableEfficacyEvidence;
 import com.hartwig.serve.datamodel.ImmutableTreatment;
 import com.hartwig.serve.datamodel.Indication;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.sources.ckb.filter.CkbEvidenceFilterModel;
 import com.hartwig.serve.datamodel.MolecularCriterium;
+import com.hartwig.serve.sources.ckb.filter.CkbEvidenceFilterModel;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurator;
 
 import org.apache.logging.log4j.LogManager;
@@ -93,7 +93,7 @@ class EfficacyEvidenceFactory {
             EvidenceLevelDetails evidenceLevelDetails = resolveEvidenceLevelDetails(evidence.approvalStatus());
             EvidenceDirection direction = resolveDirection(evidence.responseType());
             Indication indication = ActionableFunctions.extractIndication(evidence.indication());
-            Integer evidenceYear = extractEvidenceYear(entry.createDate(), evidence.references(), evidence.therapy());
+            int evidenceYear = extractEvidenceYear(entry.createDate(), evidence.references(), evidence.therapy());
 
             if (level != null && direction != null && indication != null && evidenceLevelDetails != null) {
                 String treatment = evidence.therapy().therapyName();

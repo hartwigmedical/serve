@@ -75,7 +75,7 @@ public final class KnownFusionCacheLoader {
                     .highImpactPromiscuous(values[fields.get(FLD_HIGH_IMPACT_PROM)].equalsIgnoreCase("TRUE"))
                     .build();
         } catch (ArrayIndexOutOfBoundsException e) {
-            LOGGER.error("Unable to parse line [{}] with fiels [{}]. Check the known_fusions CSV",
+            LOGGER.error("Unable to parse line [{}] with fields [{}]. Check the known_fusions CSV",
                     line,
                     fields.entrySet().stream().map(entry -> entry.getKey() + ":" + entry.getValue()).collect(Collectors.joining(",")));
             throw new RuntimeException(e);

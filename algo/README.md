@@ -56,7 +56,7 @@ SERVE generates clinical evidence in the following datamodel:
         - The NCT ID of the study
         - The title of the study
         - The acronym of the study
-        - For which gender the study is a option
+        - For which gender the study is an option
         - The countries where the study is active
         - The name of the therapy given in the trial
 - Cancer type (annotated with DOID) for which the treatment is considered on-label.
@@ -141,7 +141,7 @@ Assuming a suitable transcript has been found, N hotspots are derived for each p
 - In case of a complex deletion/insertion (DELINS) the rules for hotspot generation for deletions and insertions are extrapolated.
   Hence, the reference sequence is assumed to be deleted, and one new nucleotide sequence is inserted unless the insertion is 1 amino acid
   in which case hotspots are generated for all trinucleotides coding for the inserted amino acid.
-  Complexity of the resulting variant is reduced by removing any bases that are shared between ref and alt at start or end of the variant.
+  Complexity of the resulting variant has been reduced by removing any bases that are shared between ref and alt at start or end of the variant.
 - In case of a frameshift the following hotspots are generated:
     - Any of the 12 possible single base inserts inside the affected codon that does not lead to synonymous impact in the affected codon
     - Any of the 3 possible single base deletes inside the affected codon that does not lead to synonymous impact in the affected codon
@@ -495,7 +495,7 @@ elsewhere.
     - Setup POM to support new way of versioning and releasing.
     - Rename of RefGenomeVersion to RefGenome and move into main datamodel package
 - [2.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v2.0)
-    - Major changes to datamodel in general (different packages, different classes etc)
+    - Major changes to datamodel in general (different packages, different classes etc.)
     - Known events are annotated with the following additional data: geneRole, proteinEffect, associatedWithDrugResistance (y/n)
 - [1.12](https://github.com/hartwigmedical/hmftools/releases/tag/serve-v1.12)
     - Support for generating a mySQL database
@@ -522,7 +522,7 @@ elsewhere.
     - The filtering of iClusion events is moved to an input file instead inside SERVE
     - Created a link of CKB of the evidence for CKB Boost (web based)
     - For actionable signatures evidences could be applicable with different cut-offs. Now supporting those cut-off values of the different
-      signatures (eg. TML >= 140 )
+      signatures (e.g. TML >= 140 )
     - Support the possibility to blacklist specific tumor locations for particular treatments
     - Add an option to filter evidences when there are driver inconsistencies
     - Support for curation the coordinates of genes because with ensembl data cache BRAF has the wrong coordinates

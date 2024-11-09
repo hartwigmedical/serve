@@ -99,7 +99,7 @@ public final class HmfTranscriptRegionUtils {
                     endPosition,
                     exonCodingStart,
                     exonCodingEnd,
-                    codonRegions.size() > 0);
+                    !codonRegions.isEmpty());
 
             if (region != null) {
                 codonRegions.add(region);

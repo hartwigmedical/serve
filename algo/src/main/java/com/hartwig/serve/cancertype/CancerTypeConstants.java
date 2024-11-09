@@ -6,7 +6,6 @@ import com.hartwig.serve.datamodel.ImmutableCancerType;
 public final class CancerTypeConstants {
 
     public static final String CANCER_DOID = "162";
-    public static final String ORGAN_SYSTEM_CANCER_DOID = "0050686";
     public static final String CARCINOMA_OF_UNKNOWN_PRIMARY = "305";
     public static final String SQUAMOUS_CELL_CARCINOMA_OF_UNKNOWN_PRIMARY = "1749";
     public static final String ADENOCARCINOMA_OF_UNKNOWN_PRIMARY = "299";

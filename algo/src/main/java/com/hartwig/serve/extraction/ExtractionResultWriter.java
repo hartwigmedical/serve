@@ -73,7 +73,7 @@ public class ExtractionResultWriter {
         EventInterpretationFile.write(eventInterpretationTsv, eventInterpretations);
 
         String filepath = ServeJson.jsonFilePath(outputDir);
-        LOGGER.info(" Writing SERVE database to '{}'", filepath);
+        LOGGER.info(" Writing SERVE database to {}", filepath);
         ServeJson.write(serveDatabase, filepath);
     }
 

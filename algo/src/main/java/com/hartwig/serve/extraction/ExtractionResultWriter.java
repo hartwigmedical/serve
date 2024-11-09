@@ -89,11 +89,11 @@ public class ExtractionResultWriter {
     private static void logServeDatabaseEntry(@NotNull RefGenome refGenome, @NotNull ServeRecord serveRecord) {
         LOGGER.info(" Generated SERVE record for {}", refGenome);
         LOGGER.info("  {} known hotspots generated", serveRecord.knownEvents().hotspots().size());
-        LOGGER.info("  {} known hotspots generated", serveRecord.knownEvents().codons().size());
-        LOGGER.info("  {} known hotspots generated", serveRecord.knownEvents().exons().size());
-        LOGGER.info("  {} known hotspots generated", serveRecord.knownEvents().genes().size());
-        LOGGER.info("  {} known hotspots generated", serveRecord.knownEvents().copyNumbers().size());
-        LOGGER.info("  {} known hotspots generated", serveRecord.knownEvents().fusions().size());
+        LOGGER.info("  {} known codons generated", serveRecord.knownEvents().codons().size());
+        LOGGER.info("  {} known exons generated", serveRecord.knownEvents().exons().size());
+        LOGGER.info("  {} known genes generated", serveRecord.knownEvents().genes().size());
+        LOGGER.info("  {} known copy numbers generated", serveRecord.knownEvents().copyNumbers().size());
+        LOGGER.info("  {} known fusions generated", serveRecord.knownEvents().fusions().size());
         LOGGER.info("  {} efficacy evidences generated", serveRecord.evidences().size());
         LOGGER.info("  {} actionable trials generated", serveRecord.trials().size());
     }

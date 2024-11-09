@@ -108,5 +108,4 @@ public class CkbVariantAnnotatorTest {
                 .gene(gene).proteinEffect(proteinEffect).associatedWithDrugResistance("Y")
                 .build();
     }
-
 }

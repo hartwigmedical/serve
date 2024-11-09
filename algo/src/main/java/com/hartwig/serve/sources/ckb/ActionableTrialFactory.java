@@ -24,8 +24,8 @@ import com.hartwig.serve.datamodel.ImmutableActionableTrial;
 import com.hartwig.serve.datamodel.ImmutableCountry;
 import com.hartwig.serve.datamodel.ImmutableHospital;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.sources.ckb.filter.CkbTrialFilterModel;
 import com.hartwig.serve.datamodel.MolecularCriterium;
+import com.hartwig.serve.sources.ckb.filter.CkbTrialFilterModel;
 import com.hartwig.serve.sources.ckb.region.CkbRegion;
 
 import org.apache.logging.log4j.util.Strings;
@@ -91,7 +91,7 @@ class ActionableTrialFactory {
                         filteredIndications.add(indication);
                     }
                 }
-                Set<com.hartwig.serve.datamodel.Indication> indications = getIndications(filteredIndications);
+                Set<com.hartwig.serve.datamodel.Indication> indications = extractIndications(filteredIndications);
                 actionableTrials.add(ImmutableActionableTrial.builder()
                         .source(Knowledgebase.CKB)
                         .nctId(trial.nctId())
@@ -99,7 +99,7 @@ class ActionableTrialFactory {
                         .acronym(trial.acronym())
                         .countries(countries)
                         .therapyNames(therapies)
-                        .genderCriterium(trial.gender() != null ? GenderCriterium.valueOf(trial.gender()) : null)
+                        .genderCriterium(trial.gender() != null ? GenderCriterium.valueOf(trial.gender().toUpperCase()) : null)
                         .indications(indications)
                         // TODO (CB): trial can have multiple molecular criteria. One for each CkbEntry. Should be merged somewhere?
                         .anyMolecularCriteria(List.of(molecularCriterium))
@@ -111,7 +111,7 @@ class ActionableTrialFactory {
     }
 
     @NotNull
-    private static Set<com.hartwig.serve.datamodel.Indication> getIndications(@NotNull List<Indication> ckbIndications) {
+    private static Set<com.hartwig.serve.datamodel.Indication> extractIndications(@NotNull List<Indication> ckbIndications) {
         Set<com.hartwig.serve.datamodel.Indication> indications = new HashSet<>();
         for (Indication indication : ckbIndications) {
             com.hartwig.serve.datamodel.Indication cancerTypeExtraction = ActionableFunctions.extractIndication(indication);
@@ -177,7 +177,8 @@ class ActionableTrialFactory {
     static boolean hasVariantRequirementTypeToInclude(@NotNull List<VariantRequirementDetail> variantRequirementDetails,
             @NotNull CkbEntry entry) {
         for (VariantRequirementDetail variantRequirementDetail : variantRequirementDetails) {
-            // Check if trial should be included based on the molecular profile of the current entry (trial can be linked to multiple molecular profiles)
+            // Check if trial should be included based on the molecular profile of the current entry
+            // (trial can be linked to multiple molecular profiles)
             if (entry.profileId() == variantRequirementDetail.profileId() && VARIANT_REQUIREMENT_TYPES_TO_INCLUDE.contains(
                     variantRequirementDetail.requirementType().toLowerCase())) {
                 return true;

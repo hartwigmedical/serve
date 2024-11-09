@@ -103,7 +103,6 @@ public class CkbExtractor {
 
     @NotNull
     public ExtractionResult extract(@NotNull List<CkbEntry> entries) {
-
         ProgressTracker tracker = new ProgressTracker("CKB", entries.size());
         // Assume entries without variants are filtered out prior to extraction
         List<ExtractionResult> extractions = entries.parallelStream()
@@ -121,7 +120,7 @@ public class CkbExtractor {
             throw new IllegalStateException("A CKB entry without variants has been provided for extraction: " + entry);
         }
         int variantCount = entry.variants().size();
-        // TODO this is where we assume only 1 variant per entry
+        // TODO (CB): This is where we assume only 1 variant per entry
         Variant variant = entry.variants().get(0);
         String event = variantCount > 1 ? concat(entry.variants()) : CkbEventAndGeneExtractor.extractEvent(variant);
         String gene = variantCount > 1 ? "Multiple" : CkbEventAndGeneExtractor.extractGene(variant);

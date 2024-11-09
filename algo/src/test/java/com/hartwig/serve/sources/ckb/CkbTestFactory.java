@@ -3,7 +3,6 @@ package com.hartwig.serve.sources.ckb;
 import java.time.LocalDate;
 import java.util.List;
 
-import com.google.common.collect.Lists;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.ckb.datamodel.ImmutableCkbEntry;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.ClinicalTrial;
@@ -74,39 +73,42 @@ public final class CkbTestFactory {
         Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting", "Rotterdam", "EMC");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(0, "required");
         return builder().addVariants(createVariant(geneSymbol, variant, fullName))
-                .addEvidences(createEvidence(responseType, evidenceType, therapyName, indicationName, evidenceLevel, approvalStatus, termId))
-                .addClinicalTrials(createTrialWithTherapy("Recruiting",
-                        List.of(requirementDetail),
-                        List.of(location),
-                        "NCT0102",
+                .addEvidences(createEvidence(responseType,
+                        evidenceType,
+                        therapyName,
+                        indicationName,
+                        evidenceLevel,
+                        approvalStatus,
+                        termId))
+                .addClinicalTrials(createTrialWithTherapy("NCT0102",
                         "Phase I trial",
                         List.of(CkbTestFactory.createTherapy("Nivolumab")),
                         List.of(CkbTestFactory.createIndication("test", "JAX:10000006")),
-                        List.of("senior", "child", "adult")))
+                        "Recruiting",
+                        List.of("senior", "child", "adult"),
+                        List.of(requirementDetail),
+                        List.of(location)))
                 .build();
     }
 
     @NotNull
-    public static ClinicalTrial createTrial(@NotNull String recruitment, @NotNull List<VariantRequirementDetail> variantRequirementDetails,
-            @NotNull List<Location> locations, @NotNull String nctId, @NotNull String title, @NotNull List<String> ageGroups) {
-        return ImmutableClinicalTrial.builder()
-                .updateDate(TEST_UPDATE_DATE)
-                .nctId(nctId)
-                .title(title)
-                .indications(List.of(createIndication("AB", "DOID:162")))
-                .recruitment(recruitment)
-                .ageGroups(ageGroups)
-                .variantRequirement("")
-                .variantRequirementDetails(variantRequirementDetails)
-                .locations(locations)
-                .build();
+    public static ClinicalTrial createTrial(@NotNull String nctId, @NotNull String title, @NotNull String recruitment,
+            @NotNull List<String> ageGroups, @NotNull List<VariantRequirementDetail> variantRequirementDetails,
+            @NotNull List<Location> locations) {
+        return createTrialWithTherapy(nctId,
+                title,
+                List.of(),
+                List.of(createIndication("AB", "DOID:162")),
+                recruitment,
+                ageGroups,
+                variantRequirementDetails,
+                locations);
     }
 
     @NotNull
-    public static ClinicalTrial createTrialWithTherapy(@NotNull String recruitment,
-            @NotNull List<VariantRequirementDetail> variantRequirementDetails, @NotNull List<Location> locations, @NotNull String nctId,
-            @NotNull String title, @NotNull List<Therapy> therapies, @NotNull List<Indication> indication,
-            @NotNull List<String> ageGroups) {
+    public static ClinicalTrial createTrialWithTherapy(@NotNull String nctId, @NotNull String title, @NotNull List<Therapy> therapies,
+            @NotNull List<Indication> indication, @NotNull String recruitment, @NotNull List<String> ageGroups,
+            @NotNull List<VariantRequirementDetail> variantRequirementDetails, @NotNull List<Location> locations) {
         return ImmutableClinicalTrial.builder()
                 .updateDate(TEST_UPDATE_DATE)
                 .nctId(nctId)
@@ -115,6 +117,7 @@ public final class CkbTestFactory {
                 .indications(indication)
                 .recruitment(recruitment)
                 .ageGroups(ageGroups)
+                .gender("both")
                 .variantRequirement("")
                 .variantRequirementDetails(variantRequirementDetails)
                 .locations(locations)
@@ -131,11 +134,10 @@ public final class CkbTestFactory {
                 .responseType(responseType)
                 .evidenceType(evidenceType)
                 .efficacyEvidence(EFFICACY_EVIDENCE)
-                .approvalStatus("")
                 .approvalStatus(approvalStatus)
                 .ampCapAscoEvidenceLevel(level)
                 .ampCapAscoInferredTier("")
-                .references(Lists.newArrayList())
+                .references(List.of())
                 .build();
     }
 
@@ -146,11 +148,26 @@ public final class CkbTestFactory {
                 .createDate(TEST_CREATE_DATE)
                 .updateDate(TEST_UPDATE_DATE)
                 .therapyName(therapyName)
-                .drugs(Lists.newArrayList())
-                .synonyms(Lists.newArrayList())
-                .globalApprovalStatuses(Lists.newArrayList())
+                .drugs(List.of())
+                .synonyms(List.of())
+                .globalApprovalStatuses(List.of())
                 .description("")
-                .references(Lists.newArrayList())
+                .references(List.of())
+                .build();
+    }
+
+    @NotNull
+    public static Therapy createTherapy(int createYear) {
+        return ImmutableTherapy.builder()
+                .id(0)
+                .createDate(LocalDate.of(createYear, 1, 1))
+                .updateDate(LocalDate.of(2021, 1, 1))
+                .therapyName("Therapy")
+                .drugs(List.of())
+                .synonyms(List.of())
+                .globalApprovalStatuses(List.of())
+                .description("Description")
+                .references(List.of())
                 .build();
     }
 
@@ -164,7 +181,7 @@ public final class CkbTestFactory {
                 .currentPreferredTerm("")
                 .lastUpdateDateFromDO(TEST_UPDATE_DATE)
                 .termId(termId)
-                .altIds(Lists.newArrayList())
+                .altIds(List.of())
                 .build();
     }
 
@@ -225,21 +242,6 @@ public final class CkbTestFactory {
                 .issue("Issue")
                 .date("Date")
                 .year(year)
-                .build();
-    }
-
-    @NotNull
-    public static Therapy createTherapy(int createYear) {
-        return ImmutableTherapy.builder()
-                .id(0)
-                .createDate(LocalDate.of(createYear, 1, 1))
-                .updateDate(LocalDate.of(2021, 1, 1))
-                .therapyName("Therapy")
-                .drugs(List.of())
-                .synonyms(List.of())
-                .globalApprovalStatuses(List.of())
-                .description("Description")
-                .references(List.of())
                 .build();
     }
 }

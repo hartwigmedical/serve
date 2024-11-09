@@ -32,7 +32,7 @@ public class DrugCuratorTest {
     }
 
     @Test
-    public void canBlacklistDrugs() {
+    public void canFilterDrugs() {
         DrugCurator curator = new DrugCurator();
 
         DrugCurationKey firstKey = DrugCurationFactory.DRUG_FILTERS.iterator().next();

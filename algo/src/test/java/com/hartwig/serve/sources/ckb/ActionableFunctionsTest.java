@@ -28,8 +28,8 @@ public class ActionableFunctionsTest {
 
         assertEquals(Sets.newHashSet(CancerTypeConstants.REFRACTORY_HEMATOLOGIC_TYPE,
                 CancerTypeConstants.BONE_MARROW_TYPE,
-                CancerTypeConstants.LEUKEMIA_TYPE), extractBlacklistedCancerTypes("JAX:10000003"));
-        assertTrue(extractBlacklistedCancerTypes("JAX:10000009").isEmpty());
+                CancerTypeConstants.LEUKEMIA_TYPE), extractExcludedSubTypes("JAX:10000003"));
+        assertTrue(extractExcludedSubTypes("JAX:10000009").isEmpty());
     }
 
     @Test
@@ -48,7 +48,7 @@ public class ActionableFunctionsTest {
     }
 
     @NotNull
-    private static Set<CancerType> extractBlacklistedCancerTypes(@NotNull String termId) {
+    private static Set<CancerType> extractExcludedSubTypes(@NotNull String termId) {
         return ActionableFunctions.extractIndication(CkbTestFactory.createIndication("test", termId)).excludedSubTypes();
     }
 }

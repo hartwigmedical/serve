@@ -39,110 +39,106 @@ public class EfficacyEvidenceFactoryTest {
     private static final CkbEvidenceFilterModel EVIDENCE_FILTER_MODEL = CkbFilteringTestFactory.createProperEvidenceFilterModel();
 
     @Test
-    public void shouldIgnoreNonActionableKrasDeletion() {
-        MolecularCriterium molecularCriterium = MolecularCriteriumTestFactory.createWithTestActionableGene();
-
-        CkbEntry entryDeletion = CkbTestFactory.createEntry("KRAS",
-                "deletion",
-                "KRAS deletion",
+    public void shouldCreateEvidenceForMSIEntry() {
+        CkbEntry msiEntry = CkbTestFactory.createEntry("-",
+                "MSI neg",
+                "MSI neg",
                 "sensitive",
-                "Emerging",
-                "AB",
-                "AB",
+                "Actionable",
+                "Therapy",
+                "Indication",
                 "A",
                 "Guideline",
                 "DOID:162");
-        EfficacyEvidenceFactory efficacyEvidenceFactory = new EfficacyEvidenceFactory(TREATMENT_APPROACH_CURATOR, EVIDENCE_FILTER_MODEL);
-        Set<EfficacyEvidence> entryDeletionSet = efficacyEvidenceFactory.create(entryDeletion, molecularCriterium, "KRAS", "gene");
-        assertEquals(0, entryDeletionSet.size());
-    }
 
-    @Test
-    public void shouldCreateActionableMSIEntry() {
+        EfficacyEvidenceFactory factory = new EfficacyEvidenceFactory(TREATMENT_APPROACH_CURATOR, EVIDENCE_FILTER_MODEL);
         MolecularCriterium molecularCriterium = MolecularCriteriumTestFactory.createWithTestActionableCharacteristic();
+        Set<EfficacyEvidence> evidences = factory.create(msiEntry, molecularCriterium, Strings.EMPTY, "-");
+        assertEquals(1, evidences.size());
+        EfficacyEvidence evidence = evidences.iterator().next();
 
-        CkbEntry entryCharacteristics =
-                CkbTestFactory.createEntry("-", "MSI neg", "MSI neg", "sensitive", "Actionable", "AB", "AB", "A", "Guideline", "DOID:162");
-        EfficacyEvidenceFactory efficacyEvidenceFactoryCharacteristic =
-                new EfficacyEvidenceFactory(TREATMENT_APPROACH_CURATOR, EVIDENCE_FILTER_MODEL);
-        Set<EfficacyEvidence> entryCharacteristicsSet =
-                efficacyEvidenceFactoryCharacteristic.create(entryCharacteristics, molecularCriterium, Strings.EMPTY, "-");
-        assertEquals(1, entryCharacteristicsSet.size());
-        EfficacyEvidence characteristics = entryCharacteristicsSet.iterator().next();
-
-        assertEquals(Knowledgebase.CKB, characteristics.source());
-        assertEquals("AB", characteristics.treatment().name());
-        assertEquals("AB", characteristics.indication().applicableType().name());
-        assertEquals("162", characteristics.indication().applicableType().doid());
-        assertEquals(Sets.newHashSet(), characteristics.indication().excludedSubTypes());
-        assertEquals(molecularCriterium, characteristics.molecularCriterium());
-        assertEquals(EvidenceLevel.A, characteristics.evidenceLevel());
-        assertEquals(EvidenceDirection.RESPONSIVE, characteristics.evidenceDirection());
-        assertEquals(CkbTestFactory.EFFICACY_EVIDENCE, characteristics.efficacyDescription());
-        assertEquals(CkbTestFactory.TEST_CREATE_DATE.getYear(), characteristics.evidenceYear());
+        assertEquals(Knowledgebase.CKB, evidence.source());
+        assertEquals("Therapy", evidence.treatment().name());
+        assertEquals("Indication", evidence.indication().applicableType().name());
+        assertEquals("162", evidence.indication().applicableType().doid());
+        assertEquals(Sets.newHashSet(), evidence.indication().excludedSubTypes());
+        assertEquals(molecularCriterium, evidence.molecularCriterium());
+        assertEquals(EvidenceLevel.A, evidence.evidenceLevel());
+        assertEquals(EvidenceDirection.RESPONSIVE, evidence.evidenceDirection());
+        assertEquals(CkbTestFactory.EFFICACY_EVIDENCE, evidence.efficacyDescription());
+        assertEquals(CkbTestFactory.TEST_CREATE_DATE.getYear(), evidence.evidenceYear());
     }
 
     @Test
-    public void shouldCreateActionableKrasAmplificationEntry() {
-        MolecularCriterium molecularCriterium = MolecularCriteriumTestFactory.createWithTestActionableGene();
-
+    public void shouldCreateEvidenceForKrasAmplificationEntry() {
         CkbEntry entryAmplification = CkbTestFactory.createEntry("KRAS",
                 "KRAS amplification",
                 "KRAS amplification",
                 "sensitive",
                 "Actionable",
-                "AB",
-                "AB",
+                "Therapy",
+                "Indication",
                 "A",
                 "Guideline",
                 "DOID:163");
-        EfficacyEvidenceFactory efficacyEvidenceFactoryAmplification =
-                new EfficacyEvidenceFactory(TREATMENT_APPROACH_CURATOR, EVIDENCE_FILTER_MODEL);
-        Set<EfficacyEvidence> entryAmplificationSet =
-                efficacyEvidenceFactoryAmplification.create(entryAmplification, molecularCriterium, "KRAS", "KRAS");
-        assertEquals(1, entryAmplificationSet.size());
-        EfficacyEvidence amplification = entryAmplificationSet.iterator().next();
-        assertEquals(Knowledgebase.CKB, amplification.source());
-        assertEquals("AB", amplification.treatment().name());
-        assertEquals("AB", amplification.indication().applicableType().name());
-        assertEquals("163", amplification.indication().applicableType().doid());
-        assertTrue(amplification.indication().excludedSubTypes().isEmpty());
-        assertEquals(molecularCriterium, amplification.molecularCriterium());
-        assertEquals(EvidenceLevel.A, amplification.evidenceLevel());
-        assertEquals(EvidenceDirection.RESPONSIVE, amplification.evidenceDirection());
-        assertEquals(CkbTestFactory.EFFICACY_EVIDENCE, amplification.efficacyDescription());
-        assertEquals(CkbTestFactory.TEST_CREATE_DATE.getYear(), amplification.evidenceYear());
+
+        EfficacyEvidenceFactory factory = new EfficacyEvidenceFactory(TREATMENT_APPROACH_CURATOR, EVIDENCE_FILTER_MODEL);
+        MolecularCriterium molecularCriterium = MolecularCriteriumTestFactory.createWithTestActionableGene();
+        Set<EfficacyEvidence> evidences = factory.create(entryAmplification, molecularCriterium, "KRAS", "KRAS");
+        assertEquals(1, evidences.size());
+
+        EfficacyEvidence evidence = evidences.iterator().next();
+        assertEquals(Knowledgebase.CKB, evidence.source());
+        assertEquals("Therapy", evidence.treatment().name());
+        assertEquals("Indication", evidence.indication().applicableType().name());
+        assertEquals("163", evidence.indication().applicableType().doid());
+        assertTrue(evidence.indication().excludedSubTypes().isEmpty());
+        assertEquals(molecularCriterium, evidence.molecularCriterium());
+        assertEquals(EvidenceLevel.A, evidence.evidenceLevel());
+        assertEquals(EvidenceDirection.RESPONSIVE, evidence.evidenceDirection());
+        assertEquals(CkbTestFactory.EFFICACY_EVIDENCE, evidence.efficacyDescription());
+        assertEquals(CkbTestFactory.TEST_CREATE_DATE.getYear(), evidence.evidenceYear());
     }
 
     @Test
-    public void shouldCreateActionableBrafHotspotEntry() {
-        MolecularCriterium molecularCriterium = MolecularCriteriumTestFactory.createWithTestActionableHotspot();
-
+    public void shouldCreateEvidenceForBrafHotspotEntry() {
         CkbEntry entryHotspot = CkbTestFactory.createEntry("BRAF",
                 "BRAF V600E",
                 "BRAF V600E",
                 "sensitive",
                 "Actionable",
-                "AB",
-                "AB",
+                "Therapy",
+                "Indication",
                 "A",
                 "Guideline",
                 "DOID:162");
-        EfficacyEvidenceFactory efficacyEvidenceFactoryHotspot =
-                new EfficacyEvidenceFactory(TREATMENT_APPROACH_CURATOR, EVIDENCE_FILTER_MODEL);
-        Set<EfficacyEvidence> entryHotspotSet = efficacyEvidenceFactoryHotspot.create(entryHotspot, molecularCriterium, "BRAF", "BRAF");
-        assertEquals(1, entryHotspotSet.size());
-        EfficacyEvidence hotspot = entryHotspotSet.iterator().next();
-        assertEquals(Knowledgebase.CKB, hotspot.source());
-        assertEquals("AB", hotspot.treatment().name());
-        assertEquals("AB", hotspot.indication().applicableType().name());
-        assertEquals("162", hotspot.indication().applicableType().doid());
-        assertEquals(Sets.newHashSet(), hotspot.indication().excludedSubTypes());
-        assertEquals(molecularCriterium, hotspot.molecularCriterium());
-        assertEquals(EvidenceLevel.A, hotspot.evidenceLevel());
-        assertEquals(EvidenceDirection.RESPONSIVE, hotspot.evidenceDirection());
-        assertEquals(CkbTestFactory.EFFICACY_EVIDENCE, hotspot.efficacyDescription());
-        assertEquals(CkbTestFactory.TEST_CREATE_DATE.getYear(), hotspot.evidenceYear());
+
+        EfficacyEvidenceFactory factory = new EfficacyEvidenceFactory(TREATMENT_APPROACH_CURATOR, EVIDENCE_FILTER_MODEL);
+        MolecularCriterium molecularCriterium = MolecularCriteriumTestFactory.createWithTestActionableHotspot();
+        Set<EfficacyEvidence> evidences = factory.create(entryHotspot, molecularCriterium, "BRAF", "BRAF");
+        assertEquals(1, evidences.size());
+
+        EfficacyEvidence evidence = evidences.iterator().next();
+        assertEquals(Knowledgebase.CKB, evidence.source());
+        assertEquals("Therapy", evidence.treatment().name());
+        assertEquals("Indication", evidence.indication().applicableType().name());
+        assertEquals("162", evidence.indication().applicableType().doid());
+        assertEquals(Sets.newHashSet(), evidence.indication().excludedSubTypes());
+        assertEquals(molecularCriterium, evidence.molecularCriterium());
+        assertEquals(EvidenceLevel.A, evidence.evidenceLevel());
+        assertEquals(EvidenceDirection.RESPONSIVE, evidence.evidenceDirection());
+        assertEquals(CkbTestFactory.EFFICACY_EVIDENCE, evidence.efficacyDescription());
+        assertEquals(CkbTestFactory.TEST_CREATE_DATE.getYear(), evidence.evidenceYear());
+    }
+
+    @Test
+    public void shouldIgnoreKrasDeletionWithEmergingEvidence() {
+        MolecularCriterium molecularCriterium = MolecularCriteriumTestFactory.createWithTestActionableGene();
+        CkbEntry entryDeletion = create("KRAS", "deletion", "KRAS deletion", "sensitive", "Emerging");
+
+        EfficacyEvidenceFactory factory = new EfficacyEvidenceFactory(TREATMENT_APPROACH_CURATOR, EVIDENCE_FILTER_MODEL);
+        Set<EfficacyEvidence> evidences = factory.create(entryDeletion, molecularCriterium, "KRAS", "gene");
+        assertEquals(0, evidences.size());
     }
 
     @Test
@@ -212,107 +208,104 @@ public class EfficacyEvidenceFactoryTest {
     }
 
     @Test
-    public void canBlacklistEvidenceOnTherapy() {
+    public void canFilterEvidenceOnTherapy() {
         MolecularCriterium molecularCriterium = MolecularCriteriumTestFactory.createWithTestActionableGene();
+        String therapy = "Nivolumab";
         CkbEvidenceFilterModel model =
-                createBlacklistModel(CkbEvidenceFilterType.EVIDENCE_BASED_ON_THERAPY, "Nivolumab", null, null, null, null);
-        CkbEntry entryBlacklist = CkbTestFactory.createEntry("KRAS",
-                "KRAS amplification",
-                "KRAS amplification",
-                "sensitive",
-                "Actionable",
-                "Nivolumab",
-                "AB",
-                "B",
-                "Guideline",
-                "DOID:163");
-        EfficacyEvidenceFactory evidence = new EfficacyEvidenceFactory(TREATMENT_APPROACH_CURATOR, model);
-        Set<EfficacyEvidence> interpretEvidenceEntry = evidence.create(entryBlacklist, molecularCriterium, "KRAS", "KRAS");
-        assertEquals(0, interpretEvidenceEntry.size());
+                createEvidenceFilterModel(CkbEvidenceFilterType.EVIDENCE_BASED_ON_THERAPY, therapy, null, null, null, null);
+
+        CkbEntry entry = createForTherapy(therapy);
+
+        EfficacyEvidenceFactory factory = new EfficacyEvidenceFactory(TREATMENT_APPROACH_CURATOR, model);
+        Set<EfficacyEvidence> evidences = factory.create(entry, molecularCriterium, "KRAS", "KRAS");
+        assertEquals(0, evidences.size());
     }
 
     @Test
-    public void doesNotBlacklistEvidenceOnOtherTherapy() {
+    public void doesNotFilterEvidenceOnOtherTherapy() {
         MolecularCriterium molecularCriterium = MolecularCriteriumTestFactory.createWithTestActionableGene();
         CkbEvidenceFilterModel model =
-                createBlacklistModel(CkbEvidenceFilterType.EVIDENCE_BASED_ON_THERAPY, "Nivolumab", null, null, null, null);
-        CkbEntry entryBlacklist = CkbTestFactory.createEntry("KRAS",
-                "KRAS amplification",
-                "KRAS amplification",
-                "sensitive",
-                "Actionable",
-                "AB",
-                "AB",
-                "B",
-                "Guideline",
-                "DOID:163");
-        EfficacyEvidenceFactory evidence = new EfficacyEvidenceFactory(TREATMENT_APPROACH_CURATOR, model);
-        Set<EfficacyEvidence> interpretEvidenceEntry = evidence.create(entryBlacklist, molecularCriterium, "BRAF", "BRAF");
-        assertEquals(1, interpretEvidenceEntry.size());
+                createEvidenceFilterModel(CkbEvidenceFilterType.EVIDENCE_BASED_ON_THERAPY, "Nivolumab", null, null, null, null);
+
+        CkbEntry entry = createForTherapyAndLevel("Immuno", "A");
+
+        EfficacyEvidenceFactory factory = new EfficacyEvidenceFactory(TREATMENT_APPROACH_CURATOR, model);
+        Set<EfficacyEvidence> evidences = factory.create(entry, molecularCriterium, "BRAF", "BRAF");
+        assertEquals(1, evidences.size());
     }
 
     @Test
-    public void canBlacklistEvidenceOnTherapyAndLevel() {
+    public void canFilterEvidenceOnTherapyAndLevel() {
         MolecularCriterium molecularCriterium = MolecularCriteriumTestFactory.createWithTestActionableGene();
         CkbEvidenceFilterModel model =
-                createBlacklistModel(CkbEvidenceFilterType.EVIDENCE_BASED_ON_THERAPY, "Immuno", null, null, null, EvidenceLevel.A);
-        CkbEntry entry = CkbTestFactory.createEntry("KRAS",
-                "KRAS amplification",
-                "KRAS amplification",
-                "sensitive",
-                "Actionable",
-                "Immuno",
-                "AB",
-                "A",
-                "Guideline",
-                "DOID:163");
-        EfficacyEvidenceFactory evidence = new EfficacyEvidenceFactory(TREATMENT_APPROACH_CURATOR, model);
-        Set<EfficacyEvidence> interpretEvidenceEntry = evidence.create(entry, molecularCriterium, "KRAS", "KRAS");
-        assertEquals(0, interpretEvidenceEntry.size());
+                createEvidenceFilterModel(CkbEvidenceFilterType.EVIDENCE_BASED_ON_THERAPY, "Immuno", null, null, null, EvidenceLevel.A);
+        CkbEntry entry = createForTherapyAndLevel("Immuno", "A");
+
+        EfficacyEvidenceFactory factory = new EfficacyEvidenceFactory(TREATMENT_APPROACH_CURATOR, model);
+        Set<EfficacyEvidence> evidences = factory.create(entry, molecularCriterium, "KRAS", "KRAS");
+        assertEquals(0, evidences.size());
     }
 
     @Test
-    public void canBlacklistAllEvidenceOnGene() {
+    public void canFilterAllEvidenceOnGene() {
         MolecularCriterium molecularCriterium = MolecularCriteriumTestFactory.createWithTestActionableGene();
         CkbEvidenceFilterModel model =
-                createBlacklistModel(CkbEvidenceFilterType.ALL_EVIDENCE_BASED_ON_GENE, null, null, "KRAS", null, null);
-        CkbEntry entry = CkbTestFactory.createEntry("KRAS",
-                "KRAS amplification",
-                "KRAS amplification",
-                "sensitive",
-                "Actionable",
-                "Nivolumab",
-                "AB",
-                "B",
-                "Guideline",
-                "DOID:163");
-        EfficacyEvidenceFactory evidence = new EfficacyEvidenceFactory(TREATMENT_APPROACH_CURATOR, model);
-        Set<EfficacyEvidence> interpretEvidenceEntry = evidence.create(entry, molecularCriterium, "KRAS", "KRAS");
-        assertEquals(0, interpretEvidenceEntry.size());
+                createEvidenceFilterModel(CkbEvidenceFilterType.ALL_EVIDENCE_BASED_ON_GENE, null, null, "KRAS", null, null);
+        CkbEntry entry = create("KRAS", "KRAS amplification", "KRAS amplification", "sensitive", "Actionable");
+
+        EfficacyEvidenceFactory factory = new EfficacyEvidenceFactory(TREATMENT_APPROACH_CURATOR, model);
+        Set<EfficacyEvidence> evidences = factory.create(entry, molecularCriterium, "KRAS", "KRAS");
+        assertEquals(0, evidences.size());
     }
 
     @Test
-    public void doesNotBlacklistAllEvidenceOnGene() {
+    public void doesNotFilterEvidenceOnOtherGene() {
         MolecularCriterium molecularCriterium = MolecularCriteriumTestFactory.createWithTestActionableGene();
         CkbEvidenceFilterModel model =
-                createBlacklistModel(CkbEvidenceFilterType.ALL_EVIDENCE_BASED_ON_GENE, null, null, "BRAF", null, null);
-        CkbEntry entry = CkbTestFactory.createEntry("KRAS",
-                "KRAS amplification",
-                "KRAS amplification",
-                "sensitive",
-                "Actionable",
-                "Nivolumab",
-                "AB",
-                "B",
-                "Guideline",
-                "DOID:163");
-        EfficacyEvidenceFactory evidence = new EfficacyEvidenceFactory(TREATMENT_APPROACH_CURATOR, model);
-        Set<EfficacyEvidence> interpretEvidenceEntry = evidence.create(entry, molecularCriterium, "KRAS", "KRAS");
-        assertEquals(1, interpretEvidenceEntry.size());
+                createEvidenceFilterModel(CkbEvidenceFilterType.ALL_EVIDENCE_BASED_ON_GENE, null, null, "BRAF", null, null);
+        CkbEntry entry = create("KRAS", "KRAS amplification", "KRAS amplification", "sensitive", "Actionable");
+
+        EfficacyEvidenceFactory factory = new EfficacyEvidenceFactory(TREATMENT_APPROACH_CURATOR, model);
+        Set<EfficacyEvidence> evidences = factory.create(entry, molecularCriterium, "KRAS", "KRAS");
+        assertEquals(1, evidences.size());
     }
 
     @NotNull
-    private static CkbEvidenceFilterModel createBlacklistModel(@NotNull CkbEvidenceFilterType type, @Nullable String therapy,
+    private static CkbEntry createForTherapy(@NotNull String therapy) {
+        return createForTherapyAndLevel(therapy, "A");
+    }
+
+    @NotNull
+    private static CkbEntry createForTherapyAndLevel(@NotNull String therapy, @NotNull String level) {
+        return CkbTestFactory.createEntry("any gene",
+                "any variant",
+                "any full name",
+                "sensitive",
+                "Actionable",
+                therapy,
+                "Indication",
+                level,
+                "Guideline",
+                "DOID:162");
+    }
+
+    @NotNull
+    private static CkbEntry create(@NotNull String geneSymbol, @NotNull String variant, @NotNull String fullName,
+            @NotNull String responseType, @NotNull String evidenceType) {
+        return CkbTestFactory.createEntry(geneSymbol,
+                variant,
+                fullName,
+                responseType,
+                evidenceType,
+                "Therapy",
+                "Indication",
+                "A",
+                "Guideline",
+                "DOID:162");
+    }
+
+    @NotNull
+    private static CkbEvidenceFilterModel createEvidenceFilterModel(@NotNull CkbEvidenceFilterType type, @Nullable String therapy,
             @Nullable String cancerType, @Nullable String gene, @Nullable String event, @Nullable EvidenceLevel level) {
         CkbEvidenceFilterEntry entry = ImmutableCkbEvidenceFilterEntry.builder()
                 .type(type)

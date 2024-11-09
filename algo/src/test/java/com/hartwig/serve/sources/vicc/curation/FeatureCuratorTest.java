@@ -27,8 +27,8 @@ public class FeatureCuratorTest {
     }
 
     @Test
-    public void canBlacklistFeatures() {
-        FeatureCurationKey firstOncoKbKey = firstOncoKbBlacklistKey();
+    public void canFilterFeatures() {
+        FeatureCurationKey firstOncoKbKey = firstOncoKbFilterKey();
         ViccEntry entry = ViccTestFactory.testEntryWithSourceAndTranscript(ViccSource.ONCOKB, firstOncoKbKey.transcript());
 
         Feature feature = ViccTestFactory.testFeatureWithGeneAndName(firstOncoKbKey.gene(), firstOncoKbKey.featureName());
@@ -44,12 +44,12 @@ public class FeatureCuratorTest {
 
         assertNotNull(curator.curate(entry, feature));
 
-        FeatureCurationKey blacklistKey = firstOncoKbBlacklistKey();
-        ViccEntry blacklistEntry = ViccTestFactory.testEntryWithSourceAndTranscript(ViccSource.ONCOKB, blacklistKey.transcript());
+        FeatureCurationKey filterKey = firstOncoKbFilterKey();
+        ViccEntry filterEntry = ViccTestFactory.testEntryWithSourceAndTranscript(ViccSource.ONCOKB, filterKey.transcript());
 
-        Feature blacklistFeature = ViccTestFactory.testFeatureWithGeneAndName(blacklistKey.gene(), blacklistKey.featureName());
+        Feature filterFeature = ViccTestFactory.testFeatureWithGeneAndName(filterKey.gene(), filterKey.featureName());
 
-        assertNull(curator.curate(blacklistEntry, blacklistFeature));
+        assertNull(curator.curate(filterEntry, filterFeature));
 
         curator.reportUnusedCurationKeys();
     }
@@ -65,12 +65,12 @@ public class FeatureCuratorTest {
     }
 
     @NotNull
-    private static FeatureCurationKey firstOncoKbBlacklistKey() {
+    private static FeatureCurationKey firstOncoKbFilterKey() {
         for (FeatureCurationKey key : FeatureCurationFactory.FEATURE_FILTERS) {
             if (key.source() == ViccSource.ONCOKB) {
                 return key;
             }
         }
-        throw new IllegalStateException("No OncoKB blacklist keys found!");
+        throw new IllegalStateException("No OncoKB filter keys found!");
     }
 }

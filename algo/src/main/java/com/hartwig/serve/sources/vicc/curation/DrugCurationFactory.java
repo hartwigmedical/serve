@@ -22,14 +22,14 @@ final class DrugCurationFactory {
     }
 
     static {
-        populateBlacklist();
+        populateFilters();
 
         populateRenames();
         populateAndMappings();
         populateOrMappings();
     }
 
-    private static void populateBlacklist() {
+    private static void populateFilters() {
         DRUG_FILTERS.add(civicB("119"));
 
         // The below drugs are supposed to be given sequentially.

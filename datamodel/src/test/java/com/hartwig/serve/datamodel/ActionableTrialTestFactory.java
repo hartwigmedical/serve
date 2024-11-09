@@ -32,7 +32,7 @@ public final class ActionableTrialTestFactory {
     }
 
     @NotNull
-    public static ActionableTrial createTestClinicalTrial(@NotNull String nctId, @NotNull String title, @NotNull String countryName,
+    public static ActionableTrial createTestActionableTrial(@NotNull String nctId, @NotNull String title, @NotNull String countryName,
             @NotNull Set<String> therapyNames, @NotNull GenderCriterium genderCriterium, @NotNull String applicableCancerType,
             @NotNull String excludedCancerSubType) {
         return builder().nctId(nctId)

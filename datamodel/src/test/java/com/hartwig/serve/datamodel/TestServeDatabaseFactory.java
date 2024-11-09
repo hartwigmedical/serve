@@ -23,7 +23,7 @@ public class TestServeDatabaseFactory {
         return ImmutableServeRecord.builder()
                 .knownEvents(createKnownEvents(source))
                 .evidences(createEfficacyEvidences())
-                .trials(createClinicalTrials())
+                .trials(createActionableTrials())
                 .build();
     }
 
@@ -45,7 +45,7 @@ public class TestServeDatabaseFactory {
     }
 
     @NotNull
-    public static List<ActionableTrial> createClinicalTrials() {
+    public static List<ActionableTrial> createActionableTrials() {
         return List.of(ActionableTrialTestFactory.builder().build());
     }
 }

@@ -6,36 +6,36 @@ import java.util.Set;
 
 import org.jetbrains.annotations.NotNull;
 
-public class ClinicalTrialComparator implements Comparator<ActionableTrial> {
+public class ActionableTrialComparator implements Comparator<ActionableTrial> {
 
     @Override
-    public int compare(@NotNull ActionableTrial clinicalTrial1, @NotNull ActionableTrial clinicalTrial2) {
-        int nctIdCompare = clinicalTrial1.nctId().compareTo(clinicalTrial2.nctId());
+    public int compare(@NotNull ActionableTrial actionableTrial1, @NotNull ActionableTrial actionableTrial2) {
+        int nctIdCompare = actionableTrial1.nctId().compareTo(actionableTrial2.nctId());
         if (nctIdCompare != 0) {
             return nctIdCompare;
         }
 
-        int titleCompare = clinicalTrial1.title().compareTo(clinicalTrial2.title());
+        int titleCompare = actionableTrial1.title().compareTo(actionableTrial2.title());
         if (titleCompare != 0) {
             return titleCompare;
         }
 
-        int compareCountries = compareCountries(clinicalTrial1.countries(), clinicalTrial2.countries());
+        int compareCountries = compareCountries(actionableTrial1.countries(), actionableTrial2.countries());
         if (compareCountries != 0) {
             return compareCountries;
         }
 
-        int compareTherapyNames = compareTherapyNames(clinicalTrial1.therapyNames(), clinicalTrial2.therapyNames());
+        int compareTherapyNames = compareTherapyNames(actionableTrial1.therapyNames(), actionableTrial2.therapyNames());
         if (compareTherapyNames != 0) {
             return compareTherapyNames;
         }
 
-        int genderCriteriumCompare = clinicalTrial1.genderCriterium().toString().compareTo(clinicalTrial2.genderCriterium().toString());
+        int genderCriteriumCompare = actionableTrial1.genderCriterium().toString().compareTo(actionableTrial2.genderCriterium().toString());
         if (genderCriteriumCompare != 0) {
             return genderCriteriumCompare;
         }
 
-        return compareIndications(clinicalTrial1.indications(), clinicalTrial2.indications());
+        return compareIndications(actionableTrial1.indications(), actionableTrial2.indications());
     }
 
     private static int compareTherapyNames(@NotNull Set<String> set1, @NotNull Set<String> set2) {

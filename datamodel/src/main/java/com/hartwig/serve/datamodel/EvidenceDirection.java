@@ -20,11 +20,6 @@ public enum EvidenceDirection {
         this.isCertain = isCertain;
     }
 
-    @Deprecated
-    public boolean isResponsive() {
-        return hasPositiveResponse;
-    }
-
     public boolean hasPositiveResponse() {
         return hasPositiveResponse;
     }

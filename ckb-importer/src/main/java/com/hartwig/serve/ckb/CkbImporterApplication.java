@@ -34,8 +34,8 @@ public class CkbImporterApplication {
             System.exit(1);
         }
 
-        LOGGER.info("Reading CKB database from {}", config.cbkDir());
-        List<CkbEntry> ckbEntries = CkbEntryReader.read(config.cbkDir());
+        LOGGER.info("Reading CKB database from {}", config.ckbDir());
+        List<CkbEntry> ckbEntries = CkbEntryReader.read(config.ckbDir());
         LOGGER.info(" Read {} entries", ckbEntries.size());
 
         updateCkbSqlDatabase(config, ckbEntries);

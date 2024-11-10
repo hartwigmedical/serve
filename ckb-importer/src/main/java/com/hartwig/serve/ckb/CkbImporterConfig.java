@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class })
 public interface CkbImporterConfig {
 
-    String CBK_DIR = "cbk_dir";
+    String CKB_DIR = "ckb_dir";
 
     String DB_USER = "db_user";
     String DB_PASS = "db_pass";
@@ -29,7 +29,7 @@ public interface CkbImporterConfig {
     static Options createOptions() {
         Options options = new Options();
 
-        options.addOption(CBK_DIR, true, "Path towards the directory holding the ckb data");
+        options.addOption(CKB_DIR, true, "Path towards the directory holding the ckb data");
         options.addOption(LOG_DEBUG, false, "If provided, set the log level to debug rather than default.");
 
         options.addOption(DB_USER, true, "Database user name.");
@@ -42,7 +42,7 @@ public interface CkbImporterConfig {
     }
 
     @NotNull
-    String cbkDir();
+    String ckbDir();
 
     @NotNull
     String dbUser();
@@ -61,8 +61,7 @@ public interface CkbImporterConfig {
             Configurator.setRootLevel(Level.DEBUG);
         }
 
-        return ImmutableCkbImporterConfig.builder()
-                .cbkDir(nonOptionalDir(cmd, CBK_DIR))
+        return ImmutableCkbImporterConfig.builder().ckbDir(nonOptionalDir(cmd, CKB_DIR))
                 .dbUser(nonOptionalValue(cmd, DB_USER))
                 .dbPass(nonOptionalValue(cmd, DB_PASS))
                 .dbUrl(nonOptionalValue(cmd, DB_URL))

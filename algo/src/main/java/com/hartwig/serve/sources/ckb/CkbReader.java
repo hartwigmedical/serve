@@ -35,7 +35,7 @@ public final class CkbReader {
         List<CkbEntry> ckbEntries = CkbEntryReader.read(ckbDir);
         LOGGER.info(" Read {} entries", ckbEntries.size());
 
-        LOGGER.info("Reading CBK molecular profile filter entries from {}", ckbMolecularProfileFilterTsv);
+        LOGGER.info("Reading CKB molecular profile filter entries from {}", ckbMolecularProfileFilterTsv);
         List<CkbMolecularProfileFilterEntry> ckbMolecularProfileFilterEntries =
                 CkbMolecularProfileFilterFile.read(ckbMolecularProfileFilterTsv);
         LOGGER.info(" Read {} molecular profile filter entries", ckbMolecularProfileFilterEntries.size());

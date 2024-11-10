@@ -2,6 +2,7 @@ package com.hartwig.serve.sources.ckb;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.HashSet;
@@ -14,6 +15,7 @@ import com.hartwig.serve.ckb.datamodel.clinicaltrial.ClinicalTrial;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.Location;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.VariantRequirementDetail;
 import com.hartwig.serve.datamodel.ActionableTrial;
+import com.hartwig.serve.datamodel.GenderCriterium;
 import com.hartwig.serve.datamodel.ImmutableCountry;
 import com.hartwig.serve.datamodel.ImmutableHospital;
 import com.hartwig.serve.datamodel.Knowledgebase;
@@ -49,7 +51,7 @@ public class ActionableTrialFactoryTest {
         ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTherapy("NCT0102",
                 "Phase I trial",
                 List.of(CkbTestFactory.createTherapy("Nivolumab")),
-                List.of(CkbTestFactory.createIndication("test", "JAX:10000006")),
+                List.of(CkbTestFactory.createIndication("CUP", "JAX:10000006")),
                 "Recruiting",
                 List.of("senior", "child", "adult"),
                 List.of(requirementDetail),
@@ -63,14 +65,20 @@ public class ActionableTrialFactoryTest {
         ActionableTrial clinicalTrial1 = trials.iterator().next();
 
         assertEquals(Knowledgebase.CKB, clinicalTrial1.source());
+        assertEquals("NCT0102", clinicalTrial1.nctId());
         assertEquals("Phase I trial", clinicalTrial1.title());
-        assertEquals(Sets.newHashSet("https://clinicaltrials.gov/study/NCT0102"), clinicalTrial1.urls());
+        assertNull(clinicalTrial1.acronym());
         assertEquals(Sets.newHashSet(ImmutableCountry.builder()
                 .countryName("Netherlands")
                 .hospitalsPerCity(Map.of("Rotterdam",
                         Sets.newHashSet(ImmutableHospital.builder().name("EMC").isChildrensHospital(false).build())))
                 .build()), clinicalTrial1.countries());
+        assertEquals(Sets.newHashSet("Nivolumab"), clinicalTrial1.therapyNames());
+        assertEquals("CUP", clinicalTrial1.indications().iterator().next().applicableType().name());
+        assertEquals("162", clinicalTrial1.indications().iterator().next().applicableType().doid());
+        assertEquals(GenderCriterium.BOTH, clinicalTrial1.genderCriterium());
         assertEquals(Set.of(TEST_MOLECULAR_CRITERIUM), clinicalTrial1.anyMolecularCriteria());
+        assertEquals(Sets.newHashSet("https://clinicaltrials.gov/study/NCT0102"), clinicalTrial1.urls());
     }
 
     @Test
@@ -82,7 +90,7 @@ public class ActionableTrialFactoryTest {
         ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTherapy("NCT0456",
                 "Phase I trial",
                 List.of(CkbTestFactory.createTherapy("Nivolumab")),
-                List.of(CkbTestFactory.createIndication("test", "JAX:10000006")),
+                List.of(CkbTestFactory.createIndication("CUP", "JAX:10000006")),
                 "Recruiting",
                 List.of("senior", "child", "adult"),
                 List.of(requirementDetail),
@@ -104,7 +112,7 @@ public class ActionableTrialFactoryTest {
         ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTherapy("NCT0456",
                 "Phase I trial",
                 List.of(CkbTestFactory.createTherapy("Nivolumab")),
-                List.of(CkbTestFactory.createIndication("test", "JAX:10000006")),
+                List.of(CkbTestFactory.createIndication("CUP", "JAX:10000006")),
                 "Recruiting",
                 List.of("senior", "child", "adult"),
                 List.of(requirementDetail),
@@ -126,7 +134,7 @@ public class ActionableTrialFactoryTest {
         ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTherapy("NCT0456",
                 "Phase I trial",
                 List.of(CkbTestFactory.createTherapy("Nivolumab")),
-                List.of(CkbTestFactory.createIndication("test", "JAX:10000006")),
+                List.of(CkbTestFactory.createIndication("CUP", "JAX:10000006")),
                 "Recruiting",
                 List.of("senior", "child", "adult"),
                 List.of(requirementDetail),
@@ -148,7 +156,7 @@ public class ActionableTrialFactoryTest {
         ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTherapy("NCT0456",
                 "Phase I trial",
                 List.of(CkbTestFactory.createTherapy("Nivolumab")),
-                List.of(CkbTestFactory.createIndication("test", "JAX:10000006")),
+                List.of(CkbTestFactory.createIndication("CUP", "JAX:10000006")),
                 "Recruiting",
                 List.of("senior", "child", "adult"),
                 List.of(requirementDetail),
@@ -336,6 +344,13 @@ public class ActionableTrialFactoryTest {
         assertTrue(ActionableTrialFactory.hasPotentiallyOpenRequirementToInclude("enrolling by invitation"));
         assertTrue(ActionableTrialFactory.hasPotentiallyOpenRequirementToInclude("enrolling_by_invitation"));
         assertFalse(ActionableTrialFactory.hasPotentiallyOpenRequirementToInclude("unknown status"));
+    }
+
+    @Test
+    public void canDetermineIfHospitalIsChildrensHospital() {
+        assertTrue(ActionableTrialFactory.isChildrensHospital("PMC", "Netherlands"));
+        assertFalse(ActionableTrialFactory.isChildrensHospital("UMCU", "Netherlands"));
+        assertNull(ActionableTrialFactory.isChildrensHospital("UZ Brussel", "Belgium"));
     }
 
     @NotNull

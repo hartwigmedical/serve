@@ -66,7 +66,9 @@ public class EfficacyEvidenceFactoryTest {
         assertEquals(EvidenceLevel.A, evidence.evidenceLevel());
         assertEquals(EvidenceDirection.RESPONSIVE, evidence.evidenceDirection());
         assertEquals(CkbTestFactory.EFFICACY_EVIDENCE, evidence.efficacyDescription());
+        assertEquals(EvidenceLevelDetails.GUIDELINE, evidence.evidenceLevelDetails());
         assertEquals(CkbTestFactory.TEST_CREATE_DATE.getYear(), evidence.evidenceYear());
+        assertEquals(Sets.newHashSet(), evidence.urls());
     }
 
     @Test
@@ -97,7 +99,9 @@ public class EfficacyEvidenceFactoryTest {
         assertEquals(EvidenceLevel.A, evidence.evidenceLevel());
         assertEquals(EvidenceDirection.RESPONSIVE, evidence.evidenceDirection());
         assertEquals(CkbTestFactory.EFFICACY_EVIDENCE, evidence.efficacyDescription());
+        assertEquals(EvidenceLevelDetails.GUIDELINE, evidence.evidenceLevelDetails());
         assertEquals(CkbTestFactory.TEST_CREATE_DATE.getYear(), evidence.evidenceYear());
+        assertEquals(Sets.newHashSet(), evidence.urls());
     }
 
     @Test
@@ -128,7 +132,9 @@ public class EfficacyEvidenceFactoryTest {
         assertEquals(EvidenceLevel.A, evidence.evidenceLevel());
         assertEquals(EvidenceDirection.RESPONSIVE, evidence.evidenceDirection());
         assertEquals(CkbTestFactory.EFFICACY_EVIDENCE, evidence.efficacyDescription());
+        assertEquals(EvidenceLevelDetails.GUIDELINE, evidence.evidenceLevelDetails());
         assertEquals(CkbTestFactory.TEST_CREATE_DATE.getYear(), evidence.evidenceYear());
+        assertEquals(Sets.newHashSet(), evidence.urls());
     }
 
     @Test

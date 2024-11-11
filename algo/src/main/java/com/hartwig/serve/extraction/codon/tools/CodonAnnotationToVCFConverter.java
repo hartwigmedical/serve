@@ -49,7 +49,7 @@ public class CodonAnnotationToVCFConverter {
         ServeConfig config = ServeLocalConfigProvider.create();
         IndexedFastaSequenceFile refSequence37 = new IndexedFastaSequenceFile(new File(config.refGenome37FastaFile()));
 
-        String serveJson = System.getProperty("user.home") + "/hmf/tmp/serve.37.json";
+        String serveJson = System.getProperty("user.home") + "/hmf/tmp/serve.json";
         String outputVcf = System.getProperty("user.home") + "/hmf/tmp/codons.vcf.gz";
         GenerateAltBase altBaseGenerator = new GenerateAltBase(RefGenome.V37, refSequence37);
 

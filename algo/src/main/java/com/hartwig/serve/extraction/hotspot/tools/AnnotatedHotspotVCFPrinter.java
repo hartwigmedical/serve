@@ -21,13 +21,13 @@ import htsjdk.tribble.readers.LineIterator;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.vcf.VCFCodec;
 
-public class AnnotatedHotspotVCFPrinterPAVE {
+public class AnnotatedHotspotVCFPrinter {
 
-    private static final Logger LOGGER = LogManager.getLogger(AnnotatedHotspotVCFPrinterPAVE.class);
+    private static final Logger LOGGER = LogManager.getLogger(AnnotatedHotspotVCFPrinter.class);
 
     public static void main(String[] args) throws IOException {
         String annotatedInputVcf = System.getProperty("user.home") + "/hmf/tmp/KnownHotspots.somatic.37.pave.vcf";
-        new AnnotatedHotspotVCFPrinterPAVE().run(annotatedInputVcf);
+        new AnnotatedHotspotVCFPrinter().run(annotatedInputVcf);
     }
 
     public void run(@NotNull String annotatedInputVcf) throws IOException {

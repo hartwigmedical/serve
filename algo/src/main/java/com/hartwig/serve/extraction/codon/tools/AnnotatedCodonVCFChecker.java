@@ -20,9 +20,9 @@ import htsjdk.tribble.readers.LineIterator;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.vcf.VCFCodec;
 
-public class AnnotatedCodonVCFCheckerPAVE {
+public class AnnotatedCodonVCFChecker {
 
-    private static final Logger LOGGER = LogManager.getLogger(AnnotatedCodonVCFCheckerPAVE.class);
+    private static final Logger LOGGER = LogManager.getLogger(AnnotatedCodonVCFChecker.class);
 
     private static final boolean LOG_DEBUG = false;
 

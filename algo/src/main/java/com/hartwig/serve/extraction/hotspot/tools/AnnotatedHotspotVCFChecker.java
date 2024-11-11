@@ -25,9 +25,9 @@ import htsjdk.tribble.readers.LineIterator;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.vcf.VCFCodec;
 
-public class AnnotatedHotspotVCFCheckerPAVE {
+public class AnnotatedHotspotVCFChecker {
 
-    private static final Logger LOGGER = LogManager.getLogger(AnnotatedHotspotVCFCheckerPAVE.class);
+    private static final Logger LOGGER = LogManager.getLogger(AnnotatedHotspotVCFChecker.class);
     private static final boolean LOG_DEBUG = false;
 
     // Should be enabled when we know the hotspots have been lifted-over
@@ -43,7 +43,7 @@ public class AnnotatedHotspotVCFCheckerPAVE {
         }
 
         String annotatedHotspotVcf = System.getProperty("user.home") + "/hmf/tmp/KnownHotspots.somatic.37.pave.vcf";
-        new AnnotatedHotspotVCFCheckerPAVE().run(annotatedHotspotVcf);
+        new AnnotatedHotspotVCFChecker().run(annotatedHotspotVcf);
     }
 
     public void run(@NotNull String annotatedVcfFilePath) throws IOException {

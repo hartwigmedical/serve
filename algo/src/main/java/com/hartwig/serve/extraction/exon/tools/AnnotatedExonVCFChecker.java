@@ -21,9 +21,9 @@ import htsjdk.tribble.readers.LineIterator;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.vcf.VCFCodec;
 
-public class AnnotatedExonVCFCheckerPAVE {
+public class AnnotatedExonVCFChecker {
 
-    private static final Logger LOGGER = LogManager.getLogger(AnnotatedExonVCFCheckerPAVE.class);
+    private static final Logger LOGGER = LogManager.getLogger(AnnotatedExonVCFChecker.class);
 
     private static final boolean LOG_DEBUG = false;
 

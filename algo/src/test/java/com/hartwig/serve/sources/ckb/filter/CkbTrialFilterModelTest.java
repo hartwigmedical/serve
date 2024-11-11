@@ -62,8 +62,8 @@ public class CkbTrialFilterModelTest {
 
         assertTrue(model.isMatch("NCT1", "Nivolumab", "Solid tumor", "KRAS", "amplification", filterEntry));
         assertFalse(model.isMatch("NCT1", "Chemo", "Breast", "KRAS", "deletion", filterEntry));
-        assertTrue(model.shouldFilterCancerType("NCT1", "Nivolumab", "Solid tumor", "KRAS", "amplification"));
-        assertFalse(model.shouldFilterCancerType("NCT1", "Chemo", "Breast", "KRAS", "deletion"));
+        assertTrue(model.shouldFilterTrial("NCT1", "Nivolumab", "Solid tumor", "KRAS", "amplification"));
+        assertFalse(model.shouldFilterTrial("NCT1", "Chemo", "Breast", "KRAS", "deletion"));
     }
 
     @Test
@@ -78,8 +78,8 @@ public class CkbTrialFilterModelTest {
 
         assertTrue(model.isMatch("NCT1", "Nivolumab", "Solid tumor", "KRAS", "amplification", filterEntry));
         assertFalse(model.isMatch("NCT1", "Chemo", "Breast", "PTEN", "deletion", filterEntry));
-        assertTrue(model.shouldFilterCancerType("NCT1", "Nivolumab", "Solid tumor", "KRAS", "amplification"));
-        assertFalse(model.shouldFilterCancerType("NCT1", "Chemo", "Breast", "PTEN", "deletion"));
+        assertTrue(model.shouldFilterTrial("NCT1", "Nivolumab", "Solid tumor", "KRAS", "amplification"));
+        assertFalse(model.shouldFilterTrial("NCT1", "Chemo", "Breast", "PTEN", "deletion"));
     }
 
     @Test
@@ -94,8 +94,8 @@ public class CkbTrialFilterModelTest {
 
         assertTrue(model.isMatch("NCT1", "Nivolumab", "Solid tumor", "KRAS", "amplification", filterEntry));
         assertFalse(model.isMatch("NCT1", "Chemo", "Breast", "PTEN", "deletion", filterEntry));
-        assertTrue(model.shouldFilterCancerType("NCT1", "Nivolumab", "Solid tumor", "KRAS", "amplification"));
-        assertFalse(model.shouldFilterCancerType("NCT1", "Chemo", "Breast", "PTEN", "deletion"));
+        assertTrue(model.shouldFilterTrial("NCT1", "Nivolumab", "Solid tumor", "KRAS", "amplification"));
+        assertFalse(model.shouldFilterTrial("NCT1", "Chemo", "Breast", "PTEN", "deletion"));
     }
 
     @NotNull

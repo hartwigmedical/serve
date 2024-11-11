@@ -13,10 +13,6 @@ public class CkbTrialFilterModel {
 
     private static final Logger LOGGER = LogManager.getLogger(CkbTrialFilterModel.class);
 
-    private static final Set<CkbTrialFilterType> CANCER_TYPE_FILTERING = Set.of(CkbTrialFilterType.TRIAL_BASED_ON_THERAPY_AND_CANCER_TYPE,
-            CkbTrialFilterType.TRIAL_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE,
-            CkbTrialFilterType.TRIAL_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE_AND_EVENT);
-
     @NotNull
     private final List<CkbTrialFilterEntry> filterEntries;
     @NotNull
@@ -29,24 +25,9 @@ public class CkbTrialFilterModel {
     public boolean shouldFilterTrial(@NotNull String nctId, @NotNull String therapyName, @NotNull String cancerType,
             @NotNull String sourceGene, @NotNull String event) {
         for (CkbTrialFilterEntry filterEntry : filterEntries) {
-            if (!CANCER_TYPE_FILTERING.contains(filterEntry.type())) {
-                if (isMatch(nctId, therapyName, cancerType, sourceGene, event, filterEntry)) {
-                    usedFilterEntries.add(filterEntry);
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    public boolean shouldFilterCancerType(@NotNull String nctId, @NotNull String therapyName, @NotNull String cancerType,
-            @NotNull String sourceGene, @NotNull String event) {
-        for (CkbTrialFilterEntry filterEntry : filterEntries) {
-            if (CANCER_TYPE_FILTERING.contains(filterEntry.type())) {
-                if (isMatch(nctId, therapyName, cancerType, sourceGene, event, filterEntry)) {
-                    usedFilterEntries.add(filterEntry);
-                    return true;
-                }
+            if (isMatch(nctId, therapyName, cancerType, sourceGene, event, filterEntry)) {
+                usedFilterEntries.add(filterEntry);
+                return true;
             }
         }
         return false;

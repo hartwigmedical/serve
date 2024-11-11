@@ -78,20 +78,9 @@ class ActionableTrialFactory {
                 therapies.add(therapy.therapyName());
             }
 
-            // TODO (CB): This filtering was previously not done properly. Discussed with Lieke. If we want these complex filters we should have the clinical trial in the json multiple times, one for each combination of tumor type and therapy.
+            // TODO: Complex filters are ignored for now, if needed will be implemented in the future
             if (!filterTrial.shouldFilterTrial(trial.nctId(), setToField(therapies), Strings.EMPTY, sourceGene, sourceEvent)
                     && !countries.isEmpty()) {
-                List<Indication> filteredIndications = Lists.newArrayList();
-                for (Indication indication : trial.indications()) {
-                    if (!filterTrial.shouldFilterCancerType(trial.nctId(),
-                            setToField(therapies),
-                            indication.name(),
-                            sourceGene,
-                            sourceEvent)) {
-                        filteredIndications.add(indication);
-                    }
-                }
-                Set<com.hartwig.serve.datamodel.Indication> indications = extractIndications(filteredIndications);
                 actionableTrials.add(ImmutableActionableTrial.builder()
                         .source(Knowledgebase.CKB)
                         .nctId(trial.nctId())
@@ -100,7 +89,7 @@ class ActionableTrialFactory {
                         .countries(countries)
                         .therapyNames(therapies)
                         .genderCriterium(trial.gender() != null ? GenderCriterium.valueOf(trial.gender().toUpperCase()) : null)
-                        .indications(indications)
+                        .indications(extractIndications(trial.indications()))
                         // TODO (CB): trial can have multiple molecular criteria. One for each CkbEntry. Should be merged somewhere?
                         .anyMolecularCriteria(List.of(molecularCriterium))
                         .urls(Sets.newHashSet("https://clinicaltrials.gov/study/" + trial.nctId()))

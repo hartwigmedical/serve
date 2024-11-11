@@ -98,7 +98,7 @@ class EfficacyEvidenceFactory {
             if (level != null && direction != null && indication != null && evidenceLevelDetails != null) {
                 String treatment = evidence.therapy().therapyName();
 
-                // TODO (CB): this filtering is also done incorrectly.
+                // TODO: Complex filters are ignored for now, if needed will be implemented in the future
                 if (!filterEvidence.shouldFilterEvidence(treatment, indication.applicableType().name(), level, sourceGene, sourceEvent)) {
                     Set<String> evidenceUrls = Sets.newHashSet();
                     for (Reference reference : evidence.references()) {

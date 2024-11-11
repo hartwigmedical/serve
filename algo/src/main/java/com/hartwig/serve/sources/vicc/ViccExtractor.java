@@ -8,8 +8,8 @@ import java.util.Set;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.hartwig.serve.datamodel.ActionableEvidenceImpl;
-import com.hartwig.serve.datamodel.ImmutableActionableEvidenceImpl;
+import com.hartwig.serve.datamodel.ActionableEvent;
+import com.hartwig.serve.datamodel.ImmutableActionableEventImpl;
 import com.hartwig.serve.datamodel.ImmutableKnownEvents;
 import com.hartwig.serve.datamodel.ImmutableMolecularCriterium;
 import com.hartwig.serve.datamodel.Knowledgebase;
@@ -68,12 +68,12 @@ public final class ViccExtractor {
     @NotNull
     private final EventExtractor eventExtractor;
     @NotNull
-    private final ViccEfficacyEvidenceFactory actionableEvidenceFactory;
+    private final ViccEfficacyEvidenceFactory efficacyEvidenceFactory;
 
     public ViccExtractor(@NotNull final EventExtractor eventExtractor,
-            @NotNull final ViccEfficacyEvidenceFactory actionableEvidenceFactory) {
+            @NotNull final ViccEfficacyEvidenceFactory efficacyEvidenceFactory) {
         this.eventExtractor = eventExtractor;
-        this.actionableEvidenceFactory = actionableEvidenceFactory;
+        this.efficacyEvidenceFactory = efficacyEvidenceFactory;
     }
 
     @NotNull
@@ -90,7 +90,7 @@ public final class ViccExtractor {
             tracker.update();
         }
 
-        actionableEvidenceFactory.evaluateCuration();
+        efficacyEvidenceFactory.evaluateCuration();
         ViccUtil.printExtractionResults(resultsPerEntry);
         return ExtractionFunctions.merge(extractions);
     }
@@ -173,7 +173,7 @@ public final class ViccExtractor {
 
         return ImmutableViccExtractionResult.builder()
                 .from(molecularExtraction)
-                .actionableEvidence(actionableEvidenceFactory.toEfficacyEvidence(entry, molecularCriteria))
+                .efficacyEvidences(efficacyEvidenceFactory.toEfficacyEvidence(entry, molecularCriteria))
                 .build();
     }
 
@@ -184,7 +184,7 @@ public final class ViccExtractor {
                 .refGenomeVersion(Knowledgebase.VICC_CGI.refGenomeVersion())
                 .addAllEventInterpretations(extraction.eventInterpretationPerFeature().values())
                 .knownEvents(toKnownEvents(entry, extraction))
-                .evidences(extraction.actionableEvidence())
+                .evidences(extraction.efficacyEvidences())
                 .trials(null);
 
         return outputBuilder.build();
@@ -315,10 +315,10 @@ public final class ViccExtractor {
         for (Map.Entry<Feature, List<VariantHotspot>> entry : hotspotPerFeature.entrySet()) {
             List<VariantHotspot> hotspots = entry.getValue();
             if (hotspots != null) {
-                ActionableEvidenceImpl evidence = toActionableEvidence(interpretations.get(entry.getKey()));
+                ActionableEvent event = toActionableEvent(interpretations.get(entry.getKey()));
                 for (VariantHotspot hotspot : hotspots) {
                     criteriaForHotspots.add(ImmutableMolecularCriterium.builder()
-                            .addHotspots(ImmutableActionableHotspot.builder().from(hotspot).from(evidence).build())
+                            .addHotspots(ImmutableActionableHotspot.builder().from(hotspot).from(event).build())
                             .build());
                 }
             }
@@ -333,10 +333,10 @@ public final class ViccExtractor {
         for (Map.Entry<Feature, List<CodonAnnotation>> entry : codonsPerFeature.entrySet()) {
             List<CodonAnnotation> codons = entry.getValue();
             if (codons != null) {
-                ActionableEvidenceImpl evidence = toActionableEvidence(interpretations.get(entry.getKey()));
+                ActionableEvent event = toActionableEvent(interpretations.get(entry.getKey()));
                 for (CodonAnnotation codon : codons) {
                     criteriaForCodons.add(ImmutableMolecularCriterium.builder()
-                            .addCodons(ImmutableActionableRange.builder().from(codon).from(evidence).build())
+                            .addCodons(ImmutableActionableRange.builder().from(codon).from(event).build())
                             .build());
                 }
             }
@@ -351,10 +351,10 @@ public final class ViccExtractor {
         for (Map.Entry<Feature, List<ExonAnnotation>> entry : rangesPerFeature.entrySet()) {
             List<ExonAnnotation> exons = entry.getValue();
             if (exons != null) {
-                ActionableEvidenceImpl evidence = toActionableEvidence(interpretations.get(entry.getKey()));
+                ActionableEvent event = toActionableEvent(interpretations.get(entry.getKey()));
                 for (ExonAnnotation exon : exons) {
                     criteriaForExons.add(ImmutableMolecularCriterium.builder()
-                            .addExons(ImmutableActionableRange.builder().from(exon).from(evidence).build())
+                            .addExons(ImmutableActionableRange.builder().from(exon).from(event).build())
                             .build());
                 }
             }
@@ -369,9 +369,9 @@ public final class ViccExtractor {
         for (Map.Entry<Feature, GeneAnnotation> entry : genesPerFeature.entrySet()) {
             GeneAnnotation annotation = entry.getValue();
             if (annotation != null) {
-                ActionableEvidenceImpl evidence = toActionableEvidence(interpretations.get(entry.getKey()));
+                ActionableEvent event = toActionableEvent(interpretations.get(entry.getKey()));
                 criteriaForGenes.add(ImmutableMolecularCriterium.builder()
-                        .addGenes(ImmutableActionableGene.builder().from(annotation).from(evidence).build())
+                        .addGenes(ImmutableActionableGene.builder().from(annotation).from(event).build())
                         .build());
             }
         }
@@ -385,9 +385,9 @@ public final class ViccExtractor {
         for (Map.Entry<Feature, FusionPair> entry : fusionsPerFeature.entrySet()) {
             FusionPair fusionPair = entry.getValue();
             if (fusionPair != null) {
-                ActionableEvidenceImpl evidence = toActionableEvidence(interpretations.get(entry.getKey()));
+                ActionableEvent event = toActionableEvent(interpretations.get(entry.getKey()));
                 criteriaForFusions.add(ImmutableMolecularCriterium.builder()
-                        .addFusions(ImmutableActionableFusion.builder().from(fusionPair).from(evidence).build())
+                        .addFusions(ImmutableActionableFusion.builder().from(fusionPair).from(event).build())
                         .build());
             }
         }
@@ -402,9 +402,9 @@ public final class ViccExtractor {
         for (Map.Entry<Feature, TumorCharacteristic> entry : characteristicPerFeature.entrySet()) {
             TumorCharacteristic characteristic = entry.getValue();
             if (characteristic != null) {
-                ActionableEvidenceImpl evidence = toActionableEvidence(interpretationPerFeature.get(entry.getKey()));
+                ActionableEvent event = toActionableEvent(interpretationPerFeature.get(entry.getKey()));
                 criteriaForCharacteristics.add(ImmutableMolecularCriterium.builder()
-                        .addCharacteristics(ImmutableActionableCharacteristic.builder().from(characteristic).from(evidence).build())
+                        .addCharacteristics(ImmutableActionableCharacteristic.builder().from(characteristic).from(event).build())
                         .build());
             }
         }
@@ -412,8 +412,8 @@ public final class ViccExtractor {
     }
 
     @NotNull
-    private static ActionableEvidenceImpl toActionableEvidence(@NotNull EventInterpretation interpretation) {
-        return ImmutableActionableEvidenceImpl.builder()
+    private static ActionableEvent toActionableEvent(@NotNull EventInterpretation interpretation) {
+        return ImmutableActionableEventImpl.builder()
                 .sourceDate(LocalDate.EPOCH)
                 .sourceEvent(interpretation.sourceEvent())
                 .sourceUrls(Sets.newHashSet())

@@ -51,5 +51,5 @@ public abstract class ViccExtractionResult {
     public abstract Map<Feature, ImmunoHLA> HLAPerFeature();
 
     @NotNull
-    public abstract Set<EfficacyEvidence> actionableEvidence();
+    public abstract Set<EfficacyEvidence> efficacyEvidences();
 }

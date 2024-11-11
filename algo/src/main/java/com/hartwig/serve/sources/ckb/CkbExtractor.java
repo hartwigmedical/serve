@@ -18,10 +18,10 @@ import com.hartwig.serve.ckb.classification.CkbProteinAnnotationExtractor;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.ckb.datamodel.variant.Variant;
 import com.hartwig.serve.common.classification.EventType;
-import com.hartwig.serve.datamodel.ActionableEvidenceImpl;
+import com.hartwig.serve.datamodel.ActionableEvent;
 import com.hartwig.serve.datamodel.ActionableTrial;
 import com.hartwig.serve.datamodel.EfficacyEvidence;
-import com.hartwig.serve.datamodel.ImmutableActionableEvidenceImpl;
+import com.hartwig.serve.datamodel.ImmutableActionableEventImpl;
 import com.hartwig.serve.datamodel.ImmutableKnownEvents;
 import com.hartwig.serve.datamodel.ImmutableMolecularCriterium;
 import com.hartwig.serve.datamodel.Knowledgebase;
@@ -79,7 +79,6 @@ import com.hartwig.serve.util.ProgressTracker;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -176,21 +175,20 @@ public class CkbExtractor {
     @NotNull
     private MolecularCriterium createMolecularCriterium(@NotNull EventExtractorOutput extractionOutput, @NotNull Variant variant,
             @NotNull String event, @NotNull CkbEntry entry) {
-        Set<String> sourceUrls =
-                Set.of("https://ckbhome.jax.org/profileResponse/advancedEvidenceFind?molecularProfileId=" + entry.profileId());
-        ActionableEvidenceImpl actionableEvidence = toActionableEvidence(event, variant, sourceUrls);
+        String sourceUrl = "https://ckbhome.jax.org/profileResponse/advancedEvidenceFind?molecularProfileId=" + entry.profileId();
+        ActionableEvent actionableEvent = toActionableEvent(event, variant, sourceUrl);
 
         return ImmutableMolecularCriterium.builder()
-                .hotspots(extractActionableHotspots(extractionOutput.hotspots(), actionableEvidence))
-                .characteristics(extractActionableCharacteristic(extractionOutput.characteristic(), actionableEvidence))
-                .exons(extractActionableRanges(extractionOutput.exons(), actionableEvidence))
-                .codons(extractActionableRanges(extractionOutput.codons(), actionableEvidence))
+                .hotspots(extractActionableHotspots(extractionOutput.hotspots(), actionableEvent))
+                .characteristics(extractActionableCharacteristic(extractionOutput.characteristic(), actionableEvent))
+                .exons(extractActionableRanges(extractionOutput.exons(), actionableEvent))
+                .codons(extractActionableRanges(extractionOutput.codons(), actionableEvent))
                 .genes(Stream.of(extractionOutput.geneLevel(), extractionOutput.copyNumber())
                         .filter(Objects::nonNull)
-                        .map(annotation -> extractActionableGenes(annotation, actionableEvidence))
+                        .map(annotation -> extractActionableGenes(annotation, actionableEvent))
                         .collect(Collectors.toSet()))
-                .fusions(extractActionableFusions(extractionOutput.fusionPair(), actionableEvidence))
-                .hla(extractActionableHLA(extractionOutput.hla(), actionableEvidence))
+                .fusions(extractActionableFusions(extractionOutput.fusionPair(), actionableEvent))
+                .hla(extractActionableHLA(extractionOutput.hla(), actionableEvent))
                 .build();
     }
 
@@ -310,62 +308,64 @@ public class CkbExtractor {
 
     @NotNull
     private static Set<ActionableHotspot> extractActionableHotspots(@Nullable List<VariantHotspot> hotspots,
-            @NotNull ActionableEvidenceImpl actionableEvidence) {
+            @NotNull ActionableEvent actionableEvent) {
         if (hotspots == null) {
             return Collections.emptySet();
         }
         return hotspots.stream()
-                .map(hotspot -> ImmutableActionableHotspot.builder().from(hotspot).from(actionableEvidence).build())
+                .map(hotspot -> ImmutableActionableHotspot.builder().from(hotspot).from(actionableEvent).build())
                 .collect(Collectors.toSet());
     }
 
     @NotNull
     private static Set<ActionableCharacteristic> extractActionableCharacteristic(@Nullable TumorCharacteristic characteristic,
-            @NotNull ActionableEvidenceImpl actionableEvidence) {
+            @NotNull ActionableEvent actionableEvent) {
         if (characteristic == null) {
             return Collections.emptySet();
         }
-        return Set.of(ImmutableActionableCharacteristic.builder().from(characteristic).from(actionableEvidence).build());
+        return Set.of(ImmutableActionableCharacteristic.builder().from(characteristic).from(actionableEvent).build());
     }
 
     @NotNull
     private static Set<ActionableRange> extractActionableRanges(@Nullable List<? extends RangeAnnotation> ranges,
-            @NotNull ActionableEvidenceImpl actionableEvidence) {
+            @NotNull ActionableEvent actionableEvent) {
         if (ranges == null) {
             return Collections.emptySet();
         }
         return ranges.stream()
-                .map(range -> ImmutableActionableRange.builder().from(range).from(actionableEvidence).build())
+                .map(range -> ImmutableActionableRange.builder().from(range).from(actionableEvent).build())
                 .collect(Collectors.toSet());
     }
 
     @NotNull
-    private static Set<ActionableHLA> extractActionableHLA(@Nullable ImmunoHLA hla, @NotNull ActionableEvidenceImpl actionableEvidence) {
+    private static Set<ActionableHLA> extractActionableHLA(@Nullable ImmunoHLA hla, @NotNull ActionableEvent actionableEvent) {
         if (hla == null) {
             return Collections.emptySet();
         }
-        return Set.of(ImmutableActionableHLA.builder().from(hla).from(actionableEvidence).build());
+        return Set.of(ImmutableActionableHLA.builder().from(hla).from(actionableEvent).build());
     }
 
     @NotNull
     private static Set<ActionableFusion> extractActionableFusions(@Nullable FusionPair fusionPair,
-            @NotNull ActionableEvidenceImpl actionableEvidence) {
+            @NotNull ActionableEvent actionableEvent) {
         if (fusionPair == null) {
             return Collections.emptySet();
         }
-        return Set.of(ImmutableActionableFusion.builder().from(fusionPair).from(actionableEvidence).build());
+        return Set.of(ImmutableActionableFusion.builder().from(fusionPair).from(actionableEvent).build());
     }
 
     @NotNull
-    public static ActionableGene extractActionableGenes(@NotNull GeneAnnotation geneAnnotation,
-            @NotNull ActionableEvidenceImpl actionableEvidence) {
-        return ImmutableActionableGene.builder().from(geneAnnotation).from(actionableEvidence).build();
+    public static ActionableGene extractActionableGenes(@NotNull GeneAnnotation geneAnnotation, @NotNull ActionableEvent actionableEvent) {
+        return ImmutableActionableGene.builder().from(geneAnnotation).from(actionableEvent).build();
     }
 
     @NotNull
-    private static ActionableEvidenceImpl toActionableEvidence(@NotNull String event, @NotNull Variant variant,
-            @NotNull Set<String> sourceUrls) {
-        return ImmutableActionableEvidenceImpl.builder().sourceDate(variant.createDate()).sourceEvent(event).sourceUrls(sourceUrls).build();
+    private static ActionableEvent toActionableEvent(@NotNull String event, @NotNull Variant variant, @NotNull String sourceUrl) {
+        return ImmutableActionableEventImpl.builder()
+                .sourceDate(variant.createDate())
+                .sourceEvent(event)
+                .sourceUrls(Set.of(sourceUrl))
+                .build();
     }
 }
 

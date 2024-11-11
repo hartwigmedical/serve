@@ -27,7 +27,7 @@ import com.hartwig.serve.vicc.datamodel.ViccEntry;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
-public class EfficacyEvidenceFactoryTest {
+public class ViccEfficacyEvidenceFactoryTest {
 
     @Test
     public void canResolveActionableEventWithMultipleCancerTypes() {
@@ -37,8 +37,8 @@ public class EfficacyEvidenceFactoryTest {
         Map<String, Set<String>> doidLookupMap = Maps.newHashMap();
         doidLookupMap.put(cancerTypeA, Sets.newHashSet("1"));
         doidLookupMap.put(cancerTypeB, Sets.newHashSet(CancerTypeConstants.CANCER_DOID));
-        ActionableEvidenceFactory factory =
-                new ActionableEvidenceFactory(DoidLookupTestFactory.create(doidLookupMap), new DrugCurator(), new EvidenceLevelCurator());
+        ViccEfficacyEvidenceFactory factory =
+                new ViccEfficacyEvidenceFactory(DoidLookupTestFactory.create(doidLookupMap), new DrugCurator(), new EvidenceLevelCurator());
 
         Association actionable = ViccTestFactory.testActionableAssociation("Treatment",
                 cancerTypeA + ";" + cancerTypeB,
@@ -51,7 +51,7 @@ public class EfficacyEvidenceFactoryTest {
 
         ViccEntry entry = ViccTestFactory.testEntryWithGeneEventAndAssociation("gene", "event", actionable);
 
-        Set<EfficacyEvidence> evidences = factory.toActionableEvidence(entry, List.of(molecularCriterium));
+        Set<EfficacyEvidence> evidences = factory.toEfficacyEvidence(entry, List.of(molecularCriterium));
         assertEquals(2, evidences.size());
 
         EfficacyEvidence evidenceA = findByCancerType(evidences, cancerTypeA);
@@ -83,51 +83,51 @@ public class EfficacyEvidenceFactoryTest {
 
     @Test
     public void canReformatDrugs() {
-        assertEquals("Imatinib,Imatinib", ActionableEvidenceFactory.reformatDrugLabels("IMATINIB,IMATINIB"));
+        assertEquals("Imatinib,Imatinib", ViccEfficacyEvidenceFactory.reformatDrugLabels("IMATINIB,IMATINIB"));
         assertEquals("Fluorouracil,Irinotecan,Bevacizumab,Lysergide",
-                ActionableEvidenceFactory.reformatDrugLabels("FLUOROURACIL,Irinotecan,BEVACIZUMAB,Lysergide"));
+                ViccEfficacyEvidenceFactory.reformatDrugLabels("FLUOROURACIL,Irinotecan,BEVACIZUMAB,Lysergide"));
 
-        assertNull(ActionableEvidenceFactory.reformatDrugLabels(null));
+        assertNull(ViccEfficacyEvidenceFactory.reformatDrugLabels(null));
     }
 
     @Test
     public void canReformatField() {
-        assertEquals("Field", ActionableEvidenceFactory.reformatField("Field"));
-        assertEquals("Field", ActionableEvidenceFactory.reformatField("field"));
-        assertEquals("Field", ActionableEvidenceFactory.reformatField("FIELD"));
+        assertEquals("Field", ViccEfficacyEvidenceFactory.reformatField("Field"));
+        assertEquals("Field", ViccEfficacyEvidenceFactory.reformatField("field"));
+        assertEquals("Field", ViccEfficacyEvidenceFactory.reformatField("FIELD"));
 
-        assertEquals("F", ActionableEvidenceFactory.reformatField("F"));
-        assertEquals("F", ActionableEvidenceFactory.reformatField("f"));
-        assertEquals("", ActionableEvidenceFactory.reformatField(""));
-        assertNull(ActionableEvidenceFactory.reformatField(null));
+        assertEquals("F", ViccEfficacyEvidenceFactory.reformatField("F"));
+        assertEquals("F", ViccEfficacyEvidenceFactory.reformatField("f"));
+        assertEquals("", ViccEfficacyEvidenceFactory.reformatField(""));
+        assertNull(ViccEfficacyEvidenceFactory.reformatField(null));
     }
 
     @Test
     public void canResolveDirection() {
-        assertEquals(EvidenceDirection.RESPONSIVE, ActionableEvidenceFactory.resolveDirection("Responsive"));
-        assertEquals(EvidenceDirection.RESPONSIVE, ActionableEvidenceFactory.resolveDirection("Sensitive"));
-        assertEquals(EvidenceDirection.RESISTANT, ActionableEvidenceFactory.resolveDirection("Resistant"));
+        assertEquals(EvidenceDirection.RESPONSIVE, ViccEfficacyEvidenceFactory.resolveDirection("Responsive"));
+        assertEquals(EvidenceDirection.RESPONSIVE, ViccEfficacyEvidenceFactory.resolveDirection("Sensitive"));
+        assertEquals(EvidenceDirection.RESISTANT, ViccEfficacyEvidenceFactory.resolveDirection("Resistant"));
 
-        assertNull(ActionableEvidenceFactory.resolveDirection(null));
-        assertNull(ActionableEvidenceFactory.resolveDirection("Conflicting"));
-        assertNull(ActionableEvidenceFactory.resolveDirection("This is no direction"));
+        assertNull(ViccEfficacyEvidenceFactory.resolveDirection(null));
+        assertNull(ViccEfficacyEvidenceFactory.resolveDirection("Conflicting"));
+        assertNull(ViccEfficacyEvidenceFactory.resolveDirection("This is no direction"));
     }
 
     @Test
     public void canResolveLevel() {
-        assertEquals(EvidenceLevel.A, ActionableEvidenceFactory.resolveLevel("A"));
+        assertEquals(EvidenceLevel.A, ViccEfficacyEvidenceFactory.resolveLevel("A"));
 
-        assertNull(ActionableEvidenceFactory.resolveLevel(null));
-        assertNull(ActionableEvidenceFactory.resolveLevel("XXX"));
+        assertNull(ViccEfficacyEvidenceFactory.resolveLevel(null));
+        assertNull(ViccEfficacyEvidenceFactory.resolveLevel("XXX"));
     }
 
     @Test
     public void canExtractDoid() {
-        assertEquals("123", ActionableEvidenceFactory.extractDoid("DOID:123"));
-        assertNull(ActionableEvidenceFactory.extractDoid("SNOMED:123"));
-        assertNull(ActionableEvidenceFactory.extractDoid("DOID"));
+        assertEquals("123", ViccEfficacyEvidenceFactory.extractDoid("DOID:123"));
+        assertNull(ViccEfficacyEvidenceFactory.extractDoid("SNOMED:123"));
+        assertNull(ViccEfficacyEvidenceFactory.extractDoid("DOID"));
 
-        assertNull(ActionableEvidenceFactory.extractDoid(null));
+        assertNull(ViccEfficacyEvidenceFactory.extractDoid(null));
     }
 
     @Test
@@ -138,8 +138,8 @@ public class EfficacyEvidenceFactoryTest {
 
         Map<String, Set<String>> doidLookupMap = Maps.newHashMap();
         doidLookupMap.put("Cancer", Sets.newHashSet(CancerTypeConstants.CANCER_DOID));
-        ActionableEvidenceFactory factory =
-                new ActionableEvidenceFactory(DoidLookupTestFactory.create(doidLookupMap), new DrugCurator(), new EvidenceLevelCurator());
+        ViccEfficacyEvidenceFactory factory =
+                new ViccEfficacyEvidenceFactory(DoidLookupTestFactory.create(doidLookupMap), new DrugCurator(), new EvidenceLevelCurator());
 
         List<MolecularCriterium> molecularCriteria = List.of(MolecularCriteriumTestFactory.createWithTestActionableHotspot());
 
@@ -148,28 +148,28 @@ public class EfficacyEvidenceFactoryTest {
                 .kbSpecificObject(ViccTestFactory.testEntryWithCivicEvidenceDirection("Does Not Support").kbSpecificObject())
                 .build();
 
-        assertEquals(0, factory.toActionableEvidence(doesNotSupport, molecularCriteria).size());
+        assertEquals(0, factory.toEfficacyEvidence(doesNotSupport, molecularCriteria).size());
 
         ViccEntry supports = ImmutableViccEntry.builder()
                 .from(actionable)
                 .kbSpecificObject(ViccTestFactory.testEntryWithCivicEvidenceDirection("Supports").kbSpecificObject())
                 .build();
 
-        assertEquals(1, factory.toActionableEvidence(supports, molecularCriteria).size());
+        assertEquals(1, factory.toEfficacyEvidence(supports, molecularCriteria).size());
 
         ViccEntry undefined = ImmutableViccEntry.builder()
                 .from(actionable)
                 .kbSpecificObject(ViccTestFactory.testEntryWithCivicEvidenceDirection(null).kbSpecificObject())
                 .build();
 
-        assertEquals(1, factory.toActionableEvidence(undefined, molecularCriteria).size());
+        assertEquals(1, factory.toEfficacyEvidence(undefined, molecularCriteria).size());
 
         ViccEntry notRecognized = ImmutableViccEntry.builder()
                 .from(actionable)
                 .kbSpecificObject(ViccTestFactory.testEntryWithCivicEvidenceDirection("Not a direction").kbSpecificObject())
                 .build();
 
-        assertEquals(1, factory.toActionableEvidence(notRecognized, molecularCriteria).size());
+        assertEquals(1, factory.toEfficacyEvidence(notRecognized, molecularCriteria).size());
     }
 
     @NotNull

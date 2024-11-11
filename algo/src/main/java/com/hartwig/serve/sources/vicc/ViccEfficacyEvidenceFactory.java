@@ -39,9 +39,9 @@ import org.immutables.value.internal.$guava$.annotations.$VisibleForTesting;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-class ActionableEvidenceFactory {
+class ViccEfficacyEvidenceFactory {
 
-    private static final Logger LOGGER = LogManager.getLogger(ActionableEvidenceFactory.class);
+    private static final Logger LOGGER = LogManager.getLogger(ViccEfficacyEvidenceFactory.class);
 
     private static final String CANCER_TYPE_SEPARATOR = ";";
 
@@ -86,7 +86,7 @@ class ActionableEvidenceFactory {
     @NotNull
     private final EvidenceLevelCurator evidenceLevelCurator;
 
-    public ActionableEvidenceFactory(@NotNull final DoidLookup missingDoidLookup, @NotNull final DrugCurator drugCurator,
+    public ViccEfficacyEvidenceFactory(@NotNull final DoidLookup missingDoidLookup, @NotNull final DrugCurator drugCurator,
             @NotNull final EvidenceLevelCurator evidenceLevelCurator) {
         this.missingDoidLookup = missingDoidLookup;
         this.drugCurator = drugCurator;
@@ -94,7 +94,7 @@ class ActionableEvidenceFactory {
     }
 
     @NotNull
-    public Set<EfficacyEvidence> toActionableEvidence(@NotNull ViccEntry entry, @NotNull List<MolecularCriterium> molecularCriteria) {
+    public Set<EfficacyEvidence> toEfficacyEvidence(@NotNull ViccEntry entry, @NotNull List<MolecularCriterium> molecularCriteria) {
         Set<EfficacyEvidence> evidences = Sets.newHashSet();
 
         boolean isSupportive = isSupportiveEntry(entry);
@@ -103,8 +103,7 @@ class ActionableEvidenceFactory {
         EvidenceDirection direction = resolveDirection(entry.association().responseType());
 
         if (isSupportive && treatment != null && level != null && direction != null) {
-            ImmutableEfficacyEvidence.Builder builder = ImmutableEfficacyEvidence.builder()
-                    .source(fromViccSource(entry.source()))
+            ImmutableEfficacyEvidence.Builder builder = ImmutableEfficacyEvidence.builder().source(fromViccSource(entry.source()))
                     .efficacyDescription(Strings.EMPTY)
                     .evidenceLevel(evidenceLevelCurator.curate(entry.source(), entry.genes(), treatment, level, direction))
                     .evidenceLevelDetails(EvidenceLevelDetails.UNKNOWN)

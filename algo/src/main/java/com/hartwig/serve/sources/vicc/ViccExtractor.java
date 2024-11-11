@@ -8,6 +8,8 @@ import java.util.Set;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.hartwig.serve.datamodel.ActionableEvidenceImpl;
+import com.hartwig.serve.datamodel.ImmutableActionableEvidenceImpl;
 import com.hartwig.serve.datamodel.ImmutableKnownEvents;
 import com.hartwig.serve.datamodel.ImmutableMolecularCriterium;
 import com.hartwig.serve.datamodel.Knowledgebase;
@@ -66,9 +68,10 @@ public final class ViccExtractor {
     @NotNull
     private final EventExtractor eventExtractor;
     @NotNull
-    private final ActionableEvidenceFactory actionableEvidenceFactory;
+    private final ViccEfficacyEvidenceFactory actionableEvidenceFactory;
 
-    public ViccExtractor(@NotNull final EventExtractor eventExtractor, @NotNull final ActionableEvidenceFactory actionableEvidenceFactory) {
+    public ViccExtractor(@NotNull final EventExtractor eventExtractor,
+            @NotNull final ViccEfficacyEvidenceFactory actionableEvidenceFactory) {
         this.eventExtractor = eventExtractor;
         this.actionableEvidenceFactory = actionableEvidenceFactory;
     }
@@ -113,8 +116,7 @@ public final class ViccExtractor {
 
                 String sourceEvent = feature.name().startsWith(gene) ? feature.name() : gene + " " + feature.name();
                 eventInterpretationPerFeature.put(feature,
-                        ImmutableEventInterpretation.builder()
-                                .source(ActionableEvidenceFactory.fromViccSource(entry.source()))
+                        ImmutableEventInterpretation.builder().source(ViccEfficacyEvidenceFactory.fromViccSource(entry.source()))
                                 .sourceEvent(sourceEvent)
                                 .interpretedGene(gene)
                                 .interpretedEvent(feature.name())
@@ -171,7 +173,7 @@ public final class ViccExtractor {
 
         return ImmutableViccExtractionResult.builder()
                 .from(molecularExtraction)
-                .actionableEvidence(actionableEvidenceFactory.toActionableEvidence(entry, molecularCriteria))
+                .actionableEvidence(actionableEvidenceFactory.toEfficacyEvidence(entry, molecularCriteria))
                 .build();
     }
 
@@ -313,7 +315,7 @@ public final class ViccExtractor {
         for (Map.Entry<Feature, List<VariantHotspot>> entry : hotspotPerFeature.entrySet()) {
             List<VariantHotspot> hotspots = entry.getValue();
             if (hotspots != null) {
-                ActionableEvidence evidence = toActionableEvidence(interpretations.get(entry.getKey()));
+                ActionableEvidenceImpl evidence = toActionableEvidence(interpretations.get(entry.getKey()));
                 for (VariantHotspot hotspot : hotspots) {
                     criteriaForHotspots.add(ImmutableMolecularCriterium.builder()
                             .addHotspots(ImmutableActionableHotspot.builder().from(hotspot).from(evidence).build())
@@ -331,7 +333,7 @@ public final class ViccExtractor {
         for (Map.Entry<Feature, List<CodonAnnotation>> entry : codonsPerFeature.entrySet()) {
             List<CodonAnnotation> codons = entry.getValue();
             if (codons != null) {
-                ActionableEvidence evidence = toActionableEvidence(interpretations.get(entry.getKey()));
+                ActionableEvidenceImpl evidence = toActionableEvidence(interpretations.get(entry.getKey()));
                 for (CodonAnnotation codon : codons) {
                     criteriaForCodons.add(ImmutableMolecularCriterium.builder()
                             .addCodons(ImmutableActionableRange.builder().from(codon).from(evidence).build())
@@ -349,7 +351,7 @@ public final class ViccExtractor {
         for (Map.Entry<Feature, List<ExonAnnotation>> entry : rangesPerFeature.entrySet()) {
             List<ExonAnnotation> exons = entry.getValue();
             if (exons != null) {
-                ActionableEvidence evidence = toActionableEvidence(interpretations.get(entry.getKey()));
+                ActionableEvidenceImpl evidence = toActionableEvidence(interpretations.get(entry.getKey()));
                 for (ExonAnnotation exon : exons) {
                     criteriaForExons.add(ImmutableMolecularCriterium.builder()
                             .addExons(ImmutableActionableRange.builder().from(exon).from(evidence).build())
@@ -367,7 +369,7 @@ public final class ViccExtractor {
         for (Map.Entry<Feature, GeneAnnotation> entry : genesPerFeature.entrySet()) {
             GeneAnnotation annotation = entry.getValue();
             if (annotation != null) {
-                ActionableEvidence evidence = toActionableEvidence(interpretations.get(entry.getKey()));
+                ActionableEvidenceImpl evidence = toActionableEvidence(interpretations.get(entry.getKey()));
                 criteriaForGenes.add(ImmutableMolecularCriterium.builder()
                         .addGenes(ImmutableActionableGene.builder().from(annotation).from(evidence).build())
                         .build());
@@ -383,7 +385,7 @@ public final class ViccExtractor {
         for (Map.Entry<Feature, FusionPair> entry : fusionsPerFeature.entrySet()) {
             FusionPair fusionPair = entry.getValue();
             if (fusionPair != null) {
-                ActionableEvidence evidence = toActionableEvidence(interpretations.get(entry.getKey()));
+                ActionableEvidenceImpl evidence = toActionableEvidence(interpretations.get(entry.getKey()));
                 criteriaForFusions.add(ImmutableMolecularCriterium.builder()
                         .addFusions(ImmutableActionableFusion.builder().from(fusionPair).from(evidence).build())
                         .build());
@@ -400,7 +402,7 @@ public final class ViccExtractor {
         for (Map.Entry<Feature, TumorCharacteristic> entry : characteristicPerFeature.entrySet()) {
             TumorCharacteristic characteristic = entry.getValue();
             if (characteristic != null) {
-                ActionableEvidence evidence = toActionableEvidence(interpretationPerFeature.get(entry.getKey()));
+                ActionableEvidenceImpl evidence = toActionableEvidence(interpretationPerFeature.get(entry.getKey()));
                 criteriaForCharacteristics.add(ImmutableMolecularCriterium.builder()
                         .addCharacteristics(ImmutableActionableCharacteristic.builder().from(characteristic).from(evidence).build())
                         .build());
@@ -410,8 +412,8 @@ public final class ViccExtractor {
     }
 
     @NotNull
-    private static ActionableEvidence toActionableEvidence(@NotNull EventInterpretation interpretation) {
-        return ImmutableActionableEvidence.builder()
+    private static ActionableEvidenceImpl toActionableEvidence(@NotNull EventInterpretation interpretation) {
+        return ImmutableActionableEvidenceImpl.builder()
                 .sourceDate(LocalDate.EPOCH)
                 .sourceEvent(interpretation.sourceEvent())
                 .sourceUrls(Sets.newHashSet())

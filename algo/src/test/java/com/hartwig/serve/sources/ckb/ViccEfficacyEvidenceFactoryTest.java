@@ -33,17 +33,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.Test;
 
-public class EfficacyEvidenceFactoryTest {
+public class ViccEfficacyEvidenceFactoryTest {
 
     private static final TreatmentApproachCurator TREATMENT_APPROACH_CURATOR = TreatmentApproachTestFactory.createTestCurator();
     private static final CkbEvidenceFilterModel EVIDENCE_FILTER_MODEL = CkbFilteringTestFactory.createProperEvidenceFilterModel();
 
     @Test
     public void shouldCreateEvidenceForMSIEntry() {
-        CkbEntry msiEntry = CkbTestFactory.createEntry("-",
-                "MSI neg",
-                "MSI neg",
-                "sensitive",
+        CkbEntry msiEntry = CkbTestFactory.createEntry("-", "MSI neg", "MSI neg", "sensitive",
                 "Actionable",
                 "Therapy",
                 "Indication",

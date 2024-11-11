@@ -434,7 +434,7 @@ elsewhere.
 
 - Upcoming
     - New datamodel with main change the separation of trials and efficacy evidence.
-    - `CKB_EVIDENCE` and `CKB_TRIALS` are merged back into one source.
+    - `CKB_EVIDENCE` and `CKB_TRIALS` are merged back into one source `CKB`.
     - iClusion is no longer supported.
 - [6.0.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v6.0.0)
     - Convert output to JSON format instead of TSV

@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.hartwig.serve.common.variant.impact.VariantTranscriptImpact;
 import com.hartwig.serve.common.variant.impact.VariantTranscriptImpactFactory;
-import com.hartwig.serve.extraction.codon.tools.AnnotatedCodonVCFChecker;
 import com.hartwig.serve.extraction.util.VCFWriterFactory;
 
 import org.apache.commons.compress.utils.Lists;
@@ -24,7 +23,7 @@ import htsjdk.variant.vcf.VCFCodec;
 
 public class AnnotatedExonVCFCheckerPAVE {
 
-    private static final Logger LOGGER = LogManager.getLogger(AnnotatedCodonVCFChecker.class);
+    private static final Logger LOGGER = LogManager.getLogger(AnnotatedExonVCFCheckerPAVE.class);
 
     private static final boolean LOG_DEBUG = false;
 

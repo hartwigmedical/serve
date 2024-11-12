@@ -20,15 +20,15 @@ public final class HartwigGeneFileReader {
     }
 
     @NotNull
-    public static List<HartwigGeneEntry> read(@NotNull String fileName) throws IOException {
-        return fromLines(Files.readAllLines(new File(fileName).toPath()));
+    public static List<HartwigGeneEntry> read(@NotNull String fileName, @NotNull String geneRoleFieldName) throws IOException {
+        return fromLines(Files.readAllLines(new File(fileName).toPath()), geneRoleFieldName);
     }
 
     @NotNull
-    private static List<HartwigGeneEntry> fromLines(@NotNull List<String> lines) {
+    private static List<HartwigGeneEntry> fromLines(@NotNull List<String> lines, @NotNull String geneRoleFieldName) {
         Map<String, Integer> fields = createFields(lines.get(0), DELIMITER);
         int geneFieldIndex = fields.get("gene");
-        int geneRoleFieldIndex = fields.get("likelihoodType");
+        int geneRoleFieldIndex = fields.get(geneRoleFieldName);
         return lines.stream().skip(1).map(line -> fromLine(line, geneFieldIndex, geneRoleFieldIndex)).collect(toList());
     }
 

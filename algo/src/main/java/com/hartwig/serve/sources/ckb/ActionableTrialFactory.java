@@ -78,7 +78,7 @@ class ActionableTrialFactory {
                 therapies.add(therapy.therapyName());
             }
 
-            // TODO: Complex filters are ignored for now, if needed will be implemented in the future
+            // TODO: Complex filters are not supported, if needed will be implemented in the future
             if (!filterTrial.shouldFilterTrial(trial.nctId(), setToField(therapies), Strings.EMPTY, sourceGene, sourceEvent)
                     && !countries.isEmpty()) {
                 actionableTrials.add(ImmutableActionableTrial.builder()

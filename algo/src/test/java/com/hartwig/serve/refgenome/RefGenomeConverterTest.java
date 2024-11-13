@@ -23,7 +23,7 @@ import com.hartwig.serve.datamodel.molecular.range.KnownCodon;
 import com.hartwig.serve.datamodel.molecular.range.KnownExon;
 import com.hartwig.serve.datamodel.molecular.range.RangeTestFactory;
 import com.hartwig.serve.datamodel.trial.ActionableTrial;
-import com.hartwig.serve.datamodel.trial.ActionableTrialTestFactory;
+import com.hartwig.serve.datamodel.trial.TrialTestFactory;
 import com.hartwig.serve.refgenome.liftover.ImmutableLiftOverResult;
 import com.hartwig.serve.refgenome.liftover.LiftOverAlgo;
 import com.hartwig.serve.refgenome.liftover.LiftOverResult;
@@ -116,7 +116,7 @@ public class RefGenomeConverterTest {
                 DUMMY_CONVERTER.convertEfficacyEvidences(evidences).iterator().next().molecularCriterium().hotspots();
         assertEquals(actionableHotspot, convertedActionableHotspotsFromEvidence.iterator().next());
 
-        List<ActionableTrial> trials = List.of(ActionableTrialTestFactory.createWithMolecularCriterium(molecularCriterium));
+        List<ActionableTrial> trials = List.of(TrialTestFactory.createWithMolecularCriterium(molecularCriterium));
         Set<ActionableHotspot> convertedActionableHotspotFromTrial =
                 DUMMY_CONVERTER.convertTrials(trials).iterator().next().anyMolecularCriteria().iterator().next().hotspots();
         assertEquals(actionableHotspot, convertedActionableHotspotFromTrial.iterator().next());
@@ -134,7 +134,7 @@ public class RefGenomeConverterTest {
                 DUMMY_CONVERTER.convertEfficacyEvidences(evidences).iterator().next().molecularCriterium().codons();
         assertEquals(actionableCodon, convertedActionableCodonFromEvidence.iterator().next());
 
-        List<ActionableTrial> trials = List.of(ActionableTrialTestFactory.createWithMolecularCriterium(molecularCriterium));
+        List<ActionableTrial> trials = List.of(TrialTestFactory.createWithMolecularCriterium(molecularCriterium));
         Set<ActionableRange> convertedActionableCodonFromTrial =
                 DUMMY_CONVERTER.convertTrials(trials).iterator().next().anyMolecularCriteria().iterator().next().codons();
         assertEquals(actionableCodon, convertedActionableCodonFromTrial.iterator().next());
@@ -152,7 +152,7 @@ public class RefGenomeConverterTest {
                 DUMMY_CONVERTER.convertEfficacyEvidences(evidences).iterator().next().molecularCriterium().exons();
         assertEquals(actionableExon, convertedActionableExonFromEvidence.iterator().next());
 
-        List<ActionableTrial> trials = List.of(ActionableTrialTestFactory.createWithMolecularCriterium(molecularCriterium));
+        List<ActionableTrial> trials = List.of(TrialTestFactory.createWithMolecularCriterium(molecularCriterium));
         Set<ActionableRange> convertedActionableExonFromTrial =
                 DUMMY_CONVERTER.convertTrials(trials).iterator().next().anyMolecularCriteria().iterator().next().exons();
         assertEquals(actionableExon, convertedActionableExonFromTrial.iterator().next());

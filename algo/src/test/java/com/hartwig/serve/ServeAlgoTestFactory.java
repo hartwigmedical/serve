@@ -11,7 +11,7 @@ import com.hartwig.serve.datamodel.molecular.fusion.FusionTestFactory;
 import com.hartwig.serve.datamodel.molecular.gene.GeneTestFactory;
 import com.hartwig.serve.datamodel.molecular.hotspot.HotspotTestFactory;
 import com.hartwig.serve.datamodel.molecular.range.RangeTestFactory;
-import com.hartwig.serve.datamodel.trial.ActionableTrialTestFactory;
+import com.hartwig.serve.datamodel.trial.TrialTestFactory;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.ImmutableExtractionResult;
 import com.hartwig.serve.extraction.events.TestEventInterpretationFactory;
@@ -41,7 +41,7 @@ public final class ServeAlgoTestFactory {
                 .knownEvents(knownEvents)
                 .eventInterpretations(Set.of(TestEventInterpretationFactory.createTestEventInterpretationForSource(source)))
                 .evidences(List.of(EfficacyEvidenceTestFactory.builder().source(source).build()))
-                .trials(List.of(ActionableTrialTestFactory.builder().source(source).build()))
+                .trials(List.of(TrialTestFactory.builder().source(source).build()))
                 .build();
     }
 }

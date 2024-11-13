@@ -12,7 +12,7 @@ import com.hartwig.serve.datamodel.molecular.gene.GeneTestFactory;
 import com.hartwig.serve.datamodel.molecular.hotspot.HotspotTestFactory;
 import com.hartwig.serve.datamodel.molecular.range.RangeTestFactory;
 import com.hartwig.serve.datamodel.trial.ActionableTrial;
-import com.hartwig.serve.datamodel.trial.ActionableTrialTestFactory;
+import com.hartwig.serve.datamodel.trial.TrialTestFactory;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -52,6 +52,6 @@ public class TestServeDatabaseFactory {
 
     @NotNull
     public static List<ActionableTrial> createActionableTrials() {
-        return List.of(ActionableTrialTestFactory.builder().build());
+        return List.of(TrialTestFactory.builder().build());
     }
 }

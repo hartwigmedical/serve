@@ -15,7 +15,7 @@ import com.hartwig.serve.datamodel.molecular.gene.GeneTestFactory;
 import com.hartwig.serve.datamodel.molecular.hotspot.HotspotTestFactory;
 import com.hartwig.serve.datamodel.molecular.range.RangeTestFactory;
 import com.hartwig.serve.datamodel.trial.ActionableTrial;
-import com.hartwig.serve.datamodel.trial.ActionableTrialTestFactory;
+import com.hartwig.serve.datamodel.trial.TrialTestFactory;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.ImmutableExtractionResult;
 
@@ -82,11 +82,11 @@ public class ConversionFilterTest {
 
     @NotNull
     private static ActionableTrial trialForGene(@NotNull ActionableGene gene) {
-        return ActionableTrialTestFactory.createWithMolecularCriterium(MolecularCriteriumTestFactory.createWithActionableGene(gene));
+        return TrialTestFactory.createWithMolecularCriterium(MolecularCriteriumTestFactory.createWithActionableGene(gene));
     }
 
     @NotNull
     private static ActionableTrial trialForFusion(@NotNull ActionableFusion fusion) {
-        return ActionableTrialTestFactory.createWithMolecularCriterium(MolecularCriteriumTestFactory.createWithActionableFusion(fusion));
+        return TrialTestFactory.createWithMolecularCriterium(MolecularCriteriumTestFactory.createWithActionableFusion(fusion));
     }
 }

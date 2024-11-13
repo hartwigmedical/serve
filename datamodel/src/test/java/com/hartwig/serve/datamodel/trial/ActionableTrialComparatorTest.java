@@ -7,7 +7,6 @@ import java.util.Set;
 
 import com.google.common.collect.Lists;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.datamodel.common.DatamodelTestFactory;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
@@ -33,10 +32,10 @@ public class ActionableTrialComparatorTest {
     @NotNull
     private static ActionableTrial create(@NotNull Knowledgebase source, @NotNull String nctId, @NotNull String countryName,
             @NotNull String therapy, @NotNull GenderCriterium genderCriterium) {
-        return ActionableTrialTestFactory.builder()
+        return TrialTestFactory.builder()
                 .source(source)
                 .nctId(nctId)
-                .countries(Set.of(DatamodelTestFactory.createTestCountry(countryName)))
+                .countries(Set.of(TrialTestFactory.createTestCountry(countryName)))
                 .therapyNames(Set.of(therapy))
                 .genderCriterium(genderCriterium)
                 .build();

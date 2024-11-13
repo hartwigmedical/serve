@@ -20,7 +20,7 @@ public final class EfficacyEvidenceTestFactory {
     public static ImmutableEfficacyEvidence.Builder builder() {
         return ImmutableEfficacyEvidence.builder()
                 .source(Knowledgebase.UNKNOWN)
-                .treatment(DatamodelTestFactory.treatmentBuilder().build())
+                .treatment(createTestTreatment())
                 .indication(DatamodelTestFactory.indicationBuilder().build())
                 .molecularCriterium(MolecularCriteriumTestFactory.createWithTestActionableHotspot())
                 .efficacyDescription(Strings.EMPTY)
@@ -49,5 +49,10 @@ public final class EfficacyEvidenceTestFactory {
                 .evidenceYear(evidenceYear)
                 .urls(urls)
                 .build();
+    }
+
+    @NotNull
+    private static Treatment createTestTreatment() {
+        return ImmutableTreatment.builder().name(Strings.EMPTY).build();
     }
 }

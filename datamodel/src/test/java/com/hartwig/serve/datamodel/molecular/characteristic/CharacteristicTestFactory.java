@@ -2,7 +2,7 @@ package com.hartwig.serve.datamodel.molecular.characteristic;
 
 import java.util.Objects;
 
-import com.hartwig.serve.datamodel.common.DatamodelTestFactory;
+import com.hartwig.serve.datamodel.molecular.MolecularTestFactory;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -21,7 +21,7 @@ public final class CharacteristicTestFactory {
     @NotNull
     public static ImmutableActionableCharacteristic.Builder actionableCharacteristicBuilder() {
         return ImmutableActionableCharacteristic.builder()
-                .from(DatamodelTestFactory.createTestActionableEvent())
+                .from(MolecularTestFactory.createTestActionableEvent())
                 .type(TumorCharacteristicType.MICROSATELLITE_UNSTABLE);
     }
 

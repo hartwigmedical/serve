@@ -3,7 +3,7 @@ package com.hartwig.serve.datamodel.molecular.fusion;
 import java.util.Objects;
 
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.datamodel.common.DatamodelTestFactory;
+import com.hartwig.serve.datamodel.molecular.MolecularTestFactory;
 import com.hartwig.serve.datamodel.molecular.common.ProteinEffect;
 
 import org.apache.logging.log4j.util.Strings;
@@ -34,7 +34,7 @@ public final class FusionTestFactory {
     @NotNull
     public static ImmutableActionableFusion.Builder actionableFusionBuilder() {
         return ImmutableActionableFusion.builder()
-                .from(DatamodelTestFactory.createTestActionableEvent())
+                .from(MolecularTestFactory.createTestActionableEvent())
                 .geneUp(Strings.EMPTY)
                 .geneDown(Strings.EMPTY);
     }

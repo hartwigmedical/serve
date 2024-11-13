@@ -1,5 +1,9 @@
 package com.hartwig.serve.datamodel.trial;
 
+import java.util.Map;
+import java.util.Set;
+
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.molecular.MolecularCriterium;
@@ -7,9 +11,9 @@ import com.hartwig.serve.datamodel.molecular.MolecularCriterium;
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 
-public final class ActionableTrialTestFactory {
+public final class TrialTestFactory {
 
-    private ActionableTrialTestFactory() {
+    private TrialTestFactory() {
     }
 
     @NotNull
@@ -29,5 +33,18 @@ public final class ActionableTrialTestFactory {
     @NotNull
     public static ActionableTrial createWithMolecularCriterium(@NotNull MolecularCriterium molecularCriterium) {
         return builder().addAnyMolecularCriteria(molecularCriterium).build();
+    }
+
+
+    public static ImmutableCountry.Builder countryBuilder() {
+        return ImmutableCountry.builder().countryName(Strings.EMPTY).hospitalsPerCity(Maps.newHashMap());
+    }
+
+    @NotNull
+    public static Country createTestCountry(@NotNull String countryName) {
+        return countryBuilder().countryName(countryName)
+                .hospitalsPerCity(Map.of("city",
+                        Set.of(ImmutableHospital.builder().isChildrensHospital(false).name("hospital name").build())))
+                .build();
     }
 }

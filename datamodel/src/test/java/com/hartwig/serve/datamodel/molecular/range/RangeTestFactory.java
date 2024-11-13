@@ -3,7 +3,7 @@ package com.hartwig.serve.datamodel.molecular.range;
 import java.util.Objects;
 
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.datamodel.common.DatamodelTestFactory;
+import com.hartwig.serve.datamodel.molecular.MolecularTestFactory;
 import com.hartwig.serve.datamodel.molecular.MutationType;
 import com.hartwig.serve.datamodel.molecular.common.CommonTestFactory;
 
@@ -56,7 +56,7 @@ public final class RangeTestFactory {
 
     @NotNull
     public static ImmutableActionableRange.Builder actionableRangeBuilder() {
-        return ImmutableActionableRange.builder().from(createTestRangeAnnotation()).from(DatamodelTestFactory.createTestActionableEvent());
+        return ImmutableActionableRange.builder().from(createTestRangeAnnotation()).from(MolecularTestFactory.createTestActionableEvent());
     }
 
     private static class RangeAnnotationImpl implements RangeAnnotation {

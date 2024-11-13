@@ -3,7 +3,7 @@ package com.hartwig.serve.datamodel.molecular.gene;
 import java.util.Objects;
 
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.datamodel.common.DatamodelTestFactory;
+import com.hartwig.serve.datamodel.molecular.MolecularTestFactory;
 import com.hartwig.serve.datamodel.molecular.common.CommonTestFactory;
 import com.hartwig.serve.datamodel.molecular.common.GeneRole;
 
@@ -47,7 +47,7 @@ public final class GeneTestFactory {
 
     @NotNull
     public static ImmutableActionableGene.Builder actionableGeneBuilder() {
-        return ImmutableActionableGene.builder().from(DatamodelTestFactory.createTestActionableEvent()).from(createTestGeneAnnotation());
+        return ImmutableActionableGene.builder().from(MolecularTestFactory.createTestActionableEvent()).from(createTestGeneAnnotation());
     }
 
     @NotNull

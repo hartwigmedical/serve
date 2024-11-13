@@ -3,7 +3,7 @@ package com.hartwig.serve.datamodel.molecular.hotspot;
 import java.util.Objects;
 
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.datamodel.common.DatamodelTestFactory;
+import com.hartwig.serve.datamodel.molecular.MolecularTestFactory;
 import com.hartwig.serve.datamodel.molecular.common.CommonTestFactory;
 
 import org.apache.logging.log4j.util.Strings;
@@ -41,7 +41,7 @@ public final class HotspotTestFactory {
 
     @NotNull
     public static ImmutableActionableHotspot.Builder actionableHotspotBuilder() {
-        return ImmutableActionableHotspot.builder().from(DatamodelTestFactory.createTestActionableEvent()).from(createTestVariantHotspot());
+        return ImmutableActionableHotspot.builder().from(MolecularTestFactory.createTestActionableEvent()).from(createTestVariantHotspot());
     }
 
     @NotNull

@@ -33,7 +33,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.Test;
 
-public class ViccEfficacyEvidenceFactoryTest {
+public class EfficacyEvidenceFactoryTest {
 
     private static final TreatmentApproachCurator TREATMENT_APPROACH_CURATOR = TreatmentApproachTestFactory.createTestCurator();
     private static final CkbEvidenceFilterModel EVIDENCE_FILTER_MODEL = CkbFilteringTestFactory.createProperEvidenceFilterModel();

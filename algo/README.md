@@ -450,6 +450,9 @@ elsewhere.
 
 ## Version History and Download Links
 
+- [6.1.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v6.1.0)
+    - Take gene role into account when comparing / sorting known genes (bug-fix) 
+    - Support reading of gene roles from Hartwig curated and driver gene sources.
 - [6.0.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v6.0.0)
     - Convert output to JSON format instead of TSV
     - Add SERVE version to JSON output

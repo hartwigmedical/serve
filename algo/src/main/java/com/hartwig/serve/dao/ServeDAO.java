@@ -559,8 +559,9 @@ public class ServeDAO {
                 null,
                 null,
                 evidenceForCharacteristic.treatment().name(),
-                !evidenceForCharacteristic.treatment().treatmentApproachesDrugClass().isEmpty() ? concat(evidenceForCharacteristic.treatment()
-                        .treatmentApproachesDrugClass()) : null,
+                !evidenceForCharacteristic.treatment().treatmentApproachesDrugClass().isEmpty()
+                        ? concat(evidenceForCharacteristic.treatment().treatmentApproachesDrugClass())
+                        : null,
                 !evidenceForCharacteristic.treatment().treatmentApproachesTherapy().isEmpty() ? concat(evidenceForCharacteristic.treatment()
                         .treatmentApproachesTherapy()) : null,
                 evidenceForCharacteristic.indication().applicableType().name(),
@@ -607,14 +608,68 @@ public class ServeDAO {
     }
 
     private void writeActionableTrials(@NotNull Timestamp timestamp, @NotNull List<ActionableTrial> actionableTrials) {
-        writeHotspotActionableTrials(timestamp, filterAndExpandHotspotTrials(actionableTrials, hotspotFilter()));
+        writeHotspotActionableTrials(timestamp, filterAndExpandTrials(actionableTrials, hotspotFilter()));
+        writeCodonActionableTrials(timestamp, filterAndExpandTrials(actionableTrials, codonFilter()));
+        writeExonActionableTrials(timestamp, filterAndExpandTrials(actionableTrials, exonFilter()));
+        writeGeneActionableTrials(timestamp, filterAndExpandTrials(actionableTrials, geneFilter()));
+        writeFusionActionableTrials(timestamp, filterAndExpandTrials(actionableTrials, fusionFilter()));
+        writeCharacteristicActionableTrials(timestamp, filterAndExpandTrials(actionableTrials, characteristicsFilter()));
+        writeHLAActionableTrials(timestamp, filterAndExpandTrials(actionableTrials, hlaFilter()));
     }
 
-
-    private void writeHotspotActionableTrials(@NotNull Timestamp timestamp, @NotNull List<ActionableTrial> trialsWithHotspots) {
-        for (List<ActionableTrial> batch : Iterables.partition(trialsWithHotspots, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
+    private void writeHotspotActionableTrials(@NotNull Timestamp timestamp, @NotNull List<ActionableTrial> trialsForHotspots) {
+        for (List<ActionableTrial> batch : Iterables.partition(trialsForHotspots, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
             InsertValuesStepN inserter = createActionableHotspotInserter();
             batch.forEach(entry -> writeTrialsForHotspotBatch(timestamp, inserter, entry));
+            inserter.execute();
+        }
+    }
+
+    private void writeCodonActionableTrials(@NotNull Timestamp timestamp, @NotNull List<ActionableTrial> trialsForCodons) {
+        for (List<ActionableTrial> batch : Iterables.partition(trialsForCodons, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
+            InsertValuesStepN inserter = createActionableCodonInserter();
+            batch.forEach(entry -> writeTrialsForRangeBatch(timestamp, inserter, entry));
+            inserter.execute();
+        }
+    }
+
+    private void writeExonActionableTrials(@NotNull Timestamp timestamp, @NotNull List<ActionableTrial> trialsForExons) {
+        for (List<ActionableTrial> batch : Iterables.partition(trialsForExons, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
+            InsertValuesStepN inserter = createActionableExonInserter();
+            batch.forEach(entry -> writeTrialsForRangeBatch(timestamp, inserter, entry));
+            inserter.execute();
+        }
+    }
+
+    private void writeGeneActionableTrials(@NotNull Timestamp timestamp, @NotNull List<ActionableTrial> trialsForGenes) {
+        for (List<ActionableTrial> batch : Iterables.partition(trialsForGenes, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
+            InsertValuesStepN inserter = createActionableGeneInserter();
+            batch.forEach(entry -> writeTrialsForGeneBatch(timestamp, inserter, entry));
+            inserter.execute();
+        }
+    }
+
+    private void writeFusionActionableTrials(@NotNull Timestamp timestamp, @NotNull List<ActionableTrial> trialsForFusions) {
+        for (List<ActionableTrial> batch : Iterables.partition(trialsForFusions, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
+            InsertValuesStepN inserter = createActionableFusionInserter();
+            batch.forEach(entry -> writeTrialsForFusionBatch(timestamp, inserter, entry));
+            inserter.execute();
+        }
+    }
+
+    private void writeCharacteristicActionableTrials(@NotNull Timestamp timestamp,
+            @NotNull List<ActionableTrial> trialsForCharacteristics) {
+        for (List<ActionableTrial> batch : Iterables.partition(trialsForCharacteristics, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
+            InsertValuesStepN inserter = createActionableCharacteristicInserter();
+            batch.forEach(entry -> writeTrialsForCharacteristicBatch(timestamp, inserter, entry));
+            inserter.execute();
+        }
+    }
+
+    private void writeHLAActionableTrials(@NotNull Timestamp timestamp, @NotNull List<ActionableTrial> trialsForHLA) {
+        for (List<ActionableTrial> batch : Iterables.partition(trialsForHLA, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
+            InsertValuesStepN inserter = createActionableHLAInserter();
+            batch.forEach(entry -> writeTrialsForHLABatch(timestamp, inserter, entry));
             inserter.execute();
         }
     }
@@ -646,13 +701,188 @@ public class ServeDAO {
                 null,
                 indication.applicableType().name(),
                 indication.applicableType().doid(),
-                concat(toStrings(trialForHotspot.indications().iterator().next().excludedSubTypes())),
+                concat(toStrings(indication.excludedSubTypes())),
                 "",
                 null,
                 EvidenceLevel.B,
                 EvidenceLevelDetails.CLINICAL_STUDY,
                 EvidenceDirection.RESPONSIVE,
                 concat(trialForHotspot.urls()));
+    }
+
+    private static void writeTrialsForRangeBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStepN inserter,
+            @NotNull ActionableTrial trialForRange) {
+        MolecularCriterium molecularCriterium = trialForRange.anyMolecularCriteria().iterator().next();
+        ActionableRange range;
+        if (!molecularCriterium.codons().isEmpty()) {
+            range = molecularCriterium.codons().iterator().next();
+        } else if (!molecularCriterium.exons().isEmpty()) {
+            range = molecularCriterium.exons().iterator().next();
+        } else {
+            throw new IllegalStateException("Neither codon nor range present in trial on actionable range: " + molecularCriterium);
+        }
+        Indication indication = trialForRange.indications().iterator().next();
+        inserter.values(timestamp,
+                range.gene(),
+                range.chromosome(),
+                range.start(),
+                range.end(),
+                range.applicableMutationType(),
+                trialForRange.source(),
+                range.sourceDate(),
+                range.sourceEvent(),
+                concat(range.sourceUrls()),
+                trialForRange.nctId(),
+                trialForRange.title(),
+                trialForRange.acronym(),
+                trialForRange.genderCriterium(),
+                toCountryWithCities(trialForRange.countries()),
+                toHospitals(trialForRange.countries()),
+                concat(trialForRange.therapyNames()),
+                null,
+                null,
+                indication.applicableType().name(),
+                indication.applicableType().doid(),
+                concat(toStrings(indication.excludedSubTypes())),
+                "",
+                null,
+                EvidenceLevel.B,
+                EvidenceLevelDetails.CLINICAL_STUDY,
+                EvidenceDirection.RESPONSIVE,
+                concat(trialForRange.urls()));
+    }
+
+    private static void writeTrialsForGeneBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStepN inserter,
+            @NotNull ActionableTrial trialForGene) {
+        ActionableGene gene = trialForGene.anyMolecularCriteria().iterator().next().genes().iterator().next();
+        Indication indication = trialForGene.indications().iterator().next();
+
+        inserter.values(timestamp,
+                gene.gene(),
+                gene.event(),
+                trialForGene.source(),
+                gene.sourceDate(),
+                gene.sourceEvent(),
+                concat(gene.sourceUrls()),
+                trialForGene.nctId(),
+                trialForGene.title(),
+                trialForGene.acronym(),
+                trialForGene.genderCriterium(),
+                toCountryWithCities(trialForGene.countries()),
+                toHospitals(trialForGene.countries()),
+                concat(trialForGene.therapyNames()),
+                null,
+                null,
+                indication.applicableType().name(),
+                indication.applicableType().doid(),
+                concat(toStrings(indication.excludedSubTypes())),
+                "",
+                null,
+                EvidenceLevel.B,
+                EvidenceLevelDetails.CLINICAL_STUDY,
+                EvidenceDirection.RESPONSIVE,
+                concat(trialForGene.urls()));
+    }
+
+    private static void writeTrialsForFusionBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStepN inserter,
+            @NotNull ActionableTrial trialForFusion) {
+        ActionableFusion fusion = trialForFusion.anyMolecularCriteria().iterator().next().fusions().iterator().next();
+        Indication indication = trialForFusion.indications().iterator().next();
+
+        inserter.values(timestamp,
+                fusion.geneUp(),
+                fusion.minExonUp(),
+                fusion.maxExonUp(),
+                fusion.geneDown(),
+                fusion.minExonDown(),
+                fusion.maxExonDown(),
+                trialForFusion.source(),
+                fusion.sourceDate(),
+                fusion.sourceEvent(),
+                concat(fusion.sourceUrls()),
+                trialForFusion.nctId(),
+                trialForFusion.title(),
+                trialForFusion.acronym(),
+                trialForFusion.genderCriterium(),
+                toCountryWithCities(trialForFusion.countries()),
+                toHospitals(trialForFusion.countries()),
+                concat(trialForFusion.therapyNames()),
+                null,
+                null,
+                indication.applicableType().name(),
+                indication.applicableType().doid(),
+                concat(toStrings(indication.excludedSubTypes())),
+                "",
+                null,
+                EvidenceLevel.B,
+                EvidenceLevelDetails.CLINICAL_STUDY,
+                EvidenceDirection.RESPONSIVE,
+                concat(trialForFusion.urls()));
+    }
+
+    private void writeTrialsForCharacteristicBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStepN inserter,
+            @NotNull ActionableTrial trialForCharacteristic) {
+        ActionableCharacteristic characteristic =
+                trialForCharacteristic.anyMolecularCriteria().iterator().next().characteristics().iterator().next();
+        Indication indication = trialForCharacteristic.indications().iterator().next();
+
+        inserter.values(timestamp,
+                characteristic.type(),
+                characteristic.cutoffType(),
+                characteristic.cutoff(),
+                trialForCharacteristic.source(),
+                characteristic.sourceDate(),
+                characteristic.sourceEvent(),
+                concat(characteristic.sourceUrls()),
+                trialForCharacteristic.nctId(),
+                trialForCharacteristic.title(),
+                trialForCharacteristic.acronym(),
+                trialForCharacteristic.genderCriterium(),
+                toCountryWithCities(trialForCharacteristic.countries()),
+                toHospitals(trialForCharacteristic.countries()),
+                concat(trialForCharacteristic.therapyNames()),
+                null,
+                null,
+                indication.applicableType().name(),
+                indication.applicableType().doid(),
+                concat(toStrings(indication.excludedSubTypes())),
+                "",
+                null,
+                EvidenceLevel.B,
+                EvidenceLevelDetails.CLINICAL_STUDY,
+                EvidenceDirection.RESPONSIVE,
+                concat(trialForCharacteristic.urls()));
+    }
+
+    private static void writeTrialsForHLABatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStepN inserter,
+            @NotNull ActionableTrial trialForHLA) {
+        ActionableHLA hla = trialForHLA.anyMolecularCriteria().iterator().next().hla().iterator().next();
+        Indication indication = trialForHLA.indications().iterator().next();
+
+        inserter.values(timestamp,
+                hla.hlaAllele(),
+                trialForHLA.source(),
+                hla.sourceDate(),
+                hla.sourceEvent(),
+                concat(hla.sourceUrls()),
+                trialForHLA.nctId(),
+                trialForHLA.title(),
+                trialForHLA.acronym(),
+                trialForHLA.genderCriterium(),
+                toCountryWithCities(trialForHLA.countries()),
+                toHospitals(trialForHLA.countries()),
+                concat(trialForHLA.therapyNames()),
+                null,
+                null,
+                indication.applicableType().name(),
+                indication.applicableType().doid(),
+                concat(toStrings(indication.excludedSubTypes())),
+                "",
+                null,
+                EvidenceLevel.B,
+                EvidenceLevelDetails.CLINICAL_STUDY,
+                EvidenceDirection.RESPONSIVE,
+                concat(trialForHLA.urls()));
     }
 
     @NotNull
@@ -922,7 +1152,7 @@ public class ServeDAO {
     }
 
     @NotNull
-    private static List<ActionableTrial> filterAndExpandHotspotTrials(@NotNull List<ActionableTrial> trials,
+    private static List<ActionableTrial> filterAndExpandTrials(@NotNull List<ActionableTrial> trials,
             @NotNull Predicate<MolecularCriterium> molecularCriteriumPredicate) {
         List<ActionableTrial> expandedFilteredTrials = Lists.newArrayList();
         for (ActionableTrial trial : trials) {

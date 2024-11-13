@@ -1,4 +1,4 @@
-package com.hartwig.serve;
+package com.hartwig.serve.extraction;
 
 import java.util.List;
 import java.util.Set;
@@ -12,13 +12,14 @@ import com.hartwig.serve.datamodel.molecular.gene.GeneTestFactory;
 import com.hartwig.serve.datamodel.molecular.hotspot.HotspotTestFactory;
 import com.hartwig.serve.datamodel.molecular.range.RangeTestFactory;
 import com.hartwig.serve.datamodel.trial.TrialTestFactory;
-import com.hartwig.serve.extraction.ExtractionResult;
-import com.hartwig.serve.extraction.ImmutableExtractionResult;
 import com.hartwig.serve.extraction.events.TestEventInterpretationFactory;
 
 import org.jetbrains.annotations.NotNull;
 
-public final class ServeAlgoTestFactory {
+public final class ExtractionResultTestFactory {
+
+    private ExtractionResultTestFactory() {
+    }
 
     @NotNull
     public static ExtractionResult createMinimalResultForSource(@NotNull Knowledgebase source) {

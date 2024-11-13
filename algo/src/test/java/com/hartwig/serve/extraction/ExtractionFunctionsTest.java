@@ -7,7 +7,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.Set;
 
 import com.google.common.collect.Lists;
-import com.hartwig.serve.ServeAlgoTestFactory;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.molecular.KnownEvent;
 
@@ -21,8 +20,8 @@ public class ExtractionFunctionsTest {
 
     @Test
     public void canMergeProperExtractionResults() {
-        ExtractionResult result1 = ServeAlgoTestFactory.createProperResultForSource(SOURCE_1);
-        ExtractionResult result2 = ServeAlgoTestFactory.createProperResultForSource(SOURCE_2);
+        ExtractionResult result1 = ExtractionResultTestFactory.createProperResultForSource(SOURCE_1);
+        ExtractionResult result2 = ExtractionResultTestFactory.createProperResultForSource(SOURCE_2);
 
         ExtractionResult merged = ExtractionFunctions.merge(Lists.newArrayList(result1, result2));
 
@@ -40,8 +39,8 @@ public class ExtractionFunctionsTest {
 
     @Test
     public void retainsNullOnMinimalExtractionResults() {
-        ExtractionResult result1 = ServeAlgoTestFactory.createMinimalResultForSource(SOURCE_1);
-        ExtractionResult result2 = ServeAlgoTestFactory.createMinimalResultForSource(SOURCE_2);
+        ExtractionResult result1 = ExtractionResultTestFactory.createMinimalResultForSource(SOURCE_1);
+        ExtractionResult result2 = ExtractionResultTestFactory.createMinimalResultForSource(SOURCE_2);
         ExtractionResult merged = ExtractionFunctions.merge(Lists.newArrayList(result1, result2));
 
         assertNull(merged.knownEvents());

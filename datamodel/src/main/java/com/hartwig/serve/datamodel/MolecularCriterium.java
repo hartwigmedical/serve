@@ -1,5 +1,6 @@
 package com.hartwig.serve.datamodel;
 
+import java.util.Comparator;
 import java.util.Set;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -20,7 +21,9 @@ import org.jetbrains.annotations.Nullable;
              jdkOnly = true)
 @JsonSerialize(as = ImmutableMolecularCriterium.class)
 @JsonDeserialize(as = ImmutableMolecularCriterium.class)
-public abstract class MolecularCriterium {
+public abstract class MolecularCriterium implements Comparable<MolecularCriterium> {
+
+    private static final Comparator<MolecularCriterium> COMPARATOR = new MolecularCriteriumComparator();
 
     @NotNull
     public abstract Set<ActionableHotspot> hotspots();
@@ -42,5 +45,10 @@ public abstract class MolecularCriterium {
 
     @NotNull
     public abstract Set<ActionableHLA> hla();
+
+    @Override
+    public int compareTo(MolecularCriterium other) {
+        return COMPARATOR.compare(this, other);
+    }
 
 }

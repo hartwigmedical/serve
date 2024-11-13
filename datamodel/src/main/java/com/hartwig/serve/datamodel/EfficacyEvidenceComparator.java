@@ -20,9 +20,14 @@ public class EfficacyEvidenceComparator implements Comparator<EfficacyEvidence> 
             return treatmentCompare;
         }
 
-        int indicationCompare = compareIndications(evidence1.indication().applicableType(), evidence2.indication().applicableType());
+        int indicationCompare = compareIndications(evidence1.indication(), evidence2.indication());
         if (indicationCompare != 0) {
             return indicationCompare;
+        }
+
+        int molecularCriteriumCompare = evidence1.molecularCriterium().compareTo(evidence2.molecularCriterium());
+        if (molecularCriteriumCompare != 0) {
+            return molecularCriteriumCompare;
         }
 
         int efficacyDescriptionCompare = evidence1.efficacyDescription().compareTo(evidence2.efficacyDescription());
@@ -30,17 +35,17 @@ public class EfficacyEvidenceComparator implements Comparator<EfficacyEvidence> 
             return efficacyDescriptionCompare;
         }
 
-        int evidenceLevelCompare = evidence1.evidenceLevel().toString().compareTo(evidence2.evidenceLevel().toString());
+        int evidenceLevelCompare = evidence1.evidenceLevel().compareTo(evidence2.evidenceLevel());
         if (evidenceLevelCompare != 0) {
             return evidenceLevelCompare;
         }
 
-        int evidenceLevelDetailsCompare = evidence1.evidenceLevelDetails().toString().compareTo(evidence2.evidenceLevelDetails().toString());
+        int evidenceLevelDetailsCompare = evidence1.evidenceLevelDetails().compareTo(evidence2.evidenceLevelDetails());
         if (evidenceLevelDetailsCompare != 0) {
             return evidenceLevelDetailsCompare;
         }
 
-        int evidenceDirectionCompare = evidence1.evidenceDirection().toString().compareTo(evidence2.evidenceDirection().toString());
+        int evidenceDirectionCompare = evidence1.evidenceDirection().compareTo(evidence2.evidenceDirection());
         if (evidenceDirectionCompare != 0) {
             return evidenceDirectionCompare;
         }
@@ -53,7 +58,10 @@ public class EfficacyEvidenceComparator implements Comparator<EfficacyEvidence> 
         return CompareFunctions.compareSetOfComparable(evidence1.urls(), evidence2.urls());
     }
 
-    private static int compareIndications(@NotNull CancerType cancerType1, @NotNull CancerType cancerType2) {
+    private static int compareIndications(@NotNull Indication indication1, @NotNull Indication indication2) {
+        CancerType cancerType1 = indication1.applicableType();
+        CancerType cancerType2 = indication2.applicableType();
+
         int nameCompare = cancerType1.name().compareTo(cancerType2.name());
         if (nameCompare != 0) {
             return nameCompare;

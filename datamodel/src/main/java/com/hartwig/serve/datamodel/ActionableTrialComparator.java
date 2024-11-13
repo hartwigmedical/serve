@@ -47,7 +47,12 @@ public class ActionableTrialComparator implements Comparator<ActionableTrial> {
             return genderCriteriumCompare;
         }
 
-        return compareIndications(actionableTrial1.indications(), actionableTrial2.indications());
+        int indicationCompare = compareIndications(actionableTrial1.indications(), actionableTrial2.indications());
+        if (indicationCompare != 0) {
+            return indicationCompare;
+        }
+
+        return CompareFunctions.compareSetOfComparable(actionableTrial1.anyMolecularCriteria(), actionableTrial2.anyMolecularCriteria());
     }
 
     private static int compareCountries(@NotNull Set<Country> set1, @NotNull Set<Country> set2) {
@@ -69,9 +74,17 @@ public class ActionableTrialComparator implements Comparator<ActionableTrial> {
         Iterator<Indication> iterator2 = indication2.iterator();
 
         while (iterator1.hasNext() && iterator2.hasNext()) {
-            int compare = iterator1.next().applicableType().name().compareTo(iterator2.next().applicableType().name());
-            if (compare != 0) {
-                return compare;
+            CancerType cancerType1 = iterator1.next().applicableType();
+            CancerType cancerType2 = iterator2.next().applicableType();
+
+            int nameCompare = cancerType1.name().compareTo(cancerType2.name());
+            if (nameCompare != 0) {
+                return nameCompare;
+            }
+
+            int doidCompare = cancerType1.doid().compareTo(cancerType2.doid());
+            if (doidCompare != 0) {
+                return doidCompare;
             }
         }
 

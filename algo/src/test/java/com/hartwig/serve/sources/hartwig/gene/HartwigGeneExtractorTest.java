@@ -18,12 +18,13 @@ public class HartwigGeneExtractorTest {
     @Test
     public void shouldExtractGenesFromEntries() {
         HartwigGeneExtractor victim = new HartwigGeneExtractor(Knowledgebase.HARTWIG_GENE_CURATED);
-        ExtractionResult result = victim.extract(List.of(ImmutableHartwigGeneEntry.builder().gene(GENE).build()));
+        ExtractionResult result = victim.extract(List.of(ImmutableHartwigGeneEntry.builder().gene(GENE).geneRole("onco").build()));
         assertEquals(result.knownEvents().genes().size(), 1);
         KnownGene knownGene = result.knownEvents().genes().iterator().next();
-        assertEquals(knownGene.gene(), GENE);
-        assertEquals(knownGene.geneRole(), GeneRole.UNKNOWN);
-        assertEquals(knownGene.sources().size(), 1);
-        assertEquals(knownGene.sources().iterator().next(), Knowledgebase.HARTWIG_GENE_CURATED);
+        assertEquals(GENE, knownGene.gene());
+        assertEquals(GeneRole.ONCO, knownGene.geneRole());
+        assertEquals(1, knownGene.sources().size());
+        assertEquals(Knowledgebase.HARTWIG_GENE_CURATED, knownGene.sources().iterator().next());
     }
+
 }

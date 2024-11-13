@@ -10,4 +10,7 @@ public abstract class HartwigGeneEntry {
 
     @NotNull
     public abstract String gene();
+    
+    @NotNull
+    public abstract String geneRole();
 }

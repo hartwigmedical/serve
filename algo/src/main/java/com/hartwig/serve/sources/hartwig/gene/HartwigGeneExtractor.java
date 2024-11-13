@@ -30,7 +30,11 @@ public class HartwigGeneExtractor {
         Set<KnownGene> knownGenes = Sets.newHashSet();
         ProgressTracker tracker = new ProgressTracker("Hartwig genes", entries.size());
         for (HartwigGeneEntry entry : entries) {
-            knownGenes.add(ImmutableKnownGene.builder().gene(entry.gene()).geneRole(GeneRole.UNKNOWN).addSources(source).build());
+            knownGenes.add(ImmutableKnownGene.builder()
+                    .gene(entry.gene())
+                    .geneRole(GeneRole.valueOf(entry.geneRole().toUpperCase()))
+                    .addSources(source)
+                    .build());
             tracker.update();
         }
 

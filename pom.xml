@@ -74,7 +74,7 @@
                 <version>2.1.0</version>
             </extension>
         </extensions>
-
+        
         <pluginManagement>
             <plugins>
                 <plugin>

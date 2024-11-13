@@ -15,7 +15,7 @@ public class HartwigGeneFileReaderTest {
 
     @Test
     public void canReadHartwigCuratedGenesFile() throws IOException {
-        List<HartwigGeneEntry> entries = HartwigGeneFileReader.read(EXAMPLE_TSV);
+        List<HartwigGeneEntry> entries = HartwigGeneFileReader.read(EXAMPLE_TSV, "geneRole");
 
         assertEquals(2, entries.size());
 

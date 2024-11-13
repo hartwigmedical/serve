@@ -14,15 +14,28 @@ import com.hartwig.serve.datamodel.common.GeneRole;
 
 import org.jetbrains.annotations.NotNull;
 
-final class HartwigGeneFileReader {
+public final class HartwigGeneFileReader {
 
     private static final String DELIMITER = "\t";
+
+    private static final String DRIVER_GENES_GENE_ROLE_FIELD = "likelihoodType";
+    private static final String CURATED_GENES_GENE_ROLE_FIELD = "geneRole";
 
     private HartwigGeneFileReader() {
     }
 
     @NotNull
-    public static List<HartwigGeneEntry> read(@NotNull String fileName, @NotNull String geneRoleFieldName) throws IOException {
+    public static List<HartwigGeneEntry> readDriverGenes(@NotNull String fileName) throws IOException {
+        return HartwigGeneFileReader.read(fileName, DRIVER_GENES_GENE_ROLE_FIELD);
+    }
+
+    @NotNull
+    public static List<HartwigGeneEntry> readCuratedGenes(@NotNull String fileName) throws IOException {
+        return HartwigGeneFileReader.read(fileName, CURATED_GENES_GENE_ROLE_FIELD);
+    }
+
+    @NotNull
+    private static List<HartwigGeneEntry> read(@NotNull String fileName, @NotNull String geneRoleFieldName) throws IOException {
         return fromLines(Files.readAllLines(new File(fileName).toPath()), geneRoleFieldName);
     }
 

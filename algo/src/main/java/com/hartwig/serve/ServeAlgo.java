@@ -38,10 +38,9 @@ import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurator;
 import com.hartwig.serve.sources.docm.DocmEntry;
 import com.hartwig.serve.sources.docm.DocmExtractor;
 import com.hartwig.serve.sources.docm.DocmReader;
-import com.hartwig.serve.sources.hartwig.gene.HartwigCuratedGeneFileReader;
-import com.hartwig.serve.sources.hartwig.gene.HartwigDriverGeneFileReader;
 import com.hartwig.serve.sources.hartwig.gene.HartwigGeneEntry;
 import com.hartwig.serve.sources.hartwig.gene.HartwigGeneExtractor;
+import com.hartwig.serve.sources.hartwig.gene.HartwigGeneFileReader;
 import com.hartwig.serve.sources.hartwig.hotspot.HartwigHotspotEntry;
 import com.hartwig.serve.sources.hartwig.hotspot.HartwigHotspotExtractor;
 import com.hartwig.serve.sources.hartwig.hotspot.HartwigHotspotFileReader;
@@ -227,7 +226,7 @@ public class ServeAlgo {
     @NotNull
     private ExtractionResult extractHartwigDriverGeneKnowledge(@NotNull String driverGeneFileTsv) throws IOException {
         LOGGER.info("Reading Hartwig Driver Genes TSV from '{}'", driverGeneFileTsv);
-        List<HartwigGeneEntry> entries = HartwigDriverGeneFileReader.read(driverGeneFileTsv);
+        List<HartwigGeneEntry> entries = HartwigGeneFileReader.readDriverGenes(driverGeneFileTsv);
         LOGGER.info(" Read {} entries", entries.size());
 
         HartwigGeneExtractor extractor = new HartwigGeneExtractor(Knowledgebase.HARTWIG_GENE_DRIVER_PANEL);
@@ -238,7 +237,7 @@ public class ServeAlgo {
     @NotNull
     private ExtractionResult extractHartwigCuratedGeneKnowledge(@NotNull String curatedGeneFileTsv) throws IOException {
         LOGGER.info("Reading Hartwig Curated Genes TSV from '{}'", curatedGeneFileTsv);
-        List<HartwigGeneEntry> entries = HartwigCuratedGeneFileReader.read(curatedGeneFileTsv);
+        List<HartwigGeneEntry> entries = HartwigGeneFileReader.readCuratedGenes(curatedGeneFileTsv);
         LOGGER.info(" Read {} entries", entries.size());
 
         HartwigGeneExtractor extractor = new HartwigGeneExtractor(Knowledgebase.HARTWIG_GENE_CURATED);

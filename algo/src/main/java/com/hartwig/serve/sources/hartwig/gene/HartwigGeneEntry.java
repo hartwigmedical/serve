@@ -1,5 +1,7 @@
 package com.hartwig.serve.sources.hartwig.gene;
 
+import com.hartwig.serve.datamodel.common.GeneRole;
+
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -12,5 +14,5 @@ public abstract class HartwigGeneEntry {
     public abstract String gene();
     
     @NotNull
-    public abstract String geneRole();
+    public abstract GeneRole geneRole();
 }

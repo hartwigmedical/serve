@@ -14,17 +14,18 @@ import org.junit.Test;
 public class HartwigGeneExtractorTest {
 
     private static final String GENE = "gene";
+    private static final GeneRole GENE_ROLE = GeneRole.ONCO;
 
     @Test
     public void shouldExtractGenesFromEntries() {
-        HartwigGeneExtractor victim = new HartwigGeneExtractor(Knowledgebase.HARTWIG_GENE_CURATED);
-        ExtractionResult result = victim.extract(List.of(ImmutableHartwigGeneEntry.builder().gene(GENE).geneRole("onco").build()));
+        HartwigGeneExtractor extractor = new HartwigGeneExtractor(Knowledgebase.HARTWIG_GENE_CURATED);
+        ExtractionResult result = extractor.extract(List.of(ImmutableHartwigGeneEntry.builder().gene(GENE).geneRole(GENE_ROLE).build()));
         assertEquals(result.knownEvents().genes().size(), 1);
+
         KnownGene knownGene = result.knownEvents().genes().iterator().next();
         assertEquals(GENE, knownGene.gene());
         assertEquals(GeneRole.ONCO, knownGene.geneRole());
         assertEquals(1, knownGene.sources().size());
         assertEquals(Knowledgebase.HARTWIG_GENE_CURATED, knownGene.sources().iterator().next());
     }
-
 }

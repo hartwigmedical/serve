@@ -9,10 +9,10 @@ import org.junit.Test;
 public class CompareFunctionsTest {
 
     @Test
-    public void canCompareSetsOfStrings() {
-        assertEquals(1, CompareFunctions.compareSetOfStrings(Set.of(), Set.of("string")));
-        assertEquals(0, CompareFunctions.compareSetOfStrings(Set.of("string"), Set.of("string")));
-        assertEquals(-1, CompareFunctions.compareSetOfStrings(Set.of("string"), Set.of()));
+    public void canCompareSetsOfComparable() {
+        assertEquals(1, CompareFunctions.compareSetOfComparable(Set.of(), Set.of("string")));
+        assertEquals(0, CompareFunctions.compareSetOfComparable(Set.of("string"), Set.of("string")));
+        assertEquals(-1, CompareFunctions.compareSetOfComparable(Set.of("string"), Set.of()));
     }
 
     @Test

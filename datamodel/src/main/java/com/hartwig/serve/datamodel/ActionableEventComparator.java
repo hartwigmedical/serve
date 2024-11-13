@@ -20,6 +20,6 @@ public class ActionableEventComparator implements Comparator<ActionableEvent> {
             return dateCompare;
         }
 
-        return CompareFunctions.compareSetOfStrings(event1.sourceUrls(), event2.sourceUrls());
+        return CompareFunctions.compareSetOfComparable(event1.sourceUrls(), event2.sourceUrls());
     }
 }

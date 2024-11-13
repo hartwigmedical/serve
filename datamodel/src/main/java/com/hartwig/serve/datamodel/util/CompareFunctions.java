@@ -13,14 +13,14 @@ public final class CompareFunctions {
     private CompareFunctions() {
     }
 
-    public static int compareSetOfStrings(@NotNull Set<String> set1, @NotNull Set<String> set2) {
-        Iterator<String> set1Iterator = set1.iterator();
-        Iterator<String> set2Iterator = set2.iterator();
+    public static <T extends Comparable<T>> int compareSetOfComparable(@NotNull Set<T> set1, @NotNull Set<T> set2) {
+        Iterator<T> set1Iterator = set1.iterator();
+        Iterator<T> set2Iterator = set2.iterator();
 
         while (set1Iterator.hasNext() && set2Iterator.hasNext()) {
-            int stringCompare = set1Iterator.next().compareTo(set2Iterator.next());
-            if (stringCompare != 0) {
-                return stringCompare;
+            int entryCompare = set1Iterator.next().compareTo(set2Iterator.next());
+            if (entryCompare != 0) {
+                return entryCompare;
             }
         }
 

@@ -37,7 +37,7 @@ public class ActionableTrialComparator implements Comparator<ActionableTrial> {
             return compareCountries;
         }
 
-        int compareTherapyNames = CompareFunctions.compareSetOfStrings(actionableTrial1.therapyNames(), actionableTrial2.therapyNames());
+        int compareTherapyNames = CompareFunctions.compareSetOfComparable(actionableTrial1.therapyNames(), actionableTrial2.therapyNames());
         if (compareTherapyNames != 0) {
             return compareTherapyNames;
         }

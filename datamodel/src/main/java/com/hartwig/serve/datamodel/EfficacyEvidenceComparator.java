@@ -50,7 +50,7 @@ public class EfficacyEvidenceComparator implements Comparator<EfficacyEvidence> 
             return evidenceYearCompare;
         }
 
-        return CompareFunctions.compareSetOfStrings(evidence1.urls(), evidence2.urls());
+        return CompareFunctions.compareSetOfComparable(evidence1.urls(), evidence2.urls());
     }
 
     private static int compareIndications(@NotNull CancerType cancerType1, @NotNull CancerType cancerType2) {

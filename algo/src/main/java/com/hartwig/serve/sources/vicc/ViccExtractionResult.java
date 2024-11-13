@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.hartwig.serve.datamodel.EfficacyEvidence;
+import com.hartwig.serve.datamodel.efficacy.EfficacyEvidence;
 import com.hartwig.serve.datamodel.molecular.characteristic.TumorCharacteristic;
 import com.hartwig.serve.datamodel.molecular.fusion.FusionPair;
 import com.hartwig.serve.datamodel.molecular.gene.GeneAnnotation;

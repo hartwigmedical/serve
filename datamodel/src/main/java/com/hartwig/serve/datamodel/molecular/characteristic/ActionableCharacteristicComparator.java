@@ -2,8 +2,8 @@ package com.hartwig.serve.datamodel.molecular.characteristic;
 
 import java.util.Comparator;
 
-import com.hartwig.serve.datamodel.ActionableEvent;
-import com.hartwig.serve.datamodel.ActionableEventComparator;
+import com.hartwig.serve.datamodel.molecular.ActionableEvent;
+import com.hartwig.serve.datamodel.molecular.ActionableEventComparator;
 
 import org.jetbrains.annotations.NotNull;
 

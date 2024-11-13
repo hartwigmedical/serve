@@ -2,7 +2,7 @@ package com.hartwig.serve.datamodel.molecular.characteristic;
 
 import java.util.Objects;
 
-import com.hartwig.serve.datamodel.DatamodelTestFactory;
+import com.hartwig.serve.datamodel.common.DatamodelTestFactory;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

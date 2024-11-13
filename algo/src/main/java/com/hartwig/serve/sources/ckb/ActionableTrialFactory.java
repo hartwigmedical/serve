@@ -16,15 +16,15 @@ import com.hartwig.serve.ckb.datamodel.clinicaltrial.Location;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.VariantRequirementDetail;
 import com.hartwig.serve.ckb.datamodel.indication.Indication;
 import com.hartwig.serve.ckb.datamodel.therapy.Therapy;
-import com.hartwig.serve.datamodel.ActionableTrial;
-import com.hartwig.serve.datamodel.Country;
-import com.hartwig.serve.datamodel.GenderCriterium;
-import com.hartwig.serve.datamodel.Hospital;
-import com.hartwig.serve.datamodel.ImmutableActionableTrial;
-import com.hartwig.serve.datamodel.ImmutableCountry;
-import com.hartwig.serve.datamodel.ImmutableHospital;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.datamodel.MolecularCriterium;
+import com.hartwig.serve.datamodel.molecular.MolecularCriterium;
+import com.hartwig.serve.datamodel.trial.ActionableTrial;
+import com.hartwig.serve.datamodel.trial.Country;
+import com.hartwig.serve.datamodel.trial.GenderCriterium;
+import com.hartwig.serve.datamodel.trial.Hospital;
+import com.hartwig.serve.datamodel.trial.ImmutableActionableTrial;
+import com.hartwig.serve.datamodel.trial.ImmutableCountry;
+import com.hartwig.serve.datamodel.trial.ImmutableHospital;
 import com.hartwig.serve.sources.ckb.filter.CkbTrialFilterModel;
 import com.hartwig.serve.sources.ckb.region.CkbRegion;
 
@@ -100,10 +100,10 @@ class ActionableTrialFactory {
     }
 
     @NotNull
-    private static Set<com.hartwig.serve.datamodel.Indication> extractIndications(@NotNull List<Indication> ckbIndications) {
-        Set<com.hartwig.serve.datamodel.Indication> indications = new HashSet<>();
+    private static Set<com.hartwig.serve.datamodel.common.Indication> extractIndications(@NotNull List<Indication> ckbIndications) {
+        Set<com.hartwig.serve.datamodel.common.Indication> indications = new HashSet<>();
         for (Indication indication : ckbIndications) {
-            com.hartwig.serve.datamodel.Indication cancerTypeExtraction = ActionableFunctions.extractIndication(indication);
+            com.hartwig.serve.datamodel.common.Indication cancerTypeExtraction = ActionableFunctions.extractIndication(indication);
             if (cancerTypeExtraction != null) {
                 indications.add(cancerTypeExtraction);
             }

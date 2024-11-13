@@ -1,6 +1,6 @@
 package com.hartwig.serve.datamodel.molecular.immuno;
 
-import com.hartwig.serve.datamodel.DatamodelTestFactory;
+import com.hartwig.serve.datamodel.common.DatamodelTestFactory;
 
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;

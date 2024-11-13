@@ -2,8 +2,8 @@ package com.hartwig.serve.datamodel.molecular.fusion;
 
 import java.util.Objects;
 
-import com.hartwig.serve.datamodel.DatamodelTestFactory;
 import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.datamodel.common.DatamodelTestFactory;
 import com.hartwig.serve.datamodel.molecular.common.ProteinEffect;
 
 import org.apache.logging.log4j.util.Strings;

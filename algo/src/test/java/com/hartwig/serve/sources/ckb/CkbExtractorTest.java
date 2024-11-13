@@ -10,7 +10,7 @@ import java.util.Set;
 import com.hartwig.serve.ckb.classification.CkbClassificationConfig;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.ImmutableVariantRequirementDetail;
-import com.hartwig.serve.datamodel.MutationType;
+import com.hartwig.serve.datamodel.molecular.MutationType;
 import com.hartwig.serve.datamodel.molecular.range.RangeTestFactory;
 import com.hartwig.serve.extraction.EventExtractorOutput;
 import com.hartwig.serve.extraction.ExtractionResult;

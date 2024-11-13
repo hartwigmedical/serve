@@ -1,7 +1,7 @@
 package com.hartwig.serve.cancertype;
 
-import com.hartwig.serve.datamodel.CancerType;
-import com.hartwig.serve.datamodel.ImmutableCancerType;
+import com.hartwig.serve.datamodel.common.CancerType;
+import com.hartwig.serve.datamodel.common.ImmutableCancerType;
 
 public final class CancerTypeConstants {
 

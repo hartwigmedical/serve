@@ -2,20 +2,20 @@ package com.hartwig.serve.refgenome;
 
 import static org.junit.Assert.assertTrue;
 
-import com.hartwig.serve.datamodel.ActionableTrial;
-import com.hartwig.serve.datamodel.ActionableTrialTestFactory;
-import com.hartwig.serve.datamodel.EfficacyEvidence;
-import com.hartwig.serve.datamodel.EfficacyEvidenceTestFactory;
-import com.hartwig.serve.datamodel.ImmutableKnownEvents;
-import com.hartwig.serve.datamodel.KnownEvents;
-import com.hartwig.serve.datamodel.MolecularCriteriumTestFactory;
 import com.hartwig.serve.datamodel.RefGenome;
+import com.hartwig.serve.datamodel.efficacy.EfficacyEvidence;
+import com.hartwig.serve.datamodel.efficacy.EfficacyEvidenceTestFactory;
+import com.hartwig.serve.datamodel.molecular.ImmutableKnownEvents;
+import com.hartwig.serve.datamodel.molecular.KnownEvents;
+import com.hartwig.serve.datamodel.molecular.MolecularCriteriumTestFactory;
 import com.hartwig.serve.datamodel.molecular.fusion.ActionableFusion;
 import com.hartwig.serve.datamodel.molecular.fusion.FusionTestFactory;
 import com.hartwig.serve.datamodel.molecular.gene.ActionableGene;
 import com.hartwig.serve.datamodel.molecular.gene.GeneTestFactory;
 import com.hartwig.serve.datamodel.molecular.hotspot.HotspotTestFactory;
 import com.hartwig.serve.datamodel.molecular.range.RangeTestFactory;
+import com.hartwig.serve.datamodel.trial.ActionableTrial;
+import com.hartwig.serve.datamodel.trial.ActionableTrialTestFactory;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.ImmutableExtractionResult;
 

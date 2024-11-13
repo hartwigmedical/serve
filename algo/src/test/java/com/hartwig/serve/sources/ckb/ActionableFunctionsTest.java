@@ -9,7 +9,7 @@ import java.util.Set;
 
 import com.google.common.collect.Sets;
 import com.hartwig.serve.cancertype.CancerTypeConstants;
-import com.hartwig.serve.datamodel.CancerType;
+import com.hartwig.serve.datamodel.common.CancerType;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;

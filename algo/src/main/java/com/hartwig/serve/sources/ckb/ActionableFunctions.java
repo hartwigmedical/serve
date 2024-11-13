@@ -6,9 +6,9 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.cancertype.CancerTypeConstants;
 import com.hartwig.serve.ckb.datamodel.indication.Indication;
-import com.hartwig.serve.datamodel.CancerType;
-import com.hartwig.serve.datamodel.ImmutableCancerType;
-import com.hartwig.serve.datamodel.ImmutableIndication;
+import com.hartwig.serve.datamodel.common.CancerType;
+import com.hartwig.serve.datamodel.common.ImmutableCancerType;
+import com.hartwig.serve.datamodel.common.ImmutableIndication;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,7 +23,7 @@ final class ActionableFunctions {
     }
 
     @Nullable
-    public static com.hartwig.serve.datamodel.Indication extractIndication(@NotNull Indication indication) {
+    public static com.hartwig.serve.datamodel.common.Indication extractIndication(@NotNull Indication indication) {
         String[] sourceDoidValues = splitSourceDoidString(indication.termId());
 
         if (sourceDoidValues == null) {

@@ -7,7 +7,7 @@ import com.google.common.collect.Lists;
 import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.common.drivergene.DriverGene;
 import com.hartwig.serve.common.ensemblcache.EnsemblDataCache;
-import com.hartwig.serve.datamodel.MutationType;
+import com.hartwig.serve.datamodel.molecular.MutationType;
 import com.hartwig.serve.datamodel.molecular.common.GenomeRegion;
 import com.hartwig.serve.extraction.util.DriverInconsistencyMode;
 import com.hartwig.serve.extraction.util.EnsemblFunctions;

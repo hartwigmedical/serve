@@ -1,7 +1,7 @@
 package com.hartwig.serve.sources.ckb.filter;
 
 import com.google.common.collect.Lists;
-import com.hartwig.serve.datamodel.EvidenceLevel;
+import com.hartwig.serve.datamodel.efficacy.EvidenceLevel;
 
 import org.jetbrains.annotations.NotNull;
 

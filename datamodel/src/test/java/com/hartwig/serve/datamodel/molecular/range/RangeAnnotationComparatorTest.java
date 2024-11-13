@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.List;
 
 import com.google.common.collect.Lists;
-import com.hartwig.serve.datamodel.MutationType;
+import com.hartwig.serve.datamodel.molecular.MutationType;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;

@@ -3,10 +3,16 @@ package com.hartwig.serve.datamodel;
 import java.util.List;
 import java.util.Map;
 
+import com.hartwig.serve.datamodel.efficacy.EfficacyEvidence;
+import com.hartwig.serve.datamodel.efficacy.EfficacyEvidenceTestFactory;
+import com.hartwig.serve.datamodel.molecular.ImmutableKnownEvents;
+import com.hartwig.serve.datamodel.molecular.KnownEvents;
 import com.hartwig.serve.datamodel.molecular.fusion.FusionTestFactory;
 import com.hartwig.serve.datamodel.molecular.gene.GeneTestFactory;
 import com.hartwig.serve.datamodel.molecular.hotspot.HotspotTestFactory;
 import com.hartwig.serve.datamodel.molecular.range.RangeTestFactory;
+import com.hartwig.serve.datamodel.trial.ActionableTrial;
+import com.hartwig.serve.datamodel.trial.ActionableTrialTestFactory;
 
 import org.jetbrains.annotations.NotNull;
 

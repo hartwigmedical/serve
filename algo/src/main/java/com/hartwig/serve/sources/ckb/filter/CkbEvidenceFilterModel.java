@@ -5,7 +5,7 @@ import java.util.Set;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Sets;
-import com.hartwig.serve.datamodel.EvidenceLevel;
+import com.hartwig.serve.datamodel.efficacy.EvidenceLevel;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

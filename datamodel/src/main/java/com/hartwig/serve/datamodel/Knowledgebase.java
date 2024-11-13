@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.StringJoiner;
 
 import com.google.common.collect.Sets;
+import com.hartwig.serve.datamodel.efficacy.EvidenceLevel;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

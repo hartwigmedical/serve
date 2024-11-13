@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
-import com.hartwig.serve.datamodel.ImmutableKnownEvents;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.datamodel.KnownEvents;
+import com.hartwig.serve.datamodel.molecular.ImmutableKnownEvents;
+import com.hartwig.serve.datamodel.molecular.KnownEvents;
 import com.hartwig.serve.datamodel.molecular.gene.ImmutableKnownGene;
 import com.hartwig.serve.datamodel.molecular.gene.KnownGene;
 import com.hartwig.serve.extraction.ExtractionResult;

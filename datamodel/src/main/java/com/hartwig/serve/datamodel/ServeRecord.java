@@ -4,6 +4,9 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.hartwig.serve.datamodel.efficacy.EfficacyEvidence;
+import com.hartwig.serve.datamodel.molecular.KnownEvents;
+import com.hartwig.serve.datamodel.trial.ActionableTrial;
 
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;

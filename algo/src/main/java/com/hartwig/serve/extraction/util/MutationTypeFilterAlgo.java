@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.hartwig.serve.common.drivergene.DriverCategory;
 import com.hartwig.serve.common.drivergene.DriverGene;
-import com.hartwig.serve.datamodel.MutationType;
+import com.hartwig.serve.datamodel.molecular.MutationType;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

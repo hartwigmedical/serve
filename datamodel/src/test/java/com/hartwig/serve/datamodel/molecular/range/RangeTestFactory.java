@@ -2,9 +2,9 @@ package com.hartwig.serve.datamodel.molecular.range;
 
 import java.util.Objects;
 
-import com.hartwig.serve.datamodel.DatamodelTestFactory;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.datamodel.MutationType;
+import com.hartwig.serve.datamodel.common.DatamodelTestFactory;
+import com.hartwig.serve.datamodel.molecular.MutationType;
 import com.hartwig.serve.datamodel.molecular.common.CommonTestFactory;
 
 import org.apache.logging.log4j.util.Strings;

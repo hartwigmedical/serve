@@ -9,7 +9,7 @@ import java.util.Set;
 import com.google.common.collect.Lists;
 import com.hartwig.serve.ServeAlgoTestFactory;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.datamodel.KnownEvent;
+import com.hartwig.serve.datamodel.molecular.KnownEvent;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;

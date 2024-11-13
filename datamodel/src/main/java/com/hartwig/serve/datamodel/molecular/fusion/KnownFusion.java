@@ -4,7 +4,7 @@ import java.util.Comparator;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.hartwig.serve.datamodel.KnownEvent;
+import com.hartwig.serve.datamodel.molecular.KnownEvent;
 import com.hartwig.serve.datamodel.molecular.common.ProteinEffect;
 
 import org.immutables.value.Value;

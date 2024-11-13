@@ -6,12 +6,12 @@ import java.util.Set;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.hartwig.serve.datamodel.ActionableTrial;
-import com.hartwig.serve.datamodel.EfficacyEvidence;
-import com.hartwig.serve.datamodel.ImmutableEfficacyEvidence;
-import com.hartwig.serve.datamodel.ImmutableKnownEvents;
-import com.hartwig.serve.datamodel.KnownEvents;
 import com.hartwig.serve.datamodel.RefGenome;
+import com.hartwig.serve.datamodel.efficacy.EfficacyEvidence;
+import com.hartwig.serve.datamodel.efficacy.ImmutableEfficacyEvidence;
+import com.hartwig.serve.datamodel.molecular.ImmutableKnownEvents;
+import com.hartwig.serve.datamodel.molecular.KnownEvents;
+import com.hartwig.serve.datamodel.trial.ActionableTrial;
 import com.hartwig.serve.extraction.codon.CodonConsolidation;
 import com.hartwig.serve.extraction.copynumber.CopyNumberConsolidation;
 import com.hartwig.serve.extraction.events.EventInterpretation;

@@ -1,6 +1,6 @@
 package com.hartwig.serve.sources.ckb.filter;
 
-import com.hartwig.serve.datamodel.EvidenceLevel;
+import com.hartwig.serve.datamodel.efficacy.EvidenceLevel;
 
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;

@@ -5,12 +5,12 @@ import java.util.Map;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
-import com.hartwig.serve.datamodel.ImmutableKnownEvents;
 import com.hartwig.serve.datamodel.ImmutableServeDatabase;
 import com.hartwig.serve.datamodel.ImmutableServeRecord;
 import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.datamodel.ServeDatabase;
 import com.hartwig.serve.datamodel.ServeRecord;
+import com.hartwig.serve.datamodel.molecular.ImmutableKnownEvents;
 import com.hartwig.serve.datamodel.molecular.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.serialization.ServeJson;
 import com.hartwig.serve.extraction.events.EventInterpretation;

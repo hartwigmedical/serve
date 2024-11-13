@@ -36,6 +36,8 @@ import htsjdk.variant.vcf.VCFCodec;
 public final class KnownHotspotVCF {
 
     private static final Logger LOGGER = LogManager.getLogger(KnownHotspotVCF.class);
+
+    private static final String GZIP_EXTENSION = ".gz";
     private static final String KNOWN_HOTSPOT_VCF = "KnownHotspots.SERVE.vcf.gz";
 
     private KnownHotspotVCF() {
@@ -43,7 +45,7 @@ public final class KnownHotspotVCF {
 
     @NotNull
     public static String knownHotspotVcfPath(@NotNull String outputDir, @NotNull RefGenome refGenome) {
-        return refGenome.addVersionToFilePath(outputDir + File.separator + KNOWN_HOTSPOT_VCF);
+        return addVersionToFilePath(refGenome, outputDir + File.separator + KNOWN_HOTSPOT_VCF);
     }
 
     public static void write(@NotNull String hotspotVcf, @NotNull IndexedFastaSequenceFile refSequence,
@@ -116,6 +118,42 @@ public final class KnownHotspotVCF {
         sorted.sort(new VariantHotspotComparator());
 
         return sorted;
+    }
+
+    @VisibleForTesting
+    @NotNull
+    static String addVersionToFilePath(@NotNull RefGenome refGenome, @NotNull String filePath) {
+        String modifiedFilePath = filePath;
+        if (filePath.endsWith(GZIP_EXTENSION)) {
+            modifiedFilePath = filePath.substring(0, filePath.indexOf(GZIP_EXTENSION));
+        }
+
+        if (!modifiedFilePath.contains(".")) {
+            throw new IllegalStateException("Cannot include ref genome version in file path that has no proper extension: " + filePath);
+        }
+
+        String identifier = determineRefGenomeIdentifier(refGenome);
+        int extensionStart = modifiedFilePath.lastIndexOf(".");
+        String versionedFilePath =
+                modifiedFilePath.substring(0, extensionStart) + "." + identifier + modifiedFilePath.substring(extensionStart);
+
+        if (filePath.endsWith(GZIP_EXTENSION)) {
+            versionedFilePath = versionedFilePath + GZIP_EXTENSION;
+        }
+
+        return versionedFilePath;
+    }
+
+    @VisibleForTesting
+    @NotNull
+    static String determineRefGenomeIdentifier(@NotNull RefGenome refGenome) {
+        if (refGenome == RefGenome.V37) {
+            return "37";
+        } else if (refGenome == RefGenome.V38) {
+            return "38";
+        } else {
+            throw new IllegalStateException("Cannot determine identifier for ref genome version: " + refGenome);
+        }
     }
 
     @VisibleForTesting

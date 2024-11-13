@@ -5,7 +5,6 @@ import java.util.Set;
 
 import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.datamodel.common.GeneRole;
 import com.hartwig.serve.datamodel.gene.ImmutableKnownGene;
 import com.hartwig.serve.datamodel.gene.KnownGene;
 import com.hartwig.serve.extraction.ExtractionResult;
@@ -28,11 +27,7 @@ public class HartwigGeneExtractor {
         Set<KnownGene> knownGenes = Sets.newHashSet();
         ProgressTracker tracker = new ProgressTracker("Hartwig genes", entries.size());
         for (HartwigGeneEntry entry : entries) {
-            knownGenes.add(ImmutableKnownGene.builder()
-                    .gene(entry.gene())
-                    .geneRole(GeneRole.valueOf(entry.geneRole().toUpperCase()))
-                    .addSources(source)
-                    .build());
+            knownGenes.add(ImmutableKnownGene.builder().gene(entry.gene()).geneRole(entry.geneRole()).addSources(source).build());
             tracker.update();
         }
 

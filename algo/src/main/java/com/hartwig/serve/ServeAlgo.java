@@ -226,7 +226,7 @@ public class ServeAlgo {
     @NotNull
     private ExtractionResult extractHartwigDriverGeneKnowledge(@NotNull String driverGeneFileTsv) throws IOException {
         LOGGER.info("Reading Hartwig Driver Genes TSV from '{}'", driverGeneFileTsv);
-        List<HartwigGeneEntry> entries = HartwigGeneFileReader.read(driverGeneFileTsv, "likelihoodType");
+        List<HartwigGeneEntry> entries = HartwigGeneFileReader.readDriverGenes(driverGeneFileTsv);
         LOGGER.info(" Read {} entries", entries.size());
 
         HartwigGeneExtractor extractor = new HartwigGeneExtractor(Knowledgebase.HARTWIG_GENE_DRIVER_PANEL);
@@ -237,7 +237,7 @@ public class ServeAlgo {
     @NotNull
     private ExtractionResult extractHartwigCuratedGeneKnowledge(@NotNull String curatedGeneFileTsv) throws IOException {
         LOGGER.info("Reading Hartwig Curated Genes TSV from '{}'", curatedGeneFileTsv);
-        List<HartwigGeneEntry> entries = HartwigGeneFileReader.read(curatedGeneFileTsv, "geneRole");
+        List<HartwigGeneEntry> entries = HartwigGeneFileReader.readCuratedGenes(curatedGeneFileTsv);
         LOGGER.info(" Read {} entries", entries.size());
 
         HartwigGeneExtractor extractor = new HartwigGeneExtractor(Knowledgebase.HARTWIG_GENE_CURATED);

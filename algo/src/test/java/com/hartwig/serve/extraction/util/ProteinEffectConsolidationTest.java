@@ -3,7 +3,7 @@ package com.hartwig.serve.extraction.util;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import com.hartwig.serve.datamodel.common.ProteinEffect;
+import com.hartwig.serve.datamodel.molecular.common.ProteinEffect;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;

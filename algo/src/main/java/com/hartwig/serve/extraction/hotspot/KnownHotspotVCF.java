@@ -10,12 +10,12 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.RefGenome;
-import com.hartwig.serve.datamodel.common.GeneRole;
-import com.hartwig.serve.datamodel.common.ProteinEffect;
-import com.hartwig.serve.datamodel.hotspot.ImmutableKnownHotspot;
-import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
-import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
-import com.hartwig.serve.datamodel.hotspot.VariantHotspotComparator;
+import com.hartwig.serve.datamodel.molecular.common.GeneRole;
+import com.hartwig.serve.datamodel.molecular.common.ProteinEffect;
+import com.hartwig.serve.datamodel.molecular.hotspot.ImmutableKnownHotspot;
+import com.hartwig.serve.datamodel.molecular.hotspot.KnownHotspot;
+import com.hartwig.serve.datamodel.molecular.hotspot.VariantHotspot;
+import com.hartwig.serve.datamodel.molecular.hotspot.VariantHotspotComparator;
 import com.hartwig.serve.extraction.util.VCFWriterFactory;
 
 import org.apache.logging.log4j.LogManager;

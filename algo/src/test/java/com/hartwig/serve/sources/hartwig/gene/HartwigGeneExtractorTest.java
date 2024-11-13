@@ -5,8 +5,8 @@ import static org.junit.Assert.assertEquals;
 import java.util.List;
 
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.datamodel.common.GeneRole;
-import com.hartwig.serve.datamodel.gene.KnownGene;
+import com.hartwig.serve.datamodel.molecular.common.GeneRole;
+import com.hartwig.serve.datamodel.molecular.gene.KnownGene;
 import com.hartwig.serve.extraction.ExtractionResult;
 
 import org.junit.Test;

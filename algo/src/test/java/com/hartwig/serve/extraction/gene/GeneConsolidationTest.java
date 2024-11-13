@@ -7,9 +7,9 @@ import java.util.Set;
 
 import com.google.common.collect.Lists;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.datamodel.common.GeneRole;
-import com.hartwig.serve.datamodel.gene.ImmutableKnownGene;
-import com.hartwig.serve.datamodel.gene.KnownGene;
+import com.hartwig.serve.datamodel.molecular.common.GeneRole;
+import com.hartwig.serve.datamodel.molecular.gene.ImmutableKnownGene;
+import com.hartwig.serve.datamodel.molecular.gene.KnownGene;
 
 import org.junit.Test;
 

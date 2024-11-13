@@ -10,7 +10,7 @@ import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
 
-import com.hartwig.serve.datamodel.common.GeneRole;
+import com.hartwig.serve.datamodel.molecular.common.GeneRole;
 
 import org.jetbrains.annotations.NotNull;
 

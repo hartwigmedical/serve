@@ -5,9 +5,9 @@ import static org.junit.Assert.assertNull;
 
 import com.google.common.collect.Sets;
 import com.hartwig.serve.common.classification.EventType;
-import com.hartwig.serve.datamodel.characteristic.TumorCharacteristic;
-import com.hartwig.serve.datamodel.characteristic.TumorCharacteristicCutoffType;
-import com.hartwig.serve.datamodel.characteristic.TumorCharacteristicType;
+import com.hartwig.serve.datamodel.molecular.characteristic.TumorCharacteristic;
+import com.hartwig.serve.datamodel.molecular.characteristic.TumorCharacteristicCutoffType;
+import com.hartwig.serve.datamodel.molecular.characteristic.TumorCharacteristicType;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;

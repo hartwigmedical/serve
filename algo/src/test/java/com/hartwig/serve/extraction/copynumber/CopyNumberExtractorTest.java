@@ -6,8 +6,8 @@ import static org.junit.Assert.assertNull;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.DriverGenesTestFactory;
 import com.hartwig.serve.common.classification.EventType;
-import com.hartwig.serve.datamodel.gene.GeneAnnotation;
-import com.hartwig.serve.datamodel.gene.GeneEvent;
+import com.hartwig.serve.datamodel.molecular.gene.GeneAnnotation;
+import com.hartwig.serve.datamodel.molecular.gene.GeneEvent;
 import com.hartwig.serve.extraction.util.DriverInconsistencyMode;
 import com.hartwig.serve.extraction.util.GeneChecker;
 

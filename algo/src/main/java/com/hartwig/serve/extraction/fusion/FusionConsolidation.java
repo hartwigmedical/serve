@@ -6,9 +6,9 @@ import java.util.Set;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.datamodel.common.ProteinEffect;
-import com.hartwig.serve.datamodel.fusion.ImmutableKnownFusion;
-import com.hartwig.serve.datamodel.fusion.KnownFusion;
+import com.hartwig.serve.datamodel.molecular.common.ProteinEffect;
+import com.hartwig.serve.datamodel.molecular.fusion.ImmutableKnownFusion;
+import com.hartwig.serve.datamodel.molecular.fusion.KnownFusion;
 import com.hartwig.serve.extraction.util.ProteinEffectConsolidation;
 
 import org.jetbrains.annotations.NotNull;

@@ -7,11 +7,11 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.datamodel.common.ProteinEffect;
-import com.hartwig.serve.datamodel.gene.GeneEvent;
-import com.hartwig.serve.datamodel.gene.GeneTestFactory;
-import com.hartwig.serve.datamodel.gene.ImmutableKnownCopyNumber;
-import com.hartwig.serve.datamodel.gene.KnownCopyNumber;
+import com.hartwig.serve.datamodel.molecular.common.ProteinEffect;
+import com.hartwig.serve.datamodel.molecular.gene.GeneEvent;
+import com.hartwig.serve.datamodel.molecular.gene.GeneTestFactory;
+import com.hartwig.serve.datamodel.molecular.gene.ImmutableKnownCopyNumber;
+import com.hartwig.serve.datamodel.molecular.gene.KnownCopyNumber;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;

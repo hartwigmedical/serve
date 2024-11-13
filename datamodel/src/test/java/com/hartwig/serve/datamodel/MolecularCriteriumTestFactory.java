@@ -1,13 +1,13 @@
 package com.hartwig.serve.datamodel;
 
-import com.hartwig.serve.datamodel.characteristic.ActionableCharacteristic;
-import com.hartwig.serve.datamodel.characteristic.CharacteristicTestFactory;
-import com.hartwig.serve.datamodel.fusion.ActionableFusion;
-import com.hartwig.serve.datamodel.gene.ActionableGene;
-import com.hartwig.serve.datamodel.gene.GeneTestFactory;
-import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
-import com.hartwig.serve.datamodel.hotspot.HotspotTestFactory;
-import com.hartwig.serve.datamodel.range.ActionableRange;
+import com.hartwig.serve.datamodel.molecular.characteristic.ActionableCharacteristic;
+import com.hartwig.serve.datamodel.molecular.characteristic.CharacteristicTestFactory;
+import com.hartwig.serve.datamodel.molecular.fusion.ActionableFusion;
+import com.hartwig.serve.datamodel.molecular.gene.ActionableGene;
+import com.hartwig.serve.datamodel.molecular.gene.GeneTestFactory;
+import com.hartwig.serve.datamodel.molecular.hotspot.ActionableHotspot;
+import com.hartwig.serve.datamodel.molecular.hotspot.HotspotTestFactory;
+import com.hartwig.serve.datamodel.molecular.range.ActionableRange;
 
 import org.jetbrains.annotations.NotNull;
 

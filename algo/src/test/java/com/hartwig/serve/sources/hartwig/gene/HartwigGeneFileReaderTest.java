@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.List;
 
 import com.google.common.io.Resources;
-import com.hartwig.serve.datamodel.common.GeneRole;
+import com.hartwig.serve.datamodel.molecular.common.GeneRole;
 
 import org.junit.Test;
 

@@ -7,9 +7,9 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.datamodel.common.ProteinEffect;
-import com.hartwig.serve.datamodel.fusion.FusionTestFactory;
-import com.hartwig.serve.datamodel.fusion.KnownFusion;
+import com.hartwig.serve.datamodel.molecular.common.ProteinEffect;
+import com.hartwig.serve.datamodel.molecular.fusion.FusionTestFactory;
+import com.hartwig.serve.datamodel.molecular.fusion.KnownFusion;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;

@@ -2,10 +2,10 @@ package com.hartwig.serve.extraction;
 
 import java.util.List;
 
-import com.hartwig.serve.datamodel.characteristic.TumorCharacteristic;
-import com.hartwig.serve.datamodel.fusion.FusionPair;
-import com.hartwig.serve.datamodel.gene.GeneAnnotation;
-import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
+import com.hartwig.serve.datamodel.molecular.characteristic.TumorCharacteristic;
+import com.hartwig.serve.datamodel.molecular.fusion.FusionPair;
+import com.hartwig.serve.datamodel.molecular.gene.GeneAnnotation;
+import com.hartwig.serve.datamodel.molecular.hotspot.VariantHotspot;
 import com.hartwig.serve.extraction.codon.CodonAnnotation;
 import com.hartwig.serve.extraction.exon.ExonAnnotation;
 import com.hartwig.serve.extraction.immuno.ImmunoHLA;

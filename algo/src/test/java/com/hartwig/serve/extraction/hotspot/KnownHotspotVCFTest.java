@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.List;
 
 import com.google.common.io.Resources;
-import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
+import com.hartwig.serve.datamodel.molecular.hotspot.KnownHotspot;
 
 import org.junit.Test;
 

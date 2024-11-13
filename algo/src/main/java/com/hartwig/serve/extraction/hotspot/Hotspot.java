@@ -1,6 +1,6 @@
 package com.hartwig.serve.extraction.hotspot;
 
-import com.hartwig.serve.datamodel.common.GenomePosition;
+import com.hartwig.serve.datamodel.molecular.common.GenomePosition;
 
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;

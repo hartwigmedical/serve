@@ -1,6 +1,6 @@
 package com.hartwig.serve.extraction.characteristic;
 
-import com.hartwig.serve.datamodel.characteristic.TumorCharacteristic;
+import com.hartwig.serve.datamodel.molecular.characteristic.TumorCharacteristic;
 
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;

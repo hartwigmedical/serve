@@ -1,6 +1,6 @@
 package com.hartwig.serve.extraction.util;
 
-import com.hartwig.serve.datamodel.common.GenomeRegion;
+import com.hartwig.serve.datamodel.molecular.common.GenomeRegion;
 
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;

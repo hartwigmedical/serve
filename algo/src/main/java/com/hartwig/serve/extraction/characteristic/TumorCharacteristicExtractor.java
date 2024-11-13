@@ -3,9 +3,9 @@ package com.hartwig.serve.extraction.characteristic;
 import java.util.Set;
 
 import com.hartwig.serve.common.classification.EventType;
-import com.hartwig.serve.datamodel.characteristic.TumorCharacteristic;
-import com.hartwig.serve.datamodel.characteristic.TumorCharacteristicCutoffType;
-import com.hartwig.serve.datamodel.characteristic.TumorCharacteristicType;
+import com.hartwig.serve.datamodel.molecular.characteristic.TumorCharacteristic;
+import com.hartwig.serve.datamodel.molecular.characteristic.TumorCharacteristicCutoffType;
+import com.hartwig.serve.datamodel.molecular.characteristic.TumorCharacteristicType;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

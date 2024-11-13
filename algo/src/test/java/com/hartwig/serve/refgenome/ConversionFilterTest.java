@@ -10,13 +10,12 @@ import com.hartwig.serve.datamodel.ImmutableKnownEvents;
 import com.hartwig.serve.datamodel.KnownEvents;
 import com.hartwig.serve.datamodel.MolecularCriteriumTestFactory;
 import com.hartwig.serve.datamodel.RefGenome;
-import com.hartwig.serve.datamodel.fusion.ActionableFusion;
-import com.hartwig.serve.datamodel.fusion.FusionTestFactory;
-import com.hartwig.serve.datamodel.gene.ActionableGene;
-import com.hartwig.serve.datamodel.gene.GeneTestFactory;
-import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
-import com.hartwig.serve.datamodel.hotspot.HotspotTestFactory;
-import com.hartwig.serve.datamodel.range.RangeTestFactory;
+import com.hartwig.serve.datamodel.molecular.fusion.ActionableFusion;
+import com.hartwig.serve.datamodel.molecular.fusion.FusionTestFactory;
+import com.hartwig.serve.datamodel.molecular.gene.ActionableGene;
+import com.hartwig.serve.datamodel.molecular.gene.GeneTestFactory;
+import com.hartwig.serve.datamodel.molecular.hotspot.HotspotTestFactory;
+import com.hartwig.serve.datamodel.molecular.range.RangeTestFactory;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.ImmutableExtractionResult;
 
@@ -72,11 +71,6 @@ public class ConversionFilterTest {
     }
 
     @NotNull
-    private static EfficacyEvidence evidenceForHotspot(@NotNull ActionableHotspot hotspot) {
-        return EfficacyEvidenceTestFactory.createWithMolecularCriterium(MolecularCriteriumTestFactory.createWithActionableHotspot(hotspot));
-    }
-
-    @NotNull
     private static EfficacyEvidence evidenceForGene(@NotNull ActionableGene gene) {
         return EfficacyEvidenceTestFactory.createWithMolecularCriterium(MolecularCriteriumTestFactory.createWithActionableGene(gene));
     }
@@ -84,11 +78,6 @@ public class ConversionFilterTest {
     @NotNull
     private static EfficacyEvidence evidenceForFusion(@NotNull ActionableFusion fusion) {
         return EfficacyEvidenceTestFactory.createWithMolecularCriterium(MolecularCriteriumTestFactory.createWithActionableFusion(fusion));
-    }
-
-    @NotNull
-    private static ActionableTrial trialForHotspot(@NotNull ActionableHotspot hotspot) {
-        return ActionableTrialTestFactory.createWithMolecularCriterium(MolecularCriteriumTestFactory.createWithActionableHotspot(hotspot));
     }
 
     @NotNull

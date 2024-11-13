@@ -5,10 +5,10 @@ import java.util.Map;
 import java.util.Set;
 
 import com.hartwig.serve.datamodel.EfficacyEvidence;
-import com.hartwig.serve.datamodel.characteristic.TumorCharacteristic;
-import com.hartwig.serve.datamodel.fusion.FusionPair;
-import com.hartwig.serve.datamodel.gene.GeneAnnotation;
-import com.hartwig.serve.datamodel.hotspot.VariantHotspot;
+import com.hartwig.serve.datamodel.molecular.characteristic.TumorCharacteristic;
+import com.hartwig.serve.datamodel.molecular.fusion.FusionPair;
+import com.hartwig.serve.datamodel.molecular.gene.GeneAnnotation;
+import com.hartwig.serve.datamodel.molecular.hotspot.VariantHotspot;
 import com.hartwig.serve.extraction.codon.CodonAnnotation;
 import com.hartwig.serve.extraction.events.EventInterpretation;
 import com.hartwig.serve.extraction.exon.ExonAnnotation;

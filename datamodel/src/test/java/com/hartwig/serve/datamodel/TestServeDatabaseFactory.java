@@ -3,10 +3,10 @@ package com.hartwig.serve.datamodel;
 import java.util.List;
 import java.util.Map;
 
-import com.hartwig.serve.datamodel.fusion.FusionTestFactory;
-import com.hartwig.serve.datamodel.gene.GeneTestFactory;
-import com.hartwig.serve.datamodel.hotspot.HotspotTestFactory;
-import com.hartwig.serve.datamodel.range.RangeTestFactory;
+import com.hartwig.serve.datamodel.molecular.fusion.FusionTestFactory;
+import com.hartwig.serve.datamodel.molecular.gene.GeneTestFactory;
+import com.hartwig.serve.datamodel.molecular.hotspot.HotspotTestFactory;
+import com.hartwig.serve.datamodel.molecular.range.RangeTestFactory;
 
 import org.jetbrains.annotations.NotNull;
 

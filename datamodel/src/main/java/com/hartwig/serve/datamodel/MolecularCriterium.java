@@ -5,12 +5,12 @@ import java.util.Set;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.hartwig.serve.datamodel.characteristic.ActionableCharacteristic;
-import com.hartwig.serve.datamodel.fusion.ActionableFusion;
-import com.hartwig.serve.datamodel.gene.ActionableGene;
-import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
-import com.hartwig.serve.datamodel.immuno.ActionableHLA;
-import com.hartwig.serve.datamodel.range.ActionableRange;
+import com.hartwig.serve.datamodel.molecular.characteristic.ActionableCharacteristic;
+import com.hartwig.serve.datamodel.molecular.fusion.ActionableFusion;
+import com.hartwig.serve.datamodel.molecular.gene.ActionableGene;
+import com.hartwig.serve.datamodel.molecular.hotspot.ActionableHotspot;
+import com.hartwig.serve.datamodel.molecular.immuno.ActionableHLA;
+import com.hartwig.serve.datamodel.molecular.range.ActionableRange;
 
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;

@@ -1,5 +1,7 @@
 package com.hartwig.serve.datamodel.molecular;
 
+import java.util.Set;
+
 import com.hartwig.serve.datamodel.molecular.characteristic.ActionableCharacteristic;
 import com.hartwig.serve.datamodel.molecular.characteristic.CharacteristicTestFactory;
 import com.hartwig.serve.datamodel.molecular.fusion.ActionableFusion;
@@ -17,18 +19,18 @@ public final class MolecularCriteriumTestFactory {
     }
 
     @NotNull
-    public static MolecularCriterium createWithTestActionableHotspot() {
-        return createWithActionableHotspot(HotspotTestFactory.createTestActionableHotspot());
+    public static Set<MolecularCriterium> createWithTestActionableHotspot() {
+        return Set.of(createWithActionableHotspot(HotspotTestFactory.createTestActionableHotspot()));
     }
 
     @NotNull
-    public static MolecularCriterium createWithTestActionableGene() {
-        return createWithActionableGene(GeneTestFactory.createTestActionableGene());
+    public static Set<MolecularCriterium> createWithTestActionableGene() {
+        return Set.of(createWithActionableGene(GeneTestFactory.createTestActionableGene()));
     }
 
     @NotNull
-    public static MolecularCriterium createWithTestActionableCharacteristic() {
-        return createWithActionableCharacteristics(CharacteristicTestFactory.createTestActionableCharacteristic());
+    public static Set<MolecularCriterium> createWithTestActionableCharacteristic() {
+        return Set.of(createWithActionableCharacteristics(CharacteristicTestFactory.createTestActionableCharacteristic()));
     }
 
     @NotNull

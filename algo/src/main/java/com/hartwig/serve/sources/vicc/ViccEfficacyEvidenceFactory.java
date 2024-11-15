@@ -94,7 +94,7 @@ class ViccEfficacyEvidenceFactory {
     }
 
     @NotNull
-    public Set<EfficacyEvidence> toEfficacyEvidence(@NotNull ViccEntry entry, @NotNull List<MolecularCriterium> molecularCriteria) {
+    public Set<EfficacyEvidence> toEfficacyEvidence(@NotNull ViccEntry entry, @NotNull Set<MolecularCriterium> molecularCriteria) {
         Set<EfficacyEvidence> evidences = Sets.newHashSet();
 
         boolean isSupportive = isSupportiveEntry(entry);
@@ -103,7 +103,8 @@ class ViccEfficacyEvidenceFactory {
         EvidenceDirection direction = resolveDirection(entry.association().responseType());
 
         if (isSupportive && treatment != null && level != null && direction != null) {
-            ImmutableEfficacyEvidence.Builder builder = ImmutableEfficacyEvidence.builder().source(fromViccSource(entry.source()))
+            ImmutableEfficacyEvidence.Builder builder = ImmutableEfficacyEvidence.builder()
+                    .source(fromViccSource(entry.source()))
                     .efficacyDescription(Strings.EMPTY)
                     .evidenceLevel(evidenceLevelCurator.curate(entry.source(), entry.genes(), treatment, level, direction))
                     .evidenceLevelDetails(EvidenceLevelDetails.UNKNOWN)

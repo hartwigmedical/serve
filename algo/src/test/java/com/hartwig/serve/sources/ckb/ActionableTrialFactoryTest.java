@@ -40,7 +40,7 @@ public class ActionableTrialFactoryTest {
     private static final CkbTrialFilterModel FILTER_MODEL = CkbFilteringTestFactory.createProperTrialFilterModel();
     private static final Set<CkbRegion> REGIONS_TO_INCLUDE =
             Set.of(createRegion("netherlands"), createRegion("belgium"), createRegion("germany"), createRegion("united states", "maine"));
-    private static final MolecularCriterium TEST_MOLECULAR_CRITERIUM = MolecularCriteriumTestFactory.createWithTestActionableGene();
+    private static final Set<MolecularCriterium> TEST_MOLECULAR_CRITERIUM = MolecularCriteriumTestFactory.createWithTestActionableGene();
 
     @Test
     public void canCreateActionableEntryForOpenTrialInAllowedCountryWithRequiredMolecularProfileAndValidAgeGroup() {
@@ -77,7 +77,7 @@ public class ActionableTrialFactoryTest {
         assertEquals("CUP", clinicalTrial1.indications().iterator().next().applicableType().name());
         assertEquals("162", clinicalTrial1.indications().iterator().next().applicableType().doid());
         assertEquals(GenderCriterium.BOTH, clinicalTrial1.genderCriterium());
-        assertEquals(Set.of(TEST_MOLECULAR_CRITERIUM), clinicalTrial1.anyMolecularCriteria());
+        assertEquals(TEST_MOLECULAR_CRITERIUM, clinicalTrial1.anyMolecularCriteria());
         assertEquals(Sets.newHashSet("https://clinicaltrials.gov/study/NCT0102"), clinicalTrial1.urls());
     }
 

@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.collect.Sets;
 import com.hartwig.serve.ckb.classification.CkbConstants;
 import com.hartwig.serve.ckb.classification.CkbEventAndGeneExtractor;
 import com.hartwig.serve.ckb.classification.CkbProteinAnnotationExtractor;
@@ -140,10 +141,10 @@ public class CkbExtractor {
                     .interpretedEventType(entry.type())
                     .build();
 
-            MolecularCriterium molecularCriterium = createMolecularCriterium(extractionOutput, sourceEvent, entry);
+            Set<MolecularCriterium> molecularCriteria = createMolecularCriteria(extractionOutput, sourceEvent, entry);
 
-            Set<EfficacyEvidence> efficacyEvidences = efficacyEvidenceFactory.create(entry, molecularCriterium, sourceEvent, gene);
-            Set<ActionableTrial> actionableTrials = actionableTrialFactory.create(entry, molecularCriterium, sourceEvent, gene);
+            Set<EfficacyEvidence> efficacyEvidences = efficacyEvidenceFactory.create(entry, molecularCriteria, sourceEvent, gene);
+            Set<ActionableTrial> actionableTrials = actionableTrialFactory.create(entry, molecularCriteria, sourceEvent, gene);
 
             return ImmutableExtractionResult.builder()
                     .refGenomeVersion(Knowledgebase.CKB.refGenomeVersion())
@@ -174,24 +175,64 @@ public class CkbExtractor {
     }
 
     @NotNull
-    private MolecularCriterium createMolecularCriterium(@NotNull EventExtractorOutput extractionOutput, @NotNull String sourceEvent,
+    private Set<MolecularCriterium> createMolecularCriteria(@NotNull EventExtractorOutput extractionOutput, @NotNull String sourceEvent,
             @NotNull CkbEntry entry) {
         String sourceUrl = "https://ckbhome.jax.org/profileResponse/advancedEvidenceFind?molecularProfileId=" + entry.profileId();
         LocalDate sourceDate = entry.createDate();
         ActionableEvent actionableEvent = toActionableEvent(sourceEvent, sourceDate, sourceUrl);
 
-        return ImmutableMolecularCriterium.builder()
-                .hotspots(extractActionableHotspots(extractionOutput.hotspots(), actionableEvent))
-                .characteristics(extractActionableCharacteristic(extractionOutput.characteristic(), actionableEvent))
-                .exons(extractActionableRanges(extractionOutput.exons(), actionableEvent))
-                .codons(extractActionableRanges(extractionOutput.codons(), actionableEvent))
-                .genes(Stream.of(extractionOutput.geneLevel(), extractionOutput.copyNumber())
-                        .filter(Objects::nonNull)
-                        .map(annotation -> extractActionableGenes(annotation, actionableEvent))
-                        .collect(Collectors.toSet()))
-                .fusions(extractActionableFusions(extractionOutput.fusionPair(), actionableEvent))
-                .hla(extractActionableHLA(extractionOutput.hla(), actionableEvent))
-                .build();
+        Set<MolecularCriterium> molecularCriteria = Sets.newHashSet();
+
+        addHotspotsToCriteria(extractionOutput, actionableEvent, molecularCriteria);
+        addExonsToCriteria(extractionOutput, actionableEvent, molecularCriteria);
+        addCodonsToCriteria(extractionOutput, actionableEvent, molecularCriteria);
+
+        if (molecularCriteria.isEmpty()) {
+            molecularCriteria.add(ImmutableMolecularCriterium.builder()
+                    .hotspots(Sets.newHashSet())
+                    .characteristics(extractActionableCharacteristic(extractionOutput.characteristic(), actionableEvent))
+                    .exons(Sets.newHashSet())
+                    .codons(Sets.newHashSet())
+                    .genes(Stream.of(extractionOutput.geneLevel(), extractionOutput.copyNumber())
+                            .filter(Objects::nonNull)
+                            .map(annotation -> extractActionableGenes(annotation, actionableEvent))
+                            .collect(Collectors.toSet()))
+                    .fusions(extractActionableFusions(extractionOutput.fusionPair(), actionableEvent))
+                    .hla(extractActionableHLA(extractionOutput.hla(), actionableEvent))
+                    .build());
+        }
+
+        return molecularCriteria;
+    }
+
+    private void addHotspotsToCriteria(@NotNull EventExtractorOutput extractionOutput, @NotNull ActionableEvent actionableEvent,
+            @NotNull Set<MolecularCriterium> molecularCriteria) {
+        if (extractionOutput.hotspots() != null) {
+            Set<ActionableHotspot> hotspots = extractActionableHotspots(extractionOutput.hotspots(), actionableEvent);
+            for (ActionableHotspot hotspot : hotspots) {
+                molecularCriteria.add(ImmutableMolecularCriterium.builder().hotspots(Set.of(hotspot)).build());
+            }
+        }
+    }
+
+    private void addExonsToCriteria(@NotNull EventExtractorOutput extractionOutput, @NotNull ActionableEvent actionableEvent,
+            @NotNull Set<MolecularCriterium> molecularCriteria) {
+        if (extractionOutput.exons() != null) {
+            Set<ActionableRange> exons = extractActionableRanges(extractionOutput.exons(), actionableEvent);
+            for (ActionableRange exon : exons) {
+                molecularCriteria.add(ImmutableMolecularCriterium.builder().exons(Set.of(exon)).build());
+            }
+        }
+    }
+
+    private void addCodonsToCriteria(@NotNull EventExtractorOutput extractionOutput, @NotNull ActionableEvent actionableEvent,
+            @NotNull Set<MolecularCriterium> molecularCriteria) {
+        if (extractionOutput.codons() != null) {
+            Set<ActionableRange> codons = extractActionableRanges(extractionOutput.codons(), actionableEvent);
+            for (ActionableRange codon : codons) {
+                molecularCriteria.add(ImmutableMolecularCriterium.builder().codons(Set.of(codon)).build());
+            }
+        }
     }
 
     @VisibleForTesting
@@ -309,11 +350,8 @@ public class CkbExtractor {
     }
 
     @NotNull
-    private static Set<ActionableHotspot> extractActionableHotspots(@Nullable List<VariantHotspot> hotspots,
+    private static Set<ActionableHotspot> extractActionableHotspots(@NotNull List<VariantHotspot> hotspots,
             @NotNull ActionableEvent actionableEvent) {
-        if (hotspots == null) {
-            return Collections.emptySet();
-        }
         return hotspots.stream()
                 .map(hotspot -> ImmutableActionableHotspot.builder().from(hotspot).from(actionableEvent).build())
                 .collect(Collectors.toSet());
@@ -329,11 +367,8 @@ public class CkbExtractor {
     }
 
     @NotNull
-    private static Set<ActionableRange> extractActionableRanges(@Nullable List<? extends RangeAnnotation> ranges,
+    private static Set<ActionableRange> extractActionableRanges(@NotNull List<? extends RangeAnnotation> ranges,
             @NotNull ActionableEvent actionableEvent) {
-        if (ranges == null) {
-            return Collections.emptySet();
-        }
         return ranges.stream()
                 .map(range -> ImmutableActionableRange.builder().from(range).from(actionableEvent).build())
                 .collect(Collectors.toSet());

@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -47,11 +46,11 @@ public class ViccEfficacyEvidenceFactoryTest {
                 "Responsive",
                 "url");
 
-        MolecularCriterium molecularCriterium = MolecularCriteriumTestFactory.createWithTestActionableHotspot();
+        Set<MolecularCriterium> molecularCriterium = MolecularCriteriumTestFactory.createWithTestActionableHotspot();
 
         ViccEntry entry = ViccTestFactory.testEntryWithGeneEventAndAssociation("gene", "event", actionable);
 
-        Set<EfficacyEvidence> evidences = factory.toEfficacyEvidence(entry, List.of(molecularCriterium));
+        Set<EfficacyEvidence> evidences = factory.toEfficacyEvidence(entry, molecularCriterium);
         assertEquals(2, evidences.size());
 
         EfficacyEvidence evidenceA = findByCancerType(evidences, cancerTypeA);
@@ -59,7 +58,7 @@ public class ViccEfficacyEvidenceFactoryTest {
         assertEquals(cancerTypeA, evidenceA.indication().applicableType().name());
         assertEquals("1", evidenceA.indication().applicableType().doid());
         assertTrue(evidenceA.indication().excludedSubTypes().isEmpty());
-        assertEquals(molecularCriterium, evidenceA.molecularCriterium());
+        assertEquals(molecularCriterium, Set.of(evidenceA.molecularCriterium()));
         assertEquals(EvidenceLevel.A, evidenceA.evidenceLevel());
         assertEquals(EvidenceLevelDetails.UNKNOWN, evidenceA.evidenceLevelDetails());
         assertEquals(EvidenceDirection.RESPONSIVE, evidenceA.evidenceDirection());
@@ -72,7 +71,7 @@ public class ViccEfficacyEvidenceFactoryTest {
         assertEquals(Sets.newHashSet(CancerTypeConstants.REFRACTORY_HEMATOLOGIC_TYPE,
                 CancerTypeConstants.BONE_MARROW_TYPE,
                 CancerTypeConstants.LEUKEMIA_TYPE), evidenceB.indication().excludedSubTypes());
-        assertEquals(molecularCriterium, evidenceB.molecularCriterium());
+        assertEquals(molecularCriterium, Set.of(evidenceB.molecularCriterium()));
         assertEquals(EvidenceLevel.A, evidenceB.evidenceLevel());
         assertEquals(EvidenceLevelDetails.UNKNOWN, evidenceB.evidenceLevelDetails());
         assertEquals(EvidenceDirection.RESPONSIVE, evidenceB.evidenceDirection());
@@ -141,7 +140,7 @@ public class ViccEfficacyEvidenceFactoryTest {
         ViccEfficacyEvidenceFactory factory =
                 new ViccEfficacyEvidenceFactory(DoidLookupTestFactory.create(doidLookupMap), new DrugCurator(), new EvidenceLevelCurator());
 
-        List<MolecularCriterium> molecularCriteria = List.of(MolecularCriteriumTestFactory.createWithTestActionableHotspot());
+        Set<MolecularCriterium> molecularCriteria = MolecularCriteriumTestFactory.createWithTestActionableHotspot();
 
         ViccEntry doesNotSupport = ImmutableViccEntry.builder()
                 .from(actionable)

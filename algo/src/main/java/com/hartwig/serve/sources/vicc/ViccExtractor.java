@@ -169,7 +169,7 @@ public final class ViccExtractor {
                 .HLAPerFeature(hlaPerFeature)
                 .build();
 
-        List<MolecularCriterium> molecularCriteria = toMolecularCriteria(molecularExtraction);
+        Set<MolecularCriterium> molecularCriteria = toMolecularCriteria(molecularExtraction);
 
         return ImmutableViccExtractionResult.builder()
                 .from(molecularExtraction)
@@ -293,10 +293,10 @@ public final class ViccExtractor {
     }
 
     @NotNull
-    private static List<MolecularCriterium> toMolecularCriteria(@NotNull ViccExtractionResult molecularExtraction) {
+    private static Set<MolecularCriterium> toMolecularCriteria(@NotNull ViccExtractionResult molecularExtraction) {
         Map<Feature, EventInterpretation> interpretations = molecularExtraction.eventInterpretationPerFeature();
 
-        List<MolecularCriterium> molecularCriteria = Lists.newArrayList();
+        Set<MolecularCriterium> molecularCriteria = Sets.newHashSet();
         molecularCriteria.addAll(extractActionableHotspots(interpretations, molecularExtraction.hotspotsPerFeature()));
         molecularCriteria.addAll(extractActionableCodons(interpretations, molecularExtraction.codonsPerFeature()));
         molecularCriteria.addAll(extractActionableExons(interpretations, molecularExtraction.exonsPerFeature()));

@@ -67,8 +67,8 @@ class ActionableTrialFactory {
     }
 
     @NotNull
-    public Set<ActionableTrial> create(@NotNull CkbEntry entry, @NotNull MolecularCriterium molecularCriterium, @NotNull String sourceEvent,
-            @NotNull String sourceGene) {
+    public Set<ActionableTrial> create(@NotNull CkbEntry entry, @NotNull Set<MolecularCriterium> molecularCriteria,
+            @NotNull String sourceEvent, @NotNull String sourceGene) {
         Set<ActionableTrial> actionableTrials = Sets.newHashSet();
 
         for (ClinicalTrial trial : trialsToInclude(entry)) {
@@ -91,7 +91,7 @@ class ActionableTrialFactory {
                         .genderCriterium(trial.gender() != null ? GenderCriterium.valueOf(trial.gender().toUpperCase()) : null)
                         .indications(extractIndications(trial.indications()))
                         // TODO (CB): trial can have multiple molecular criteria. One for each CkbEntry. Should be merged somewhere?
-                        .anyMolecularCriteria(List.of(molecularCriterium))
+                        .anyMolecularCriteria(molecularCriteria)
                         .urls(Sets.newHashSet("https://clinicaltrials.gov/study/" + trial.nctId()))
                         .build());
             }

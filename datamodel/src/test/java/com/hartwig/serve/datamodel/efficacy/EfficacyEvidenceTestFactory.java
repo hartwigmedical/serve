@@ -22,7 +22,7 @@ public final class EfficacyEvidenceTestFactory {
                 .source(Knowledgebase.UNKNOWN)
                 .treatment(createTestTreatment())
                 .indication(DatamodelTestFactory.indicationBuilder().build())
-                .molecularCriterium(MolecularCriteriumTestFactory.createWithTestActionableHotspot())
+                .molecularCriterium(MolecularCriteriumTestFactory.createWithTestActionableHotspot().iterator().next())
                 .efficacyDescription(Strings.EMPTY)
                 .evidenceLevel(EvidenceLevel.A)
                 .evidenceLevelDetails(EvidenceLevelDetails.FDA_APPROVED)

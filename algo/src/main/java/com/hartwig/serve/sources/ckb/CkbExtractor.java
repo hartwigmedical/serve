@@ -2,6 +2,7 @@ package com.hartwig.serve.sources.ckb;
 
 import static com.hartwig.serve.sources.ckb.CkbVariantAnnotator.resolveGeneRole;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -139,7 +140,7 @@ public class CkbExtractor {
                     .interpretedEventType(entry.type())
                     .build();
 
-            MolecularCriterium molecularCriterium = createMolecularCriterium(extractionOutput, variant, sourceEvent, entry);
+            MolecularCriterium molecularCriterium = createMolecularCriterium(extractionOutput, sourceEvent, entry);
 
             Set<EfficacyEvidence> efficacyEvidences = efficacyEvidenceFactory.create(entry, molecularCriterium, sourceEvent, gene);
             Set<ActionableTrial> actionableTrials = actionableTrialFactory.create(entry, molecularCriterium, sourceEvent, gene);
@@ -173,17 +174,19 @@ public class CkbExtractor {
     }
 
     @NotNull
-    private MolecularCriterium createMolecularCriterium(@NotNull EventExtractorOutput extractionOutput, @NotNull Variant variant,
-            @NotNull String sourceEvent, @NotNull CkbEntry entry) {
+    private MolecularCriterium createMolecularCriterium(@NotNull EventExtractorOutput extractionOutput, @NotNull String sourceEvent,
+            @NotNull CkbEntry entry) {
         String sourceUrl = "https://ckbhome.jax.org/profileResponse/advancedEvidenceFind?molecularProfileId=" + entry.profileId();
-        ActionableEvent actionableEvent = toActionableEvent(sourceEvent, variant, sourceUrl);
+        LocalDate sourceDate = entry.createDate();
+        ActionableEvent actionableEvent = toActionableEvent(sourceEvent, sourceDate, sourceUrl);
 
         return ImmutableMolecularCriterium.builder()
                 .hotspots(extractActionableHotspots(extractionOutput.hotspots(), actionableEvent))
                 .characteristics(extractActionableCharacteristic(extractionOutput.characteristic(), actionableEvent))
                 .exons(extractActionableRanges(extractionOutput.exons(), actionableEvent))
                 .codons(extractActionableRanges(extractionOutput.codons(), actionableEvent))
-                .genes(Stream.of(extractionOutput.geneLevel(), extractionOutput.copyNumber()).filter(Objects::nonNull)
+                .genes(Stream.of(extractionOutput.geneLevel(), extractionOutput.copyNumber())
+                        .filter(Objects::nonNull)
                         .map(annotation -> extractActionableGenes(annotation, actionableEvent))
                         .collect(Collectors.toSet()))
                 .fusions(extractActionableFusions(extractionOutput.fusionPair(), actionableEvent))
@@ -359,12 +362,9 @@ public class CkbExtractor {
     }
 
     @NotNull
-    private static ActionableEvent toActionableEvent(@NotNull String event, @NotNull Variant variant, @NotNull String sourceUrl) {
-        return ImmutableActionableEventImpl.builder()
-                .sourceDate(variant.createDate())
-                .sourceEvent(event)
-                .sourceUrls(Set.of(sourceUrl))
-                .build();
+    private static ActionableEvent toActionableEvent(@NotNull String sourceEvent, @NotNull LocalDate sourceDate,
+            @NotNull String sourceUrl) {
+        return ImmutableActionableEventImpl.builder().sourceDate(sourceDate).sourceEvent(sourceEvent).sourceUrls(Set.of(sourceUrl)).build();
     }
 }
 

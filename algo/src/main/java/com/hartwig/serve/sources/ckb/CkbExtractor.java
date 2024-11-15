@@ -139,7 +139,7 @@ public class CkbExtractor {
                     .interpretedEventType(entry.type())
                     .build();
 
-            MolecularCriterium molecularCriterium = createMolecularCriterium(extractionOutput, variant, event, entry);
+            MolecularCriterium molecularCriterium = createMolecularCriterium(extractionOutput, variant, sourceEvent, entry);
 
             Set<EfficacyEvidence> efficacyEvidences = efficacyEvidenceFactory.create(entry, molecularCriterium, sourceEvent, gene);
             Set<ActionableTrial> actionableTrials = actionableTrialFactory.create(entry, molecularCriterium, sourceEvent, gene);
@@ -174,17 +174,16 @@ public class CkbExtractor {
 
     @NotNull
     private MolecularCriterium createMolecularCriterium(@NotNull EventExtractorOutput extractionOutput, @NotNull Variant variant,
-            @NotNull String event, @NotNull CkbEntry entry) {
+            @NotNull String sourceEvent, @NotNull CkbEntry entry) {
         String sourceUrl = "https://ckbhome.jax.org/profileResponse/advancedEvidenceFind?molecularProfileId=" + entry.profileId();
-        ActionableEvent actionableEvent = toActionableEvent(event, variant, sourceUrl);
+        ActionableEvent actionableEvent = toActionableEvent(sourceEvent, variant, sourceUrl);
 
         return ImmutableMolecularCriterium.builder()
                 .hotspots(extractActionableHotspots(extractionOutput.hotspots(), actionableEvent))
                 .characteristics(extractActionableCharacteristic(extractionOutput.characteristic(), actionableEvent))
                 .exons(extractActionableRanges(extractionOutput.exons(), actionableEvent))
                 .codons(extractActionableRanges(extractionOutput.codons(), actionableEvent))
-                .genes(Stream.of(extractionOutput.geneLevel(), extractionOutput.copyNumber())
-                        .filter(Objects::nonNull)
+                .genes(Stream.of(extractionOutput.geneLevel(), extractionOutput.copyNumber()).filter(Objects::nonNull)
                         .map(annotation -> extractActionableGenes(annotation, actionableEvent))
                         .collect(Collectors.toSet()))
                 .fusions(extractActionableFusions(extractionOutput.fusionPair(), actionableEvent))

@@ -93,6 +93,7 @@ class ActionableTrialFactory {
                         // TODO (CB): trial can have multiple molecular criteria. One for each CkbEntry. Should be merged somewhere?
                         .anyMolecularCriteria(molecularCriteria)
                         .urls(Sets.newHashSet("https://clinicaltrials.gov/study/" + trial.nctId()))
+                        .evidenceYear(trial.updateDate().getYear())
                         .build());
             }
         }

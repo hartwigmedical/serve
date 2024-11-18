@@ -1,5 +1,6 @@
 package com.hartwig.serve.datamodel.trial;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -48,4 +49,7 @@ public abstract class ActionableTrial {
 
     @NotNull
     public abstract Set<String> urls();
+
+    @Nullable
+    public abstract Integer evidenceYear();
 }

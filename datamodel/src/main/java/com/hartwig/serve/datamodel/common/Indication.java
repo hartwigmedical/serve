@@ -1,5 +1,6 @@
 package com.hartwig.serve.datamodel.common;
 
+import java.util.Comparator;
 import java.util.Set;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -14,11 +15,18 @@ import org.jetbrains.annotations.Nullable;
              jdkOnly = true)
 @JsonSerialize(as = ImmutableIndication.class)
 @JsonDeserialize(as = ImmutableIndication.class)
-public abstract class Indication {
+public abstract class Indication implements Comparable<Indication> {
+
+    private static final Comparator<Indication> COMPARATOR = new IndicationComparator();
 
     @NotNull
     public abstract CancerType applicableType();
 
     @NotNull
     public abstract Set<CancerType> excludedSubTypes();
+
+    @Override
+    public int compareTo(Indication other) {
+        return COMPARATOR.compare(this, other);
+    }
 }

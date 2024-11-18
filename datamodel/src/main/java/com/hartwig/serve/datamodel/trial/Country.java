@@ -1,5 +1,6 @@
 package com.hartwig.serve.datamodel.trial;
 
+import java.util.Comparator;
 import java.util.Map;
 import java.util.Set;
 
@@ -15,11 +16,18 @@ import org.jetbrains.annotations.Nullable;
              jdkOnly = true)
 @JsonSerialize(as = ImmutableCountry.class)
 @JsonDeserialize(as = ImmutableCountry.class)
-public abstract class Country {
+public abstract class Country implements Comparable<Country> {
+
+    private static final Comparator<Country> COMPARATOR = new CountryComparator();
 
     @NotNull
     public abstract String countryName();
 
     @NotNull
     public abstract Map<String, Set<Hospital>> hospitalsPerCity();
+
+    @Override
+    public int compareTo(Country other) {
+        return COMPARATOR.compare(this, other);
+    }
 }

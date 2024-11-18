@@ -35,7 +35,7 @@ public class ActionableTrialComparatorTest {
         return TrialTestFactory.builder()
                 .source(source)
                 .nctId(nctId)
-                .countries(Set.of(TrialTestFactory.createTestCountry(countryName)))
+                .countries(Set.of(TrialTestFactory.createTestCountry(countryName, "city")))
                 .therapyNames(Set.of(therapy))
                 .genderCriterium(genderCriterium)
                 .build();

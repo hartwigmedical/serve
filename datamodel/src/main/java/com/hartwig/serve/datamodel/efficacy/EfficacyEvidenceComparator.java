@@ -2,8 +2,6 @@ package com.hartwig.serve.datamodel.efficacy;
 
 import java.util.Comparator;
 
-import com.hartwig.serve.datamodel.common.CancerType;
-import com.hartwig.serve.datamodel.common.Indication;
 import com.hartwig.serve.datamodel.util.CompareFunctions;
 
 import org.jetbrains.annotations.NotNull;
@@ -17,12 +15,12 @@ public class EfficacyEvidenceComparator implements Comparator<EfficacyEvidence> 
             return sourceCompare;
         }
 
-        int treatmentCompare = evidence1.treatment().name().compareTo(evidence2.treatment().name());
+        int treatmentCompare = evidence1.treatment().compareTo(evidence2.treatment());
         if (treatmentCompare != 0) {
             return treatmentCompare;
         }
 
-        int indicationCompare = compareIndications(evidence1.indication(), evidence2.indication());
+        int indicationCompare = evidence1.indication().compareTo(evidence2.indication());
         if (indicationCompare != 0) {
             return indicationCompare;
         }
@@ -58,17 +56,5 @@ public class EfficacyEvidenceComparator implements Comparator<EfficacyEvidence> 
         }
 
         return CompareFunctions.compareSetOfComparable(evidence1.urls(), evidence2.urls());
-    }
-
-    private static int compareIndications(@NotNull Indication indication1, @NotNull Indication indication2) {
-        CancerType cancerType1 = indication1.applicableType();
-        CancerType cancerType2 = indication2.applicableType();
-
-        int nameCompare = cancerType1.name().compareTo(cancerType2.name());
-        if (nameCompare != 0) {
-            return nameCompare;
-        }
-
-        return cancerType1.doid().compareTo(cancerType2.doid());
     }
 }

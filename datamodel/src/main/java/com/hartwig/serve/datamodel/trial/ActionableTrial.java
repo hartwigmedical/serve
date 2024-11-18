@@ -1,6 +1,6 @@
 package com.hartwig.serve.datamodel.trial;
 
-import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.Set;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -18,7 +18,9 @@ import org.jetbrains.annotations.Nullable;
              jdkOnly = true)
 @JsonSerialize(as = ImmutableActionableTrial.class)
 @JsonDeserialize(as = ImmutableActionableTrial.class)
-public abstract class ActionableTrial {
+public abstract class ActionableTrial implements Comparable<ActionableTrial> {
+
+    private static final Comparator<ActionableTrial> COMPARATOR = new ActionableTrialComparator();
 
     @NotNull
     public abstract Knowledgebase source();
@@ -52,4 +54,9 @@ public abstract class ActionableTrial {
 
     @Nullable
     public abstract Integer evidenceYear();
+
+    @Override
+    public int compareTo(ActionableTrial other) {
+        return COMPARATOR.compare(this, other);
+    }
 }

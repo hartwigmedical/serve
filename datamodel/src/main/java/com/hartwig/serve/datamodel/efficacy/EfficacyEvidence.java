@@ -1,5 +1,6 @@
 package com.hartwig.serve.datamodel.efficacy;
 
+import java.util.Comparator;
 import java.util.Set;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -17,7 +18,9 @@ import org.jetbrains.annotations.Nullable;
 @JsonDeserialize(as = ImmutableEfficacyEvidence.class)
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class },
              jdkOnly = true)
-public abstract class EfficacyEvidence {
+public abstract class EfficacyEvidence implements Comparable<EfficacyEvidence> {
+
+    private static final Comparator<EfficacyEvidence> COMPARATOR = new EfficacyEvidenceComparator();
 
     @NotNull
     public abstract Knowledgebase source();
@@ -47,4 +50,9 @@ public abstract class EfficacyEvidence {
 
     @NotNull
     public abstract Set<String> urls();
+
+    @Override
+    public int compareTo(EfficacyEvidence other) {
+        return COMPARATOR.compare(this, other);
+    }
 }

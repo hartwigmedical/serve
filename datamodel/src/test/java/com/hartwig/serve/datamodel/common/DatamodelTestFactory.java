@@ -16,13 +16,13 @@ public final class DatamodelTestFactory {
     }
 
     @NotNull
-    public static CancerType createTestCancerBuilder() {
+    public static CancerType createTestCancerType() {
         return cancerTypeBuilder().build();
     }
 
     @NotNull
     public static ImmutableIndication.Builder indicationBuilder() {
-        return ImmutableIndication.builder().applicableType(createTestCancerBuilder());
+        return ImmutableIndication.builder().applicableType(createTestCancerType());
     }
 
     @NotNull

@@ -35,16 +35,23 @@ public final class TrialTestFactory {
         return builder().addAnyMolecularCriteria(molecularCriterium).build();
     }
 
-
+    @NotNull
     public static ImmutableCountry.Builder countryBuilder() {
         return ImmutableCountry.builder().countryName(Strings.EMPTY).hospitalsPerCity(Maps.newHashMap());
     }
 
     @NotNull
-    public static Country createTestCountry(@NotNull String countryName) {
-        return countryBuilder().countryName(countryName)
-                .hospitalsPerCity(Map.of("city",
-                        Set.of(ImmutableHospital.builder().isChildrensHospital(false).name("hospital name").build())))
-                .build();
+    public static Country createTestCountry(@NotNull String name, @NotNull String city) {
+        return countryBuilder().countryName(name).hospitalsPerCity(Map.of(city, Set.of(createTestHospital()))).build();
+    }
+
+    @NotNull
+    public static ImmutableHospital.Builder hospitalBuilder() {
+        return ImmutableHospital.builder().name(Strings.EMPTY);
+    }
+
+    @NotNull
+    private static Hospital createTestHospital() {
+        return hospitalBuilder().name("hospital name").isChildrensHospital(false).build();
     }
 }

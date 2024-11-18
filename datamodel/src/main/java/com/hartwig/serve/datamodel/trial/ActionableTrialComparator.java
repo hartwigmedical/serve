@@ -1,11 +1,7 @@
 package com.hartwig.serve.datamodel.trial;
 
 import java.util.Comparator;
-import java.util.Iterator;
-import java.util.Set;
 
-import com.hartwig.serve.datamodel.common.CancerType;
-import com.hartwig.serve.datamodel.common.Indication;
 import com.hartwig.serve.datamodel.util.CompareFunctions;
 
 import org.jetbrains.annotations.NotNull;
@@ -34,14 +30,14 @@ public class ActionableTrialComparator implements Comparator<ActionableTrial> {
             return acronymCompare;
         }
 
-        int compareCountries = compareCountries(actionableTrial1.countries(), actionableTrial2.countries());
-        if (compareCountries != 0) {
-            return compareCountries;
+        int countriesCompare = CompareFunctions.compareSetOfComparable(actionableTrial1.countries(), actionableTrial2.countries());
+        if (countriesCompare != 0) {
+            return countriesCompare;
         }
 
-        int compareTherapyNames = CompareFunctions.compareSetOfComparable(actionableTrial1.therapyNames(), actionableTrial2.therapyNames());
-        if (compareTherapyNames != 0) {
-            return compareTherapyNames;
+        int therapyNamesCompare = CompareFunctions.compareSetOfComparable(actionableTrial1.therapyNames(), actionableTrial2.therapyNames());
+        if (therapyNamesCompare != 0) {
+            return therapyNamesCompare;
         }
 
         int genderCriteriumCompare = actionableTrial1.genderCriterium().compareTo(actionableTrial2.genderCriterium());
@@ -49,47 +45,17 @@ public class ActionableTrialComparator implements Comparator<ActionableTrial> {
             return genderCriteriumCompare;
         }
 
-        int indicationCompare = compareIndications(actionableTrial1.indications(), actionableTrial2.indications());
-        if (indicationCompare != 0) {
-            return indicationCompare;
+        int indicationsCompare = CompareFunctions.compareSetOfComparable(actionableTrial1.indications(), actionableTrial2.indications());
+        if (indicationsCompare != 0) {
+            return indicationsCompare;
         }
 
-        return CompareFunctions.compareSetOfComparable(actionableTrial1.anyMolecularCriteria(), actionableTrial2.anyMolecularCriteria());
-    }
-
-    private static int compareCountries(@NotNull Set<Country> set1, @NotNull Set<Country> set2) {
-        Iterator<Country> iterator1 = set1.iterator();
-        Iterator<Country> iterator2 = set2.iterator();
-
-        while (iterator1.hasNext() && iterator2.hasNext()) {
-            int compare = iterator1.next().countryName().compareTo(iterator2.next().countryName());
-            if (compare != 0) {
-                return compare;
-            }
+        int molecularCompare =
+                CompareFunctions.compareSetOfComparable(actionableTrial1.anyMolecularCriteria(), actionableTrial2.anyMolecularCriteria());
+        if (molecularCompare != 0) {
+            return molecularCompare;
         }
 
-        return Integer.compare(set1.size(), set2.size());
-    }
-
-    private static int compareIndications(@NotNull Set<Indication> indication1, @NotNull Set<Indication> indication2) {
-        Iterator<Indication> iterator1 = indication1.iterator();
-        Iterator<Indication> iterator2 = indication2.iterator();
-
-        while (iterator1.hasNext() && iterator2.hasNext()) {
-            CancerType cancerType1 = iterator1.next().applicableType();
-            CancerType cancerType2 = iterator2.next().applicableType();
-
-            int nameCompare = cancerType1.name().compareTo(cancerType2.name());
-            if (nameCompare != 0) {
-                return nameCompare;
-            }
-
-            int doidCompare = cancerType1.doid().compareTo(cancerType2.doid());
-            if (doidCompare != 0) {
-                return doidCompare;
-            }
-        }
-
-        return Integer.compare(indication1.size(), indication2.size());
+        return CompareFunctions.compareSetOfComparable(actionableTrial1.urls(), actionableTrial2.urls());
     }
 }

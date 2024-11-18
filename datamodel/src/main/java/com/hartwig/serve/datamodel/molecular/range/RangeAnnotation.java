@@ -12,5 +12,4 @@ public interface RangeAnnotation extends GenomeRegion {
 
     @NotNull
     MutationType applicableMutationType();
-
 }

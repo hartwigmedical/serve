@@ -17,6 +17,7 @@ import org.jetbrains.annotations.Nullable;
 @JsonSerialize(as = ImmutableKnownExon.class)
 @JsonDeserialize(as = ImmutableKnownExon.class)
 public abstract class KnownExon implements RangeAnnotation, GeneAlteration, KnownEvent, Comparable<KnownExon> {
+
     private static final Comparator<KnownExon> COMPARATOR = new KnownExonComparator();
 
     @NotNull

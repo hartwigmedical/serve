@@ -771,7 +771,7 @@
           "acronym": "acronym for study 1",
           "countries": [
             {
-              "countryName": "Netherlands",
+              "name": "Netherlands",
               "hospitalsPerCity": {
                 "Maastricht": [
                   {
@@ -839,7 +839,7 @@
           "title": "study 2",
           "countries": [
             {
-              "countryName": "Netherlands",
+              "name": "Netherlands",
               "hospitalsPerCity": {
                 "Rotterdam": [
                   {
@@ -900,7 +900,7 @@
           "title": "study 3",
           "countries": [
             {
-              "countryName": "Belgium",
+              "name": "Belgium",
               "hospitalsPerCity": {
                 "Brussel": [
                   {
@@ -959,7 +959,7 @@
           "title": "study 4",
           "countries": [
             {
-              "countryName": "Belgium",
+              "name": "Belgium",
               "hospitalsPerCity": {
                 "Antwerpen": [
                   {
@@ -1016,7 +1016,7 @@
           "title": "study 5",
           "countries": [
             {
-              "countryName": "Germany",
+              "name": "Germany",
               "hospitalsPerCity": {
                 "Frankfurt": [
                   {
@@ -1079,7 +1079,7 @@
           "title": "study 6",
           "countries": [
             {
-              "countryName": "Belgium",
+              "name": "Belgium",
               "hospitalsPerCity": {
                 "Brussel": [
                   {
@@ -1090,7 +1090,7 @@
               }
             },
             {
-              "countryName": "Netherlands",
+              "name": "Netherlands",
               "hospitalsPerCity": {
                 "Eindhoven": [
                   {
@@ -1158,7 +1158,7 @@
           "title": "study 7",
           "countries": [
             {
-              "countryName": "Netherlands",
+              "name": "Netherlands",
               "hospitalsPerCity": {
                 "Groningen": [
                   {

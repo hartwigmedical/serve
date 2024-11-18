@@ -1190,7 +1190,7 @@ public class ServeDAO {
     @NotNull
     private static String toCountryWithCities(@NotNull Set<Country> countries) {
         return countries.stream()
-                .map(country -> country.countryName() + "(" + String.join(SUB_JOINER, country.hospitalsPerCity().keySet()) + ")")
+                .map(country -> country.name() + "(" + String.join(SUB_JOINER, country.hospitalsPerCity().keySet()) + ")")
                 .collect(Collectors.joining(MAIN_JOINER));
     }
 

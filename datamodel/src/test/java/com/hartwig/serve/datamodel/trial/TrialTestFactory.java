@@ -37,12 +37,12 @@ public final class TrialTestFactory {
 
     @NotNull
     public static ImmutableCountry.Builder countryBuilder() {
-        return ImmutableCountry.builder().countryName(Strings.EMPTY).hospitalsPerCity(Maps.newHashMap());
+        return ImmutableCountry.builder().name(Strings.EMPTY).hospitalsPerCity(Maps.newHashMap());
     }
 
     @NotNull
     public static Country createTestCountry(@NotNull String name, @NotNull String city) {
-        return countryBuilder().countryName(name).hospitalsPerCity(Map.of(city, Set.of(createTestHospital()))).build();
+        return countryBuilder().name(name).hospitalsPerCity(Map.of(city, Set.of(createTestHospital()))).build();
     }
 
     @NotNull

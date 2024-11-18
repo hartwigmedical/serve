@@ -150,7 +150,7 @@ class ActionableTrialFactory {
 
         return countriesToCitiesToHospitalNames.entrySet()
                 .stream()
-                .map(entry -> ImmutableCountry.builder().countryName(entry.getKey()).hospitalsPerCity(entry.getValue()).build())
+                .map(entry -> ImmutableCountry.builder().name(entry.getKey()).hospitalsPerCity(entry.getValue()).build())
                 .collect(Collectors.toSet());
     }
 

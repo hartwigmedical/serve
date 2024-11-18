@@ -69,7 +69,7 @@ public class ActionableTrialFactoryTest {
         assertEquals("Phase I trial", clinicalTrial1.title());
         assertNull(clinicalTrial1.acronym());
         assertEquals(Sets.newHashSet(ImmutableCountry.builder()
-                .countryName("Netherlands")
+                .name("Netherlands")
                 .hospitalsPerCity(Map.of("Rotterdam",
                         Sets.newHashSet(ImmutableHospital.builder().name("EMC").isChildrensHospital(false).build())))
                 .build()), clinicalTrial1.countries());
@@ -277,7 +277,7 @@ public class ActionableTrialFactoryTest {
         ClinicalTrial trialWithOneLocation =
                 createTrialWithOneLocation("Recruiting", "Belgium", "Brussel", "Recruiting", "Unknown(Brussel)");
         assertEquals(Set.of(ImmutableCountry.builder()
-                .countryName("Belgium")
+                .name("Belgium")
                 .hospitalsPerCity(Map.of("Brussel", Set.of(ImmutableHospital.builder().name("Unknown(Brussel)").build())))
                 .build()), ActionableTrialFactory.extractCountriesToInclude(trialWithOneLocation, REGIONS_TO_INCLUDE));
 
@@ -291,11 +291,11 @@ public class ActionableTrialFactoryTest {
                 "Rotterdam",
                 "EMC");
         assertEquals(Set.of(ImmutableCountry.builder()
-                        .countryName("Belgium")
+                        .name("Belgium")
                         .hospitalsPerCity(Map.of("Brussel", Set.of(ImmutableHospital.builder().name("UZ Brussel").build())))
                         .build(),
                 ImmutableCountry.builder()
-                        .countryName("Netherlands")
+                        .name("Netherlands")
                         .hospitalsPerCity(Map.of("Rotterdam",
                                 Set.of(ImmutableHospital.builder().name("EMC").isChildrensHospital(false).build())))
                         .build()), ActionableTrialFactory.extractCountriesToInclude(trialWithMultipleLocations, REGIONS_TO_INCLUDE));

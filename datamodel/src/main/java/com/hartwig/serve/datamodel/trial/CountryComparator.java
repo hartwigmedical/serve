@@ -10,7 +10,7 @@ public class CountryComparator implements Comparator<Country> {
 
     @Override
     public int compare(@NotNull Country country1, @NotNull Country country2) {
-        int nameCompare = country1.countryName().compareTo(country2.countryName());
+        int nameCompare = country1.name().compareTo(country2.name());
         if (nameCompare != 0) {
             return nameCompare;
         }

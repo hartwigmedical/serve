@@ -21,7 +21,7 @@ public abstract class Country implements Comparable<Country> {
     private static final Comparator<Country> COMPARATOR = new CountryComparator();
 
     @NotNull
-    public abstract String countryName();
+    public abstract String name();
 
     @NotNull
     public abstract Map<String, Set<Hospital>> hospitalsPerCity();

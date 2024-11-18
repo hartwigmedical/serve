@@ -40,7 +40,8 @@ public class ActionableTrialFactoryTest {
     private static final CkbTrialFilterModel FILTER_MODEL = CkbFilteringTestFactory.createProperTrialFilterModel();
     private static final Set<CkbRegion> REGIONS_TO_INCLUDE =
             Set.of(createRegion("netherlands"), createRegion("belgium"), createRegion("germany"), createRegion("united states", "maine"));
-    private static final Set<MolecularCriterium> TEST_MOLECULAR_CRITERIUM = MolecularCriteriumTestFactory.createWithTestActionableGene();
+    private static final Set<MolecularCriterium> TEST_MOLECULAR_CRITERIUM =
+            Set.of(MolecularCriteriumTestFactory.createWithTestActionableGene());
 
     @Test
     public void canCreateActionableEntryForOpenTrialInAllowedCountryWithRequiredMolecularProfileAndValidAgeGroup() {
@@ -48,9 +49,8 @@ public class ActionableTrialFactoryTest {
         String profileName = Strings.EMPTY;
         Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting", "Rotterdam", "EMC");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(profileId, "required");
-        ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTherapy("NCT0102",
-                "Phase I trial",
-                List.of(CkbTestFactory.createTherapy("Nivolumab")),
+        ClinicalTrial clinicalTrial =
+                CkbTestFactory.createTrialWithTherapy("NCT0102", "Phase I trial", List.of(CkbTestFactory.createTherapy("Nivolumab")),
                 List.of(CkbTestFactory.createIndication("CUP", "JAX:10000006")),
                 "Recruiting",
                 List.of("senior", "child", "adult"),

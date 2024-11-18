@@ -40,7 +40,10 @@ public class EfficacyEvidenceFactoryTest {
 
     @Test
     public void shouldCreateEvidenceForMSIEntry() {
-        CkbEntry msiEntry = CkbTestFactory.createEntry("-", "MSI neg", "MSI neg", "sensitive",
+        CkbEntry msiEntry = CkbTestFactory.createEntry("-",
+                "MSI neg",
+                "MSI neg",
+                "sensitive",
                 "Actionable",
                 "Therapy",
                 "Indication",
@@ -49,8 +52,8 @@ public class EfficacyEvidenceFactoryTest {
                 "DOID:162");
 
         EfficacyEvidenceFactory factory = new EfficacyEvidenceFactory(TREATMENT_APPROACH_CURATOR, EVIDENCE_FILTER_MODEL);
-        Set<MolecularCriterium> molecularCriterium = MolecularCriteriumTestFactory.createWithTestActionableCharacteristic();
-        Set<EfficacyEvidence> evidences = factory.create(msiEntry, molecularCriterium, Strings.EMPTY, "-");
+        MolecularCriterium molecularCriterium = MolecularCriteriumTestFactory.createWithTestActionableCharacteristic();
+        Set<EfficacyEvidence> evidences = factory.create(msiEntry, Set.of(molecularCriterium), Strings.EMPTY, "-");
         assertEquals(1, evidences.size());
         EfficacyEvidence evidence = evidences.iterator().next();
 
@@ -59,7 +62,7 @@ public class EfficacyEvidenceFactoryTest {
         assertEquals("Indication", evidence.indication().applicableType().name());
         assertEquals("162", evidence.indication().applicableType().doid());
         assertEquals(Sets.newHashSet(), evidence.indication().excludedSubTypes());
-        assertEquals(molecularCriterium, Set.of(evidence.molecularCriterium()));
+        assertEquals(molecularCriterium, evidence.molecularCriterium());
         assertEquals(EvidenceLevel.A, evidence.evidenceLevel());
         assertEquals(EvidenceDirection.RESPONSIVE, evidence.evidenceDirection());
         assertEquals(CkbTestFactory.EFFICACY_EVIDENCE, evidence.efficacyDescription());
@@ -82,8 +85,8 @@ public class EfficacyEvidenceFactoryTest {
                 "DOID:163");
 
         EfficacyEvidenceFactory factory = new EfficacyEvidenceFactory(TREATMENT_APPROACH_CURATOR, EVIDENCE_FILTER_MODEL);
-        Set<MolecularCriterium> molecularCriterium = MolecularCriteriumTestFactory.createWithTestActionableGene();
-        Set<EfficacyEvidence> evidences = factory.create(entryAmplification, molecularCriterium, "KRAS", "KRAS");
+        MolecularCriterium molecularCriterium = MolecularCriteriumTestFactory.createWithTestActionableGene();
+        Set<EfficacyEvidence> evidences = factory.create(entryAmplification, Set.of(molecularCriterium), "KRAS", "KRAS");
         assertEquals(1, evidences.size());
 
         EfficacyEvidence evidence = evidences.iterator().next();
@@ -92,7 +95,7 @@ public class EfficacyEvidenceFactoryTest {
         assertEquals("Indication", evidence.indication().applicableType().name());
         assertEquals("163", evidence.indication().applicableType().doid());
         assertTrue(evidence.indication().excludedSubTypes().isEmpty());
-        assertEquals(molecularCriterium, Set.of(evidence.molecularCriterium()));
+        assertEquals(molecularCriterium, evidence.molecularCriterium());
         assertEquals(EvidenceLevel.A, evidence.evidenceLevel());
         assertEquals(EvidenceDirection.RESPONSIVE, evidence.evidenceDirection());
         assertEquals(CkbTestFactory.EFFICACY_EVIDENCE, evidence.efficacyDescription());
@@ -115,8 +118,8 @@ public class EfficacyEvidenceFactoryTest {
                 "DOID:162");
 
         EfficacyEvidenceFactory factory = new EfficacyEvidenceFactory(TREATMENT_APPROACH_CURATOR, EVIDENCE_FILTER_MODEL);
-        Set<MolecularCriterium> molecularCriterium = MolecularCriteriumTestFactory.createWithTestActionableHotspot();
-        Set<EfficacyEvidence> evidences = factory.create(entryHotspot, molecularCriterium, "BRAF", "BRAF");
+        MolecularCriterium molecularCriterium = MolecularCriteriumTestFactory.createWithTestActionableHotspot();
+        Set<EfficacyEvidence> evidences = factory.create(entryHotspot, Set.of(molecularCriterium), "BRAF", "BRAF");
         assertEquals(1, evidences.size());
 
         EfficacyEvidence evidence = evidences.iterator().next();
@@ -125,7 +128,7 @@ public class EfficacyEvidenceFactoryTest {
         assertEquals("Indication", evidence.indication().applicableType().name());
         assertEquals("162", evidence.indication().applicableType().doid());
         assertEquals(Sets.newHashSet(), evidence.indication().excludedSubTypes());
-        assertEquals(molecularCriterium, Set.of(evidence.molecularCriterium()));
+        assertEquals(molecularCriterium, evidence.molecularCriterium());
         assertEquals(EvidenceLevel.A, evidence.evidenceLevel());
         assertEquals(EvidenceDirection.RESPONSIVE, evidence.evidenceDirection());
         assertEquals(CkbTestFactory.EFFICACY_EVIDENCE, evidence.efficacyDescription());
@@ -136,11 +139,11 @@ public class EfficacyEvidenceFactoryTest {
 
     @Test
     public void shouldIgnoreKrasDeletionWithEmergingEvidence() {
-        Set<MolecularCriterium> molecularCriterium = MolecularCriteriumTestFactory.createWithTestActionableGene();
+        MolecularCriterium molecularCriterium = MolecularCriteriumTestFactory.createWithTestActionableGene();
         CkbEntry entryDeletion = create("KRAS", "deletion", "KRAS deletion", "sensitive", "Emerging");
 
         EfficacyEvidenceFactory factory = new EfficacyEvidenceFactory(TREATMENT_APPROACH_CURATOR, EVIDENCE_FILTER_MODEL);
-        Set<EfficacyEvidence> evidences = factory.create(entryDeletion, molecularCriterium, "KRAS", "gene");
+        Set<EfficacyEvidence> evidences = factory.create(entryDeletion, Set.of(molecularCriterium), "KRAS", "gene");
         assertEquals(0, evidences.size());
     }
 
@@ -212,7 +215,7 @@ public class EfficacyEvidenceFactoryTest {
 
     @Test
     public void canFilterEvidenceOnTherapy() {
-        Set<MolecularCriterium> molecularCriterium = MolecularCriteriumTestFactory.createWithTestActionableGene();
+        MolecularCriterium molecularCriterium = MolecularCriteriumTestFactory.createWithTestActionableGene();
         String therapy = "Nivolumab";
         CkbEvidenceFilterModel model =
                 createEvidenceFilterModel(CkbEvidenceFilterType.EVIDENCE_BASED_ON_THERAPY, therapy, null, null, null, null);
@@ -220,56 +223,56 @@ public class EfficacyEvidenceFactoryTest {
         CkbEntry entry = createForTherapy(therapy);
 
         EfficacyEvidenceFactory factory = new EfficacyEvidenceFactory(TREATMENT_APPROACH_CURATOR, model);
-        Set<EfficacyEvidence> evidences = factory.create(entry, molecularCriterium, "KRAS", "KRAS");
+        Set<EfficacyEvidence> evidences = factory.create(entry, Set.of(molecularCriterium), "KRAS", "KRAS");
         assertEquals(0, evidences.size());
     }
 
     @Test
     public void doesNotFilterEvidenceOnOtherTherapy() {
-        Set<MolecularCriterium> molecularCriterium = MolecularCriteriumTestFactory.createWithTestActionableGene();
+        MolecularCriterium molecularCriterium = MolecularCriteriumTestFactory.createWithTestActionableGene();
         CkbEvidenceFilterModel model =
                 createEvidenceFilterModel(CkbEvidenceFilterType.EVIDENCE_BASED_ON_THERAPY, "Nivolumab", null, null, null, null);
 
         CkbEntry entry = createForTherapyAndLevel("Immuno", "A");
 
         EfficacyEvidenceFactory factory = new EfficacyEvidenceFactory(TREATMENT_APPROACH_CURATOR, model);
-        Set<EfficacyEvidence> evidences = factory.create(entry, molecularCriterium, "BRAF", "BRAF");
+        Set<EfficacyEvidence> evidences = factory.create(entry, Set.of(molecularCriterium), "BRAF", "BRAF");
         assertEquals(1, evidences.size());
     }
 
     @Test
     public void canFilterEvidenceOnTherapyAndLevel() {
-        Set<MolecularCriterium> molecularCriterium = MolecularCriteriumTestFactory.createWithTestActionableGene();
+        MolecularCriterium molecularCriterium = MolecularCriteriumTestFactory.createWithTestActionableGene();
         CkbEvidenceFilterModel model =
                 createEvidenceFilterModel(CkbEvidenceFilterType.EVIDENCE_BASED_ON_THERAPY, "Immuno", null, null, null, EvidenceLevel.A);
         CkbEntry entry = createForTherapyAndLevel("Immuno", "A");
 
         EfficacyEvidenceFactory factory = new EfficacyEvidenceFactory(TREATMENT_APPROACH_CURATOR, model);
-        Set<EfficacyEvidence> evidences = factory.create(entry, molecularCriterium, "KRAS", "KRAS");
+        Set<EfficacyEvidence> evidences = factory.create(entry, Set.of(molecularCriterium), "KRAS", "KRAS");
         assertEquals(0, evidences.size());
     }
 
     @Test
     public void canFilterAllEvidenceOnGene() {
-        Set<MolecularCriterium> molecularCriterium = MolecularCriteriumTestFactory.createWithTestActionableGene();
+        MolecularCriterium molecularCriterium = MolecularCriteriumTestFactory.createWithTestActionableGene();
         CkbEvidenceFilterModel model =
                 createEvidenceFilterModel(CkbEvidenceFilterType.ALL_EVIDENCE_BASED_ON_GENE, null, null, "KRAS", null, null);
         CkbEntry entry = create("KRAS", "KRAS amplification", "KRAS amplification", "sensitive", "Actionable");
 
         EfficacyEvidenceFactory factory = new EfficacyEvidenceFactory(TREATMENT_APPROACH_CURATOR, model);
-        Set<EfficacyEvidence> evidences = factory.create(entry, molecularCriterium, "KRAS", "KRAS");
+        Set<EfficacyEvidence> evidences = factory.create(entry, Set.of(molecularCriterium), "KRAS", "KRAS");
         assertEquals(0, evidences.size());
     }
 
     @Test
     public void doesNotFilterEvidenceOnOtherGene() {
-        Set<MolecularCriterium> molecularCriterium = MolecularCriteriumTestFactory.createWithTestActionableGene();
+        MolecularCriterium molecularCriterium = MolecularCriteriumTestFactory.createWithTestActionableGene();
         CkbEvidenceFilterModel model =
                 createEvidenceFilterModel(CkbEvidenceFilterType.ALL_EVIDENCE_BASED_ON_GENE, null, null, "BRAF", null, null);
         CkbEntry entry = create("KRAS", "KRAS amplification", "KRAS amplification", "sensitive", "Actionable");
 
         EfficacyEvidenceFactory factory = new EfficacyEvidenceFactory(TREATMENT_APPROACH_CURATOR, model);
-        Set<EfficacyEvidence> evidences = factory.create(entry, molecularCriterium, "KRAS", "KRAS");
+        Set<EfficacyEvidence> evidences = factory.create(entry, Set.of(molecularCriterium), "KRAS", "KRAS");
         assertEquals(1, evidences.size());
     }
 

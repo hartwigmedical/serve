@@ -46,11 +46,11 @@ public class ViccEfficacyEvidenceFactoryTest {
                 "Responsive",
                 "url");
 
-        Set<MolecularCriterium> molecularCriterium = MolecularCriteriumTestFactory.createWithTestActionableHotspot();
+        MolecularCriterium molecularCriterium = MolecularCriteriumTestFactory.createWithTestActionableHotspot();
 
         ViccEntry entry = ViccTestFactory.testEntryWithGeneEventAndAssociation("gene", "event", actionable);
 
-        Set<EfficacyEvidence> evidences = factory.toEfficacyEvidence(entry, molecularCriterium);
+        Set<EfficacyEvidence> evidences = factory.toEfficacyEvidence(entry, Set.of(molecularCriterium));
         assertEquals(2, evidences.size());
 
         EfficacyEvidence evidenceA = findByCancerType(evidences, cancerTypeA);
@@ -58,7 +58,7 @@ public class ViccEfficacyEvidenceFactoryTest {
         assertEquals(cancerTypeA, evidenceA.indication().applicableType().name());
         assertEquals("1", evidenceA.indication().applicableType().doid());
         assertTrue(evidenceA.indication().excludedSubTypes().isEmpty());
-        assertEquals(molecularCriterium, Set.of(evidenceA.molecularCriterium()));
+        assertEquals(molecularCriterium, evidenceA.molecularCriterium());
         assertEquals(EvidenceLevel.A, evidenceA.evidenceLevel());
         assertEquals(EvidenceLevelDetails.UNKNOWN, evidenceA.evidenceLevelDetails());
         assertEquals(EvidenceDirection.RESPONSIVE, evidenceA.evidenceDirection());
@@ -140,35 +140,35 @@ public class ViccEfficacyEvidenceFactoryTest {
         ViccEfficacyEvidenceFactory factory =
                 new ViccEfficacyEvidenceFactory(DoidLookupTestFactory.create(doidLookupMap), new DrugCurator(), new EvidenceLevelCurator());
 
-        Set<MolecularCriterium> molecularCriteria = MolecularCriteriumTestFactory.createWithTestActionableHotspot();
+        MolecularCriterium molecularCriteria = MolecularCriteriumTestFactory.createWithTestActionableHotspot();
 
         ViccEntry doesNotSupport = ImmutableViccEntry.builder()
                 .from(actionable)
                 .kbSpecificObject(ViccTestFactory.testEntryWithCivicEvidenceDirection("Does Not Support").kbSpecificObject())
                 .build();
 
-        assertEquals(0, factory.toEfficacyEvidence(doesNotSupport, molecularCriteria).size());
+        assertEquals(0, factory.toEfficacyEvidence(doesNotSupport, Set.of(molecularCriteria)).size());
 
         ViccEntry supports = ImmutableViccEntry.builder()
                 .from(actionable)
                 .kbSpecificObject(ViccTestFactory.testEntryWithCivicEvidenceDirection("Supports").kbSpecificObject())
                 .build();
 
-        assertEquals(1, factory.toEfficacyEvidence(supports, molecularCriteria).size());
+        assertEquals(1, factory.toEfficacyEvidence(supports, Set.of(molecularCriteria)).size());
 
         ViccEntry undefined = ImmutableViccEntry.builder()
                 .from(actionable)
                 .kbSpecificObject(ViccTestFactory.testEntryWithCivicEvidenceDirection(null).kbSpecificObject())
                 .build();
 
-        assertEquals(1, factory.toEfficacyEvidence(undefined, molecularCriteria).size());
+        assertEquals(1, factory.toEfficacyEvidence(undefined, Set.of(molecularCriteria)).size());
 
         ViccEntry notRecognized = ImmutableViccEntry.builder()
                 .from(actionable)
                 .kbSpecificObject(ViccTestFactory.testEntryWithCivicEvidenceDirection("Not a direction").kbSpecificObject())
                 .build();
 
-        assertEquals(1, factory.toEfficacyEvidence(notRecognized, molecularCriteria).size());
+        assertEquals(1, factory.toEfficacyEvidence(notRecognized, Set.of(molecularCriteria)).size());
     }
 
     @NotNull

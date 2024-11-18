@@ -177,30 +177,17 @@ public class CkbExtractor {
     @NotNull
     private Set<MolecularCriterium> createMolecularCriteria(@NotNull EventExtractorOutput extractionOutput, @NotNull String sourceEvent,
             @NotNull CkbEntry entry) {
-        String sourceUrl = "https://ckbhome.jax.org/profileResponse/advancedEvidenceFind?molecularProfileId=" + entry.profileId();
-        LocalDate sourceDate = entry.createDate();
-        ActionableEvent actionableEvent = toActionableEvent(sourceEvent, sourceDate, sourceUrl);
+        ActionableEvent actionableEvent = toActionableEvent(sourceEvent, entry);
 
         Set<MolecularCriterium> molecularCriteria = Sets.newHashSet();
 
         addHotspotsToCriteria(extractionOutput, actionableEvent, molecularCriteria);
-        addExonsToCriteria(extractionOutput, actionableEvent, molecularCriteria);
         addCodonsToCriteria(extractionOutput, actionableEvent, molecularCriteria);
-
-        if (molecularCriteria.isEmpty()) {
-            molecularCriteria.add(ImmutableMolecularCriterium.builder()
-                    .hotspots(Sets.newHashSet())
-                    .characteristics(extractActionableCharacteristic(extractionOutput.characteristic(), actionableEvent))
-                    .exons(Sets.newHashSet())
-                    .codons(Sets.newHashSet())
-                    .genes(Stream.of(extractionOutput.geneLevel(), extractionOutput.copyNumber())
-                            .filter(Objects::nonNull)
-                            .map(annotation -> extractActionableGenes(annotation, actionableEvent))
-                            .collect(Collectors.toSet()))
-                    .fusions(extractActionableFusions(extractionOutput.fusionPair(), actionableEvent))
-                    .hla(extractActionableHLA(extractionOutput.hla(), actionableEvent))
-                    .build());
-        }
+        addExonsToCriteria(extractionOutput, actionableEvent, molecularCriteria);
+        addGenesToCriteria(extractionOutput, actionableEvent, molecularCriteria);
+        addFusionsToCriteria(extractionOutput, actionableEvent, molecularCriteria);
+        addCharacteristicsToCriteria(extractionOutput, actionableEvent, molecularCriteria);
+        addHlaToCriteria(extractionOutput, actionableEvent, molecularCriteria);
 
         return molecularCriteria;
     }
@@ -215,6 +202,16 @@ public class CkbExtractor {
         }
     }
 
+    private void addCodonsToCriteria(@NotNull EventExtractorOutput extractionOutput, @NotNull ActionableEvent actionableEvent,
+            @NotNull Set<MolecularCriterium> molecularCriteria) {
+        if (extractionOutput.codons() != null) {
+            Set<ActionableRange> codons = extractActionableRanges(extractionOutput.codons(), actionableEvent);
+            for (ActionableRange codon : codons) {
+                molecularCriteria.add(ImmutableMolecularCriterium.builder().codons(Set.of(codon)).build());
+            }
+        }
+    }
+
     private void addExonsToCriteria(@NotNull EventExtractorOutput extractionOutput, @NotNull ActionableEvent actionableEvent,
             @NotNull Set<MolecularCriterium> molecularCriteria) {
         if (extractionOutput.exons() != null) {
@@ -225,13 +222,39 @@ public class CkbExtractor {
         }
     }
 
-    private void addCodonsToCriteria(@NotNull EventExtractorOutput extractionOutput, @NotNull ActionableEvent actionableEvent,
+    private void addGenesToCriteria(@NotNull EventExtractorOutput extractionOutput, @NotNull ActionableEvent actionableEvent,
             @NotNull Set<MolecularCriterium> molecularCriteria) {
-        if (extractionOutput.codons() != null) {
-            Set<ActionableRange> codons = extractActionableRanges(extractionOutput.codons(), actionableEvent);
-            for (ActionableRange codon : codons) {
-                molecularCriteria.add(ImmutableMolecularCriterium.builder().codons(Set.of(codon)).build());
-            }
+        Set<ActionableGene> genes = Stream.of(extractionOutput.geneLevel(), extractionOutput.copyNumber())
+                .filter(Objects::nonNull)
+                .map(annotation -> extractActionableGenes(annotation, actionableEvent))
+                .collect(Collectors.toSet());
+        if (!genes.isEmpty()) {
+            molecularCriteria.add(ImmutableMolecularCriterium.builder().genes(genes).build());
+        }
+    }
+
+    private void addFusionsToCriteria(@NotNull EventExtractorOutput extractionOutput, @NotNull ActionableEvent actionableEvent,
+            @NotNull Set<MolecularCriterium> molecularCriteria) {
+        if (extractionOutput.fusionPair() != null) {
+            Set<ActionableFusion> fusions = extractActionableFusions(extractionOutput.fusionPair(), actionableEvent);
+            molecularCriteria.add(ImmutableMolecularCriterium.builder().fusions(fusions).build());
+        }
+    }
+
+    private void addCharacteristicsToCriteria(@NotNull EventExtractorOutput extractionOutput, @NotNull ActionableEvent actionableEvent,
+            @NotNull Set<MolecularCriterium> molecularCriteria) {
+        if (extractionOutput.characteristic() != null) {
+            Set<ActionableCharacteristic> characteristics =
+                    extractActionableCharacteristic(extractionOutput.characteristic(), actionableEvent);
+            molecularCriteria.add(ImmutableMolecularCriterium.builder().characteristics(characteristics).build());
+        }
+    }
+
+    private void addHlaToCriteria(@NotNull EventExtractorOutput extractionOutput, @NotNull ActionableEvent actionableEvent,
+            @NotNull Set<MolecularCriterium> molecularCriteria) {
+        if (extractionOutput.hla() != null) {
+            Set<ActionableHLA> hla = extractActionableHLA(extractionOutput.hla(), actionableEvent);
+            molecularCriteria.add(ImmutableMolecularCriterium.builder().hla(hla).build());
         }
     }
 
@@ -360,9 +383,6 @@ public class CkbExtractor {
     @NotNull
     private static Set<ActionableCharacteristic> extractActionableCharacteristic(@Nullable TumorCharacteristic characteristic,
             @NotNull ActionableEvent actionableEvent) {
-        if (characteristic == null) {
-            return Collections.emptySet();
-        }
         return Set.of(ImmutableActionableCharacteristic.builder().from(characteristic).from(actionableEvent).build());
     }
 
@@ -376,18 +396,12 @@ public class CkbExtractor {
 
     @NotNull
     private static Set<ActionableHLA> extractActionableHLA(@Nullable ImmunoHLA hla, @NotNull ActionableEvent actionableEvent) {
-        if (hla == null) {
-            return Collections.emptySet();
-        }
         return Set.of(ImmutableActionableHLA.builder().from(hla).from(actionableEvent).build());
     }
 
     @NotNull
     private static Set<ActionableFusion> extractActionableFusions(@Nullable FusionPair fusionPair,
             @NotNull ActionableEvent actionableEvent) {
-        if (fusionPair == null) {
-            return Collections.emptySet();
-        }
         return Set.of(ImmutableActionableFusion.builder().from(fusionPair).from(actionableEvent).build());
     }
 
@@ -397,8 +411,9 @@ public class CkbExtractor {
     }
 
     @NotNull
-    private static ActionableEvent toActionableEvent(@NotNull String sourceEvent, @NotNull LocalDate sourceDate,
-            @NotNull String sourceUrl) {
+    private static ActionableEvent toActionableEvent(@NotNull String sourceEvent, @NotNull CkbEntry entry) {
+        String sourceUrl = "https://ckbhome.jax.org/profileResponse/advancedEvidenceFind?molecularProfileId=" + entry.profileId();
+        LocalDate sourceDate = entry.createDate();
         return ImmutableActionableEventImpl.builder().sourceDate(sourceDate).sourceEvent(sourceEvent).sourceUrls(Set.of(sourceUrl)).build();
     }
 }

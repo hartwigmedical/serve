@@ -12,9 +12,9 @@ public class MolecularCriteriumComparatorTest {
 
     @Test
     public void canSortMolecularCriteria() {
-        MolecularCriterium criterium1 = MolecularCriteriumTestFactory.createWithTestActionableHotspot().iterator().next();
-        MolecularCriterium criterium2 = MolecularCriteriumTestFactory.createWithTestActionableGene().iterator().next();
-        MolecularCriterium criterium3 = MolecularCriteriumTestFactory.createWithTestActionableCharacteristic().iterator().next();
+        MolecularCriterium criterium1 = MolecularCriteriumTestFactory.createWithTestActionableHotspot();
+        MolecularCriterium criterium2 = MolecularCriteriumTestFactory.createWithTestActionableGene();
+        MolecularCriterium criterium3 = MolecularCriteriumTestFactory.createWithTestActionableCharacteristic();
 
         List<MolecularCriterium> criteria = Lists.newArrayList(criterium2, criterium3, criterium1);
         criteria.sort(new MolecularCriteriumComparator());

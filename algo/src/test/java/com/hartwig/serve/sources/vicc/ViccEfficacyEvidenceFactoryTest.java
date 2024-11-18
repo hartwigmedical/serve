@@ -71,7 +71,7 @@ public class ViccEfficacyEvidenceFactoryTest {
         assertEquals(Sets.newHashSet(CancerTypeConstants.REFRACTORY_HEMATOLOGIC_TYPE,
                 CancerTypeConstants.BONE_MARROW_TYPE,
                 CancerTypeConstants.LEUKEMIA_TYPE), evidenceB.indication().excludedSubTypes());
-        assertEquals(molecularCriterium, Set.of(evidenceB.molecularCriterium()));
+        assertEquals(molecularCriterium, evidenceB.molecularCriterium());
         assertEquals(EvidenceLevel.A, evidenceB.evidenceLevel());
         assertEquals(EvidenceLevelDetails.UNKNOWN, evidenceB.evidenceLevelDetails());
         assertEquals(EvidenceDirection.RESPONSIVE, evidenceB.evidenceDirection());

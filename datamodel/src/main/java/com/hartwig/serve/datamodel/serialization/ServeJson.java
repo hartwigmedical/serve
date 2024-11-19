@@ -137,9 +137,9 @@ public final class ServeJson {
 
             gen.writeStartObject();
             if (!map.isEmpty()) {
-                if (!(map instanceof SortedMap)) {
+                if (!SortedMap.class.isAssignableFrom(map.getClass())) {
                     Object key = map.keySet().iterator().next();
-                    if (key instanceof Comparable) {
+                    if (Comparable.class.isAssignableFrom(key.getClass())) {
                         map = new TreeMap<>(map);
                     }
                 }

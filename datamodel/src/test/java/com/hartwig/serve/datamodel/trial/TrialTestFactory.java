@@ -42,7 +42,7 @@ public final class TrialTestFactory {
 
     @NotNull
     public static Country createTestCountry(@NotNull String name, @NotNull String city) {
-        return countryBuilder().name(name).hospitalsPerCity(Map.of(city, Set.of(createTestHospital()))).build();
+        return countryBuilder().name(name).hospitalsPerCity(Map.of(city, Set.of(createTestHospital("hospital 1")))).build();
     }
 
     @NotNull
@@ -51,7 +51,7 @@ public final class TrialTestFactory {
     }
 
     @NotNull
-    private static Hospital createTestHospital() {
-        return hospitalBuilder().name("hospital name").isChildrensHospital(false).build();
+    public static Hospital createTestHospital(@NotNull String name) {
+        return hospitalBuilder().name(name).build();
     }
 }

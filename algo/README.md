@@ -442,10 +442,11 @@ elsewhere.
 
 ## Version History and Download Links
 
-- Upcoming
+- [7.0.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v7.0.0)
     - Redesign SERVE datamodel to split trials from evidence and support complex profiles.
     - `CKB_EVIDENCE` and `CKB_TRIALS` are merged back into one source `CKB`.
     - iClusion is no longer supported.
+    - The term 'blacklist' is removed in multiple places
 - [6.1.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v6.1.0)
     - Take gene role into account when comparing / sorting known genes (bug-fix)
     - Support reading of gene roles from Hartwig curated and driver gene sources.

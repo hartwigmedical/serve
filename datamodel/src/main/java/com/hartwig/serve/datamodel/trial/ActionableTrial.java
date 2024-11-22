@@ -52,9 +52,6 @@ public abstract class ActionableTrial implements Comparable<ActionableTrial> {
     @NotNull
     public abstract Set<String> urls();
 
-    @Nullable
-    public abstract Integer evidenceYear();
-
     @Override
     public int compareTo(ActionableTrial other) {
         return COMPARATOR.compare(this, other);

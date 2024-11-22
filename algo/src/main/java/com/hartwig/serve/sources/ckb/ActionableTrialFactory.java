@@ -78,7 +78,7 @@ class ActionableTrialFactory {
                 therapies.add(therapy.therapyName());
             }
 
-            // TODO: Complex filters are not supported, if needed will be implemented in the future
+            // TODO: Complex filters (e.g. therapy AND tumor type combi) are not supported, if needed will be implemented in the future
             if (!filterTrial.shouldFilterTrial(trial.nctId(), setToField(therapies), Strings.EMPTY, sourceGene, sourceEvent)
                     && !countries.isEmpty()) {
                 actionableTrials.add(ImmutableActionableTrial.builder()
@@ -90,7 +90,7 @@ class ActionableTrialFactory {
                         .therapyNames(therapies)
                         .genderCriterium(trial.gender() != null ? GenderCriterium.valueOf(trial.gender().toUpperCase()) : null)
                         .indications(extractIndications(trial.indications()))
-                        // TODO (CB): trial can have multiple molecular criteria. One for each CkbEntry. Should be merged somewhere?
+                        // TODO (CB): trial can have multiple molecular criteria (required and/or partial required!). Since we currently loop over ckb entries (instead of ckb trials) in CkbExtractor, it's not possible to implement this.
                         .anyMolecularCriteria(molecularCriteria)
                         .urls(Sets.newHashSet("https://clinicaltrials.gov/study/" + trial.nctId()))
                         .build());

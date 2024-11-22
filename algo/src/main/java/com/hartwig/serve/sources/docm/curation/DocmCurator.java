@@ -26,8 +26,8 @@ public class DocmCurator {
         for (DocmEntry entry : entries) {
             CurationKey key = new CurationKey(entry.gene(), entry.transcript(), entry.proteinAnnotation());
             evaluatedCurationKeys.add(key);
-            if (CurationFactory.ENTRY_BLACKLIST.contains(key)) {
-                LOGGER.debug("Removing DocmEntry '{}' because of blacklist curation.",
+            if (CurationFactory.ENTRY_FILTERS.contains(key)) {
+                LOGGER.debug("Removing DocmEntry '{}' because of filtering curation.",
                         KeyFormatter.toProteinKey(entry.gene(), entry.transcript(), entry.proteinAnnotation()));
             } else if (CurationFactory.GENE_MAPPINGS.containsKey(entry.gene())) {
                 String mappedGene = CurationFactory.GENE_MAPPINGS.get(entry.gene());
@@ -40,18 +40,18 @@ public class DocmCurator {
         return curatedEntries;
     }
 
-    public void reportUnusedBlacklistEntries() {
+    public void reportUnusedFilterEntries() {
         int unusedKeys = 0;
-        for (CurationKey key : CurationFactory.ENTRY_BLACKLIST) {
+        for (CurationKey key : CurationFactory.ENTRY_FILTERS) {
             if (!evaluatedCurationKeys.contains(key)) {
                 unusedKeys++;
-                LOGGER.warn("Key '{}' hasn't been used during DoCM curation", key);
+                LOGGER.warn("Key '{}' hasn't been used during DoCM filtering", key);
             }
         }
 
-        LOGGER.debug("Found {} unused DoCM blacklist entries. {} keys have been requested against {} blacklist entries",
+        LOGGER.debug("Found {} unused DoCM filter entries. {} keys have been requested against {} filter entries",
                 unusedKeys,
                 evaluatedCurationKeys.size(),
-                CurationFactory.ENTRY_BLACKLIST.size());
+                CurationFactory.ENTRY_FILTERS.size());
     }
 }

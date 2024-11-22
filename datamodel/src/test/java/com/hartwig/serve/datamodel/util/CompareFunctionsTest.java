@@ -2,15 +2,25 @@ package com.hartwig.serve.datamodel.util;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Set;
+
 import org.junit.Test;
 
 public class CompareFunctionsTest {
 
     @Test
+    public void canCompareSetsOfComparable() {
+        assertEquals(1, CompareFunctions.compareSetOfComparable(Set.of(), Set.of("string")));
+        assertEquals(0, CompareFunctions.compareSetOfComparable(Set.of("string"), Set.of("string")));
+        assertEquals(-1, CompareFunctions.compareSetOfComparable(Set.of("string"), Set.of()));
+    }
+
+    @Test
     public void canCompareNullableObjects() {
+        assertEquals(0, CompareFunctions.compareNullableStrings(null, null));
+        assertEquals(0, CompareFunctions.compareNullableBoolean(null, null));
         assertEquals(0, CompareFunctions.compareNullableDoubles(null, null));
         assertEquals(0, CompareFunctions.compareNullableIntegers(null, null));
-        assertEquals(0, CompareFunctions.compareNullableBoolean(null, null));
     }
 
     @Test

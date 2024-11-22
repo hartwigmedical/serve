@@ -7,13 +7,12 @@ SERVE harmonizes various sources of evidence into a single unified model that ca
 
 In addition, this repo provides a number of utility applications to ingest and analyze various SERVE input sources.
 
-| Module                                 | Description                               |
-|----------------------------------------|-------------------------------------------|
-| [Datamodel](datamodel)                 | The datamodel that other tools can reuse. |
-| [Algo](algo)                           | The actual SERVE algorithm.               |
-| [CKB-Importer](ckb-importer)           | Importer of CKB FLEX datamodel.           |
-| [iClusion-Importer](iclusion-importer) | Importer of iClusion datamodel.           |
-| [VICC-Importer](vicc-importer)         | Importer of VICC datamodel.               |
+| Module                         | Description                               |
+|--------------------------------|-------------------------------------------|
+| [Datamodel](datamodel)         | The datamodel that other tools can reuse. |
+| [Algo](algo)                   | The actual SERVE algorithm.               |
+| [CKB-Importer](ckb-importer)   | Importer of CKB FLEX datamodel.           |
+| [VICC-Importer](vicc-importer) | Importer of VICC datamodel.               |
 
 ## Releasing serve
 

@@ -1,6 +1,6 @@
 package com.hartwig.serve.extraction.immuno;
 
-import com.hartwig.serve.datamodel.immuno.ImmunoAnnotation;
+import com.hartwig.serve.datamodel.molecular.immuno.ImmunoAnnotation;
 
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;

@@ -3,7 +3,7 @@ package com.hartwig.serve.extraction.util;
 import static org.junit.Assert.assertEquals;
 
 import com.hartwig.serve.DriverGenesTestFactory;
-import com.hartwig.serve.datamodel.MutationType;
+import com.hartwig.serve.datamodel.molecular.MutationType;
 
 import org.junit.Test;
 

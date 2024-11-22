@@ -5,8 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
 
-import com.hartwig.serve.datamodel.ActionableEvents;
-import com.hartwig.serve.datamodel.KnownEvents;
+import com.hartwig.serve.datamodel.ServeRecord;
 import com.hartwig.serve.extraction.events.EventInterpretation;
 
 import org.apache.commons.cli.CommandLine;
@@ -89,8 +88,7 @@ public class ServeDatabaseAccess {
         options.addOption(Option.builder(DB_URL).desc("Database url").hasArg(true).required(isRequired).build());
     }
 
-    public void writeServeData(@NotNull ActionableEvents actionableEvents, @NotNull KnownEvents knownEvents,
-            @NotNull List<EventInterpretation> eventInterpretations) {
-        serveDAO.write(actionableEvents, knownEvents, eventInterpretations);
+    public void writeServeRecord(@NotNull ServeRecord serveRecord, @NotNull List<EventInterpretation> eventInterpretations) {
+        serveDAO.write(serveRecord, eventInterpretations);
     }
 }

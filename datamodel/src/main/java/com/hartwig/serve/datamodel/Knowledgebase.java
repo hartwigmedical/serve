@@ -5,20 +5,19 @@ import java.util.Set;
 import java.util.StringJoiner;
 
 import com.google.common.collect.Sets;
+import com.hartwig.serve.datamodel.efficacy.EvidenceLevel;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 public enum Knowledgebase {
-    CKB_EVIDENCE(RefGenome.V38, "CKB", EvidenceLevel.C, EvidenceLevel.B),
-    CKB_TRIAL(RefGenome.V38, "CKB", EvidenceLevel.B, EvidenceLevel.B),
+    CKB(RefGenome.V38, "CKB", EvidenceLevel.C, EvidenceLevel.B),
     DOCM(RefGenome.V37, "DoCM", EvidenceLevel.A, EvidenceLevel.A),
     HARTWIG_HOTSPOT_COHORT(RefGenome.V37, "HMF Hotspot Cohort", EvidenceLevel.A, EvidenceLevel.A),
     HARTWIG_HOTSPOT_CURATED(RefGenome.V37, "HMF Hotspot Curated", EvidenceLevel.A, EvidenceLevel.A),
     HARTWIG_GENE_DRIVER_PANEL(RefGenome.V37, "HMF Gene Driver Panel", EvidenceLevel.A, EvidenceLevel.A),
     HARTWIG_GENE_CURATED(RefGenome.V37, "HMF Gene Curated", EvidenceLevel.A, EvidenceLevel.A),
-    ICLUSION(RefGenome.V37, "iClusion", EvidenceLevel.B, EvidenceLevel.B),
     VICC_CGI(RefGenome.V37, "CGI", EvidenceLevel.B, EvidenceLevel.B),
     VICC_CIVIC(RefGenome.V37, "CIViC", EvidenceLevel.B, EvidenceLevel.B),
     VICC_JAX(RefGenome.V37, "CKB Core", EvidenceLevel.B, EvidenceLevel.B),

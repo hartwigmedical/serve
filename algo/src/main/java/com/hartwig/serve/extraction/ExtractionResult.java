@@ -1,20 +1,12 @@
 package com.hartwig.serve.extraction;
 
+import java.util.List;
 import java.util.Set;
 
 import com.hartwig.serve.datamodel.RefGenome;
-import com.hartwig.serve.datamodel.characteristic.ActionableCharacteristic;
-import com.hartwig.serve.datamodel.fusion.ActionableFusion;
-import com.hartwig.serve.datamodel.fusion.KnownFusion;
-import com.hartwig.serve.datamodel.gene.ActionableGene;
-import com.hartwig.serve.datamodel.gene.KnownCopyNumber;
-import com.hartwig.serve.datamodel.gene.KnownGene;
-import com.hartwig.serve.datamodel.hotspot.ActionableHotspot;
-import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
-import com.hartwig.serve.datamodel.immuno.ActionableHLA;
-import com.hartwig.serve.datamodel.range.ActionableRange;
-import com.hartwig.serve.datamodel.range.KnownCodon;
-import com.hartwig.serve.datamodel.range.KnownExon;
+import com.hartwig.serve.datamodel.efficacy.EfficacyEvidence;
+import com.hartwig.serve.datamodel.molecular.KnownEvents;
+import com.hartwig.serve.datamodel.trial.ActionableTrial;
 import com.hartwig.serve.extraction.events.EventInterpretation;
 
 import org.immutables.value.Value;
@@ -31,42 +23,12 @@ public abstract class ExtractionResult {
     @NotNull
     public abstract Set<EventInterpretation> eventInterpretations();
 
-    @NotNull
-    public abstract Set<KnownHotspot> knownHotspots();
+    @Nullable
+    public abstract KnownEvents knownEvents();
 
-    @NotNull
-    public abstract Set<KnownCodon> knownCodons();
+    @Nullable
+    public abstract List<EfficacyEvidence> evidences();
 
-    @NotNull
-    public abstract Set<KnownExon> knownExons();
-
-    @NotNull
-    public abstract Set<KnownGene> knownGenes();
-
-    @NotNull
-    public abstract Set<KnownCopyNumber> knownCopyNumbers();
-
-    @NotNull
-    public abstract Set<KnownFusion> knownFusions();
-
-    @NotNull
-    public abstract Set<ActionableHotspot> actionableHotspots();
-
-    @NotNull
-    public abstract Set<ActionableRange> actionableCodons();
-
-    @NotNull
-    public abstract Set<ActionableRange> actionableExons();
-
-    @NotNull
-    public abstract Set<ActionableGene> actionableGenes();
-
-    @NotNull
-    public abstract Set<ActionableFusion> actionableFusions();
-
-    @NotNull
-    public abstract Set<ActionableCharacteristic> actionableCharacteristics();
-
-    @NotNull
-    public abstract Set<ActionableHLA> actionableHLA();
+    @Nullable
+    public abstract List<ActionableTrial> trials();
 }

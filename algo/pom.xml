@@ -24,10 +24,6 @@
         </dependency>
         <dependency>
             <groupId>com.hartwig.serve</groupId>
-            <artifactId>iclusion-importer</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.hartwig.serve</groupId>
             <artifactId>vicc-importer</artifactId>
         </dependency>
 

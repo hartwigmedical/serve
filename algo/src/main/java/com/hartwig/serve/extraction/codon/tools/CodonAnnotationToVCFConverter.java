@@ -8,13 +8,12 @@ import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.hartwig.serve.ServeConfig;
-import com.hartwig.serve.ServeLocalConfigProvider;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.datamodel.KnownEvent;
 import com.hartwig.serve.datamodel.RefGenome;
+import com.hartwig.serve.datamodel.ServeDatabase;
 import com.hartwig.serve.datamodel.ServeRecord;
-import com.hartwig.serve.datamodel.range.KnownCodon;
+import com.hartwig.serve.datamodel.molecular.KnownEvent;
+import com.hartwig.serve.datamodel.molecular.range.KnownCodon;
 import com.hartwig.serve.datamodel.serialization.ServeJson;
 import com.hartwig.serve.extraction.util.GenerateAltBase;
 import com.hartwig.serve.extraction.util.KeyFormatter;
@@ -36,6 +35,9 @@ public class CodonAnnotationToVCFConverter {
 
     private static final Logger LOGGER = LogManager.getLogger(CodonAnnotationToVCFConverter.class);
 
+    private static final String REF_GENOME_FASTA_37 =
+            System.getProperty("user.home") + "/hmf/refgenomes/grch37/Homo_sapiens.GRCh37.GATK.illumina.fasta";
+
     private static final boolean LOG_DEBUG = false;
 
     public static void main(String[] args) throws IOException {
@@ -45,14 +47,14 @@ public class CodonAnnotationToVCFConverter {
             Configurator.setRootLevel(Level.DEBUG);
         }
 
-        ServeConfig config = ServeLocalConfigProvider.create();
-        IndexedFastaSequenceFile refSequence37 = new IndexedFastaSequenceFile(new File(config.refGenome37FastaFile()));
+        IndexedFastaSequenceFile refSequence37 = new IndexedFastaSequenceFile(new File(REF_GENOME_FASTA_37));
 
-        String serveJson = System.getProperty("user.home") + "/hmf/tmp/serve.37.json";
+        String serveJson = System.getProperty("user.home") + "/hmf/tmp/serve.json";
         String outputVcf = System.getProperty("user.home") + "/hmf/tmp/codons.vcf.gz";
         GenerateAltBase altBaseGenerator = new GenerateAltBase(RefGenome.V37, refSequence37);
 
-        ServeRecord serveRecord = ServeJson.read(serveJson);
+        ServeDatabase serveDatabase = ServeJson.read(serveJson);
+        ServeRecord serveRecord = serveDatabase.records().get(RefGenome.V37);
         List<KnownCodon> codons = serveRecord.knownEvents().codons().stream().sorted().collect(Collectors.toList());
         LOGGER.info("The number of codons in known codon file is {}", codons.size());
 

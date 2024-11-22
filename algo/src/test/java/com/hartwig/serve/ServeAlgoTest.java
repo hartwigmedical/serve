@@ -5,7 +5,6 @@ import static org.junit.Assert.assertNotNull;
 import java.io.IOException;
 
 import com.google.common.io.Resources;
-import com.hartwig.serve.curation.DoidLookupTestFactory;
 import com.hartwig.serve.refgenome.RefGenomeManagerFactory;
 import com.hartwig.serve.vicc.datamodel.ViccSource;
 
@@ -16,18 +15,16 @@ import org.junit.Test;
 public class ServeAlgoTest {
 
     private static final String VICC_JSON = Resources.getResource("vicc/empty.vicc.json").getPath();
-    private static final String ICLUSION_TRIAL_TSV = Resources.getResource("iclusion/empty.iclusion.tsv").getPath();
-    private static final String ICLUSION_FILTER_TSV = Resources.getResource("iclusion/filter.tsv").getPath();
+    private static final String VICC_MISSING_DOIDS_MAPPING_TSV = Resources.getResource("vicc/doid_mapping_example.tsv").getPath();
 
     private static final String CKB_DIR = Resources.getResource("ckb_data").getPath();
-    private static final String CKB_BLACKLIST_MOLECULAR_PROFILE_TSV =
-            Resources.getResource("ckb_blacklist/ckb_blacklist_molecular_profile.tsv").getPath();
-    private static final String CKB_BLACKLIST_TRIAL_TSV = Resources.getResource("ckb_blacklist/ckb_blacklist_trial.tsv").getPath();
-    private static final String CKB_BLACKLIST_EVIDENCE_TSV = Resources.getResource("ckb_blacklist/ckb_blacklist_evidence.tsv").getPath();
+    private static final String CKB_MOLECULAR_PROFILE_FILTER_TSV =
+            Resources.getResource("ckb_filter/ckb_molecular_profile_filter.tsv").getPath();
+    private static final String CKB_TRIAL_FILTER_TSV = Resources.getResource("ckb_filter/ckb_trial_filter.tsv").getPath();
+    private static final String CKB_EVIDENCE_FILTER_TSV = Resources.getResource("ckb_filter/ckb_evidence_filter.tsv").getPath();
+    private static final String CKB_REGIONS_TO_INCLUDE_TSV = Resources.getResource("ckb_region/ckb_regions_to_include.tsv").getPath();
     private static final String CKB_DRUG_CLASS_CURATION_TSV =
             Resources.getResource("ckb_curation/ckb_treatment_approach_curation.tsv").getPath();
-    private static final String CKB_REGION_TSV = Resources.getResource("ckb_region/ckb_regions.tsv").getPath();
-
     private static final String CKB_FACILITY_CURATION_NAME_TSV = Resources.getResource("ckb_curation/ckb_facility_name.tsv").getPath();
     private static final String CKB_FACILITY_CURATION_ZIP_TSV = Resources.getResource("ckb_curation/ckb_facility_zip.tsv").getPath();
     private static final String CKB_FACILITY_CURATION_MANUAL_TSV = Resources.getResource("ckb_curation/ckb_facility_manual.tsv").getPath();
@@ -55,17 +52,14 @@ public class ServeAlgoTest {
         ServeConfig config = algoBuilder().useVicc(true)
                 .viccJson(VICC_JSON)
                 .addViccSources(ViccSource.CIVIC, ViccSource.CGI)
-                .useIclusion(true)
-                .iClusionTrialTsv(ICLUSION_TRIAL_TSV)
-                .iClusionFilterTsv(ICLUSION_FILTER_TSV)
-                .useCkbEvidence(true)
-                .useCkbTrials(true)
+                .viccMissingDoidsMappingTsv(VICC_MISSING_DOIDS_MAPPING_TSV)
+                .useCkb(true)
                 .ckbDir(CKB_DIR)
-                .ckbBlacklistMolecularProfileTsv(CKB_BLACKLIST_MOLECULAR_PROFILE_TSV)
-                .ckbBlacklistTrialTsv(CKB_BLACKLIST_TRIAL_TSV)
-                .ckbBlacklistEvidenceTsv(CKB_BLACKLIST_EVIDENCE_TSV)
+                .ckbMolecularProfileFilterTsv(CKB_MOLECULAR_PROFILE_FILTER_TSV)
+                .ckbEvidenceFilterTsv(CKB_EVIDENCE_FILTER_TSV)
+                .ckbTrialFilterTsv(CKB_TRIAL_FILTER_TSV)
+                .ckbRegionsToIncludeTsv(CKB_REGIONS_TO_INCLUDE_TSV)
                 .ckbDrugCurationTsv(CKB_DRUG_CLASS_CURATION_TSV)
-                .ckbRegionTsv(CKB_REGION_TSV)
                 .ckbFacilityCurationNameTsv(CKB_FACILITY_CURATION_NAME_TSV)
                 .ckbFacilityCurationZipTsv(CKB_FACILITY_CURATION_ZIP_TSV)
                 .ckbFacilityCurationManualTsv(CKB_FACILITY_CURATION_MANUAL_TSV)
@@ -90,13 +84,13 @@ public class ServeAlgoTest {
                 .knownFusion38File(KNOWN_FUSION_38_FILE)
                 .build();
 
-        ServeAlgo algo = new ServeAlgo(RefGenomeManagerFactory.createFromServeConfig(config), DoidLookupTestFactory.dummy());
+        ServeAlgo algo = new ServeAlgo(RefGenomeManagerFactory.createFromServeConfig(config));
 
         assertNotNull(algo.run(config));
     }
 
     @NotNull
     private static ImmutableServeConfig.Builder algoBuilder() {
-        return ImmutableServeConfig.builder().missingDoidsMappingTsv(Strings.EMPTY).outputDir(Strings.EMPTY).skipHotspotResolving(true);
+        return ImmutableServeConfig.builder().outputDir(Strings.EMPTY).skipHotspotResolving(true);
     }
 }

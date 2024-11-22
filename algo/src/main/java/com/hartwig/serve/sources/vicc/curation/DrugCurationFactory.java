@@ -7,7 +7,7 @@ import java.util.Set;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.hartwig.serve.datamodel.EvidenceLevel;
+import com.hartwig.serve.datamodel.efficacy.EvidenceLevel;
 import com.hartwig.serve.vicc.datamodel.ViccSource;
 
 import org.jetbrains.annotations.NotNull;
@@ -16,25 +16,25 @@ final class DrugCurationFactory {
 
     static final Map<DrugCurationKey, DrugCurationValues> DRUG_MAPPINGS = Maps.newHashMap();
 
-    static final Set<DrugCurationKey> DRUG_BLACKLIST = Sets.newHashSet();
+    static final Set<DrugCurationKey> DRUG_FILTERS = Sets.newHashSet();
 
     private DrugCurationFactory() {
     }
 
     static {
-        populateBlacklist();
+        populateFilters();
 
         populateRenames();
         populateAndMappings();
         populateOrMappings();
     }
 
-    private static void populateBlacklist() {
-        DRUG_BLACKLIST.add(civicB("119"));
+    private static void populateFilters() {
+        DRUG_FILTERS.add(civicB("119"));
 
         // The below drugs are supposed to be given sequentially.
-        DRUG_BLACKLIST.add(civicB("Sunitinib,Everolimus"));
-        DRUG_BLACKLIST.add(civicB("Vismodegib,Erismodegib"));
+        DRUG_FILTERS.add(civicB("Sunitinib,Everolimus"));
+        DRUG_FILTERS.add(civicB("Vismodegib,Erismodegib"));
     }
 
     private static void populateRenames() {

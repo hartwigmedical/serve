@@ -7,9 +7,9 @@ import java.util.Set;
 
 import com.google.common.collect.Lists;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.datamodel.common.ProteinEffect;
-import com.hartwig.serve.datamodel.range.KnownCodon;
-import com.hartwig.serve.datamodel.range.RangeTestFactory;
+import com.hartwig.serve.datamodel.molecular.common.ProteinEffect;
+import com.hartwig.serve.datamodel.molecular.range.KnownCodon;
+import com.hartwig.serve.datamodel.molecular.range.RangeTestFactory;
 
 import org.junit.Test;
 

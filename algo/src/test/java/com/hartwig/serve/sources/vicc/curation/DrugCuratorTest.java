@@ -6,7 +6,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 
 import com.google.common.collect.Lists;
-import com.hartwig.serve.datamodel.EvidenceLevel;
+import com.hartwig.serve.datamodel.efficacy.EvidenceLevel;
 import com.hartwig.serve.vicc.datamodel.ViccSource;
 
 import org.junit.Test;
@@ -32,10 +32,10 @@ public class DrugCuratorTest {
     }
 
     @Test
-    public void canBlacklistDrugs() {
+    public void canFilterDrugs() {
         DrugCurator curator = new DrugCurator();
 
-        DrugCurationKey firstKey = DrugCurationFactory.DRUG_BLACKLIST.iterator().next();
+        DrugCurationKey firstKey = DrugCurationFactory.DRUG_FILTERS.iterator().next();
 
         assertTrue(curator.curate(firstKey.source(), firstKey.level(), firstKey.treatment()).isEmpty());
 

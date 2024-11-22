@@ -3,11 +3,11 @@ package com.hartwig.serve.extraction.exon.tools;
 import java.io.IOException;
 import java.util.List;
 
-import com.hartwig.serve.extraction.codon.tools.AnnotatedCodonVCFChecker;
+import com.hartwig.serve.common.variant.impact.VariantTranscriptImpact;
+import com.hartwig.serve.common.variant.impact.VariantTranscriptImpactFactory;
 import com.hartwig.serve.extraction.util.VCFWriterFactory;
-import com.hartwig.serve.snpeff.SnpEffAnnotation;
-import com.hartwig.serve.snpeff.SnpEffAnnotationParser;
 
+import org.apache.commons.compress.utils.Lists;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,7 +23,7 @@ import htsjdk.variant.vcf.VCFCodec;
 
 public class AnnotatedExonVCFChecker {
 
-    private static final Logger LOGGER = LogManager.getLogger(AnnotatedCodonVCFChecker.class);
+    private static final Logger LOGGER = LogManager.getLogger(AnnotatedExonVCFChecker.class);
 
     private static final boolean LOG_DEBUG = false;
 
@@ -51,7 +51,8 @@ public class AnnotatedExonVCFChecker {
             String inputTranscript = inputParts[1].equals("null") ? null : inputParts[1];
             int inputExonId = Integer.parseInt(inputParts[2]);
 
-            List<SnpEffAnnotation> annotations = SnpEffAnnotationParser.fromContext(variant);
+            List<VariantTranscriptImpact> annotations = toVariantTranscriptImpact(variant.getAttributeAsStringList("PAVE_TI", ""));
+
             if (isMatch(inputGene, inputTranscript, inputExonId, annotations)) {
                 matchCount++;
             } else {
@@ -62,10 +63,21 @@ public class AnnotatedExonVCFChecker {
         LOGGER.info("Done comparing {} exons: {} matches and {} differences found.", totalCount, matchCount, diffCount);
     }
 
+    @NotNull
+    private static List<VariantTranscriptImpact> toVariantTranscriptImpact(@NotNull final List<String> annotation) {
+        List<VariantTranscriptImpact> variantTranscriptImpactList = Lists.newArrayList();
+        for (int i = 0; i <= annotation.size() - 1; i++) {
+            variantTranscriptImpactList.add(VariantTranscriptImpactFactory.fromVcfData(annotation.get(i)));
+        }
+
+        return variantTranscriptImpactList;
+    }
+
     @Nullable
-    private static SnpEffAnnotation annotationForTranscript(@NotNull List<SnpEffAnnotation> annotations, @NotNull String transcript) {
-        for (SnpEffAnnotation annotation : annotations) {
-            if (annotation.isTranscriptFeature() && annotation.transcript().equals(transcript)) {
+    private static VariantTranscriptImpact annotationForTranscript(@NotNull List<VariantTranscriptImpact> annotations,
+            @NotNull String transcript) {
+        for (VariantTranscriptImpact annotation : annotations) {
+            if (annotation.transcript().equals(transcript)) {
                 return annotation;
             }
         }
@@ -73,12 +85,12 @@ public class AnnotatedExonVCFChecker {
     }
 
     private static boolean isMatch(@NotNull String inputGene, @Nullable String inputTranscript, int inputExonId,
-            @NotNull List<SnpEffAnnotation> annotations) {
+            @NotNull List<VariantTranscriptImpact> annotations) {
         if (inputTranscript != null) {
-            SnpEffAnnotation annotation = annotationForTranscript(annotations, inputTranscript);
+            VariantTranscriptImpact annotation = annotationForTranscript(annotations, inputTranscript);
 
             if (annotation != null) {
-                int snpeffExonId = extractExonId(annotation.rank());
+                int snpeffExonId = extractExonId("rank");
                 if (inputExonId == snpeffExonId) {
                     LOGGER.debug("Identical on gene '{}': SERVE input exon id '{}' vs SnpEff exon id '{}'",
                             inputGene,
@@ -99,12 +111,11 @@ public class AnnotatedExonVCFChecker {
         } else {
             // In case input transcript is missing we try to match against any transcript.
             boolean matchFound = false;
-            for (SnpEffAnnotation annotation : annotations) {
-                if (annotation.isTranscriptFeature()) {
-                    int snpeffExonId = extractExonId(annotation.rank());
-                    if (inputExonId == snpeffExonId) {
-                        matchFound = true;
-                    }
+            for (VariantTranscriptImpact annotation : annotations) {
+                int snpeffExonId = extractExonId("rank");
+                if (inputExonId == snpeffExonId) {
+                    matchFound = true;
+
                 }
             }
 

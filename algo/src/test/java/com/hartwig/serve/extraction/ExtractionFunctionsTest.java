@@ -1,61 +1,57 @@
 package com.hartwig.serve.extraction;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import com.google.common.collect.Lists;
-import com.hartwig.serve.ServeAlgoTestFactory;
-import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.datamodel.fusion.KnownFusion;
-import com.hartwig.serve.datamodel.gene.KnownCopyNumber;
-import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
-import com.hartwig.serve.datamodel.range.KnownCodon;
-import com.hartwig.serve.datamodel.range.KnownExon;
+import java.util.Set;
 
+import com.google.common.collect.Lists;
+import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.datamodel.molecular.KnownEvent;
+
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
 public class ExtractionFunctionsTest {
 
+    private static final Knowledgebase SOURCE_1 = Knowledgebase.VICC_CIVIC;
+    private static final Knowledgebase SOURCE_2 = Knowledgebase.VICC_CGI;
+
     @Test
-    public void canMergeExtractionResults() {
-        Knowledgebase source1 = Knowledgebase.VICC_CIVIC;
-        Knowledgebase source2 = Knowledgebase.VICC_CGI;
-        ExtractionResult result1 = ServeAlgoTestFactory.createResultForSource(source1);
-        ExtractionResult result2 = ServeAlgoTestFactory.createResultForSource(source2);
+    public void canMergeProperExtractionResults() {
+        ExtractionResult result1 = ExtractionResultTestFactory.createProperResultForSource(SOURCE_1);
+        ExtractionResult result2 = ExtractionResultTestFactory.createProperResultForSource(SOURCE_2);
 
         ExtractionResult merged = ExtractionFunctions.merge(Lists.newArrayList(result1, result2));
 
-        assertEquals(1, merged.knownHotspots().size());
-        KnownHotspot hotspot = merged.knownHotspots().iterator().next();
-        assertTrue(hotspot.sources().contains(source1));
-        assertTrue(hotspot.sources().contains(source2));
+        assertMergedKnownEvents(merged.knownEvents().hotspots());
+        assertMergedKnownEvents(merged.knownEvents().codons());
+        assertMergedKnownEvents(merged.knownEvents().exons());
+        assertMergedKnownEvents(merged.knownEvents().genes());
+        assertMergedKnownEvents(merged.knownEvents().copyNumbers());
+        assertMergedKnownEvents(merged.knownEvents().fusions());
 
-        assertEquals(1, merged.knownCodons().size());
-        KnownCodon codon = merged.knownCodons().iterator().next();
-        assertTrue(codon.sources().contains(source1));
-        assertTrue(codon.sources().contains(source2));
+        assertEquals(2, merged.eventInterpretations().size());
+        assertEquals(2, merged.evidences().size());
+        assertEquals(2, merged.trials().size());
+    }
 
-        assertEquals(1, merged.knownExons().size());
-        KnownExon exon = merged.knownExons().iterator().next();
-        assertTrue(exon.sources().contains(source1));
-        assertTrue(exon.sources().contains(source2));
+    @Test
+    public void retainsNullOnMinimalExtractionResults() {
+        ExtractionResult result1 = ExtractionResultTestFactory.createMinimalResultForSource(SOURCE_1);
+        ExtractionResult result2 = ExtractionResultTestFactory.createMinimalResultForSource(SOURCE_2);
+        ExtractionResult merged = ExtractionFunctions.merge(Lists.newArrayList(result1, result2));
 
-        assertEquals(1, merged.knownCopyNumbers().size());
-        KnownCopyNumber copyNumber = merged.knownCopyNumbers().iterator().next();
-        assertTrue(copyNumber.sources().contains(source1));
-        assertTrue(copyNumber.sources().contains(source2));
+        assertNull(merged.knownEvents());
+        assertNull(merged.evidences());
+        assertNull(merged.trials());
+    }
 
-        assertEquals(1, merged.knownFusions().size());
-        KnownFusion fusion = merged.knownFusions().iterator().next();
-        assertTrue(fusion.sources().contains(source1));
-        assertTrue(fusion.sources().contains(source2));
-
-        assertEquals(2, merged.actionableHotspots().size());
-        assertEquals(2, merged.actionableCodons().size());
-        assertEquals(2, merged.actionableExons().size());
-        assertEquals(2, merged.actionableGenes().size());
-        assertEquals(2, merged.actionableFusions().size());
-        assertEquals(2, merged.actionableCharacteristics().size());
-        assertEquals(2, merged.actionableHLA().size());
+    private static void assertMergedKnownEvents(@NotNull Set<? extends KnownEvent> known) {
+        assertEquals(1, known.size());
+        KnownEvent first = known.iterator().next();
+        assertTrue(first.sources().contains(SOURCE_1));
+        assertTrue(first.sources().contains(SOURCE_2));
     }
 }

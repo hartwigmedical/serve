@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.Maps;
-import com.hartwig.serve.datamodel.EvidenceDirection;
+import com.hartwig.serve.datamodel.efficacy.EvidenceDirection;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -19,9 +19,10 @@ public final class TreatmentApproachCurationFile {
     }
 
     @NotNull
-    public static Map<TreatmentApproachCurationEntryKey, TreatmentApproachCurationEntry> read(@NotNull String treatmentApproachCurationFile)
+    public static Map<TreatmentApproachCurationEntryKey, TreatmentApproachCurationEntry> read(@NotNull String treatmentApproachCurationTsv)
             throws IOException {
-        List<String> lines = Files.readAllLines(new File(treatmentApproachCurationFile).toPath());
+        List<String> lines = Files.readAllLines(new File(treatmentApproachCurationTsv).toPath());
+
         // Skip header
         return fromLines(lines.subList(1, lines.size()));
     }

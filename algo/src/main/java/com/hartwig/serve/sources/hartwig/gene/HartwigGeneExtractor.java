@@ -5,8 +5,10 @@ import java.util.Set;
 
 import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.datamodel.gene.ImmutableKnownGene;
-import com.hartwig.serve.datamodel.gene.KnownGene;
+import com.hartwig.serve.datamodel.molecular.ImmutableKnownEvents;
+import com.hartwig.serve.datamodel.molecular.KnownEvents;
+import com.hartwig.serve.datamodel.molecular.gene.ImmutableKnownGene;
+import com.hartwig.serve.datamodel.molecular.gene.KnownGene;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.ImmutableExtractionResult;
 import com.hartwig.serve.util.ProgressTracker;
@@ -31,6 +33,7 @@ public class HartwigGeneExtractor {
             tracker.update();
         }
 
-        return ImmutableExtractionResult.builder().refGenomeVersion(source.refGenomeVersion()).knownGenes(knownGenes).build();
+        KnownEvents knownEvents = ImmutableKnownEvents.builder().genes(knownGenes).build();
+        return ImmutableExtractionResult.builder().refGenomeVersion(source.refGenomeVersion()).knownEvents(knownEvents).build();
     }
 }

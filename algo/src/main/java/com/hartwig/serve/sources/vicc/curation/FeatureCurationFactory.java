@@ -14,7 +14,7 @@ final class FeatureCurationFactory {
 
     static final Map<FeatureCurationKey, FeatureCurationValues> FEATURE_MAPPINGS = Maps.newHashMap();
 
-    static final Set<FeatureCurationKey> FEATURE_BLACKLIST = Sets.newHashSet();
+    static final Set<FeatureCurationKey> FEATURE_FILTERS = Sets.newHashSet();
 
     private FeatureCurationFactory() {
     }
@@ -84,30 +84,30 @@ final class FeatureCurationFactory {
         FEATURE_MAPPINGS.put(civic("ABL1", "ENST00000305877", "BCR-ABL"), curation("BCR", "BCR-ABL1"));
 
         // Variants that don't exist
-        FEATURE_BLACKLIST.add(civic("NOTCH1", "ENST00000277541", "S2275FS"));
-        FEATURE_BLACKLIST.add(civic("NOTCH1", "ENST00000277541", "V2444FS"));
-        FEATURE_BLACKLIST.add(civic("VHL", null, "L132fs (c.395delA)"));
-        FEATURE_BLACKLIST.add(civic("GNAS", "ENST00000371100", "T393C"));
-        FEATURE_BLACKLIST.add(civic("TERT", "ENST00000310581", "C228T"));
-        FEATURE_BLACKLIST.add(civic("VHL", null, "P81delRVV (c.243_251delGCGCGTCGT)"));
-        FEATURE_BLACKLIST.add(civic("VHL", null, "A121I (c.364_365GC>AT)"));
-        FEATURE_BLACKLIST.add(civic("VHL", null, "N167T (c.392A>C)"));
-        FEATURE_BLACKLIST.add(civic("VHL", null, "X214L (c.641G>T)"));
+        FEATURE_FILTERS.add(civic("NOTCH1", "ENST00000277541", "S2275FS"));
+        FEATURE_FILTERS.add(civic("NOTCH1", "ENST00000277541", "V2444FS"));
+        FEATURE_FILTERS.add(civic("VHL", null, "L132fs (c.395delA)"));
+        FEATURE_FILTERS.add(civic("GNAS", "ENST00000371100", "T393C"));
+        FEATURE_FILTERS.add(civic("TERT", "ENST00000310581", "C228T"));
+        FEATURE_FILTERS.add(civic("VHL", null, "P81delRVV (c.243_251delGCGCGTCGT)"));
+        FEATURE_FILTERS.add(civic("VHL", null, "A121I (c.364_365GC>AT)"));
+        FEATURE_FILTERS.add(civic("VHL", null, "N167T (c.392A>C)"));
+        FEATURE_FILTERS.add(civic("VHL", null, "X214L (c.641G>T)"));
 
         // Variant only possible through an MNV which spans an intron, and inconsistent with its coding impact.
-        FEATURE_BLACKLIST.add(civic("VHL", null, "V155C (c.462delA)"));
+        FEATURE_FILTERS.add(civic("VHL", null, "V155C (c.462delA)"));
 
         // Variant unlikely to be real as it spans multiple exons
-        FEATURE_BLACKLIST.add(civic("VHL", null, "G114dup (c.342dupGGT)"));
+        FEATURE_FILTERS.add(civic("VHL", null, "G114dup (c.342dupGGT)"));
 
         // Variant hard to interpret as it crossing exonic boundary (in protein space)
-        FEATURE_BLACKLIST.add(civic("VHL", null, "G114fs (c.341delCGTTTCCAACAATTTCTCGGTGT)"));
+        FEATURE_FILTERS.add(civic("VHL", null, "G114fs (c.341delCGTTTCCAACAATTTCTCGGTGT)"));
 
         // Variant hard to interpret in protein space as it changes an amino acid followed by a frameshift.
-        FEATURE_BLACKLIST.add(civic("VHL", "ENST00000256474", "M54IFS (c.162_166delGGAGG)"));
+        FEATURE_FILTERS.add(civic("VHL", "ENST00000256474", "M54IFS (c.162_166delGGAGG)"));
 
         // Variant has an inconsistent formatting. Not sure how to correct
-        FEATURE_BLACKLIST.add(civic("PDGFRA", "ENST00000257290", "DI842-843VM"));
+        FEATURE_FILTERS.add(civic("PDGFRA", "ENST00000257290", "DI842-843VM"));
     }
 
     private static void populateJaxCuration() {
@@ -133,24 +133,24 @@ final class FeatureCurationFactory {
 
         // The below variants in FLT3 are from a paper where an additional R was added in the ref sequence, shifting all AAs by one position.
         // This has been corrected in current live CKB.
-        FEATURE_BLACKLIST.add(jax("FLT3", null, "FLT3 L611_E612insCSSDNEYFYVDFREYEYDLKWEFPRENL "));
-        FEATURE_BLACKLIST.add(jax("FLT3", null, "FLT3 E612_F613insGYVDFREYEYDLKWEFRPRENLEF "));
+        FEATURE_FILTERS.add(jax("FLT3", null, "FLT3 L611_E612insCSSDNEYFYVDFREYEYDLKWEFPRENL "));
+        FEATURE_FILTERS.add(jax("FLT3", null, "FLT3 E612_F613insGYVDFREYEYDLKWEFRPRENLEF "));
 
         // The transcript that should have this mutation (ENST00000507379) is annotated as 3' truncated with only 1135 AAs in ensembl
-        FEATURE_BLACKLIST.add(jax("APC", null, "APC S1197* "));
+        FEATURE_FILTERS.add(jax("APC", null, "APC S1197* "));
 
         // The below is pending investigation by JAX, possibly a mistake by the paper.
-        FEATURE_BLACKLIST.add(jax("PIK3CA", null, "PIK3CA R425L "));
+        FEATURE_FILTERS.add(jax("PIK3CA", null, "PIK3CA R425L "));
 
         // Variant that doesn't seem to exist.
-        FEATURE_BLACKLIST.add(jax("PTEN", null, "PTEN Y86fs "));
+        FEATURE_FILTERS.add(jax("PTEN", null, "PTEN Y86fs "));
 
         // Variants spanning multiple exons in our interpretation
-        FEATURE_BLACKLIST.add(jax("PTEN", null, "PTEN R55fs*1 "));
-        FEATURE_BLACKLIST.add(jax("PTEN", null, "PTEN Y27fs*1 "));
+        FEATURE_FILTERS.add(jax("PTEN", null, "PTEN R55fs*1 "));
+        FEATURE_FILTERS.add(jax("PTEN", null, "PTEN Y27fs*1 "));
 
         // Variant hard to interpret as it crossing exonic boundary
-        FEATURE_BLACKLIST.add(jax("VHL", null, "VHL V155fs "));
+        FEATURE_FILTERS.add(jax("VHL", null, "VHL V155fs "));
     }
 
     private static void populateOncoKBCuration() {
@@ -200,123 +200,123 @@ final class FeatureCurationFactory {
         FEATURE_MAPPINGS.put(oncoKb("RIT1", "ENST00000368323", "T76insTLDT"), curation("RIT1", "T76_A77insTLDT"));
 
         // Not clear what TRA and TRB are
-        FEATURE_BLACKLIST.add(oncoKb("NKX2-1", "ENST00000354822", "TRA-NKX2-1 Fusion"));
-        FEATURE_BLACKLIST.add(oncoKb("NKX2-1", "ENST00000354822", "TRB-NKX2-1 Fusion"));
+        FEATURE_FILTERS.add(oncoKb("NKX2-1", "ENST00000354822", "TRA-NKX2-1 Fusion"));
+        FEATURE_FILTERS.add(oncoKb("NKX2-1", "ENST00000354822", "TRB-NKX2-1 Fusion"));
 
         // Not sure what "Delta" means in this context.
-        FEATURE_BLACKLIST.add(oncoKb("NTRK1", "ENST00000524377", "Delta-NTRK1 Fusion"));
+        FEATURE_FILTERS.add(oncoKb("NTRK1", "ENST00000524377", "Delta-NTRK1 Fusion"));
 
         // Variants are unlikely as they span multiple exons (and hence are more fusions than inframes)
-        FEATURE_BLACKLIST.add(oncoKb("PDGFRA", "ENST00000257290", "E311_K312del"));
-        FEATURE_BLACKLIST.add(oncoKb("ETV6", "ENST00000396373", "385_418del"));
+        FEATURE_FILTERS.add(oncoKb("PDGFRA", "ENST00000257290", "E311_K312del"));
+        FEATURE_FILTERS.add(oncoKb("ETV6", "ENST00000396373", "385_418del"));
 
         // Variants that we couldn't quite figure out
-        FEATURE_BLACKLIST.add(oncoKb("KIT", "ENST00000288135", "T574insTQLPYD"));
+        FEATURE_FILTERS.add(oncoKb("KIT", "ENST00000288135", "T574insTQLPYD"));
 
         // Variants that don't exist
         //  - Below is called a "silent promoter" according to https://pubmed.ncbi.nlm.nih.gov/11606402/
-        FEATURE_BLACKLIST.add(oncoKb("APC", "ENST00000257430", "A290T"));
-        FEATURE_BLACKLIST.add(oncoKb("AR", "ENST00000374690", "F876L"));
-        FEATURE_BLACKLIST.add(oncoKb("BRCA1", "ENST00000357654", "T47D"));
-        FEATURE_BLACKLIST.add(oncoKb("BRCA1", "ENST00000357654", "E60L"));
-        FEATURE_BLACKLIST.add(oncoKb("BRCA2", "ENST00000380152", "S1670A"));
-        FEATURE_BLACKLIST.add(oncoKb("BRCA2", "ENST00000380152", "R2304C"));
-        FEATURE_BLACKLIST.add(oncoKb("BRCA2", "ENST00000380152", "N2829R"));
-        FEATURE_BLACKLIST.add(oncoKb("CARD11", "ENST00000396946", "G116S"));
-        FEATURE_BLACKLIST.add(oncoKb("CARD11", "ENST00000396946", "F123I"));
-        FEATURE_BLACKLIST.add(oncoKb("CARD11", "ENST00000396946", "E127G"));
-        FEATURE_BLACKLIST.add(oncoKb("CARM1", "ENST00000327064", "S217A"));
-        FEATURE_BLACKLIST.add(oncoKb("CARM1", "ENST00000327064", "S217C"));
-        FEATURE_BLACKLIST.add(oncoKb("CARM1", "ENST00000327064", "S217E"));
-        FEATURE_BLACKLIST.add(oncoKb("CARM1", "ENST00000327064", "S217T"));
-        FEATURE_BLACKLIST.add(oncoKb("CASP8", "ENST00000358485", "C248T"));
-        FEATURE_BLACKLIST.add(oncoKb("CCND3", "ENST00000372991", "T286A"));
-        FEATURE_BLACKLIST.add(oncoKb("CDK12", "ENST00000447079", "K765R"));
-        FEATURE_BLACKLIST.add(oncoKb("CDK12", "ENST00000447079", "D887N"));
-        FEATURE_BLACKLIST.add(oncoKb("CDKN2A", "ENST00000304494", "P73L"));
-        FEATURE_BLACKLIST.add(oncoKb("CDKN2A", "ENST00000304494", "R79P"));
-        FEATURE_BLACKLIST.add(oncoKb("CDKN2A", "ENST00000304494", "G93W"));
-        FEATURE_BLACKLIST.add(oncoKb("CDKN2A", "ENST00000304494", "V118D"));
-        FEATURE_BLACKLIST.add(oncoKb("FLT3", "ENST00000241453", "L611_E612insCSSDNEYFYVDFREYEYDLKWEFPRENL"));
-        FEATURE_BLACKLIST.add(oncoKb("FLT3", "ENST00000241453", "E612_F613insGYVDFREYEYDLKWEFRPRENLEF"));
-        FEATURE_BLACKLIST.add(oncoKb("IGF1R", "ENST00000268035", "G119T"));
-        FEATURE_BLACKLIST.add(oncoKb("IGF1R", "ENST00000268035", "G1125A"));
-        FEATURE_BLACKLIST.add(oncoKb("IGF1R", "ENST00000268035", "A1374V"));
-        FEATURE_BLACKLIST.add(oncoKb("JAK1", "ENST00000342505", "G1079D"));
-        FEATURE_BLACKLIST.add(oncoKb("JAK1", "ENST00000342505", "G871E"));
-        FEATURE_BLACKLIST.add(oncoKb("KIT", "ENST00000288135", "A504_Y505ins"));
-        FEATURE_BLACKLIST.add(oncoKb("KIT", "ENST00000288135", "D814V"));
-        FEATURE_BLACKLIST.add(oncoKb("MAP3K1", "ENST00000399503", "T1481fs"));
-        FEATURE_BLACKLIST.add(oncoKb("PMS2", "ENST00000265849", "E541K"));
-        FEATURE_BLACKLIST.add(oncoKb("POLE", "ENST00000320574", "S279Y"));
+        FEATURE_FILTERS.add(oncoKb("APC", "ENST00000257430", "A290T"));
+        FEATURE_FILTERS.add(oncoKb("AR", "ENST00000374690", "F876L"));
+        FEATURE_FILTERS.add(oncoKb("BRCA1", "ENST00000357654", "T47D"));
+        FEATURE_FILTERS.add(oncoKb("BRCA1", "ENST00000357654", "E60L"));
+        FEATURE_FILTERS.add(oncoKb("BRCA2", "ENST00000380152", "S1670A"));
+        FEATURE_FILTERS.add(oncoKb("BRCA2", "ENST00000380152", "R2304C"));
+        FEATURE_FILTERS.add(oncoKb("BRCA2", "ENST00000380152", "N2829R"));
+        FEATURE_FILTERS.add(oncoKb("CARD11", "ENST00000396946", "G116S"));
+        FEATURE_FILTERS.add(oncoKb("CARD11", "ENST00000396946", "F123I"));
+        FEATURE_FILTERS.add(oncoKb("CARD11", "ENST00000396946", "E127G"));
+        FEATURE_FILTERS.add(oncoKb("CARM1", "ENST00000327064", "S217A"));
+        FEATURE_FILTERS.add(oncoKb("CARM1", "ENST00000327064", "S217C"));
+        FEATURE_FILTERS.add(oncoKb("CARM1", "ENST00000327064", "S217E"));
+        FEATURE_FILTERS.add(oncoKb("CARM1", "ENST00000327064", "S217T"));
+        FEATURE_FILTERS.add(oncoKb("CASP8", "ENST00000358485", "C248T"));
+        FEATURE_FILTERS.add(oncoKb("CCND3", "ENST00000372991", "T286A"));
+        FEATURE_FILTERS.add(oncoKb("CDK12", "ENST00000447079", "K765R"));
+        FEATURE_FILTERS.add(oncoKb("CDK12", "ENST00000447079", "D887N"));
+        FEATURE_FILTERS.add(oncoKb("CDKN2A", "ENST00000304494", "P73L"));
+        FEATURE_FILTERS.add(oncoKb("CDKN2A", "ENST00000304494", "R79P"));
+        FEATURE_FILTERS.add(oncoKb("CDKN2A", "ENST00000304494", "G93W"));
+        FEATURE_FILTERS.add(oncoKb("CDKN2A", "ENST00000304494", "V118D"));
+        FEATURE_FILTERS.add(oncoKb("FLT3", "ENST00000241453", "L611_E612insCSSDNEYFYVDFREYEYDLKWEFPRENL"));
+        FEATURE_FILTERS.add(oncoKb("FLT3", "ENST00000241453", "E612_F613insGYVDFREYEYDLKWEFRPRENLEF"));
+        FEATURE_FILTERS.add(oncoKb("IGF1R", "ENST00000268035", "G119T"));
+        FEATURE_FILTERS.add(oncoKb("IGF1R", "ENST00000268035", "G1125A"));
+        FEATURE_FILTERS.add(oncoKb("IGF1R", "ENST00000268035", "A1374V"));
+        FEATURE_FILTERS.add(oncoKb("JAK1", "ENST00000342505", "G1079D"));
+        FEATURE_FILTERS.add(oncoKb("JAK1", "ENST00000342505", "G871E"));
+        FEATURE_FILTERS.add(oncoKb("KIT", "ENST00000288135", "A504_Y505ins"));
+        FEATURE_FILTERS.add(oncoKb("KIT", "ENST00000288135", "D814V"));
+        FEATURE_FILTERS.add(oncoKb("MAP3K1", "ENST00000399503", "T1481fs"));
+        FEATURE_FILTERS.add(oncoKb("PMS2", "ENST00000265849", "E541K"));
+        FEATURE_FILTERS.add(oncoKb("POLE", "ENST00000320574", "S279Y"));
         //  - This one comes from https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4155059/ and probably should be L1237F.
-        FEATURE_BLACKLIST.add(oncoKb("RAD50", "ENST00000265335", "L1273F"));
-        FEATURE_BLACKLIST.add(oncoKb("RAD51D", "ENST00000335858", "S257delinsK"));
-        FEATURE_BLACKLIST.add(oncoKb("RXRA", "ENST00000481739", "S247F"));
-        FEATURE_BLACKLIST.add(oncoKb("RXRA", "ENST00000481739", "S247Y"));
-        FEATURE_BLACKLIST.add(oncoKb("SMAD4", "ENST00000342988", "D357Y"));
-        FEATURE_BLACKLIST.add(oncoKb("SOX9", "ENST00000245479", "F12L"));
-        FEATURE_BLACKLIST.add(oncoKb("SOX9", "ENST00000245479", "A19V"));
-        FEATURE_BLACKLIST.add(oncoKb("SOX9", "ENST00000245479", "H65Y"));
-        FEATURE_BLACKLIST.add(oncoKb("TERT", "ENST00000310581", "C228T"));
-        FEATURE_BLACKLIST.add(oncoKb("TERT", "ENST00000310581", "C250T"));
-        FEATURE_BLACKLIST.add(oncoKb("TMPRSS2", "ENST00000398585", "M160V"));
+        FEATURE_FILTERS.add(oncoKb("RAD50", "ENST00000265335", "L1273F"));
+        FEATURE_FILTERS.add(oncoKb("RAD51D", "ENST00000335858", "S257delinsK"));
+        FEATURE_FILTERS.add(oncoKb("RXRA", "ENST00000481739", "S247F"));
+        FEATURE_FILTERS.add(oncoKb("RXRA", "ENST00000481739", "S247Y"));
+        FEATURE_FILTERS.add(oncoKb("SMAD4", "ENST00000342988", "D357Y"));
+        FEATURE_FILTERS.add(oncoKb("SOX9", "ENST00000245479", "F12L"));
+        FEATURE_FILTERS.add(oncoKb("SOX9", "ENST00000245479", "A19V"));
+        FEATURE_FILTERS.add(oncoKb("SOX9", "ENST00000245479", "H65Y"));
+        FEATURE_FILTERS.add(oncoKb("TERT", "ENST00000310581", "C228T"));
+        FEATURE_FILTERS.add(oncoKb("TERT", "ENST00000310581", "C250T"));
+        FEATURE_FILTERS.add(oncoKb("TMPRSS2", "ENST00000398585", "M160V"));
 
         // Variants that probably have the wrong transcripts configured by OncoKB
-        FEATURE_BLACKLIST.add(oncoKb("CASP8", "ENST00000358485", "G325A"));
-        FEATURE_BLACKLIST.add(oncoKb("EZH2", "ENST00000320356", "A677G"));
-        FEATURE_BLACKLIST.add(oncoKb("FBXW7", "ENST00000281708", "R482Q"));
-        FEATURE_BLACKLIST.add(oncoKb("FGFR2", "ENST00000358487", "K525E"));
-        FEATURE_BLACKLIST.add(oncoKb("FGFR2", "ENST00000358487", "T730S"));
-        FEATURE_BLACKLIST.add(oncoKb("FGFR2", "ENST00000358487", "V755I"));
-        FEATURE_BLACKLIST.add(oncoKb("GNAS", "ENST00000371085", "R844H"));
-        FEATURE_BLACKLIST.add(oncoKb("JAK2", "ENST00000381652", "R277K"));
-        FEATURE_BLACKLIST.add(oncoKb("KRAS", "ENST00000256078", "D153V"));
-        FEATURE_BLACKLIST.add(oncoKb("NF1", "ENST00000358273", "R1391G"));
-        FEATURE_BLACKLIST.add(oncoKb("NF1", "ENST00000358273", "R1391S"));
-        FEATURE_BLACKLIST.add(oncoKb("NF1", "ENST00000358273", "V1398D"));
-        FEATURE_BLACKLIST.add(oncoKb("NF1", "ENST00000358273", "K1423E"));
-        FEATURE_BLACKLIST.add(oncoKb("NF1", "ENST00000358273", "K1436Q"));
-        FEATURE_BLACKLIST.add(oncoKb("NF1", "ENST00000358273", "S1463F"));
-        FEATURE_BLACKLIST.add(oncoKb("NKX2-1", "ENST00000354822", "A339V"));
-        FEATURE_BLACKLIST.add(oncoKb("PRDM1", "ENST00000369096", "P48R"));
-        FEATURE_BLACKLIST.add(oncoKb("PRDM1", "ENST00000369096", "P48T"));
-        FEATURE_BLACKLIST.add(oncoKb("PRDM1", "ENST00000369096", "Y149D"));
-        FEATURE_BLACKLIST.add(oncoKb("PRDM1", "ENST00000369096", "C569Y"));
-        FEATURE_BLACKLIST.add(oncoKb("PTPRT", "ENST00000373198", "T844M"));
-        FEATURE_BLACKLIST.add(oncoKb("PTPRT", "ENST00000373198", "D927G"));
-        FEATURE_BLACKLIST.add(oncoKb("PTPRT", "ENST00000373198", "V995M"));
-        FEATURE_BLACKLIST.add(oncoKb("PTPRT", "ENST00000373198", "A1022E"));
-        FEATURE_BLACKLIST.add(oncoKb("PTPRT", "ENST00000373198", "R1040L"));
-        FEATURE_BLACKLIST.add(oncoKb("RAC1", "ENST00000356142", "C157Y"));
-        FEATURE_BLACKLIST.add(oncoKb("RBM10", "ENST00000329236", "V354E"));
-        FEATURE_BLACKLIST.add(oncoKb("RUNX1", "ENST00000300305", "G42R"));
-        FEATURE_BLACKLIST.add(oncoKb("RUNX1", "ENST00000300305", "H78Q"));
-        FEATURE_BLACKLIST.add(oncoKb("RUNX1", "ENST00000300305", "R80C"));
-        FEATURE_BLACKLIST.add(oncoKb("RUNX1", "ENST00000300305", "K83E"));
-        FEATURE_BLACKLIST.add(oncoKb("RUNX1", "ENST00000300305", "K83N"));
-        FEATURE_BLACKLIST.add(oncoKb("RUNX1", "ENST00000300305", "Y113*"));
-        FEATURE_BLACKLIST.add(oncoKb("RUNX1", "ENST00000300305", "A122*"));
-        FEATURE_BLACKLIST.add(oncoKb("RUNX1", "ENST00000300305", "R139G"));
-        FEATURE_BLACKLIST.add(oncoKb("RUNX1", "ENST00000300305", "D171G"));
-        FEATURE_BLACKLIST.add(oncoKb("RUNX1", "ENST00000300305", "D171N"));
-        FEATURE_BLACKLIST.add(oncoKb("RUNX1", "ENST00000300305", "P173S"));
-        FEATURE_BLACKLIST.add(oncoKb("RUNX1", "ENST00000300305", "R174*"));
-        FEATURE_BLACKLIST.add(oncoKb("RUNX1", "ENST00000300305", "R174Q"));
-        FEATURE_BLACKLIST.add(oncoKb("RUNX1", "ENST00000300305", "R177*"));
-        FEATURE_BLACKLIST.add(oncoKb("RUNX1", "ENST00000300305", "R177Q"));
-        FEATURE_BLACKLIST.add(oncoKb("TGFBR2", "ENST00000359013", "V419L"));
-        FEATURE_BLACKLIST.add(oncoKb("TGFBR2", "ENST00000359013", "P525L"));
-        FEATURE_BLACKLIST.add(oncoKb("TGFBR2", "ENST00000359013", "E526Q"));
-        FEATURE_BLACKLIST.add(oncoKb("TGFBR2", "ENST00000359013", "R537P"));
-        FEATURE_BLACKLIST.add(oncoKb("TMPRSS2", "ENST00000398585", "T75M"));
+        FEATURE_FILTERS.add(oncoKb("CASP8", "ENST00000358485", "G325A"));
+        FEATURE_FILTERS.add(oncoKb("EZH2", "ENST00000320356", "A677G"));
+        FEATURE_FILTERS.add(oncoKb("FBXW7", "ENST00000281708", "R482Q"));
+        FEATURE_FILTERS.add(oncoKb("FGFR2", "ENST00000358487", "K525E"));
+        FEATURE_FILTERS.add(oncoKb("FGFR2", "ENST00000358487", "T730S"));
+        FEATURE_FILTERS.add(oncoKb("FGFR2", "ENST00000358487", "V755I"));
+        FEATURE_FILTERS.add(oncoKb("GNAS", "ENST00000371085", "R844H"));
+        FEATURE_FILTERS.add(oncoKb("JAK2", "ENST00000381652", "R277K"));
+        FEATURE_FILTERS.add(oncoKb("KRAS", "ENST00000256078", "D153V"));
+        FEATURE_FILTERS.add(oncoKb("NF1", "ENST00000358273", "R1391G"));
+        FEATURE_FILTERS.add(oncoKb("NF1", "ENST00000358273", "R1391S"));
+        FEATURE_FILTERS.add(oncoKb("NF1", "ENST00000358273", "V1398D"));
+        FEATURE_FILTERS.add(oncoKb("NF1", "ENST00000358273", "K1423E"));
+        FEATURE_FILTERS.add(oncoKb("NF1", "ENST00000358273", "K1436Q"));
+        FEATURE_FILTERS.add(oncoKb("NF1", "ENST00000358273", "S1463F"));
+        FEATURE_FILTERS.add(oncoKb("NKX2-1", "ENST00000354822", "A339V"));
+        FEATURE_FILTERS.add(oncoKb("PRDM1", "ENST00000369096", "P48R"));
+        FEATURE_FILTERS.add(oncoKb("PRDM1", "ENST00000369096", "P48T"));
+        FEATURE_FILTERS.add(oncoKb("PRDM1", "ENST00000369096", "Y149D"));
+        FEATURE_FILTERS.add(oncoKb("PRDM1", "ENST00000369096", "C569Y"));
+        FEATURE_FILTERS.add(oncoKb("PTPRT", "ENST00000373198", "T844M"));
+        FEATURE_FILTERS.add(oncoKb("PTPRT", "ENST00000373198", "D927G"));
+        FEATURE_FILTERS.add(oncoKb("PTPRT", "ENST00000373198", "V995M"));
+        FEATURE_FILTERS.add(oncoKb("PTPRT", "ENST00000373198", "A1022E"));
+        FEATURE_FILTERS.add(oncoKb("PTPRT", "ENST00000373198", "R1040L"));
+        FEATURE_FILTERS.add(oncoKb("RAC1", "ENST00000356142", "C157Y"));
+        FEATURE_FILTERS.add(oncoKb("RBM10", "ENST00000329236", "V354E"));
+        FEATURE_FILTERS.add(oncoKb("RUNX1", "ENST00000300305", "G42R"));
+        FEATURE_FILTERS.add(oncoKb("RUNX1", "ENST00000300305", "H78Q"));
+        FEATURE_FILTERS.add(oncoKb("RUNX1", "ENST00000300305", "R80C"));
+        FEATURE_FILTERS.add(oncoKb("RUNX1", "ENST00000300305", "K83E"));
+        FEATURE_FILTERS.add(oncoKb("RUNX1", "ENST00000300305", "K83N"));
+        FEATURE_FILTERS.add(oncoKb("RUNX1", "ENST00000300305", "Y113*"));
+        FEATURE_FILTERS.add(oncoKb("RUNX1", "ENST00000300305", "A122*"));
+        FEATURE_FILTERS.add(oncoKb("RUNX1", "ENST00000300305", "R139G"));
+        FEATURE_FILTERS.add(oncoKb("RUNX1", "ENST00000300305", "D171G"));
+        FEATURE_FILTERS.add(oncoKb("RUNX1", "ENST00000300305", "D171N"));
+        FEATURE_FILTERS.add(oncoKb("RUNX1", "ENST00000300305", "P173S"));
+        FEATURE_FILTERS.add(oncoKb("RUNX1", "ENST00000300305", "R174*"));
+        FEATURE_FILTERS.add(oncoKb("RUNX1", "ENST00000300305", "R174Q"));
+        FEATURE_FILTERS.add(oncoKb("RUNX1", "ENST00000300305", "R177*"));
+        FEATURE_FILTERS.add(oncoKb("RUNX1", "ENST00000300305", "R177Q"));
+        FEATURE_FILTERS.add(oncoKb("TGFBR2", "ENST00000359013", "V419L"));
+        FEATURE_FILTERS.add(oncoKb("TGFBR2", "ENST00000359013", "P525L"));
+        FEATURE_FILTERS.add(oncoKb("TGFBR2", "ENST00000359013", "E526Q"));
+        FEATURE_FILTERS.add(oncoKb("TGFBR2", "ENST00000359013", "R537P"));
+        FEATURE_FILTERS.add(oncoKb("TMPRSS2", "ENST00000398585", "T75M"));
 
         // Variants that are simply invalid protein annotations
-        FEATURE_BLACKLIST.add(oncoKb("BRAF", "ENST00000288602", "V600D_K601insFGLAT"));
-        FEATURE_BLACKLIST.add(oncoKb("CARD11", "ENST00000396946", "L225LI"));
-        FEATURE_BLACKLIST.add(oncoKb("RIT1", "ENST00000368323", "TA83del"));
-        FEATURE_BLACKLIST.add(oncoKb("RUNX1", "ENST00000300305", "S291fsX300"));
-        FEATURE_BLACKLIST.add(oncoKb("RUNX1", "ENST00000300305", "S70fsX93"));
+        FEATURE_FILTERS.add(oncoKb("BRAF", "ENST00000288602", "V600D_K601insFGLAT"));
+        FEATURE_FILTERS.add(oncoKb("CARD11", "ENST00000396946", "L225LI"));
+        FEATURE_FILTERS.add(oncoKb("RIT1", "ENST00000368323", "TA83del"));
+        FEATURE_FILTERS.add(oncoKb("RUNX1", "ENST00000300305", "S291fsX300"));
+        FEATURE_FILTERS.add(oncoKb("RUNX1", "ENST00000300305", "S70fsX93"));
     }
 
     @NotNull

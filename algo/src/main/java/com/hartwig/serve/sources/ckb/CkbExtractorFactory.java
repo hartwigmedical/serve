@@ -3,13 +3,12 @@ package com.hartwig.serve.sources.ckb;
 import java.util.Set;
 
 import com.hartwig.serve.common.classification.EventClassifierConfig;
-import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.extraction.EventExtractor;
 import com.hartwig.serve.extraction.EventExtractorFactory;
 import com.hartwig.serve.extraction.util.DriverInconsistencyMode;
 import com.hartwig.serve.refgenome.RefGenomeResource;
-import com.hartwig.serve.sources.ckb.blacklist.CkbEvidenceBlacklistModel;
-import com.hartwig.serve.sources.ckb.blacklist.CkbStudyBlacklistModel;
+import com.hartwig.serve.sources.ckb.filter.CkbEvidenceFilterModel;
+import com.hartwig.serve.sources.ckb.filter.CkbTrialFilterModel;
 import com.hartwig.serve.sources.ckb.region.CkbRegion;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachCurator;
 
@@ -20,22 +19,12 @@ public final class CkbExtractorFactory {
     private CkbExtractorFactory() {
     }
 
-    @NotNull
-    public static CkbExtractor createEvidenceExtractor(@NotNull EventClassifierConfig config, @NotNull RefGenomeResource refGenomeResource,
-            @NotNull TreatmentApproachCurator treatmentApproachCurator, @NotNull CkbEvidenceBlacklistModel blacklistEvidence) {
-        return new CkbExtractor(Knowledgebase.CKB_EVIDENCE,
-                createEventExtractor(config, refGenomeResource),
-                new ActionableEvidenceFactory(treatmentApproachCurator, blacklistEvidence),
-                true);
-    }
-
-    @NotNull
-    public static CkbExtractor createTrialExtractor(@NotNull EventClassifierConfig config, @NotNull RefGenomeResource refGenomeResource,
-            @NotNull CkbStudyBlacklistModel blacklistStudy, @NotNull Set<CkbRegion> regionsToInclude) {
-        return new CkbExtractor(Knowledgebase.CKB_TRIAL,
-                createEventExtractor(config, refGenomeResource),
-                new ActionableTrialFactory(blacklistStudy, regionsToInclude),
-                false);
+    public static CkbExtractor createExtractor(@NotNull EventClassifierConfig config, @NotNull RefGenomeResource refGenomeResource,
+            @NotNull TreatmentApproachCurator treatmentApproachCurator, @NotNull CkbEvidenceFilterModel evidenceFilter,
+            @NotNull CkbTrialFilterModel trialFilter, @NotNull Set<CkbRegion> regionsToInclude) {
+        return new CkbExtractor(createEventExtractor(config, refGenomeResource),
+                new EfficacyEvidenceFactory(treatmentApproachCurator, evidenceFilter),
+                new ActionableTrialFactory(trialFilter, regionsToInclude));
     }
 
     @NotNull

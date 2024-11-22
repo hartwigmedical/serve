@@ -7,8 +7,8 @@ import com.hartwig.serve.common.ensemblcache.ExonData;
 import com.hartwig.serve.common.ensemblcache.GeneData;
 import com.hartwig.serve.common.ensemblcache.Strand;
 import com.hartwig.serve.common.ensemblcache.TranscriptData;
-import com.hartwig.serve.datamodel.common.GenomeRegion;
-import com.hartwig.serve.datamodel.common.GenomeRegionComparator;
+import com.hartwig.serve.datamodel.molecular.common.GenomeRegion;
+import com.hartwig.serve.datamodel.molecular.common.GenomeRegionComparator;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -99,7 +99,7 @@ public final class HmfTranscriptRegionUtils {
                     endPosition,
                     exonCodingStart,
                     exonCodingEnd,
-                    codonRegions.size() > 0);
+                    !codonRegions.isEmpty());
 
             if (region != null) {
                 codonRegions.add(region);

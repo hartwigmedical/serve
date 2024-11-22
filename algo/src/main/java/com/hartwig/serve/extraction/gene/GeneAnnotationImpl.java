@@ -1,6 +1,6 @@
 package com.hartwig.serve.extraction.gene;
 
-import com.hartwig.serve.datamodel.gene.GeneAnnotation;
+import com.hartwig.serve.datamodel.molecular.gene.GeneAnnotation;
 
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;

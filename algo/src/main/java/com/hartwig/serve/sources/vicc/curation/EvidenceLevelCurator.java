@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
-import com.hartwig.serve.datamodel.EvidenceDirection;
-import com.hartwig.serve.datamodel.EvidenceLevel;
+import com.hartwig.serve.datamodel.efficacy.EvidenceDirection;
+import com.hartwig.serve.datamodel.efficacy.EvidenceLevel;
 import com.hartwig.serve.vicc.datamodel.ViccSource;
 
 import org.apache.logging.log4j.LogManager;

@@ -6,8 +6,9 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.cancertype.CancerTypeConstants;
 import com.hartwig.serve.ckb.datamodel.indication.Indication;
-import com.hartwig.serve.datamodel.CancerType;
-import com.hartwig.serve.datamodel.ImmutableCancerType;
+import com.hartwig.serve.datamodel.common.CancerType;
+import com.hartwig.serve.datamodel.common.ImmutableCancerType;
+import com.hartwig.serve.datamodel.common.ImmutableIndication;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,7 +23,7 @@ final class ActionableFunctions {
     }
 
     @Nullable
-    public static CancerTypeExtraction extractCancerTypeDetails(@NotNull Indication indication) {
+    public static com.hartwig.serve.datamodel.common.Indication extractIndication(@NotNull Indication indication) {
         String[] sourceDoidValues = splitSourceDoidString(indication.termId());
 
         if (sourceDoidValues == null) {
@@ -33,41 +34,41 @@ final class ActionableFunctions {
             throw new IllegalStateException("Unexpected termId" + indication.termId() + " for indication " + indication.name());
         }
 
-        ImmutableCancerType.Builder applicableCancerTypeBuilder = ImmutableCancerType.builder().name(indication.name());
-        Set<CancerType> blacklistedCancerTypes = Sets.newHashSet();
+        ImmutableCancerType.Builder applicableTypeBuilder = ImmutableCancerType.builder().name(indication.name());
+        Set<CancerType> excludedSubTypes = Sets.newHashSet();
 
         String source = sourceDoidValues[0];
         String id = sourceDoidValues[1];
         if (source.equalsIgnoreCase("doid")) {
-            applicableCancerTypeBuilder.doid(id);
+            applicableTypeBuilder.doid(id);
         } else if (source.equalsIgnoreCase("jax")) {
             switch (id) {
-                case CancerTypeConstants.JAX_ADVANCED_SOLID_TUMOR: {
-                    applicableCancerTypeBuilder.doid(CancerTypeConstants.CANCER_DOID);
-                    blacklistedCancerTypes.add(CancerTypeConstants.LEUKEMIA_TYPE);
-                    blacklistedCancerTypes.add(CancerTypeConstants.REFRACTORY_HEMATOLOGIC_TYPE);
-                    blacklistedCancerTypes.add(CancerTypeConstants.BONE_MARROW_TYPE);
+                case CancerTypeConstants.CKB_ADVANCED_SOLID_TUMOR: {
+                    applicableTypeBuilder.doid(CancerTypeConstants.CANCER_DOID);
+                    excludedSubTypes.add(CancerTypeConstants.LEUKEMIA_TYPE);
+                    excludedSubTypes.add(CancerTypeConstants.REFRACTORY_HEMATOLOGIC_TYPE);
+                    excludedSubTypes.add(CancerTypeConstants.BONE_MARROW_TYPE);
                     break;
                 }
-                case CancerTypeConstants.JAX_CANCER_OF_UNKNOWN_PRIMARY: {
-                    applicableCancerTypeBuilder.doid(CancerTypeConstants.CANCER_DOID);
+                case CancerTypeConstants.CKB_CANCER_OF_UNKNOWN_PRIMARY: {
+                    applicableTypeBuilder.doid(CancerTypeConstants.CANCER_DOID);
                     break;
                 }
-                case CancerTypeConstants.JAX_CARCINOMA_OF_UNKNOWN_PRIMARY: {
-                    applicableCancerTypeBuilder.doid(CancerTypeConstants.CARCINOMA_OF_UNKNOWN_PRIMARY);
+                case CancerTypeConstants.CKB_CARCINOMA_OF_UNKNOWN_PRIMARY: {
+                    applicableTypeBuilder.doid(CancerTypeConstants.CARCINOMA_OF_UNKNOWN_PRIMARY);
                     break;
                 }
-                case CancerTypeConstants.JAX_ADENOCARCINOMA_OF_UNKNOWN_PRIMARY: {
-                    applicableCancerTypeBuilder.doid(CancerTypeConstants.ADENOCARCINOMA_OF_UNKNOWN_PRIMARY);
+                case CancerTypeConstants.CKB_ADENOCARCINOMA_OF_UNKNOWN_PRIMARY: {
+                    applicableTypeBuilder.doid(CancerTypeConstants.ADENOCARCINOMA_OF_UNKNOWN_PRIMARY);
                     break;
                 }
-                case CancerTypeConstants.JAX_SQUAMOUS_CELL_CARCINOMA_OF_UNKNOWN_PRIMARY: {
-                    applicableCancerTypeBuilder.doid(CancerTypeConstants.SQUAMOUS_CELL_CARCINOMA_OF_UNKNOWN_PRIMARY);
+                case CancerTypeConstants.CKB_SQUAMOUS_CELL_CARCINOMA_OF_UNKNOWN_PRIMARY: {
+                    applicableTypeBuilder.doid(CancerTypeConstants.SQUAMOUS_CELL_CARCINOMA_OF_UNKNOWN_PRIMARY);
                     break;
                 }
                 default: {
                     // CKB uses 10000005 for configuring "Not a cancer". We can ignore these.
-                    if (!id.equals(CancerTypeConstants.JAX_NOT_CANCER)) {
+                    if (!id.equals(CancerTypeConstants.CKB_NOT_CANCER)) {
                         LOGGER.warn("Unexpected DOID string annotated by CKB: '{}'", source + ":" + id);
                     }
                     return null;
@@ -78,10 +79,7 @@ final class ActionableFunctions {
             return null;
         }
 
-        return ImmutableCancerTypeExtraction.builder()
-                .applicableCancerType(applicableCancerTypeBuilder.build())
-                .blacklistedCancerTypes(blacklistedCancerTypes)
-                .build();
+        return ImmutableIndication.builder().applicableType(applicableTypeBuilder.build()).excludedSubTypes(excludedSubTypes).build();
     }
 
     @Nullable

@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.Map;
 
 import com.google.common.collect.Maps;
-import com.hartwig.serve.datamodel.EvidenceDirection;
+import com.hartwig.serve.datamodel.efficacy.EvidenceDirection;
 
 import org.apache.logging.log4j.util.Strings;
 import org.junit.Test;

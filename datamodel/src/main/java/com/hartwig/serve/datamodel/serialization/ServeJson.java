@@ -27,11 +27,12 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.hartwig.serve.datamodel.RefGenome;
-import com.hartwig.serve.datamodel.ServeRecord;
+import com.google.common.annotations.VisibleForTesting;
+import com.hartwig.serve.datamodel.ServeDatabase;
 
 import org.jetbrains.annotations.NotNull;
 
+@SuppressWarnings("ALL")
 public final class ServeJson {
 
     private static final JsonMapper MAPPER = JsonMapper.builder()
@@ -46,30 +47,32 @@ public final class ServeJson {
             .serializationInclusion(JsonInclude.Include.NON_NULL)
             .build();
 
-    public static void write(@NotNull ServeRecord record, @NotNull String filePath) throws IOException {
-        MAPPER.writeValue(new File(filePath), record);
+    @NotNull
+    public static String jsonFilePath(@NotNull String outputDir) {
+        return outputDir + File.separator + "serve.json";
     }
 
     @NotNull
-    public static ServeRecord read(@NotNull String filePath) throws IOException {
-        return MAPPER.readValue(new File(filePath), ServeRecord.class);
+    public static ServeDatabase read(@NotNull String filePath) throws IOException {
+        return MAPPER.readValue(new File(filePath), ServeDatabase.class);
     }
 
-    public static void writeToStream(@NotNull ServeRecord record, @NotNull OutputStream outputStream) throws IOException {
+    public static void write(@NotNull ServeDatabase database, @NotNull String filePath) throws IOException {
+        MAPPER.writeValue(new File(filePath), database);
+    }
+
+    @NotNull
+    @VisibleForTesting
+    static ServeDatabase readFromStream(@NotNull InputStream inputStream) throws IOException {
+        return MAPPER.readValue(inputStream, ServeDatabase.class);
+    }
+
+    @VisibleForTesting
+    static void writeToStream(@NotNull ServeDatabase record, @NotNull OutputStream outputStream) throws IOException {
         MAPPER.writeValue(outputStream, record);
     }
 
-    @NotNull
-    public static ServeRecord readFromStream(@NotNull InputStream inputStream) throws IOException {
-        return MAPPER.readValue(inputStream, ServeRecord.class);
-    }
-
-    @NotNull
-    public static String jsonFilePath(@NotNull String outputDir, @NotNull RefGenome refGenome) {
-        return refGenome.addVersionToFilePath(outputDir + "/serve.json");
-    }
-
-    static class LocalDateSerializer extends StdSerializer<LocalDate> {
+    private static class LocalDateSerializer extends StdSerializer<LocalDate> {
 
         public LocalDateSerializer() {
             super(LocalDate.class);
@@ -85,11 +88,11 @@ public final class ServeJson {
         }
     }
 
-    static class LocalDateDeserializer extends JsonDeserializer<LocalDate> {
+    private static class LocalDateDeserializer extends JsonDeserializer<LocalDate> {
 
         @Override
-        public LocalDate deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
-            Map<String, Integer> dateMap = p.readValueAs(Map.class);
+        public LocalDate deserialize(JsonParser parser, DeserializationContext ctxt) throws IOException {
+            Map<String, Integer> dateMap = parser.readValueAs(Map.class);
             Integer year = dateMap.get("year");
             Integer month = dateMap.get("month");
             Integer day = dateMap.get("day");
@@ -98,7 +101,7 @@ public final class ServeJson {
         }
     }
 
-    static class SortedSetJsonSerializer extends JsonSerializer<Set> {
+    private static class SortedSetJsonSerializer extends JsonSerializer<Set> {
 
         @Override
         public void serialize(Set set, JsonGenerator gen, SerializerProvider serializers) throws IOException {
@@ -123,7 +126,7 @@ public final class ServeJson {
         }
     }
 
-    static class SortedMapJsonSerializer extends JsonSerializer<Map> {
+    private static class SortedMapJsonSerializer extends JsonSerializer<Map> {
 
         @Override
         public void serialize(Map map, JsonGenerator gen, SerializerProvider serializers) throws IOException {
@@ -134,9 +137,9 @@ public final class ServeJson {
 
             gen.writeStartObject();
             if (!map.isEmpty()) {
-                if (!(map instanceof SortedMap)) {
+                if (!SortedMap.class.isAssignableFrom(map.getClass())) {
                     Object key = map.keySet().iterator().next();
-                    if (key instanceof Comparable) {
+                    if (Comparable.class.isAssignableFrom(key.getClass())) {
                         map = new TreeMap<>(map);
                     }
                 }
@@ -154,7 +157,7 @@ public final class ServeJson {
         }
     }
 
-    static class SortedListJsonSerializer extends JsonSerializer<List> {
+    private static class SortedListJsonSerializer extends JsonSerializer<List> {
 
         @Override
         public void serialize(List list, JsonGenerator gen, SerializerProvider serializers) throws IOException {

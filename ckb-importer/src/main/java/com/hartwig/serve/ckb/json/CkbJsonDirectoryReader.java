@@ -31,7 +31,7 @@ public abstract class CkbJsonDirectoryReader<T extends CkbJsonObject> {
     }
 
     @NotNull
-    public List<T> read(@NotNull String dir) throws IOException {
+    public List<T> read(@NotNull String dir) {
         File[] files = new File(dir).listFiles();
 
         LOGGER.debug(" {} files found in directory {}", files.length, dir);

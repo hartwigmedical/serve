@@ -15,17 +15,17 @@ import org.junit.Test;
 public class DocmCuratorTest {
 
     @Test
-    public void canRemoveBlacklistedDocmEntries() {
+    public void canFilterDocmEntries() {
         DocmEntry validEntry = ImmutableDocmEntry.builder().gene("gene").transcript("transcript").proteinAnnotation("annotation").build();
 
-        CurationKey firstBlacklistKey = firstBlacklistKey();
-        DocmEntry blacklistEntry = ImmutableDocmEntry.builder()
-                .gene(firstBlacklistKey.gene())
-                .transcript(firstBlacklistKey.transcript())
-                .proteinAnnotation(firstBlacklistKey.proteinAnnotation())
+        CurationKey firstFilterKey = firstFilterKey();
+        DocmEntry filterEntry = ImmutableDocmEntry.builder()
+                .gene(firstFilterKey.gene())
+                .transcript(firstFilterKey.transcript())
+                .proteinAnnotation(firstFilterKey.proteinAnnotation())
                 .build();
 
-        List<DocmEntry> entries = Lists.newArrayList(validEntry, blacklistEntry);
+        List<DocmEntry> entries = Lists.newArrayList(validEntry, filterEntry);
 
         DocmCurator curator = new DocmCurator();
         List<DocmEntry> curated = curator.curate(entries);
@@ -33,7 +33,7 @@ public class DocmCuratorTest {
         assertEquals(1, curated.size());
         assertEquals(validEntry, curated.get(0));
 
-        curator.reportUnusedBlacklistEntries();
+        curator.reportUnusedFilterEntries();
     }
 
     @Test
@@ -55,7 +55,7 @@ public class DocmCuratorTest {
     }
 
     @NotNull
-    private static CurationKey firstBlacklistKey() {
-        return CurationFactory.ENTRY_BLACKLIST.iterator().next();
+    private static CurationKey firstFilterKey() {
+        return CurationFactory.ENTRY_FILTERS.iterator().next();
     }
 }

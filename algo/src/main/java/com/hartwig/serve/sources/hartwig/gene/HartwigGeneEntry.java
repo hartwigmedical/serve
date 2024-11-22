@@ -1,6 +1,6 @@
 package com.hartwig.serve.sources.hartwig.gene;
 
-import com.hartwig.serve.datamodel.common.GeneRole;
+import com.hartwig.serve.datamodel.molecular.common.GeneRole;
 
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;

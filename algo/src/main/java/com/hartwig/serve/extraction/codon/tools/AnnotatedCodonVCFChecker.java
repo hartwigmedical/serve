@@ -1,11 +1,10 @@
 package com.hartwig.serve.extraction.codon.tools;
 
 import java.io.IOException;
-import java.util.List;
 
+import com.hartwig.serve.common.variant.impact.VariantImpact;
+import com.hartwig.serve.common.variant.impact.VariantImpactSerialiser;
 import com.hartwig.serve.extraction.util.VCFWriterFactory;
-import com.hartwig.serve.snpeff.SnpEffAnnotation;
-import com.hartwig.serve.snpeff.SnpEffAnnotationParser;
 import com.hartwig.serve.util.AminoAcids;
 
 import org.apache.logging.log4j.Level;
@@ -51,8 +50,9 @@ public class AnnotatedCodonVCFChecker {
             String inputTranscript = inputParts[1].equals("null") ? null : inputParts[1];
             int inputCodon = Integer.parseInt(inputParts[2]);
 
-            List<SnpEffAnnotation> annotations = SnpEffAnnotationParser.fromContext(variant);
-            if (isMatch(inputGene, inputTranscript, inputCodon, annotations)) {
+            VariantImpact impact = VariantImpactSerialiser.fromVariantContext(variant);
+
+            if (isMatch(inputGene, inputTranscript, inputCodon, impact)) {
                 matchCount++;
             } else {
                 diffCount++;
@@ -63,43 +63,40 @@ public class AnnotatedCodonVCFChecker {
     }
 
     @Nullable
-    private static SnpEffAnnotation annotationForTranscript(@NotNull List<SnpEffAnnotation> annotations, @NotNull String transcript) {
-        for (SnpEffAnnotation annotation : annotations) {
-            if (annotation.isTranscriptFeature() && annotation.transcript().equals(transcript)) {
-                return annotation;
-            }
+    private static VariantImpact annotationForTranscript(@NotNull VariantImpact impact, @NotNull String transcript) {
+        if (impact.canonicalTranscript().equals(transcript)) {
+            return impact;
         }
+
         return null;
     }
 
     private static boolean isMatch(@NotNull String inputGene, @Nullable String inputTranscript, int inputCodon,
-            @NotNull List<SnpEffAnnotation> annotations) {
+            @NotNull VariantImpact impact) {
         if (inputTranscript != null) {
-            SnpEffAnnotation annotation = annotationForTranscript(annotations, inputTranscript);
+            VariantImpact variantImpact = annotationForTranscript(impact, inputTranscript);
 
-            if (annotation != null) {
-                int snpEffCodon = extractCodon(annotation.hgvsProtein());
+            if (variantImpact != null) {
+                int snpEffCodon = extractCodon(variantImpact.canonicalHgvsProtein());
                 if (inputCodon == snpEffCodon) {
-                    LOGGER.debug("Identical on gene '{}': SERVE input codon '{}' vs SnpEff codon '{}'", inputGene, inputCodon, snpEffCodon);
+                    LOGGER.debug("Identical on gene '{}': SERVE input codon '{}' vs PAVE codon '{}'", inputGene, inputCodon, snpEffCodon);
                     return true;
                 } else {
-                    LOGGER.warn("Difference on gene '{}': SERVE input codon '{}' vs SnpEff codon '{}'", inputGene, inputCodon, snpEffCodon);
+                    LOGGER.warn("Difference on gene '{}': SERVE input codon '{}' vs PAVE codon '{}'", inputGene, inputCodon, snpEffCodon);
                     return false;
                 }
             } else {
-                LOGGER.warn("No suitable SnpEff annotation found on gene '{}': SERVE input codon '{}'", inputGene, inputCodon);
+                LOGGER.warn("No suitable PAVE annotation found on gene '{}': SERVE input codon '{}'", inputGene, inputCodon);
                 return false;
             }
         } else {
             // In case input transcript is missing we try to match against any transcript.
             boolean matchFound = false;
-            for (SnpEffAnnotation annotation : annotations) {
-                if (annotation.isTranscriptFeature()) {
-                    int snpEffCodon = extractCodon(annotation.hgvsProtein());
-                    if (inputCodon == snpEffCodon) {
-                        matchFound = true;
-                    }
-                }
+
+            int snpEffCodon = extractCodon(impact.canonicalHgvsProtein());
+            if (inputCodon == snpEffCodon) {
+                matchFound = true;
+
             }
 
             if (matchFound) {

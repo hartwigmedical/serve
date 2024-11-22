@@ -35,7 +35,7 @@ public final class DocmReader {
                 curatedEntries.size(),
                 entries.size() - curatedEntries.size());
 
-        curator.reportUnusedBlacklistEntries();
+        curator.reportUnusedFilterEntries();
 
         return curatedEntries;
     }

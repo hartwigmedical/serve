@@ -10,15 +10,15 @@ import java.util.Set;
 import com.hartwig.serve.ckb.classification.CkbClassificationConfig;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.ImmutableVariantRequirementDetail;
-import com.hartwig.serve.datamodel.MutationType;
-import com.hartwig.serve.datamodel.range.RangeTestFactory;
+import com.hartwig.serve.datamodel.molecular.MutationType;
+import com.hartwig.serve.datamodel.molecular.range.RangeTestFactory;
 import com.hartwig.serve.extraction.EventExtractorOutput;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.ImmutableEventExtractorOutput;
 import com.hartwig.serve.extraction.codon.CodonAnnotation;
 import com.hartwig.serve.extraction.codon.ImmutableCodonAnnotation;
 import com.hartwig.serve.refgenome.RefGenomeResourceTestFactory;
-import com.hartwig.serve.sources.ckb.blacklist.CkbBlacklistTestFactory;
+import com.hartwig.serve.sources.ckb.filter.CkbFilteringTestFactory;
 import com.hartwig.serve.sources.ckb.region.ImmutableCkbRegion;
 import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachTestFactory;
 
@@ -29,43 +29,23 @@ import org.junit.Test;
 public class CkbExtractorTest {
 
     @Test
-    public void canExtractEvidenceFromCkbEntries() {
-        CkbExtractor evidenceExtractor = CkbExtractorFactory.createEvidenceExtractor(CkbClassificationConfig.build(),
+    public void canExtractEvidenceAndTrialsFromCkbEntries() {
+        CkbExtractor trialExtractor = CkbExtractorFactory.createExtractor(CkbClassificationConfig.build(),
                 RefGenomeResourceTestFactory.buildTestResource37(),
                 TreatmentApproachTestFactory.createEmptyCurator(),
-                CkbBlacklistTestFactory.createEmptyEvidenceBlacklist());
-
-        ExtractionResult evidenceResult = evidenceExtractor.extract(createCkbEntryTestDatabase());
-        assertEquals(1, evidenceResult.knownHotspots().size());
-        assertEquals(3, evidenceResult.knownGenes().size());
-        assertEquals(1, evidenceResult.knownCopyNumbers().size());
-        assertEquals(1, evidenceResult.knownFusions().size());
-        assertEquals(1, evidenceResult.actionableHotspots().size());
-        assertEquals(1, evidenceResult.actionableCodons().size());
-        assertEquals(1, evidenceResult.actionableExons().size());
-        assertEquals(2, evidenceResult.actionableGenes().size());
-        assertEquals(1, evidenceResult.actionableFusions().size());
-        assertEquals(1, evidenceResult.actionableCharacteristics().size());
-    }
-
-    @Test
-    public void canExtractTrialsFromCkbEntries() {
-        CkbExtractor trialExtractor = CkbExtractorFactory.createTrialExtractor(CkbClassificationConfig.build(),
-                RefGenomeResourceTestFactory.buildTestResource37(),
-                CkbBlacklistTestFactory.createEmptyStudyBlacklist(),
+                CkbFilteringTestFactory.createEmptyEvidenceFilterModel(),
+                CkbFilteringTestFactory.createEmptyTrialFilterModel(),
                 Set.of(ImmutableCkbRegion.builder().country("netherlands").states(Collections.emptySet()).build()));
 
         ExtractionResult trialResult = trialExtractor.extract(createCkbEntryTestDatabase());
-        assertEquals(0, trialResult.knownHotspots().size());
-        assertEquals(0, trialResult.knownGenes().size());
-        assertEquals(0, trialResult.knownCopyNumbers().size());
-        assertEquals(0, trialResult.knownFusions().size());
-        assertEquals(1, trialResult.actionableHotspots().size());
-        assertEquals(1, trialResult.actionableCodons().size());
-        assertEquals(1, trialResult.actionableExons().size());
-        assertEquals(2, trialResult.actionableGenes().size());
-        assertEquals(1, trialResult.actionableFusions().size());
-        assertEquals(1, trialResult.actionableCharacteristics().size());
+        assertEquals(7, trialResult.trials().size());
+        assertEquals(7, trialResult.evidences().size());
+        assertEquals(1, trialResult.knownEvents().hotspots().size());
+        assertEquals(1, trialResult.knownEvents().exons().size());
+        assertEquals(1, trialResult.knownEvents().codons().size());
+        assertEquals(1, trialResult.knownEvents().fusions().size());
+        assertEquals(1, trialResult.knownEvents().copyNumbers().size());
+        assertEquals(3, trialResult.knownEvents().genes().size());
     }
 
     @Test
@@ -150,17 +130,17 @@ public class CkbExtractorTest {
 
         return CkbTestFactory.builder()
                 .from(baseEntry)
-                .clinicalTrials(List.of(CkbTestFactory.createTrialWithTherapy("Recruiting",
+                .clinicalTrials(List.of(CkbTestFactory.createTrialWithTherapy("nctid",
+                        "title",
+                        List.of(CkbTestFactory.createTherapy("Nivolumab")),
+                        List.of(CkbTestFactory.createIndication("test", "JAX:10000006")),
+                        "Recruiting",
+                        List.of("senior", "child", "adult"),
                         List.of(ImmutableVariantRequirementDetail.builder()
                                 .profileId(baseEntry.profileId())
                                 .requirementType("required")
                                 .build()),
-                        List.of(CkbTestFactory.createLocation("Netherlands", null, "Rotterdam", "EMC")),
-                        "nctid",
-                        "title",
-                        List.of(CkbTestFactory.createTherapy("Nivolumab")),
-                        List.of(CkbTestFactory.createIndication("test", "JAX:10000006")),
-                        List.of("senior", "child", "adult"))))
+                        List.of(CkbTestFactory.createLocation("Netherlands", null, "Rotterdam", "EMC")))))
                 .build();
     }
 }

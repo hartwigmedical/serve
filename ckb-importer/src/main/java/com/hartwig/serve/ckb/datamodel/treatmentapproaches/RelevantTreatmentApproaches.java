@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.hartwig.serve.ckb.datamodel.reference.Reference;
 
-import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

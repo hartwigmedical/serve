@@ -4,11 +4,9 @@ import com.hartwig.serve.ckb.database.Tables;
 import com.hartwig.serve.ckb.database.tables.Treatmentapproach;
 import com.hartwig.serve.ckb.datamodel.reference.Reference;
 import com.hartwig.serve.ckb.datamodel.treatmentapproaches.DrugClassTreatmentApproach;
-import com.hartwig.serve.ckb.datamodel.treatmentapproaches.RelevantTreatmentApproaches;
 import com.hartwig.serve.ckb.datamodel.treatmentapproaches.TherapyTreatmentApproach;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.jooq.DSLContext;
 
 class TreatmentApproachDAO {

@@ -6,11 +6,12 @@ import java.util.Set;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Sets;
+import com.hartwig.serve.common.variant.impact.VariantTranscriptImpact;
+import com.hartwig.serve.common.variant.impact.VariantTranscriptImpactFactory;
 import com.hartwig.serve.extraction.util.VCFWriterFactory;
-import com.hartwig.serve.snpeff.SnpEffAnnotation;
-import com.hartwig.serve.snpeff.SnpEffAnnotationParser;
 import com.hartwig.serve.util.AminoAcids;
 
+import org.apache.commons.compress.utils.Lists;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -41,7 +42,7 @@ public class AnnotatedHotspotVCFChecker {
             Configurator.setRootLevel(Level.DEBUG);
         }
 
-        String annotatedHotspotVcf = System.getProperty("user.home") + "/hmf/tmp/annotatedHotspots_SNPeff.vcf";
+        String annotatedHotspotVcf = System.getProperty("user.home") + "/hmf/tmp/KnownHotspots.somatic.37.pave.vcf";
         new AnnotatedHotspotVCFChecker().run(annotatedHotspotVcf);
     }
 
@@ -68,7 +69,8 @@ public class AnnotatedHotspotVCFChecker {
                 LOGGER.debug("Skipping non-coding hotspot on '{}'", formattedHotspot);
                 matchCount++;
             } else {
-                List<SnpEffAnnotation> annotations = SnpEffAnnotationParser.fromContext(variant);
+                List<VariantTranscriptImpact> annotations = toVariantTranscriptImpact(variant.getAttributeAsStringList("PAVE_TI", ""));
+
                 MatchType match = determineMatch(inputTranscript, inputProteinAnnotation, annotations);
 
                 switch (match) {
@@ -92,10 +94,28 @@ public class AnnotatedHotspotVCFChecker {
                         break;
                     }
                     case NO_MATCH: {
-                        LOGGER.warn("Could not find a match amongst candidate transcripts for '{}' on '{}'",
-                                inputProteinAnnotation,
-                                inputGene);
+                        //  LOGGER.warn("Could not match inputTranscript {}, input protein {} for input gene {}",
+                        //   inputTranscript,
+                        //   inputProteinAnnotation,
+                        //   inputGene);
+
+                        for (VariantTranscriptImpact variantTranscriptImpact : annotations) {
+                            if (variantTranscriptImpact.transcript().equals(inputTranscript)) {
+                                LOGGER.warn(
+                                        "Could not match inputTranscript {}, paveTranscript {}, input protein {}, pave protein {}, pave coding {} for input gene {}, pave gene {}",
+                                        inputTranscript,
+                                        variantTranscriptImpact.transcript(),
+                                        inputProteinAnnotation,
+                                        variantTranscriptImpact.hgvsProtein(),
+                                        variantTranscriptImpact.hgvsCoding(),
+                                        inputGene,
+                                        variantTranscriptImpact.geneName());
+
+                            }
+                        }
+
                         diffCount++;
+
                         break;
                     }
                 }
@@ -111,6 +131,16 @@ public class AnnotatedHotspotVCFChecker {
     }
 
     @NotNull
+    private static List<VariantTranscriptImpact> toVariantTranscriptImpact(@NotNull final List<String> annotation) {
+        List<VariantTranscriptImpact> variantTranscriptImpactList = Lists.newArrayList();
+        for (int i = 0; i <= annotation.size() - 1; i++) {
+            variantTranscriptImpactList.add(VariantTranscriptImpactFactory.fromVcfData(annotation.get(i)));
+        }
+
+        return variantTranscriptImpactList;
+    }
+
+    @NotNull
     private static String formatHotspot(@NotNull VariantContext variant) {
         return variant.getContig() + ":" + variant.getStart() + " " + variant.getReference().getBaseString() + ">"
                 + variant.getAlternateAllele(0).getBaseString();
@@ -118,8 +148,8 @@ public class AnnotatedHotspotVCFChecker {
 
     @NotNull
     private MatchType determineMatch(@Nullable String inputTranscript, @NotNull String inputProteinAnnotation,
-            @NotNull List<SnpEffAnnotation> annotations) {
-        SnpEffAnnotation specificAnnotation = annotationForTranscript(annotations, inputTranscript);
+            @NotNull List<VariantTranscriptImpact> annotations) {
+        VariantTranscriptImpact specificAnnotation = annotationForTranscript(annotations, inputTranscript);
         if (specificAnnotation != null) {
             return matchOnSpecificAnnotation(inputTranscript, inputProteinAnnotation, specificAnnotation);
         } else {
@@ -131,19 +161,20 @@ public class AnnotatedHotspotVCFChecker {
 
     @NotNull
     private MatchType matchOnSpecificAnnotation(@NotNull String inputTranscript, @NotNull String inputProteinAnnotation,
-            @NotNull SnpEffAnnotation specificAnnotation) {
-        String snpeffProteinAnnotation = AminoAcids.forceSingleLetterProteinAnnotation(specificAnnotation.hgvsProtein());
-        return matchAnnotation(inputTranscript, inputProteinAnnotation, snpeffProteinAnnotation);
+            @NotNull VariantTranscriptImpact specificAnnotation) {
+        String PaveProteinAnnotation = AminoAcids.forceSingleLetterProteinAnnotation(specificAnnotation.hgvsProtein());
+        return matchAnnotation(inputTranscript, inputProteinAnnotation, PaveProteinAnnotation, specificAnnotation.effects());
     }
 
     @NotNull
-    private MatchType matchOnAnyTranscript(@NotNull String inputProteinAnnotation, @NotNull List<SnpEffAnnotation> annotations) {
+    private MatchType matchOnAnyTranscript(@NotNull String inputProteinAnnotation, @NotNull List<VariantTranscriptImpact> annotations) {
         MatchType matchedMatchType = MatchType.NO_MATCH;
-        for (SnpEffAnnotation annotation : annotations) {
+        for (VariantTranscriptImpact annotation : annotations) {
             // We only want to consider transcript features with coding impact.
-            if (annotation.isTranscriptFeature() && !annotation.hgvsProtein().isEmpty()) {
-                String snpeffProteinAnnotation = AminoAcids.forceSingleLetterProteinAnnotation(annotation.hgvsProtein());
-                MatchType match = matchAnnotation(annotation.transcript(), inputProteinAnnotation, snpeffProteinAnnotation);
+            if (!annotation.hgvsProtein().isEmpty()) {
+                String PaveProteinAnnotation = AminoAcids.forceSingleLetterProteinAnnotation(annotation.hgvsProtein());
+                MatchType match =
+                        matchAnnotation(annotation.transcript(), inputProteinAnnotation, PaveProteinAnnotation, annotation.effects());
                 if (match != MatchType.NO_MATCH && matchedMatchType == MatchType.NO_MATCH) {
                     matchedMatchType = match;
                 }
@@ -154,9 +185,10 @@ public class AnnotatedHotspotVCFChecker {
     }
 
     @Nullable
-    private static SnpEffAnnotation annotationForTranscript(@NotNull List<SnpEffAnnotation> annotations, @Nullable String transcript) {
-        for (SnpEffAnnotation annotation : annotations) {
-            if (annotation.isTranscriptFeature() && annotation.transcript().equals(transcript)) {
+    private static VariantTranscriptImpact annotationForTranscript(@NotNull List<VariantTranscriptImpact> annotations,
+            @Nullable String transcript) {
+        for (VariantTranscriptImpact annotation : annotations) {
+            if (annotation.transcript().equals(transcript)) {
                 return annotation;
             }
         }
@@ -164,20 +196,22 @@ public class AnnotatedHotspotVCFChecker {
     }
 
     @NotNull
-    private MatchType matchAnnotation(@NotNull String transcript, @NotNull String inputAnnotation, @NotNull String snpeffAnnotation) {
+    private MatchType matchAnnotation(@NotNull String transcript, @NotNull String inputAnnotation, @NotNull String PaveProteinAnnotation,
+            @NotNull String effect) {
         String curatedInputAnnotation = curateStartCodonAnnotation(inputAnnotation);
-        if (curatedInputAnnotation.equals(snpeffAnnotation)) {
+        curatedInputAnnotation = curateSynonymous(curatedInputAnnotation, effect, PaveProteinAnnotation);
+        if (curatedInputAnnotation.equals(PaveProteinAnnotation)) {
             return MatchType.IDENTICAL;
         }
 
-        if (isApproximateIndelMatch(inputAnnotation, snpeffAnnotation)) {
+        if (isApproximateIndelMatch(inputAnnotation, PaveProteinAnnotation)) {
             return MatchType.APPROXIMATE;
         }
 
-        if (ENABLE_TRANSCRIPT_REF_GENOME_CURATION && (retiredTranscriptCheck(transcript, snpeffAnnotation) || changedTranscriptCheck(
+        if (ENABLE_TRANSCRIPT_REF_GENOME_CURATION && (retiredTranscriptCheck(transcript, PaveProteinAnnotation) || changedTranscriptCheck(
                 transcript,
                 inputAnnotation,
-                snpeffAnnotation))) {
+                PaveProteinAnnotation))) {
             return MatchType.LIFTOVER_RETIRED_OR_CHANGED_TRANSCRIPT;
         }
 
@@ -188,6 +222,15 @@ public class AnnotatedHotspotVCFChecker {
     private static String curateStartCodonAnnotation(@NotNull String serveAnnotation) {
         if (serveAnnotation.startsWith("p.M1") && serveAnnotation.length() == 5) {
             return "p.M1?";
+        } else {
+            return serveAnnotation;
+        }
+    }
+
+    @NotNull
+    private static String curateSynonymous(@NotNull String serveAnnotation, @NotNull String effect, @NotNull String PaveProteinAnnotation) {
+        if (effect.contains("synonymous_variant") || effect.contains("start_lost") || effect.contains("5_prime_UTR_variant")) {
+            return PaveProteinAnnotation;
         } else {
             return serveAnnotation;
         }

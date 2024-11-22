@@ -1,13 +1,8 @@
 package com.hartwig.serve;
 
 import java.io.IOException;
-import java.util.Map;
 
 import com.hartwig.serve.common.commandline.CliAndPropertyParser;
-import com.hartwig.serve.curation.DoidLookup;
-import com.hartwig.serve.curation.DoidLookupFactory;
-import com.hartwig.serve.datamodel.RefGenome;
-import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.ExtractionResultWriter;
 import com.hartwig.serve.refgenome.RefGenomeManager;
 import com.hartwig.serve.refgenome.RefGenomeManagerFactory;
@@ -17,9 +12,6 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jetbrains.annotations.NotNull;
-
-import htsjdk.samtools.reference.IndexedFastaSequenceFile;
 
 public class ServeApplication {
 
@@ -43,21 +35,11 @@ public class ServeApplication {
 
         RefGenomeManager refGenomeManager = RefGenomeManagerFactory.createFromServeConfig(config);
 
-        ServeAlgo algo = new ServeAlgo(refGenomeManager, buildDoidLookup(config.missingDoidsMappingTsv()));
-        Map<RefGenome, ExtractionResult> resultMap = algo.run(config);
+        ServeAlgo algo = new ServeAlgo(refGenomeManager);
 
-        for (Map.Entry<RefGenome, ExtractionResult> entry : resultMap.entrySet()) {
-            RefGenome version = entry.getKey();
-            IndexedFastaSequenceFile refSequence = refGenomeManager.refSequenceForRefGenome(version);
-            new ExtractionResultWriter(config.outputDir(), version, refSequence, VERSION).write(entry.getValue());
-        }
+        ExtractionResultWriter writer = new ExtractionResultWriter(VERSION, refGenomeManager, config.outputDir());
+        writer.write(algo.run(config));
 
         LOGGER.info("Complete!");
-    }
-
-    @NotNull
-    private static DoidLookup buildDoidLookup(@NotNull String missingDoidsMappingTsv) throws IOException {
-        LOGGER.info("Creating missing doid lookup mapping from {}", missingDoidsMappingTsv);
-        return DoidLookupFactory.buildFromMappingTsv(missingDoidsMappingTsv);
     }
 }

@@ -1,0 +1,1225 @@
+{
+  "version": "local-SNAPSHOT",
+  "records": {
+    "V37": {
+      "knownEvents": {
+        "hotspots": [
+          {
+            "inputTranscript": "trans1",
+            "inputProteinAnnotation": "F1389S",
+            "gene": "CREBBP",
+            "ref": "GA",
+            "alt": "TG",
+            "chromosome": "16",
+            "position": 3789692,
+            "geneRole": "BOTH",
+            "proteinEffect": "UNKNOWN",
+            "associatedWithDrugResistance": false,
+            "sources": [
+              "VICC_CGI"
+            ]
+          },
+          {
+            "inputProteinAnnotation": "C124*",
+            "gene": "TP53",
+            "ref": "G",
+            "alt": "T",
+            "chromosome": "17",
+            "position": 7579315,
+            "geneRole": "TSG",
+            "proteinEffect": "LOSS_OF_FUNCTION_PREDICTED",
+            "sources": [
+              "VICC_CGI"
+            ]
+          }
+        ],
+        "codons": [
+          {
+            "inputTranscript": "ENST00000369535",
+            "inputCodonRank": 179,
+            "gene": "NRAS",
+            "applicableMutationType": "MISSENSE",
+            "chromosome": "1",
+            "start": 115251189,
+            "end": 115251191,
+            "geneRole": "ONCO",
+            "proteinEffect": "GAIN_OF_FUNCTION",
+            "associatedWithDrugResistance": false,
+            "sources": [
+              "VICC_CIVIC"
+            ]
+          },
+          {
+            "inputTranscript": "ENST00000369535",
+            "inputCodonRank": 61,
+            "gene": "NRAS",
+            "applicableMutationType": "MISSENSE",
+            "chromosome": "1",
+            "start": 115256528,
+            "end": 115256530,
+            "geneRole": "ONCO",
+            "proteinEffect": "GAIN_OF_FUNCTION",
+            "sources": [
+              "VICC_CGI",
+              "VICC_CIVIC"
+            ]
+          }
+        ],
+        "exons": [
+          {
+            "inputTranscript": "ENST00000263967",
+            "inputExonRank": 10,
+            "gene": "PIK3CA",
+            "applicableMutationType": "MISSENSE",
+            "chromosome": "3",
+            "start": 178935993,
+            "end": 178936127,
+            "geneRole": "ONCO",
+            "proteinEffect": "GAIN_OF_FUNCTION",
+            "sources": [
+              "VICC_CIVIC"
+            ]
+          },
+          {
+            "inputTranscript": "ENST00000263967",
+            "inputExonRank": 21,
+            "gene": "PIK3CA",
+            "applicableMutationType": "MISSENSE",
+            "chromosome": "3",
+            "start": 178951877,
+            "end": 178957886,
+            "geneRole": "ONCO",
+            "proteinEffect": "GAIN_OF_FUNCTION",
+            "associatedWithDrugResistance": true,
+            "sources": [
+              "VICC_CIVIC"
+            ]
+          }
+        ],
+        "genes": [
+          {
+            "gene": "NRAS",
+            "geneRole": "ONCO",
+            "sources": [
+              "VICC_CIVIC"
+            ]
+          }
+        ],
+        "copyNumbers": [
+          {
+            "gene": "NF1",
+            "event": "DELETION",
+            "geneRole": "TSG",
+            "proteinEffect": "LOSS_OF_FUNCTION",
+            "sources": [
+              "VICC_CIVIC"
+            ]
+          },
+          {
+            "gene": "SND1",
+            "event": "OVEREXPRESSION",
+            "geneRole": "ONCO",
+            "proteinEffect": "NO_EFFECT",
+            "associatedWithDrugResistance": true,
+            "sources": [
+              "VICC_CIVIC"
+            ]
+          }
+        ],
+        "fusions": [
+          {
+            "proteinEffect": "UNKNOWN",
+            "geneUp": "ABCC4",
+            "geneDown": "ETV4",
+            "sources": [
+              "VICC_CIVIC"
+            ]
+          },
+          {
+            "proteinEffect": "GAIN_OF_FUNCTION",
+            "associatedWithDrugResistance": true,
+            "geneUp": "KIT",
+            "minExonUp": 11,
+            "maxExonUp": 11,
+            "geneDown": "KIT",
+            "minExonDown": 11,
+            "maxExonDown": 11,
+            "sources": [
+              "VICC_CGI"
+            ]
+          }
+        ]
+      },
+      "evidences": [
+        {
+          "source": "VICC_CGI",
+          "treatment": {
+            "name": "Vemurafenib",
+            "treatmentApproachesDrugClass": [],
+            "treatmentApproachesTherapy": []
+          },
+          "efficacyDescription": "efficacy evidence",
+          "evidenceLevel": "A",
+          "evidenceLevelDetails": "GUIDELINE",
+          "evidenceDirection": "RESPONSIVE",
+          "evidenceYear": 2024,
+          "urls": [
+            "http"
+          ],
+          "indication": {
+            "applicableType": {
+              "name": "Skin Melanoma",
+              "doid": "X"
+            },
+            "excludedSubTypes": []
+          },
+          "molecularCriterium": {
+            "hotspots": [
+              {
+                "sourceDate": {
+                  "year": 2021,
+                  "month": 2,
+                  "day": 3
+                },
+                "sourceEvent": "variant",
+                "sourceUrls": [
+                  "http"
+                ],
+                "gene": "BRAF",
+                "ref": "A",
+                "alt": "T",
+                "chromosome": "7",
+                "position": 140453137
+              }
+            ],
+            "codons": [],
+            "exons": [],
+            "genes": [],
+            "fusions": [],
+            "characteristics": [],
+            "hla": []
+          }
+        },
+        {
+          "source": "VICC_CGI",
+          "treatment": {
+            "name": "Vemurafenib",
+            "treatmentApproachesDrugClass": [],
+            "treatmentApproachesTherapy": []
+          },
+          "efficacyDescription": "efficacy evidence",
+          "evidenceLevel": "A",
+          "evidenceLevelDetails": "GUIDELINE",
+          "evidenceDirection": "RESPONSIVE",
+          "evidenceYear": 2024,
+          "urls": [
+            "http"
+          ],
+          "indication": {
+            "applicableType": {
+              "name": "Skin Melanoma",
+              "doid": "X"
+            },
+            "excludedSubTypes": []
+          },
+          "molecularCriterium": {
+            "hotspots": [],
+            "codons": [
+              {
+                "sourceDate": {
+                  "year": 2021,
+                  "month": 2,
+                  "day": 3
+                },
+                "sourceEvent": "600X",
+                "sourceUrls": [],
+                "gene": "BRAF",
+                "applicableMutationType": "MISSENSE",
+                "chromosome": "7",
+                "start": 140453136,
+                "end": 140453137
+              }
+            ],
+            "exons": [],
+            "genes": [],
+            "fusions": [],
+            "characteristics": [],
+            "hla": []
+          }
+        },
+        {
+          "source": "VICC_CGI",
+          "treatment": {
+            "name": "Erlotinib",
+            "treatmentApproachesDrugClass": [],
+            "treatmentApproachesTherapy": []
+          },
+          "efficacyDescription": "efficacy evidence",
+          "evidenceLevel": "B",
+          "evidenceLevelDetails": "GUIDELINE",
+          "evidenceDirection": "RESISTANT",
+          "evidenceYear": 2024,
+          "urls": [
+            "http"
+          ],
+          "indication": {
+            "applicableType": {
+              "name": "Lung Adeno",
+              "doid": "X"
+            },
+            "excludedSubTypes": []
+          },
+          "molecularCriterium": {
+            "hotspots": [],
+            "codons": [],
+            "exons": [
+              {
+                "sourceDate": {
+                  "year": 1970,
+                  "month": 1,
+                  "day": 1
+                },
+                "sourceEvent": "exon 21",
+                "sourceUrls": [],
+                "gene": "EGFR",
+                "applicableMutationType": "INFRAME",
+                "chromosome": "7",
+                "start": 55241707,
+                "end": 55279321
+              }
+            ],
+            "genes": [],
+            "fusions": [],
+            "characteristics": [],
+            "hla": []
+          }
+        },
+        {
+          "source": "VICC_CGI",
+          "treatment": {
+            "name": "Crizotinib",
+            "treatmentApproachesDrugClass": [],
+            "treatmentApproachesTherapy": []
+          },
+          "efficacyDescription": "efficacy evidence A",
+          "evidenceLevel": "A",
+          "evidenceLevelDetails": "GUIDELINE",
+          "evidenceDirection": "RESPONSIVE",
+          "evidenceYear": 2024,
+          "urls": [
+            "http"
+          ],
+          "indication": {
+            "applicableType": {
+              "name": "Lung Adenocarcinoma",
+              "doid": "X"
+            },
+            "excludedSubTypes": []
+          },
+          "molecularCriterium": {
+            "hotspots": [],
+            "codons": [],
+            "exons": [],
+            "genes": [
+              {
+                "sourceDate": {
+                  "year": 2021,
+                  "month": 2,
+                  "day": 3
+                },
+                "sourceEvent": "fusion",
+                "sourceUrls": [],
+                "gene": "ALK",
+                "event": "FUSION"
+              }
+            ],
+            "fusions": [],
+            "characteristics": [],
+            "hla": []
+          }
+        },
+        {
+          "source": "VICC_CGI",
+          "treatment": {
+            "name": "DRUP",
+            "treatmentApproachesDrugClass": [],
+            "treatmentApproachesTherapy": []
+          },
+          "efficacyDescription": "efficacy evidence B",
+          "evidenceLevel": "B",
+          "evidenceLevelDetails": "GUIDELINE",
+          "evidenceDirection": "RESPONSIVE",
+          "evidenceYear": 2024,
+          "urls": [
+            "http"
+          ],
+          "indication": {
+            "applicableType": {
+              "name": "Solid tumors",
+              "doid": "X"
+            },
+            "excludedSubTypes": [
+              {
+                "name": "Hematologic cancer",
+                "doid": "2531"
+              }
+            ]
+          },
+          "molecularCriterium": {
+            "hotspots": [],
+            "codons": [],
+            "exons": [],
+            "genes": [
+              {
+                "sourceDate": {
+                  "year": 2021,
+                  "month": 2,
+                  "day": 4
+                },
+                "sourceEvent": "inact",
+                "sourceUrls": [],
+                "gene": "BRCA1",
+                "event": "INACTIVATION"
+              }
+            ],
+            "fusions": [],
+            "characteristics": [],
+            "hla": []
+          }
+        },
+        {
+          "source": "VICC_CGI",
+          "treatment": {
+            "name": "Trastuzumab",
+            "treatmentApproachesDrugClass": [],
+            "treatmentApproachesTherapy": []
+          },
+          "efficacyDescription": "efficacy evidence C",
+          "evidenceLevel": "C",
+          "evidenceLevelDetails": "GUIDELINE",
+          "evidenceDirection": "RESPONSIVE",
+          "evidenceYear": 2024,
+          "urls": [
+            "http"
+          ],
+          "indication": {
+            "applicableType": {
+              "name": "Breast cancer",
+              "doid": "X"
+            },
+            "excludedSubTypes": []
+          },
+          "molecularCriterium": {
+            "hotspots": [],
+            "codons": [],
+            "exons": [],
+            "genes": [
+              {
+                "sourceDate": {
+                  "year": 2021,
+                  "month": 2,
+                  "day": 5
+                },
+                "sourceEvent": "amp",
+                "sourceUrls": [],
+                "gene": "ERBB2",
+                "event": "AMPLIFICATION"
+              }
+            ],
+            "fusions": [],
+            "characteristics": [],
+            "hla": []
+          }
+        },
+        {
+          "source": "VICC_CGI",
+          "treatment": {
+            "name": "Panitumumab",
+            "treatmentApproachesDrugClass": [],
+            "treatmentApproachesTherapy": []
+          },
+          "efficacyDescription": "efficacy evidence D",
+          "evidenceLevel": "B",
+          "evidenceLevelDetails": "GUIDELINE",
+          "evidenceDirection": "RESISTANT",
+          "evidenceYear": 2024,
+          "urls": [
+            "http"
+          ],
+          "indication": {
+            "applicableType": {
+              "name": "Colorectal cancer",
+              "doid": "X"
+            },
+            "excludedSubTypes": []
+          },
+          "molecularCriterium": {
+            "hotspots": [],
+            "codons": [],
+            "exons": [],
+            "genes": [
+              {
+                "sourceDate": {
+                  "year": 2021,
+                  "month": 2,
+                  "day": 6
+                },
+                "sourceEvent": "amp",
+                "sourceUrls": [],
+                "gene": "ERBB2",
+                "event": "AMPLIFICATION"
+              }
+            ],
+            "fusions": [],
+            "characteristics": [],
+            "hla": []
+          }
+        },
+        {
+          "source": "VICC_CGI",
+          "treatment": {
+            "name": "Erdafitinib",
+            "treatmentApproachesDrugClass": [],
+            "treatmentApproachesTherapy": []
+          },
+          "efficacyDescription": "efficacy evidence E",
+          "evidenceLevel": "B",
+          "evidenceLevelDetails": "GUIDELINE",
+          "evidenceDirection": "RESPONSIVE",
+          "evidenceYear": 2024,
+          "urls": [
+            "http"
+          ],
+          "indication": {
+            "applicableType": {
+              "name": "Bladder cancer",
+              "doid": "X"
+            },
+            "excludedSubTypes": []
+          },
+          "molecularCriterium": {
+            "hotspots": [],
+            "codons": [],
+            "exons": [],
+            "genes": [
+              {
+                "sourceDate": {
+                  "year": 2021,
+                  "month": 2,
+                  "day": 7
+                },
+                "sourceEvent": "fusion",
+                "sourceUrls": [],
+                "gene": "FGFR2",
+                "event": "FUSION"
+              }
+            ],
+            "fusions": [],
+            "characteristics": [],
+            "hla": []
+          }
+        },
+        {
+          "source": "VICC_CGI",
+          "treatment": {
+            "name": "DRUP",
+            "treatmentApproachesDrugClass": [],
+            "treatmentApproachesTherapy": []
+          },
+          "efficacyDescription": "efficacy evidence F",
+          "evidenceLevel": "B",
+          "evidenceLevelDetails": "GUIDELINE",
+          "evidenceDirection": "RESPONSIVE",
+          "evidenceYear": 2024,
+          "urls": [
+            "http"
+          ],
+          "indication": {
+            "applicableType": {
+              "name": "Advanced Solid Tumor",
+              "doid": "X"
+            },
+            "excludedSubTypes": [
+              {
+                "name": "Hematologic cancer",
+                "doid": "2531"
+              }
+            ]
+          },
+          "molecularCriterium": {
+            "hotspots": [],
+            "codons": [],
+            "exons": [],
+            "genes": [
+              {
+                "sourceDate": {
+                  "year": 2021,
+                  "month": 2,
+                  "day": 8
+                },
+                "sourceEvent": "amp",
+                "sourceUrls": [],
+                "gene": "MET",
+                "event": "AMPLIFICATION"
+              }
+            ],
+            "fusions": [],
+            "characteristics": [],
+            "hla": []
+          }
+        },
+        {
+          "source": "VICC_CGI",
+          "treatment": {
+            "name": "Osimertinib",
+            "treatmentApproachesDrugClass": [],
+            "treatmentApproachesTherapy": []
+          },
+          "efficacyDescription": "efficacy evidence A",
+          "evidenceLevel": "A",
+          "evidenceLevelDetails": "GUIDELINE",
+          "evidenceDirection": "RESPONSIVE",
+          "evidenceYear": 2024,
+          "urls": [
+            "http"
+          ],
+          "indication": {
+            "applicableType": {
+              "name": "Lung Cancer",
+              "doid": "X"
+            },
+            "excludedSubTypes": []
+          },
+          "molecularCriterium": {
+            "hotspots": [],
+            "codons": [],
+            "exons": [],
+            "genes": [],
+            "fusions": [
+              {
+                "sourceDate": {
+                  "year": 2021,
+                  "month": 2,
+                  "day": 3
+                },
+                "sourceEvent": "fusion",
+                "sourceUrls": [],
+                "geneUp": "EGFR",
+                "minExonUp": 1,
+                "maxExonUp": 2,
+                "geneDown": "EGFR",
+                "minExonDown": 8,
+                "maxExonDown": 9
+              }
+            ],
+            "characteristics": [],
+            "hla": []
+          }
+        },
+        {
+          "source": "VICC_CGI",
+          "treatment": {
+            "name": "Crizotinib",
+            "treatmentApproachesDrugClass": [],
+            "treatmentApproachesTherapy": []
+          },
+          "efficacyDescription": "efficacy evidence B",
+          "evidenceLevel": "A",
+          "evidenceLevelDetails": "GUIDELINE",
+          "evidenceDirection": "RESPONSIVE",
+          "evidenceYear": 2024,
+          "urls": [
+            "http"
+          ],
+          "indication": {
+            "applicableType": {
+              "name": "Lung Cancer",
+              "doid": "X"
+            },
+            "excludedSubTypes": []
+          },
+          "molecularCriterium": {
+            "hotspots": [],
+            "codons": [],
+            "exons": [],
+            "genes": [],
+            "fusions": [
+              {
+                "sourceDate": {
+                  "year": 2021,
+                  "month": 2,
+                  "day": 4
+                },
+                "sourceEvent": "fusion",
+                "sourceUrls": [],
+                "geneUp": "EML4",
+                "geneDown": "ALK"
+              }
+            ],
+            "characteristics": [],
+            "hla": []
+          }
+        },
+        {
+          "source": "VICC_CGI",
+          "treatment": {
+            "name": "Nivolumab",
+            "treatmentApproachesDrugClass": [],
+            "treatmentApproachesTherapy": []
+          },
+          "efficacyDescription": "efficacy evidence",
+          "evidenceLevel": "A",
+          "evidenceLevelDetails": "GUIDELINE",
+          "evidenceDirection": "RESPONSIVE",
+          "evidenceYear": 2024,
+          "urls": [
+            "http1",
+            "http2"
+          ],
+          "indication": {
+            "applicableType": {
+              "name": "All cancer types",
+              "doid": "X"
+            },
+            "excludedSubTypes": [
+              {
+                "name": "Hematologic cancer",
+                "doid": "2531"
+              }
+            ]
+          },
+          "molecularCriterium": {
+            "hotspots": [],
+            "codons": [],
+            "exons": [],
+            "genes": [],
+            "fusions": [],
+            "characteristics": [
+              {
+                "sourceDate": {
+                  "year": 2021,
+                  "month": 2,
+                  "day": 3
+                },
+                "sourceEvent": "msi",
+                "sourceUrls": [],
+                "type": "MICROSATELLITE_UNSTABLE",
+                "cutoffType": "EQUAL_OR_GREATER",
+                "cutoff": 4.0
+              }
+            ],
+            "hla": []
+          }
+        },
+        {
+          "source": "VICC_CGI",
+          "treatment": {
+            "name": "Nivolumab",
+            "treatmentApproachesDrugClass": [],
+            "treatmentApproachesTherapy": []
+          },
+          "efficacyDescription": "efficacy evidence",
+          "evidenceLevel": "A",
+          "evidenceLevelDetails": "GUIDELINE",
+          "evidenceDirection": "RESPONSIVE",
+          "evidenceYear": 2024,
+          "urls": [
+            "http1",
+            "http2"
+          ],
+          "indication": {
+            "applicableType": {
+              "name": "All cancer types",
+              "doid": "X"
+            },
+            "excludedSubTypes": [
+              {
+                "name": "Hematologic cancer",
+                "doid": "2531"
+              }
+            ]
+          },
+          "molecularCriterium": {
+            "hotspots": [],
+            "codons": [],
+            "exons": [],
+            "genes": [],
+            "fusions": [],
+            "characteristics": [],
+            "hla": [
+              {
+                "sourceDate": {
+                  "year": 2021,
+                  "month": 2,
+                  "day": 3
+                },
+                "sourceEvent": "A*02",
+                "sourceUrls": [
+                  "http"
+                ],
+                "hlaAllele": "A*02"
+              }
+            ]
+          }
+        }
+      ],
+      "trials": [
+        {
+          "source": "VICC_CGI",
+          "nctId": "NCT1",
+          "title": "study 1",
+          "acronym": "acronym for study 1",
+          "countries": [
+            {
+              "name": "Netherlands",
+              "hospitalsPerCity": {
+                "Maastricht": [
+                  {
+                    "name": "MUMC",
+                    "isChildrensHospital": false
+                  }
+                ],
+                "Nijmegen": [
+                  {
+                    "name": "Radboud UMC",
+                    "isChildrensHospital": false
+                  }
+                ]
+              }
+            }
+          ],
+          "therapyNames": [
+            "Vemurafenib"
+          ],
+          "genderCriterium": "FEMALE",
+          "urls": [
+            "http"
+          ],
+          "indications": [
+            {
+              "applicableType": {
+                "name": "Solid tumor",
+                "doid": "X"
+              },
+              "excludedSubTypes": []
+            }
+          ],
+          "anyMolecularCriteria": [
+            {
+              "hotspots": [
+                {
+                  "sourceDate": {
+                    "year": 1970,
+                    "month": 1,
+                    "day": 1
+                  },
+                  "sourceEvent": "variant",
+                  "sourceUrls": [
+                    "http"
+                  ],
+                  "gene": "BRAF",
+                  "ref": "A",
+                  "alt": "T",
+                  "chromosome": "7",
+                  "position": 140453137
+                }
+              ],
+              "codons": [],
+              "exons": [],
+              "genes": [],
+              "fusions": [],
+              "characteristics": [],
+              "hla": []
+            }
+          ]
+        },
+        {
+          "source": "VICC_CGI",
+          "nctId": "NCT2",
+          "title": "study 2",
+          "countries": [
+            {
+              "name": "Netherlands",
+              "hospitalsPerCity": {
+                "Rotterdam": [
+                  {
+                    "name": "EMC",
+                    "isChildrensHospital": false
+                  }
+                ]
+              }
+            }
+          ],
+          "therapyNames": [
+            "Vemurafenib"
+          ],
+          "urls": [
+            "http"
+          ],
+          "indications": [
+            {
+              "applicableType": {
+                "name": "Breast cancer",
+                "doid": "X"
+              },
+              "excludedSubTypes": []
+            }
+          ],
+          "anyMolecularCriteria": [
+            {
+              "hotspots": [],
+              "codons": [
+                {
+                  "sourceDate": {
+                    "year": 1970,
+                    "month": 1,
+                    "day": 1
+                  },
+                  "sourceEvent": "600X",
+                  "sourceUrls": [
+                    "NCT1"
+                  ],
+                  "gene": "BRAF",
+                  "applicableMutationType": "MISSENSE",
+                  "chromosome": "7",
+                  "start": 140453136,
+                  "end": 140453137
+                }
+              ],
+              "exons": [],
+              "genes": [],
+              "fusions": [],
+              "characteristics": [],
+              "hla": []
+            }
+          ]
+        },
+        {
+          "source": "VICC_CGI",
+          "nctId": "NCT3",
+          "title": "study 3",
+          "countries": [
+            {
+              "name": "Belgium",
+              "hospitalsPerCity": {
+                "Brussel": [
+                  {
+                    "name": "UZ Brussel",
+                    "isChildrensHospital": false
+                  }
+                ]
+              }
+            }
+          ],
+          "therapyNames": [
+            "Erlotinib"
+          ],
+          "urls": [
+            "http"
+          ],
+          "indications": [
+            {
+              "applicableType": {
+                "name": "Pancreas",
+                "doid": "X"
+              },
+              "excludedSubTypes": []
+            }
+          ],
+          "anyMolecularCriteria": [
+            {
+              "hotspots": [],
+              "codons": [
+                {
+                  "sourceDate": {
+                    "year": 1970,
+                    "month": 1,
+                    "day": 1
+                  },
+                  "sourceEvent": "exon 21",
+                  "sourceUrls": [],
+                  "gene": "EGFR",
+                  "applicableMutationType": "INFRAME",
+                  "chromosome": "7",
+                  "start": 55241707,
+                  "end": 55279321
+                }
+              ],
+              "exons": [],
+              "genes": [],
+              "fusions": [],
+              "characteristics": [],
+              "hla": []
+            }
+          ]
+        },
+        {
+          "source": "VICC_CGI",
+          "nctId": "NCT4",
+          "title": "study 4",
+          "countries": [
+            {
+              "name": "Belgium",
+              "hospitalsPerCity": {
+                "Antwerpen": [
+                  {
+                    "name": "ZAS Vincentius",
+                    "isChildrensHospital": false
+                  }
+                ]
+              }
+            }
+          ],
+          "therapyNames": [
+            "Cetuximab"
+          ],
+          "genderCriterium": "MALE",
+          "urls": [
+            "http"
+          ],
+          "indications": [
+            {
+              "applicableType": {
+                "name": "Colorectal Cancer",
+                "doid": "X"
+              },
+              "excludedSubTypes": []
+            }
+          ],
+          "anyMolecularCriteria": [
+            {
+              "hotspots": [],
+              "codons": [],
+              "exons": [],
+              "genes": [
+                {
+                  "sourceDate": {
+                    "year": 1970,
+                    "month": 1,
+                    "day": 1
+                  },
+                  "sourceEvent": "act",
+                  "sourceUrls": [],
+                  "gene": "NRAS",
+                  "event": "ACTIVATION"
+                }
+              ],
+              "fusions": [],
+              "characteristics": [],
+              "hla": []
+            }
+          ]
+        },
+        {
+          "source": "VICC_CGI",
+          "nctId": "NCT5",
+          "title": "study 5",
+          "countries": [
+            {
+              "name": "Germany",
+              "hospitalsPerCity": {
+                "Frankfurt": [
+                  {
+                    "name": "Burgerhospital Frankfurt",
+                    "isChildrensHospital": false
+                  }
+                ],
+                "Koln": [
+                  {
+                    "name": "Cellitinnen-Krankenhaus St. Marien",
+                    "isChildrensHospital": false
+                  }
+                ]
+              }
+            }
+          ],
+          "therapyNames": [
+            "Ruxolitinib"
+          ],
+          "genderCriterium": "MALE",
+          "urls": [
+            "http"
+          ],
+          "indications": [
+            {
+              "applicableType": {
+                "name": "Leukemia",
+                "doid": "X"
+              },
+              "excludedSubTypes": []
+            }
+          ],
+          "anyMolecularCriteria": [
+            {
+              "hotspots": [],
+              "codons": [],
+              "exons": [],
+              "genes": [],
+              "fusions": [
+                {
+                  "sourceDate": {
+                    "year": 1970,
+                    "month": 1,
+                    "day": 1
+                  },
+                  "sourceEvent": "fusion",
+                  "sourceUrls": [],
+                  "geneUp": "PCM1",
+                  "geneDown": "JAK2"
+                }
+              ],
+              "characteristics": [],
+              "hla": []
+            }
+          ]
+        },
+        {
+          "source": "VICC_CGI",
+          "nctId": "NCT6",
+          "title": "study 6",
+          "countries": [
+            {
+              "name": "Belgium",
+              "hospitalsPerCity": {
+                "Brussel": [
+                  {
+                    "name": "UZ Brussel",
+                    "isChildrensHospital": false
+                  }
+                ]
+              }
+            },
+            {
+              "name": "Netherlands",
+              "hospitalsPerCity": {
+                "Eindhoven": [
+                  {
+                    "name": "Catharina",
+                    "isChildrensHospital": false
+                  }
+                ],
+                "Rotterdam": [
+                  {
+                    "name": "EMC",
+                    "isChildrensHospital": false
+                  }
+                ]
+              }
+            }
+          ],
+          "therapyNames": [
+            "Immuno",
+            "Pembro"
+          ],
+          "genderCriterium": "BOTH",
+          "urls": [
+            "http"
+          ],
+          "indications": [
+            {
+              "applicableType": {
+                "name": "All cancer types",
+                "doid": "X"
+              },
+              "excludedSubTypes": [
+                {
+                  "name": "Hematologic cancer",
+                  "doid": "2531"
+                }
+              ]
+            }
+          ],
+          "anyMolecularCriteria": [
+            {
+              "hotspots": [],
+              "codons": [],
+              "exons": [],
+              "genes": [],
+              "fusions": [],
+              "characteristics": [
+                {
+                  "sourceDate": {
+                    "year": 1970,
+                    "month": 1,
+                    "day": 1
+                  },
+                  "sourceEvent": "msi",
+                  "sourceUrls": [],
+                  "type": "MICROSATELLITE_UNSTABLE"
+                }
+              ],
+              "hla": []
+            }
+          ]
+        },
+        {
+          "source": "VICC_CGI",
+          "nctId": "NCT7",
+          "title": "study 7",
+          "countries": [
+            {
+              "name": "Netherlands",
+              "hospitalsPerCity": {
+                "Groningen": [
+                  {
+                    "name": "UMCG",
+                    "isChildrensHospital": false
+                  }
+                ],
+                "Utrecht": [
+                  {
+                    "name": "UMCU",
+                    "isChildrensHospital": false
+                  }
+                ]
+              }
+            }
+          ],
+          "therapyNames": [
+            "Nivolumab"
+          ],
+          "genderCriterium": "FEMALE",
+          "urls": [
+            "http"
+          ],
+          "indications": [
+            {
+              "applicableType": {
+                "name": "Skin melanoma",
+                "doid": "X"
+              },
+              "excludedSubTypes": [
+                {
+                  "name": "Hematologic cancer",
+                  "doid": "2531"
+                }
+              ]
+            }
+          ],
+          "anyMolecularCriteria": [
+            {
+              "hotspots": [],
+              "codons": [],
+              "exons": [],
+              "genes": [],
+              "fusions": [],
+              "characteristics": [],
+              "hla": [
+                {
+                  "sourceDate": {
+                    "year": 1970,
+                    "month": 1,
+                    "day": 1
+                  },
+                  "sourceEvent": "A*02",
+                  "sourceUrls": [],
+                  "hlaAllele": "A*02"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

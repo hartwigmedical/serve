@@ -7,7 +7,6 @@ import com.hartwig.serve.ckb.database.tables.Therapyevidence;
 import com.hartwig.serve.ckb.database.tables.Treatmentapproachevidence;
 import com.hartwig.serve.ckb.datamodel.reference.Reference;
 import com.hartwig.serve.ckb.datamodel.treatmentapproaches.DrugClassTreatmentApproach;
-import com.hartwig.serve.ckb.datamodel.treatmentapproaches.RelevantTreatmentApproaches;
 import com.hartwig.serve.ckb.datamodel.treatmentapproaches.TherapyTreatmentApproach;
 
 import org.jetbrains.annotations.NotNull;

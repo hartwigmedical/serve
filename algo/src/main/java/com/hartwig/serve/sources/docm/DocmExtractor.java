@@ -5,10 +5,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.datamodel.common.GeneRole;
-import com.hartwig.serve.datamodel.common.ProteinEffect;
-import com.hartwig.serve.datamodel.hotspot.ImmutableKnownHotspot;
-import com.hartwig.serve.datamodel.hotspot.KnownHotspot;
+import com.hartwig.serve.datamodel.molecular.ImmutableKnownEvents;
+import com.hartwig.serve.datamodel.molecular.KnownEvents;
+import com.hartwig.serve.datamodel.molecular.common.GeneRole;
+import com.hartwig.serve.datamodel.molecular.common.ProteinEffect;
+import com.hartwig.serve.datamodel.molecular.hotspot.ImmutableKnownHotspot;
+import com.hartwig.serve.datamodel.molecular.hotspot.KnownHotspot;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.ImmutableExtractionResult;
 import com.hartwig.serve.extraction.hotspot.Hotspot;
@@ -48,9 +50,8 @@ public class DocmExtractor {
         }).collect(Collectors.toSet());
 
         // Hotspots appear multiple times in DoCM on different transcripts. We need to consolidate even though there is only one source.
-        return ImmutableExtractionResult.builder()
-                .refGenomeVersion(Knowledgebase.DOCM.refGenomeVersion())
-                .knownHotspots(HotspotConsolidation.consolidate(knownHotspots))
-                .build();
+        KnownEvents knownEvents = ImmutableKnownEvents.builder().hotspots(HotspotConsolidation.consolidate(knownHotspots)).build();
+
+        return ImmutableExtractionResult.builder().refGenomeVersion(Knowledgebase.DOCM.refGenomeVersion()).knownEvents(knownEvents).build();
     }
 }

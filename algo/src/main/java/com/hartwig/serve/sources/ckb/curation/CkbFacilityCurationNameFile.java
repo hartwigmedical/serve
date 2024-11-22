@@ -6,14 +6,14 @@ import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
 
-import com.hartwig.serve.datamodel.serialization.util.SerializationUtil;
+import com.hartwig.serve.common.serialization.SerializationUtil;
 
 import org.apache.commons.compress.utils.Lists;
 import org.jetbrains.annotations.NotNull;
 
 public final class CkbFacilityCurationNameFile {
 
-    public static final String FIELD_DELIMITER = "\t";
+    private static final String FIELD_DELIMITER = "\t";
 
     @NotNull
     public static List<CkbFacilityCurationNameEntry> read(@NotNull String ckbFacilityCurationNameTsv) throws IOException {

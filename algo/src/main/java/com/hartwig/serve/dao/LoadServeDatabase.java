@@ -6,9 +6,8 @@ import java.nio.file.Files;
 import java.sql.SQLException;
 import java.util.List;
 
-import com.hartwig.serve.datamodel.ActionableEvents;
-import com.hartwig.serve.datamodel.KnownEvents;
 import com.hartwig.serve.datamodel.RefGenome;
+import com.hartwig.serve.datamodel.ServeDatabase;
 import com.hartwig.serve.datamodel.ServeRecord;
 import com.hartwig.serve.datamodel.serialization.ServeJson;
 import com.hartwig.serve.extraction.events.EventInterpretation;
@@ -37,23 +36,47 @@ public class LoadServeDatabase {
         String serveActionabilityDir = nonOptionalDir(cmd, SERVE_ACTIONABILITY_DIRECTORY);
         RefGenome refGenome = resolveRefGenomeVersion(nonOptionalValue(cmd, REF_GENOME_VERSION));
 
-        String serveJsonFile = ServeJson.jsonFilePath(serveActionabilityDir, refGenome);
-        LOGGER.info("Loading SERVE from {}", serveJsonFile);
-        ServeRecord serveRecord = ServeJson.read(serveJsonFile);
-        ActionableEvents actionableEvents = serveRecord.actionableEvents();
-        KnownEvents knownEvents = serveRecord.knownEvents();
-
-        List<EventInterpretation> eventInterpretation =
-                EventInterpretationFile.read(EventInterpretationFile.eventInterpretationTsv(serveActionabilityDir));
-
-        LOGGER.info(" Loaded {} event interpretations from {}",
-                eventInterpretation.size(),
-                EventInterpretationFile.eventInterpretationTsv(serveActionabilityDir));
+        ServeRecord serveRecord = loadServeRecord(serveActionabilityDir, refGenome);
+        List<EventInterpretation> eventInterpretations = loadEventInterpretations(serveActionabilityDir);
 
         ServeDatabaseAccess dbWriter = ServeDatabaseAccess.databaseAccess(cmd);
 
-        dbWriter.writeServeData(actionableEvents, knownEvents, eventInterpretation);
+        dbWriter.writeServeRecord(serveRecord, eventInterpretations);
         LOGGER.info("Written SERVE output to database");
+    }
+
+    @NotNull
+    private static ServeRecord loadServeRecord(@NotNull String serveActionabilityDir, @NotNull RefGenome refGenome) throws IOException {
+        String serveJsonFile = ServeJson.jsonFilePath(serveActionabilityDir);
+        LOGGER.info("Loading SERVE from {} for ref genome {}", serveJsonFile, refGenome);
+        ServeDatabase serveDatabase = ServeJson.read(serveJsonFile);
+        ServeRecord serveRecord = serveDatabase.records().get(refGenome);
+
+        if (serveRecord == null) {
+            throw new IllegalStateException("Could not find SERVE record for ref genome version '" + refGenome + "'");
+        }
+
+        LOGGER.info(" Loaded {} known hotspots", serveRecord.knownEvents().hotspots().size());
+        LOGGER.info(" Loaded {} known codons", serveRecord.knownEvents().codons().size());
+        LOGGER.info(" Loaded {} known exons", serveRecord.knownEvents().exons().size());
+        LOGGER.info(" Loaded {} known genes", serveRecord.knownEvents().genes().size());
+        LOGGER.info(" Loaded {} known copy numbers", serveRecord.knownEvents().copyNumbers().size());
+        LOGGER.info(" Loaded {} known fusions", serveRecord.knownEvents().fusions().size());
+        LOGGER.info(" Loaded {} efficacy evidences", serveRecord.evidences().size());
+        LOGGER.info(" Loaded {} actionable trials", serveRecord.trials().size());
+
+        return serveRecord;
+    }
+
+    @NotNull
+    private static List<EventInterpretation> loadEventInterpretations(@NotNull String serveActionabilityDir) throws IOException {
+        String eventInterpretationTsv = EventInterpretationFile.eventInterpretationTsv(serveActionabilityDir);
+
+        LOGGER.info("Loading event interpretation from {}", eventInterpretationTsv);
+        List<EventInterpretation> eventInterpretations = EventInterpretationFile.read(eventInterpretationTsv);
+        LOGGER.info(" Loaded {} event interpretations", eventInterpretations.size());
+
+        return eventInterpretations;
     }
 
     @NotNull

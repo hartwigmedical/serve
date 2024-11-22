@@ -2,7 +2,7 @@
 
 SERVE harmonizes various sources of evidence into a single unified model that can be readily used in genomic analyses:
 
-- A model is generated which allows mapping of genomic events to clinical evidence.
+- A model is generated which allows mapping of genomic events to efficacy evidence and clinical trials
 - An overview of mutations that are implied to be potential cancer drivers is generated.
 
 ## Contents
@@ -28,12 +28,7 @@ SERVE supports the ingestion of the following knowledgebases:
 - [OncoKB](https://www.oncokb.org) - general purpose knowledgebase that is supported through [VICC](http://cancervariants.org)
 - [DoCM](http://www.docm.info) - database containing pathogenic mutations in cancer
 - HMF Cohort - a database of recurrent somatic mutations in cancer-related genes from the Hartwig database.
-- HMF Curated - a database of known driver mutations curated by the Hartwig team.
-
-Support for the following knowledgebases is under development:
-
-- [CBG Compassionate Use](https://www.cbg-meb.nl/onderwerpen/hv-compassionate-use-programma/overzicht-goedgekeurde-cup) -
-  a database of approved compassionate use programs in the Netherlands
+- HMF Curated - a database of known driver mutations and known genes curated by the Hartwig team.
 
 A number of other Hartwig modules support the ingestion (and analysis) of these knowledgebases:
 
@@ -46,9 +41,9 @@ they are compliant with the usage of the data itself.
 
 ## Outputs
 
-SERVE generates clinical evidence in the following datamodel:
+SERVE generates a database with the following datamodel:
 
-Efficacy evidences:
+*Efficacy evidences*:
 
 - The source of the evidence (e.g. CKB, VICC, etc.)
 - Treatment
@@ -57,35 +52,34 @@ Efficacy evidences:
     - Treatment approach underlying the treatment based on drug name.
 - Indication:
     - Cancer type (annotated with DOID) for which the treatment is considered on-label.
-    - Excluded cancer subtypes (annotated with DOID) that should be children of the main cancer type and are used for filtering
-      specific types of the main cancer type.
-- Molecular criterium for which the evidence applies
+    - Excluded cancer subtypes (annotated with DOID) that should be children of the main cancer type and for which the evidence is
+      considered off-label.
+- Molecular criterium for when the evidence applies
 - Efficacy description
 - Tier / Evidence level of the treatment
 - Evidence level details (e.g. Preclinical, case reports, guideline etc.)
 - Evidence direction (Responsive for the treatment, resistant to the treatment, decreased response to the treatment or whether mutation
-  implies no
-  benefit for the treatment)
+  implies no-benefit for the treatment)
 - Evidence year
 - A set of URLs with extra information about the evidence (e.g. publications backing up the evidence)
 
-Actionable trials:
+*Actionable trials*:
 
-- The source of the trial (currently always CKB)
-- The NCT ID of the study
-- The title of the study
-- The acronym of the study
-- The countries where the study is active
+- The source of the trial
+- The NCT ID of the trial
+- The title of the trial
+- The acronym of the trial
+- The countries where the trial is active
 - The name(s) of the therapies given in the trial
-- For which gender the study is an option
+- For which gender the trial is an option
 - Indications:
-    - Cancer type (annotated with DOID) for which the treatment is considered on-label.
-    - Excluded cancer subtypes (annotated with DOID) that should be children of the main cancer type and are used for filtering
-      specific types of the main cancer type.
+    - Cancer type (annotated with DOID) for which the trial is considered on-label.
+    - Excluded cancer subtypes (annotated with DOID) that should be children of the main cancer type and for which the trial is
+      considered off-label.
 - Any molecular criteria required or partial required for the trial
 - A set of URLs with extra information about the trial (e.g. the link to the trial information on clinicaltrials.gov)
 
-The following genomic events and tumor characteristics can be mapped to clinical evidence:
+The following genomic events and tumor characteristics can be mapped to efficacy evidence and actionable trials:
 
 - Genome-wide tumor characteristics such as signatures, MSI status, TML status or viral presence
 - Presence of specific HLA alleles
@@ -97,11 +91,12 @@ The following genomic events and tumor characteristics can be mapped to clinical
     - any type of missense mutation in BRAF codon 600
 - Specific missense mutations such as BRAF V600E
 
-In addition to generating a mapping from various genomic events to clinical evidence, SERVE generates the following outputs describing
-genomic events implied to be able to driver cancer:
+In addition to generating a mapping from various genomic events to efficacy evidence and trials, SERVE generates the following outputs
+describing genomic events implied to be able to driver cancer:
 
 - Specific known pathogenic fusion pairs
 - Known pathogenic amplifications and deletions
+- Specific genes that are known to be a potential driver in cancer
 - Known pathogenic exons (exons for which specific mutations are implied to be pathogenic)
 - Known pathogenic codons (codons for which generic mutations are implied to be pathogenic)
 - Known pathogenic hotspots (specific mutations on specific loci)
@@ -118,15 +113,15 @@ For fusions, genes are permitted that can exist in the context of a fusion pair 
 
 ### Driver inconsistencies
 
-In the supported knowledgebases, there can be events defined on genes that are not part of the Hartwig's driver gene panel.
-Also, the event could be inconsistent with respect to driver gene panel (e.g. "Inactivation" evidence for a gene that is configured to be
-an oncogene). There are various ways to deal with such inconsistencies on a per-knowledgebase level:
+The knowledgebases may contain events defined on genes that are not part of the Hartwig's driver gene panel. Also, the event could be
+inconsistent with respect to driver gene panel (e.g. "Inactivation" evidence for a gene that is configured to be an oncogene). There are
+various ways to deal with such inconsistencies on a per-knowledgebase level:
 
-| Filter    | Description                                                                                                                 |
-|-----------|-----------------------------------------------------------------------------------------------------------------------------|
-| FILTER    | We filter every entry when the gene/event isn't present or there is an inconsistency with the Hartwig's driver gene panel   |
-| IGNORE    | Every gene/event is used regardless of mismatch/inconsistencies                                                             |
-| WARN_ONLY | Every gene/event is used regardless of mismatch/inconsistencies, however a warning message is shown for the inconsistencies |
+| Filter    | Description                                                                                                                                               |
+|-----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| FILTER    | We filter every entry when the gene/event isn't present or there is an inconsistency with the Hartwig's driver gene panel                                 |
+| IGNORE    | Every gene/event from the source knowledgebase is used regardless of mismatch/inconsistencies                                                             |
+| WARN_ONLY | Every gene/event from the source knowledgebase is used regardless of mismatch/inconsistencies, however a warning message is shown for the inconsistencies |
 
 ### Protein resolving for SNVs and (small) INDELs
 
@@ -137,13 +132,13 @@ for the reference genome version that is used by the input knowledgebase.
 The first step is to choose what ensembl transcript to use for converting protein annotation back to genomic coordinates:
 
 1. If the knowledgebase configured a transcript for a mutation, that transcript is used exclusively.
-2. If no transcript is configured, SERVE uses the typical transcript used by Hartwig which is generally the canonical
-   transcript defined by ensembl.
-3. If a protein annotation does not exist on the canonical transcript and has no transcript configured in the knowledgebase,
-   a consistently specific transcript is picked for protein annotation in case multiple transcripts imply the same hotspot.
+2. If no transcript is configured, SERVE uses the typical transcript used by Hartwig which is generally the canonical transcript defined by
+   ensembl.
+3. If a protein annotation does not exist on the canonical transcript and has no transcript configured in the knowledgebase, a consistently
+   specific transcript is picked for protein annotation in case multiple transcripts imply the same hotspot.
 
-If a protein annotated form does not exist on any transcript for a specific gene, the evidence is ignored
-(see also [curation](#curation-and-harmonization-of-individual-knowledgebases)).
+If a protein annotated form does not exist on any transcript for a specific gene, the evidence is ignored (see
+also [curation](#curation-and-harmonization-of-individual-knowledgebases)).
 
 Assuming a suitable transcript has been found, N hotspots are derived for each protein annotation as follows:
 
@@ -158,7 +153,7 @@ Assuming a suitable transcript has been found, N hotspots are derived for each p
 - In case of a complex deletion/insertion (DELINS) the rules for hotspot generation for deletions and insertions are extrapolated.
   Hence, the reference sequence is assumed to be deleted, and one new nucleotide sequence is inserted unless the insertion is 1 amino acid
   in which case hotspots are generated for all trinucleotides coding for the inserted amino acid.
-  Complexity of the resulting variant has been reduced by removing any bases that are shared between ref and alt at start or end of the
+  Complexity of the resulting variant will then be reduced by removing any bases that are shared between ref and alt at start or end of the
   variant.
 - In case of a frameshift the following hotspots are generated:
     - Any of the 12 possible single base inserts inside the affected codon that does not lead to synonymous impact in the affected codon
@@ -188,41 +183,43 @@ For ranges that represent exons, the range is extended by 10 bases on both sides
 the exon.
 
 In addition to resolving coordinates, every codon and exon range is annotated with a filter indicating which type(s) of mutations are valid
-for this range. SERVE tries to determine this based on the information specified in the knowledgebase, but if that information is not
-sufficient, the Hartwig driver catalog is used to determine the filter.
+for this range. SERVE determines this based on the information specified in the knowledgebase, but if that information is not sufficient,
+the Hartwig driver catalog is used to determine the filter.
 
-| Filter                 | Description                                                     |
-|------------------------|-----------------------------------------------------------------|
-| NONSENSE_OR_FRAMESHIFT | Only frameshifts or nonsense mutations are valid for this range |
-| SPLICE                 | Only splice mutations are valid for this range                  |
-| INFRAME                | Any inframe INDEL (insert or delete) is valid for this range    |
-| INFRAME_DELETION       | Only inframe deletions are valid for this range                 |
-| INFRAME_INSERTION      | Only inframe insertions are valid for this range                |
-| MISSENSE               | Only missense mutations are valid for this range                |
-| ANY                    | Any mutation is considered valid for this range.                |
+| Filter                 | Description                                                      |
+|------------------------|------------------------------------------------------------------|
+| NONSENSE_OR_FRAMESHIFT | Only frameshifts and nonsense mutations are valid for this range |
+| SPLICE                 | Only splice mutations are valid for this range                   |
+| INFRAME                | Any inframe INDELs (insert or delete) are valid for this range   |
+| INFRAME_DELETION       | Only inframe deletions are valid for this range                  |
+| INFRAME_INSERTION      | Only inframe insertions are valid for this range                 |
+| MISSENSE               | Only missense mutations are valid for this range                 |
+| ANY                    | Any mutation is considered valid for this range.                 |
 
 ### Gene level event determination
 
-For evidence that is applicable when a gene-wide level event has happened, the type of event required to match evidence to a
-mutation is derived from the knowledgebase event and no further interpretation is done. In case a knowledgebase provides insufficient
-details to make a decision (e.g. mutant), we annotate to ANY_MUTATION.
+For evidence that is applicable when a gene-wide level event has happened, the type of event required to match evidence to a mutation is
+derived from the knowledgebase event and no further interpretation is done. In case a knowledgebase provides insufficient details to make a
+decision (e.g. mutant), we annotate to ANY_MUTATION.
 
-| Gene level event | Description                                                                                                                            |
-|------------------|----------------------------------------------------------------------------------------------------------------------------------------|
-| AMPLIFICATION    | Evidence is applicable when the gene has been amplified.                                                                               |
-| OVEREXPRESSION   | Evidence is applicable when the gene has been amplified.                                                                               |
-| DELETION         | Evidence is applicable when the gene has been completely deleted from the genome.                                                      |
-| UNDEREXPRESSION  | Evidence is applicable when the gene has been completely deleted from the genome.                                                      |
-| ACTIVATION       | Evidence is applicable when a gene has been activated. Downstream algorithms are expected to interpret this.                           |
-| INACTIVATION     | Evidence is applicable when a gene has been inactivated. Downstream algorithms are expected to interpret this.                         |
-| ANY_MUTATION     | SERVE does not restrict this evidence based on the type of mutation and considers every type of mutation applicable for this evidence. |
-| FUSION           | Evidence is applicable in case the gene has fused with another gene (either 3' or 5').                                                 |
-| WILD_TYPE        | Evidence is applicable in case no genomic alteration is detected.                                                                      |
+| Gene level event    | Description                                                                                                                            |
+|---------------------|----------------------------------------------------------------------------------------------------------------------------------------|
+| AMPLIFICATION       | Evidence is applicable when the gene has been amplified.                                                                               |
+| OVEREXPRESSION      | Evidence is applicable when the gene has been amplified.                                                                               |
+| PRESENCE_OF_PROTEIN | Evidence is applicable when the protein produced by a gene is present (e.g. determined via IHC)                                        |
+| DELETION            | Evidence is applicable when the gene has been completely deleted from the genome.                                                      |
+| UNDEREXPRESSION     | Evidence is applicable when the gene has been completely deleted from the genome.                                                      |
+| ABSENCE_OF_PROTEIN  | Evidence is applicable when the protein produced by a gene is not present (e.g. determined via IHC)                                    |
+| ACTIVATION          | Evidence is applicable when a gene has been activated. Downstream algorithms are expected to interpret this.                           |
+| INACTIVATION        | Evidence is applicable when a gene has been inactivated. Downstream algorithms are expected to interpret this.                         |
+| ANY_MUTATION        | SERVE does not restrict this evidence based on the type of mutation and considers every type of mutation applicable for this evidence. |
+| FUSION              | Evidence is applicable in case the gene has fused with another gene (either 3' or 5').                                                 |
+| WILD_TYPE           | Evidence is applicable in case no genomic alteration is detected.                                                                      |
 
 ### Exonic ranges specific for fusion pairs
 
-For evidence on fusion pairs, SERVE can add restrictions on which exons are allowed to be involved in the fusion.
-This is to support evidence on fusions like EGFRvII.
+For evidence on fusion pairs, SERVE can add restrictions on which exons are allowed to be involved in the fusion. This is to support
+evidence on fusions like EGFRvII.
 
 Evidence on fusion pairs where these restrictions are missing can be assumed to be valid for any fusion between the two genes specified.
 
@@ -293,9 +290,9 @@ Also, genes that do not follow HGNC model are renamed to their HGNC name.
 
 For CKB FLEX curation and filtering is predominantly configurable rather than fixed in SERVE. The only fixed curation done in SERVE
 is mapping evidence for tumor characteristics (such as MSI or High TMB) to actual characteristics since CKB FLEX models this as "genes".
-SERVE only considers trials with one or more molecular inclusion criterion. Furthermore, SERVE only considers Dutch, German and Belgium
-trials with a potentially open recruitment status ("Recruiting", "Not yet recruiting", "approved for marketing", "available" or "enrolling
-by invitation") and required requirement type ("partial - required" and "required").
+SERVE only considers trials with one or more molecular inclusion criterion. Furthermore, SERVE only considers trials with a potentially open
+recruitment status ("Recruiting", "Not yet recruiting", "approved for marketing", "available" or "enrolling by invitation") and required
+requirement type ("partial - required" and "required").
 
 The following filters can be configured for CKB FLEX, along with an example of how this is used by Hartwig:
 
@@ -308,10 +305,10 @@ The following filters can be configured for CKB FLEX, along with an example of h
 | FILTER_EVIDENCE_FOR_EXONS_ON_GENE     | Some genes may have evidence on specific exons which don't exist on the ensembl transcript used by Hartwig                                                                                                                                                               |
 | FILTER_SECONDARY_GENE_WHEN_FUSION_LEG | Usage of this filter is similar to the use case for removing all evidence on genes.                                                                                                                                                                                      |
 
-## Relevant treatment approaches of the evidence
+#### Relevant treatment approaches of the evidence
 
-External knowledgebases can annotate evidence for a treatment with a treatment approach. For making this usable
-downstream, this is curated for harmonize the knowledge. The following filters can be configured:
+External knowledgebases can annotate evidence for a treatment with a treatment approach. For making this usable downstream, this is curated
+for harmonize the knowledge. The following filters can be configured:
 
 | Filter                                       | Description                                                                                             |
 |----------------------------------------------|---------------------------------------------------------------------------------------------------------|
@@ -319,10 +316,9 @@ downstream, this is curated for harmonize the knowledge. The following filters c
 | DIRECTION_TREATMENT_APPROACH_CURATION_IGNORE | The treatment approach wouldn't be used because we didn't use the treatment approach for this direction |
 | EVENT_TREATMENT_APPROACH_CURATION_IGNORE     | The treatment approach wouldn't be used because event is ignored for further interpretation             |
 
-## Filtering evidences
+#### Filtering efficacy evidences
 
-All evidences, which are present in the external databases, can be filtered for downstream usage. This results in all usable evidences
-which we should map to patient genomic event/cancer types.
+CKB evidences can be filtered for downstream usage. The following filters are available:
 
 | Filter                                                       | Description                                                                                                     |
 |--------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------|
@@ -333,22 +329,19 @@ which we should map to patient genomic event/cancer types.
 | EVIDENCE_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE           | All evidences based on a specific therapy and cancer type and gene is filtered for downstream usages.           |
 | EVIDENCE_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE_AND_EVENT | All evidences based on a specific therapy and cancer type and gene and event is filtered for downstream usages. |
 
-## Filtering clinical trials
+#### Filtering clinical trials
 
-All clinical trials, which are present in the external databases, can be filtered for downstream usage. This results in all usable
-clinical trials which we should map to patient genomic event/cancer types.
-| Filter | Description |
-|-----------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------|
-| ALL_STUDIES_BASED_ON_GENE | All clinical studies based on a specific gene are filtered for downstream usages. |
-| ALL_STUDIES_BASED_ON_GENE_AND_EVENT | All clinical studies based on a specific gene and event are filtered for downstream usages. |
-| STUDY_WHOLE | The whole clinical study are filtered for downstream usages. |
-| STUDY_BASED_ON_THERAPY | The clinical study with a specific therapy are filtered for downstream usages. |
-| STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE | The clinical study with a specific therapy and cancer type are filtered for downstream
-usages. |
-| STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE | The clinical study with a specific therapy and cancer type and specific gene are
-filtered for downstream usages. |
-| STUDY_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE_AND_EVENT | The clinical study with a specific therapy and cancer type and specific gene
-and event are filtered for downstream usages. |
+CKB clinical trials can be filtered for downstream usage. The following filters are available:
+
+| Filter                                                    | Description                                                                                                              |
+|-----------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|
+| ALL_TRIALS_BASED_ON_GENE                                  | All clinical trials based on a specific gene are filtered for downstream usage.                                          |
+| ALL_TRIALS_BASED_ON_GENE_AND_EVENT                        | All clinical trials based on a specific gene and event are filtered for downstream usage.                                |
+| COMPLETE_TRIAL                                            | The whole clinical trial is filtered for downstream usage.                                                               |
+| TRIAL_BASED_ON_THERAPY                                    | Any clinical trial with a specific therapy is filtered for downstream usage.                                             |
+| TRIAL_BASED_ON_THERAPY_AND_CANCER_TYPE                    | Any clinical trial with a specific therapy and cancer type is filtered for downstream usage.                             |
+| TRIAL_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE           | Any clinical trial with a specific therapy and cancer type is specific gene are filtered for downstream usage.           |
+| TRIAL_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE_AND_EVENT | Any clinical trial with a specific therapy and cancer type and specific gene and event is filtered for downstream usage. |
 
 ## Handling of multiple reference genome versions
 
@@ -367,9 +360,9 @@ are used in a ref-dependent manner during knowledge extraction:
 
 ### Ref-genome dependent output
 
-Once per-knowledgebase extraction is done, the extraction results are merged into a v37 and v38 version.
-Any extraction for a v37 knowledgebase is taken over unchanged in the v37 output, and the same holds for any v38 knowledgebase into the v38
-output. For the remaining cases, the following conversion algo is executed.
+Once per-knowledgebase extraction is done, the extraction results are merged into a v37 and v38 version. Any extraction for a v37
+knowledgebase is taken over unchanged in the v37 output, and the same holds for any v38 knowledgebase into the v38 output. For the remaining
+cases, the following conversion algo is executed.
 
 #### Genomic position lift-over
 
@@ -404,8 +397,7 @@ Knowledge extraction is performed on a per-knowledgebase level after which all e
 - All known events are aggregated on a per-event level where every event has a set of knowledgebases in which the event has been defined as
   pathogenic.
 - All efficacy evidences and actionable trials are concatenated. Every efficacy evidence that is present in multiple knowledgebases will be
-  present multiple times
-  in the output.
+  present multiple times in the output.
 
 Within the Hartwig pipeline, SERVE output is used in the following manner:
 
@@ -455,7 +447,7 @@ elsewhere.
     - `CKB_EVIDENCE` and `CKB_TRIALS` are merged back into one source `CKB`.
     - iClusion is no longer supported.
 - [6.1.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v6.1.0)
-    - Take gene role into account when comparing / sorting known genes (bug-fix) 
+    - Take gene role into account when comparing / sorting known genes (bug-fix)
     - Support reading of gene roles from Hartwig curated and driver gene sources.
 - [6.0.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v6.0.0)
     - Convert output to JSON format instead of TSV

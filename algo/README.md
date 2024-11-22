@@ -48,25 +48,42 @@ they are compliant with the usage of the data itself.
 
 SERVE generates clinical evidence in the following datamodel:
 
-- Either one of the following interventions:
-    - Treatment (name of drug(s))
-        - Treatment approach underlying the treatment based on drug class.
-        - Treatment approach underlying the treatment based on drug name.
-    - Clinical trial (name of trial)
-        - The NCT ID of the study
-        - The title of the study
-        - The acronym of the study
-        - For which gender the study is an option
-        - The countries where the study is active
-        - The name of the therapy given in the trial
-- Cancer type (annotated with DOID) for which the treatment is considered on-label.
-- Excluded cancer subtypes (annotated with DOID) that should be children of the main cancer type and are used for filtering
-  specific types of the main cancer type.
+Efficacy evidences:
+
+- The source of the evidence (e.g. CKB, VICC, etc.)
+- Treatment
+    - Name of drug
+    - Treatment approach underlying the treatment based on drug class.
+    - Treatment approach underlying the treatment based on drug name.
+- Indication:
+    - Cancer type (annotated with DOID) for which the treatment is considered on-label.
+    - Excluded cancer subtypes (annotated with DOID) that should be children of the main cancer type and are used for filtering
+      specific types of the main cancer type.
+- Molecular criterium for which the evidence applies
+- Efficacy description
 - Tier / Evidence level of the treatment
-- Direction (Responsive for the treatment, resistant to the treatment, decreased response to the treatment or whether mutation implies no
+- Evidence level details (e.g. Preclinical, case reports, guideline etc.)
+- Evidence direction (Responsive for the treatment, resistant to the treatment, decreased response to the treatment or whether mutation
+  implies no
   benefit for the treatment)
-- A set of URLs pointing towards the source website which provide extra information about the treatment.
+- Evidence year
 - A set of URLs with extra information about the evidence (e.g. publications backing up the evidence)
+
+Actionable trials:
+
+- The source of the trial (currently always CKB)
+- The NCT ID of the study
+- The title of the study
+- The acronym of the study
+- The countries where the study is active
+- The name(s) of the therapies given in the trial
+- For which gender the study is an option
+- Indications:
+    - Cancer type (annotated with DOID) for which the treatment is considered on-label.
+    - Excluded cancer subtypes (annotated with DOID) that should be children of the main cancer type and are used for filtering
+      specific types of the main cancer type.
+- Any molecular criteria required or partial required for the trial
+- A set of URLs with extra information about the trial (e.g. the link to the trial information on clinicaltrials.gov)
 
 The following genomic events and tumor characteristics can be mapped to clinical evidence:
 
@@ -276,9 +293,9 @@ Also, genes that do not follow HGNC model are renamed to their HGNC name.
 
 For CKB FLEX curation and filtering is predominantly configurable rather than fixed in SERVE. The only fixed curation done in SERVE
 is mapping evidence for tumor characteristics (such as MSI or High TMB) to actual characteristics since CKB FLEX models this as "genes".
-SERVE configures every trial to B-level evidence with `RESPONSIVE` direction. SERVE only considers trials with one or more molecular
-inclusion criterion. Furthermore, SERVE only considers Dutch, German and Belgium trials with a potentially open recruitment status ("
-Recruiting", "Not yet recruiting", or "Unknown status") and required requirement type ("partial - required" and "required").
+SERVE only considers trials with one or more molecular inclusion criterion. Furthermore, SERVE only considers Dutch, German and Belgium
+trials with a potentially open recruitment status ("Recruiting", "Not yet recruiting", "approved for marketing", "available" or "enrolling
+by invitation") and required requirement type ("partial - required" and "required").
 
 The following filters can be configured for CKB FLEX, along with an example of how this is used by Hartwig:
 
@@ -372,22 +389,23 @@ There are a few additional checks for specific types of knowledge:
 
 Every knowledgebase can be enabled or disabled through configuration.
 SERVE starts with reading the various knowledgebases which are enabled. Knowledge is extracted after applying filtering and curation.
-A knowledgebase can contribute to known and/or actionable events. Current configuration as follows:
+A knowledgebase can contribute to known and/or efficacy evidences and/or actionable trials. Current configuration as follows:
 
-| Knowledgebase   | Ref genome version | Contributes to known events? | Contributes to actionable events? |
-|-----------------|--------------------|------------------------------|-----------------------------------|
-| CKB FLEX        | v38                | Yes                          | Yes                               |
-| DoCM            | v37                | Yes                          | No                                |
-| Hartwig Cohort  | v37                | Yes                          | No                                |
-| Hartwig Curated | v37                | Yes                          | No                                |
-| VICC            | v37                | Yes                          | Yes                               |
+| Knowledgebase   | Ref genome version | Contributes to known events? | Contributes to efficacy evidences? | Contributes to actionable trials? |
+|-----------------|--------------------|------------------------------|------------------------------------|-----------------------------------|
+| CKB FLEX        | v38                | Yes                          | Yes                                | Yes                               |
+| DoCM            | v37                | Yes                          | No                                 | No                                |
+| Hartwig Cohort  | v37                | Yes                          | No                                 | No                                |
+| Hartwig Curated | v37                | Yes                          | No                                 | No                                |
+| VICC            | v37                | Yes                          | Yes                                | No                                |
 
 Knowledge extraction is performed on a per-knowledgebase level after which all events are consolidated as follows:
 
 - All known events are aggregated on a per-event level where every event has a set of knowledgebases in which the event has been defined as
   pathogenic.
-- All actionable events are concatenated. Every actionable event that is present in multiple knowledgebases will be present multiple times
-  in the actionable output.
+- All efficacy evidences and actionable trials are concatenated. Every efficacy evidence that is present in multiple knowledgebases will be
+  present multiple times
+  in the output.
 
 Within the Hartwig pipeline, SERVE output is used in the following manner:
 
@@ -433,7 +451,7 @@ elsewhere.
 ## Version History and Download Links
 
 - Upcoming
-    - New datamodel with main change the separation of trials and efficacy evidence.
+    - Redesign SERVE datamodel to split trials from evidence and support complex profiles.
     - `CKB_EVIDENCE` and `CKB_TRIALS` are merged back into one source `CKB`.
     - iClusion is no longer supported.
 - [6.1.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v6.1.0)

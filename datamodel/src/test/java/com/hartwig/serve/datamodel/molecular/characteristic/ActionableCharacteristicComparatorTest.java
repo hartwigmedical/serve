@@ -2,9 +2,8 @@ package com.hartwig.serve.datamodel.molecular.characteristic;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import com.google.common.collect.Lists;
 
 import org.junit.Test;
 
@@ -27,7 +26,7 @@ public class ActionableCharacteristicComparatorTest {
                 .sourceEvent("event3")
                 .build();
 
-        List<ActionableCharacteristic> characteristics = Lists.newArrayList(characteristic3, characteristic1, characteristic2);
+        List<ActionableCharacteristic> characteristics = new ArrayList<>(List.of(characteristic3, characteristic1, characteristic2));
         characteristics.sort(new ActionableCharacteristicComparator());
 
         assertEquals(characteristic1, characteristics.get(0));

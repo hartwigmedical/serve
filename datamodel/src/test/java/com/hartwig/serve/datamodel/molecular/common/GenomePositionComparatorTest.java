@@ -2,9 +2,8 @@ package com.hartwig.serve.datamodel.molecular.common;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import com.google.common.collect.Lists;
 
 import org.junit.Test;
 
@@ -17,7 +16,7 @@ public class GenomePositionComparatorTest {
         GenomePosition position3 = CommonTestFactory.createGenomePosition("2", 5);
         GenomePosition position4 = CommonTestFactory.createGenomePosition("X", 1);
 
-        List<GenomePosition> positions = Lists.newArrayList(position3, position1, position4, position2);
+        List<GenomePosition> positions = new ArrayList<>(List.of(position3, position1, position4, position2));
         positions.sort(new GenomePositionComparator());
 
         assertEquals(position1, positions.get(0));

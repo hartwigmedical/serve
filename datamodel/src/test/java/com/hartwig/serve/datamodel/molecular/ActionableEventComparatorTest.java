@@ -3,11 +3,10 @@ package com.hartwig.serve.datamodel.molecular;
 import static org.junit.Assert.assertEquals;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-
-import com.google.common.collect.Lists;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
@@ -21,7 +20,9 @@ public class ActionableEventComparatorTest {
         ActionableEvent actionableEvent3 = create(LocalDate.of(2023, 1, 1), "event 1", createUrls("url 1"));
         ActionableEvent actionableEvent4 = create(LocalDate.of(2024, 1, 1), "event 2", createUrls("url 1", "url 2"));
 
-        List<ActionableEvent> actionableEvents = Lists.newArrayList(actionableEvent3, actionableEvent1, actionableEvent4, actionableEvent2);
+        List<ActionableEvent> actionableEvents = new ArrayList<>(
+            List.of(actionableEvent3, actionableEvent1, actionableEvent4, actionableEvent2)
+        );
         actionableEvents.sort(new ActionableEventComparator());
 
         assertEquals(actionableEvent1, actionableEvents.get(0));

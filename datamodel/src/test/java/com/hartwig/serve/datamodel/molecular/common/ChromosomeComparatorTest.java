@@ -2,9 +2,8 @@ package com.hartwig.serve.datamodel.molecular.common;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import com.google.common.collect.Lists;
 
 import org.junit.Test;
 
@@ -19,7 +18,7 @@ public class ChromosomeComparatorTest {
         String chromosome5 = "Y";
         String chromosome6 = "chrM";
 
-        List<String> chromosomes = Lists.newArrayList(chromosome5, chromosome4, chromosome1, chromosome6, chromosome2, chromosome3);
+        List<String> chromosomes = new ArrayList<>(List.of(chromosome5, chromosome4, chromosome1, chromosome6, chromosome2, chromosome3));
         chromosomes.sort(new ChromosomeComparator());
 
         assertEquals(chromosome1, chromosomes.get(0));

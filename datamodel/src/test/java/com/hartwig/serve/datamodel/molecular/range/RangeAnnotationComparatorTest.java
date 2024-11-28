@@ -2,9 +2,9 @@ package com.hartwig.serve.datamodel.molecular.range;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import com.google.common.collect.Lists;
 import com.hartwig.serve.datamodel.molecular.MutationType;
 
 import org.jetbrains.annotations.NotNull;
@@ -19,7 +19,7 @@ public class RangeAnnotationComparatorTest {
         RangeAnnotation annotation3 = create("gene B", "22", MutationType.ANY);
         RangeAnnotation annotation4 = create("gene A", "X", MutationType.ANY);
 
-        List<RangeAnnotation> annotations = Lists.newArrayList(annotation3, annotation4, annotation1, annotation2);
+        List<RangeAnnotation> annotations = new ArrayList<>(List.of(annotation3, annotation4, annotation1, annotation2));
         annotations.sort(new RangeAnnotationComparator());
 
         assertEquals(annotation1, annotations.get(0));

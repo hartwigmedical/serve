@@ -2,9 +2,9 @@ package com.hartwig.serve.datamodel.molecular.characteristic;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import com.google.common.collect.Lists;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -22,7 +22,9 @@ public class TumorCharacteristicComparatorTest {
                 create(TumorCharacteristicType.MICROSATELLITE_UNSTABLE, TumorCharacteristicCutoffType.GREATER, 4D);
         TumorCharacteristic characteristic4 = create(TumorCharacteristicType.MICROSATELLITE_UNSTABLE, null, null);
 
-        List<TumorCharacteristic> characteristics = Lists.newArrayList(characteristic1, characteristic3, characteristic4, characteristic2);
+        List<TumorCharacteristic> characteristics = new ArrayList<>(
+            List.of(characteristic1, characteristic3, characteristic4, characteristic2)
+        );
         characteristics.sort(new TumorCharacteristicComparator());
 
         assertEquals(characteristic1, characteristics.get(0));

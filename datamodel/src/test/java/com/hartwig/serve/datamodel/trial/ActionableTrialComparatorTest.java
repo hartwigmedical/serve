@@ -2,10 +2,10 @@ package com.hartwig.serve.datamodel.trial;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import com.google.common.collect.Lists;
 import com.hartwig.serve.datamodel.Knowledgebase;
 
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +20,7 @@ public class ActionableTrialComparatorTest {
         ActionableTrial actionableTrial3 = create(Knowledgebase.DOCM, "nct2", "Netherlands", "therapy 1", GenderCriterium.FEMALE);
         ActionableTrial actionableTrial4 = create(Knowledgebase.VICC_CGI, "nct1", "Belgium", "therapy 1", GenderCriterium.FEMALE);
 
-        List<ActionableTrial> actionableTrials = Lists.newArrayList(actionableTrial3, actionableTrial1, actionableTrial4, actionableTrial2);
+        List<ActionableTrial> actionableTrials = new ArrayList<>(List.of(actionableTrial3, actionableTrial1, actionableTrial4, actionableTrial2));
         actionableTrials.sort(new ActionableTrialComparator());
 
         assertEquals(actionableTrial1, actionableTrials.get(0));

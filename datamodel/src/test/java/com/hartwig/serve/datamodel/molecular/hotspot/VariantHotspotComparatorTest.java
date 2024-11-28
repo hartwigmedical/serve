@@ -2,9 +2,8 @@ package com.hartwig.serve.datamodel.molecular.hotspot;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import com.google.common.collect.Lists;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
@@ -20,7 +19,7 @@ public class VariantHotspotComparatorTest {
         VariantHotspot hotspot5 = create("gene A", "X", 10, "A", "T");
         VariantHotspot hotspot6 = create("gene A", "X", 15, "A", "T");
 
-        List<VariantHotspot> hotspots = Lists.newArrayList(hotspot4, hotspot3, hotspot1, hotspot6, hotspot5, hotspot2);
+        List<VariantHotspot> hotspots = new ArrayList<>(List.of(hotspot4, hotspot3, hotspot1, hotspot6, hotspot5, hotspot2));
         hotspots.sort(new VariantHotspotComparator());
 
         assertEquals(hotspot1, hotspots.get(0));

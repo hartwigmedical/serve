@@ -2,9 +2,9 @@ package com.hartwig.serve.datamodel.molecular.gene;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import com.google.common.collect.Lists;
 import com.hartwig.serve.datamodel.molecular.common.GeneRole;
 
 import org.junit.Test;
@@ -17,7 +17,7 @@ public class KnownGeneComparatorTest {
         KnownGene gene2 = GeneTestFactory.knownGeneBuilder().gene("A").geneRole(GeneRole.TSG).build();
         KnownGene gene3 = GeneTestFactory.knownGeneBuilder().gene("B").geneRole(GeneRole.ONCO).build();
 
-        List<KnownGene> genes = Lists.newArrayList(gene2, gene3, gene1);
+        List<KnownGene> genes = new ArrayList<>(List.of(gene2, gene3, gene1));
         genes.sort(new KnownGeneComparator());
 
         assertEquals(gene1, genes.get(0));

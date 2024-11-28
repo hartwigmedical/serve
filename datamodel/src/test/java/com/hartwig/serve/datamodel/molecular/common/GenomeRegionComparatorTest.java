@@ -2,9 +2,8 @@ package com.hartwig.serve.datamodel.molecular.common;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import com.google.common.collect.Lists;
 
 import org.junit.Test;
 
@@ -18,7 +17,7 @@ public class GenomeRegionComparatorTest {
         GenomeRegion region4 = CommonTestFactory.createGenomeRegion("X", 5, 20);
         GenomeRegion region5 = CommonTestFactory.createGenomeRegion("X", 10, 15);
 
-        List<GenomeRegion> regions = Lists.newArrayList(region3, region5, region1, region2, region4);
+        List<GenomeRegion> regions = new ArrayList<>(List.of(region3, region5, region1, region2, region4));
         regions.sort(new GenomeRegionComparator());
 
         assertEquals(region1, regions.get(0));

@@ -1,10 +1,10 @@
 package com.hartwig.serve.datamodel.trial;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.molecular.MolecularCriterium;
 
@@ -22,12 +22,12 @@ public final class TrialTestFactory {
                 .source(Knowledgebase.UNKNOWN)
                 .nctId(Strings.EMPTY)
                 .title(Strings.EMPTY)
-                .countries(Sets.newHashSet())
-                .therapyNames(Sets.newHashSet())
+                .countries(Collections.emptySet())
+                .therapyNames(Collections.emptySet())
                 .genderCriterium(GenderCriterium.BOTH)
-                .indications(Sets.newHashSet())
-                .anyMolecularCriteria(Sets.newHashSet())
-                .urls(Sets.newHashSet());
+                .indications(Collections.emptySet())
+                .anyMolecularCriteria(Collections.emptySet())
+                .urls(Collections.emptySet());
     }
 
     @NotNull
@@ -37,7 +37,7 @@ public final class TrialTestFactory {
 
     @NotNull
     public static ImmutableCountry.Builder countryBuilder() {
-        return ImmutableCountry.builder().name(Strings.EMPTY).hospitalsPerCity(Maps.newHashMap());
+        return ImmutableCountry.builder().name(Strings.EMPTY).hospitalsPerCity(new HashMap<>());
     }
 
     @NotNull

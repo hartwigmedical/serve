@@ -1,10 +1,11 @@
 package com.hartwig.serve.datamodel;
 
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.StringJoiner;
+import java.util.TreeSet;
 
-import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.efficacy.EvidenceLevel;
 
 import org.apache.logging.log4j.LogManager;
@@ -69,7 +70,7 @@ public enum Knowledgebase {
 
     @NotNull
     public static Set<Knowledgebase> fromCommaSeparatedSourceString(@NotNull String sources) {
-        Set<Knowledgebase> consolidated = Sets.newHashSet();
+        Set<Knowledgebase> consolidated = new HashSet<>();
 
         for (String source : sources.split(",")) {
             Knowledgebase knowledgebase = lookupKnowledgebase(source);
@@ -95,7 +96,7 @@ public enum Knowledgebase {
 
     @NotNull
     public static String toCommaSeparatedSourceString(@NotNull Set<Knowledgebase> sources) {
-        Set<Knowledgebase> sorted = Sets.newTreeSet(Comparator.naturalOrder());
+        Set<Knowledgebase> sorted = new TreeSet<>(Comparator.naturalOrder());
         sorted.addAll(sources);
 
         StringJoiner joiner = new StringJoiner(",");

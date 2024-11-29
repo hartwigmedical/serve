@@ -2,9 +2,8 @@ package com.hartwig.serve.datamodel.molecular.common;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import com.google.common.collect.Lists;
 
 import org.junit.Test;
 
@@ -19,7 +18,9 @@ public class GeneAlterationComparatorTest {
         GeneAlteration alteration5 = CommonTestFactory.createGeneAlteration(GeneRole.TSG, ProteinEffect.NO_EFFECT, true);
         GeneAlteration alteration6 = CommonTestFactory.createGeneAlteration(GeneRole.TSG, ProteinEffect.NO_EFFECT, null);
 
-        List<GeneAlteration> alterations = Lists.newArrayList(alteration5, alteration4, alteration3, alteration6, alteration1, alteration2);
+        List<GeneAlteration> alterations = new ArrayList<>(
+            List.of(alteration5, alteration4, alteration3, alteration6, alteration1, alteration2)
+        );
         alterations.sort(new GeneAlterationComparator());
 
         assertEquals(alteration1, alterations.get(0));

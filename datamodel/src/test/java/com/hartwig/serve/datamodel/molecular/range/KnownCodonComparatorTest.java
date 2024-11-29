@@ -2,9 +2,8 @@ package com.hartwig.serve.datamodel.molecular.range;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import com.google.common.collect.Lists;
 
 import org.junit.Test;
 
@@ -17,7 +16,7 @@ public class KnownCodonComparatorTest {
         KnownCodon codon3 = RangeTestFactory.knownCodonBuilder().chromosome("1").inputTranscript("trans 2").inputCodonRank(1).build();
         KnownCodon codon4 = RangeTestFactory.knownCodonBuilder().chromosome("2").inputTranscript("trans 1").inputCodonRank(1).build();
 
-        List<KnownCodon> codons = Lists.newArrayList(codon3, codon4, codon2, codon1);
+        List<KnownCodon> codons = new ArrayList<>(List.of(codon3, codon4, codon2, codon1));
         codons.sort(new KnownCodonComparator());
 
         assertEquals(codon1, codons.get(0));

@@ -27,7 +27,6 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.google.common.annotations.VisibleForTesting;
 import com.hartwig.serve.datamodel.ServeDatabase;
 
 import org.jetbrains.annotations.NotNull;
@@ -62,12 +61,10 @@ public final class ServeJson {
     }
 
     @NotNull
-    @VisibleForTesting
     static ServeDatabase readFromStream(@NotNull InputStream inputStream) throws IOException {
         return MAPPER.readValue(inputStream, ServeDatabase.class);
     }
 
-    @VisibleForTesting
     static void writeToStream(@NotNull ServeDatabase record, @NotNull OutputStream outputStream) throws IOException {
         MAPPER.writeValue(outputStream, record);
     }

@@ -7,7 +7,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import com.google.common.io.Resources;
 import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.datamodel.ServeDatabase;
 import com.hartwig.serve.datamodel.ServeRecord;
@@ -18,7 +17,7 @@ import org.junit.Test;
 
 public class ServeJsonTest {
 
-    private static final String TEST_SERVE_JSON = Resources.getResource("example.serve.json").getPath();
+    private static final String TEST_SERVE_JSON = ServeJsonTest.class.getResource("/example.serve.json").getPath();
 
     @Test
     public void canRoundTripEmptyDatabase() throws IOException {

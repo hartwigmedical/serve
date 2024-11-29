@@ -1,12 +1,10 @@
 package com.hartwig.serve.datamodel.molecular;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 
-import com.google.common.collect.Sets;
-
-import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 
 public final class MolecularTestFactory {
@@ -16,7 +14,7 @@ public final class MolecularTestFactory {
 
     @NotNull
     public static ActionableEvent createTestActionableEvent() {
-        return new ActionableEventImpl(LocalDate.EPOCH, Strings.EMPTY, Sets.newHashSet());
+        return new ActionableEventImpl(LocalDate.EPOCH, "", Collections.emptySet());
     }
 
     private static class ActionableEventImpl implements ActionableEvent {

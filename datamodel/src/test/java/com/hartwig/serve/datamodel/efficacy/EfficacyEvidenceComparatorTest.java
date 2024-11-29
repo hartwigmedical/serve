@@ -2,10 +2,10 @@ package com.hartwig.serve.datamodel.efficacy;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.Knowledgebase;
 
 import org.apache.logging.log4j.util.Strings;
@@ -21,7 +21,7 @@ public class EfficacyEvidenceComparatorTest {
         EfficacyEvidence evidence3 = create("CancerA", EvidenceLevel.B, EvidenceLevelDetails.CLINICAL_STUDY, EvidenceDirection.RESPONSIVE);
         EfficacyEvidence evidence4 = create("CancerB", EvidenceLevel.A, EvidenceLevelDetails.CLINICAL_STUDY, EvidenceDirection.RESPONSIVE);
 
-        List<EfficacyEvidence> efficacyEvidences = Lists.newArrayList(evidence4, evidence1, evidence3, evidence2);
+        List<EfficacyEvidence> efficacyEvidences = new ArrayList<>(List.of(evidence4, evidence1, evidence3, evidence2));
         efficacyEvidences.sort(new EfficacyEvidenceComparator());
 
         assertEquals(evidence1, efficacyEvidences.get(0));
@@ -33,13 +33,15 @@ public class EfficacyEvidenceComparatorTest {
     @NotNull
     private static EfficacyEvidence create(@NotNull String applicableCancerType, @NotNull EvidenceLevel evidenceLevel,
             @NotNull EvidenceLevelDetails evidenceLevelDetails, @NotNull EvidenceDirection evidenceDirection) {
-        return EfficacyEvidenceTestFactory.createTestEfficacyEvidence(Knowledgebase.UNKNOWN,
-                applicableCancerType,
-                Strings.EMPTY,
-                evidenceLevel,
-                evidenceLevelDetails,
-                evidenceDirection,
-                2024,
-                Sets.newHashSet());
+        return EfficacyEvidenceTestFactory.createTestEfficacyEvidence(
+            Knowledgebase.UNKNOWN,
+            applicableCancerType,
+            Strings.EMPTY,
+            evidenceLevel,
+            evidenceLevelDetails,
+            evidenceDirection,
+            2024,
+            Collections.emptySet()
+        );
     }
 }

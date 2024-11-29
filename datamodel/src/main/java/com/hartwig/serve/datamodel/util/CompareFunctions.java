@@ -3,8 +3,6 @@ package com.hartwig.serve.datamodel.util;
 import java.util.Iterator;
 import java.util.Set;
 
-import com.google.common.annotations.VisibleForTesting;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -43,7 +41,6 @@ public final class CompareFunctions {
         return compareNullable(int1, int2);
     }
 
-    @VisibleForTesting
     static <T extends Comparable<T>> int compareNullable(@Nullable T obj1, @Nullable T obj2) {
         if (obj1 == null && obj2 == null) {
             return 0;

@@ -442,6 +442,8 @@ elsewhere.
 
 ## Version History and Download Links
 
+- [7.1.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v7.1.0)
+    - Purely technical update where dependency on Google guava has been removed from the datamodel artifact
 - [7.0.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v7.0.0)
     - Redesign SERVE datamodel to split trials from evidence and support complex profiles.
     - `CKB_EVIDENCE` and `CKB_TRIALS` are merged back into one source `CKB`.

@@ -166,11 +166,14 @@ public class EfficacyEvidenceFactoryTest {
 
     @Test
     public void canResolveLevels() {
-        assertNull(EfficacyEvidenceFactory.resolveLevel("NA"));
-        assertEquals(EvidenceLevel.A, EfficacyEvidenceFactory.resolveLevel("A"));
-        assertEquals(EvidenceLevel.B, EfficacyEvidenceFactory.resolveLevel("B"));
-        assertEquals(EvidenceLevel.C, EfficacyEvidenceFactory.resolveLevel("C"));
-        assertEquals(EvidenceLevel.D, EfficacyEvidenceFactory.resolveLevel("D"));
+        assertNull(EfficacyEvidenceFactory.resolveLevel("NA", null));
+        assertEquals(EvidenceLevel.D, EfficacyEvidenceFactory.resolveLevel("NA", EvidenceLevelDetails.PRECLINICAL));
+        assertEquals(EvidenceLevel.D, EfficacyEvidenceFactory.resolveLevel("NA", EvidenceLevelDetails.CASE_REPORTS_SERIES));
+        assertEquals(EvidenceLevel.C, EfficacyEvidenceFactory.resolveLevel(null, EvidenceLevelDetails.CLINICAL_STUDY));
+        assertEquals(EvidenceLevel.A, EfficacyEvidenceFactory.resolveLevel("A", EvidenceLevelDetails.GUIDELINE));
+        assertEquals(EvidenceLevel.B, EfficacyEvidenceFactory.resolveLevel("B", null));
+        assertEquals(EvidenceLevel.C, EfficacyEvidenceFactory.resolveLevel("C", EvidenceLevelDetails.CLINICAL_STUDY));
+        assertEquals(EvidenceLevel.D, EfficacyEvidenceFactory.resolveLevel("D", EvidenceLevelDetails.PRECLINICAL));
     }
 
     @Test

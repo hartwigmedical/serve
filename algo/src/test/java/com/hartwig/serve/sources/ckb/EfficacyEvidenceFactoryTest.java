@@ -166,11 +166,32 @@ public class EfficacyEvidenceFactoryTest {
 
     @Test
     public void canResolveLevels() {
-        assertNull(EfficacyEvidenceFactory.resolveLevel("NA"));
-        assertEquals(EvidenceLevel.A, EfficacyEvidenceFactory.resolveLevel("A"));
-        assertEquals(EvidenceLevel.B, EfficacyEvidenceFactory.resolveLevel("B"));
-        assertEquals(EvidenceLevel.C, EfficacyEvidenceFactory.resolveLevel("C"));
-        assertEquals(EvidenceLevel.D, EfficacyEvidenceFactory.resolveLevel("D"));
+        assertNull(EfficacyEvidenceFactory.resolveLevel("NA", null, null));
+        assertNull(EfficacyEvidenceFactory.resolveLevel("NA", EvidenceLevelDetails.PRECLINICAL, EvidenceDirection.RESPONSIVE));
+        assertNull(EfficacyEvidenceFactory.resolveLevel("NA", EvidenceLevelDetails.CLINICAL_STUDY, null));
+        assertEquals(EvidenceLevel.A,
+                EfficacyEvidenceFactory.resolveLevel("NA", EvidenceLevelDetails.FDA_APPROVED, EvidenceDirection.DECREASED_RESPONSE));
+        assertEquals(EvidenceLevel.A,
+                EfficacyEvidenceFactory.resolveLevel("NA", EvidenceLevelDetails.FDA_CONTRAINDICATED, EvidenceDirection.DECREASED_RESPONSE));
+        assertEquals(EvidenceLevel.A,
+                EfficacyEvidenceFactory.resolveLevel("NA", EvidenceLevelDetails.GUIDELINE, EvidenceDirection.DECREASED_RESPONSE));
+        assertEquals(EvidenceLevel.C,
+                EfficacyEvidenceFactory.resolveLevel("NA", EvidenceLevelDetails.CLINICAL_STUDY, EvidenceDirection.DECREASED_RESPONSE));
+        assertEquals(EvidenceLevel.D,
+                EfficacyEvidenceFactory.resolveLevel("NA", EvidenceLevelDetails.PRECLINICAL, EvidenceDirection.DECREASED_RESPONSE));
+        assertEquals(EvidenceLevel.D,
+                EfficacyEvidenceFactory.resolveLevel("NA", EvidenceLevelDetails.CASE_REPORTS_SERIES, EvidenceDirection.DECREASED_RESPONSE));
+        assertEquals(EvidenceLevel.A,
+                EfficacyEvidenceFactory.resolveLevel("A", EvidenceLevelDetails.GUIDELINE, EvidenceDirection.PREDICTED_RESPONSIVE));
+        assertEquals(EvidenceLevel.B, EfficacyEvidenceFactory.resolveLevel("B", null, EvidenceDirection.RESPONSIVE));
+        assertEquals(EvidenceLevel.C,
+                EfficacyEvidenceFactory.resolveLevel("C", EvidenceLevelDetails.CLINICAL_STUDY, EvidenceDirection.RESPONSIVE));
+        assertEquals(EvidenceLevel.D,
+                EfficacyEvidenceFactory.resolveLevel("D", EvidenceLevelDetails.PRECLINICAL, EvidenceDirection.RESPONSIVE));
+        assertEquals(EvidenceLevel.D,
+                EfficacyEvidenceFactory.resolveLevel("D",
+                        EvidenceLevelDetails.CASE_REPORTS_SERIES,
+                        EvidenceDirection.PREDICTED_RESPONSIVE));
     }
 
     @Test

@@ -89,9 +89,9 @@ class EfficacyEvidenceFactory {
         Set<EfficacyEvidence> efficacyEvidences = Sets.newHashSet();
 
         for (Evidence evidence : evidencesWithUsableType(entry.evidences())) {
-            EvidenceLevel level = resolveLevel(evidence.ampCapAscoEvidenceLevel());
             EvidenceLevelDetails evidenceLevelDetails = resolveEvidenceLevelDetails(evidence.approvalStatus());
             EvidenceDirection direction = resolveDirection(evidence.responseType());
+            EvidenceLevel level = resolveLevel(evidence.ampCapAscoEvidenceLevel(), evidenceLevelDetails, direction);
             Indication indication = ActionableFunctions.extractIndication(evidence.indication());
             int evidenceYear = extractEvidenceYear(entry.createDate(), evidence.references(), evidence.therapy());
 
@@ -189,7 +189,21 @@ class EfficacyEvidenceFactory {
 
     @Nullable
     @VisibleForTesting
-    static EvidenceLevel resolveLevel(@Nullable String evidenceLabel) {
+    static EvidenceLevel resolveLevel(@Nullable String evidenceLabel, @Nullable EvidenceLevelDetails evidenceLevelDetails,
+            @Nullable EvidenceDirection direction) {
+        if (direction == EvidenceDirection.DECREASED_RESPONSE && (evidenceLabel == null || evidenceLabel.equals("NA"))) {
+            if (evidenceLevelDetails == EvidenceLevelDetails.FDA_APPROVED
+                    || evidenceLevelDetails == EvidenceLevelDetails.FDA_CONTRAINDICATED
+                    || evidenceLevelDetails == EvidenceLevelDetails.GUIDELINE) {
+                return EvidenceLevel.A;
+            } else if (evidenceLevelDetails == EvidenceLevelDetails.CLINICAL_STUDY) {
+                return EvidenceLevel.C;
+            } else if (evidenceLevelDetails == EvidenceLevelDetails.PRECLINICAL
+                    || evidenceLevelDetails == EvidenceLevelDetails.CASE_REPORTS_SERIES) {
+                return EvidenceLevel.D;
+            }
+        }
+
         if (evidenceLabel == null || evidenceLabel.equals("NA")) {
             return null;
         }

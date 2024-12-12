@@ -293,6 +293,9 @@ is mapping evidence for tumor characteristics (such as MSI or High TMB) to actua
 SERVE only considers trials with one or more molecular inclusion criterion. Furthermore, SERVE only considers trials with a potentially open
 recruitment status ("Recruiting", "Not yet recruiting", "approved for marketing", "available" or "enrolling by invitation") and required
 requirement type ("partial - required" and "required").
+All evidence without evidence level is filtered in SERVE. Except for decreased response evidence, which is assigned an evidence level based
+on Evidedence Level Details
+(Preclinical or Case report series -> D, Clinical study -> C, FDA approved or Guideline or FDA contraindicated -> A).
 
 The following filters can be configured for CKB FLEX, along with an example of how this is used by Hartwig:
 
@@ -442,6 +445,8 @@ elsewhere.
 
 ## Version History and Download Links
 
+- [7.2.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v7.2.0)
+    - Assign EvidenceLevel to decreased response evidence
 - [7.1.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v7.1.0)
     - Purely technical update where dependency on Google guava has been removed from the datamodel artifact
 - [7.0.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v7.0.0)

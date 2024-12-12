@@ -191,7 +191,7 @@ class EfficacyEvidenceFactory {
     @VisibleForTesting
     static EvidenceLevel resolveLevel(@Nullable String evidenceLabel, @Nullable EvidenceLevelDetails evidenceLevelDetails,
             @Nullable EvidenceDirection direction) {
-        if (direction == EvidenceDirection.DECREASED_RESPONSE) {
+        if (direction == EvidenceDirection.DECREASED_RESPONSE && (evidenceLabel == null || evidenceLabel.equals("NA"))) {
             if (evidenceLevelDetails == EvidenceLevelDetails.FDA_APPROVED
                     || evidenceLevelDetails == EvidenceLevelDetails.FDA_CONTRAINDICATED
                     || evidenceLevelDetails == EvidenceLevelDetails.GUIDELINE) {

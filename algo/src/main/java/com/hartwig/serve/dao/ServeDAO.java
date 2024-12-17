@@ -60,10 +60,10 @@ class ServeDAO {
         LOGGER.info("Writing event interpretations");
         eventInterpretationDAO.write(eventInterpretations);
 
-        LOGGER.info("Writing evidences");
+        LOGGER.info("Writing efficacy evidences");
         efficacyEvidenceDAO.write(serveRecord.evidences());
 
-        LOGGER.info("Writing trials");
+        LOGGER.info("Writing actionable trials");
         actionableTrialDAO.write(serveRecord.trials());
     }
 }

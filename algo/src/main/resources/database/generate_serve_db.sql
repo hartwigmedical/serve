@@ -109,14 +109,14 @@ DROP TABLE IF EXISTS `actionableTrial`;
 CREATE TABLE `actionableTrial`
 (   `id` int NOT NULL AUTO_INCREMENT,
     `source` varchar(50) NOT NULL,
-    `nctId` varchar(100),
+    `nctId` varchar(20),
     `title` varchar(500),
-    `acronym` varchar(250),
+    `acronym` varchar(100),
     `countriesAndCities` varchar(1000),
     `hospitalsPerCity` text,
     `therapyNames` varchar(2000),
     `genderCriterium` varchar(50),
-    `indications` text,
+    `indications` varchar(2000),
     `urls` varchar(100),
     PRIMARY KEY (`id`)
 );

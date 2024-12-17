@@ -114,7 +114,7 @@ CREATE TABLE `actionableTrial`
     `acronym` varchar(250),
     `countriesAndCities` varchar(1000),
     `hospitalsPerCity` text,
-    `therapyNames` varchar(500),
+    `therapyNames` varchar(2000),
     `genderCriterium` varchar(50),
     `indications` text,
     `urls` varchar(100),

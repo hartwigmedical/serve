@@ -445,6 +445,8 @@ elsewhere.
 
 ## Version History and Download Links
 
+- Upcoming
+    - SQL SERVE database has been patched to v7.0.0 (separation of trial and efficacy evidence, multiple criteria per trial).
 - [7.2.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v7.2.0)
     - Assign EvidenceLevel to decreased response evidence
 - [7.1.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v7.1.0)

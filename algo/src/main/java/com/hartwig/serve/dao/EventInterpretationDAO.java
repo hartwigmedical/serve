@@ -40,7 +40,7 @@ class EventInterpretationDAO {
 
     private static void writeEventInterpretationBatch(@NotNull InsertValuesStep5 inserter,
             @NotNull EventInterpretation eventInterpretation) {
-        inserter.values(eventInterpretation.source(),
+        inserter.values(eventInterpretation.source().name(),
                 eventInterpretation.sourceEvent(),
                 eventInterpretation.interpretedGene(),
                 eventInterpretation.interpretedEvent(),

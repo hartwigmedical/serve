@@ -46,22 +46,24 @@ class ServeDAO {
         this.actionableTrialDAO = actionableTrialDAO;
     }
 
-    public void deleteAll() {
+    public void repopulate(@NotNull ServeRecord serveRecord, @NotNull List<EventInterpretation> eventInterpretations) {
         LOGGER.info("Deleting all data from SERVE database");
-
         knownEventsDAO.deleteAll();
         eventInterpretationDAO.deleteAll();
         molecularCriteriumDAO.deleteAll();
         efficacyEvidenceDAO.deleteAll();
         actionableTrialDAO.deleteAll();
-    }
 
-    void repopulate(@NotNull ServeRecord serveRecord, @NotNull List<EventInterpretation> eventInterpretations) {
-        deleteAll();
-
+        LOGGER.info("Writing known events");
         knownEventsDAO.write(serveRecord.knownEvents());
+
+        LOGGER.info("Writing event interpretations");
         eventInterpretationDAO.write(eventInterpretations);
+
+        LOGGER.info("Writing evidences");
         efficacyEvidenceDAO.write(serveRecord.evidences());
+
+        LOGGER.info("Writing trials");
         actionableTrialDAO.write(serveRecord.trials());
     }
 }

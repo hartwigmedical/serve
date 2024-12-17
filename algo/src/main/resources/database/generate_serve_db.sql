@@ -103,7 +103,7 @@ CREATE TABLE `efficacyEvidence`
     `evidenceYear` int NOT NULL,
     `evidenceUrls` varchar(1000) NOT NULL,
     PRIMARY KEY (`id`)
-)
+);
 
 DROP TABLE IF EXISTS `actionableTrial`;
 CREATE TABLE `actionableTrial`
@@ -119,19 +119,19 @@ CREATE TABLE `actionableTrial`
     `indications` text,
     `urls` varchar(100),
     PRIMARY KEY (`id`)
-)
+);
 
 DROP TABLE IF EXISTS `molecularCriterium`;
 CREATE TABLE `molecularCriterium`
 (   `id` int NOT NULL AUTO_INCREMENT,
     PRIMARY KEY (`id`)
-)
+);
 
 DROP TABLE IF EXISTS `trialMolecularCriterium`;
 CREATE TABLE `trialMolecularCriterium`
 (   `actionableTrialId` int NOT NULL,
     `molecularCriteriumId` int NOT NULL
-)
+);
 
 DROP TABLE IF EXISTS `actionableHotspot`;
 CREATE TABLE `actionableHotspot`

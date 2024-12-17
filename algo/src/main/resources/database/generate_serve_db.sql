@@ -3,7 +3,6 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `knownHotspot`;
 CREATE TABLE `knownHotspot`
 (   `id` int NOT NULL AUTO_INCREMENT,
-    `modified` DATETIME NOT NULL,
     `gene` varchar(50) NOT NULL,
     `geneRole` varchar(50) NOT NULL,
     `proteinEffect` varchar(50) NOT NULL,
@@ -21,7 +20,6 @@ CREATE TABLE `knownHotspot`
 DROP TABLE IF EXISTS `knownCodon`;
 CREATE TABLE `knownCodon`
 (   `id` int NOT NULL AUTO_INCREMENT,
-    `modified` DATETIME NOT NULL,
     `gene` varchar(50) NOT NULL,
     `geneRole` varchar(50) NOT NULL,
     `proteinEffect` varchar(50) NOT NULL,
@@ -39,7 +37,6 @@ CREATE TABLE `knownCodon`
 DROP TABLE IF EXISTS `knownExon`;
 CREATE TABLE `knownExon`
 (   `id` int NOT NULL AUTO_INCREMENT,
-    `modified` DATETIME NOT NULL,
     `gene` varchar(50) NOT NULL,
     `geneRole` varchar(50) NOT NULL,
     `proteinEffect` varchar(50) NOT NULL,
@@ -57,7 +54,6 @@ CREATE TABLE `knownExon`
 DROP TABLE IF EXISTS `knownGene`;
 CREATE TABLE `knownGene`
 (   `id` int NOT NULL AUTO_INCREMENT,
-    `modified` DATETIME NOT NULL,
     `gene` varchar(50) NOT NULL,
     `geneRole` varchar(50) NOT NULL,
     `sources` varchar(100) NOT NULL,
@@ -67,7 +63,6 @@ CREATE TABLE `knownGene`
 DROP TABLE IF EXISTS `knownCopyNumber`;
 CREATE TABLE `knownCopyNumber`
 (   `id` int NOT NULL AUTO_INCREMENT,
-    `modified` DATETIME NOT NULL,
     `gene` varchar(50) NOT NULL,
     `geneRole` varchar(50) NOT NULL,
     `proteinEffect` varchar(50) NOT NULL,
@@ -80,7 +75,6 @@ CREATE TABLE `knownCopyNumber`
 DROP TABLE IF EXISTS `knownFusion`;
 CREATE TABLE `knownFusion`
 (   `id` int NOT NULL AUTO_INCREMENT,
-    `modified` DATETIME NOT NULL,
     `geneUp` varchar(50) NOT NULL,
     `minExonUp` varchar(50),
     `maxExonUp` varchar(50),
@@ -96,7 +90,6 @@ CREATE TABLE `knownFusion`
 DROP TABLE IF EXISTS `efficacyEvidence`;
 CREATE TABLE `efficacyEvidence`
 (   `id` int NOT NULL AUTO_INCREMENT,
-    `modified` DATETIME NOT NULL,
     `source` varchar(50) NOT NULL,
     `treatment` varchar(1000) NOT NULL,
     `treatmentApproachesDrugClass` varchar(500),
@@ -115,7 +108,6 @@ CREATE TABLE `efficacyEvidence`
 DROP TABLE IF EXISTS `actionableTrial`;
 CREATE TABLE `actionableTrial`
 (   `id` int NOT NULL AUTO_INCREMENT,
-    `modified` DATETIME NOT NULL,
     `source` varchar(50) NOT NULL,
     `nctId` varchar(100),
     `title` varchar(500),
@@ -129,25 +121,23 @@ CREATE TABLE `actionableTrial`
     PRIMARY KEY (`id`)
 )
 
+DROP TABLE IF EXISTS `molecularCriterium`;
+CREATE TABLE `molecularCriterium`
+(   `id` int NOT NULL AUTO_INCREMENT,
+    PRIMARY KEY (`id`)
+)
+
 DROP TABLE IF EXISTS `trialMolecularCriterium`;
 CREATE TABLE `trialMolecularCriterium`
 (   `actionableTrialId` int NOT NULL,
     `molecularCriteriumId` int NOT NULL
 )
 
-DROP TABLE IF EXISTS `molecularCriterium`;
-CREATE TABLE `molecularCriterium`
-(   `id` int NOT NULL AUTO_INCREMENT,
-    `modified` DATETIME NOT NULL,
-    PRIMARY KEY (`id`)
-)
-
 DROP TABLE IF EXISTS `actionableHotspot`;
 CREATE TABLE `actionableHotspot`
 (   `id` int NOT NULL AUTO_INCREMENT,
-    `modified` DATETIME NOT NULL,
     `molecularCriteriumId` int NOT NULL,
-    `sourceDate` DATETIME NOT NULL,
+    `sourceDate` DATE NOT NULL,
     `sourceEvent` varchar(50) NOT NULL,
     `sourceUrls` varchar(2000),
     `gene` varchar(50) NOT NULL,
@@ -161,9 +151,8 @@ CREATE TABLE `actionableHotspot`
 DROP TABLE IF EXISTS `actionableCodon`;
 CREATE TABLE `actionableCodon`
 (   `id` int NOT NULL AUTO_INCREMENT,
-    `modified` DATETIME NOT NULL,
     `molecularCriteriumId` int NOT NULL,
-    `sourceDate` DATETIME NOT NULL,
+    `sourceDate` DATE NOT NULL,
     `sourceEvent` varchar(50) NOT NULL,
     `sourceUrls` varchar(2000),
     `gene` varchar(50) NOT NULL,
@@ -177,9 +166,8 @@ CREATE TABLE `actionableCodon`
 DROP TABLE IF EXISTS `actionableExon`;
 CREATE TABLE `actionableExon`
 (   `id` int NOT NULL AUTO_INCREMENT,
-    `modified` DATETIME NOT NULL,
     `molecularCriteriumId` int NOT NULL,
-    `sourceDate` DATETIME NOT NULL,
+    `sourceDate` DATE NOT NULL,
     `sourceEvent` varchar(50) NOT NULL,
     `sourceUrls` varchar(2000),
     `gene` varchar(50) NOT NULL,
@@ -193,9 +181,8 @@ CREATE TABLE `actionableExon`
 DROP TABLE IF EXISTS `actionableGene`;
 CREATE TABLE `actionableGene`
 (   `id` int NOT NULL AUTO_INCREMENT,
-    `modified` DATETIME NOT NULL,
     `molecularCriteriumId` int NOT NULL,
-    `sourceDate` DATETIME NOT NULL,
+    `sourceDate` DATE NOT NULL,
     `sourceEvent` varchar(50) NOT NULL,
     `sourceUrls` varchar(2000),
     `gene` varchar(50) NOT NULL,
@@ -206,9 +193,8 @@ CREATE TABLE `actionableGene`
 DROP TABLE IF EXISTS `actionableFusion`;
 CREATE TABLE `actionableFusion`
 (   `id` int NOT NULL AUTO_INCREMENT,
-    `modified` DATETIME NOT NULL,
     `molecularCriteriumId` int NOT NULL,
-    `sourceDate` DATETIME NOT NULL,
+    `sourceDate` DATE NOT NULL,
     `sourceEvent` varchar(50) NOT NULL,
     `sourceUrls` varchar(2000),
     `geneUp` varchar(50) NOT NULL,
@@ -223,9 +209,8 @@ CREATE TABLE `actionableFusion`
 DROP TABLE IF EXISTS `actionableCharacteristic`;
 CREATE TABLE `actionableCharacteristic`
 (   `id` int NOT NULL AUTO_INCREMENT,
-    `modified` DATETIME NOT NULL,
     `molecularCriteriumId` int NOT NULL,
-    `sourceDate` DATETIME NOT NULL,
+    `sourceDate` DATE NOT NULL,
     `sourceEvent` varchar(50) NOT NULL,
     `sourceUrls` varchar(2000),
     `type` varchar(50) NOT NULL,
@@ -237,9 +222,8 @@ CREATE TABLE `actionableCharacteristic`
 DROP TABLE IF EXISTS `actionableHla`;
 CREATE TABLE `actionableHla`
 (   `id` int NOT NULL AUTO_INCREMENT,
-    `modified` DATETIME NOT NULL,
     `molecularCriteriumId` int NOT NULL,
-    `sourceDate` DATETIME NOT NULL,
+    `sourceDate` DATE NOT NULL,
     `sourceEvent` varchar(50) NOT NULL,
     `sourceUrls` varchar(2000),
     `hlaAllele` varchar(50) NOT NULL,
@@ -249,7 +233,6 @@ CREATE TABLE `actionableHla`
 DROP TABLE IF EXISTS `eventInterpretation`;
 CREATE TABLE `eventInterpretation`
 (   `id` int NOT NULL AUTO_INCREMENT,
-    `modified` DATETIME NOT NULL,
     `source` varchar(100) NOT NULL,
     `sourceEvent` varchar(250),
     `interpretedGene` varchar(100),

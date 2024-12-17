@@ -2,7 +2,6 @@ package com.hartwig.serve.dao;
 
 import static com.hartwig.serve.database.Tables.EVENTINTERPRETATION;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 import com.google.common.collect.Iterables;
@@ -10,7 +9,7 @@ import com.hartwig.serve.extraction.events.EventInterpretation;
 
 import org.jetbrains.annotations.NotNull;
 import org.jooq.DSLContext;
-import org.jooq.InsertValuesStep6;
+import org.jooq.InsertValuesStep5;
 
 @SuppressWarnings({ "unchecked", "ResultOfMethodCallIgnored" })
 class EventInterpretationDAO {
@@ -26,24 +25,22 @@ class EventInterpretationDAO {
         context.deleteFrom(EVENTINTERPRETATION).execute();
     }
 
-    public void write(@NotNull Timestamp timestamp, @NotNull List<EventInterpretation> eventInterpretations) {
+    public void write(@NotNull List<EventInterpretation> eventInterpretations) {
         for (List<EventInterpretation> batch : Iterables.partition(eventInterpretations, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
-            InsertValuesStep6 inserter = context.insertInto(EVENTINTERPRETATION,
-                    EVENTINTERPRETATION.MODIFIED,
+            InsertValuesStep5 inserter = context.insertInto(EVENTINTERPRETATION,
                     EVENTINTERPRETATION.SOURCE,
                     EVENTINTERPRETATION.SOURCEEVENT,
                     EVENTINTERPRETATION.INTERPRETEDGENE,
                     EVENTINTERPRETATION.INTERPRETEDEVENT,
                     EVENTINTERPRETATION.INTERPRETEDEVENTTYPE);
-            batch.forEach(entry -> writeEventInterpretationBatch(timestamp, inserter, entry));
+            batch.forEach(entry -> writeEventInterpretationBatch(inserter, entry));
             inserter.execute();
         }
     }
 
-    private static void writeEventInterpretationBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep6 inserter,
+    private static void writeEventInterpretationBatch(@NotNull InsertValuesStep5 inserter,
             @NotNull EventInterpretation eventInterpretation) {
-        inserter.values(timestamp,
-                eventInterpretation.source(),
+        inserter.values(eventInterpretation.source(),
                 eventInterpretation.sourceEvent(),
                 eventInterpretation.interpretedGene(),
                 eventInterpretation.interpretedEvent(),

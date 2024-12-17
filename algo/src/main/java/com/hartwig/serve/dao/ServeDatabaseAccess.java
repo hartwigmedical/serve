@@ -89,6 +89,6 @@ public class ServeDatabaseAccess {
     }
 
     public void writeServeRecord(@NotNull ServeRecord serveRecord, @NotNull List<EventInterpretation> eventInterpretations) {
-        serveDAO.write(serveRecord, eventInterpretations);
+        serveDAO.repopulate(serveRecord, eventInterpretations);
     }
 }

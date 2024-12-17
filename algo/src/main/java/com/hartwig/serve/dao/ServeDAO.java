@@ -7,16 +7,13 @@ import static com.hartwig.serve.database.Tables.ACTIONABLEFUSION;
 import static com.hartwig.serve.database.Tables.ACTIONABLEGENE;
 import static com.hartwig.serve.database.Tables.ACTIONABLEHLA;
 import static com.hartwig.serve.database.Tables.ACTIONABLEHOTSPOT;
-import static com.hartwig.serve.database.Tables.EVENTINTERPRETATION;
-import static com.hartwig.serve.database.Tables.KNOWNCODON;
-import static com.hartwig.serve.database.Tables.KNOWNCOPYNUMBER;
-import static com.hartwig.serve.database.Tables.KNOWNEXON;
-import static com.hartwig.serve.database.Tables.KNOWNFUSION;
-import static com.hartwig.serve.database.Tables.KNOWNGENE;
-import static com.hartwig.serve.database.Tables.KNOWNHOTSPOT;
+import static com.hartwig.serve.database.Tables.ACTIONABLETRIAL;
+import static com.hartwig.serve.database.Tables.EFFICACYEVIDENCE;
+import static com.hartwig.serve.database.Tables.TRIALMOLECULARCRITERIUM;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -26,7 +23,6 @@ import java.util.stream.Collectors;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
-import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.ServeRecord;
 import com.hartwig.serve.datamodel.common.CancerType;
 import com.hartwig.serve.datamodel.common.Indication;
@@ -34,20 +30,13 @@ import com.hartwig.serve.datamodel.efficacy.EfficacyEvidence;
 import com.hartwig.serve.datamodel.efficacy.EvidenceDirection;
 import com.hartwig.serve.datamodel.efficacy.EvidenceLevel;
 import com.hartwig.serve.datamodel.efficacy.EvidenceLevelDetails;
-import com.hartwig.serve.datamodel.molecular.KnownEvents;
 import com.hartwig.serve.datamodel.molecular.MolecularCriterium;
 import com.hartwig.serve.datamodel.molecular.characteristic.ActionableCharacteristic;
 import com.hartwig.serve.datamodel.molecular.fusion.ActionableFusion;
-import com.hartwig.serve.datamodel.molecular.fusion.KnownFusion;
 import com.hartwig.serve.datamodel.molecular.gene.ActionableGene;
-import com.hartwig.serve.datamodel.molecular.gene.KnownCopyNumber;
-import com.hartwig.serve.datamodel.molecular.gene.KnownGene;
 import com.hartwig.serve.datamodel.molecular.hotspot.ActionableHotspot;
-import com.hartwig.serve.datamodel.molecular.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.molecular.immuno.ActionableHLA;
 import com.hartwig.serve.datamodel.molecular.range.ActionableRange;
-import com.hartwig.serve.datamodel.molecular.range.KnownCodon;
-import com.hartwig.serve.datamodel.molecular.range.KnownExon;
 import com.hartwig.serve.datamodel.trial.ActionableTrial;
 import com.hartwig.serve.datamodel.trial.Country;
 import com.hartwig.serve.datamodel.trial.Hospital;
@@ -59,15 +48,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jooq.DSLContext;
-import org.jooq.InsertValuesStep10;
-import org.jooq.InsertValuesStep12;
-import org.jooq.InsertValuesStep4;
-import org.jooq.InsertValuesStep6;
-import org.jooq.InsertValuesStep7;
+import org.jooq.InsertValuesStep13;
 import org.jooq.InsertValuesStepN;
 
 @SuppressWarnings({ "unchecked", "ResultOfMethodCallIgnored" })
-public class ServeDAO {
+class ServeDAO {
 
     private static final Logger LOGGER = LogManager.getLogger(ServeDAO.class);
 
@@ -76,257 +61,77 @@ public class ServeDAO {
 
     @NotNull
     private final DSLContext context;
+    @NotNull
+    private final KnownEventsDAO knownEventsDAO;
+    @NotNull
+    private final EventInterpretationDAO eventInterpretationDAO;
+    @NotNull
+    private final MolecularCriteriumDAO molecularCriteriumDAO;
 
-    ServeDAO(@NotNull final DSLContext context) {
+    @NotNull
+    public static ServeDAO create(@NotNull DSLContext context) {
+        KnownEventsDAO knownEventsDAO = new KnownEventsDAO(context);
+        EventInterpretationDAO eventInterpretationDAO = new EventInterpretationDAO(context);
+        MolecularCriteriumDAO molecularCriteriumDAO = new MolecularCriteriumDAO(context);
+
+        return new ServeDAO(context, knownEventsDAO, eventInterpretationDAO, molecularCriteriumDAO);
+    }
+
+    private ServeDAO(@NotNull final DSLContext context, @NotNull final KnownEventsDAO knownEventsDAO,
+            @NotNull final EventInterpretationDAO eventInterpretationDAO, @NotNull final MolecularCriteriumDAO molecularCriteriumDAO) {
         this.context = context;
+        this.knownEventsDAO = knownEventsDAO;
+        this.eventInterpretationDAO = eventInterpretationDAO;
+        this.molecularCriteriumDAO = molecularCriteriumDAO;
     }
 
     public void deleteAll() {
         LOGGER.info("Deleting all data from SERVE database");
-        context.deleteFrom(ACTIONABLEHOTSPOT).execute();
-        context.deleteFrom(ACTIONABLECODON).execute();
-        context.deleteFrom(ACTIONABLEEXON).execute();
-        context.deleteFrom(ACTIONABLEGENE).execute();
-        context.deleteFrom(ACTIONABLEFUSION).execute();
-        context.deleteFrom(ACTIONABLECHARACTERISTIC).execute();
-        context.deleteFrom(ACTIONABLEHLA).execute();
-        context.deleteFrom(KNOWNHOTSPOT).execute();
-        context.deleteFrom(KNOWNCODON).execute();
-        context.deleteFrom(KNOWNEXON).execute();
-        context.deleteFrom(KNOWNGENE).execute();
-        context.deleteFrom(KNOWNCOPYNUMBER).execute();
-        context.deleteFrom(KNOWNFUSION).execute();
-        context.deleteFrom(EVENTINTERPRETATION).execute();
+        knownEventsDAO.deleteAll();
+        eventInterpretationDAO.deleteAll();
+
+        context.deleteFrom(EFFICACYEVIDENCE).execute();
+        context.deleteFrom(ACTIONABLETRIAL).execute();
+        context.deleteFrom(TRIALMOLECULARCRITERIUM).execute();
     }
 
-    void write(@NotNull ServeRecord serveRecord, @NotNull List<EventInterpretation> eventInterpretations) {
+    void repopulate(@NotNull ServeRecord serveRecord, @NotNull List<EventInterpretation> eventInterpretations) {
         deleteAll();
 
         Timestamp timestamp = new Timestamp(new Date().getTime());
 
-        writeEventInterpretations(timestamp, eventInterpretations);
-        writeKnownEvents(timestamp, serveRecord.knownEvents());
+        knownEventsDAO.write(timestamp, serveRecord.knownEvents());
+        eventInterpretationDAO.write(timestamp, eventInterpretations);
         writeEfficacyEvidences(timestamp, serveRecord.evidences());
         writeActionableTrials(timestamp, serveRecord.trials());
     }
 
-    private void writeEventInterpretations(@NotNull Timestamp timestamp, @NotNull List<EventInterpretation> eventInterpretations) {
-        for (List<EventInterpretation> batch : Iterables.partition(eventInterpretations, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
-            InsertValuesStep6 inserter = context.insertInto(EVENTINTERPRETATION,
-                    EVENTINTERPRETATION.MODIFIED,
-                    EVENTINTERPRETATION.SOURCE,
-                    EVENTINTERPRETATION.SOURCEEVENT,
-                    EVENTINTERPRETATION.INTERPRETEDGENE,
-                    EVENTINTERPRETATION.INTERPRETEDEVENT,
-                    EVENTINTERPRETATION.INTERPRETEDEVENTTYPE);
-            batch.forEach(entry -> writeEventInterpretationBatch(timestamp, inserter, entry));
-            inserter.execute();
-        }
-    }
-
-    private static void writeEventInterpretationBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep6 inserter,
-            @NotNull EventInterpretation eventInterpretation) {
-        inserter.values(timestamp,
-                eventInterpretation.source(),
-                eventInterpretation.sourceEvent(),
-                eventInterpretation.interpretedGene(),
-                eventInterpretation.interpretedEvent(),
-                eventInterpretation.interpretedEventType());
-    }
-
-    private void writeKnownEvents(@NotNull Timestamp timestamp, @NotNull KnownEvents knownEvents) {
-        writeKnownHotspots(timestamp, knownEvents.hotspots());
-        writeKnownCodons(timestamp, knownEvents.codons());
-        writeKnownExons(timestamp, knownEvents.exons());
-        writeKnownGenes(timestamp, knownEvents.genes());
-        writeKnownCopyNumbers(timestamp, knownEvents.copyNumbers());
-        writeKnownFusions(timestamp, knownEvents.fusions());
-    }
-
-    private void writeKnownHotspots(@NotNull Timestamp timestamp, @NotNull Set<KnownHotspot> hotspots) {
-        for (List<KnownHotspot> batch : Iterables.partition(hotspots, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
-            InsertValuesStep12 inserter = context.insertInto(KNOWNHOTSPOT,
-                    KNOWNHOTSPOT.MODIFIED,
-                    KNOWNHOTSPOT.GENE,
-                    KNOWNHOTSPOT.GENEROLE,
-                    KNOWNHOTSPOT.PROTEINEFFECT,
-                    KNOWNHOTSPOT.ASSOCIATEDWITHDRUGRESISTANCE,
-                    KNOWNHOTSPOT.CHROMOSOME,
-                    KNOWNHOTSPOT.POSITION,
-                    KNOWNHOTSPOT.REF,
-                    KNOWNHOTSPOT.ALT,
-                    KNOWNHOTSPOT.INPUTTRANSCRIPT,
-                    KNOWNHOTSPOT.INPUTPROTEINANNOTATION,
-                    KNOWNHOTSPOT.SOURCES);
-            batch.forEach(entry -> writeKnownHotspotBatch(timestamp, inserter, entry));
-            inserter.execute();
-        }
-    }
-
-    private static void writeKnownHotspotBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep12 inserter,
-            @NotNull KnownHotspot knownHotspot) {
-        inserter.values(timestamp,
-                knownHotspot.gene(),
-                knownHotspot.geneRole().toString(),
-                knownHotspot.proteinEffect().toString(),
-                DatabaseUtil.toByte(knownHotspot.associatedWithDrugResistance()),
-                knownHotspot.chromosome(),
-                knownHotspot.position(),
-                knownHotspot.ref(),
-                knownHotspot.alt(),
-                knownHotspot.inputTranscript(),
-                knownHotspot.inputProteinAnnotation(),
-                Knowledgebase.toCommaSeparatedSourceString(knownHotspot.sources()));
-    }
-
-    private void writeKnownCodons(@NotNull Timestamp timestamp, @NotNull Set<KnownCodon> codons) {
-        for (List<KnownCodon> batch : Iterables.partition(codons, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
-            InsertValuesStep12 inserter = context.insertInto(KNOWNCODON,
-                    KNOWNCODON.MODIFIED,
-                    KNOWNCODON.GENE,
-                    KNOWNCODON.GENEROLE,
-                    KNOWNCODON.PROTEINEFFECT,
-                    KNOWNCODON.ASSOCIATEDWITHDRUGRESISTANCE,
-                    KNOWNCODON.CHROMOSOME,
-                    KNOWNCODON.START,
-                    KNOWNCODON.END,
-                    KNOWNCODON.APPLICABLEMUTATIONTYPE,
-                    KNOWNCODON.INPUTTRANSCRIPT,
-                    KNOWNCODON.INPUTCODONRANK,
-                    KNOWNCODON.SOURCES);
-            batch.forEach(entry -> writeKnownCodonBatch(timestamp, inserter, entry));
-            inserter.execute();
-        }
-    }
-
-    private static void writeKnownCodonBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep12 inserter,
-            @NotNull KnownCodon knownCodon) {
-        inserter.values(timestamp,
-                knownCodon.gene(),
-                knownCodon.geneRole().toString(),
-                knownCodon.proteinEffect().toString(),
-                DatabaseUtil.toByte(knownCodon.associatedWithDrugResistance()),
-                knownCodon.chromosome(),
-                knownCodon.start(),
-                knownCodon.end(),
-                knownCodon.applicableMutationType(),
-                knownCodon.inputTranscript(),
-                knownCodon.inputCodonRank(),
-                Knowledgebase.toCommaSeparatedSourceString(knownCodon.sources()));
-    }
-
-    private void writeKnownExons(@NotNull Timestamp timestamp, @NotNull Set<KnownExon> exons) {
-        for (List<KnownExon> batch : Iterables.partition(exons, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
-            InsertValuesStep12 inserter = context.insertInto(KNOWNEXON,
-                    KNOWNEXON.MODIFIED,
-                    KNOWNEXON.GENE,
-                    KNOWNEXON.GENEROLE,
-                    KNOWNEXON.PROTEINEFFECT,
-                    KNOWNEXON.ASSOCIATEDWITHDRUGRESISTANCE,
-                    KNOWNEXON.CHROMOSOME,
-                    KNOWNEXON.START,
-                    KNOWNEXON.END,
-                    KNOWNEXON.APPLICABLEMUTATIONTYPE,
-                    KNOWNEXON.INPUTTRANSCRIPT,
-                    KNOWNEXON.INPUTEXONRANK,
-                    KNOWNEXON.SOURCES);
-            batch.forEach(entry -> writeKnownExonBatch(timestamp, inserter, entry));
-            inserter.execute();
-        }
-    }
-
-    private static void writeKnownExonBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep12 inserter,
-            @NotNull KnownExon knownExon) {
-        inserter.values(timestamp,
-                knownExon.gene(),
-                knownExon.geneRole().toString(),
-                knownExon.proteinEffect().toString(),
-                DatabaseUtil.toByte(knownExon.associatedWithDrugResistance()),
-                knownExon.chromosome(),
-                knownExon.start(),
-                knownExon.end(),
-                knownExon.applicableMutationType(),
-                knownExon.inputTranscript(),
-                knownExon.inputExonRank(),
-                Knowledgebase.toCommaSeparatedSourceString(knownExon.sources()));
-    }
-
-    private void writeKnownGenes(@NotNull Timestamp timestamp, @NotNull Set<KnownGene> genes) {
-        for (List<KnownGene> batch : Iterables.partition(genes, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
-            InsertValuesStep4 inserter =
-                    context.insertInto(KNOWNGENE, KNOWNGENE.MODIFIED, KNOWNGENE.GENE, KNOWNGENE.GENEROLE, KNOWNGENE.SOURCES);
-            batch.forEach(entry -> writeKnownGeneBatch(timestamp, inserter, entry));
-            inserter.execute();
-        }
-    }
-
-    private static void writeKnownGeneBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep4 inserter,
-            @NotNull KnownGene knownGene) {
-        inserter.values(timestamp,
-                knownGene.gene(),
-                knownGene.geneRole().toString(),
-                Knowledgebase.toCommaSeparatedSourceString(knownGene.sources()));
-    }
-
-    private void writeKnownCopyNumbers(@NotNull Timestamp timestamp, @NotNull Set<KnownCopyNumber> copyNumbers) {
-        for (List<KnownCopyNumber> batch : Iterables.partition(copyNumbers, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
-            InsertValuesStep7 inserter = context.insertInto(KNOWNCOPYNUMBER,
-                    KNOWNCOPYNUMBER.MODIFIED,
-                    KNOWNCOPYNUMBER.GENE,
-                    KNOWNCOPYNUMBER.GENEROLE,
-                    KNOWNCOPYNUMBER.PROTEINEFFECT,
-                    KNOWNCOPYNUMBER.ASSOCIATEDWITHDRUGRESISTANCE,
-                    KNOWNCOPYNUMBER.EVENT,
-                    KNOWNCOPYNUMBER.SOURCES);
-            batch.forEach(entry -> writeKnownCopyNumberBatch(timestamp, inserter, entry));
-            inserter.execute();
-        }
-    }
-
-    private static void writeKnownCopyNumberBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep7 inserter,
-            @NotNull KnownCopyNumber knownCopyNumber) {
-        inserter.values(timestamp,
-                knownCopyNumber.gene(),
-                knownCopyNumber.geneRole().toString(),
-                knownCopyNumber.proteinEffect().toString(),
-                DatabaseUtil.toByte(knownCopyNumber.associatedWithDrugResistance()),
-                knownCopyNumber.event().toString(),
-                Knowledgebase.toCommaSeparatedSourceString(knownCopyNumber.sources()));
-    }
-
-    private void writeKnownFusions(@NotNull Timestamp timestamp, @NotNull Set<KnownFusion> fusions) {
-        for (List<KnownFusion> batch : Iterables.partition(fusions, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
-            InsertValuesStep10 inserter = context.insertInto(KNOWNFUSION,
-                    KNOWNFUSION.MODIFIED,
-                    KNOWNFUSION.GENEUP,
-                    KNOWNFUSION.MINEXONUP,
-                    KNOWNFUSION.MAXEXONUP,
-                    KNOWNFUSION.GENEDOWN,
-                    KNOWNFUSION.MINEXONDOWN,
-                    KNOWNFUSION.MAXEXONDOWN,
-                    KNOWNFUSION.PROTEINEFFECT,
-                    KNOWNFUSION.ASSOCIATEDWITHDRUGRESISTANCE,
-                    KNOWNFUSION.SOURCES);
-            batch.forEach(entry -> writeKnownFusionBatch(timestamp, inserter, entry));
-            inserter.execute();
-        }
-    }
-
-    private static void writeKnownFusionBatch(@NotNull Timestamp timestamp, @NotNull InsertValuesStep10 inserter,
-            @NotNull KnownFusion fusion) {
-        inserter.values(timestamp,
-                fusion.geneUp(),
-                fusion.minExonUp(),
-                fusion.maxExonUp(),
-                fusion.geneDown(),
-                fusion.minExonDown(),
-                fusion.maxExonDown(),
-                fusion.proteinEffect().toString(),
-                DatabaseUtil.toByte(fusion.associatedWithDrugResistance()),
-                Knowledgebase.toCommaSeparatedSourceString(fusion.sources()));
-    }
-
     private void writeEfficacyEvidences(@NotNull Timestamp timestamp, @NotNull List<EfficacyEvidence> efficacyEvidences) {
+        Map<EfficacyEvidence, Integer> molecularCriteriumIdPerEvidence = new HashMap<>();
+        for (EfficacyEvidence efficacyEvidence : efficacyEvidences) {
+            molecularCriteriumIdPerEvidence.put(efficacyEvidence,
+                    molecularCriteriumDAO.write(timestamp, efficacyEvidence.molecularCriterium()));
+        }
+
+        for (List<EfficacyEvidence> batch : Iterables.partition(efficacyEvidences, DatabaseUtil.DB_BATCH_INSERT_SIZE)) {
+            InsertValuesStep13 inserter = context.insertInto(EFFICACYEVIDENCE,
+                    EFFICACYEVIDENCE.MODIFIED,
+                    EFFICACYEVIDENCE.SOURCE,
+                    EFFICACYEVIDENCE.TREATMENT,
+                    EFFICACYEVIDENCE.TREATMENTAPPROACHESDRUGCLASS,
+                    EFFICACYEVIDENCE.TREATMENTAPPROACHESTHERAPY,
+                    EFFICACYEVIDENCE.INDICATION,
+                    EFFICACYEVIDENCE.MOLECULARCRITERIUMID,
+                    EFFICACYEVIDENCE.EFFICACYDESCRIPTION,
+                    EFFICACYEVIDENCE.EVIDENCELEVEL,
+                    EFFICACYEVIDENCE.EVIDENCELEVELDETAILS,
+                    EFFICACYEVIDENCE.EVIDENCEDIRECTION,
+                    EFFICACYEVIDENCE.EVIDENCEYEAR,
+                    EFFICACYEVIDENCE.EVIDENCEURLS);
+            batch.forEach(entry -> writeEfficacyEvidencesBatch(timestamp, inserter, entry));
+            inserter.execute();
+        }
+
         writeHotspotEfficacyEvidence(timestamp, filterEfficacyEvidence(efficacyEvidences, hotspotFilter()));
         writeCodonEfficacyEvidence(timestamp, filterEfficacyEvidence(efficacyEvidences, codonFilter()));
         writeExonEfficacyEvidence(timestamp, filterEfficacyEvidence(efficacyEvidences, exonFilter()));
@@ -334,6 +139,10 @@ public class ServeDAO {
         writeFusionEfficacyEvidence(timestamp, filterEfficacyEvidence(efficacyEvidences, fusionFilter()));
         writeCharacteristicEfficacyEvidence(timestamp, filterEfficacyEvidence(efficacyEvidences, characteristicsFilter()));
         writeHLAEfficacyEvidence(timestamp, filterEfficacyEvidence(efficacyEvidences, hlaFilter()));
+    }
+
+    private void writeEfficacyEvidencesBatch(final Timestamp timestamp, final InsertValuesStep13 inserter, final EfficacyEvidence entry) {
+
     }
 
     private void writeHotspotEfficacyEvidence(@NotNull Timestamp timestamp, @NotNull List<EfficacyEvidence> evidenceForHotspots) {

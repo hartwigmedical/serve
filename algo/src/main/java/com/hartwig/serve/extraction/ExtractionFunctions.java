@@ -1,17 +1,23 @@
 package com.hartwig.serve.extraction;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.datamodel.efficacy.EfficacyEvidence;
 import com.hartwig.serve.datamodel.efficacy.ImmutableEfficacyEvidence;
 import com.hartwig.serve.datamodel.molecular.ImmutableKnownEvents;
 import com.hartwig.serve.datamodel.molecular.KnownEvents;
 import com.hartwig.serve.datamodel.trial.ActionableTrial;
+import com.hartwig.serve.datamodel.trial.ImmutableActionableTrial;
 import com.hartwig.serve.extraction.codon.CodonConsolidation;
 import com.hartwig.serve.extraction.copynumber.CopyNumberConsolidation;
 import com.hartwig.serve.extraction.events.EventInterpretation;
@@ -138,7 +144,61 @@ public final class ExtractionFunctions {
             return null;
         }
 
-        return unconsolidatedTrials;
+        List<ActionableTrial> consolidatedTrials = new ArrayList<>();
+        Set<Knowledgebase> sources = unconsolidatedTrials.stream().map(ActionableTrial::source).collect(Collectors.toSet());
+        for (Knowledgebase source : sources) {
+            Set<String> uniqueNctIds = unconsolidatedTrials.stream()
+                    .filter(trial -> trial.source() == source)
+                    .map(ActionableTrial::nctId)
+                    .collect(Collectors.toSet());
+
+            for (String nctId : uniqueNctIds) {
+                List<ActionableTrial> trialsForSingleNctId = unconsolidatedTrials.stream()
+                        .filter(trial -> trial.source() == source && trial.nctId().equals(nctId))
+                        .collect(Collectors.toList());
+
+                consolidatedTrials.add(consolidateTrialsForNctId(trialsForSingleNctId));
+            }
+        }
+
+        return consolidatedTrials;
+    }
+
+    @NotNull
+    private static ActionableTrial consolidateTrialsForNctId(@NotNull List<ActionableTrial> trialsForSingleNctId) {
+        return ImmutableActionableTrial.builder()
+                .source(unique(trialsForSingleNctId.stream().map(ActionableTrial::source)))
+                .nctId(unique(trialsForSingleNctId.stream().map(ActionableTrial::nctId)))
+                .title(unique(trialsForSingleNctId.stream().map(ActionableTrial::title)))
+                .acronym(unique(trialsForSingleNctId.stream().map(ActionableTrial::acronym)))
+                .countries(unique(trialsForSingleNctId.stream().map(ActionableTrial::countries)))
+                .therapyNames(unique(trialsForSingleNctId.stream().map(ActionableTrial::therapyNames)))
+                .genderCriterium(unique(trialsForSingleNctId.stream().map(ActionableTrial::genderCriterium)))
+                .indications(mergeSet(trialsForSingleNctId.stream().map(ActionableTrial::indications).collect(Collectors.toSet())))
+                .anyMolecularCriteria(mergeSet(trialsForSingleNctId.stream()
+                        .map(ActionableTrial::anyMolecularCriteria)
+                        .collect(Collectors.toSet())))
+                .urls(unique(trialsForSingleNctId.stream().map(ActionableTrial::urls)))
+                .build();
+    }
+
+    @NotNull
+    private static <T> Set<T> mergeSet(@NotNull Set<Set<T>> setOfSets) {
+        Set<T> merged = new HashSet<>();
+        for (Set<T> set : setOfSets) {
+            merged.addAll(set);
+        }
+        return merged;
+    }
+
+    @Nullable
+    private static <T> T unique(@NotNull Stream<T> stream) {
+        Set<T> set = stream.collect(Collectors.toSet());
+        if (set.size() != 1) {
+            throw new IllegalStateException("Set does not contain exactly 1 element: " + set);
+        }
+
+        return set.iterator().next();
     }
 }
 

@@ -43,7 +43,7 @@ public final class DatabaseUtil {
         Set<String> formattedExcludedTypes =
                 indication.excludedSubTypes().stream().map(DatabaseUtil::formatCancerType).collect(Collectors.toSet());
         if (!formattedExcludedTypes.isEmpty()) {
-            addition = " excluding " + concat(formattedExcludedTypes);
+            addition = " (excluding " + concat(formattedExcludedTypes) + ")";
         }
         return base + addition;
     }

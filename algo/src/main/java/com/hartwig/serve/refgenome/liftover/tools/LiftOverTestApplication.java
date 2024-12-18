@@ -1,7 +1,6 @@
 package com.hartwig.serve.refgenome.liftover.tools;
 
 import java.io.File;
-import java.io.IOException;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -21,7 +20,7 @@ public class LiftOverTestApplication {
     private static final String LIFT_OVER_38_TO_37_CHAIN =
             System.getProperty("user.home") + "/hmf/refgenomes/liftover/hg38ToHg19.over.chain";
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         Configurator.setRootLevel(Level.DEBUG);
 
         // X:1314965 is a hotspot in 37 on CRLF2 that can't be lifted over to 38.

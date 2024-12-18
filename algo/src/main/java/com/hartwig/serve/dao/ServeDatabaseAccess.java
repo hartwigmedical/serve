@@ -46,7 +46,7 @@ public class ServeDatabaseAccess {
         LOGGER.debug("Connecting to database '{}'", catalog);
         DSLContext context = DSL.using(connection, SQLDialect.MYSQL, settings(catalog));
 
-        this.serveDAO = new ServeDAO(context);
+        this.serveDAO = ServeDAO.create(context);
     }
 
     @Nullable
@@ -79,16 +79,12 @@ public class ServeDatabaseAccess {
     }
 
     public static void addDatabaseCmdLineArgs(@NotNull Options options) {
-        addDatabaseCmdLineArgs(options, false);
-    }
-
-    public static void addDatabaseCmdLineArgs(@NotNull Options options, boolean isRequired) {
-        options.addOption(Option.builder(DB_USER).desc("Database username").hasArg(true).required(isRequired).build());
-        options.addOption(Option.builder(DB_PASS).desc("Database password").hasArg(true).required(isRequired).build());
-        options.addOption(Option.builder(DB_URL).desc("Database url").hasArg(true).required(isRequired).build());
+        options.addOption(Option.builder(DB_USER).desc("Database username").hasArg(true).build());
+        options.addOption(Option.builder(DB_PASS).desc("Database password").hasArg(true).build());
+        options.addOption(Option.builder(DB_URL).desc("Database url").hasArg(true).build());
     }
 
     public void writeServeRecord(@NotNull ServeRecord serveRecord, @NotNull List<EventInterpretation> eventInterpretations) {
-        serveDAO.write(serveRecord, eventInterpretations);
+        serveDAO.repopulate(serveRecord, eventInterpretations);
     }
 }

@@ -44,6 +44,6 @@ class EventInterpretationDAO {
                 eventInterpretation.sourceEvent(),
                 eventInterpretation.interpretedGene(),
                 eventInterpretation.interpretedEvent(),
-                eventInterpretation.interpretedEventType());
+                eventInterpretation.interpretedEventType().name());
     }
 }

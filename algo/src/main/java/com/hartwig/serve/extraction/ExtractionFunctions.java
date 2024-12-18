@@ -39,7 +39,7 @@ public final class ExtractionFunctions {
         Set<EventInterpretation> mergedInterpretations = Sets.newHashSet();
         ImmutableKnownEvents.Builder unconsolidatedKnownEventsBuilder = null;
         List<EfficacyEvidence> unconsolidatedEvidences = null;
-        List<ActionableTrial> mergedTrials = null;
+        List<ActionableTrial> unconsolidatedTrials = null;
 
         for (ExtractionResult result : results) {
             mergedInterpretations.addAll(result.eventInterpretations());
@@ -56,22 +56,21 @@ public final class ExtractionFunctions {
                 unconsolidatedEvidences.addAll(result.evidences());
             }
             if (result.trials() != null) {
-                if (mergedTrials == null) {
-                    mergedTrials = Lists.newArrayList();
+                if (unconsolidatedTrials == null) {
+                    unconsolidatedTrials = Lists.newArrayList();
                 }
-                mergedTrials.addAll(result.trials());
+                unconsolidatedTrials.addAll(result.trials());
             }
         }
 
         KnownEvents unconsolidatedKnownEvents = unconsolidatedKnownEventsBuilder != null ? unconsolidatedKnownEventsBuilder.build() : null;
 
-        // TODO (KD): We used to consolidate URLs for evidence in the past but not sure that is still necessary.
         return ImmutableExtractionResult.builder()
                 .refGenomeVersion(version)
                 .eventInterpretations(mergedInterpretations)
                 .knownEvents(consolidateKnownEvents(unconsolidatedKnownEvents))
                 .evidences(consolidateEvidences(unconsolidatedEvidences))
-                .trials(mergedTrials)
+                .trials(consolidateTrials(unconsolidatedTrials))
                 .build();
     }
 
@@ -131,6 +130,15 @@ public final class ExtractionFunctions {
             consolidatedEvents.add(ImmutableEfficacyEvidence.builder().from(entry.getKey()).urls(entry.getValue()).build());
         }
         return consolidatedEvents;
+    }
+
+    @Nullable
+    private static List<ActionableTrial> consolidateTrials(@Nullable List<ActionableTrial> unconsolidatedTrials) {
+        if (unconsolidatedTrials == null) {
+            return null;
+        }
+
+        return unconsolidatedTrials;
     }
 }
 

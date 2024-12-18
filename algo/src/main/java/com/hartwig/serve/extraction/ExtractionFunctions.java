@@ -174,18 +174,16 @@ public final class ExtractionFunctions {
                 .countries(unique(trialsForSingleNctId.stream().map(ActionableTrial::countries)))
                 .therapyNames(unique(trialsForSingleNctId.stream().map(ActionableTrial::therapyNames)))
                 .genderCriterium(unique(trialsForSingleNctId.stream().map(ActionableTrial::genderCriterium)))
-                .indications(mergeSet(trialsForSingleNctId.stream().map(ActionableTrial::indications).collect(Collectors.toSet())))
-                .anyMolecularCriteria(mergeSet(trialsForSingleNctId.stream()
-                        .map(ActionableTrial::anyMolecularCriteria)
-                        .collect(Collectors.toSet())))
+                .indications(mergeSet(trialsForSingleNctId.stream().map(ActionableTrial::indications)))
+                .anyMolecularCriteria(mergeSet(trialsForSingleNctId.stream().map(ActionableTrial::anyMolecularCriteria)))
                 .urls(unique(trialsForSingleNctId.stream().map(ActionableTrial::urls)))
                 .build();
     }
 
     @NotNull
-    private static <T> Set<T> mergeSet(@NotNull Set<Set<T>> setOfSets) {
+    private static <T> Set<T> mergeSet(@NotNull Stream<Set<T>> streamOfSets) {
         Set<T> merged = new HashSet<>();
-        for (Set<T> set : setOfSets) {
+        for (Set<T> set : streamOfSets.collect(Collectors.toSet())) {
             merged.addAll(set);
         }
         return merged;

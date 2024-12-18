@@ -2,6 +2,7 @@ package com.hartwig.serve.dao;
 
 import java.util.Set;
 import java.util.StringJoiner;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import com.hartwig.serve.datamodel.common.CancerType;
@@ -14,7 +15,7 @@ public final class DatabaseUtil {
 
     public static final int DB_BATCH_INSERT_SIZE = 1000;
 
-    public static final String MAIN_JOINER = ",";
+    public static final String MAIN_JOINER = ", ";
     public static final String SUB_JOINER = ";";
 
     private DatabaseUtil() {
@@ -28,7 +29,7 @@ public final class DatabaseUtil {
     @NotNull
     public static String concat(@NotNull Set<String> strings) {
         StringJoiner joiner = new StringJoiner(MAIN_JOINER);
-        for (String string : strings) {
+        for (String string : new TreeSet<>(strings)) {
             joiner.add(string);
         }
         return joiner.toString();

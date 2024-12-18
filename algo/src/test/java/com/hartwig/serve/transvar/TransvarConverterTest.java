@@ -271,7 +271,7 @@ public class TransvarConverterTest {
         TransvarFrameshift frameshift = (TransvarFrameshift) record.annotation();
         assertFalse(frameshift.isFrameshiftInsideStartCodon());
 
-        String lineInStartCodon = "VHL:p.M1fs\tENST00000256474 (protein_coding)\tVHL\t+\tchr3:g.(10183532_10191646)/c.(1_0)/p.M1fs\t" + ""
+        String lineInStartCodon = "VHL:p.M1fs\tENST00000256474 (protein_coding)\tVHL\t+\tchr3:g.(10183532_10191646)/c.(1_0)/p.M1fs\t"
                 + "inside_[cds_in_exon_1]\tCSQN=Frameshift;imprecise;aliases=ENSP00000256474;source=Ensembl";
 
         TransvarRecord recordInStartCodon = TransvarConverter.toTransvarRecord(lineInStartCodon);

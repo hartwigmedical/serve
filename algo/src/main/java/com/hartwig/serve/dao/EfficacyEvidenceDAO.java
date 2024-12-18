@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jooq.DSLContext;
 import org.jooq.InsertValuesStep12;
 
-@SuppressWarnings("ResultOfMethodCallIgnored")
+@SuppressWarnings({ "ResultOfMethodCallIgnored", "unchecked" })
 class EfficacyEvidenceDAO {
 
     @NotNull

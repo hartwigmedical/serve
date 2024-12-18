@@ -170,7 +170,7 @@ public class ActionableTrialFactoryTest {
     }
 
     @Test
-    public void shouldNotCreatTrialWhenVariantRequirementIsOnADifferentProfile() {
+    public void shouldNotCreateTrialWhenVariantRequirementIsOnADifferentProfile() {
         Location location = CkbTestFactory.createLocation("Belgium", "Recruiting", "Brussel", "UZ Brussel");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(0, "required");
         ClinicalTrial clinicalTrial = CkbTestFactory.createTrial("NCT0102",

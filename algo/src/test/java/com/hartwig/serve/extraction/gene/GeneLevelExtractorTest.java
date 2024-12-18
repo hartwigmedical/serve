@@ -218,7 +218,7 @@ public class GeneLevelExtractorTest {
         GeneLevelExtractor geneLevelExtractor =
                 createWithDriverGenes(DriverGenesTestFactory.createDriverGenes("STK11", "KIT"), DriverInconsistencyMode.FILTER);
 
-        GeneAnnotation conflictingGeneAnnotation = geneLevelExtractor.extract("STK11", EventType.GENE_LEVEL, "STK11 activating mutationut");
+        GeneAnnotation conflictingGeneAnnotation = geneLevelExtractor.extract("STK11", EventType.GENE_LEVEL, "STK11 activating mutation");
         assertNull(conflictingGeneAnnotation);
     }
 

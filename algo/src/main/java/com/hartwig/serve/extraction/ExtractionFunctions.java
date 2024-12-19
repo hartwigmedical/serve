@@ -1,7 +1,6 @@
 package com.hartwig.serve.extraction;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -182,11 +181,7 @@ public final class ExtractionFunctions {
 
     @NotNull
     private static <T> Set<T> mergeSet(@NotNull Stream<Set<T>> streamOfSets) {
-        Set<T> merged = new HashSet<>();
-        for (Set<T> set : streamOfSets.collect(Collectors.toSet())) {
-            merged.addAll(set);
-        }
-        return merged;
+        return streamOfSets.flatMap(Set::stream).collect(Collectors.toSet());
     }
 
     @Nullable

@@ -42,7 +42,7 @@ public class DatabaseUtilTest {
         CancerType excluded1 = DatamodelTestFactory.cancerTypeBuilder().name("excluded1").doid("doid").build();
         CancerType excluded2 = DatamodelTestFactory.cancerTypeBuilder().name("excluded2").doid("doid").build();
         Indication complex = withCancerTypeAndExcluded(applicable, excluded1, excluded2);
-        assertEquals("name (doid) excluding excluded1 (doid), excluded2 (doid)", DatabaseUtil.formatIndication(complex));
+        assertEquals("name (doid) (excluding excluded1 (doid), excluded2 (doid))", DatabaseUtil.formatIndication(complex));
     }
 
     @NotNull

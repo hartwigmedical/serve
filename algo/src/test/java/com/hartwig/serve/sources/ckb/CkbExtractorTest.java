@@ -103,20 +103,25 @@ public class CkbExtractorTest {
     @NotNull
     private static List<CkbEntry> createCkbEntryTestDatabase() {
         List<CkbEntry> ckbEntries = Lists.newArrayList();
-        ckbEntries.add(createWithOpenMolecularTrial("KIT", "amp", "KIT amp", "sensitive", "Actionable"));
-        ckbEntries.add(createWithOpenMolecularTrial("BRAF", "V600E", "BRAF V600E", "sensitive", "Actionable"));
-        ckbEntries.add(createWithOpenMolecularTrial("NTRK3", "fusion promiscuous", "NTRK3 fusion promiscuous", "sensitive", "Actionable"));
-        ckbEntries.add(createWithOpenMolecularTrial("BRAF", "V600", "BRAF V600", "sensitive", "Actionable"));
-        ckbEntries.add(createWithOpenMolecularTrial("BRAF", "exon 1 deletion", "BRAF exon 1 deletion", "sensitive", "Actionable"));
-        ckbEntries.add(createWithOpenMolecularTrial("-", "MSI high", "MSI high", "sensitive", "Actionable"));
-        ckbEntries.add(createWithOpenMolecularTrial("ALK", "EML4-ALK", "EML4-ALK Fusion", "sensitive", "Actionable"));
+        ckbEntries.add(createWithOpenMolecularTrial("nct1", "KIT", "amp", "KIT amp", "sensitive", "Actionable"));
+        ckbEntries.add(createWithOpenMolecularTrial("nct2", "BRAF", "V600E", "BRAF V600E", "sensitive", "Actionable"));
+        ckbEntries.add(createWithOpenMolecularTrial("nct3",
+                "NTRK3",
+                "fusion promiscuous",
+                "NTRK3 fusion promiscuous",
+                "sensitive",
+                "Actionable"));
+        ckbEntries.add(createWithOpenMolecularTrial("nct4", "BRAF", "V600", "BRAF V600", "sensitive", "Actionable"));
+        ckbEntries.add(createWithOpenMolecularTrial("nct5", "BRAF", "exon 1 deletion", "BRAF exon 1 deletion", "sensitive", "Actionable"));
+        ckbEntries.add(createWithOpenMolecularTrial("nct6", "-", "MSI high", "MSI high", "sensitive", "Actionable"));
+        ckbEntries.add(createWithOpenMolecularTrial("nct7", "ALK", "EML4-ALK", "EML4-ALK Fusion", "sensitive", "Actionable"));
 
         return ckbEntries;
     }
 
     @NotNull
-    private static CkbEntry createWithOpenMolecularTrial(@NotNull String gene, @NotNull String variant, @NotNull String fullName,
-            @NotNull String responseType, @NotNull String evidenceType) {
+    private static CkbEntry createWithOpenMolecularTrial(@NotNull String nctId, @NotNull String gene, @NotNull String variant,
+            @NotNull String fullName, @NotNull String responseType, @NotNull String evidenceType) {
         CkbEntry baseEntry = CkbTestFactory.createEntry(gene,
                 variant,
                 fullName,
@@ -130,7 +135,7 @@ public class CkbExtractorTest {
 
         return CkbTestFactory.builder()
                 .from(baseEntry)
-                .clinicalTrials(List.of(CkbTestFactory.createTrialWithTherapy("nctid",
+                .clinicalTrials(List.of(CkbTestFactory.createTrialWithTherapy(nctId,
                         "title",
                         List.of(CkbTestFactory.createTherapy("Nivolumab")),
                         List.of(CkbTestFactory.createIndication("test", "JAX:10000006")),

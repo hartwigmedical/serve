@@ -445,6 +445,8 @@ elsewhere.
 
 ## Version History and Download Links
 
+- Upcoming
+    - Actionable trials are consolidated by NCT ID per source.
 - [7.3.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v7.3.0)
     - SQL SERVE database has been patched to v7.0.0 (separation of trial and efficacy evidence, multiple criteria per trial).
 - [7.2.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v7.2.0)

@@ -43,22 +43,22 @@ public final class CkbTestFactory {
 
     @NotNull
     public static CkbEntry createEntryWithGene(@NotNull String geneSymbol) {
-        return createEntry(geneSymbol, "", "", "", "", "", "", "", "", "");
+        return createEntry(1, geneSymbol, "", "", "", "", "", "", "", "", "");
     }
 
     @NotNull
     public static CkbEntry createEntryWithVariant(@NotNull String variant) {
-        return createEntry("", variant, "", "", "", "", "", "", "", "");
+        return createEntry(1, "", variant, "", "", "", "", "", "", "", "");
     }
 
     @NotNull
     public static CkbEntry createEntryWithFullName(@NotNull String fullName) {
-        return createEntry("", "", fullName, "", "", "", "", "", "", "");
+        return createEntry(1, "", "", fullName, "", "", "", "", "", "", "");
     }
 
     @NotNull
     public static CkbEntry createEntryWithGeneAndVariant(@NotNull String geneSymbol, @NotNull String variant) {
-        return createEntry(geneSymbol, variant, "", "", "", "", "", "", "", "");
+        return createEntry(1, geneSymbol, variant, "", "", "", "", "", "", "", "");
     }
 
     @NotNull
@@ -67,12 +67,12 @@ public final class CkbTestFactory {
     }
 
     @NotNull
-    public static CkbEntry createEntry(@NotNull String geneSymbol, @NotNull String variant, @NotNull String fullName,
+    public static CkbEntry createEntry(int profileId, @NotNull String geneSymbol, @NotNull String variant, @NotNull String fullName,
             @NotNull String responseType, @NotNull String evidenceType, @NotNull String therapyName, @NotNull String indicationName,
             @NotNull String evidenceLevel, @NotNull String approvalStatus, @NotNull String termId) {
         Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting", "Rotterdam", "EMC");
-        VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(0, "required");
-        return builder().addVariants(createVariant(geneSymbol, variant, fullName))
+        VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(profileId, "required");
+        return builder().profileId(profileId).addVariants(createVariant(geneSymbol, variant, fullName))
                 .addEvidences(createEvidence(responseType,
                         evidenceType,
                         therapyName,
@@ -103,6 +103,35 @@ public final class CkbTestFactory {
                 ageGroups,
                 variantRequirementDetails,
                 locations);
+    }
+
+    @NotNull
+    public static CkbEntry createComplexEventEntry(@NotNull List<Variant> variants,
+            @NotNull String responseType, @NotNull String evidenceType, @NotNull String therapyName, @NotNull String indicationName,
+            @NotNull String evidenceLevel, @NotNull String approvalStatus, @NotNull String termId) {
+
+        Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting", "Rotterdam", "EMC");
+        VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(0, "required");
+
+        return builder()
+                .addAllVariants(variants)
+                .addEvidences(createEvidence(responseType,
+                        evidenceType,
+                        therapyName,
+                        indicationName,
+                        evidenceLevel,
+                        approvalStatus,
+                        termId))
+                .addClinicalTrials(createTrialWithTherapy("NCT0102",
+                        "Phase I trial",
+                        List.of(CkbTestFactory.createTherapy("Nivolumab")),
+                        List.of(CkbTestFactory.createIndication("test", "JAX:10000006")),
+                        "Recruiting",
+                        List.of("senior", "child", "adult"),
+                        List.of(requirementDetail),
+                        List.of(location)))
+                .build();
+
     }
 
     @NotNull
@@ -203,7 +232,7 @@ public final class CkbTestFactory {
     }
 
     @NotNull
-    private static Variant createVariant(@NotNull String geneSymbol, @NotNull String variant, @NotNull String fullName) {
+    public static Variant createVariant(@NotNull String geneSymbol, @NotNull String variant, @NotNull String fullName) {
         return ImmutableVariant.builder()
                 .id(0)
                 .createDate(TEST_CREATE_DATE)

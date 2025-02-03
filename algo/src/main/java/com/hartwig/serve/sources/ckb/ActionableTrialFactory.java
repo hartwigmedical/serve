@@ -66,6 +66,35 @@ class ActionableTrialFactory {
         this.regionsToInclude = regionsToInclude;
     }
 
+    // temporary duplication
+    @Nullable
+    public ActionableTrial createV2(Set<MolecularCriterium> molecularCriteria, ClinicalTrial trial) {
+
+        Set<Country> countries = extractCountriesToInclude(trial, regionsToInclude);
+        Set<String> therapies = trial.therapies().stream()
+                .map(Therapy::therapyName)
+                .collect(Collectors.toSet());
+
+        // TODO: match with trialsToInclude()
+        if (filterTrial.shouldFilterTrial(trial.nctId(), setToField(therapies), Strings.EMPTY, Strings.EMPTY, Strings.EMPTY)
+                || countries.isEmpty()) {
+            return null;
+        } else {
+            return ImmutableActionableTrial.builder()
+                    .source(Knowledgebase.CKB)
+                    .nctId(trial.nctId())
+                    .title(trial.title())
+                    .acronym(trial.acronym())
+                    .countries(countries)
+                    .therapyNames(therapies)
+                    .genderCriterium(trial.gender() != null ? GenderCriterium.valueOf(trial.gender().toUpperCase()) : null)
+                    .indications(extractIndications(trial.indications()))
+                    .anyMolecularCriteria(molecularCriteria)
+                    .urls(Sets.newHashSet("https://clinicaltrials.gov/study/" + trial.nctId()))
+                    .build();
+        }
+    }
+
     @NotNull
     public Set<ActionableTrial> create(@NotNull CkbEntry entry, @NotNull Set<MolecularCriterium> molecularCriteria,
             @NotNull String sourceEvent, @NotNull String sourceGene) {

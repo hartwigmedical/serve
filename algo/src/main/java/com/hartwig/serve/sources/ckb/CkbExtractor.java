@@ -95,16 +95,27 @@ public class CkbExtractor {
     private final EfficacyEvidenceFactory efficacyEvidenceFactory;
     @NotNull
     private final ActionableTrialFactory actionableTrialFactory;
+    @NotNull
+    private final CkbMolecularCriteriaExtractor molecularCriteriaExtractor;
 
     CkbExtractor(@NotNull final EventExtractor eventExtractor, @NotNull EfficacyEvidenceFactory efficacyEvidenceFactory,
             @NotNull ActionableTrialFactory actionableTrialFactory) {
         this.eventExtractor = eventExtractor;
         this.efficacyEvidenceFactory = efficacyEvidenceFactory;
         this.actionableTrialFactory = actionableTrialFactory;
+        this.molecularCriteriaExtractor = new CkbMolecularCriteriaExtractor(this.eventExtractor); // TODO inject, I guess
     }
 
     @NotNull
     public ExtractionResult extract(@NotNull List<CkbEntry> entries) {
+
+        LOGGER.info("total number of ckb entries: {}", entries.size());
+
+        // test call into new functionality for trials, TODO needs to be reworked into actual flow
+        CkbTrialExtractor ckbTrialExtractor = new CkbTrialExtractor(this.actionableTrialFactory, molecularCriteriaExtractor);
+        List<ActionableTrial> alternativeUniverseNewTrials = ckbTrialExtractor.processTrials(entries);
+        LOGGER.info("total number of alternative trials: {}", alternativeUniverseNewTrials.size());
+
         ProgressTracker tracker = new ProgressTracker("CKB", entries.size());
         // Assume entries without variants are filtered out prior to extraction
         List<ExtractionResult> extractions = entries.parallelStream()
@@ -113,7 +124,16 @@ public class CkbExtractor {
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
-        return ExtractionFunctions.merge(extractions);
+        ExtractionResult origResult = ExtractionFunctions.merge(extractions);
+        ExtractionResult resultWithCombined =
+                ImmutableExtractionResult.builder()
+                        .from(origResult)
+                        .trials(alternativeUniverseNewTrials)
+                        .build();
+        LOGGER.info("orig result contained {} trials", origResult.trials() != null ? origResult.trials().size() : 0);
+        LOGGER.info("new result with combined evidence contains {} trials",
+                resultWithCombined.trials() != null ? resultWithCombined.trials().size() : 0);
+        return resultWithCombined;
     }
 
     @Nullable
@@ -142,16 +162,20 @@ public class CkbExtractor {
                     .build();
 
             Set<MolecularCriterium> molecularCriteria = createMolecularCriteria(extractionOutput, sourceEvent, entry);
+            MolecularCriterium theNewWayMolecualrCriteria = this.molecularCriteriaExtractor.criteriumForEntry(entry);
 
-            Set<EfficacyEvidence> efficacyEvidences = efficacyEvidenceFactory.create(entry, molecularCriteria, sourceEvent, gene);
-            Set<ActionableTrial> actionableTrials = actionableTrialFactory.create(entry, molecularCriteria, sourceEvent, gene);
+            //            Set<EfficacyEvidence> efficacyEvidences = efficacyEvidenceFactory.create(entry, molecularCriteria, sourceEvent, gene);
+            Set<EfficacyEvidence> efficacyEvidences =
+                    efficacyEvidenceFactory.create(entry, Set.of(theNewWayMolecualrCriteria), sourceEvent, gene);
+            //            Set<ActionableTrial> actionableTrials = actionableTrialFactory.create(entry, molecularCriteria, sourceEvent, gene);
 
             return ImmutableExtractionResult.builder()
                     .refGenomeVersion(Knowledgebase.CKB.refGenomeVersion())
                     .eventInterpretations(Set.of(interpretation))
                     .knownEvents(generateKnownEvents(extractionOutput, efficacyEvidences.isEmpty(), variant, event, gene))
                     .evidences(efficacyEvidences)
-                    .trials(actionableTrials)
+                    //                    .trials(actionableTrials)
+                    .trials(Set.of())  // replaced elsewhere
                     .build();
         }
     }
@@ -206,6 +230,7 @@ public class CkbExtractor {
             @NotNull Set<MolecularCriterium> molecularCriteria) {
         if (extractionOutput.codons() != null) {
             Set<ActionableRange> codons = extractActionableRanges(extractionOutput.codons(), actionableEvent);
+            assert codons.size() == 1;
             for (ActionableRange codon : codons) {
                 molecularCriteria.add(ImmutableMolecularCriterium.builder().codons(Set.of(codon)).build());
             }
@@ -216,6 +241,7 @@ public class CkbExtractor {
             @NotNull Set<MolecularCriterium> molecularCriteria) {
         if (extractionOutput.exons() != null) {
             Set<ActionableRange> exons = extractActionableRanges(extractionOutput.exons(), actionableEvent);
+            assert exons.size() == 1;
             for (ActionableRange exon : exons) {
                 molecularCriteria.add(ImmutableMolecularCriterium.builder().exons(Set.of(exon)).build());
             }
@@ -229,6 +255,7 @@ public class CkbExtractor {
                 .map(annotation -> extractActionableGenes(annotation, actionableEvent))
                 .collect(Collectors.toSet());
         if (!genes.isEmpty()) {
+            assert genes.size() == 1;
             molecularCriteria.add(ImmutableMolecularCriterium.builder().genes(genes).build());
         }
     }
@@ -237,6 +264,7 @@ public class CkbExtractor {
             @NotNull Set<MolecularCriterium> molecularCriteria) {
         if (extractionOutput.fusionPair() != null) {
             Set<ActionableFusion> fusions = extractActionableFusions(extractionOutput.fusionPair(), actionableEvent);
+            assert fusions.size() == 1;
             molecularCriteria.add(ImmutableMolecularCriterium.builder().fusions(fusions).build());
         }
     }
@@ -246,6 +274,7 @@ public class CkbExtractor {
         if (extractionOutput.characteristic() != null) {
             Set<ActionableCharacteristic> characteristics =
                     extractActionableCharacteristic(extractionOutput.characteristic(), actionableEvent);
+            assert characteristics.size() == 1;
             molecularCriteria.add(ImmutableMolecularCriterium.builder().characteristics(characteristics).build());
         }
     }
@@ -254,6 +283,7 @@ public class CkbExtractor {
             @NotNull Set<MolecularCriterium> molecularCriteria) {
         if (extractionOutput.hla() != null) {
             Set<ActionableHLA> hla = extractActionableHLA(extractionOutput.hla(), actionableEvent);
+            assert hla.size() == 1;
             molecularCriteria.add(ImmutableMolecularCriterium.builder().hla(hla).build());
         }
     }

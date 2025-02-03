@@ -10,6 +10,7 @@ import java.util.Set;
 import com.hartwig.serve.ckb.classification.CkbClassificationConfig;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.ImmutableVariantRequirementDetail;
+import com.hartwig.serve.ckb.datamodel.variant.Variant;
 import com.hartwig.serve.datamodel.molecular.MutationType;
 import com.hartwig.serve.datamodel.molecular.range.RangeTestFactory;
 import com.hartwig.serve.extraction.EventExtractorOutput;
@@ -24,6 +25,7 @@ import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachTestFact
 
 import org.apache.commons.compress.utils.Lists;
 import org.jetbrains.annotations.NotNull;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class CkbExtractorTest {
@@ -89,6 +91,32 @@ public class CkbExtractorTest {
         assertEquals("transcript", codon2.inputTranscript());
     }
 
+    @Ignore
+    @Test
+    public void canExtractCombinedEventsFromCkbEntries() {
+        CkbExtractor trialExtractor = CkbExtractorFactory.createExtractor(CkbClassificationConfig.build(),
+                RefGenomeResourceTestFactory.buildTestResource37(),
+                TreatmentApproachTestFactory.createEmptyCurator(),
+                CkbFilteringTestFactory.createEmptyEvidenceFilterModel(),
+                CkbFilteringTestFactory.createEmptyTrialFilterModel(),
+                Set.of(ImmutableCkbRegion.builder().country("netherlands").states(Collections.emptySet()).build()));
+
+        List<Variant> variants = List.of(
+                CkbTestFactory.createVariant("BRAF", "loss", "BRAF loss"),
+                CkbTestFactory.createVariant("KIT", "loss", "KIT loss")
+        );
+
+        List<CkbEntry> ckbEntries = Lists.newArrayList();
+        ckbEntries.add(createWithOpenMolecularTrial("nct1", variants, "sensitive", "Actionable"));
+
+        ExtractionResult trialResult = trialExtractor.extract(ckbEntries);
+
+        assertEquals(1, trialResult.trials().size());
+        assertEquals(2, trialResult.eventInterpretations().size());
+        assertEquals(2, trialResult.knownEvents().genes().size());
+        assertEquals(2, trialResult.knownEvents().copyNumbers().size());
+    }
+
     @NotNull
     private static CodonAnnotation findByGene(@NotNull Iterable<CodonAnnotation> codons, @NotNull String geneToFind) {
         for (CodonAnnotation codon : codons) {
@@ -103,28 +131,64 @@ public class CkbExtractorTest {
     @NotNull
     private static List<CkbEntry> createCkbEntryTestDatabase() {
         List<CkbEntry> ckbEntries = Lists.newArrayList();
-        ckbEntries.add(createWithOpenMolecularTrial("nct1", "KIT", "amp", "KIT amp", "sensitive", "Actionable"));
-        ckbEntries.add(createWithOpenMolecularTrial("nct2", "BRAF", "V600E", "BRAF V600E", "sensitive", "Actionable"));
-        ckbEntries.add(createWithOpenMolecularTrial("nct3",
+        ckbEntries.add(createWithOpenMolecularTrial(1, "nct1", "KIT", "amp", "KIT amp", "sensitive", "Actionable"));
+        ckbEntries.add(createWithOpenMolecularTrial(2, "nct2", "BRAF", "V600E", "BRAF V600E", "sensitive", "Actionable"));
+        ckbEntries.add(createWithOpenMolecularTrial(3, "nct3",
                 "NTRK3",
                 "fusion promiscuous",
                 "NTRK3 fusion promiscuous",
                 "sensitive",
                 "Actionable"));
-        ckbEntries.add(createWithOpenMolecularTrial("nct4", "BRAF", "V600", "BRAF V600", "sensitive", "Actionable"));
-        ckbEntries.add(createWithOpenMolecularTrial("nct5", "BRAF", "exon 1 deletion", "BRAF exon 1 deletion", "sensitive", "Actionable"));
-        ckbEntries.add(createWithOpenMolecularTrial("nct6", "-", "MSI high", "MSI high", "sensitive", "Actionable"));
-        ckbEntries.add(createWithOpenMolecularTrial("nct7", "ALK", "EML4-ALK", "EML4-ALK Fusion", "sensitive", "Actionable"));
+        ckbEntries.add(createWithOpenMolecularTrial(4, "nct4", "BRAF", "V600", "BRAF V600", "sensitive", "Actionable"));
+        ckbEntries.add(createWithOpenMolecularTrial(5,
+                "nct5",
+                "BRAF",
+                "exon 1 deletion",
+                "BRAF exon 1 deletion",
+                "sensitive",
+                "Actionable"));
+        ckbEntries.add(createWithOpenMolecularTrial(6, "nct6", "-", "MSI high", "MSI high", "sensitive", "Actionable"));
+        ckbEntries.add(createWithOpenMolecularTrial(7, "nct7", "ALK", "EML4-ALK", "EML4-ALK Fusion", "sensitive", "Actionable"));
 
         return ckbEntries;
     }
 
     @NotNull
-    private static CkbEntry createWithOpenMolecularTrial(@NotNull String nctId, @NotNull String gene, @NotNull String variant,
-            @NotNull String fullName, @NotNull String responseType, @NotNull String evidenceType) {
-        CkbEntry baseEntry = CkbTestFactory.createEntry(gene,
+    private static CkbEntry createWithOpenMolecularTrial(int profileId, @NotNull String nctId, @NotNull String gene,
+            @NotNull String variant, @NotNull String fullName, @NotNull String responseType, @NotNull String evidenceType) {
+        CkbEntry baseEntry = CkbTestFactory.createEntry(profileId,
+                gene,
                 variant,
                 fullName,
+                responseType,
+                evidenceType,
+                "any treatment",
+                "any indication",
+                "A",
+                "Guideline",
+                "DOID:162");
+
+        return CkbTestFactory.builder()
+                .from(baseEntry)
+                .clinicalTrials(List.of(CkbTestFactory.createTrialWithTherapy(nctId,
+                        "title",
+                        List.of(CkbTestFactory.createTherapy("Nivolumab")),
+                        List.of(CkbTestFactory.createIndication("test", "JAX:10000006")),
+                        "Recruiting",
+                        List.of("senior", "child", "adult"),
+                        List.of(ImmutableVariantRequirementDetail.builder()
+                                .profileId(baseEntry.profileId())
+                                .requirementType("required")
+                                .build()),
+                        List.of(CkbTestFactory.createLocation("Netherlands", null, "Rotterdam", "EMC")))))
+                .build();
+    }
+
+    // TODO combine with above version
+    @NotNull
+    private static CkbEntry createWithOpenMolecularTrial(@NotNull String nctId, @NotNull List<Variant> variants,
+            @NotNull String responseType, @NotNull String evidenceType) {
+        CkbEntry baseEntry = CkbTestFactory.createComplexEventEntry(variants,
                 responseType,
                 evidenceType,
                 "any treatment",

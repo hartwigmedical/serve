@@ -40,7 +40,8 @@ public class EfficacyEvidenceFactoryTest {
 
     @Test
     public void shouldCreateEvidenceForMSIEntry() {
-        CkbEntry msiEntry = CkbTestFactory.createEntry("-",
+        CkbEntry msiEntry = CkbTestFactory.createEntry(1,
+                "-",
                 "MSI neg",
                 "MSI neg",
                 "sensitive",
@@ -73,7 +74,8 @@ public class EfficacyEvidenceFactoryTest {
 
     @Test
     public void shouldCreateEvidenceForKrasAmplificationEntry() {
-        CkbEntry entryAmplification = CkbTestFactory.createEntry("KRAS",
+        CkbEntry entryAmplification = CkbTestFactory.createEntry(1,
+                "KRAS",
                 "KRAS amplification",
                 "KRAS amplification",
                 "sensitive",
@@ -106,7 +108,8 @@ public class EfficacyEvidenceFactoryTest {
 
     @Test
     public void shouldCreateEvidenceForBrafHotspotEntry() {
-        CkbEntry entryHotspot = CkbTestFactory.createEntry("BRAF",
+        CkbEntry entryHotspot = CkbTestFactory.createEntry(1,
+                "BRAF",
                 "BRAF V600E",
                 "BRAF V600E",
                 "sensitive",
@@ -304,7 +307,8 @@ public class EfficacyEvidenceFactoryTest {
 
     @NotNull
     private static CkbEntry createForTherapyAndLevel(@NotNull String therapy, @NotNull String level) {
-        return CkbTestFactory.createEntry("any gene",
+        return CkbTestFactory.createEntry(1,
+                "any gene",
                 "any variant",
                 "any full name",
                 "sensitive",
@@ -319,7 +323,8 @@ public class EfficacyEvidenceFactoryTest {
     @NotNull
     private static CkbEntry create(@NotNull String geneSymbol, @NotNull String variant, @NotNull String fullName,
             @NotNull String responseType, @NotNull String evidenceType) {
-        return CkbTestFactory.createEntry(geneSymbol,
+        return CkbTestFactory.createEntry(1,
+                geneSymbol,
                 variant,
                 fullName,
                 responseType,

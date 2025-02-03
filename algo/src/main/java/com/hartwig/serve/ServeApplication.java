@@ -17,7 +17,9 @@ public class ServeApplication {
 
     private static final Logger LOGGER = LogManager.getLogger(ServeApplication.class);
 
-    private static final String VERSION = ServeApplication.class.getPackage().getImplementationVersion();
+    private static final String VERSION = ServeApplication.class.getPackage().getImplementationVersion() == null
+            ? "local"
+            : ServeApplication.class.getPackage().getImplementationVersion();
 
     public static void main(String[] args) throws IOException {
         LOGGER.info("Running SERVE v{}", VERSION);

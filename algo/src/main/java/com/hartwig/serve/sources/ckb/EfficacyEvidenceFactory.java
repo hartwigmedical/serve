@@ -109,8 +109,8 @@ class EfficacyEvidenceFactory {
 
                     Set<String> treatmentApproachDrugClasses =
                             evidence.drugTreatmentApproaches().stream().map(DrugClassTreatmentApproach::drugClass)
-                            .map(DrugClass::drugClass)
-                            .collect(Collectors.toSet());
+                                    .map(DrugClass::drugClass)
+                                    .collect(Collectors.toSet());
 
                     Set<String> treatmentApproachTherapies = evidence.therapyTreatmentApproaches()
                             .stream()
@@ -281,12 +281,11 @@ class EfficacyEvidenceFactory {
         }
 
         if (therapy != null) {
-           return entryDate.isAfter(therapy.createDate()) ? entryDate.getYear() : therapy.createDate().getYear();
+            return entryDate.isAfter(therapy.createDate()) ? entryDate.getYear() : therapy.createDate().getYear();
         } else {
             return entryDate.getYear();
         }
     }
-
 
     @NotNull
     @VisibleForTesting

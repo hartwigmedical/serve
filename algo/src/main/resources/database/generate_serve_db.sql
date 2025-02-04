@@ -112,7 +112,7 @@ CREATE TABLE `actionableTrial`
     `nctId` varchar(20),
     `title` varchar(500),
     `acronym` varchar(100),
-    `countriesAndCities` varchar(50000),
+    `countriesAndCities` text,
     `hospitalsPerCity` text,
     `therapyNames` varchar(2000),
     `genderCriterium` varchar(50),

@@ -1,7 +1,6 @@
 package com.hartwig.serve.dao;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.hartwig.serve.datamodel.ServeRecord;
 import com.hartwig.serve.extraction.events.EventInterpretation;
@@ -65,12 +64,6 @@ class ServeDAO {
         efficacyEvidenceDAO.write(serveRecord.evidences());
 
         LOGGER.info("Writing actionable trials");
-        String test = serveRecord.trials().get(1)
-                .countries()
-                .stream()
-                .map(country -> country.name() + "(" + String.join(DatabaseUtil.SUB_JOINER, country.hospitalsPerCity().keySet()) + ")")
-                .collect(Collectors.joining(DatabaseUtil.MAIN_JOINER));
-        LOGGER.info(test);
         actionableTrialDAO.write(serveRecord.trials());
     }
 }

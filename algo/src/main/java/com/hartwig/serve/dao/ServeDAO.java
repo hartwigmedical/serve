@@ -65,8 +65,7 @@ class ServeDAO {
         efficacyEvidenceDAO.write(serveRecord.evidences());
 
         LOGGER.info("Writing actionable trials");
-        String test = serveRecord.trials()
-                .get(0)
+        String test = serveRecord.trials().get(1)
                 .countries()
                 .stream()
                 .map(country -> country.name() + "(" + String.join(DatabaseUtil.SUB_JOINER, country.hospitalsPerCity().keySet()) + ")")

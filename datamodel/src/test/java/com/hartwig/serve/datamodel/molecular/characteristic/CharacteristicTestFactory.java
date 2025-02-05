@@ -26,7 +26,8 @@ public final class CharacteristicTestFactory {
     }
 
     @NotNull
-    public static ActionableCharacteristic createTestActionableCharacteristic() {
+    public static ActionableCharacteristic
+    createTestActionableCharacteristic() {
         return actionableCharacteristicBuilder().build();
     }
 

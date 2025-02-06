@@ -445,6 +445,8 @@ elsewhere.
 
 ## Version History and Download Links
 
+- [7.4.1](https://github.com/hartwigmedical/serve/releases/tag/serve-v7.4.1)
+    - Change varchar to text when writing countriesAndCities to SQL
 - [7.4.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v7.4.0)
     - Actionable trials are consolidated by NCT ID per source.
 - [7.3.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v7.3.0)

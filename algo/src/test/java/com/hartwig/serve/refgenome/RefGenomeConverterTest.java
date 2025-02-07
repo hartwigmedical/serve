@@ -117,7 +117,7 @@ public class RefGenomeConverterTest {
                         .iterator()
                         .next()
                         .molecularCriterium()
-                        .allOfAnyHotspots()
+                        .oneOfEachHotspots()
                         .iterator()
                         .next();
         assertEquals(actionableHotspot, convertedActionableHotspotsFromEvidence.iterator().next());
@@ -130,7 +130,7 @@ public class RefGenomeConverterTest {
                         .anyMolecularCriteria()
                         .iterator()
                         .next()
-                        .allOfAnyHotspots()
+                        .oneOfEachHotspots()
                         .iterator()
                         .next();
         assertEquals(actionableHotspot, convertedActionableHotspotFromTrial.iterator().next());

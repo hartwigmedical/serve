@@ -198,7 +198,7 @@ class ConversionFilter {
     private MolecularCriterium cleanMolecularCriterium(@NotNull MolecularCriterium criterium) {
         return ImmutableMolecularCriterium.builder()
                 .from(criterium)
-                .allOfAnyHotspots(filterAllOfAnyHotspots(criterium.allOfAnyHotspots()))
+                .oneOfEachHotspots(filterAllOfAnyHotspots(criterium.oneOfEachHotspots()))
                 .codons(filterActionableRange(criterium.codons()))
                 .exons(filterActionableRange(criterium.exons()))
                 .genes(filterActionableGenes(criterium.genes()))
@@ -214,7 +214,7 @@ class ConversionFilter {
     }
 
     private static boolean hasAtLeastOneCriterium(@NotNull MolecularCriterium criterium) {
-        boolean hasHotspots = criterium.allOfAnyHotspots().stream().anyMatch(set -> !set.isEmpty());
+        boolean hasHotspots = criterium.oneOfEachHotspots().stream().anyMatch(set -> !set.isEmpty());
         return hasHotspots || !criterium.codons().isEmpty() || !criterium.exons().isEmpty()
                 || !criterium.genes()
                 .isEmpty() || !criterium.fusions().isEmpty() || !criterium.characteristics().isEmpty() || !criterium.hla().isEmpty();

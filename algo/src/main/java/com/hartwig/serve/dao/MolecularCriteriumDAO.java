@@ -47,7 +47,7 @@ class MolecularCriteriumDAO {
                 context.insertInto(MOLECULARCRITERIUM).values().returning(MOLECULARCRITERIUM.ID).fetchOne().getValue(MOLECULARCRITERIUM.ID);
 
         // TODO do we need a subset id to model the hotspot grouping?
-        molecularCriterium.allOfAnyHotspots().forEach(hotspots -> writeActionableHotspots(molecularCriteriumId, hotspots));
+        molecularCriterium.oneOfEachHotspots().forEach(hotspots -> writeActionableHotspots(molecularCriteriumId, hotspots));
         writeActionableCodons(molecularCriteriumId, molecularCriterium.codons());
         writeActionableExons(molecularCriteriumId, molecularCriterium.exons());
         writeActionableGenes(molecularCriteriumId, molecularCriterium.genes());

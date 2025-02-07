@@ -171,7 +171,7 @@ class RefGenomeConverter {
     private MolecularCriterium convertMolecularCriterium(@NotNull MolecularCriterium molecularCriterium) {
         return ImmutableMolecularCriterium.builder()
                 .from(molecularCriterium)
-                .allOfAnyHotspots(convertActionableHotspotsSet(molecularCriterium.allOfAnyHotspots()))
+                .oneOfEachHotspots(convertActionableHotspotsSet(molecularCriterium.oneOfEachHotspots()))
                 .codons(convertActionableRanges(molecularCriterium.codons()))
                 .exons(convertActionableRanges(molecularCriterium.exons()))
                 .build();

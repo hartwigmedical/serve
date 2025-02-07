@@ -81,7 +81,7 @@ public class CkbVariantCriteriaExtractor {
             @NotNull ActionableEvent actionableEvent) {
 
         return ImmutableMolecularCriterium.builder()
-                .allOfAnyHotspots(Set.of(hotspotCriteria(extractionOutput, actionableEvent)))
+                .oneOfEachHotspots(Set.of(hotspotCriteria(extractionOutput, actionableEvent)))
                 .codons(codonCriteria(extractionOutput, actionableEvent))
                 .exons(exonCriteria(extractionOutput, actionableEvent))
                 .genes(geneCriteria(extractionOutput, actionableEvent))

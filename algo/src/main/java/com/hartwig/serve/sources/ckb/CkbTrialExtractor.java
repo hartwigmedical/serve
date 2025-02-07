@@ -121,7 +121,7 @@ public class CkbTrialExtractor {
     }
 
     private int criteriaCount(@NotNull MolecularCriterium molecularCriterium) {
-        return molecularCriterium.allOfAnyHotspots().size() +
+        return molecularCriterium.oneOfEachHotspots().size() +
                 molecularCriterium.codons().size() +
                 molecularCriterium.exons().size() +
                 molecularCriterium.genes().size() +

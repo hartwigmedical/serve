@@ -10,8 +10,8 @@ public class MolecularCriteriumComparator implements Comparator<MolecularCriteri
 
     @Override
     public int compare(@NotNull MolecularCriterium molecularCriterium1, @NotNull MolecularCriterium molecularCriterium2) {
-        int allOfAnyHotspotsCompare = CompareFunctions.compareSetOfSetOfComparable(molecularCriterium1.allOfAnyHotspots(),
-                molecularCriterium2.allOfAnyHotspots());
+        int allOfAnyHotspotsCompare = CompareFunctions.compareSetOfSetOfComparable(molecularCriterium1.oneOfEachHotspots(),
+                molecularCriterium2.oneOfEachHotspots());
         if (allOfAnyHotspotsCompare != 0) {
             return allOfAnyHotspotsCompare;
         }

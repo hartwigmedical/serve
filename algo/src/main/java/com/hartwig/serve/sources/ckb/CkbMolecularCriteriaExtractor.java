@@ -42,7 +42,9 @@ public class CkbMolecularCriteriaExtractor {
         // Join the molecular criteria into a single set, which represents the conjunction of the individual
         // variant criteria. TODO We eventually ended up with a MolecularCriteriaCombiner so check into updating & using that instead
         MolecularCriterium combinedMolecularCriterium = ImmutableMolecularCriterium.builder()
-                .addAllAllOfAnyHotspots(molecularCriteria.stream().flatMap(c -> c.allOfAnyHotspots().stream()).collect(Collectors.toSet()))
+                .addAllOneOfEachHotspots(molecularCriteria.stream()
+                        .flatMap(c -> c.oneOfEachHotspots().stream())
+                        .collect(Collectors.toSet()))
                 .addAllCodons(molecularCriteria.stream().flatMap(c -> c.codons().stream()).collect(Collectors.toSet()))
                 .addAllExons(molecularCriteria.stream().flatMap(c -> c.exons().stream()).collect(Collectors.toSet()))
                 .addAllGenes(molecularCriteria.stream().flatMap(c -> c.genes().stream()).collect(Collectors.toSet()))

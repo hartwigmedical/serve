@@ -35,7 +35,7 @@ public final class MolecularCriteriumTestFactory {
 
     @NotNull
     public static MolecularCriterium createWithActionableHotspot(@NotNull ActionableHotspot hotspot) {
-        return ImmutableMolecularCriterium.builder().addAllOfAnyHotspots(Set.of(hotspot)).build();
+        return ImmutableMolecularCriterium.builder().addOneOfEachHotspots(Set.of(hotspot)).build();
     }
 
     @NotNull

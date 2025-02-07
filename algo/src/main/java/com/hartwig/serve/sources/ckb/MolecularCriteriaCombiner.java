@@ -24,7 +24,6 @@ final class MolecularCriteriaCombiner {
     public static MolecularCriterium combine(@NotNull MolecularCriterium criteria1, @NotNull MolecularCriterium criteria2) {
         return ImmutableMolecularCriterium.builder()
                 .addAllAllOfAnyHotspots(Sets.union(criteria1.allOfAnyHotspots(), criteria2.allOfAnyHotspots()))
-                .addAllHotspots(Sets.union(criteria1.hotspots(), criteria2.hotspots()))
                 .addAllCodons(Sets.union(criteria1.codons(), criteria2.codons()))
                 .addAllExons(Sets.union(criteria1.exons(), criteria2.exons()))
                 .addAllGenes(Sets.union(criteria1.genes(), criteria2.genes()))

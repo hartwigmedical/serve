@@ -318,7 +318,7 @@ public final class ViccExtractor {
                 ActionableEvent event = toActionableEvent(interpretations.get(entry.getKey()));
                 for (VariantHotspot hotspot : hotspots) {
                     criteriaForHotspots.add(ImmutableMolecularCriterium.builder()
-                            .addHotspots(ImmutableActionableHotspot.builder().from(hotspot).from(event).build())
+                            .addAllOfAnyHotspots(Set.of(ImmutableActionableHotspot.builder().from(hotspot).from(event).build()))
                             .build());
                 }
             }

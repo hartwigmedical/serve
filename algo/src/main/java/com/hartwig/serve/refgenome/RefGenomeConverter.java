@@ -2,6 +2,7 @@ package com.hartwig.serve.refgenome;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.google.common.collect.Sets;
 import com.hartwig.serve.common.RefGenomeFunctions;
@@ -170,10 +171,15 @@ class RefGenomeConverter {
     private MolecularCriterium convertMolecularCriterium(@NotNull MolecularCriterium molecularCriterium) {
         return ImmutableMolecularCriterium.builder()
                 .from(molecularCriterium)
-                .hotspots(convertActionableHotspots(molecularCriterium.hotspots()))
+                .allOfAnyHotspots(convertActionableHotspotsSet(molecularCriterium.allOfAnyHotspots()))
                 .codons(convertActionableRanges(molecularCriterium.codons()))
                 .exons(convertActionableRanges(molecularCriterium.exons()))
                 .build();
+    }
+
+    @NotNull
+    private Set<Set<ActionableHotspot>> convertActionableHotspotsSet(@NotNull Set<Set<ActionableHotspot>> hotspots) {
+        return hotspots.stream().map(this::convertActionableHotspots).collect(Collectors.toSet());
     }
 
     @NotNull

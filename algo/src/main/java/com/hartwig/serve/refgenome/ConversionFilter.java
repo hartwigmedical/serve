@@ -2,6 +2,7 @@ package com.hartwig.serve.refgenome;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.efficacy.EfficacyEvidence;
@@ -197,7 +198,7 @@ class ConversionFilter {
     private MolecularCriterium cleanMolecularCriterium(@NotNull MolecularCriterium criterium) {
         return ImmutableMolecularCriterium.builder()
                 .from(criterium)
-                .hotspots(filterActionableHotspots(criterium.hotspots()))
+                .allOfAnyHotspots(filterAllOfAnyHotspots(criterium.allOfAnyHotspots()))
                 .codons(filterActionableRange(criterium.codons()))
                 .exons(filterActionableRange(criterium.exons()))
                 .genes(filterActionableGenes(criterium.genes()))
@@ -205,8 +206,17 @@ class ConversionFilter {
                 .build();
     }
 
+    @NotNull
+    private Set<Set<ActionableHotspot>> filterAllOfAnyHotspots(@NotNull Set<Set<ActionableHotspot>> allOfAnyHotspots) {
+        return allOfAnyHotspots.stream()
+                .map(this::filterActionableHotspots)
+                .collect(Collectors.toSet());
+    }
+
     private static boolean hasAtLeastOneCriterium(@NotNull MolecularCriterium criterium) {
-        return !criterium.hotspots().isEmpty() || !criterium.codons().isEmpty() || !criterium.exons().isEmpty() || !criterium.genes()
+        boolean hasHotspots = criterium.allOfAnyHotspots().stream().anyMatch(set -> !set.isEmpty());
+        return hasHotspots || !criterium.codons().isEmpty() || !criterium.exons().isEmpty()
+                || !criterium.genes()
                 .isEmpty() || !criterium.fusions().isEmpty() || !criterium.characteristics().isEmpty() || !criterium.hla().isEmpty();
     }
 

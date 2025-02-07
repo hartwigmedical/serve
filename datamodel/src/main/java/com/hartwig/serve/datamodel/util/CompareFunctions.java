@@ -25,6 +25,20 @@ public final class CompareFunctions {
         return Integer.compare(set2.size(), set1.size());
     }
 
+    public static <T extends Comparable<T>> int compareSetOfSetOfComparable(@NotNull Set<Set<T>> set1, @NotNull Set<Set<T>> set2) {
+        Iterator<Set<T>> set1Iterator = set1.iterator();
+        Iterator<Set<T>> set2Iterator = set2.iterator();
+
+        while (set1Iterator.hasNext() && set2Iterator.hasNext()) {
+            int entryCompare = compareSetOfComparable(set1Iterator.next(), set2Iterator.next());
+            if (entryCompare != 0) {
+                return entryCompare;
+            }
+        }
+
+        return Integer.compare(set1.size(), set2.size());
+    }
+
     public static int compareNullableStrings(@Nullable String string1, @Nullable String string2) {
         return compareNullable(string1, string2);
     }

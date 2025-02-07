@@ -1,5 +1,7 @@
 package com.hartwig.serve.sources.ckb;
 
+import static com.hartwig.serve.sources.ckb.CkbVariantCriteriaExtractor.curateCodons;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -75,7 +77,7 @@ public class CkbExtractorTest {
                                 .build()))
                 .build();
 
-        List<CodonAnnotation> curatedCodons = CkbExtractor.curateCodons(extractorOutput).codons();
+        List<CodonAnnotation> curatedCodons = curateCodons(extractorOutput).codons();
 
         assertNotNull(curatedCodons);
 

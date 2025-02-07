@@ -19,7 +19,7 @@ public class MolecularCriteriaCombinerTest {
 
         MolecularCriterium combined = MolecularCriteriaCombiner.combine(criterium1, criterium2);
 
-        assertEquals(combined.hotspots(), criterium1.hotspots());
+        assertEquals(combined.allOfAnyHotspots(), criterium1.allOfAnyHotspots());
         assertEquals(combined.genes(), criterium2.genes());
     }
 
@@ -31,7 +31,7 @@ public class MolecularCriteriaCombinerTest {
 
         MolecularCriterium combined = MolecularCriteriaCombiner.combine(List.of(criterium1, criterium2, criterium3));
 
-        assertEquals(combined.hotspots(), criterium1.hotspots());
+        assertEquals(combined.allOfAnyHotspots(), criterium1.allOfAnyHotspots());
         assertEquals(combined.genes(), criterium2.genes());
         assertEquals(combined.characteristics(), criterium3.characteristics());
     }

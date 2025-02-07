@@ -113,12 +113,26 @@ public class RefGenomeConverterTest {
 
         List<EfficacyEvidence> evidences = List.of(EfficacyEvidenceTestFactory.createWithMolecularCriterium(molecularCriterium));
         Set<ActionableHotspot> convertedActionableHotspotsFromEvidence =
-                DUMMY_CONVERTER.convertEfficacyEvidences(evidences).iterator().next().molecularCriterium().hotspots();
+                DUMMY_CONVERTER.convertEfficacyEvidences(evidences)
+                        .iterator()
+                        .next()
+                        .molecularCriterium()
+                        .allOfAnyHotspots()
+                        .iterator()
+                        .next();
         assertEquals(actionableHotspot, convertedActionableHotspotsFromEvidence.iterator().next());
 
         List<ActionableTrial> trials = List.of(TrialTestFactory.createWithMolecularCriterium(molecularCriterium));
         Set<ActionableHotspot> convertedActionableHotspotFromTrial =
-                DUMMY_CONVERTER.convertTrials(trials).iterator().next().anyMolecularCriteria().iterator().next().hotspots();
+                DUMMY_CONVERTER.convertTrials(trials)
+                        .iterator()
+                        .next()
+                        .anyMolecularCriteria()
+                        .iterator()
+                        .next()
+                        .allOfAnyHotspots()
+                        .iterator()
+                        .next();
         assertEquals(actionableHotspot, convertedActionableHotspotFromTrial.iterator().next());
     }
 

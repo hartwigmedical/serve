@@ -8,10 +8,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.hartwig.serve.ckb.classification.CkbEventAndGeneExtractor;
-import com.hartwig.serve.ckb.classification.CkbEventTypeExtractor;
-import com.hartwig.serve.ckb.datamodel.variant.Variant;
-import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.datamodel.molecular.ActionableEvent;
 import com.hartwig.serve.datamodel.molecular.ImmutableMolecularCriterium;
 import com.hartwig.serve.datamodel.molecular.MolecularCriterium;
@@ -32,7 +28,6 @@ import com.hartwig.serve.datamodel.molecular.immuno.ImmutableActionableHLA;
 import com.hartwig.serve.datamodel.molecular.range.ActionableRange;
 import com.hartwig.serve.datamodel.molecular.range.ImmutableActionableRange;
 import com.hartwig.serve.datamodel.molecular.range.RangeAnnotation;
-import com.hartwig.serve.extraction.EventExtractor;
 import com.hartwig.serve.extraction.EventExtractorOutput;
 import com.hartwig.serve.extraction.ImmutableEventExtractorOutput;
 import com.hartwig.serve.extraction.codon.CodonAnnotation;
@@ -40,44 +35,14 @@ import com.hartwig.serve.extraction.codon.ImmutableCodonAnnotation;
 import com.hartwig.serve.extraction.exon.ExonAnnotation;
 import com.hartwig.serve.extraction.immuno.ImmunoHLA;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 // maybe this should be folded into CkbMolecularCriteriaExtractor
-public class CkbVariantCriteriaExtractor {
-    private static final Logger LOGGER = LogManager.getLogger(CkbVariantCriteriaExtractor.class);
+public final class CkbVariantCriteriaExtractor {
 
     @NotNull
-    private final EventExtractor eventExtractor;
-
-    public CkbVariantCriteriaExtractor(@NotNull EventExtractor eventExtractor) {
-        this.eventExtractor = eventExtractor;
-    }
-
-    // Note the actionableEvent parameter comes from the combined event, feels suspicious
-    @Nullable
-    public MolecularCriterium extractCriteria(@NotNull Variant variant, ActionableEvent actionableEvent) {
-        EventType eventType = CkbEventTypeExtractor.classify(variant);
-
-        if (eventType == EventType.COMBINED) {
-            throw new IllegalStateException("Should not have combined event for single variant: " + variant.fullName());
-        } else if (eventType == EventType.UNKNOWN) {
-            LOGGER.warn("No known event type for variant: '{}'", variant.fullName());
-            return null;
-        }
-
-        String event = CkbEventAndGeneExtractor.extractEvent(variant);
-        String gene = CkbEventAndGeneExtractor.extractGene(variant);
-
-        EventExtractorOutput extractionOutput = curateCodons(eventExtractor.extract(gene, null, eventType, event));
-
-        return createMolecularCriterium(extractionOutput, actionableEvent);
-    }
-
-    @NotNull
-    private MolecularCriterium createMolecularCriterium(@NotNull EventExtractorOutput extractionOutput,
+    public static MolecularCriterium createMolecularCriterium(@NotNull EventExtractorOutput extractionOutput,
             @NotNull ActionableEvent actionableEvent) {
 
         return ImmutableMolecularCriterium.builder()
@@ -92,7 +57,7 @@ public class CkbVariantCriteriaExtractor {
     }
 
     @NotNull
-    private Set<ActionableHotspot> hotspotCriteria(@NotNull EventExtractorOutput extractionOutput,
+    private static Set<ActionableHotspot> hotspotCriteria(@NotNull EventExtractorOutput extractionOutput,
             @NotNull ActionableEvent actionableEvent) {
 
         List<VariantHotspot> extractionHotspots = extractionOutput.hotspots();
@@ -104,7 +69,7 @@ public class CkbVariantCriteriaExtractor {
     }
 
     @NotNull
-    private Set<ActionableRange> codonCriteria(@NotNull EventExtractorOutput extractionOutput,
+    private static Set<ActionableRange> codonCriteria(@NotNull EventExtractorOutput extractionOutput,
             @NotNull ActionableEvent actionableEvent) {
 
         List<CodonAnnotation> extractionCodons = extractionOutput.codons();
@@ -116,7 +81,7 @@ public class CkbVariantCriteriaExtractor {
     }
 
     @NotNull
-    private Set<ActionableRange> exonCriteria(@NotNull EventExtractorOutput extractionOutput,
+    private static Set<ActionableRange> exonCriteria(@NotNull EventExtractorOutput extractionOutput,
             @NotNull ActionableEvent actionableEvent) {
 
         List<ExonAnnotation> extractionExons = extractionOutput.exons();
@@ -128,7 +93,7 @@ public class CkbVariantCriteriaExtractor {
     }
 
     @NotNull
-    private Set<ActionableGene> geneCriteria(@NotNull EventExtractorOutput extractionOutput,
+    private static Set<ActionableGene> geneCriteria(@NotNull EventExtractorOutput extractionOutput,
             @NotNull ActionableEvent actionableEvent) {
 
         return Stream.of(extractionOutput.geneLevel(), extractionOutput.copyNumber())
@@ -144,7 +109,8 @@ public class CkbVariantCriteriaExtractor {
     }
 
     @NotNull
-    private Set<ActionableFusion> fusionCriteria(@NotNull EventExtractorOutput extractionOutput, @NotNull ActionableEvent actionableEvent) {
+    private static Set<ActionableFusion> fusionCriteria(@NotNull EventExtractorOutput extractionOutput,
+            @NotNull ActionableEvent actionableEvent) {
         if (extractionOutput.fusionPair() == null) {
             return Collections.emptySet();
         }
@@ -153,7 +119,7 @@ public class CkbVariantCriteriaExtractor {
     }
 
     @Nullable
-    private MolecularCriterium characteristicsCriteria(@NotNull EventExtractorOutput extractionOutput,
+    private static MolecularCriterium characteristicsCriteria(@NotNull EventExtractorOutput extractionOutput,
             @NotNull ActionableEvent actionableEvent) {
         if (extractionOutput.characteristic() == null) {
             return null;
@@ -165,7 +131,7 @@ public class CkbVariantCriteriaExtractor {
     }
 
     @Nullable
-    private MolecularCriterium hlaCriteria(@NotNull EventExtractorOutput extractionOutput,
+    private static MolecularCriterium hlaCriteria(@NotNull EventExtractorOutput extractionOutput,
             @NotNull ActionableEvent actionableEvent) {
         if (extractionOutput.hla() == null) {
             return null;

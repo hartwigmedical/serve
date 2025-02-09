@@ -1,7 +1,6 @@
 package com.hartwig.serve.sources.ckb;
 
 import java.time.LocalDate;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -13,6 +12,7 @@ import com.hartwig.serve.datamodel.molecular.ActionableEvent;
 import com.hartwig.serve.datamodel.molecular.ImmutableMolecularCriterium;
 import com.hartwig.serve.datamodel.molecular.MolecularCriterium;
 import com.hartwig.serve.extraction.EventExtractor;
+import com.hartwig.serve.extraction.EventExtractorOutput;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,22 +26,22 @@ public class CkbMolecularCriteriaExtractor {
     CkbVariantCriteriaExtractor variantCriteriaExtractor;
 
     public CkbMolecularCriteriaExtractor(@NotNull EventExtractor eventExtractor) {
-        this.variantCriteriaExtractor = new CkbVariantCriteriaExtractor(eventExtractor);
+        this.variantCriteriaExtractor = new CkbVariantCriteriaExtractor();
     }
 
     @NotNull
-    public MolecularCriterium criteriumForEntry(CkbEntry entry) {
+    public MolecularCriterium criterium(CkbEntry entry, Set<EventExtractorOutput> eventExtractorOutputs) {
         String sourceEvent = combinedSourceEvent(entry);
         ActionableEvent actionableEvent = toActionableEvent(sourceEvent, entry);
 
-        Set<MolecularCriterium> molecularCriteria = entry.variants().stream()
-                .map(variant -> variantCriteriaExtractor.extractCriteria(variant, actionableEvent))
-                .filter(Objects::nonNull) // TODO should we bail out here or use the rest?
+        Set<MolecularCriterium> molecularCriteria = eventExtractorOutputs.stream()
+                .map(eventExtractorOutput -> variantCriteriaExtractor.createMolecularCriterium(eventExtractorOutput, actionableEvent))
                 .collect(Collectors.toSet());
 
         // Join the molecular criteria into a single set, which represents the conjunction of the individual
         // variant criteria. TODO We eventually ended up with a MolecularCriteriaCombiner so check into updating & using that instead
-        MolecularCriterium combinedMolecularCriterium = ImmutableMolecularCriterium.builder()
+
+        return ImmutableMolecularCriterium.builder()
                 .addAllOneOfEachHotspots(molecularCriteria.stream()
                         .flatMap(c -> c.oneOfEachHotspots().stream())
                         .collect(Collectors.toSet()))
@@ -52,8 +52,6 @@ public class CkbMolecularCriteriaExtractor {
                 .addAllCharacteristics(molecularCriteria.stream().flatMap(c -> c.characteristics().stream()).collect(Collectors.toSet()))
                 .addAllHla(molecularCriteria.stream().flatMap(c -> c.hla().stream()).collect(Collectors.toSet()))
                 .build();
-
-        return combinedMolecularCriterium;
 
     }
 

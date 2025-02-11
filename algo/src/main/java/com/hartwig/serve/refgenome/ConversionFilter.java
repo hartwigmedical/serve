@@ -215,9 +215,8 @@ class ConversionFilter {
 
     private static boolean hasAtLeastOneCriterium(@NotNull MolecularCriterium criterium) {
         boolean hasHotspots = criterium.oneOfEachHotspots().stream().anyMatch(set -> !set.isEmpty());
-        return hasHotspots || !criterium.codons().isEmpty() || !criterium.exons().isEmpty()
-                || !criterium.genes()
-                .isEmpty() || !criterium.fusions().isEmpty() || !criterium.characteristics().isEmpty() || !criterium.hla().isEmpty();
+        return hasHotspots || !criterium.codons().isEmpty() || !criterium.exons().isEmpty() || !criterium.genes().isEmpty()
+                || !criterium.fusions().isEmpty() || !criterium.characteristics().isEmpty() || !criterium.hla().isEmpty();
     }
 
     @NotNull

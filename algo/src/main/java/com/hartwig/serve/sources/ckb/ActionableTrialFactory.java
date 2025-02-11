@@ -66,17 +66,22 @@ class ActionableTrialFactory {
         this.regionsToInclude = regionsToInclude;
     }
 
-    // temporary duplication
     @Nullable
-    public ActionableTrial createV2(Set<MolecularCriterium> molecularCriteria, ClinicalTrial trial) {
+    public ActionableTrial create(@NotNull Set<MolecularCriterium> molecularCriteria, @NotNull ClinicalTrial trial,
+            @NotNull String sourceGene, @NotNull String sourceEvent) {
 
         Set<Country> countries = extractCountriesToInclude(trial, regionsToInclude);
         Set<String> therapies = trial.therapies().stream()
                 .map(Therapy::therapyName)
                 .collect(Collectors.toSet());
 
-        // TODO: match with trialsToInclude()
-        if (filterTrial.shouldFilterTrial(trial.nctId(), setToField(therapies), Strings.EMPTY, Strings.EMPTY, Strings.EMPTY)
+        if (!hasIncludedTrialRequirements(trial)) {
+            return null;
+        }
+
+        // TODO the filtering here for gene and event is for a single combined gene and event,
+        //  will that be supported in the future?
+        if (filterTrial.shouldFilterTrial(trial.nctId(), setToField(therapies), Strings.EMPTY, sourceGene, sourceEvent)
                 || countries.isEmpty()) {
             return null;
         } else {
@@ -95,6 +100,7 @@ class ActionableTrialFactory {
         }
     }
 
+    // TODO maybe be able to remove this after comparison testing version
     @NotNull
     public Set<ActionableTrial> create(@NotNull CkbEntry entry, @NotNull Set<MolecularCriterium> molecularCriteria,
             @NotNull String sourceEvent, @NotNull String sourceGene) {
@@ -153,12 +159,15 @@ class ActionableTrialFactory {
     private static List<ClinicalTrial> trialsToInclude(@NotNull CkbEntry entry) {
         List<ClinicalTrial> filtered = Lists.newArrayList();
         for (ClinicalTrial trial : entry.clinicalTrials()) {
-            if (hasVariantRequirementTypeToInclude(trial.variantRequirementDetails(), entry)
-                    && hasPotentiallyOpenRequirementToInclude(trial.recruitment()) && hasAgeGroupToInclude(trial.ageGroups())) {
+            if (hasVariantRequirementTypeToInclude(trial.variantRequirementDetails(), entry) && hasIncludedTrialRequirements(trial)) {
                 filtered.add(trial);
             }
         }
         return filtered;
+    }
+
+    private static boolean hasIncludedTrialRequirements(@NotNull ClinicalTrial trial) {
+        return hasPotentiallyOpenRequirementToInclude(trial.recruitment()) && hasAgeGroupToInclude(trial.ageGroups());
     }
 
     @NotNull

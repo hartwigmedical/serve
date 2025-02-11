@@ -1,7 +1,5 @@
 package com.hartwig.serve.sources.ckb;
 
-import static com.hartwig.serve.sources.ckb.CkbVariantCriteriaExtractor.curateCodons;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -80,7 +78,7 @@ public class CkbExtractorTest {
                                 .build()))
                 .build();
 
-        List<CodonAnnotation> curatedCodons = curateCodons(extractorOutput).codons();
+        List<CodonAnnotation> curatedCodons = CkbMolecularCriteriaExtractor.curateCodons(extractorOutput).codons();
 
         assertNotNull(curatedCodons);
 
@@ -112,7 +110,7 @@ public class CkbExtractorTest {
         );
 
         List<CkbEntry> ckbEntries = Lists.newArrayList();
-        ckbEntries.add(createWithOpenMolecularTrial("nct1", variants, "sensitive", "Actionable"));
+        ckbEntries.add(createWithVariantsOpenMolecularTrial("nct1", variants, "sensitive", "Actionable"));
 
         ExtractionResult trialResult = trialExtractor.extract(ckbEntries);
 
@@ -136,30 +134,30 @@ public class CkbExtractorTest {
     @NotNull
     private static List<CkbEntry> createCkbEntryTestDatabase() {
         List<CkbEntry> ckbEntries = Lists.newArrayList();
-        ckbEntries.add(createWithOpenMolecularTrial(1, "nct1", "KIT", "amp", "KIT amp", "sensitive", "Actionable"));
-        ckbEntries.add(createWithOpenMolecularTrial(2, "nct2", "BRAF", "V600E", "BRAF V600E", "sensitive", "Actionable"));
-        ckbEntries.add(createWithOpenMolecularTrial(3, "nct3",
+        ckbEntries.add(createWithVariantsOpenMolecularTrial(1, "nct1", "KIT", "amp", "KIT amp", "sensitive", "Actionable"));
+        ckbEntries.add(createWithVariantsOpenMolecularTrial(2, "nct2", "BRAF", "V600E", "BRAF V600E", "sensitive", "Actionable"));
+        ckbEntries.add(createWithVariantsOpenMolecularTrial(3, "nct3",
                 "NTRK3",
                 "fusion promiscuous",
                 "NTRK3 fusion promiscuous",
                 "sensitive",
                 "Actionable"));
-        ckbEntries.add(createWithOpenMolecularTrial(4, "nct4", "BRAF", "V600", "BRAF V600", "sensitive", "Actionable"));
-        ckbEntries.add(createWithOpenMolecularTrial(5,
+        ckbEntries.add(createWithVariantsOpenMolecularTrial(4, "nct4", "BRAF", "V600", "BRAF V600", "sensitive", "Actionable"));
+        ckbEntries.add(createWithVariantsOpenMolecularTrial(5,
                 "nct5",
                 "BRAF",
                 "exon 1 deletion",
                 "BRAF exon 1 deletion",
                 "sensitive",
                 "Actionable"));
-        ckbEntries.add(createWithOpenMolecularTrial(6, "nct6", "-", "MSI high", "MSI high", "sensitive", "Actionable"));
-        ckbEntries.add(createWithOpenMolecularTrial(7, "nct7", "ALK", "EML4-ALK", "EML4-ALK Fusion", "sensitive", "Actionable"));
+        ckbEntries.add(createWithVariantsOpenMolecularTrial(6, "nct6", "-", "MSI high", "MSI high", "sensitive", "Actionable"));
+        ckbEntries.add(createWithVariantsOpenMolecularTrial(7, "nct7", "ALK", "EML4-ALK", "EML4-ALK Fusion", "sensitive", "Actionable"));
 
         return ckbEntries;
     }
 
     @NotNull
-    private static CkbEntry createWithOpenMolecularTrial(int profileId, @NotNull String nctId, @NotNull String gene,
+    private static CkbEntry createWithVariantsOpenMolecularTrial(int profileId, @NotNull String nctId, @NotNull String gene,
             @NotNull String variant, @NotNull String fullName, @NotNull String responseType, @NotNull String evidenceType) {
         CkbEntry baseEntry = CkbTestFactory.createEntry(profileId,
                 gene,
@@ -189,9 +187,8 @@ public class CkbExtractorTest {
                 .build();
     }
 
-    // TODO combine with above version
     @NotNull
-    private static CkbEntry createWithOpenMolecularTrial(@NotNull String nctId, @NotNull List<Variant> variants,
+    private static CkbEntry createWithVariantsOpenMolecularTrial(@NotNull String nctId, @NotNull List<Variant> variants,
             @NotNull String responseType, @NotNull String evidenceType) {
         CkbEntry baseEntry = CkbTestFactory.createComplexEventEntry(variants,
                 responseType,
@@ -231,11 +228,10 @@ public class CkbExtractorTest {
                 CkbExtractor.combinePartialWithRequired(requiredCriterium, partiallyRequiredCriterium);
 
         Set<MolecularCriterium> expected = Set.of(
-                // TODO! fix due to
-                //                ImmutableMolecularCriterium.builder().addAllHotspots(requiredCriterium.hotspots())
-                //                        .addAllGenes(partial1.genes()).build(),
-                //                ImmutableMolecularCriterium.builder().addAllHotspots(requiredCriterium.hotspots())
-                //                        .addAllCharacteristics(partial2.characteristics()).build()
+                ImmutableMolecularCriterium.builder().addAllOneOfEachHotspots(requiredCriterium.oneOfEachHotspots())
+                        .addAllGenes(partial1.genes()).build(),
+                ImmutableMolecularCriterium.builder().addAllOneOfEachHotspots(requiredCriterium.oneOfEachHotspots())
+                        .addAllCharacteristics(partial2.characteristics()).build()
         );
         assertEquals(expected, anyMolecularCriteria);
     }

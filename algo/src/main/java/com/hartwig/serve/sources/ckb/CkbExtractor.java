@@ -1,14 +1,12 @@
 package com.hartwig.serve.sources.ckb;
 
-import static com.hartwig.serve.sources.ckb.CkbVariantCriteriaExtractor.curateCodons;
-
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import com.google.common.annotations.VisibleForTesting;
@@ -20,10 +18,10 @@ import com.hartwig.serve.ckb.datamodel.clinicaltrial.ClinicalTrial;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.VariantRequirementDetail;
 import com.hartwig.serve.ckb.datamodel.variant.Variant;
 import com.hartwig.serve.common.classification.EventType;
-import com.hartwig.serve.datamodel.ImmutableActionableEventImpl;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.efficacy.EfficacyEvidence;
-import com.hartwig.serve.datamodel.molecular.ActionableEvent;
+import com.hartwig.serve.datamodel.molecular.ImmutableKnownEvents;
+import com.hartwig.serve.datamodel.molecular.KnownEvents;
 import com.hartwig.serve.datamodel.molecular.MolecularCriterium;
 import com.hartwig.serve.datamodel.trial.ActionableTrial;
 import com.hartwig.serve.extraction.EventExtractor;
@@ -44,6 +42,12 @@ public class CkbExtractor {
 
     private static final Logger LOGGER = LogManager.getLogger(CkbExtractor.class);
     private static final String VARIANT_DELIMITER = ",";
+    private static final String GENE_DELIMITER = ",";
+    private static final String EVENT_DELIMITER = ",";
+
+    // these constants should be in ActionableTrialFactory I think
+    private static final String VARIANT_REQUIRED = "required";
+    private static final String VARIANT_PARTIAL_REQUIRED = "partial - required";
 
     @NotNull
     private final EventExtractor eventExtractor;
@@ -51,15 +55,12 @@ public class CkbExtractor {
     private final EfficacyEvidenceFactory efficacyEvidenceFactory;
     @NotNull
     private final ActionableTrialFactory actionableTrialFactory;
-    @NotNull
-    private final CkbMolecularCriteriaExtractor molecularCriteriaExtractor;
 
     CkbExtractor(@NotNull final EventExtractor eventExtractor, @NotNull EfficacyEvidenceFactory efficacyEvidenceFactory,
             @NotNull ActionableTrialFactory actionableTrialFactory) {
         this.eventExtractor = eventExtractor;
         this.efficacyEvidenceFactory = efficacyEvidenceFactory;
         this.actionableTrialFactory = actionableTrialFactory;
-        this.molecularCriteriaExtractor = new CkbMolecularCriteriaExtractor(this.eventExtractor); // TODO inject, I guess
     }
 
     @NotNull
@@ -67,9 +68,10 @@ public class CkbExtractor {
 
         LOGGER.info("total number of ckb entries: {}", entries.size());
 
-        // test call into new functionality for trials, TODO needs to be reworked into actual flow
-        List<ActionableTrial> alternativeUniverseNewTrials = processTrials(entries);
-        LOGGER.info("total number of alternative trials: {}", alternativeUniverseNewTrials.size());
+        // TODO we are handling trials 'out-of-band' here, can rework into the regular flow
+        //  with some additional complexity
+        List<ActionableTrial> trials = processTrials(entries);
+        LOGGER.info("total number of alternative trials: {}", trials.size());
 
         ProgressTracker tracker = new ProgressTracker("CKB", entries.size());
         // Assume entries without variants are filtered out prior to extraction
@@ -79,16 +81,10 @@ public class CkbExtractor {
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
-        ExtractionResult origResult = ExtractionFunctions.merge(extractions);
-        ExtractionResult resultWithCombined =
-                ImmutableExtractionResult.builder()
-                        .from(origResult)
-                        .trials(alternativeUniverseNewTrials)
-                        .build();
-        LOGGER.info("orig result contained {} trials", origResult.trials() != null ? origResult.trials().size() : 0);
-        LOGGER.info("new result with combined evidence contains {} trials",
-                resultWithCombined.trials() != null ? resultWithCombined.trials().size() : 0);
-        return resultWithCombined;
+        return ImmutableExtractionResult.builder()
+                .from(ExtractionFunctions.merge(extractions))
+                .trials(trials)
+                .build();
     }
 
     @Nullable
@@ -105,8 +101,6 @@ public class CkbExtractor {
             LOGGER.warn("No event type known for '{}' on '{}'", event, gene);
             return null;
         } else {
-            // why is curateCodons here? TODO refactoring borken (moved)
-            EventExtractorOutput extractionOutput = curateCodons(eventExtractor.extract(gene, null, entry.type(), event));
             String sourceEvent = gene.equals(CkbConstants.NO_GENE) ? event : gene + " " + event;
 
             EventInterpretation interpretation = ImmutableEventInterpretation.builder()
@@ -117,46 +111,71 @@ public class CkbExtractor {
                     .interpretedEventType(entry.type())
                     .build();
 
-            Set<EventExtractorOutput> eventExtractionOutput = extractCriteria(entry);
-            MolecularCriterium molecularCriterium = this.molecularCriteriaExtractor.criterium(entry, eventExtractionOutput);
+            List<VariantWithExtraction> variantWithExtraction = extractEventCriteria(entry);
+            Set<EventExtractorOutput> eventExtractionOutput =
+                    variantWithExtraction.stream().map(g -> g.eventExtractorOutput).collect(Collectors.toSet());
+            MolecularCriterium molecularCriterium = CkbMolecularCriteriaExtractor.criterium(entry, eventExtractionOutput);
 
-            //            MolecularCriterium theNewWayMolecualrCriteria = this.molecularCriteriaExtractor.criteriumForEntry(entry);
-            //            thing = extractCriteria(entry);
-
-            //            Set<EfficacyEvidence> efficacyEvidences = efficacyEvidenceFactory.create(entry, molecularCriteria, sourceEvent, gene);
             Set<EfficacyEvidence> efficacyEvidences =
                     efficacyEvidenceFactory.create(entry, Set.of(molecularCriterium), sourceEvent, gene);
-            //            Set<ActionableTrial> actionableTrials = actionableTrialFactory.create(entry, molecularCriteria, sourceEvent, gene);
+
+            List<KnownEvents> knownEvents = variantWithExtraction.stream()
+                    .map(g -> CkbKnownEventsGenerator.generateKnownEvents(g.eventExtractorOutput,
+                            efficacyEvidences.isEmpty(),
+                            g.variant,
+                            g.event,
+                            g.gene))
+                    .collect(Collectors.toList());
+            KnownEvents combinedKnownEvents =
+                    knownEvents.stream().reduce(CkbKnownEventsGenerator::mergeKnownEvents)
+                            .orElse(ImmutableKnownEvents.builder().build());
 
             return ImmutableExtractionResult.builder()
                     .refGenomeVersion(Knowledgebase.CKB.refGenomeVersion())
                     .eventInterpretations(Set.of(interpretation))
-                    .knownEvents(CkbKnownEventsGenerator.generateKnownEvents(extractionOutput,
-                            efficacyEvidences.isEmpty(),
-                            variant,
-                            event,
-                            gene))
+                    .knownEvents(combinedKnownEvents)
                     .evidences(efficacyEvidences)
-                    //                    .trials(actionableTrials)
-                    .trials(Set.of())  // replaced elsewhere
+                    .trials(Set.of())
                     .build();
         }
     }
 
-    @Nullable
-    public Set<EventExtractorOutput> extractCriteria(@NotNull CkbEntry entry) {
-        String sourceEvent = combinedSourceEvent(entry);
-        ActionableEvent actionableEvent = toActionableEvent(sourceEvent, entry);
+    @NotNull
+    private List<VariantWithExtraction>
+    extractEventCriteria(@NotNull CkbEntry entry) {
+        // TODO we have a combined event here, but we need to extract the individual criteria,
+        // ned to review how the combined event should be represented in the resulting outputs
+        //        ActionableEvent combinedActionableEvent = toActionableEvent(combinedSourceEvent(entry), entry);
 
         return entry.variants().stream()
-                .map(variant -> extractCriteria(variant, actionableEvent))
-                .filter(Objects::nonNull) // TODO should we bail out here or use the rest?
-                .collect(Collectors.toSet());
+                .map(this::extractVariantCriteria)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+    }
 
+    // temporary intermediate container, might be able to refactor away somehow
+    private static class VariantWithExtraction {
+
+        @NotNull
+        private final String gene;
+        @NotNull
+        private final String event;
+        @NotNull
+        private final Variant variant;
+        @NotNull
+        private final EventExtractorOutput eventExtractorOutput;
+
+        private VariantWithExtraction(@NotNull String gene, @NotNull String event, @NotNull Variant variant,
+                @NotNull EventExtractorOutput eventExtractorOutput) {
+            this.gene = gene;
+            this.event = event;
+            this.variant = variant;
+            this.eventExtractorOutput = eventExtractorOutput;
+        }
     }
 
     @Nullable
-    public EventExtractorOutput extractCriteria(@NotNull Variant variant, ActionableEvent actionableEvent) {
+    private VariantWithExtraction extractVariantCriteria(@NotNull Variant variant) {
         EventType eventType = CkbEventTypeExtractor.classify(variant);
 
         if (eventType == EventType.COMBINED) {
@@ -169,26 +188,9 @@ public class CkbExtractor {
         String event = CkbEventAndGeneExtractor.extractEvent(variant);
         String gene = CkbEventAndGeneExtractor.extractGene(variant);
 
-        EventExtractorOutput extractionOutput = curateCodons(eventExtractor.extract(gene, null, eventType, event));
-        return extractionOutput;
-    }
-
-    @NotNull
-    private String combinedSourceEvent(@NotNull CkbEntry entry) {
-        return entry.variants().stream()
-                .map(variant -> {
-                    String event = CkbEventAndGeneExtractor.extractEvent(variant);
-                    String gene = CkbEventAndGeneExtractor.extractGene(variant);
-                    return gene.equals(CkbConstants.NO_GENE) ? event : gene + " " + event;
-                })
-                .collect(Collectors.joining(" & "));
-    }
-
-    @NotNull
-    private static ActionableEvent toActionableEvent(@NotNull String sourceEvent, @NotNull CkbEntry entry) {
-        String sourceUrl = "https://ckbhome.jax.org/profileResponse/advancedEvidenceFind?molecularProfileId=" + entry.profileId();
-        LocalDate sourceDate = entry.createDate();
-        return ImmutableActionableEventImpl.builder().sourceDate(sourceDate).sourceEvent(sourceEvent).sourceUrls(Set.of(sourceUrl)).build();
+        EventExtractorOutput eventExtractorOutput =
+                CkbMolecularCriteriaExtractor.curateCodons(eventExtractor.extract(gene, null, eventType, event));
+        return new VariantWithExtraction(gene, event, variant, eventExtractorOutput);
     }
 
     @NotNull
@@ -196,7 +198,7 @@ public class CkbExtractor {
         return variants.stream().map(Variant::variant).collect(Collectors.joining(VARIANT_DELIMITER));
     }
 
-    // trial stuff
+    @NotNull
     public List<ActionableTrial> processTrials(@NotNull List<CkbEntry> ckbEntries) {
         Map<Integer, CkbEntry> idToEntry = ckbEntries.stream()
                 .collect(Collectors.collectingAndThen(
@@ -207,7 +209,6 @@ public class CkbExtractor {
                 .flatMap(entry -> entry.clinicalTrials().stream())
                 .collect(Collectors.toSet());
 
-        // TODO does parallelism here make sense?
         List<ActionableTrial> allActionableTrials = uniqueTrials.parallelStream()
                 .map(trial -> processTrial(trial, idToEntry))
                 .filter(Objects::nonNull)
@@ -223,22 +224,29 @@ public class CkbExtractor {
 
         ArrayList<MolecularCriterium> requiredCriterium = new ArrayList<>();
         ArrayList<MolecularCriterium> partiallyRequiredCriterium = new ArrayList<>();
+        ArrayList<VariantWithExtraction> allVariantWithExtraction = new ArrayList<>();
 
         for (VariantRequirementDetail details : trial.variantRequirementDetails()) {
             Integer profileId = details.profileId();
-            if (!idToEntry.containsKey(profileId)) {
-                throw new IllegalStateException("No entry found for profile ID: " + profileId);
-            }
+            if (details.requirementType().equals(VARIANT_REQUIRED) || details.requirementType().equals(VARIANT_PARTIAL_REQUIRED)) {
+                CkbEntry entry = idToEntry.get(profileId);
 
-            CkbEntry entry = idToEntry.get(profileId);
-            Set<EventExtractorOutput> eventExtractionOutput = extractCriteria(entry);
+                if (entry == null) {
+                    LOGGER.warn("Skipping profile {} for trial {} because profile was filtered", profileId, trial.nctId());
+                } else {
+                    List<VariantWithExtraction> variantWithExtraction = extractEventCriteria(entry);
+                    allVariantWithExtraction.addAll(variantWithExtraction);
+                    Set<EventExtractorOutput> eventExtractionOutput = variantWithExtraction.stream()
+                            .map(g -> g.eventExtractorOutput)
+                            .collect(Collectors.toSet());
+                    MolecularCriterium criteria = CkbMolecularCriteriaExtractor.criterium(entry, eventExtractionOutput);
 
-            MolecularCriterium criteria = this.molecularCriteriaExtractor.criterium(entry, eventExtractionOutput);
-
-            if (details.requirementType().equals("required")) {
-                requiredCriterium.add(criteria);
-            } else if (details.requirementType().equals("partial - required")) {
-                partiallyRequiredCriterium.add(criteria);
+                    if (details.requirementType().equals(VARIANT_REQUIRED)) {
+                        requiredCriterium.add(criteria);
+                    } else if (details.requirementType().equals(VARIANT_PARTIAL_REQUIRED)) {
+                        partiallyRequiredCriterium.add(criteria);
+                    }
+                }
             }
         }
 
@@ -247,21 +255,32 @@ public class CkbExtractor {
             return null;
         }
 
-        MolecularCriterium combinedRequiredCriterium = MolecularCriteriaCombiner.combine(requiredCriterium);
+        MolecularCriterium combinedRequiredCriterium = CkbMolecularCriteriaExtractor.combine(requiredCriterium);
         Set<MolecularCriterium> anyMolecularCriteria = combinePartialWithRequired(combinedRequiredCriterium, partiallyRequiredCriterium);
-        return actionableTrialFactory.createV2(anyMolecularCriteria, trial);
+
+        // TODO if we are extracting a variant that represents a combined event, it can already be multiple genes, so the further combining
+        //  look messy.
+        String allGenes = String.join(GENE_DELIMITER, allVariantWithExtraction.stream()
+                .map(g -> g.gene)
+                .collect(Collectors.toCollection(TreeSet::new)));
+
+        String allEvents = String.join(EVENT_DELIMITER, allVariantWithExtraction.stream()
+                .map(g -> g.event)
+                .collect(Collectors.toCollection(TreeSet::new)));
+
+        return actionableTrialFactory.create(anyMolecularCriteria, trial, allGenes, allEvents);
     }
 
     @VisibleForTesting
     @NotNull
-    static Set<MolecularCriterium> combinePartialWithRequired(MolecularCriterium requiredCriterium,
+    static Set<MolecularCriterium> combinePartialWithRequired(@NotNull MolecularCriterium requiredCriterium,
             List<MolecularCriterium> partiallyRequiredCriterium) {
 
         if (partiallyRequiredCriterium.isEmpty()) {
             return Set.of(requiredCriterium);
         } else {
             return partiallyRequiredCriterium.stream().map(partialMolecularCriterium ->
-                            MolecularCriteriaCombiner.combine(requiredCriterium, partialMolecularCriterium))
+                            CkbMolecularCriteriaExtractor.combine(requiredCriterium, partialMolecularCriterium))
                     .collect(Collectors.toSet());
         }
     }
@@ -293,6 +312,5 @@ public class CkbExtractor {
                 molecularCriterium.characteristics().size() +
                 molecularCriterium.hla().size();
     }
-
 }
 

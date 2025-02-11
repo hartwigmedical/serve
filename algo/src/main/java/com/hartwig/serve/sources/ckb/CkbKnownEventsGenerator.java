@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.hartwig.serve.ckb.classification.CkbConstants;
 import com.hartwig.serve.ckb.classification.CkbProteinAnnotationExtractor;
@@ -45,6 +46,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public final class CkbKnownEventsGenerator {
+
     @NotNull
     public static KnownEvents generateKnownEvents(@NotNull EventExtractorOutput extractorOutput, boolean efficacyEvidencesIsEmpty,
             @NotNull Variant variant, @NotNull String event, @NotNull String gene) {
@@ -55,6 +57,36 @@ public final class CkbKnownEventsGenerator {
                 .genes(extractorOutput.fusionPair() == null ? convertToKnownGenes(gene, variant) : Collections.emptySet())
                 .copyNumbers(convertToKnownCopyNumbers(extractorOutput.copyNumber(), variant))
                 .fusions(convertToKnownFusions(extractorOutput.fusionPair(), variant))
+                .build();
+    }
+
+    @NotNull
+    public static KnownEvents mergeKnownEvents(@NotNull KnownEvents events1, @NotNull KnownEvents events2) {
+        Set<KnownHotspot> mergedHotspots = Stream.concat(events1.hotspots().stream(), events2.hotspots().stream())
+                .collect(Collectors.toSet());
+
+        Set<KnownCodon> mergedCodons = Stream.concat(events1.codons().stream(), events2.codons().stream())
+                .collect(Collectors.toSet());
+
+        Set<KnownExon> mergedExons = Stream.concat(events1.exons().stream(), events2.exons().stream())
+                .collect(Collectors.toSet());
+
+        Set<KnownGene> mergedGenes = Stream.concat(events1.genes().stream(), events2.genes().stream())
+                .collect(Collectors.toSet());
+
+        Set<KnownCopyNumber> mergedCopyNumbers = Stream.concat(events1.copyNumbers().stream(), events2.copyNumbers().stream())
+                .collect(Collectors.toSet());
+
+        Set<KnownFusion> mergedFusions = Stream.concat(events1.fusions().stream(), events2.fusions().stream())
+                .collect(Collectors.toSet());
+
+        return ImmutableKnownEvents.builder()
+                .hotspots(mergedHotspots)
+                .codons(mergedCodons)
+                .exons(mergedExons)
+                .genes(mergedGenes)
+                .copyNumbers(mergedCopyNumbers)
+                .fusions(mergedFusions)
                 .build();
     }
 

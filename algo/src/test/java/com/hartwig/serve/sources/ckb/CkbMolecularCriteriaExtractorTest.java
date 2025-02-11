@@ -10,14 +10,14 @@ import com.hartwig.serve.datamodel.molecular.MolecularCriteriumTestFactory;
 
 import org.junit.Test;
 
-public class MolecularCriteriaCombinerTest {
+public class CkbMolecularCriteriaExtractorTest {
 
     @Test
     public void shouldCombineCriteriaPair() {
         MolecularCriterium criterium1 = MolecularCriteriumTestFactory.createWithTestActionableHotspot();
         MolecularCriterium criterium2 = MolecularCriteriumTestFactory.createWithTestActionableGene();
 
-        MolecularCriterium combined = MolecularCriteriaCombiner.combine(criterium1, criterium2);
+        MolecularCriterium combined = CkbMolecularCriteriaExtractor.combine(criterium1, criterium2);
 
         assertEquals(combined.oneOfEachHotspots(), criterium1.oneOfEachHotspots());
         assertEquals(combined.genes(), criterium2.genes());
@@ -29,7 +29,7 @@ public class MolecularCriteriaCombinerTest {
         MolecularCriterium criterium2 = MolecularCriteriumTestFactory.createWithTestActionableGene();
         MolecularCriterium criterium3 = MolecularCriteriumTestFactory.createWithTestActionableCharacteristic();
 
-        MolecularCriterium combined = MolecularCriteriaCombiner.combine(List.of(criterium1, criterium2, criterium3));
+        MolecularCriterium combined = CkbMolecularCriteriaExtractor.combine(List.of(criterium1, criterium2, criterium3));
 
         assertEquals(combined.oneOfEachHotspots(), criterium1.oneOfEachHotspots());
         assertEquals(combined.genes(), criterium2.genes());
@@ -38,8 +38,7 @@ public class MolecularCriteriaCombinerTest {
 
     @Test
     public void shouldCombineEmptyCriteriaList() {
-        MolecularCriterium combined = MolecularCriteriaCombiner.combine(List.of());
+        MolecularCriterium combined = CkbMolecularCriteriaExtractor.combine(List.of());
         assertEquals(ImmutableMolecularCriterium.builder().build(), combined);
     }
-
 }

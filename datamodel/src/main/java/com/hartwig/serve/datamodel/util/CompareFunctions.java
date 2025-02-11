@@ -1,7 +1,9 @@
 package com.hartwig.serve.datamodel.util;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,17 +28,43 @@ public final class CompareFunctions {
     }
 
     public static <T extends Comparable<T>> int compareSetOfSetOfComparable(@NotNull Set<Set<T>> set1, @NotNull Set<Set<T>> set2) {
-        Iterator<Set<T>> set1Iterator = set1.iterator();
-        Iterator<Set<T>> set2Iterator = set2.iterator();
+        int sizeCompare = Integer.compare(set2.size(), set1.size());
+        if (sizeCompare != 0) {
+            return sizeCompare;
+        }
 
-        while (set1Iterator.hasNext() && set2Iterator.hasNext()) {
-            int entryCompare = compareSetOfComparable(set1Iterator.next(), set2Iterator.next());
+        List<List<T>> sortedSet1 = set1.stream()
+                .map(innerSet -> innerSet.stream().sorted().collect(Collectors.toList()))
+                .sorted(CompareFunctions::compareListOfComparable)
+                .collect(Collectors.toList());
+
+        List<List<T>> sortedSet2 = set2.stream()
+                .map(innerSet -> innerSet.stream().sorted().collect(Collectors.toList()))
+                .sorted(CompareFunctions::compareListOfComparable)
+                .collect(Collectors.toList());
+
+        for (int i = 0; i < sortedSet1.size(); i++) {
+            int entryCompare = compareListOfComparable(sortedSet1.get(i), sortedSet2.get(i));
             if (entryCompare != 0) {
                 return entryCompare;
             }
         }
 
-        return Integer.compare(set1.size(), set2.size());
+        return 0;
+    }
+
+    private static <T extends Comparable<T>> int compareListOfComparable(@NotNull List<T> list1, @NotNull List<T> list2) {
+        Iterator<T> list1Iterator = list1.iterator();
+        Iterator<T> list2Iterator = list2.iterator();
+
+        while (list1Iterator.hasNext() && list2Iterator.hasNext()) {
+            int entryCompare = list1Iterator.next().compareTo(list2Iterator.next());
+            if (entryCompare != 0) {
+                return entryCompare;
+            }
+        }
+
+        return Integer.compare(list1.size(), list2.size());
     }
 
     public static int compareNullableStrings(@Nullable String string1, @Nullable String string2) {

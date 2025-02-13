@@ -71,8 +71,9 @@ final class CkbMolecularCriteriaExtractor {
     @NotNull
     public static MolecularCriterium createMolecularCriterium(@NotNull EventExtractorOutput extractionOutput,
             @NotNull ActionableEvent actionableEvent) {
+        final var hotspot = hotspotCriteria(extractionOutput, actionableEvent);
         return ImmutableMolecularCriterium.builder()
-                .oneOfEachHotspots(Set.of(hotspotCriteria(extractionOutput, actionableEvent)))
+                .oneOfEachHotspots(hotspot.isEmpty() ? Collections.emptySet() : Set.of(hotspot))
                 .codons(codonCriteria(extractionOutput, actionableEvent))
                 .exons(exonCriteria(extractionOutput, actionableEvent))
                 .genes(geneCriteria(extractionOutput, actionableEvent))

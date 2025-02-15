@@ -8,6 +8,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.hartwig.serve.ckb.classification.CkbConstants;
@@ -222,6 +223,9 @@ public class CkbExtractor {
     private ActionableTrial processTrial(@NotNull ClinicalTrial trial, @NotNull Map<Integer, CkbEntry> idToEntry) {
         LOGGER.debug("trial: {}", trial.nctId());
 
+        if (trial.nctId().equals("NCT04584853")) {
+            LOGGER.warn("found test case NCT ID: {}", trial.nctId());
+        }
         ArrayList<MolecularCriterium> requiredCriterium = new ArrayList<>();
         ArrayList<MolecularCriterium> partiallyRequiredCriterium = new ArrayList<>();
         ArrayList<VariantWithExtraction> allVariantWithExtraction = new ArrayList<>();
@@ -278,11 +282,15 @@ public class CkbExtractor {
 
         if (partiallyRequiredCriterium.isEmpty()) {
             return Set.of(requiredCriterium);
+        } else if (criteriaCount(requiredCriterium) == 0) {
+            return partiallyRequiredCriterium.stream().collect(Collectors.toSet());
         } else {
-            return partiallyRequiredCriterium.stream().map(partialMolecularCriterium ->
-                            CkbMolecularCriteriaExtractor.combine(requiredCriterium, partialMolecularCriterium))
+            return Stream.concat(Stream.of(requiredCriterium),
+                            partiallyRequiredCriterium.stream().map(partialMolecularCriterium ->
+                                    CkbMolecularCriteriaExtractor.combine(requiredCriterium, partialMolecularCriterium)))
                     .collect(Collectors.toSet());
         }
+
     }
 
     private void logSummaryStats(@NotNull List<ActionableTrial> trials) {
@@ -303,7 +311,7 @@ public class CkbExtractor {
         LOGGER.info("trials with multiple criteria: {}", totalTrials - totalSingleCriteriaTrials);
     }
 
-    private int criteriaCount(@NotNull MolecularCriterium molecularCriterium) {
+    private static int criteriaCount(@NotNull MolecularCriterium molecularCriterium) {
         return molecularCriterium.oneOfEachHotspots().size() +
                 molecularCriterium.codons().size() +
                 molecularCriterium.exons().size() +

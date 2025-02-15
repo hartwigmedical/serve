@@ -228,6 +228,7 @@ public class CkbExtractorTest {
                 CkbExtractor.combinePartialWithRequired(requiredCriterium, partiallyRequiredCriterium);
 
         Set<MolecularCriterium> expected = Set.of(
+                requiredCriterium,
                 ImmutableMolecularCriterium.builder().addAllOneOfEachHotspots(requiredCriterium.oneOfEachHotspots())
                         .addAllGenes(partial1.genes()).build(),
                 ImmutableMolecularCriterium.builder().addAllOneOfEachHotspots(requiredCriterium.oneOfEachHotspots())
@@ -237,7 +238,7 @@ public class CkbExtractorTest {
     }
 
     @Test
-    public void shouldHandleEmptyPartialCriteria() {
+    public void shouldHandleEmptyPartialWhenCombiningCriteria() {
         MolecularCriterium requiredCriterium = MolecularCriteriumTestFactory.createWithTestActionableHotspot();
         List<MolecularCriterium> partiallyRequiredCriterium = List.of();
 
@@ -248,7 +249,7 @@ public class CkbExtractorTest {
     }
 
     @Test
-    public void shouldHandleEmptyRequiredCriteria() {
+    public void shouldHandleEmptyRequiredWhenCombiningCriteria() {
         MolecularCriterium requiredCriterium = ImmutableMolecularCriterium.builder().build();
         MolecularCriterium partial1 = MolecularCriteriumTestFactory.createWithTestActionableGene();
         MolecularCriterium partial2 = MolecularCriteriumTestFactory.createWithTestActionableCharacteristic();

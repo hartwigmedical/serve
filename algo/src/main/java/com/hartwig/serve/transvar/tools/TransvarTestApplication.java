@@ -52,11 +52,11 @@ public class TransvarTestApplication {
 
     private static void extractAndPrintVariants(@NotNull Transvar transvar, @NotNull String gene, @Nullable String specificTranscript,
             @NotNull String proteinAnnotation) {
-        List<Variant> hotspots = transvar.resolve(gene, specificTranscript, proteinAnnotation);
+        List<Variant> variants = transvar.resolve(gene, specificTranscript, proteinAnnotation);
 
-        LOGGER.info("Printing hotspots for '{}:p.{}' on transcript {}", gene, proteinAnnotation, specificTranscript);
-        for (Variant hotspot : hotspots) {
-            LOGGER.info(" {}", hotspot);
+        LOGGER.info("Printing variants for '{}:p.{}' on transcript {}", gene, proteinAnnotation, specificTranscript);
+        for (Variant variant : variants) {
+            LOGGER.info(" {}", variant);
         }
     }
 }

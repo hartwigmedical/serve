@@ -135,32 +135,32 @@ The first step is to choose what ensembl transcript to use for converting protei
 2. If no transcript is configured, SERVE uses the typical transcript used by Hartwig which is generally the canonical transcript defined by
    ensembl.
 3. If a protein annotation does not exist on the canonical transcript and has no transcript configured in the knowledgebase, a consistently
-   specific transcript is picked for protein annotation in case multiple transcripts imply the same hotspot.
+   specific transcript is picked for protein annotation in case multiple transcripts imply the same variant.
 
 If a protein annotated form does not exist on any transcript for a specific gene, the evidence is ignored (see
 also [curation](#curation-and-harmonization-of-individual-knowledgebases)).
 
-Assuming a suitable transcript has been found, N hotspots are derived for each protein annotation as follows:
+Assuming a suitable transcript has been found, N variants are derived for each protein annotation as follows:
 
 - In case the mutation is caused by SNV or MNV every possible trinucleotide combination that codes for the new amino acid is generated.
-- In case the mutation is caused by a duplication (DUP) or an inframe deletion (DEL) 1 hotspot is generated which assumes
+- In case the mutation is caused by a duplication (DUP) or an inframe deletion (DEL) 1 variant is generated which assumes
   the exact reference sequence has been duplicated or deleted.
-    - In case a DEL can be left-aligned a hotspot is generated for every position between the left-aligned position and the actual position.
+    - In case a DEL can be left-aligned a variant is generated for every position between the left-aligned position and the actual position.
 - In case the mutation is caused by an inframe insertion (INS) there are two flavors based on the length of the insertion:
-    1. In case 1 amino acid is inserted, hotspots are generated for every trinucleotide coding for that amino acid.
-    2. In case multiple amino acids are inserted, one of the potentially many hotspots is generated. This is just for practical reasons
+    1. In case 1 amino acid is inserted, variants are generated for every trinucleotide coding for that amino acid.
+    2. In case multiple amino acids are inserted, one of the potentially many variants is generated. This is just for practical reasons
        to put a limit on the (exponential) number of variants that can code for a multi-amino-acid insert.
-- In case of a complex deletion/insertion (DELINS) the rules for hotspot generation for deletions and insertions are extrapolated.
+- In case of a complex deletion/insertion (DELINS) the rules for variant generation for deletions and insertions are extrapolated.
   Hence, the reference sequence is assumed to be deleted, and one new nucleotide sequence is inserted unless the insertion is 1 amino acid
-  in which case hotspots are generated for all trinucleotides coding for the inserted amino acid.
+  in which case variants are generated for all trinucleotides coding for the inserted amino acid.
   Complexity of the resulting variant will then be reduced by removing any bases that are shared between ref and alt at start or end of the
   variant.
-- In case of a frameshift the following hotspots are generated:
+- In case of a frameshift the following variants are generated:
     - Any of the 12 possible single base inserts inside the affected codon that does not lead to synonymous impact in the affected codon
     - Any of the 3 possible single base deletes inside the affected codon that does not lead to synonymous impact in the affected codon
     - Any of the 2 possible double base deletes inside the affected codon that does not lead to synonymous impact in the affected codon
 
-Additionally, hotspot generation is ignored for any INDEL that spans multiple exons. Examples are:
+Additionally, variant generation is ignored for any INDEL that spans multiple exons. Examples are:
 
 - A DUP which duplicates a codon that is encoded by parts of two separate exons.
 - A frameshift which shifts into the intronic space of the gene.
@@ -369,14 +369,14 @@ cases, the following conversion algo is executed.
 
 #### Genomic position lift-over
 
-Hotspots and ranges are lifted over
+Variants and ranges are lifted over
 using [HTSJDK's implementation](https://gatk.broadinstitute.org/hc/en-us/articles/360037060932-LiftoverVcf-Picard-) of UCSC LiftOver.
 In case lift-over could not be performed a warning is raised unless the position is known to not exist in the target ref genome.
 In addition, any lift-over that lifts a position towards a different chromosome is raised as a warning but is accepted nonetheless.
 
 There are a few additional checks for specific types of knowledge:
 
-- A hotspot lift-over is accepted only in case the reference at the lifted position has remained unchanged.
+- A variant lift-over is accepted only in case the reference at the lifted position has remained unchanged.
 - A codon lift-over is accepted only in case the lifted range has a length of 3 bases.
 - Transcripts and codon/exon indices are removed from known codons and exons since they can't be trusted anymore after lift-over
 - In case the genomic region of a gene has been flipped between v37 and v38 we exclude the gene from liftover.

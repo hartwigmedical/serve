@@ -33,7 +33,7 @@ public class Transvar implements ProteinResolver {
     @NotNull
     private final EnsemblDataCache ensemblDataCache;
     @NotNull
-    private final ConcurrentHashMap<String, List<Variant>> hotspotsByProteinKey = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, List<Variant>> variantsByProteinKey = new ConcurrentHashMap<>();
     @NotNull
     private final Set<String> unresolvedProteinAnnotations = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
@@ -56,20 +56,19 @@ public class Transvar implements ProteinResolver {
     @Override
     @NotNull
     public List<Variant> resolve(@NotNull String gene, @Nullable String specificTranscript, @NotNull String proteinAnnotation) {
-
         String proteinKey = KeyFormatter.toProteinKey(gene, specificTranscript, proteinAnnotation);
-        if (hotspotsByProteinKey.containsKey(proteinKey)) {
-            return hotspotsByProteinKey.get(proteinKey);
+        if (variantsByProteinKey.containsKey(proteinKey)) {
+            return variantsByProteinKey.get(proteinKey);
         }
 
-        List<Variant> hotspots = extractHotspotsForAnnotation(gene, specificTranscript, proteinAnnotation);
-        LOGGER.debug("Converted '{}' to {} hotspot(s)", proteinKey, hotspots.size());
-        if (hotspots.isEmpty()) {
+        List<Variant> variants = extractVariantsForAnnotation(gene, specificTranscript, proteinAnnotation);
+        LOGGER.debug("Converted '{}' to {} variant(s)", proteinKey, variants.size());
+        if (variants.isEmpty()) {
             unresolvedProteinAnnotations.add(proteinKey);
         }
-        hotspotsByProteinKey.put(proteinKey, hotspots);
+        variantsByProteinKey.put(proteinKey, variants);
 
-        return hotspots;
+        return variants;
     }
 
     @Override
@@ -79,7 +78,7 @@ public class Transvar implements ProteinResolver {
     }
 
     @NotNull
-    private List<Variant> extractHotspotsForAnnotation(@NotNull String gene, @Nullable String specificTranscript,
+    private List<Variant> extractVariantsForAnnotation(@NotNull String gene, @Nullable String specificTranscript,
             @NotNull String proteinAnnotation) {
         List<TransvarRecord> records = runTransvarProcess(gene, proteinAnnotation);
 
@@ -90,7 +89,7 @@ public class Transvar implements ProteinResolver {
 
         HmfTranscriptRegion canonicalTranscript = EnsemblFunctions.findCanonicalTranscript(ensemblDataCache, gene);
         if (canonicalTranscript == null) {
-            LOGGER.warn("Could not find canonical transcript for '{}' in ensembl data cache. Skipping hotspot extraction for 'p.{}'",
+            LOGGER.warn("Could not find canonical transcript for '{}' in ensembl data cache. Skipping variant extraction for 'p.{}'",
                     gene,
                     proteinAnnotation);
             return Collections.emptyList();
@@ -109,17 +108,17 @@ public class Transvar implements ProteinResolver {
 
         LOGGER.debug("Interpreting transvar record: '{}'", best);
         // This is assuming every transcript on a gene lies on the same strand.
-        List<Variant> hotspots = interpreter.convertRecordToHotspots(best, canonicalTranscript.strand());
+        List<Variant> variants = interpreter.convertRecordToVariants(best, canonicalTranscript.strand());
 
-        if (hotspots.isEmpty()) {
-            LOGGER.warn("Could not derive any hotspots from record {} for '{}:p.{} - {}'",
+        if (variants.isEmpty()) {
+            LOGGER.warn("Could not derive any variants from record {} for '{}:p.{} - {}'",
                     best,
                     gene,
                     proteinAnnotation,
                     specificTranscript);
         }
 
-        return hotspots;
+        return variants;
     }
 
     @NotNull

@@ -48,7 +48,7 @@ public class TransvarInterpreterTest {
     }
 
     @Test
-    public void canConvertSnvToHotspots() {
+    public void canConvertSnvToVariants() {
         TransvarRecord record = baseRecord().gdnaPosition(10)
                 .annotation(ImmutableTransvarSnvMnv.builder()
                         .gdnaRef("A")
@@ -58,18 +58,18 @@ public class TransvarInterpreterTest {
                         .build())
                 .build();
 
-        List<Variant> hotspots = testInterpreter37().convertRecordToHotspots(record, Strand.REVERSE);
+        List<Variant> variants = testInterpreter37().convertRecordToVariants(record, Strand.REVERSE);
 
-        assertEquals(4, hotspots.size());
+        assertEquals(4, variants.size());
 
-        assertHotspot(baseHotspot().position(10).ref("A").alt("C").build(), hotspots.get(0));
-        assertHotspot(baseHotspot().position(8).ref("TAA").alt("GAC").build(), hotspots.get(1));
-        assertHotspot(baseHotspot().position(8).ref("TAA").alt("CAC").build(), hotspots.get(2));
-        assertHotspot(baseHotspot().position(8).ref("TAA").alt("AAC").build(), hotspots.get(3));
+        assertVariant(baseVariant().position(10).ref("A").alt("C").build(), variants.get(0));
+        assertVariant(baseVariant().position(8).ref("TAA").alt("GAC").build(), variants.get(1));
+        assertVariant(baseVariant().position(8).ref("TAA").alt("CAC").build(), variants.get(2));
+        assertVariant(baseVariant().position(8).ref("TAA").alt("AAC").build(), variants.get(3));
     }
 
     @Test
-    public void canConvertMnvForwardStrandToHotspots() {
+    public void canConvertMnvForwardStrandToVariants() {
         TransvarRecord record = baseRecord().gdnaPosition(10)
                 .annotation(ImmutableTransvarSnvMnv.builder()
                         .gdnaRef("TA")
@@ -79,18 +79,18 @@ public class TransvarInterpreterTest {
                         .build())
                 .build();
 
-        List<Variant> hotspots = testInterpreter37().convertRecordToHotspots(record, Strand.FORWARD);
+        List<Variant> variants = testInterpreter37().convertRecordToVariants(record, Strand.FORWARD);
 
-        assertEquals(4, hotspots.size());
+        assertEquals(4, variants.size());
 
-        assertHotspot(baseHotspot().position(10).ref("TAC").alt("GCA").build(), hotspots.get(0));
-        assertHotspot(baseHotspot().position(10).ref("TA").alt("GC").build(), hotspots.get(1));
-        assertHotspot(baseHotspot().position(10).ref("TAC").alt("GCG").build(), hotspots.get(2));
-        assertHotspot(baseHotspot().position(10).ref("TAC").alt("GCT").build(), hotspots.get(3));
+        assertVariant(baseVariant().position(10).ref("TAC").alt("GCA").build(), variants.get(0));
+        assertVariant(baseVariant().position(10).ref("TA").alt("GC").build(), variants.get(1));
+        assertVariant(baseVariant().position(10).ref("TAC").alt("GCG").build(), variants.get(2));
+        assertVariant(baseVariant().position(10).ref("TAC").alt("GCT").build(), variants.get(3));
     }
 
     @Test
-    public void canConvertMnvReverseStrandToHotspots() {
+    public void canConvertMnvReverseStrandToVariants() {
         TransvarRecord record = baseRecord().gdnaPosition(10)
                 .annotation(ImmutableTransvarSnvMnv.builder()
                         .gdnaRef("CA")
@@ -100,14 +100,14 @@ public class TransvarInterpreterTest {
                         .build())
                 .build();
 
-        List<Variant> hotspots = testInterpreter37().convertRecordToHotspots(record, Strand.REVERSE);
+        List<Variant> variants = testInterpreter37().convertRecordToVariants(record, Strand.REVERSE);
 
-        assertEquals(4, hotspots.size());
+        assertEquals(4, variants.size());
 
-        assertHotspot(baseHotspot().position(9).ref("CCA").alt("TGC").build(), hotspots.get(0));
-        assertHotspot(baseHotspot().position(9).ref("CCA").alt("GGC").build(), hotspots.get(1));
-        assertHotspot(baseHotspot().position(10).ref("CA").alt("GC").build(), hotspots.get(2));
-        assertHotspot(baseHotspot().position(9).ref("CCA").alt("AGC").build(), hotspots.get(3));
+        assertVariant(baseVariant().position(9).ref("CCA").alt("TGC").build(), variants.get(0));
+        assertVariant(baseVariant().position(9).ref("CCA").alt("GGC").build(), variants.get(1));
+        assertVariant(baseVariant().position(10).ref("CA").alt("GC").build(), variants.get(2));
+        assertVariant(baseVariant().position(9).ref("CCA").alt("AGC").build(), variants.get(3));
     }
 
     @Test
@@ -122,11 +122,11 @@ public class TransvarInterpreterTest {
                         .build())
                 .build();
 
-        List<Variant> hotspots1 = testInterpreter37().convertRecordToHotspots(record, Strand.REVERSE);
+        List<Variant> variants1 = testInterpreter37().convertRecordToVariants(record, Strand.REVERSE);
 
-        assertEquals(1, hotspots1.size());
+        assertEquals(1, variants1.size());
 
-        assertHotspot(baseHotspot().position(10).ref("A").alt("C").build(), hotspots1.get(0));
+        assertVariant(baseVariant().position(10).ref("A").alt("C").build(), variants1.get(0));
 
         TransvarRecord record2 = baseRecord().variantSpanMultipleExons(true)
                 .gdnaPosition(10)
@@ -138,71 +138,71 @@ public class TransvarInterpreterTest {
                         .build())
                 .build();
 
-        List<Variant> hotspots2 = testInterpreter37().convertRecordToHotspots(record2, Strand.FORWARD);
+        List<Variant> variants2 = testInterpreter37().convertRecordToVariants(record2, Strand.FORWARD);
 
-        assertEquals(0, hotspots2.size());
+        assertEquals(0, variants2.size());
     }
 
     @Test
-    public void canConvertDeletionToHotspots() {
+    public void canConvertDeletionToVariants() {
         TransvarRecord record = baseRecord().gdnaPosition(5)
                 .annotation(ImmutableTransvarDeletion.builder().deletedBaseCount(3).leftAlignedGDNAPosition(5).build())
                 .build();
 
-        List<Variant> hotspots = testInterpreter37().convertRecordToHotspots(record, Strand.FORWARD);
+        List<Variant> variants = testInterpreter37().convertRecordToVariants(record, Strand.FORWARD);
 
-        assertEquals(1, hotspots.size());
+        assertEquals(1, variants.size());
 
-        assertHotspot(baseHotspot().position(4).ref("CGAT").alt("C").build(), hotspots.get(0));
+        assertVariant(baseVariant().position(4).ref("CGAT").alt("C").build(), variants.get(0));
     }
 
     @Test
-    public void canConvertDeletionWithMultipleAlignmentsToHotspots() {
+    public void canConvertDeletionWithMultipleAlignmentsToVariants() {
         // In this situation the mutation is "GATCGATC -> GATC",
         //  Normally the unaligned DNA would be 1 here but that would imply we need to read the 0th ref base.
         TransvarRecord record = baseRecord().gdnaPosition(5)
                 .annotation(ImmutableTransvarDeletion.builder().deletedBaseCount(4).leftAlignedGDNAPosition(2).build())
                 .build();
 
-        List<Variant> hotspots = testInterpreter37().convertRecordToHotspots(record, Strand.FORWARD);
+        List<Variant> variants = testInterpreter37().convertRecordToVariants(record, Strand.FORWARD);
 
-        assertEquals(4, hotspots.size());
+        assertEquals(4, variants.size());
 
-        assertHotspot(baseHotspot().position(1).ref("GATCG").alt("G").build(), hotspots.get(0));
-        assertHotspot(baseHotspot().position(2).ref("ATCGA").alt("A").build(), hotspots.get(1));
-        assertHotspot(baseHotspot().position(3).ref("TCGAT").alt("T").build(), hotspots.get(2));
-        assertHotspot(baseHotspot().position(4).ref("CGATC").alt("C").build(), hotspots.get(3));
+        assertVariant(baseVariant().position(1).ref("GATCG").alt("G").build(), variants.get(0));
+        assertVariant(baseVariant().position(2).ref("ATCGA").alt("A").build(), variants.get(1));
+        assertVariant(baseVariant().position(3).ref("TCGAT").alt("T").build(), variants.get(2));
+        assertVariant(baseVariant().position(4).ref("CGATC").alt("C").build(), variants.get(3));
     }
 
     @Test
-    public void canConvertInsertionsToHotspots() {
+    public void canConvertInsertionsToVariants() {
         TransvarRecord forwardRecord = baseRecord().gdnaPosition(5)
                 .annotation(ImmutableTransvarInsertion.builder().insertedBases("GAA").leftAlignedGDNAPosition(4).build())
                 .build();
 
-        List<Variant> forwardHotspots = testInterpreter37().convertRecordToHotspots(forwardRecord, Strand.FORWARD);
+        List<Variant> forwardVariants = testInterpreter37().convertRecordToVariants(forwardRecord, Strand.FORWARD);
 
-        assertEquals(2, forwardHotspots.size());
+        assertEquals(2, forwardVariants.size());
 
-        assertHotspot(baseHotspot().position(5).ref("G").alt("GGAG").build(), forwardHotspots.get(0));
-        assertHotspot(baseHotspot().position(5).ref("G").alt("GGAA").build(), forwardHotspots.get(1));
+        assertVariant(baseVariant().position(5).ref("G").alt("GGAG").build(), forwardVariants.get(0));
+        assertVariant(baseVariant().position(5).ref("G").alt("GGAA").build(), forwardVariants.get(1));
 
         TransvarRecord reverseRecord = baseRecord().gdnaPosition(5)
                 .annotation(ImmutableTransvarInsertion.builder().insertedBases("TGC").leftAlignedGDNAPosition(5).build())
                 .build();
 
-        List<Variant> reverseHotspots = testInterpreter37().convertRecordToHotspots(reverseRecord, Strand.REVERSE);
+        List<Variant> reverseVariants = testInterpreter37().convertRecordToVariants(reverseRecord, Strand.REVERSE);
 
-        assertEquals(4, reverseHotspots.size());
+        assertEquals(4, reverseVariants.size());
 
-        assertHotspot(baseHotspot().position(5).ref("G").alt("GAGC").build(), reverseHotspots.get(0));
-        assertHotspot(baseHotspot().position(5).ref("G").alt("GTGC").build(), reverseHotspots.get(1));
-        assertHotspot(baseHotspot().position(5).ref("G").alt("GGGC").build(), reverseHotspots.get(2));
-        assertHotspot(baseHotspot().position(5).ref("G").alt("GCGC").build(), reverseHotspots.get(3));
+        assertVariant(baseVariant().position(5).ref("G").alt("GAGC").build(), reverseVariants.get(0));
+        assertVariant(baseVariant().position(5).ref("G").alt("GTGC").build(), reverseVariants.get(1));
+        assertVariant(baseVariant().position(5).ref("G").alt("GGGC").build(), reverseVariants.get(2));
+        assertVariant(baseVariant().position(5).ref("G").alt("GCGC").build(), reverseVariants.get(3));
     }
 
     @Test
-    public void canConvertComplexDeletionInsertionsToHotspots() {
+    public void canConvertComplexDeletionInsertionsToVariants() {
         TransvarRecord oneAminoAcidInsert = baseRecord().gdnaPosition(2)
                 .annotation(ImmutableTransvarComplexInsertDelete.builder()
                         .deletedBaseCount(6)
@@ -212,12 +212,12 @@ public class TransvarInterpreterTest {
                         .build())
                 .build();
 
-        List<Variant> hotspots1 = testInterpreter37().convertRecordToHotspots(oneAminoAcidInsert, Strand.FORWARD);
+        List<Variant> variants1 = testInterpreter37().convertRecordToVariants(oneAminoAcidInsert, Strand.FORWARD);
 
-        assertEquals(2, hotspots1.size());
+        assertEquals(2, variants1.size());
 
-        assertHotspot(baseHotspot().position(2).ref("ATCG").alt("A").build(), hotspots1.get(0));
-        assertHotspot(baseHotspot().position(2).ref("ATCG").alt("G").build(), hotspots1.get(1));
+        assertVariant(baseVariant().position(2).ref("ATCG").alt("A").build(), variants1.get(0));
+        assertVariant(baseVariant().position(2).ref("ATCG").alt("G").build(), variants1.get(1));
 
         TransvarRecord twoAminoAcidInsert = baseRecord().gdnaPosition(2)
                 .annotation(ImmutableTransvarComplexInsertDelete.builder()
@@ -228,11 +228,11 @@ public class TransvarInterpreterTest {
                         .build())
                 .build();
 
-        List<Variant> hotspots2 = testInterpreter37().convertRecordToHotspots(twoAminoAcidInsert, Strand.FORWARD);
+        List<Variant> variants2 = testInterpreter37().convertRecordToVariants(twoAminoAcidInsert, Strand.FORWARD);
 
-        assertEquals(1, hotspots2.size());
+        assertEquals(1, variants2.size());
 
-        assertHotspot(baseHotspot().position(2).ref("A").alt("AGGG").build(), hotspots2.get(0));
+        assertVariant(baseVariant().position(2).ref("A").alt("AGGG").build(), variants2.get(0));
     }
 
     @Test
@@ -246,96 +246,96 @@ public class TransvarInterpreterTest {
                         .build())
                 .build();
 
-        List<Variant> hotspots = testInterpreter37().convertRecordToHotspots(oneAminoAcidInsert, Strand.REVERSE);
+        List<Variant> variants = testInterpreter37().convertRecordToVariants(oneAminoAcidInsert, Strand.REVERSE);
 
-        assertEquals(2, hotspots.size());
+        assertEquals(2, variants.size());
 
-        assertHotspot(baseHotspot().position(2).ref("ATC").alt("TAA").build(), hotspots.get(0));
-        assertHotspot(baseHotspot().position(2).ref("AT").alt("CG").build(), hotspots.get(1));
+        assertVariant(baseVariant().position(2).ref("ATC").alt("TAA").build(), variants.get(0));
+        assertVariant(baseVariant().position(2).ref("AT").alt("CG").build(), variants.get(1));
     }
 
     @Test
-    public void canReduceComplexityOnComplexDelInsHotspots() {
-        Variant hotspot = baseHotspot().chromosome("1").position(10).ref("ATGTTA").alt("ATCCTA").build();
+    public void canReduceComplexityOnComplexDelInsVariants() {
+        Variant variant = baseVariant().chromosome("1").position(10).ref("ATGTTA").alt("ATCCTA").build();
 
-        Variant simplifiedHotspot = testInterpreter37().reduceComplexityForComplexInsDel(hotspot);
+        Variant simplifiedVariant = testInterpreter37().reduceComplexityForComplexInsDel(variant);
 
-        assertEquals(12, simplifiedHotspot.position());
-        assertEquals("GT", simplifiedHotspot.ref());
-        assertEquals("CC", simplifiedHotspot.alt());
+        assertEquals(12, simplifiedVariant.position());
+        assertEquals("GT", simplifiedVariant.ref());
+        assertEquals("CC", simplifiedVariant.alt());
     }
 
     @Test
-    public void canConvertDuplicationToHotspot37() {
+    public void canConvertDuplicationToVariant37() {
         TransvarRecord record =
                 baseRecord().gdnaPosition(5).annotation(ImmutableTransvarDuplication.builder().duplicatedBaseCount(3).build()).build();
 
-        List<Variant> hotspots = testInterpreter37().convertRecordToHotspots(record, Strand.FORWARD);
+        List<Variant> variants = testInterpreter37().convertRecordToVariants(record, Strand.FORWARD);
 
-        assertEquals(1, hotspots.size());
+        assertEquals(1, variants.size());
 
-        assertHotspot(baseHotspot().position(4).ref("C").alt("CGAT").build(), hotspots.get(0));
+        assertVariant(baseVariant().position(4).ref("C").alt("CGAT").build(), variants.get(0));
     }
 
     @Test
-    public void canConvertDuplicationToHotspot38() {
+    public void canConvertDuplicationToVariant38() {
         TransvarRecord record =
                 baseRecord().gdnaPosition(5).annotation(ImmutableTransvarDuplication.builder().duplicatedBaseCount(3).build()).build();
 
-        List<Variant> hotspots = testInterpreter38().convertRecordToHotspots(record, Strand.FORWARD);
+        List<Variant> variants = testInterpreter38().convertRecordToVariants(record, Strand.FORWARD);
 
-        assertEquals(1, hotspots.size());
+        assertEquals(1, variants.size());
 
-        assertHotspot(baseHotspot().chromosome("chr1").position(4).ref("C").alt("CGAT").build(), hotspots.get(0));
+        assertVariant(baseVariant().chromosome("chr1").position(4).ref("C").alt("CGAT").build(), variants.get(0));
     }
 
     @Test
-    public void canConvertFrameshiftToHotspotOnForwardStrand() {
+    public void canConvertFrameshiftToVariantOnForwardStrand() {
         TransvarRecord record = baseRecord().gdnaPosition(2)
                 .annotation(ImmutableTransvarFrameshift.builder().isFrameshiftInsideStartCodon(false).build())
                 .build();
-        List<Variant> hotspots = testInterpreter37().convertRecordToHotspots(record, Strand.FORWARD);
+        List<Variant> variants = testInterpreter37().convertRecordToVariants(record, Strand.FORWARD);
 
-        assertEquals(10, hotspots.size());
-        assertHotspot(baseHotspot().position(2).ref("A").alt("AG").build(), hotspots.get(0));
-        assertHotspot(baseHotspot().position(2).ref("A").alt("AA").build(), hotspots.get(1));
-        assertHotspot(baseHotspot().position(2).ref("A").alt("AT").build(), hotspots.get(2));
-        assertHotspot(baseHotspot().position(2).ref("A").alt("AC").build(), hotspots.get(3));
+        assertEquals(10, variants.size());
+        assertVariant(baseVariant().position(2).ref("A").alt("AG").build(), variants.get(0));
+        assertVariant(baseVariant().position(2).ref("A").alt("AA").build(), variants.get(1));
+        assertVariant(baseVariant().position(2).ref("A").alt("AT").build(), variants.get(2));
+        assertVariant(baseVariant().position(2).ref("A").alt("AC").build(), variants.get(3));
 
-        assertHotspot(baseHotspot().position(3).ref("T").alt("TG").build(), hotspots.get(4));
-        assertHotspot(baseHotspot().position(3).ref("T").alt("TA").build(), hotspots.get(5));
-        assertHotspot(baseHotspot().position(3).ref("T").alt("TT").build(), hotspots.get(6));
+        assertVariant(baseVariant().position(3).ref("T").alt("TG").build(), variants.get(4));
+        assertVariant(baseVariant().position(3).ref("T").alt("TA").build(), variants.get(5));
+        assertVariant(baseVariant().position(3).ref("T").alt("TT").build(), variants.get(6));
 
-        assertHotspot(baseHotspot().position(2).ref("AT").alt("A").build(), hotspots.get(7));
+        assertVariant(baseVariant().position(2).ref("AT").alt("A").build(), variants.get(7));
 
-        assertHotspot(baseHotspot().position(2).ref("ATC").alt("A").build(), hotspots.get(8));
-        assertHotspot(baseHotspot().position(3).ref("TCG").alt("T").build(), hotspots.get(9));
+        assertVariant(baseVariant().position(2).ref("ATC").alt("A").build(), variants.get(8));
+        assertVariant(baseVariant().position(3).ref("TCG").alt("T").build(), variants.get(9));
     }
 
     @Test
-    public void canConvertFrameshiftToHotspotOnReverseStrand() {
+    public void canConvertFrameshiftToVariantOnReverseStrand() {
         TransvarRecord record = baseRecord().gdnaPosition(6)
                 .annotation(ImmutableTransvarFrameshift.builder().isFrameshiftInsideStartCodon(false).build())
                 .build();
-        List<Variant> hotspots = testInterpreter37().convertRecordToHotspots(record, Strand.REVERSE);
+        List<Variant> variants = testInterpreter37().convertRecordToVariants(record, Strand.REVERSE);
 
-        assertEquals(10, hotspots.size());
-        assertHotspot(baseHotspot().position(5).ref("G").alt("GA").build(), hotspots.get(0));
-        assertHotspot(baseHotspot().position(5).ref("G").alt("GT").build(), hotspots.get(1));
-        assertHotspot(baseHotspot().position(5).ref("G").alt("GC").build(), hotspots.get(2));
+        assertEquals(10, variants.size());
+        assertVariant(baseVariant().position(5).ref("G").alt("GA").build(), variants.get(0));
+        assertVariant(baseVariant().position(5).ref("G").alt("GT").build(), variants.get(1));
+        assertVariant(baseVariant().position(5).ref("G").alt("GC").build(), variants.get(2));
 
-        assertHotspot(baseHotspot().position(6).ref("A").alt("AG").build(), hotspots.get(3));
-        assertHotspot(baseHotspot().position(6).ref("A").alt("AA").build(), hotspots.get(4));
-        assertHotspot(baseHotspot().position(6).ref("A").alt("AT").build(), hotspots.get(5));
-        assertHotspot(baseHotspot().position(6).ref("A").alt("AC").build(), hotspots.get(6));
+        assertVariant(baseVariant().position(6).ref("A").alt("AG").build(), variants.get(3));
+        assertVariant(baseVariant().position(6).ref("A").alt("AA").build(), variants.get(4));
+        assertVariant(baseVariant().position(6).ref("A").alt("AT").build(), variants.get(5));
+        assertVariant(baseVariant().position(6).ref("A").alt("AC").build(), variants.get(6));
 
-        assertHotspot(baseHotspot().position(5).ref("GA").alt("G").build(), hotspots.get(7));
+        assertVariant(baseVariant().position(5).ref("GA").alt("G").build(), variants.get(7));
 
-        assertHotspot(baseHotspot().position(3).ref("TCG").alt("T").build(), hotspots.get(8));
-        assertHotspot(baseHotspot().position(4).ref("CGA").alt("C").build(), hotspots.get(9));
+        assertVariant(baseVariant().position(3).ref("TCG").alt("T").build(), variants.get(8));
+        assertVariant(baseVariant().position(4).ref("CGA").alt("C").build(), variants.get(9));
     }
 
-    private static void assertHotspot(@NotNull Variant expectedVariant, @NotNull Variant actualVariant) {
+    private static void assertVariant(@NotNull Variant expectedVariant, @NotNull Variant actualVariant) {
         assertEquals(expectedVariant.chromosome(), actualVariant.chromosome());
         assertEquals(expectedVariant.position(), actualVariant.position());
         assertEquals(expectedVariant.ref(), actualVariant.ref());
@@ -348,7 +348,7 @@ public class TransvarInterpreterTest {
     }
 
     @NotNull
-    private static ImmutableVariant.Builder baseHotspot() {
+    private static ImmutableVariant.Builder baseVariant() {
         return ImmutableVariant.builder().chromosome("1");
     }
 }

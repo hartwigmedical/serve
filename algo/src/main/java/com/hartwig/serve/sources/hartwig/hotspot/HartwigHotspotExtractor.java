@@ -82,7 +82,7 @@ public class HartwigHotspotExtractor {
     @NotNull
     private Optional<Variant> explicitHotspotOption(@NotNull HartwigHotspotEntry entry, @NotNull List<Variant> hotspots) {
         if (addExplicitHotspots) {
-            Variant explicitVariant = toHotspot(entry);
+            Variant explicitVariant = toVariant(entry);
             if (!hotspots.contains(explicitVariant)) {
                 if (entry.proteinAnnotation().isEmpty()) {
                     LOGGER.debug(" Adding hotspot '{}' since protein annotation is not provided", explicitVariant);
@@ -97,7 +97,7 @@ public class HartwigHotspotExtractor {
     }
 
     @NotNull
-    private static Variant toHotspot(@NotNull HartwigHotspotEntry entry) {
+    private static Variant toVariant(@NotNull HartwigHotspotEntry entry) {
         return ImmutableVariant.builder()
                 .chromosome(entry.chromosome())
                 .position(entry.position())

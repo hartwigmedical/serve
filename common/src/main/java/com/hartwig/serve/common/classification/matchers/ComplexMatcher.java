@@ -8,12 +8,12 @@ import org.jetbrains.annotations.NotNull;
 class ComplexMatcher implements EventMatcher {
 
     @NotNull
-    private final HotspotMatcher hotspotMatcher;
+    private final VariantMatcher variantMatcher;
     @NotNull
     private final Map<String, Set<String>> complexEventsPerGene;
 
-    ComplexMatcher(@NotNull final HotspotMatcher hotspotMatcher, @NotNull final Map<String, Set<String>> complexEventsPerGene) {
-        this.hotspotMatcher = hotspotMatcher;
+    ComplexMatcher(@NotNull final VariantMatcher variantMatcher, @NotNull final Map<String, Set<String>> complexEventsPerGene) {
+        this.variantMatcher = variantMatcher;
         this.complexEventsPerGene = complexEventsPerGene;
     }
 
@@ -31,7 +31,7 @@ class ComplexMatcher implements EventMatcher {
         } else if (event.contains("/")) {
             // Some hotspots appear as V600E/K
             return !event.toLowerCase().contains("exon");
-        } else if (hotspotMatcher.isComplexMatch(gene, event)) {
+        } else if (variantMatcher.isComplexMatch(gene, event)) {
             // Some hotspots are real hotspots but considered complex by hotspot matcher.
             return true;
         } else {

@@ -1,16 +1,9 @@
 package com.hartwig.serve.sources.vicc;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.StringJoiner;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.datamodel.molecular.characteristic.TumorCharacteristic;
 import com.hartwig.serve.datamodel.molecular.fusion.FusionPair;
@@ -24,13 +17,10 @@ import com.hartwig.serve.vicc.datamodel.ViccEntry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public final class ViccUtil {
 
     private static final Logger LOGGER = LogManager.getLogger(ViccUtil.class);
-
-    private static final String FIELD_DELIMITER = "\t";
 
     private ViccUtil() {
     }
@@ -55,7 +45,7 @@ public final class ViccUtil {
             ViccEntry entry = resultPerEntry.getKey();
             ViccExtractionResult result = resultPerEntry.getValue();
             for (Feature feature : entry.features()) {
-                List<VariantHotspot> hotspotsForFeature = result.hotspotsPerFeature().get(feature);
+                List<VariantHotspot> hotspotsForFeature = result.variantsPerFeature().get(feature);
                 List<CodonAnnotation> codonsForFeature = result.codonsPerFeature().get(feature);
                 List<ExonAnnotation> exonsForFeature = result.exonsPerFeature().get(feature);
                 GeneAnnotation geneAnnotationForFeature = result.geneLevelEventsPerFeature().get(feature);
@@ -121,101 +111,5 @@ public final class ViccUtil {
         LOGGER.info(" Extracted {} known amps and dels", featuresWithCopyNumberCount);
         LOGGER.info(" Extracted {} known fusions pairs", featuresWithFusionCount);
         LOGGER.info(" Extracted {} tumor characteristics", featuresWithCharacteristicCount);
-    }
-
-    public static void writeFeaturesToTsv(@NotNull String featureTsv, @NotNull List<ViccEntry> entries) throws IOException {
-        List<String> lines = Lists.newArrayList();
-        String header = new StringJoiner(FIELD_DELIMITER).add("source").add("gene").add("transcript").add("type").add("feature").toString();
-        lines.add(header);
-
-        Set<FeatureTypeEntry> typeEntries = Sets.newHashSet();
-
-        for (ViccEntry entry : entries) {
-            for (Feature feature : entry.features()) {
-                typeEntries.add(new FeatureTypeEntry(entry.source().display(),
-                        feature.geneSymbol(),
-                        entry.transcriptId(),
-                        feature.type().toString(),
-                        feature.name()));
-            }
-        }
-
-        for (FeatureTypeEntry feature : typeEntries) {
-            lines.add(new StringJoiner(FIELD_DELIMITER).add(feature.source())
-                    .add(feature.gene())
-                    .add(feature.transcript())
-                    .add(feature.type())
-                    .add(feature.name())
-                    .toString());
-        }
-
-        LOGGER.info("Writing {} unique VICC features to {}", lines.size() - 1, featureTsv);
-        Files.write(new File(featureTsv).toPath(), lines);
-    }
-
-    private static class FeatureTypeEntry {
-
-        @NotNull
-        private final String source;
-        @Nullable
-        private final String gene;
-        @Nullable
-        private final String transcript;
-        @NotNull
-        private final String type;
-        @NotNull
-        private final String name;
-
-        public FeatureTypeEntry(@NotNull final String source, @Nullable final String gene, @Nullable final String transcript,
-                @NotNull final String type, @NotNull final String name) {
-            this.source = source;
-            this.gene = gene;
-            this.transcript = transcript;
-            this.type = type;
-            this.name = name;
-        }
-
-        @NotNull
-        public String source() {
-            return source;
-        }
-
-        @Nullable
-        public String gene() {
-            return gene;
-        }
-
-        @Nullable
-        public String transcript() {
-            return transcript;
-        }
-
-        @NotNull
-        public String type() {
-            return type;
-        }
-
-        @NotNull
-        public String name() {
-            return name;
-        }
-
-        @Override
-        public boolean equals(final Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (o == null || getClass() != o.getClass()) {
-                return false;
-            }
-            final FeatureTypeEntry that = (FeatureTypeEntry) o;
-            return source.equals(that.source) && Objects.equals(gene, that.gene) && Objects.equals(transcript, that.transcript)
-                    && type.equals(that.type) && name.equals(that.name);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(source, gene, transcript, type, name);
-        }
     }
 }

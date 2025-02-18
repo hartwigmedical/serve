@@ -10,16 +10,16 @@ class CombinedMatcher implements EventMatcher {
     @NotNull
     private final Map<String, Set<String>> combinedEventsPerGene;
     @NotNull
-    private final HotspotMatcher hotspotMatcher;
+    private final VariantMatcher variantMatcher;
     @NotNull
     private final FusionPairMatcher fusionMatcher;
     @NotNull
     private final AmplificationMatcher amplificationMatcher;
 
-    CombinedMatcher(@NotNull final Map<String, Set<String>> combinedEventsPerGene, @NotNull final HotspotMatcher hotspotMatcher,
+    CombinedMatcher(@NotNull final Map<String, Set<String>> combinedEventsPerGene, @NotNull final VariantMatcher variantMatcher,
             @NotNull final FusionPairMatcher fusionMatcher, @NotNull final AmplificationMatcher amplificationMatcher) {
         this.combinedEventsPerGene = combinedEventsPerGene;
-        this.hotspotMatcher = hotspotMatcher;
+        this.variantMatcher = variantMatcher;
         this.fusionMatcher = fusionMatcher;
         this.amplificationMatcher = amplificationMatcher;
     }
@@ -43,7 +43,7 @@ class CombinedMatcher implements EventMatcher {
             String[] parts = event.trim().replace("  ", " ").split(" ");
             if (fusionMatcher.matches(gene, parts[0])) {
                 // Hotspots or amplifications on fusion genes are considered combined.
-                return hotspotMatcher.matches(gene, parts[1]) || amplificationMatcher.matches(gene, parts[1]);
+                return variantMatcher.matches(gene, parts[1]) || amplificationMatcher.matches(gene, parts[1]);
             }
         }
 

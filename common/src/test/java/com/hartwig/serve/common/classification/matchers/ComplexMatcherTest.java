@@ -39,7 +39,7 @@ public class ComplexMatcherTest {
     }
 
     @NotNull
-    private static HotspotMatcher testHotspotMatcher() {
-        return new HotspotMatcher(event -> event, new FusionPairMatcher(Sets.newHashSet(), Sets.newHashSet(), Sets.newHashSet()));
+    private static VariantMatcher testHotspotMatcher() {
+        return new VariantMatcher(event -> event, new FusionPairMatcher(Sets.newHashSet(), Sets.newHashSet(), Sets.newHashSet()));
     }
 }

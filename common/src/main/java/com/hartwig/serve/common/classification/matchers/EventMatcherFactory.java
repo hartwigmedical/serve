@@ -25,7 +25,7 @@ public final class EventMatcherFactory {
         PromiscuousFusionMatcher promiscuousFusionMatcher =
                 new PromiscuousFusionMatcher(config.promiscuousFusionKeyPhrases(), fusionPairMatcher);
 
-        HotspotMatcher hotspotMatcher = new HotspotMatcher(config.proteinAnnotationExtractor(), fusionPairMatcher);
+        VariantMatcher variantMatcher = new VariantMatcher(config.proteinAnnotationExtractor(), fusionPairMatcher);
         CodonMatcher codonMatcher = new CodonMatcher(config.proteinAnnotationExtractor());
         ExonMatcher exonMatcher = new ExonMatcher(config.exonIdentifiers(),
                 config.exonKeywords(),
@@ -54,14 +54,14 @@ public final class EventMatcherFactory {
         CharacteristicMatcher characteristicMatcher = new CharacteristicMatcher(allCharacteristicKeyPhrases(config));
         HlaMatcher hlaMatcher = new HlaMatcher(allHlaKeyPhrases(config));
 
-        ComplexMatcher complexMatcher = new ComplexMatcher(hotspotMatcher, config.complexEventsPerGene());
+        ComplexMatcher complexMatcher = new ComplexMatcher(variantMatcher, config.complexEventsPerGene());
         CombinedMatcher combinedMatcher =
-                new CombinedMatcher(config.combinedEventsPerGene(), hotspotMatcher, fusionPairMatcher, amplificationMatcher);
+                new CombinedMatcher(config.combinedEventsPerGene(), variantMatcher, fusionPairMatcher, amplificationMatcher);
 
         List<EventMatcher> firstTierEventMatchers = Lists.newArrayList(complexMatcher, combinedMatcher, fusionPairAndExonMatcher);
 
         Map<EventType, EventMatcher> map = Maps.newHashMap();
-        map.put(EventType.HOTSPOT, withFirstTierMatchers(firstTierEventMatchers, hotspotMatcher));
+        map.put(EventType.HOTSPOT, withFirstTierMatchers(firstTierEventMatchers, variantMatcher));
         map.put(EventType.CODON, withFirstTierMatchers(firstTierEventMatchers, codonMatcher));
         map.put(EventType.EXON, withFirstTierMatchers(firstTierEventMatchers, exonMatcher));
         map.put(EventType.FUSION_PAIR_AND_EXON, fusionPairAndExonMatcher);

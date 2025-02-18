@@ -27,7 +27,7 @@ public abstract class ViccExtractionResult {
     public abstract Map<Feature, EventInterpretation> eventInterpretationPerFeature();
 
     @NotNull
-    public abstract Map<Feature, List<VariantHotspot>> hotspotsPerFeature();
+    public abstract Map<Feature, List<VariantHotspot>> variantsPerFeature();
 
     @NotNull
     public abstract Map<Feature, List<CodonAnnotation>> codonsPerFeature();

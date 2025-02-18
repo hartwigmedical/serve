@@ -98,7 +98,7 @@ public final class ViccExtractor {
     @NotNull
     private ViccExtractionResult extractEntry(@NotNull ViccEntry entry) {
         Map<Feature, EventInterpretation> eventInterpretationPerFeature = Maps.newHashMap();
-        Map<Feature, List<VariantHotspot>> hotspotsPerFeature = Maps.newHashMap();
+        Map<Feature, List<VariantHotspot>> variantsPerFeature = Maps.newHashMap();
         Map<Feature, List<CodonAnnotation>> codonsPerFeature = Maps.newHashMap();
         Map<Feature, List<ExonAnnotation>> exonsPerFeature = Maps.newHashMap();
         Map<Feature, GeneAnnotation> geneLevelEventsPerFeature = Maps.newHashMap();
@@ -124,7 +124,7 @@ public final class ViccExtractor {
                                 .build());
 
                 if (extractorOutput.hotspots() != null) {
-                    hotspotsPerFeature.put(feature, extractorOutput.hotspots());
+                    variantsPerFeature.put(feature, extractorOutput.hotspots());
                 }
 
                 if (extractorOutput.codons() != null) {
@@ -159,7 +159,7 @@ public final class ViccExtractor {
 
         ViccExtractionResult molecularExtraction = ImmutableViccExtractionResult.builder()
                 .eventInterpretationPerFeature(eventInterpretationPerFeature)
-                .hotspotsPerFeature(hotspotsPerFeature)
+                .variantsPerFeature(variantsPerFeature)
                 .codonsPerFeature(codonsPerFeature)
                 .exonsPerFeature(exonsPerFeature)
                 .geneLevelEventsPerFeature(geneLevelEventsPerFeature)
@@ -206,7 +206,7 @@ public final class ViccExtractor {
         ViccProteinAnnotationExtractor proteinExtractor = new ViccProteinAnnotationExtractor();
         Set<KnownHotspot> hotspots = Sets.newHashSet();
         Knowledgebase source = ViccSource.toKnowledgebase(entry.source());
-        for (Map.Entry<Feature, List<VariantHotspot>> featureResult : extraction.hotspotsPerFeature().entrySet()) {
+        for (Map.Entry<Feature, List<VariantHotspot>> featureResult : extraction.variantsPerFeature().entrySet()) {
             Feature feature = featureResult.getKey();
             for (VariantHotspot hotspot : featureResult.getValue()) {
                 hotspots.add(ImmutableKnownHotspot.builder()
@@ -297,7 +297,7 @@ public final class ViccExtractor {
         Map<Feature, EventInterpretation> interpretations = molecularExtraction.eventInterpretationPerFeature();
 
         Set<MolecularCriterium> molecularCriteria = Sets.newHashSet();
-        molecularCriteria.addAll(extractActionableHotspots(interpretations, molecularExtraction.hotspotsPerFeature()));
+        molecularCriteria.addAll(extractActionableHotspots(interpretations, molecularExtraction.variantsPerFeature()));
         molecularCriteria.addAll(extractActionableCodons(interpretations, molecularExtraction.codonsPerFeature()));
         molecularCriteria.addAll(extractActionableExons(interpretations, molecularExtraction.exonsPerFeature()));
         molecularCriteria.addAll(extractActionableGenes(interpretations, molecularExtraction.ampsDelsPerFeature()));

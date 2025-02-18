@@ -35,8 +35,10 @@ public final class EventMatcherFactory {
                 config.genericGeneLevelKeyPhrases(),
                 config.activatingGeneLevelKeyPhrases(),
                 config.inactivatingGeneLevelKeyPhrases());
-        PresenceAbsenceOfProteinMatcher absenceOfProteinMatcher = new PresenceAbsenceOfProteinMatcher(config.absenceOfProteinEvents(), config.absenceOfProteinBlacklistEvents());
-        PresenceAbsenceOfProteinMatcher presenceOfProteinMatcher = new PresenceAbsenceOfProteinMatcher(config.presenceOfProteinEvents(), config.presenceOfProteinBlacklistEvents());
+        PresenceAbsenceOfProteinMatcher absenceOfProteinMatcher =
+                new PresenceAbsenceOfProteinMatcher(config.absenceOfProteinEvents(), config.absenceOfProteinBlacklistEvents());
+        PresenceAbsenceOfProteinMatcher presenceOfProteinMatcher =
+                new PresenceAbsenceOfProteinMatcher(config.presenceOfProteinEvents(), config.presenceOfProteinBlacklistEvents());
 
         WildTypeMatcher wildTypeMatcher = new WildTypeMatcher(config.wildTypeKeyPhrases());
 
@@ -61,7 +63,7 @@ public final class EventMatcherFactory {
         List<EventMatcher> firstTierEventMatchers = Lists.newArrayList(complexMatcher, combinedMatcher, fusionPairAndExonMatcher);
 
         Map<EventType, EventMatcher> map = Maps.newHashMap();
-        map.put(EventType.HOTSPOT, withFirstTierMatchers(firstTierEventMatchers, variantMatcher));
+        map.put(EventType.VARIANT, withFirstTierMatchers(firstTierEventMatchers, variantMatcher));
         map.put(EventType.CODON, withFirstTierMatchers(firstTierEventMatchers, codonMatcher));
         map.put(EventType.EXON, withFirstTierMatchers(firstTierEventMatchers, exonMatcher));
         map.put(EventType.FUSION_PAIR_AND_EXON, fusionPairAndExonMatcher);

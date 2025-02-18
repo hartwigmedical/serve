@@ -101,7 +101,7 @@ public class KnownHotspotConsolidationTest {
 
     @NotNull
     private static VariantHotspot hotspot1() {
-        return ImmutableVariantHotspotImpl.builder()
+        return ImmutableVariantAnnotation.builder()
                 .from(HotspotTestFactory.createTestVariantHotspot())
                 .chromosome("1")
                 .position(10)
@@ -112,7 +112,7 @@ public class KnownHotspotConsolidationTest {
 
     @NotNull
     private static VariantHotspot hotspot2() {
-        return ImmutableVariantHotspotImpl.builder()
+        return ImmutableVariantAnnotation.builder()
                 .from(HotspotTestFactory.createTestVariantHotspot())
                 .chromosome("1")
                 .position(20)

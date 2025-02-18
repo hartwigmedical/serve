@@ -30,7 +30,6 @@ import com.hartwig.serve.datamodel.molecular.gene.KnownCopyNumber;
 import com.hartwig.serve.datamodel.molecular.hotspot.ImmutableActionableHotspot;
 import com.hartwig.serve.datamodel.molecular.hotspot.ImmutableKnownHotspot;
 import com.hartwig.serve.datamodel.molecular.hotspot.KnownHotspot;
-import com.hartwig.serve.datamodel.molecular.hotspot.VariantHotspot;
 import com.hartwig.serve.datamodel.molecular.range.ImmutableActionableRange;
 import com.hartwig.serve.datamodel.molecular.range.ImmutableKnownCodon;
 import com.hartwig.serve.datamodel.molecular.range.ImmutableKnownExon;
@@ -51,6 +50,7 @@ import com.hartwig.serve.extraction.exon.ExonConsolidation;
 import com.hartwig.serve.extraction.fusion.FusionConsolidation;
 import com.hartwig.serve.extraction.immuno.ImmunoHLA;
 import com.hartwig.serve.extraction.variant.KnownHotspotConsolidation;
+import com.hartwig.serve.extraction.variant.VariantAnnotation;
 import com.hartwig.serve.util.ProgressTracker;
 import com.hartwig.serve.vicc.annotation.ViccProteinAnnotationExtractor;
 import com.hartwig.serve.vicc.datamodel.Feature;
@@ -98,7 +98,7 @@ public final class ViccExtractor {
     @NotNull
     private ViccExtractionResult extractEntry(@NotNull ViccEntry entry) {
         Map<Feature, EventInterpretation> eventInterpretationPerFeature = Maps.newHashMap();
-        Map<Feature, List<VariantHotspot>> variantsPerFeature = Maps.newHashMap();
+        Map<Feature, List<VariantAnnotation>> variantsPerFeature = Maps.newHashMap();
         Map<Feature, List<CodonAnnotation>> codonsPerFeature = Maps.newHashMap();
         Map<Feature, List<ExonAnnotation>> exonsPerFeature = Maps.newHashMap();
         Map<Feature, GeneAnnotation> geneLevelEventsPerFeature = Maps.newHashMap();
@@ -206,11 +206,11 @@ public final class ViccExtractor {
         ViccProteinAnnotationExtractor proteinExtractor = new ViccProteinAnnotationExtractor();
         Set<KnownHotspot> hotspots = Sets.newHashSet();
         Knowledgebase source = ViccSource.toKnowledgebase(entry.source());
-        for (Map.Entry<Feature, List<VariantHotspot>> featureResult : extraction.variantsPerFeature().entrySet()) {
+        for (Map.Entry<Feature, List<VariantAnnotation>> featureResult : extraction.variantsPerFeature().entrySet()) {
             Feature feature = featureResult.getKey();
-            for (VariantHotspot hotspot : featureResult.getValue()) {
+            for (VariantAnnotation variantAnnotation : featureResult.getValue()) {
                 hotspots.add(ImmutableKnownHotspot.builder()
-                        .from(hotspot)
+                        .from(variantAnnotation)
                         .geneRole(GeneRole.UNKNOWN)
                         .proteinEffect(ProteinEffect.UNKNOWN)
                         .inputTranscript(entry.transcriptId())
@@ -310,15 +310,15 @@ public final class ViccExtractor {
 
     @NotNull
     private static Set<MolecularCriterium> extractActionableHotspots(@NotNull Map<Feature, EventInterpretation> interpretations,
-            @NotNull Map<Feature, List<VariantHotspot>> hotspotPerFeature) {
+            @NotNull Map<Feature, List<VariantAnnotation>> variantsPerFeature) {
         Set<MolecularCriterium> criteriaForHotspots = Sets.newHashSet();
-        for (Map.Entry<Feature, List<VariantHotspot>> entry : hotspotPerFeature.entrySet()) {
-            List<VariantHotspot> hotspots = entry.getValue();
-            if (hotspots != null) {
+        for (Map.Entry<Feature, List<VariantAnnotation>> entry : variantsPerFeature.entrySet()) {
+            List<VariantAnnotation> variantAnnotations = entry.getValue();
+            if (variantAnnotations != null) {
                 ActionableEvent event = toActionableEvent(interpretations.get(entry.getKey()));
-                for (VariantHotspot hotspot : hotspots) {
+                for (VariantAnnotation variantAnnotation : variantAnnotations) {
                     criteriaForHotspots.add(ImmutableMolecularCriterium.builder()
-                            .addHotspots(ImmutableActionableHotspot.builder().from(hotspot).from(event).build())
+                            .addHotspots(ImmutableActionableHotspot.builder().from(variantAnnotation).from(event).build())
                             .build());
                 }
             }

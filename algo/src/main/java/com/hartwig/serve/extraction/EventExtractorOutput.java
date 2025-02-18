@@ -5,10 +5,10 @@ import java.util.List;
 import com.hartwig.serve.datamodel.molecular.characteristic.TumorCharacteristic;
 import com.hartwig.serve.datamodel.molecular.fusion.FusionPair;
 import com.hartwig.serve.datamodel.molecular.gene.GeneAnnotation;
-import com.hartwig.serve.datamodel.molecular.hotspot.VariantHotspot;
 import com.hartwig.serve.extraction.codon.CodonAnnotation;
 import com.hartwig.serve.extraction.exon.ExonAnnotation;
 import com.hartwig.serve.extraction.immuno.ImmunoHLA;
+import com.hartwig.serve.extraction.variant.VariantAnnotation;
 
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;
@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 public abstract class EventExtractorOutput {
 
     @Nullable
-    public abstract List<VariantHotspot> variants();
+    public abstract List<VariantAnnotation> variants();
 
     @Nullable
     public abstract List<CodonAnnotation> codons();

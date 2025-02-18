@@ -49,7 +49,6 @@ import com.hartwig.serve.datamodel.molecular.hotspot.ActionableHotspot;
 import com.hartwig.serve.datamodel.molecular.hotspot.ImmutableActionableHotspot;
 import com.hartwig.serve.datamodel.molecular.hotspot.ImmutableKnownHotspot;
 import com.hartwig.serve.datamodel.molecular.hotspot.KnownHotspot;
-import com.hartwig.serve.datamodel.molecular.hotspot.VariantHotspot;
 import com.hartwig.serve.datamodel.molecular.immuno.ActionableHLA;
 import com.hartwig.serve.datamodel.molecular.immuno.ImmutableActionableHLA;
 import com.hartwig.serve.datamodel.molecular.range.ActionableRange;
@@ -77,6 +76,7 @@ import com.hartwig.serve.extraction.exon.ExonConsolidation;
 import com.hartwig.serve.extraction.fusion.FusionConsolidation;
 import com.hartwig.serve.extraction.immuno.ImmunoHLA;
 import com.hartwig.serve.extraction.variant.KnownHotspotConsolidation;
+import com.hartwig.serve.extraction.variant.VariantAnnotation;
 import com.hartwig.serve.util.ProgressTracker;
 
 import org.apache.logging.log4j.LogManager;
@@ -289,18 +289,18 @@ public class CkbExtractor {
     }
 
     @NotNull
-    private Set<KnownHotspot> convertToKnownHotspots(@Nullable List<VariantHotspot> hotspots, @NotNull String event,
+    private Set<KnownHotspot> convertToKnownHotspots(@Nullable List<VariantAnnotation> variants, @NotNull String event,
             @NotNull Variant variant) {
         CkbProteinAnnotationExtractor proteinExtractor = new CkbProteinAnnotationExtractor();
-        Function<VariantHotspot, KnownHotspot> convert = hotspot -> ImmutableKnownHotspot.builder()
-                .from(hotspot)
+        Function<VariantAnnotation, KnownHotspot> convert = variantAnnotation -> ImmutableKnownHotspot.builder()
+                .from(variantAnnotation)
                 .geneRole(GeneRole.UNKNOWN)
                 .proteinEffect(ProteinEffect.UNKNOWN)
                 .addSources(Knowledgebase.CKB)
                 .inputProteinAnnotation(proteinExtractor.apply(event))
                 .build();
 
-        return convertToKnownSet(hotspots, convert, KnownHotspotConsolidation::consolidate, CkbVariantAnnotator::annotateHotspot, variant);
+        return convertToKnownSet(variants, convert, KnownHotspotConsolidation::consolidate, CkbVariantAnnotator::annotateHotspot, variant);
     }
 
     @NotNull
@@ -373,9 +373,9 @@ public class CkbExtractor {
     }
 
     @NotNull
-    private static Set<ActionableHotspot> extractActionableHotspots(@NotNull List<VariantHotspot> hotspots,
+    private static Set<ActionableHotspot> extractActionableHotspots(@NotNull List<VariantAnnotation> variants,
             @NotNull ActionableEvent actionableEvent) {
-        return hotspots.stream()
+        return variants.stream()
                 .map(hotspot -> ImmutableActionableHotspot.builder().from(hotspot).from(actionableEvent).build())
                 .collect(Collectors.toSet());
     }

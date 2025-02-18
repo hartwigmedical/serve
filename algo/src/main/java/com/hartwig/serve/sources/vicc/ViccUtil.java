@@ -8,9 +8,9 @@ import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.datamodel.molecular.characteristic.TumorCharacteristic;
 import com.hartwig.serve.datamodel.molecular.fusion.FusionPair;
 import com.hartwig.serve.datamodel.molecular.gene.GeneAnnotation;
-import com.hartwig.serve.datamodel.molecular.hotspot.VariantHotspot;
 import com.hartwig.serve.extraction.codon.CodonAnnotation;
 import com.hartwig.serve.extraction.exon.ExonAnnotation;
+import com.hartwig.serve.extraction.variant.VariantAnnotation;
 import com.hartwig.serve.vicc.datamodel.Feature;
 import com.hartwig.serve.vicc.datamodel.ViccEntry;
 
@@ -45,7 +45,7 @@ public final class ViccUtil {
             ViccEntry entry = resultPerEntry.getKey();
             ViccExtractionResult result = resultPerEntry.getValue();
             for (Feature feature : entry.features()) {
-                List<VariantHotspot> variantsForFeature = result.variantsPerFeature().get(feature);
+                List<VariantAnnotation> variantsForFeature = result.variantsPerFeature().get(feature);
                 List<CodonAnnotation> codonsForFeature = result.codonsPerFeature().get(feature);
                 List<ExonAnnotation> exonsForFeature = result.exonsPerFeature().get(feature);
                 GeneAnnotation geneAnnotationForFeature = result.geneLevelEventsPerFeature().get(feature);

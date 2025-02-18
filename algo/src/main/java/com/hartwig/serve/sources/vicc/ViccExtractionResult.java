@@ -8,11 +8,11 @@ import com.hartwig.serve.datamodel.efficacy.EfficacyEvidence;
 import com.hartwig.serve.datamodel.molecular.characteristic.TumorCharacteristic;
 import com.hartwig.serve.datamodel.molecular.fusion.FusionPair;
 import com.hartwig.serve.datamodel.molecular.gene.GeneAnnotation;
-import com.hartwig.serve.datamodel.molecular.hotspot.VariantHotspot;
 import com.hartwig.serve.extraction.codon.CodonAnnotation;
 import com.hartwig.serve.extraction.events.EventInterpretation;
 import com.hartwig.serve.extraction.exon.ExonAnnotation;
 import com.hartwig.serve.extraction.immuno.ImmunoHLA;
+import com.hartwig.serve.extraction.variant.VariantAnnotation;
 import com.hartwig.serve.vicc.datamodel.Feature;
 
 import org.immutables.value.Value;
@@ -27,7 +27,7 @@ public abstract class ViccExtractionResult {
     public abstract Map<Feature, EventInterpretation> eventInterpretationPerFeature();
 
     @NotNull
-    public abstract Map<Feature, List<VariantHotspot>> variantsPerFeature();
+    public abstract Map<Feature, List<VariantAnnotation>> variantsPerFeature();
 
     @NotNull
     public abstract Map<Feature, List<CodonAnnotation>> codonsPerFeature();

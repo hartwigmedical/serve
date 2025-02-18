@@ -15,7 +15,7 @@ import com.hartwig.serve.datamodel.molecular.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.serialization.ServeJson;
 import com.hartwig.serve.extraction.events.EventInterpretation;
 import com.hartwig.serve.extraction.events.EventInterpretationFile;
-import com.hartwig.serve.extraction.hotspot.KnownHotspotVCF;
+import com.hartwig.serve.extraction.variant.KnownHotspotVCF;
 import com.hartwig.serve.refgenome.RefGenomeManager;
 
 import org.apache.commons.compress.utils.Lists;

@@ -16,11 +16,11 @@ import com.hartwig.serve.extraction.copynumber.CopyNumberExtractor;
 import com.hartwig.serve.extraction.exon.ExonExtractor;
 import com.hartwig.serve.extraction.fusion.FusionExtractor;
 import com.hartwig.serve.extraction.gene.GeneLevelExtractor;
-import com.hartwig.serve.extraction.hotspot.HotspotExtractor;
 import com.hartwig.serve.extraction.immuno.ImmunoHLAExtractor;
 import com.hartwig.serve.extraction.util.DriverInconsistencyMode;
 import com.hartwig.serve.extraction.util.GeneChecker;
 import com.hartwig.serve.extraction.util.MutationTypeFilterAlgo;
+import com.hartwig.serve.extraction.variant.VariantExtractor;
 import com.hartwig.serve.refgenome.RefGenomeResource;
 
 import org.jetbrains.annotations.NotNull;
@@ -42,7 +42,7 @@ public final class EventExtractorFactory {
         GeneChecker fusionGeneChecker = new GeneChecker(fusionGeneSet);
 
         MutationTypeFilterAlgo mutationTypeFilterAlgo = new MutationTypeFilterAlgo(refGenomeResource.driverGenes());
-        return new EventExtractor(new HotspotExtractor(exomeGeneChecker,
+        return new EventExtractor(new VariantExtractor(exomeGeneChecker,
                 refGenomeResource.proteinResolver(),
                 config.proteinAnnotationExtractor(),
                 driverInconsistencyMode,

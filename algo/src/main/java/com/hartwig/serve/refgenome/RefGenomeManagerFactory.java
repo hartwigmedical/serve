@@ -15,8 +15,8 @@ import com.hartwig.serve.common.ensemblcache.GeneData;
 import com.hartwig.serve.common.knownfusion.KnownFusionCache;
 import com.hartwig.serve.common.knownfusion.KnownFusionCacheLoader;
 import com.hartwig.serve.datamodel.RefGenome;
-import com.hartwig.serve.extraction.hotspot.ProteinResolver;
-import com.hartwig.serve.extraction.hotspot.ProteinResolverFactory;
+import com.hartwig.serve.extraction.variant.ProteinResolver;
+import com.hartwig.serve.extraction.variant.ProteinResolverFactory;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -44,7 +44,7 @@ public final class RefGenomeManagerFactory {
         String fastaFile37 = config.refGenome37FastaFile();
         LOGGER.info("Creating ref genome resource for V37 using fasta {}", fastaFile37);
         EnsemblDataCache ensemblDataCache37 = loadEnsemblDataCache(RefGenome.V37, config.ensemblDataDir37());
-        ProteinResolver proteinResolver37 = config.skipHotspotResolving()
+        ProteinResolver proteinResolver37 = config.skipVariantResolving()
                 ? ProteinResolverFactory.dummy()
                 : ProteinResolverFactory.transvarWithRefGenome(RefGenome.V37, fastaFile37, ensemblDataCache37);
 
@@ -63,7 +63,7 @@ public final class RefGenomeManagerFactory {
         String fastaFile38 = config.refGenome38FastaFile();
         LOGGER.info("Creating ref genome resource for V38 using fasta {}", fastaFile38);
         EnsemblDataCache ensemblDataCache38 = loadEnsemblDataCache(RefGenome.V38, config.ensemblDataDir38());
-        ProteinResolver proteinResolver38 = config.skipHotspotResolving()
+        ProteinResolver proteinResolver38 = config.skipVariantResolving()
                 ? ProteinResolverFactory.dummy()
                 : ProteinResolverFactory.transvarWithRefGenome(RefGenome.V38, fastaFile38, ensemblDataCache38);
 

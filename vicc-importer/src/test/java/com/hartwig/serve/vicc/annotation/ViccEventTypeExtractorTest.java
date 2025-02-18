@@ -14,7 +14,7 @@ public class ViccEventTypeExtractorTest {
 
     @Test
     public void canDetermineMutationTypes() {
-        assertEquals(EventType.HOTSPOT, ViccEventTypeExtractor.extractType(createFeature("BRAF", "V600E")));
+        assertEquals(EventType.VARIANT, ViccEventTypeExtractor.extractType(createFeature("BRAF", "V600E")));
 
         assertEquals(EventType.UNKNOWN, ViccEventTypeExtractor.extractType(createFeature("BRAF", "what is this?")));
 

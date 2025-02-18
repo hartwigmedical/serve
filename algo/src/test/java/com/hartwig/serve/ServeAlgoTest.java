@@ -91,6 +91,6 @@ public class ServeAlgoTest {
 
     @NotNull
     private static ImmutableServeConfig.Builder algoBuilder() {
-        return ImmutableServeConfig.builder().outputDir(Strings.EMPTY).skipHotspotResolving(true);
+        return ImmutableServeConfig.builder().outputDir(Strings.EMPTY).skipVariantResolving(true);
     }
 }

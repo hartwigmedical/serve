@@ -80,9 +80,9 @@ public class ServeAlgo {
                                 config.ckbFacilityCurationManualTsv()) : null,
                         config.useDocm() ? extractDocmKnowledge(config.docmTsv()) : null,
                         config.useHartwigCohortHotspots() ? extractHartwigCohortHotspotKnowledge(config.hartwigCohortHotspotTsv(),
-                                !config.skipHotspotResolving()) : null,
+                                !config.skipVariantResolving()) : null,
                         config.useHartwigCuratedHotspots() ? extractHartwigCuratedHotspotKnowledge(config.hartwigCuratedHotspotTsv(),
-                                !config.skipHotspotResolving()) : null,
+                                !config.skipVariantResolving()) : null,
                         config.useHartwigDriverGenes() ? extractHartwigDriverGeneKnowledge(config.driverGene37Tsv()) : null,
                         config.useHartwigCuratedGenes() ? extractHartwigCuratedGeneKnowledge(config.hartwigCuratedGeneTsv()) : null)
                 .filter(Objects::nonNull)

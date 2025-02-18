@@ -22,7 +22,7 @@ public class ComplexMatcherTest {
 
     @Test
     public void canAssessWhetherEventIsComplexEvent() {
-        EventMatcher matcher = new ComplexMatcher(testHotspotMatcher(), COMPLEX_EVENTS_PER_GENE);
+        EventMatcher matcher = new ComplexMatcher(createTestVariantMatcher(), COMPLEX_EVENTS_PER_GENE);
 
         assertTrue(matcher.matches("VHL", "Splicing alteration (c.464-2A>G)"));
         assertTrue(matcher.matches("KRAS", "KRAS ."));
@@ -39,7 +39,7 @@ public class ComplexMatcherTest {
     }
 
     @NotNull
-    private static HotspotMatcher testHotspotMatcher() {
-        return new HotspotMatcher(event -> event, new FusionPairMatcher(Sets.newHashSet(), Sets.newHashSet(), Sets.newHashSet()));
+    private static VariantMatcher createTestVariantMatcher() {
+        return new VariantMatcher(event -> event, new FusionPairMatcher(Sets.newHashSet(), Sets.newHashSet(), Sets.newHashSet()));
     }
 }

@@ -2,8 +2,8 @@ package com.hartwig.serve.extraction.util;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.hartwig.serve.extraction.hotspot.HumanChromosome;
-import com.hartwig.serve.extraction.hotspot.MitochondrialChromosome;
+import com.hartwig.serve.extraction.variant.HumanChromosome;
+import com.hartwig.serve.extraction.variant.MitochondrialChromosome;
 
 import org.jetbrains.annotations.NotNull;
 

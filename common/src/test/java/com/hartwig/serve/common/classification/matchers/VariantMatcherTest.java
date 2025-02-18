@@ -9,11 +9,11 @@ import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
-public class HotspotMatcherTest {
+public class VariantMatcherTest {
 
     @Test
-    public void canAssessWhetherEventIsHotspot() {
-        EventMatcher matcher = testHotspotMatcher();
+    public void canAssessWhetherEventIsVariant() {
+        EventMatcher matcher = createTestVariantMatcher();
 
         assertTrue(matcher.matches("any", "K5N"));
         assertTrue(matcher.matches("any", "L2230V"));
@@ -68,7 +68,7 @@ public class HotspotMatcherTest {
 
     @Test
     public void canDetermineComplexMatches() {
-        HotspotMatcher matcher = testHotspotMatcher();
+        VariantMatcher matcher = createTestVariantMatcher();
 
         assertFalse(matcher.isComplexMatch("any", "V600E"));
         assertFalse(matcher.isComplexMatch("any", "G10fs*"));
@@ -80,7 +80,7 @@ public class HotspotMatcherTest {
     }
 
     @NotNull
-    private static HotspotMatcher testHotspotMatcher() {
-        return new HotspotMatcher(event -> event, new FusionPairMatcher(Sets.newHashSet(), Sets.newHashSet(), Sets.newHashSet()));
+    private static VariantMatcher createTestVariantMatcher() {
+        return new VariantMatcher(event -> event, new FusionPairMatcher(Sets.newHashSet(), Sets.newHashSet(), Sets.newHashSet()));
     }
 }

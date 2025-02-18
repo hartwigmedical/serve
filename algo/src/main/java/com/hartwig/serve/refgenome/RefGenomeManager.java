@@ -103,7 +103,7 @@ public class RefGenomeManager {
                     LOGGER.warn("Protein resolver {} could not resolve protein annotation '{}'", version, unresolvedProteinAnnotation);
                 }
             } else {
-                LOGGER.debug("Protein resolver {} observed no issues when resolving hotspots", version);
+                LOGGER.debug("Protein resolver {} observed no issues when resolving variants", version);
             }
         }
     }

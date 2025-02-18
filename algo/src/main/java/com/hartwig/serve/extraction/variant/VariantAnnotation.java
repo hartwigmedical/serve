@@ -1,4 +1,4 @@
-package com.hartwig.serve.extraction.hotspot;
+package com.hartwig.serve.extraction.variant;
 
 import com.hartwig.serve.datamodel.molecular.hotspot.VariantHotspot;
 
@@ -8,6 +8,6 @@ import org.jetbrains.annotations.Nullable;
 
 @Value.Immutable
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class })
-public abstract class VariantHotspotImpl implements VariantHotspot {
+public abstract class VariantAnnotation implements VariantHotspot {
 
 }

@@ -6,7 +6,7 @@ import com.hartwig.serve.common.variant.hgvs.HgvsConstants;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class HotspotMatcher implements EventMatcher {
+public class VariantMatcher implements EventMatcher {
 
     private static final int MAX_INFRAME_BASE_LENGTH = 50;
 
@@ -15,7 +15,7 @@ public class HotspotMatcher implements EventMatcher {
     @NotNull
     private final FusionPairMatcher fusionPairMatcher;
 
-    HotspotMatcher(@NotNull final EventPreprocessor proteinAnnotationExtractor, @NotNull final FusionPairMatcher fusionPairMatcher) {
+    VariantMatcher(@NotNull final EventPreprocessor proteinAnnotationExtractor, @NotNull final FusionPairMatcher fusionPairMatcher) {
         this.proteinAnnotationExtractor = proteinAnnotationExtractor;
         this.fusionPairMatcher = fusionPairMatcher;
     }

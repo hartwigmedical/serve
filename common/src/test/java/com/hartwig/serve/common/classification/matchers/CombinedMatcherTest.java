@@ -43,10 +43,9 @@ public class CombinedMatcherTest {
     @NotNull
     private static EventMatcher buildCombinedMatcher() {
         FusionPairMatcher fusionPairMatcher = new FusionPairMatcher(Sets.newHashSet(), Sets.newHashSet(), Sets.newHashSet());
-        HotspotMatcher hotspotMatcher = new HotspotMatcher(event -> event, fusionPairMatcher);
+        VariantMatcher variantMatcher = new VariantMatcher(event -> event, fusionPairMatcher);
 
-        return new CombinedMatcher(COMBINED_EVENTS_PER_GENE,
-                hotspotMatcher,
+        return new CombinedMatcher(COMBINED_EVENTS_PER_GENE, variantMatcher,
                 fusionPairMatcher,
                 new AmplificationMatcher(AMPLIFICATION_KEYWORDS, Sets.newHashSet()));
     }

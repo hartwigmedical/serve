@@ -1,4 +1,4 @@
-package com.hartwig.serve.extraction.hotspot;
+package com.hartwig.serve.extraction.variant;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

@@ -1,4 +1,4 @@
-package com.hartwig.serve.extraction.hotspot;
+package com.hartwig.serve.extraction.variant;
 
 import java.util.Map;
 import java.util.Set;
@@ -15,9 +15,9 @@ import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public final class HotspotConsolidation {
+public final class KnownHotspotConsolidation {
 
-    private HotspotConsolidation() {
+    private KnownHotspotConsolidation() {
     }
 
     @NotNull

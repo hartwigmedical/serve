@@ -1,4 +1,4 @@
-package com.hartwig.serve.extraction.hotspot;
+package com.hartwig.serve.extraction.variant;
 
 import java.io.FileNotFoundException;
 import java.util.List;
@@ -29,7 +29,7 @@ public final class ProteinResolverFactory {
         return new ProteinResolver() {
             @NotNull
             @Override
-            public List<Hotspot> resolve(@NotNull final String gene, @Nullable final String specificTranscript,
+            public List<Variant> resolve(@NotNull final String gene, @Nullable final String specificTranscript,
                     @NotNull final String proteinAnnotation) {
                 return Lists.newArrayList();
             }

@@ -23,7 +23,7 @@ import com.hartwig.serve.extraction.events.EventInterpretation;
 import com.hartwig.serve.extraction.exon.ExonConsolidation;
 import com.hartwig.serve.extraction.fusion.FusionConsolidation;
 import com.hartwig.serve.extraction.gene.GeneConsolidation;
-import com.hartwig.serve.extraction.hotspot.HotspotConsolidation;
+import com.hartwig.serve.extraction.variant.KnownHotspotConsolidation;
 
 import org.apache.commons.compress.utils.Lists;
 import org.apache.logging.log4j.LogManager;
@@ -104,7 +104,7 @@ public final class ExtractionFunctions {
         }
 
         return ImmutableKnownEvents.builder()
-                .hotspots(HotspotConsolidation.consolidate(unconsolidated.hotspots()))
+                .hotspots(KnownHotspotConsolidation.consolidate(unconsolidated.hotspots()))
                 .codons(CodonConsolidation.consolidate(unconsolidated.codons()))
                 .exons(ExonConsolidation.consolidate(unconsolidated.exons()))
                 .genes(GeneConsolidation.consolidate(unconsolidated.genes()))

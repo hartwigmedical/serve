@@ -66,7 +66,7 @@ final class FilterFactory {
     }
 
     private static void populateFeatureKeysToFilter() {
-        populateFilterForHotspotsThatCannotYetBeInterpreted();
+        populateFilterForVariantsThatCannotYetBeInterpreted();
         populateFilterForEventsInconsistentWithDriverCatalog();
         populateFilterForNonReportableFusions();
 
@@ -103,7 +103,7 @@ final class FilterFactory {
         FEATURE_KEYS_TO_FILTER.add(new FilterKey(ViccSource.CIVIC, "CDKN2A", "p16 EXPRESSION"));
     }
 
-    private static void populateFilterForHotspotsThatCannotYetBeInterpreted() {
+    private static void populateFilterForVariantsThatCannotYetBeInterpreted() {
         // Variants implying stop lost. They are real but not handled yet in SERVE
         FEATURE_KEYS_TO_FILTER.add(new FilterKey(ViccSource.CIVIC, "VHL", "*214W (c.642A>G)"));
         FEATURE_KEYS_TO_FILTER.add(new FilterKey(ViccSource.CIVIC, "MLH1", "*757L"));

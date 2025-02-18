@@ -1,4 +1,4 @@
-package com.hartwig.serve.extraction.hotspot;
+package com.hartwig.serve.extraction.variant;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -16,11 +16,11 @@ import com.hartwig.serve.datamodel.molecular.hotspot.VariantHotspot;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
-public class HotspotConsolidationTest {
+public class KnownHotspotConsolidationTest {
 
     @Test
     public void canConsolidateEmptyHotspots() {
-        assertTrue(HotspotConsolidation.consolidate(Lists.newArrayList()).isEmpty());
+        assertTrue(KnownHotspotConsolidation.consolidate(Lists.newArrayList()).isEmpty());
     }
 
     @Test
@@ -53,7 +53,7 @@ public class HotspotConsolidationTest {
                 .inputProteinAnnotation("prot3")
                 .build());
 
-        Set<KnownHotspot> consolidateHotspots = HotspotConsolidation.consolidate(knownHotspots);
+        Set<KnownHotspot> consolidateHotspots = KnownHotspotConsolidation.consolidate(knownHotspots);
         assertEquals(2, consolidateHotspots.size());
 
         KnownHotspot gene1 = findByGene(consolidateHotspots, "gene1");
@@ -90,7 +90,7 @@ public class HotspotConsolidationTest {
                 .inputProteinAnnotation("prot2")
                 .build());
 
-        Set<KnownHotspot> consolidateHotspots = HotspotConsolidation.consolidate(knownHotspots);
+        Set<KnownHotspot> consolidateHotspots = KnownHotspotConsolidation.consolidate(knownHotspots);
         assertEquals(1, consolidateHotspots.size());
 
         KnownHotspot hotspot = findByGene(consolidateHotspots, gene);
@@ -101,7 +101,7 @@ public class HotspotConsolidationTest {
 
     @NotNull
     private static VariantHotspot hotspot1() {
-        return ImmutableVariantHotspotImpl.builder()
+        return ImmutableVariantAnnotation.builder()
                 .from(HotspotTestFactory.createTestVariantHotspot())
                 .chromosome("1")
                 .position(10)
@@ -112,7 +112,7 @@ public class HotspotConsolidationTest {
 
     @NotNull
     private static VariantHotspot hotspot2() {
-        return ImmutableVariantHotspotImpl.builder()
+        return ImmutableVariantAnnotation.builder()
                 .from(HotspotTestFactory.createTestVariantHotspot())
                 .chromosome("1")
                 .position(20)

@@ -1,7 +1,7 @@
 package com.hartwig.serve.common.classification;
 
 public enum EventType {
-    HOTSPOT,
+    VARIANT,
     CODON,
     EXON,
     FUSION_PAIR_AND_EXON,

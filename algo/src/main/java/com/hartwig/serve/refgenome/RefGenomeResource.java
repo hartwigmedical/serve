@@ -7,7 +7,7 @@ import com.hartwig.serve.common.drivergene.DriverGene;
 import com.hartwig.serve.common.ensemblcache.EnsemblDataCache;
 import com.hartwig.serve.common.knownfusion.KnownFusionCache;
 import com.hartwig.serve.datamodel.RefGenome;
-import com.hartwig.serve.extraction.hotspot.ProteinResolver;
+import com.hartwig.serve.extraction.variant.ProteinResolver;
 
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;

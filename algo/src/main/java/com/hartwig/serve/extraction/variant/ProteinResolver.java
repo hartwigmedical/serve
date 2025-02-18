@@ -1,4 +1,4 @@
-package com.hartwig.serve.extraction.hotspot;
+package com.hartwig.serve.extraction.variant;
 
 import java.util.List;
 import java.util.Set;
@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 public interface ProteinResolver {
 
     @NotNull
-    List<Hotspot> resolve(@NotNull String gene, @Nullable String specificTranscript, @NotNull String proteinAnnotation);
+    List<Variant> resolve(@NotNull String gene, @Nullable String specificTranscript, @NotNull String proteinAnnotation);
 
     @NotNull
     Set<String> unresolvedProteinAnnotations();

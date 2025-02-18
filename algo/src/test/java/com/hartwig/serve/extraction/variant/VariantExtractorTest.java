@@ -1,4 +1,4 @@
-package com.hartwig.serve.extraction.hotspot;
+package com.hartwig.serve.extraction.variant;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -78,18 +78,18 @@ public class VariantExtractorTest {
     }
 
     @Test
-    public void canExtractSimpleHotspot() {
+    public void canExtractSimpleVariant() {
         String protein = "V600E";
 
         VariantExtractor variantExtractor = createWithProtein(protein, DriverInconsistencyMode.IGNORE);
-        List<VariantHotspot> hotspots = variantExtractor.extract("BRAF", null, EventType.HOTSPOT, "V600E");
+        List<VariantHotspot> variants = variantExtractor.extract("BRAF", null, EventType.HOTSPOT, "V600E");
 
-        assertEquals(1, hotspots.size());
-        assertEquals(TEST_BRAF_VARIANT_HOTSPOT, hotspots.get(0));
+        assertEquals(1, variants.size());
+        assertEquals(TEST_BRAF_VARIANT_HOTSPOT, variants.get(0));
     }
 
     @Test
-    public void skipsHotspotsForInvalidGenes() {
+    public void skipsVariantsForInvalidGenes() {
         String protein = "V600E";
 
         VariantExtractor variantExtractor = createWithProtein(protein, DriverInconsistencyMode.IGNORE);

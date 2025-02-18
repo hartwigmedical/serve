@@ -75,8 +75,8 @@ import com.hartwig.serve.extraction.events.ImmutableEventInterpretation;
 import com.hartwig.serve.extraction.exon.ExonAnnotation;
 import com.hartwig.serve.extraction.exon.ExonConsolidation;
 import com.hartwig.serve.extraction.fusion.FusionConsolidation;
-import com.hartwig.serve.extraction.hotspot.KnownHotspotConsolidation;
 import com.hartwig.serve.extraction.immuno.ImmunoHLA;
+import com.hartwig.serve.extraction.variant.KnownHotspotConsolidation;
 import com.hartwig.serve.util.ProgressTracker;
 
 import org.apache.logging.log4j.LogManager;

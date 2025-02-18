@@ -1,4 +1,4 @@
-package com.hartwig.serve.extraction.hotspot;
+package com.hartwig.serve.extraction.variant;
 
 import com.hartwig.serve.datamodel.molecular.hotspot.VariantHotspot;
 

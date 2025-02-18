@@ -1,4 +1,4 @@
-package com.hartwig.serve.extraction.hotspot;
+package com.hartwig.serve.extraction.variant;
 
 import java.io.FileNotFoundException;
 import java.util.List;

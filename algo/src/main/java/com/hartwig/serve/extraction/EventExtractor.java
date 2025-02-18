@@ -7,8 +7,8 @@ import com.hartwig.serve.extraction.copynumber.CopyNumberExtractor;
 import com.hartwig.serve.extraction.exon.ExonExtractor;
 import com.hartwig.serve.extraction.fusion.FusionExtractor;
 import com.hartwig.serve.extraction.gene.GeneLevelExtractor;
-import com.hartwig.serve.extraction.hotspot.VariantExtractor;
 import com.hartwig.serve.extraction.immuno.ImmunoHLAExtractor;
+import com.hartwig.serve.extraction.variant.VariantExtractor;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

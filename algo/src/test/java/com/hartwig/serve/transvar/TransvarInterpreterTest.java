@@ -8,8 +8,8 @@ import static org.junit.Assert.assertEquals;
 import java.util.List;
 
 import com.hartwig.serve.common.ensemblcache.Strand;
-import com.hartwig.serve.extraction.hotspot.ImmutableVariant;
-import com.hartwig.serve.extraction.hotspot.Variant;
+import com.hartwig.serve.extraction.variant.ImmutableVariant;
+import com.hartwig.serve.extraction.variant.Variant;
 import com.hartwig.serve.transvar.datamodel.ImmutableTransvarComplexInsertDelete;
 import com.hartwig.serve.transvar.datamodel.ImmutableTransvarDeletion;
 import com.hartwig.serve.transvar.datamodel.ImmutableTransvarDuplication;

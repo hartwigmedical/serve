@@ -15,8 +15,8 @@ import com.hartwig.serve.common.ensemblcache.GeneData;
 import com.hartwig.serve.common.knownfusion.KnownFusionCache;
 import com.hartwig.serve.common.knownfusion.KnownFusionCacheLoader;
 import com.hartwig.serve.datamodel.RefGenome;
-import com.hartwig.serve.extraction.hotspot.ProteinResolver;
-import com.hartwig.serve.extraction.hotspot.ProteinResolverFactory;
+import com.hartwig.serve.extraction.variant.ProteinResolver;
+import com.hartwig.serve.extraction.variant.ProteinResolverFactory;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

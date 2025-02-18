@@ -11,9 +11,9 @@ import com.google.common.io.Resources;
 import com.hartwig.serve.DriverGenesTestFactory;
 import com.hartwig.serve.EnsemblDataCacheTestFactory;
 import com.hartwig.serve.KnownFusionCacheTestFactory;
-import com.hartwig.serve.extraction.hotspot.ImmutableVariant;
-import com.hartwig.serve.extraction.hotspot.ProteinResolver;
-import com.hartwig.serve.extraction.hotspot.Variant;
+import com.hartwig.serve.extraction.variant.ImmutableVariant;
+import com.hartwig.serve.extraction.variant.ProteinResolver;
+import com.hartwig.serve.extraction.variant.Variant;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

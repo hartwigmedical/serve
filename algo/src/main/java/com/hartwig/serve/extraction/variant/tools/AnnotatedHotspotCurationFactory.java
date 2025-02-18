@@ -1,4 +1,4 @@
-package com.hartwig.serve.extraction.hotspot.tools;
+package com.hartwig.serve.extraction.variant.tools;
 
 import java.util.Set;
 

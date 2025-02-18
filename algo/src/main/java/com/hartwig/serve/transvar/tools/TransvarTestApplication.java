@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.hartwig.serve.common.ensemblcache.EnsemblDataLoader;
 import com.hartwig.serve.datamodel.RefGenome;
-import com.hartwig.serve.extraction.hotspot.Variant;
+import com.hartwig.serve.extraction.variant.Variant;
 import com.hartwig.serve.transvar.Transvar;
 
 import org.apache.commons.cli.DefaultParser;

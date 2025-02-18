@@ -10,11 +10,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.google.common.annotations.VisibleForTesting;
 import com.hartwig.serve.common.ensemblcache.EnsemblDataCache;
 import com.hartwig.serve.datamodel.RefGenome;
-import com.hartwig.serve.extraction.hotspot.ProteinResolver;
-import com.hartwig.serve.extraction.hotspot.Variant;
 import com.hartwig.serve.extraction.util.EnsemblFunctions;
 import com.hartwig.serve.extraction.util.HmfTranscriptRegion;
 import com.hartwig.serve.extraction.util.KeyFormatter;
+import com.hartwig.serve.extraction.variant.ProteinResolver;
+import com.hartwig.serve.extraction.variant.Variant;
 import com.hartwig.serve.transvar.datamodel.TransvarRecord;
 
 import org.apache.logging.log4j.LogManager;

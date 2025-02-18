@@ -29,8 +29,8 @@ public final class ViccUtil {
         List<Feature> featuresWithoutGenomicEvents = Lists.newArrayList();
 
         int totalFeatureCount = 0;
-        int featuresWithHotspotsCount = 0;
-        int totalHotspotsCount = 0;
+        int featuresWithVariantsCount = 0;
+        int totalVariantsCount = 0;
         int featuresWithCodonCount = 0;
         int totalCodonCount = 0;
         int featuresWithExonCount = 0;
@@ -45,7 +45,7 @@ public final class ViccUtil {
             ViccEntry entry = resultPerEntry.getKey();
             ViccExtractionResult result = resultPerEntry.getValue();
             for (Feature feature : entry.features()) {
-                List<VariantHotspot> hotspotsForFeature = result.variantsPerFeature().get(feature);
+                List<VariantHotspot> variantsForFeature = result.variantsPerFeature().get(feature);
                 List<CodonAnnotation> codonsForFeature = result.codonsPerFeature().get(feature);
                 List<ExonAnnotation> exonsForFeature = result.exonsPerFeature().get(feature);
                 GeneAnnotation geneAnnotationForFeature = result.geneLevelEventsPerFeature().get(feature);
@@ -53,16 +53,16 @@ public final class ViccUtil {
                 FusionPair fusionForFeature = result.fusionsPerFeature().get(feature);
                 TumorCharacteristic characteristicForFeature = result.characteristicsPerFeature().get(feature);
 
-                if (hotspotsForFeature == null && codonsForFeature == null && exonsForFeature == null && geneAnnotationForFeature == null
+                if (variantsForFeature == null && codonsForFeature == null && exonsForFeature == null && geneAnnotationForFeature == null
                         && ampDelForFeature == null && fusionForFeature == null && characteristicForFeature == null) {
                     if (feature.type() != EventType.COMBINED && feature.type() != EventType.COMPLEX) {
                         // For both combined and complex events we expect no genomic events to be derived.
                         featuresWithoutGenomicEvents.add(feature);
                     }
                 } else {
-                    if (hotspotsForFeature != null) {
-                        featuresWithHotspotsCount++;
-                        totalHotspotsCount += hotspotsForFeature.size();
+                    if (variantsForFeature != null) {
+                        featuresWithVariantsCount++;
+                        totalVariantsCount += variantsForFeature.size();
                     }
 
                     if (codonsForFeature != null) {
@@ -104,7 +104,7 @@ public final class ViccUtil {
         }
 
         LOGGER.info("Analysis performed on {} features in {} VICC entries", totalFeatureCount, resultsPerEntry.size());
-        LOGGER.info(" Extracted {} hotspots for {} features", totalHotspotsCount, featuresWithHotspotsCount);
+        LOGGER.info(" Extracted {} variants for {} features", totalVariantsCount, featuresWithVariantsCount);
         LOGGER.info(" Extracted {} codons for {} features", totalCodonCount, featuresWithCodonCount);
         LOGGER.info(" Extracted {} exons for {} features", totalExonCount, featuresWithExonCount);
         LOGGER.info(" Extracted {} gene level events", featuresWithGeneLevelEventCount);

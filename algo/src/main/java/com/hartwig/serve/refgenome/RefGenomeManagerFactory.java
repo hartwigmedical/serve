@@ -44,7 +44,7 @@ public final class RefGenomeManagerFactory {
         String fastaFile37 = config.refGenome37FastaFile();
         LOGGER.info("Creating ref genome resource for V37 using fasta {}", fastaFile37);
         EnsemblDataCache ensemblDataCache37 = loadEnsemblDataCache(RefGenome.V37, config.ensemblDataDir37());
-        ProteinResolver proteinResolver37 = config.skipHotspotResolving()
+        ProteinResolver proteinResolver37 = config.skipVariantResolving()
                 ? ProteinResolverFactory.dummy()
                 : ProteinResolverFactory.transvarWithRefGenome(RefGenome.V37, fastaFile37, ensemblDataCache37);
 
@@ -63,7 +63,7 @@ public final class RefGenomeManagerFactory {
         String fastaFile38 = config.refGenome38FastaFile();
         LOGGER.info("Creating ref genome resource for V38 using fasta {}", fastaFile38);
         EnsemblDataCache ensemblDataCache38 = loadEnsemblDataCache(RefGenome.V38, config.ensemblDataDir38());
-        ProteinResolver proteinResolver38 = config.skipHotspotResolving()
+        ProteinResolver proteinResolver38 = config.skipVariantResolving()
                 ? ProteinResolverFactory.dummy()
                 : ProteinResolverFactory.transvarWithRefGenome(RefGenome.V38, fastaFile38, ensemblDataCache38);
 

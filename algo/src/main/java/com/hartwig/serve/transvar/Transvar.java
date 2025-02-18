@@ -10,8 +10,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.google.common.annotations.VisibleForTesting;
 import com.hartwig.serve.common.ensemblcache.EnsemblDataCache;
 import com.hartwig.serve.datamodel.RefGenome;
-import com.hartwig.serve.extraction.hotspot.Hotspot;
 import com.hartwig.serve.extraction.hotspot.ProteinResolver;
+import com.hartwig.serve.extraction.hotspot.Variant;
 import com.hartwig.serve.extraction.util.EnsemblFunctions;
 import com.hartwig.serve.extraction.util.HmfTranscriptRegion;
 import com.hartwig.serve.extraction.util.KeyFormatter;
@@ -33,7 +33,7 @@ public class Transvar implements ProteinResolver {
     @NotNull
     private final EnsemblDataCache ensemblDataCache;
     @NotNull
-    private final ConcurrentHashMap<String, List<Hotspot>> hotspotsByProteinKey = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, List<Variant>> hotspotsByProteinKey = new ConcurrentHashMap<>();
     @NotNull
     private final Set<String> unresolvedProteinAnnotations = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
@@ -55,14 +55,14 @@ public class Transvar implements ProteinResolver {
 
     @Override
     @NotNull
-    public List<Hotspot> resolve(@NotNull String gene, @Nullable String specificTranscript, @NotNull String proteinAnnotation) {
+    public List<Variant> resolve(@NotNull String gene, @Nullable String specificTranscript, @NotNull String proteinAnnotation) {
 
         String proteinKey = KeyFormatter.toProteinKey(gene, specificTranscript, proteinAnnotation);
         if (hotspotsByProteinKey.containsKey(proteinKey)) {
             return hotspotsByProteinKey.get(proteinKey);
         }
 
-        List<Hotspot> hotspots = extractHotspotsForAnnotation(gene, specificTranscript, proteinAnnotation);
+        List<Variant> hotspots = extractHotspotsForAnnotation(gene, specificTranscript, proteinAnnotation);
         LOGGER.debug("Converted '{}' to {} hotspot(s)", proteinKey, hotspots.size());
         if (hotspots.isEmpty()) {
             unresolvedProteinAnnotations.add(proteinKey);
@@ -79,7 +79,7 @@ public class Transvar implements ProteinResolver {
     }
 
     @NotNull
-    private List<Hotspot> extractHotspotsForAnnotation(@NotNull String gene, @Nullable String specificTranscript,
+    private List<Variant> extractHotspotsForAnnotation(@NotNull String gene, @Nullable String specificTranscript,
             @NotNull String proteinAnnotation) {
         List<TransvarRecord> records = runTransvarProcess(gene, proteinAnnotation);
 
@@ -109,7 +109,7 @@ public class Transvar implements ProteinResolver {
 
         LOGGER.debug("Interpreting transvar record: '{}'", best);
         // This is assuming every transcript on a gene lies on the same strand.
-        List<Hotspot> hotspots = interpreter.convertRecordToHotspots(best, canonicalTranscript.strand());
+        List<Variant> hotspots = interpreter.convertRecordToHotspots(best, canonicalTranscript.strand());
 
         if (hotspots.isEmpty()) {
             LOGGER.warn("Could not derive any hotspots from record {} for '{}:p.{} - {}'",

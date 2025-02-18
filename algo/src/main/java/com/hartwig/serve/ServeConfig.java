@@ -66,7 +66,7 @@ public interface ServeConfig {
     String OUTPUT_DIR = "output_dir";
 
     // Options to help with debugging / testing
-    String SKIP_HOTSPOT_RESOLVING = "skip_hotspot_resolving";
+    String SKIP_VARIANT_RESOLVING = "skip_variant_resolving";
     String LOG_DEBUG = "log_debug";
 
     @NotNull
@@ -112,7 +112,7 @@ public interface ServeConfig {
 
         options.addOption(OUTPUT_DIR, true, "Dir which will hold all SERVE output files");
 
-        options.addOption(SKIP_HOTSPOT_RESOLVING, false, "If present, skips hotspot resolving");
+        options.addOption(SKIP_VARIANT_RESOLVING, false, "If present, skips variant resolving");
         options.addOption(LOG_DEBUG, false, "If present, switches the logging to DEBUG mode");
 
         return options;
@@ -212,7 +212,7 @@ public interface ServeConfig {
     @NotNull
     String outputDir();
 
-    boolean skipHotspotResolving();
+    boolean skipVariantResolving();
 
     @NotNull
     static ServeConfig createConfig(@NotNull CommandLine cmd) throws ParseException {
@@ -264,7 +264,7 @@ public interface ServeConfig {
                 .knownFusion37File(nonOptionalFile(cmd, KNOWN_FUSION_37_FILE))
                 .knownFusion38File(nonOptionalFile(cmd, KNOWN_FUSION_38_FILE))
                 .outputDir(nonOptionalDir(cmd, OUTPUT_DIR))
-                .skipHotspotResolving(cmd.hasOption(SKIP_HOTSPOT_RESOLVING))
+                .skipVariantResolving(cmd.hasOption(SKIP_VARIANT_RESOLVING))
                 .build();
     }
 

@@ -17,9 +17,9 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class HotspotExtractor {
+public class VariantExtractor {
 
-    private static final Logger LOGGER = LogManager.getLogger(HotspotExtractor.class);
+    private static final Logger LOGGER = LogManager.getLogger(VariantExtractor.class);
 
     @NotNull
     private final GeneChecker geneChecker;
@@ -32,7 +32,7 @@ public class HotspotExtractor {
     @NotNull
     private final List<DriverGene> driverGenes;
 
-    public HotspotExtractor(@NotNull final GeneChecker geneChecker, @NotNull final ProteinResolver proteinResolver,
+    public VariantExtractor(@NotNull final GeneChecker geneChecker, @NotNull final ProteinResolver proteinResolver,
             @NotNull final EventPreprocessor proteinAnnotationExtractor, @NotNull final DriverInconsistencyMode driverInconsistencyMode,
             @NotNull final List<DriverGene> driverGenes) {
         this.geneChecker = geneChecker;
@@ -70,8 +70,8 @@ public class HotspotExtractor {
             }
 
             List<VariantHotspot> hotspots = Lists.newArrayList();
-            for (Hotspot hotspot : proteinResolver.resolve(gene, transcriptId, proteinAnnotationExtractor.apply(event))) {
-                hotspots.add(ImmutableVariantHotspotImpl.builder().from(hotspot).gene(gene).ref(hotspot.ref()).alt(hotspot.alt()).build());
+            for (Variant variant : proteinResolver.resolve(gene, transcriptId, proteinAnnotationExtractor.apply(event))) {
+                hotspots.add(ImmutableVariantHotspotImpl.builder().from(variant).gene(gene).ref(variant.ref()).alt(variant.alt()).build());
             }
             return hotspots;
         }

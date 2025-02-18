@@ -29,7 +29,7 @@ public final class ProteinResolverFactory {
         return new ProteinResolver() {
             @NotNull
             @Override
-            public List<Hotspot> resolve(@NotNull final String gene, @Nullable final String specificTranscript,
+            public List<Variant> resolve(@NotNull final String gene, @Nullable final String specificTranscript,
                     @NotNull final String proteinAnnotation) {
                 return Lists.newArrayList();
             }

@@ -75,7 +75,7 @@ import com.hartwig.serve.extraction.events.ImmutableEventInterpretation;
 import com.hartwig.serve.extraction.exon.ExonAnnotation;
 import com.hartwig.serve.extraction.exon.ExonConsolidation;
 import com.hartwig.serve.extraction.fusion.FusionConsolidation;
-import com.hartwig.serve.extraction.hotspot.HotspotConsolidation;
+import com.hartwig.serve.extraction.hotspot.KnownHotspotConsolidation;
 import com.hartwig.serve.extraction.immuno.ImmunoHLA;
 import com.hartwig.serve.util.ProgressTracker;
 
@@ -165,7 +165,7 @@ public class CkbExtractor {
     private KnownEvents generateKnownEvents(@NotNull EventExtractorOutput extractorOutput, boolean efficacyEvidencesIsEmpty,
             @NotNull Variant variant, @NotNull String event, @NotNull String gene) {
         return ImmutableKnownEvents.builder()
-                .hotspots(convertToKnownHotspots(extractorOutput.hotspots(), event, variant))
+                .hotspots(convertToKnownHotspots(extractorOutput.variants(), event, variant))
                 .codons(convertToKnownCodons(efficacyEvidencesIsEmpty ? Collections.emptyList() : extractorOutput.codons(), variant))
                 .exons(convertToKnownExons(extractorOutput.exons(), variant))
                 .genes(extractorOutput.fusionPair() == null ? convertToKnownGenes(gene, variant) : Collections.emptySet())
@@ -194,8 +194,8 @@ public class CkbExtractor {
 
     private void addHotspotsToCriteria(@NotNull EventExtractorOutput extractionOutput, @NotNull ActionableEvent actionableEvent,
             @NotNull Set<MolecularCriterium> molecularCriteria) {
-        if (extractionOutput.hotspots() != null) {
-            Set<ActionableHotspot> hotspots = extractActionableHotspots(extractionOutput.hotspots(), actionableEvent);
+        if (extractionOutput.variants() != null) {
+            Set<ActionableHotspot> hotspots = extractActionableHotspots(extractionOutput.variants(), actionableEvent);
             for (ActionableHotspot hotspot : hotspots) {
                 molecularCriteria.add(ImmutableMolecularCriterium.builder().hotspots(Set.of(hotspot)).build());
             }
@@ -300,7 +300,7 @@ public class CkbExtractor {
                 .inputProteinAnnotation(proteinExtractor.apply(event))
                 .build();
 
-        return convertToKnownSet(hotspots, convert, HotspotConsolidation::consolidate, CkbVariantAnnotator::annotateHotspot, variant);
+        return convertToKnownSet(hotspots, convert, KnownHotspotConsolidation::consolidate, CkbVariantAnnotator::annotateHotspot, variant);
     }
 
     @NotNull

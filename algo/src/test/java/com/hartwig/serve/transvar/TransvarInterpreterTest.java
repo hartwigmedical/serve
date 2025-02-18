@@ -8,8 +8,8 @@ import static org.junit.Assert.assertEquals;
 import java.util.List;
 
 import com.hartwig.serve.common.ensemblcache.Strand;
-import com.hartwig.serve.extraction.hotspot.Hotspot;
-import com.hartwig.serve.extraction.hotspot.ImmutableHotspot;
+import com.hartwig.serve.extraction.hotspot.ImmutableVariant;
+import com.hartwig.serve.extraction.hotspot.Variant;
 import com.hartwig.serve.transvar.datamodel.ImmutableTransvarComplexInsertDelete;
 import com.hartwig.serve.transvar.datamodel.ImmutableTransvarDeletion;
 import com.hartwig.serve.transvar.datamodel.ImmutableTransvarDuplication;
@@ -58,7 +58,7 @@ public class TransvarInterpreterTest {
                         .build())
                 .build();
 
-        List<Hotspot> hotspots = testInterpreter37().convertRecordToHotspots(record, Strand.REVERSE);
+        List<Variant> hotspots = testInterpreter37().convertRecordToHotspots(record, Strand.REVERSE);
 
         assertEquals(4, hotspots.size());
 
@@ -79,7 +79,7 @@ public class TransvarInterpreterTest {
                         .build())
                 .build();
 
-        List<Hotspot> hotspots = testInterpreter37().convertRecordToHotspots(record, Strand.FORWARD);
+        List<Variant> hotspots = testInterpreter37().convertRecordToHotspots(record, Strand.FORWARD);
 
         assertEquals(4, hotspots.size());
 
@@ -100,7 +100,7 @@ public class TransvarInterpreterTest {
                         .build())
                 .build();
 
-        List<Hotspot> hotspots = testInterpreter37().convertRecordToHotspots(record, Strand.REVERSE);
+        List<Variant> hotspots = testInterpreter37().convertRecordToHotspots(record, Strand.REVERSE);
 
         assertEquals(4, hotspots.size());
 
@@ -122,7 +122,7 @@ public class TransvarInterpreterTest {
                         .build())
                 .build();
 
-        List<Hotspot> hotspots1 = testInterpreter37().convertRecordToHotspots(record, Strand.REVERSE);
+        List<Variant> hotspots1 = testInterpreter37().convertRecordToHotspots(record, Strand.REVERSE);
 
         assertEquals(1, hotspots1.size());
 
@@ -138,7 +138,7 @@ public class TransvarInterpreterTest {
                         .build())
                 .build();
 
-        List<Hotspot> hotspots2 = testInterpreter37().convertRecordToHotspots(record2, Strand.FORWARD);
+        List<Variant> hotspots2 = testInterpreter37().convertRecordToHotspots(record2, Strand.FORWARD);
 
         assertEquals(0, hotspots2.size());
     }
@@ -149,7 +149,7 @@ public class TransvarInterpreterTest {
                 .annotation(ImmutableTransvarDeletion.builder().deletedBaseCount(3).leftAlignedGDNAPosition(5).build())
                 .build();
 
-        List<Hotspot> hotspots = testInterpreter37().convertRecordToHotspots(record, Strand.FORWARD);
+        List<Variant> hotspots = testInterpreter37().convertRecordToHotspots(record, Strand.FORWARD);
 
         assertEquals(1, hotspots.size());
 
@@ -164,7 +164,7 @@ public class TransvarInterpreterTest {
                 .annotation(ImmutableTransvarDeletion.builder().deletedBaseCount(4).leftAlignedGDNAPosition(2).build())
                 .build();
 
-        List<Hotspot> hotspots = testInterpreter37().convertRecordToHotspots(record, Strand.FORWARD);
+        List<Variant> hotspots = testInterpreter37().convertRecordToHotspots(record, Strand.FORWARD);
 
         assertEquals(4, hotspots.size());
 
@@ -180,7 +180,7 @@ public class TransvarInterpreterTest {
                 .annotation(ImmutableTransvarInsertion.builder().insertedBases("GAA").leftAlignedGDNAPosition(4).build())
                 .build();
 
-        List<Hotspot> forwardHotspots = testInterpreter37().convertRecordToHotspots(forwardRecord, Strand.FORWARD);
+        List<Variant> forwardHotspots = testInterpreter37().convertRecordToHotspots(forwardRecord, Strand.FORWARD);
 
         assertEquals(2, forwardHotspots.size());
 
@@ -191,7 +191,7 @@ public class TransvarInterpreterTest {
                 .annotation(ImmutableTransvarInsertion.builder().insertedBases("TGC").leftAlignedGDNAPosition(5).build())
                 .build();
 
-        List<Hotspot> reverseHotspots = testInterpreter37().convertRecordToHotspots(reverseRecord, Strand.REVERSE);
+        List<Variant> reverseHotspots = testInterpreter37().convertRecordToHotspots(reverseRecord, Strand.REVERSE);
 
         assertEquals(4, reverseHotspots.size());
 
@@ -212,7 +212,7 @@ public class TransvarInterpreterTest {
                         .build())
                 .build();
 
-        List<Hotspot> hotspots1 = testInterpreter37().convertRecordToHotspots(oneAminoAcidInsert, Strand.FORWARD);
+        List<Variant> hotspots1 = testInterpreter37().convertRecordToHotspots(oneAminoAcidInsert, Strand.FORWARD);
 
         assertEquals(2, hotspots1.size());
 
@@ -228,7 +228,7 @@ public class TransvarInterpreterTest {
                         .build())
                 .build();
 
-        List<Hotspot> hotspots2 = testInterpreter37().convertRecordToHotspots(twoAminoAcidInsert, Strand.FORWARD);
+        List<Variant> hotspots2 = testInterpreter37().convertRecordToHotspots(twoAminoAcidInsert, Strand.FORWARD);
 
         assertEquals(1, hotspots2.size());
 
@@ -246,7 +246,7 @@ public class TransvarInterpreterTest {
                         .build())
                 .build();
 
-        List<Hotspot> hotspots = testInterpreter37().convertRecordToHotspots(oneAminoAcidInsert, Strand.REVERSE);
+        List<Variant> hotspots = testInterpreter37().convertRecordToHotspots(oneAminoAcidInsert, Strand.REVERSE);
 
         assertEquals(2, hotspots.size());
 
@@ -256,9 +256,9 @@ public class TransvarInterpreterTest {
 
     @Test
     public void canReduceComplexityOnComplexDelInsHotspots() {
-        Hotspot hotspot = baseHotspot().chromosome("1").position(10).ref("ATGTTA").alt("ATCCTA").build();
+        Variant hotspot = baseHotspot().chromosome("1").position(10).ref("ATGTTA").alt("ATCCTA").build();
 
-        Hotspot simplifiedHotspot = testInterpreter37().reduceComplexityForComplexInsDel(hotspot);
+        Variant simplifiedHotspot = testInterpreter37().reduceComplexityForComplexInsDel(hotspot);
 
         assertEquals(12, simplifiedHotspot.position());
         assertEquals("GT", simplifiedHotspot.ref());
@@ -270,7 +270,7 @@ public class TransvarInterpreterTest {
         TransvarRecord record =
                 baseRecord().gdnaPosition(5).annotation(ImmutableTransvarDuplication.builder().duplicatedBaseCount(3).build()).build();
 
-        List<Hotspot> hotspots = testInterpreter37().convertRecordToHotspots(record, Strand.FORWARD);
+        List<Variant> hotspots = testInterpreter37().convertRecordToHotspots(record, Strand.FORWARD);
 
         assertEquals(1, hotspots.size());
 
@@ -282,7 +282,7 @@ public class TransvarInterpreterTest {
         TransvarRecord record =
                 baseRecord().gdnaPosition(5).annotation(ImmutableTransvarDuplication.builder().duplicatedBaseCount(3).build()).build();
 
-        List<Hotspot> hotspots = testInterpreter38().convertRecordToHotspots(record, Strand.FORWARD);
+        List<Variant> hotspots = testInterpreter38().convertRecordToHotspots(record, Strand.FORWARD);
 
         assertEquals(1, hotspots.size());
 
@@ -294,7 +294,7 @@ public class TransvarInterpreterTest {
         TransvarRecord record = baseRecord().gdnaPosition(2)
                 .annotation(ImmutableTransvarFrameshift.builder().isFrameshiftInsideStartCodon(false).build())
                 .build();
-        List<Hotspot> hotspots = testInterpreter37().convertRecordToHotspots(record, Strand.FORWARD);
+        List<Variant> hotspots = testInterpreter37().convertRecordToHotspots(record, Strand.FORWARD);
 
         assertEquals(10, hotspots.size());
         assertHotspot(baseHotspot().position(2).ref("A").alt("AG").build(), hotspots.get(0));
@@ -317,7 +317,7 @@ public class TransvarInterpreterTest {
         TransvarRecord record = baseRecord().gdnaPosition(6)
                 .annotation(ImmutableTransvarFrameshift.builder().isFrameshiftInsideStartCodon(false).build())
                 .build();
-        List<Hotspot> hotspots = testInterpreter37().convertRecordToHotspots(record, Strand.REVERSE);
+        List<Variant> hotspots = testInterpreter37().convertRecordToHotspots(record, Strand.REVERSE);
 
         assertEquals(10, hotspots.size());
         assertHotspot(baseHotspot().position(5).ref("G").alt("GA").build(), hotspots.get(0));
@@ -335,11 +335,11 @@ public class TransvarInterpreterTest {
         assertHotspot(baseHotspot().position(4).ref("CGA").alt("C").build(), hotspots.get(9));
     }
 
-    private static void assertHotspot(@NotNull Hotspot expectedHotspot, @NotNull Hotspot actualHotspot) {
-        assertEquals(expectedHotspot.chromosome(), actualHotspot.chromosome());
-        assertEquals(expectedHotspot.position(), actualHotspot.position());
-        assertEquals(expectedHotspot.ref(), actualHotspot.ref());
-        assertEquals(expectedHotspot.alt(), actualHotspot.alt());
+    private static void assertHotspot(@NotNull Variant expectedVariant, @NotNull Variant actualVariant) {
+        assertEquals(expectedVariant.chromosome(), actualVariant.chromosome());
+        assertEquals(expectedVariant.position(), actualVariant.position());
+        assertEquals(expectedVariant.ref(), actualVariant.ref());
+        assertEquals(expectedVariant.alt(), actualVariant.alt());
     }
 
     @NotNull
@@ -348,7 +348,7 @@ public class TransvarInterpreterTest {
     }
 
     @NotNull
-    private static ImmutableHotspot.Builder baseHotspot() {
-        return ImmutableHotspot.builder().chromosome("1");
+    private static ImmutableVariant.Builder baseHotspot() {
+        return ImmutableVariant.builder().chromosome("1");
     }
 }

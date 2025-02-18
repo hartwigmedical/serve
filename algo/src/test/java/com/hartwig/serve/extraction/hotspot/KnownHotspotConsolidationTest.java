@@ -16,11 +16,11 @@ import com.hartwig.serve.datamodel.molecular.hotspot.VariantHotspot;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
-public class HotspotConsolidationTest {
+public class KnownHotspotConsolidationTest {
 
     @Test
     public void canConsolidateEmptyHotspots() {
-        assertTrue(HotspotConsolidation.consolidate(Lists.newArrayList()).isEmpty());
+        assertTrue(KnownHotspotConsolidation.consolidate(Lists.newArrayList()).isEmpty());
     }
 
     @Test
@@ -53,7 +53,7 @@ public class HotspotConsolidationTest {
                 .inputProteinAnnotation("prot3")
                 .build());
 
-        Set<KnownHotspot> consolidateHotspots = HotspotConsolidation.consolidate(knownHotspots);
+        Set<KnownHotspot> consolidateHotspots = KnownHotspotConsolidation.consolidate(knownHotspots);
         assertEquals(2, consolidateHotspots.size());
 
         KnownHotspot gene1 = findByGene(consolidateHotspots, "gene1");
@@ -90,7 +90,7 @@ public class HotspotConsolidationTest {
                 .inputProteinAnnotation("prot2")
                 .build());
 
-        Set<KnownHotspot> consolidateHotspots = HotspotConsolidation.consolidate(knownHotspots);
+        Set<KnownHotspot> consolidateHotspots = KnownHotspotConsolidation.consolidate(knownHotspots);
         assertEquals(1, consolidateHotspots.size());
 
         KnownHotspot hotspot = findByGene(consolidateHotspots, gene);

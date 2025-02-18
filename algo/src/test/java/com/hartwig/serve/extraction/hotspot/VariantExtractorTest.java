@@ -20,11 +20,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.Test;
 
-public class HotspotExtractorTest {
+public class VariantExtractorTest {
 
     private static final GeneChecker GENE_CHECKER = new GeneChecker(Sets.newHashSet("BRAF", "KRAS"));
 
-    private static final Hotspot TEST_HOTSPOT = ImmutableHotspot.builder().chromosome("1").position(10).ref("A").alt("T").build();
+    private static final Variant TEST_VARIANT = ImmutableVariant.builder().chromosome("1").position(10).ref("A").alt("T").build();
 
     private static final VariantHotspot TEST_BRAF_VARIANT_HOTSPOT =
             ImmutableVariantHotspotImpl.builder().gene("BRAF").chromosome("1").position(10).ref("A").alt("T").build();
@@ -35,26 +35,26 @@ public class HotspotExtractorTest {
     @Test
     public void canFindGene() {
         List<DriverGene> driverGenes = DriverGenesTestFactory.createDriverGenes("BRAF", "KIT");
-        assertEquals(DriverCategory.TSG, HotspotExtractor.findByGene(driverGenes, "BRAF"));
-        assertEquals(DriverCategory.ONCO, HotspotExtractor.findByGene(driverGenes, "KIT"));
-        assertNull(HotspotExtractor.findByGene(driverGenes, "KRAS"));
+        assertEquals(DriverCategory.TSG, VariantExtractor.findByGene(driverGenes, "BRAF"));
+        assertEquals(DriverCategory.ONCO, VariantExtractor.findByGene(driverGenes, "KIT"));
+        assertNull(VariantExtractor.findByGene(driverGenes, "KRAS"));
     }
 
     @Test
     public void canFilterInCatalog() {
         String protein = "V600E";
-        HotspotExtractor hotspotExtractorFilter = createWithProtein(protein, DriverInconsistencyMode.FILTER);
-        List<VariantHotspot> hotspotExtractorFilterList = hotspotExtractorFilter.extract("BRAF", null, EventType.HOTSPOT, "V600E");
+        VariantExtractor variantExtractorFilter = createWithProtein(protein, DriverInconsistencyMode.FILTER);
+        List<VariantHotspot> hotspotExtractorFilterList = variantExtractorFilter.extract("BRAF", null, EventType.HOTSPOT, "V600E");
         assertEquals(1, hotspotExtractorFilterList.size());
         assertEquals(TEST_BRAF_VARIANT_HOTSPOT, hotspotExtractorFilterList.get(0));
 
-        HotspotExtractor hotspotExtractorIgnore = createWithProtein(protein, DriverInconsistencyMode.IGNORE);
-        List<VariantHotspot> hotspotExtractorIgnoreList = hotspotExtractorIgnore.extract("BRAF", null, EventType.HOTSPOT, "V600E");
+        VariantExtractor variantExtractorIgnore = createWithProtein(protein, DriverInconsistencyMode.IGNORE);
+        List<VariantHotspot> hotspotExtractorIgnoreList = variantExtractorIgnore.extract("BRAF", null, EventType.HOTSPOT, "V600E");
         assertEquals(1, hotspotExtractorIgnoreList.size());
         assertEquals(TEST_BRAF_VARIANT_HOTSPOT, hotspotExtractorIgnoreList.get(0));
 
-        HotspotExtractor hotspotExtractorWarn = createWithProtein(protein, DriverInconsistencyMode.WARN_ONLY);
-        List<VariantHotspot> hotspotExtractorWarnList = hotspotExtractorWarn.extract("BRAF", null, EventType.HOTSPOT, "V600E");
+        VariantExtractor variantExtractorWarn = createWithProtein(protein, DriverInconsistencyMode.WARN_ONLY);
+        List<VariantHotspot> hotspotExtractorWarnList = variantExtractorWarn.extract("BRAF", null, EventType.HOTSPOT, "V600E");
         assertEquals(1, hotspotExtractorWarnList.size());
         assertEquals(TEST_BRAF_VARIANT_HOTSPOT, hotspotExtractorWarnList.get(0));
     }
@@ -62,17 +62,17 @@ public class HotspotExtractorTest {
     @Test
     public void canFilterNotInCatalog() {
         String protein = "V600E";
-        HotspotExtractor hotspotExtractorFilter = createWithProtein(protein, DriverInconsistencyMode.FILTER);
-        List<VariantHotspot> hotspotExtractorFilterList = hotspotExtractorFilter.extract("KRAS", null, EventType.HOTSPOT, "V600E");
+        VariantExtractor variantExtractorFilter = createWithProtein(protein, DriverInconsistencyMode.FILTER);
+        List<VariantHotspot> hotspotExtractorFilterList = variantExtractorFilter.extract("KRAS", null, EventType.HOTSPOT, "V600E");
         assertNull(hotspotExtractorFilterList);
 
-        HotspotExtractor hotspotExtractorIgnore = createWithProtein(protein, DriverInconsistencyMode.IGNORE);
-        List<VariantHotspot> hotspotExtractorIgnoreList = hotspotExtractorIgnore.extract("KRAS", null, EventType.HOTSPOT, "V600E");
+        VariantExtractor variantExtractorIgnore = createWithProtein(protein, DriverInconsistencyMode.IGNORE);
+        List<VariantHotspot> hotspotExtractorIgnoreList = variantExtractorIgnore.extract("KRAS", null, EventType.HOTSPOT, "V600E");
         assertEquals(1, hotspotExtractorIgnoreList.size());
         assertEquals(TEST_KRAS_VARIANT_HOTSPOT, hotspotExtractorIgnoreList.get(0));
 
-        HotspotExtractor hotspotExtractorWarn = createWithProtein(protein, DriverInconsistencyMode.WARN_ONLY);
-        List<VariantHotspot> hotspotExtractorWarnList = hotspotExtractorWarn.extract("KRAS", null, EventType.HOTSPOT, "V600E");
+        VariantExtractor variantExtractorWarn = createWithProtein(protein, DriverInconsistencyMode.WARN_ONLY);
+        List<VariantHotspot> hotspotExtractorWarnList = variantExtractorWarn.extract("KRAS", null, EventType.HOTSPOT, "V600E");
         assertEquals(1, hotspotExtractorWarnList.size());
         assertEquals(TEST_KRAS_VARIANT_HOTSPOT, hotspotExtractorWarnList.get(0));
     }
@@ -81,8 +81,8 @@ public class HotspotExtractorTest {
     public void canExtractSimpleHotspot() {
         String protein = "V600E";
 
-        HotspotExtractor hotspotExtractor = createWithProtein(protein, DriverInconsistencyMode.IGNORE);
-        List<VariantHotspot> hotspots = hotspotExtractor.extract("BRAF", null, EventType.HOTSPOT, "V600E");
+        VariantExtractor variantExtractor = createWithProtein(protein, DriverInconsistencyMode.IGNORE);
+        List<VariantHotspot> hotspots = variantExtractor.extract("BRAF", null, EventType.HOTSPOT, "V600E");
 
         assertEquals(1, hotspots.size());
         assertEquals(TEST_BRAF_VARIANT_HOTSPOT, hotspots.get(0));
@@ -92,14 +92,14 @@ public class HotspotExtractorTest {
     public void skipsHotspotsForInvalidGenes() {
         String protein = "V600E";
 
-        HotspotExtractor hotspotExtractor = createWithProtein(protein, DriverInconsistencyMode.IGNORE);
+        VariantExtractor variantExtractor = createWithProtein(protein, DriverInconsistencyMode.IGNORE);
 
-        assertNull(hotspotExtractor.extract("NOT-A-GENE", null, EventType.HOTSPOT, "V600E"));
+        assertNull(variantExtractor.extract("NOT-A-GENE", null, EventType.HOTSPOT, "V600E"));
     }
 
     @NotNull
-    private static HotspotExtractor createWithProtein(@NotNull String protein, @NotNull DriverInconsistencyMode annotation) {
-        return new HotspotExtractor(GENE_CHECKER,
+    private static VariantExtractor createWithProtein(@NotNull String protein, @NotNull DriverInconsistencyMode annotation) {
+        return new VariantExtractor(GENE_CHECKER,
                 new TestProteinResolver(protein),
                 event -> event,
                 annotation,
@@ -117,9 +117,9 @@ public class HotspotExtractorTest {
 
         @NotNull
         @Override
-        public List<Hotspot> resolve(@NotNull final String gene, @Nullable final String specificTranscript,
+        public List<Variant> resolve(@NotNull final String gene, @Nullable final String specificTranscript,
                 @NotNull final String proteinAnnotation) {
-            return proteinAnnotation.equals(protein) ? Lists.newArrayList(TEST_HOTSPOT) : Lists.newArrayList();
+            return proteinAnnotation.equals(protein) ? Lists.newArrayList(TEST_VARIANT) : Lists.newArrayList();
         }
 
         @NotNull

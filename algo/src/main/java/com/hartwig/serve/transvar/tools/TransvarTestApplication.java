@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.hartwig.serve.common.ensemblcache.EnsemblDataLoader;
 import com.hartwig.serve.datamodel.RefGenome;
-import com.hartwig.serve.extraction.hotspot.Hotspot;
+import com.hartwig.serve.extraction.hotspot.Variant;
 import com.hartwig.serve.transvar.Transvar;
 
 import org.apache.commons.cli.DefaultParser;
@@ -52,10 +52,10 @@ public class TransvarTestApplication {
 
     private static void extractAndPrintVariants(@NotNull Transvar transvar, @NotNull String gene, @Nullable String specificTranscript,
             @NotNull String proteinAnnotation) {
-        List<Hotspot> hotspots = transvar.resolve(gene, specificTranscript, proteinAnnotation);
+        List<Variant> hotspots = transvar.resolve(gene, specificTranscript, proteinAnnotation);
 
         LOGGER.info("Printing hotspots for '{}:p.{}' on transcript {}", gene, proteinAnnotation, specificTranscript);
-        for (Hotspot hotspot : hotspots) {
+        for (Variant hotspot : hotspots) {
             LOGGER.info(" {}", hotspot);
         }
     }

@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 @Value.Immutable
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class })
-public abstract class Hotspot implements GenomePosition {
+public abstract class Variant implements GenomePosition {
 
     @NotNull
     public abstract String ref();

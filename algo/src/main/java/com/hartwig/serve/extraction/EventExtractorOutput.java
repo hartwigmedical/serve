@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 public abstract class EventExtractorOutput {
 
     @Nullable
-    public abstract List<VariantHotspot> hotspots();
+    public abstract List<VariantHotspot> variants();
 
     @Nullable
     public abstract List<CodonAnnotation> codons();

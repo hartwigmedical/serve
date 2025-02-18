@@ -49,7 +49,7 @@ import com.hartwig.serve.extraction.events.ImmutableEventInterpretation;
 import com.hartwig.serve.extraction.exon.ExonAnnotation;
 import com.hartwig.serve.extraction.exon.ExonConsolidation;
 import com.hartwig.serve.extraction.fusion.FusionConsolidation;
-import com.hartwig.serve.extraction.hotspot.HotspotConsolidation;
+import com.hartwig.serve.extraction.hotspot.KnownHotspotConsolidation;
 import com.hartwig.serve.extraction.immuno.ImmunoHLA;
 import com.hartwig.serve.util.ProgressTracker;
 import com.hartwig.serve.vicc.annotation.ViccProteinAnnotationExtractor;
@@ -123,8 +123,8 @@ public final class ViccExtractor {
                                 .interpretedEventType(feature.type())
                                 .build());
 
-                if (extractorOutput.hotspots() != null) {
-                    variantsPerFeature.put(feature, extractorOutput.hotspots());
+                if (extractorOutput.variants() != null) {
+                    variantsPerFeature.put(feature, extractorOutput.variants());
                 }
 
                 if (extractorOutput.codons() != null) {
@@ -220,7 +220,7 @@ public final class ViccExtractor {
             }
         }
 
-        return HotspotConsolidation.consolidate(hotspots);
+        return KnownHotspotConsolidation.consolidate(hotspots);
     }
 
     @NotNull

@@ -7,7 +7,7 @@ import com.hartwig.serve.extraction.copynumber.CopyNumberExtractor;
 import com.hartwig.serve.extraction.exon.ExonExtractor;
 import com.hartwig.serve.extraction.fusion.FusionExtractor;
 import com.hartwig.serve.extraction.gene.GeneLevelExtractor;
-import com.hartwig.serve.extraction.hotspot.HotspotExtractor;
+import com.hartwig.serve.extraction.hotspot.VariantExtractor;
 import com.hartwig.serve.extraction.immuno.ImmunoHLAExtractor;
 
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 public class EventExtractor {
 
     @NotNull
-    private final HotspotExtractor hotspotExtractor;
+    private final VariantExtractor variantExtractor;
     @NotNull
     private final CodonExtractor codonExtractor;
     @NotNull
@@ -32,11 +32,11 @@ public class EventExtractor {
     @NotNull
     private final ImmunoHLAExtractor immunoHLAExtractor;
 
-    public EventExtractor(@NotNull final HotspotExtractor hotspotExtractor, @NotNull final CodonExtractor codonExtractor,
+    public EventExtractor(@NotNull final VariantExtractor variantExtractor, @NotNull final CodonExtractor codonExtractor,
             @NotNull final ExonExtractor exonExtractor, @NotNull final GeneLevelExtractor geneLevelExtractor,
             @NotNull final CopyNumberExtractor copyNumberExtractor, @NotNull final FusionExtractor fusionExtractor,
             @NotNull final TumorCharacteristicExtractor tumorCharacteristicExtractor, @NotNull ImmunoHLAExtractor immunoHLAExtractor) {
-        this.hotspotExtractor = hotspotExtractor;
+        this.variantExtractor = variantExtractor;
         this.codonExtractor = codonExtractor;
         this.exonExtractor = exonExtractor;
         this.geneLevelExtractor = geneLevelExtractor;
@@ -50,7 +50,7 @@ public class EventExtractor {
     public EventExtractorOutput extract(@NotNull String gene, @Nullable String transcriptId, @NotNull EventType type,
             @NotNull String event) {
         return ImmutableEventExtractorOutput.builder()
-                .hotspots(hotspotExtractor.extract(gene, transcriptId, type, event))
+                .variants(variantExtractor.extract(gene, transcriptId, type, event))
                 .codons(codonExtractor.extract(gene, transcriptId, type, event))
                 .exons(exonExtractor.extract(gene, transcriptId, type, event))
                 .geneLevel(geneLevelExtractor.extract(gene, type, event))

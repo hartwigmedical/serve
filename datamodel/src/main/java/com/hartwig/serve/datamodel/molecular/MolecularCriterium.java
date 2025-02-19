@@ -25,13 +25,6 @@ public abstract class MolecularCriterium implements Comparable<MolecularCriteriu
 
     private static final Comparator<MolecularCriterium> COMPARATOR = new MolecularCriteriumComparator();
 
-    // Is the name clear? Semantics are to satisfy the criteria we require
-    // each outer set to be satisfied, where each inner set requires one of its
-    // members to be satisfied. E.g. if multiHotspot = Set(Set(A, B), Set(C, D))
-    // then we require all(any(A, B), any(C, D)).
-    //
-    // Is it safe (ie for hashability reasons) to use a Set in the outer collection?
-    // Could make it a list.
     @NotNull
     public abstract Set<Set<ActionableHotspot>> oneOfEachHotspots();
 

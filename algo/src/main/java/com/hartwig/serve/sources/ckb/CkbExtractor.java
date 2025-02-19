@@ -152,7 +152,7 @@ public class CkbExtractor {
                 .collect(Collectors.toList());
     }
 
-    // temporary intermediate container, might be able to refactor away somehow
+    // intermediate container, might be able to refactor away somehow
     private static class VariantWithExtraction {
 
         @NotNull
@@ -221,9 +221,6 @@ public class CkbExtractor {
     private ActionableTrial processTrial(@NotNull ClinicalTrial trial, @NotNull Map<Integer, CkbEntry> idToEntry) {
         LOGGER.debug("trial: {}", trial.nctId());
 
-        if (trial.nctId().equals("NCT04584853")) {
-            LOGGER.warn("found test case NCT ID: {}", trial.nctId());
-        }
         ArrayList<MolecularCriterium> requiredCriterium = new ArrayList<>();
         ArrayList<MolecularCriterium> partiallyRequiredCriterium = new ArrayList<>();
         ArrayList<VariantWithExtraction> allVariantWithExtraction = new ArrayList<>();
@@ -236,10 +233,10 @@ public class CkbExtractor {
                 if (entry == null) {
                     LOGGER.warn("Skipping profile {} for trial {} because profile was filtered", profileId, trial.nctId());
                 } else {
-                    List<VariantWithExtraction> variantWithExtraction = extractEventCriteria(entry);
-                    allVariantWithExtraction.addAll(variantWithExtraction);
-                    Set<EventExtractorOutput> eventExtractionOutput = variantWithExtraction.stream()
-                            .map(g -> g.eventExtractorOutput)
+                    List<VariantWithExtraction> variantWithExtractions = extractEventCriteria(entry);
+                    allVariantWithExtraction.addAll(variantWithExtractions);
+                    Set<EventExtractorOutput> eventExtractionOutput = variantWithExtractions.stream()
+                            .map(extraction -> extraction.eventExtractorOutput)
                             .collect(Collectors.toSet());
                     MolecularCriterium criteria = CkbMolecularCriteriaExtractor.createMolecularCriterium(entry, eventExtractionOutput);
 

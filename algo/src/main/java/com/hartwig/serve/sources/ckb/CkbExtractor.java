@@ -272,7 +272,7 @@ public class CkbExtractor {
                 .map(g -> g.event)
                 .collect(Collectors.toCollection(TreeSet::new)));
 
-        return actionableTrialFactory.create(anyMolecularCriteria, trial, allGenes, allEvents);
+        return actionableTrialFactory.create(trial, anyMolecularCriteria, allGenes, allEvents);
     }
 
     @VisibleForTesting

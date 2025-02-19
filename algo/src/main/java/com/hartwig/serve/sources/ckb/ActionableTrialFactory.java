@@ -67,7 +67,7 @@ class ActionableTrialFactory {
     }
 
     @Nullable
-    public ActionableTrial create(@NotNull Set<MolecularCriterium> molecularCriteria, @NotNull ClinicalTrial trial,
+    public ActionableTrial create(@NotNull ClinicalTrial trial, @NotNull Set<MolecularCriterium> molecularCriteria,
             @NotNull String sourceGene, @NotNull String sourceEvent) {
 
         Set<Country> countries = extractCountriesToInclude(trial, regionsToInclude);
@@ -99,41 +99,7 @@ class ActionableTrialFactory {
                     .build();
         }
     }
-
-    // TODO maybe be able to remove this after comparison testing version
-    @NotNull
-    public Set<ActionableTrial> create(@NotNull CkbEntry entry, @NotNull Set<MolecularCriterium> molecularCriteria,
-            @NotNull String sourceEvent, @NotNull String sourceGene) {
-        Set<ActionableTrial> actionableTrials = Sets.newHashSet();
-
-        for (ClinicalTrial trial : trialsToInclude(entry)) {
-            Set<Country> countries = extractCountriesToInclude(trial, regionsToInclude);
-            Set<String> therapies = Sets.newHashSet();
-            for (Therapy therapy : trial.therapies()) {
-                therapies.add(therapy.therapyName());
-            }
-
-            // TODO: Complex filters (e.g. therapy AND tumor type combi) are not supported, if needed will be implemented in the future
-            if (!filterTrial.shouldFilterTrial(trial.nctId(), setToField(therapies), Strings.EMPTY, sourceGene, sourceEvent)
-                    && !countries.isEmpty()) {
-                actionableTrials.add(ImmutableActionableTrial.builder()
-                        .source(Knowledgebase.CKB)
-                        .nctId(trial.nctId())
-                        .title(trial.title())
-                        .acronym(trial.acronym())
-                        .countries(countries)
-                        .therapyNames(therapies)
-                        .genderCriterium(trial.gender() != null ? GenderCriterium.valueOf(trial.gender().toUpperCase()) : null)
-                        .indications(extractIndications(trial.indications()))
-                        // TODO (CB): trial can have multiple molecular criteria (required and/or partial required!). Since we currently loop over ckb entries (instead of ckb trials) in CkbExtractor, it's not possible to implement this.
-                        .anyMolecularCriteria(molecularCriteria)
-                        .urls(Sets.newHashSet("https://clinicaltrials.gov/study/" + trial.nctId()))
-                        .build());
-            }
-        }
-        return actionableTrials;
-    }
-
+    
     @NotNull
     private static Set<com.hartwig.serve.datamodel.common.Indication> extractIndications(@NotNull List<Indication> ckbIndications) {
         Set<com.hartwig.serve.datamodel.common.Indication> indications = new HashSet<>();

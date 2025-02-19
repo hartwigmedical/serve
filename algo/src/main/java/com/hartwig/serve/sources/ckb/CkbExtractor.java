@@ -115,7 +115,7 @@ public class CkbExtractor {
             List<VariantWithExtraction> variantWithExtraction = extractEventCriteria(entry);
             Set<EventExtractorOutput> eventExtractionOutput =
                     variantWithExtraction.stream().map(g -> g.eventExtractorOutput).collect(Collectors.toSet());
-            MolecularCriterium molecularCriterium = CkbMolecularCriteriaExtractor.criterium(entry, eventExtractionOutput);
+            MolecularCriterium molecularCriterium = CkbMolecularCriteriaExtractor.createMolecularCriterium(entry, eventExtractionOutput);
 
             Set<EfficacyEvidence> efficacyEvidences =
                     efficacyEvidenceFactory.create(entry, Set.of(molecularCriterium), sourceEvent, gene);
@@ -243,7 +243,7 @@ public class CkbExtractor {
                     Set<EventExtractorOutput> eventExtractionOutput = variantWithExtraction.stream()
                             .map(g -> g.eventExtractorOutput)
                             .collect(Collectors.toSet());
-                    MolecularCriterium criteria = CkbMolecularCriteriaExtractor.criterium(entry, eventExtractionOutput);
+                    MolecularCriterium criteria = CkbMolecularCriteriaExtractor.createMolecularCriterium(entry, eventExtractionOutput);
 
                     if (details.requirementType().equals(VARIANT_REQUIRED)) {
                         requiredCriterium.add(criteria);

@@ -47,40 +47,15 @@ import org.jetbrains.annotations.Nullable;
 final class CkbMolecularCriteriaExtractor {
 
     @NotNull
-    public static MolecularCriterium criterium(CkbEntry entry, Set<EventExtractorOutput> eventExtractorOutputs) {
+    public static MolecularCriterium createMolecularCriterium(CkbEntry entry, Set<EventExtractorOutput> eventExtractorOutputs) {
         String sourceEvent = combinedSourceEvent(entry);
         ActionableEvent actionableEvent = toActionableEvent(sourceEvent, entry);
 
-        Set<MolecularCriterium> molecularCriteria = eventExtractorOutputs.stream()
+        List<MolecularCriterium> molecularCriteria = eventExtractorOutputs.stream()
                 .map(eventExtractorOutput -> createMolecularCriterium(eventExtractorOutput, actionableEvent))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
 
-        return ImmutableMolecularCriterium.builder()
-                .addAllOneOfEachHotspots(molecularCriteria.stream()
-                        .flatMap(c -> c.oneOfEachHotspots().stream())
-                        .collect(Collectors.toSet()))
-                .addAllCodons(molecularCriteria.stream().flatMap(c -> c.codons().stream()).collect(Collectors.toSet()))
-                .addAllExons(molecularCriteria.stream().flatMap(c -> c.exons().stream()).collect(Collectors.toSet()))
-                .addAllGenes(molecularCriteria.stream().flatMap(c -> c.genes().stream()).collect(Collectors.toSet()))
-                .addAllFusions(molecularCriteria.stream().flatMap(c -> c.fusions().stream()).collect(Collectors.toSet()))
-                .addAllCharacteristics(molecularCriteria.stream().flatMap(c -> c.characteristics().stream()).collect(Collectors.toSet()))
-                .addAllHla(molecularCriteria.stream().flatMap(c -> c.hla().stream()).collect(Collectors.toSet()))
-                .build();
-    }
-
-    @NotNull
-    public static MolecularCriterium createMolecularCriterium(@NotNull EventExtractorOutput extractionOutput,
-            @NotNull ActionableEvent actionableEvent) {
-        final var hotspot = hotspotCriteria(extractionOutput, actionableEvent);
-        return ImmutableMolecularCriterium.builder()
-                .oneOfEachHotspots(hotspot.isEmpty() ? Collections.emptySet() : Set.of(hotspot))
-                .codons(codonCriteria(extractionOutput, actionableEvent))
-                .exons(exonCriteria(extractionOutput, actionableEvent))
-                .genes(geneCriteria(extractionOutput, actionableEvent))
-                .fusions(fusionCriteria(extractionOutput, actionableEvent))
-                .characteristics(extractActionableCharacteristic(extractionOutput.characteristic(), actionableEvent))
-                .hla(extractActionableHLA(extractionOutput.hla(), actionableEvent))
-                .build();
+        return combine(molecularCriteria);
     }
 
     @NotNull
@@ -99,6 +74,22 @@ final class CkbMolecularCriteriaExtractor {
                 .addAllFusions(Sets.union(criteria1.fusions(), criteria2.fusions()))
                 .addAllCharacteristics(Sets.union(criteria1.characteristics(), criteria2.characteristics()))
                 .addAllHla(Sets.union(criteria1.hla(), criteria2.hla()))
+                .build();
+    }
+
+    @VisibleForTesting
+    @NotNull
+    static MolecularCriterium createMolecularCriterium(@NotNull EventExtractorOutput extractionOutput,
+            @NotNull ActionableEvent actionableEvent) {
+        Set<ActionableHotspot> hotspot = hotspotCriteria(extractionOutput, actionableEvent);
+        return ImmutableMolecularCriterium.builder()
+                .oneOfEachHotspots(hotspot.isEmpty() ? Collections.emptySet() : Set.of(hotspot))
+                .codons(codonCriteria(extractionOutput, actionableEvent))
+                .exons(exonCriteria(extractionOutput, actionableEvent))
+                .genes(geneCriteria(extractionOutput, actionableEvent))
+                .fusions(fusionCriteria(extractionOutput, actionableEvent))
+                .characteristics(extractActionableCharacteristic(extractionOutput.characteristic(), actionableEvent))
+                .hla(extractActionableHLA(extractionOutput.hla(), actionableEvent))
                 .build();
     }
 
@@ -165,18 +156,6 @@ final class CkbMolecularCriteriaExtractor {
     }
 
     @Nullable
-    private static MolecularCriterium characteristicsCriteria(@NotNull EventExtractorOutput extractionOutput,
-            @NotNull ActionableEvent actionableEvent) {
-        if (extractionOutput.characteristic() == null) {
-            return null;
-        }
-
-        Set<ActionableCharacteristic> actionableCharacteristic =
-                extractActionableCharacteristic(extractionOutput.characteristic(), actionableEvent);
-        return ImmutableMolecularCriterium.builder().characteristics(actionableCharacteristic).build();
-    }
-
-    @Nullable
     private static MolecularCriterium hlaCriteria(@NotNull EventExtractorOutput extractionOutput,
             @NotNull ActionableEvent actionableEvent) {
         if (extractionOutput.hla() == null) {
@@ -220,12 +199,6 @@ final class CkbMolecularCriteriaExtractor {
         } else {
             return Set.of(ImmutableActionableHLA.builder().from(hla).from(actionableEvent).build());
         }
-    }
-
-    @NotNull
-    private static ActionableFusion extractActionableFusion(@Nullable FusionPair fusionPair,
-            @NotNull ActionableEvent actionableEvent) {
-        return ImmutableActionableFusion.builder().from(fusionPair).from(actionableEvent).build();
     }
 
     @NotNull

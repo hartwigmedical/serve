@@ -8,7 +8,6 @@ import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.ClinicalTrial;
@@ -79,27 +78,27 @@ class ActionableTrialFactory {
             return null;
         }
 
-        // TODO the filtering here for gene and event is for a single combined gene and event,
-        //  will that be supported in the future?
+        // TODO: Complex filters (e.g. therapy AND tumor type combi) are not supported, if needed will be implemented in the future
+        // TODO: What happens to filtering when combined events?
         if (filterTrial.shouldFilterTrial(trial.nctId(), setToField(therapies), Strings.EMPTY, sourceGene, sourceEvent)
                 || countries.isEmpty()) {
             return null;
-        } else {
-            return ImmutableActionableTrial.builder()
-                    .source(Knowledgebase.CKB)
-                    .nctId(trial.nctId())
-                    .title(trial.title())
-                    .acronym(trial.acronym())
-                    .countries(countries)
-                    .therapyNames(therapies)
-                    .genderCriterium(trial.gender() != null ? GenderCriterium.valueOf(trial.gender().toUpperCase()) : null)
-                    .indications(extractIndications(trial.indications()))
-                    .anyMolecularCriteria(molecularCriteria)
-                    .urls(Sets.newHashSet("https://clinicaltrials.gov/study/" + trial.nctId()))
-                    .build();
         }
+
+        return ImmutableActionableTrial.builder()
+                .source(Knowledgebase.CKB)
+                .nctId(trial.nctId())
+                .title(trial.title())
+                .acronym(trial.acronym())
+                .countries(countries)
+                .therapyNames(therapies)
+                .genderCriterium(trial.gender() != null ? GenderCriterium.valueOf(trial.gender().toUpperCase()) : null)
+                .indications(extractIndications(trial.indications()))
+                .anyMolecularCriteria(molecularCriteria)
+                .urls(Sets.newHashSet("https://clinicaltrials.gov/study/" + trial.nctId()))
+                .build();
     }
-    
+
     @NotNull
     private static Set<com.hartwig.serve.datamodel.common.Indication> extractIndications(@NotNull List<Indication> ckbIndications) {
         Set<com.hartwig.serve.datamodel.common.Indication> indications = new HashSet<>();
@@ -119,17 +118,6 @@ class ActionableTrialFactory {
             joiner.add(string);
         }
         return joiner.toString();
-    }
-
-    @NotNull
-    private static List<ClinicalTrial> trialsToInclude(@NotNull CkbEntry entry) {
-        List<ClinicalTrial> filtered = Lists.newArrayList();
-        for (ClinicalTrial trial : entry.clinicalTrials()) {
-            if (hasVariantRequirementTypeToInclude(trial.variantRequirementDetails(), entry) && hasIncludedTrialRequirements(trial)) {
-                filtered.add(trial);
-            }
-        }
-        return filtered;
     }
 
     private static boolean hasIncludedTrialRequirements(@NotNull ClinicalTrial trial) {

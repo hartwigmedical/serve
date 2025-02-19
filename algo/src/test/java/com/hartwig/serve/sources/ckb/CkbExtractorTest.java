@@ -11,16 +11,19 @@ import com.hartwig.serve.ckb.classification.CkbClassificationConfig;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.ImmutableVariantRequirementDetail;
 import com.hartwig.serve.ckb.datamodel.variant.Variant;
+import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.molecular.ImmutableMolecularCriterium;
 import com.hartwig.serve.datamodel.molecular.MolecularCriterium;
 import com.hartwig.serve.datamodel.molecular.MolecularCriteriumTestFactory;
 import com.hartwig.serve.datamodel.molecular.MutationType;
 import com.hartwig.serve.datamodel.molecular.range.RangeTestFactory;
+import com.hartwig.serve.datamodel.trial.ActionableTrial;
 import com.hartwig.serve.extraction.EventExtractorOutput;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.ImmutableEventExtractorOutput;
 import com.hartwig.serve.extraction.codon.CodonAnnotation;
 import com.hartwig.serve.extraction.codon.ImmutableCodonAnnotation;
+import com.hartwig.serve.extraction.events.EventInterpretation;
 import com.hartwig.serve.refgenome.RefGenomeResourceTestFactory;
 import com.hartwig.serve.sources.ckb.filter.CkbFilteringTestFactory;
 import com.hartwig.serve.sources.ckb.region.ImmutableCkbRegion;
@@ -28,7 +31,6 @@ import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachTestFact
 
 import org.apache.commons.compress.utils.Lists;
 import org.jetbrains.annotations.NotNull;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class CkbExtractorTest {
@@ -94,7 +96,6 @@ public class CkbExtractorTest {
         assertEquals("transcript", codon2.inputTranscript());
     }
 
-    @Ignore
     @Test
     public void canExtractCombinedEventsFromCkbEntries() {
         CkbExtractor trialExtractor = CkbExtractorFactory.createExtractor(CkbClassificationConfig.build(),
@@ -115,9 +116,62 @@ public class CkbExtractorTest {
         ExtractionResult trialResult = trialExtractor.extract(ckbEntries);
 
         assertEquals(1, trialResult.trials().size());
-        assertEquals(2, trialResult.eventInterpretations().size());
+        ActionableTrial actionableTrial = trialResult.trials().iterator().next();
+        assertEquals(1, actionableTrial.anyMolecularCriteria().size());
+        MolecularCriterium molecularCriterium = actionableTrial.anyMolecularCriteria().iterator().next();
+        assertEquals(2, molecularCriterium.genes().size());
+
+        assertEquals(1, trialResult.eventInterpretations().size());
+        EventInterpretation eventInterpretation = trialResult.eventInterpretations().iterator().next();
+        assertEquals(Knowledgebase.CKB, eventInterpretation.source());
+        assertEquals("BRAF loss & KIT loss", eventInterpretation.sourceEvent());
+        assertEquals("BRAF KIT", eventInterpretation.interpretedGene());
+
+        // TODO this would previously have been just "loss", should we combine to "loss loss", change model to a list?
+        assertEquals("BRAF loss & KIT loss", eventInterpretation.interpretedEvent());
+
         assertEquals(2, trialResult.knownEvents().genes().size());
         assertEquals(2, trialResult.knownEvents().copyNumbers().size());
+    }
+
+    @Test
+    public void canExtractCombinedExonsEventsFromCkbEntries() {
+        CkbExtractor trialExtractor = CkbExtractorFactory.createExtractor(CkbClassificationConfig.build(),
+                RefGenomeResourceTestFactory.buildTestResource37(),
+                TreatmentApproachTestFactory.createEmptyCurator(),
+                CkbFilteringTestFactory.createEmptyEvidenceFilterModel(),
+                CkbFilteringTestFactory.createEmptyTrialFilterModel(),
+                Set.of(ImmutableCkbRegion.builder().country("netherlands").states(Collections.emptySet()).build()));
+
+        List<Variant> variants = List.of(
+                CkbTestFactory.createVariant("KIT", "exon11", "KIT exon11"),
+                CkbTestFactory.createVariant("KIT", "exon17", "KIT exon17")
+        );
+
+        List<CkbEntry> ckbEntries = Lists.newArrayList();
+        ckbEntries.add(createWithVariantsOpenMolecularTrial("nct1", variants, "sensitive", "Actionable"));
+
+        ExtractionResult trialResult = trialExtractor.extract(ckbEntries);
+
+        assertEquals(1, trialResult.trials().size());
+        ActionableTrial actionableTrial = trialResult.trials().iterator().next();
+        assertEquals(1, actionableTrial.anyMolecularCriteria().size());
+        MolecularCriterium molecularCriterium = actionableTrial.anyMolecularCriteria().iterator().next();
+        assertEquals(2, molecularCriterium.exons().size());
+
+        // TODO verify fusion is correct interpretation here
+        assertEquals(1, molecularCriterium.fusions().size());
+
+        assertEquals(1, trialResult.eventInterpretations().size());
+        EventInterpretation eventInterpretation = trialResult.eventInterpretations().iterator().next();
+        assertEquals(Knowledgebase.CKB, eventInterpretation.source());
+        assertEquals("KIT exon 11 & KIT exon 17", eventInterpretation.sourceEvent());
+
+        // TODO do we want both even if the same, or dedup?
+        assertEquals("KIT KIT", eventInterpretation.interpretedGene());
+
+        assertEquals(1, trialResult.knownEvents().genes().size());
+        assertEquals(1, trialResult.knownEvents().fusions().size());
     }
 
     @NotNull

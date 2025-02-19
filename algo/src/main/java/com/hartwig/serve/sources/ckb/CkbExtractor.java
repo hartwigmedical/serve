@@ -1,5 +1,7 @@
 package com.hartwig.serve.sources.ckb;
 
+import static com.hartwig.serve.sources.ckb.CkbMolecularCriteriaExtractor.combinedSourceEvent;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -11,7 +13,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.hartwig.serve.ckb.classification.CkbConstants;
 import com.hartwig.serve.ckb.classification.CkbEventAndGeneExtractor;
 import com.hartwig.serve.ckb.classification.CkbEventTypeExtractor;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
@@ -93,22 +94,23 @@ public class CkbExtractor {
         if (entry.variants().isEmpty()) {
             throw new IllegalStateException("A CKB entry without variants has been provided for extraction: " + entry);
         }
-        int variantCount = entry.variants().size();
-        Variant variant = entry.variants().get(0);
-        String event = variantCount > 1 ? concat(entry.variants()) : CkbEventAndGeneExtractor.extractEvent(variant);
-        String gene = variantCount > 1 ? "Multiple" : CkbEventAndGeneExtractor.extractGene(variant);
+
+        List<String> genes = entry.variants().stream()
+                .map(CkbEventAndGeneExtractor::extractGene)
+                .collect(Collectors.toList());
+
+        String sourceEvent = combinedSourceEvent(entry);
 
         if (entry.type() == EventType.UNKNOWN) {
-            LOGGER.warn("No event type known for '{}' on '{}'", event, gene);
+            LOGGER.warn("No event type known for CKB Profile '{}' for event '{}'", entry.profileId(), sourceEvent);
             return null;
         } else {
-            String sourceEvent = gene.equals(CkbConstants.NO_GENE) ? event : gene + " " + event;
 
             EventInterpretation interpretation = ImmutableEventInterpretation.builder()
                     .source(Knowledgebase.CKB)
                     .sourceEvent(sourceEvent)
-                    .interpretedGene(gene)
-                    .interpretedEvent(event)
+                    .interpretedGene(String.join(" ", genes))
+                    .interpretedEvent(sourceEvent)
                     .interpretedEventType(entry.type())
                     .build();
 
@@ -118,7 +120,7 @@ public class CkbExtractor {
             MolecularCriterium molecularCriterium = CkbMolecularCriteriaExtractor.createMolecularCriterium(entry, eventExtractionOutput);
 
             Set<EfficacyEvidence> efficacyEvidences =
-                    efficacyEvidenceFactory.create(entry, Set.of(molecularCriterium), sourceEvent, gene);
+                    efficacyEvidenceFactory.create(entry, Set.of(molecularCriterium), sourceEvent, String.join(GENE_DELIMITER, genes));
 
             List<KnownEvents> knownEvents = variantWithExtraction.stream()
                     .map(g -> CkbKnownEventsGenerator.generateKnownEvents(g.eventExtractorOutput,
@@ -144,10 +146,6 @@ public class CkbExtractor {
     @NotNull
     private List<VariantWithExtraction>
     extractEventCriteria(@NotNull CkbEntry entry) {
-        // TODO we have a combined event here, but we need to extract the individual criteria,
-        // ned to review how the combined event should be represented in the resulting outputs
-        //        ActionableEvent combinedActionableEvent = toActionableEvent(combinedSourceEvent(entry), entry);
-
         return entry.variants().stream()
                 .map(this::extractVariantCriteria)
                 .filter(Objects::nonNull)

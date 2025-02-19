@@ -77,6 +77,17 @@ final class CkbMolecularCriteriaExtractor {
                 .build();
     }
 
+    @NotNull
+    public static String combinedSourceEvent(@NotNull CkbEntry entry) {
+        return entry.variants().stream()
+                .map(variant -> {
+                    String event = CkbEventAndGeneExtractor.extractEvent(variant);
+                    String gene = CkbEventAndGeneExtractor.extractGene(variant);
+                    return gene.equals(CkbConstants.NO_GENE) ? event : gene + " " + event;
+                })
+                .collect(Collectors.joining(" & "));
+    }
+
     @VisibleForTesting
     @NotNull
     static MolecularCriterium createMolecularCriterium(@NotNull EventExtractorOutput extractionOutput,
@@ -155,17 +166,6 @@ final class CkbMolecularCriteriaExtractor {
         return extractActionableFusions(extractionOutput.fusionPair(), actionableEvent);
     }
 
-    @Nullable
-    private static MolecularCriterium hlaCriteria(@NotNull EventExtractorOutput extractionOutput,
-            @NotNull ActionableEvent actionableEvent) {
-        if (extractionOutput.hla() == null) {
-            return null;
-        }
-
-        Set<ActionableHLA> actionableHla = extractActionableHLA(extractionOutput.hla(), actionableEvent);
-        return ImmutableMolecularCriterium.builder().hla(actionableHla).build();
-    }
-
     @NotNull
     private static Set<ActionableHotspot> extractActionableHotspots(@NotNull List<VariantHotspot> hotspots,
             @NotNull ActionableEvent actionableEvent) {
@@ -224,17 +224,6 @@ final class CkbMolecularCriteriaExtractor {
         }).collect(Collectors.toList());
 
         return ImmutableEventExtractorOutput.copyOf(extractorOutput).withCodons(codons);
-    }
-
-    @NotNull
-    private static String combinedSourceEvent(@NotNull CkbEntry entry) {
-        return entry.variants().stream()
-                .map(variant -> {
-                    String event = CkbEventAndGeneExtractor.extractEvent(variant);
-                    String gene = CkbEventAndGeneExtractor.extractGene(variant);
-                    return gene.equals(CkbConstants.NO_GENE) ? event : gene + " " + event;
-                })
-                .collect(Collectors.joining(" & "));
     }
 
     @NotNull

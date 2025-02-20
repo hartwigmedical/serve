@@ -174,6 +174,45 @@ public class CkbExtractorTest {
         assertEquals(1, trialResult.knownEvents().fusions().size());
     }
 
+    @Test
+    public void canFilterNotAGene() {
+        CkbExtractor trialExtractor = CkbExtractorFactory.createExtractor(CkbClassificationConfig.build(),
+                RefGenomeResourceTestFactory.buildTestResource37(),
+                TreatmentApproachTestFactory.createEmptyCurator(),
+                CkbFilteringTestFactory.createEmptyEvidenceFilterModel(),
+                CkbFilteringTestFactory.createEmptyTrialFilterModel(),
+                Set.of(ImmutableCkbRegion.builder().country("netherlands").states(Collections.emptySet()).build()));
+
+        List<Variant> variants = List.of(
+                CkbTestFactory.createVariant("BRAF", "loss", "BRAF loss"),
+                CkbTestFactory.createVariant("TILs", "high", "TILs high")
+        );
+
+        List<CkbEntry> ckbEntries = Lists.newArrayList();
+        ckbEntries.add(createWithVariantsOpenMolecularTrial("nct1", variants, "sensitive", "Actionable"));
+
+        ExtractionResult trialResult = trialExtractor.extract(ckbEntries);
+
+        assertEquals(1, trialResult.trials().size());
+        ActionableTrial actionableTrial = trialResult.trials().iterator().next();
+        assertEquals(1, actionableTrial.anyMolecularCriteria().size());
+        MolecularCriterium molecularCriterium = actionableTrial.anyMolecularCriteria().iterator().next();
+        assertEquals(2, molecularCriterium.genes().size());
+
+        assertEquals(1, trialResult.eventInterpretations().size());
+        EventInterpretation eventInterpretation = trialResult.eventInterpretations().iterator().next();
+        assertEquals(Knowledgebase.CKB, eventInterpretation.source());
+        assertEquals("BRAF loss & KIT loss", eventInterpretation.sourceEvent());
+        assertEquals("BRAF KIT", eventInterpretation.interpretedGene());
+
+        // TODO this would previously have been just "loss", should we combine to "loss loss", change model to a list?
+        assertEquals("BRAF loss & KIT loss", eventInterpretation.interpretedEvent());
+
+        assertEquals(2, trialResult.knownEvents().genes().size());
+        assertEquals(2, trialResult.knownEvents().copyNumbers().size());
+
+    }
+
     @NotNull
     private static CodonAnnotation findByGene(@NotNull Iterable<CodonAnnotation> codons, @NotNull String geneToFind) {
         for (CodonAnnotation codon : codons) {

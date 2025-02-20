@@ -123,11 +123,11 @@ public class CkbExtractor {
                     efficacyEvidenceFactory.create(entry, Set.of(molecularCriterium), sourceEvent, String.join(GENE_DELIMITER, genes));
 
             List<KnownEvents> knownEvents = variantWithExtraction.stream()
-                    .map(g -> CkbKnownEventsGenerator.generateKnownEvents(g.eventExtractorOutput,
+                    .map(extraction -> CkbKnownEventsGenerator.generateKnownEvents(extraction.eventExtractorOutput,
                             efficacyEvidences.isEmpty(),
-                            g.variant,
-                            g.event,
-                            g.gene))
+                            extraction.variant,
+                            extraction.event,
+                            extraction.gene))
                     .collect(Collectors.toList());
             KnownEvents combinedKnownEvents =
                     knownEvents.stream().reduce(CkbKnownEventsGenerator::mergeKnownEvents)
@@ -144,8 +144,7 @@ public class CkbExtractor {
     }
 
     @NotNull
-    private List<VariantWithExtraction>
-    extractEventCriteria(@NotNull CkbEntry entry) {
+    private List<VariantWithExtraction> extractEventCriteria(@NotNull CkbEntry entry) {
         return entry.variants().stream()
                 .map(this::extractVariantCriteria)
                 .filter(Objects::nonNull)

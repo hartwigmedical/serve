@@ -37,7 +37,7 @@ public class ServeApplication {
 
         ServeAlgo algo = new ServeAlgo(refGenomeManager);
 
-        ExtractionResultWriter writer = new ExtractionResultWriter(VERSION, refGenomeManager, config.outputDir());
+        ExtractionResultWriter writer = new ExtractionResultWriter("local", refGenomeManager, config.outputDir());
         writer.write(algo.run(config));
 
         LOGGER.info("Complete!");

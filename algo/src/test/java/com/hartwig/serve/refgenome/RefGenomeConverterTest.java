@@ -16,6 +16,7 @@ import com.hartwig.serve.datamodel.molecular.KnownEvents;
 import com.hartwig.serve.datamodel.molecular.MolecularCriterium;
 import com.hartwig.serve.datamodel.molecular.MolecularCriteriumTestFactory;
 import com.hartwig.serve.datamodel.molecular.hotspot.ActionableHotspot;
+import com.hartwig.serve.datamodel.molecular.hotspot.ActionableHotspotSet;
 import com.hartwig.serve.datamodel.molecular.hotspot.HotspotTestFactory;
 import com.hartwig.serve.datamodel.molecular.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.molecular.range.ActionableRange;
@@ -109,17 +110,19 @@ public class RefGenomeConverterTest {
                 .alt("C")
                 .build();
 
+        ActionableHotspotSet actionableHotspotSet = HotspotTestFactory.createActionableHotspotSet(actionableHotspot);
+
         MolecularCriterium molecularCriterium = MolecularCriteriumTestFactory.createWithActionableHotspot(actionableHotspot);
 
         List<EfficacyEvidence> evidences = List.of(EfficacyEvidenceTestFactory.createWithMolecularCriterium(molecularCriterium));
-        Set<ActionableHotspot> convertedActionableHotspotsFromEvidence =
+        Set<ActionableHotspotSet> convertedActionableHotspotsFromEvidence =
                 DUMMY_CONVERTER.convertEfficacyEvidences(evidences).iterator().next().molecularCriterium().hotspots();
-        assertEquals(actionableHotspot, convertedActionableHotspotsFromEvidence.iterator().next());
+        assertEquals(actionableHotspotSet, convertedActionableHotspotsFromEvidence.iterator().next());
 
         List<ActionableTrial> trials = List.of(TrialTestFactory.createWithMolecularCriterium(molecularCriterium));
-        Set<ActionableHotspot> convertedActionableHotspotFromTrial =
+        Set<ActionableHotspotSet> convertedActionableHotspotFromTrial =
                 DUMMY_CONVERTER.convertTrials(trials).iterator().next().anyMolecularCriteria().iterator().next().hotspots();
-        assertEquals(actionableHotspot, convertedActionableHotspotFromTrial.iterator().next());
+        assertEquals(actionableHotspotSet, convertedActionableHotspotFromTrial.iterator().next());
     }
 
     @Test

@@ -2,6 +2,7 @@ package com.hartwig.serve.refgenome;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.google.common.collect.Sets;
 import com.hartwig.serve.common.RefGenomeFunctions;
@@ -14,7 +15,9 @@ import com.hartwig.serve.datamodel.molecular.KnownEvents;
 import com.hartwig.serve.datamodel.molecular.MolecularCriterium;
 import com.hartwig.serve.datamodel.molecular.common.GenomeRegion;
 import com.hartwig.serve.datamodel.molecular.hotspot.ActionableHotspot;
+import com.hartwig.serve.datamodel.molecular.hotspot.ActionableHotspotSet;
 import com.hartwig.serve.datamodel.molecular.hotspot.ImmutableActionableHotspot;
+import com.hartwig.serve.datamodel.molecular.hotspot.ImmutableActionableHotspotSet;
 import com.hartwig.serve.datamodel.molecular.hotspot.ImmutableKnownHotspot;
 import com.hartwig.serve.datamodel.molecular.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.molecular.hotspot.VariantHotspot;
@@ -170,10 +173,19 @@ class RefGenomeConverter {
     private MolecularCriterium convertMolecularCriterium(@NotNull MolecularCriterium molecularCriterium) {
         return ImmutableMolecularCriterium.builder()
                 .from(molecularCriterium)
-                .hotspots(convertActionableHotspots(molecularCriterium.hotspots()))
+                .hotspots(convertActionableHotspotsSets(molecularCriterium.hotspots()))
                 .codons(convertActionableRanges(molecularCriterium.codons()))
                 .exons(convertActionableRanges(molecularCriterium.exons()))
                 .build();
+    }
+
+    @NotNull
+    private Set<ActionableHotspotSet> convertActionableHotspotsSets(@NotNull Set<ActionableHotspotSet> hotspots) {
+        return hotspots.stream()
+                .map(hotspot -> ImmutableActionableHotspotSet.builder()
+                        .hotspots(convertActionableHotspots(hotspot.hotspots()))
+                        .build())
+                .collect(Collectors.toSet());
     }
 
     @NotNull

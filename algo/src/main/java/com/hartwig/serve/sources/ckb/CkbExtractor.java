@@ -46,7 +46,9 @@ import com.hartwig.serve.datamodel.molecular.gene.ImmutableKnownGene;
 import com.hartwig.serve.datamodel.molecular.gene.KnownCopyNumber;
 import com.hartwig.serve.datamodel.molecular.gene.KnownGene;
 import com.hartwig.serve.datamodel.molecular.hotspot.ActionableHotspot;
+import com.hartwig.serve.datamodel.molecular.hotspot.ActionableHotspotSet;
 import com.hartwig.serve.datamodel.molecular.hotspot.ImmutableActionableHotspot;
+import com.hartwig.serve.datamodel.molecular.hotspot.ImmutableActionableHotspotSet;
 import com.hartwig.serve.datamodel.molecular.hotspot.ImmutableKnownHotspot;
 import com.hartwig.serve.datamodel.molecular.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.molecular.immuno.ActionableHLA;
@@ -196,10 +198,17 @@ public class CkbExtractor {
             @NotNull Set<MolecularCriterium> molecularCriteria) {
         if (extractionOutput.variants() != null) {
             Set<ActionableHotspot> hotspots = extractActionableHotspots(extractionOutput.variants(), actionableEvent);
-            for (ActionableHotspot hotspot : hotspots) {
-                molecularCriteria.add(ImmutableMolecularCriterium.builder().hotspots(Set.of(hotspot)).build());
-            }
+            molecularCriteria.add(ImmutableMolecularCriterium.builder()
+                    .addHotspots(hotspotSetFromHotspot(hotspots))
+                    .build());
         }
+    }
+
+    @NotNull
+    private ActionableHotspotSet hotspotSetFromHotspot(Set<ActionableHotspot> hotspots) {
+        return ImmutableActionableHotspotSet.builder()
+                .hotspots(hotspots)
+                .build();
     }
 
     private void addCodonsToCriteria(@NotNull EventExtractorOutput extractionOutput, @NotNull ActionableEvent actionableEvent,

@@ -49,6 +49,20 @@ public final class HotspotTestFactory {
         return actionableHotspotBuilder().build();
     }
 
+    @NotNull
+    public static ActionableHotspotSet createTestActionableHotspotSet() {
+        return ImmutableActionableHotspotSet.builder()
+                .addHotspots(createTestActionableHotspot())
+                .build();
+    }
+
+    @NotNull
+    public static ActionableHotspotSet createActionableHotspotSet(ActionableHotspot hotspot) {
+        return ImmutableActionableHotspotSet.builder()
+                .addHotspots(hotspot)
+                .build();
+    }
+
     private static class VariantHotspotImpl implements VariantHotspot {
 
         @NotNull

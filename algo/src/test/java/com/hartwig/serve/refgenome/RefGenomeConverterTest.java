@@ -111,8 +111,7 @@ public class RefGenomeConverterTest {
                 .build();
 
         ActionableHotspotSet actionableHotspotSet = HotspotTestFactory.createActionableHotspotSet(actionableHotspot);
-
-        MolecularCriterium molecularCriterium = MolecularCriteriumTestFactory.createWithActionableHotspot(actionableHotspot);
+        MolecularCriterium molecularCriterium = MolecularCriteriumTestFactory.createWithActionableHotspotSet(actionableHotspotSet);
 
         List<EfficacyEvidence> evidences = List.of(EfficacyEvidenceTestFactory.createWithMolecularCriterium(molecularCriterium));
         Set<ActionableHotspotSet> convertedActionableHotspotsFromEvidence =

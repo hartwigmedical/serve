@@ -5,10 +5,8 @@ import com.hartwig.serve.datamodel.molecular.characteristic.CharacteristicTestFa
 import com.hartwig.serve.datamodel.molecular.fusion.ActionableFusion;
 import com.hartwig.serve.datamodel.molecular.gene.ActionableGene;
 import com.hartwig.serve.datamodel.molecular.gene.GeneTestFactory;
-import com.hartwig.serve.datamodel.molecular.hotspot.ActionableHotspot;
 import com.hartwig.serve.datamodel.molecular.hotspot.ActionableHotspotSet;
 import com.hartwig.serve.datamodel.molecular.hotspot.HotspotTestFactory;
-import com.hartwig.serve.datamodel.molecular.hotspot.ImmutableActionableHotspotSet;
 import com.hartwig.serve.datamodel.molecular.range.ActionableRange;
 
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +18,7 @@ public final class MolecularCriteriumTestFactory {
 
     @NotNull
     public static MolecularCriterium createWithTestActionableHotspot() {
-        return createWithActionableHotspot(HotspotTestFactory.createTestActionableHotspotSet());
+        return createWithActionableHotspotSet(HotspotTestFactory.createTestActionableHotspotSet());
     }
 
     @NotNull
@@ -34,13 +32,7 @@ public final class MolecularCriteriumTestFactory {
     }
 
     @NotNull
-    public static MolecularCriterium createWithActionableHotspot(@NotNull ActionableHotspot hotspot) {
-        return ImmutableMolecularCriterium.builder().addHotspots(
-                ImmutableActionableHotspotSet.builder().addHotspots(hotspot).build()).build();
-    }
-
-    @NotNull
-    public static MolecularCriterium createWithActionableHotspot(@NotNull ActionableHotspotSet hotspot) {
+    public static MolecularCriterium createWithActionableHotspotSet(@NotNull ActionableHotspotSet hotspot) {
         return ImmutableMolecularCriterium.builder().addHotspots(hotspot).build();
     }
 

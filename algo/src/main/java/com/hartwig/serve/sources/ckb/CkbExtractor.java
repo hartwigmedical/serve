@@ -199,13 +199,13 @@ public class CkbExtractor {
         if (extractionOutput.variants() != null) {
             Set<ActionableHotspot> hotspots = extractActionableHotspots(extractionOutput.variants(), actionableEvent);
             molecularCriteria.add(ImmutableMolecularCriterium.builder()
-                    .addHotspots(hotspotSetFromHotspot(hotspots))
+                    .addHotspots(hotspotSet(hotspots))
                     .build());
         }
     }
 
     @NotNull
-    private ActionableHotspotSet hotspotSetFromHotspot(Set<ActionableHotspot> hotspots) {
+    private ActionableHotspotSet hotspotSet(Set<ActionableHotspot> hotspots) {
         return ImmutableActionableHotspotSet.builder()
                 .hotspots(hotspots)
                 .build();

@@ -15,7 +15,7 @@ import com.hartwig.serve.datamodel.molecular.fusion.KnownFusion;
 import com.hartwig.serve.datamodel.molecular.gene.ActionableGene;
 import com.hartwig.serve.datamodel.molecular.gene.KnownCopyNumber;
 import com.hartwig.serve.datamodel.molecular.gene.KnownGene;
-import com.hartwig.serve.datamodel.molecular.hotspot.ActionableHotspot;
+import com.hartwig.serve.datamodel.molecular.hotspot.ActionableHotspotSet;
 import com.hartwig.serve.datamodel.molecular.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.molecular.range.ActionableRange;
 import com.hartwig.serve.datamodel.molecular.range.KnownCodon;
@@ -211,7 +211,7 @@ class ConversionFilter {
     }
 
     @NotNull
-    private Set<ActionableHotspot> filterActionableHotspots(@NotNull Set<ActionableHotspot> actionableHotspots) {
+    private Set<ActionableHotspotSet> filterActionableHotspots(@NotNull Set<ActionableHotspotSet> actionableHotspots) {
         return actionableHotspots;
     }
 

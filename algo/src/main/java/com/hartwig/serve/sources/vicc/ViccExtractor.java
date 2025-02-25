@@ -27,7 +27,9 @@ import com.hartwig.serve.datamodel.molecular.gene.GeneAnnotation;
 import com.hartwig.serve.datamodel.molecular.gene.ImmutableActionableGene;
 import com.hartwig.serve.datamodel.molecular.gene.ImmutableKnownCopyNumber;
 import com.hartwig.serve.datamodel.molecular.gene.KnownCopyNumber;
+import com.hartwig.serve.datamodel.molecular.hotspot.ActionableHotspotSet;
 import com.hartwig.serve.datamodel.molecular.hotspot.ImmutableActionableHotspot;
+import com.hartwig.serve.datamodel.molecular.hotspot.ImmutableActionableHotspotSet;
 import com.hartwig.serve.datamodel.molecular.hotspot.ImmutableKnownHotspot;
 import com.hartwig.serve.datamodel.molecular.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.molecular.range.ImmutableActionableRange;
@@ -318,12 +320,22 @@ public final class ViccExtractor {
                 ActionableEvent event = toActionableEvent(interpretations.get(entry.getKey()));
                 for (VariantAnnotation variantAnnotation : variantAnnotations) {
                     criteriaForHotspots.add(ImmutableMolecularCriterium.builder()
-                            .addHotspots(ImmutableActionableHotspot.builder().from(variantAnnotation).from(event).build())
+                            .addHotspots(createTestActionableHotspotSet(variantAnnotation, event))
                             .build());
                 }
             }
         }
         return criteriaForHotspots;
+    }
+
+    @NotNull
+    private static ActionableHotspotSet createTestActionableHotspotSet(VariantAnnotation variantAnnotation, ActionableEvent event) {
+        return ImmutableActionableHotspotSet.builder()
+                .addHotspots(ImmutableActionableHotspot.builder()
+                        .from(variantAnnotation)
+                        .from(event)
+                        .build())
+                .build();
     }
 
     @NotNull

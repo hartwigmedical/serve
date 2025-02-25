@@ -176,20 +176,24 @@
           "molecularCriterium": {
             "hotspots": [
               {
-                "sourceDate": {
-                  "year": 2021,
-                  "month": 2,
-                  "day": 3
-                },
-                "sourceEvent": "variant",
-                "sourceUrls": [
-                  "http"
-                ],
-                "gene": "BRAF",
-                "ref": "A",
-                "alt": "T",
-                "chromosome": "7",
-                "position": 140453137
+                "hotspots": [
+                  {
+                    "sourceDate": {
+                      "year": 2021,
+                      "month": 2,
+                      "day": 3
+                    },
+                    "sourceEvent": "variant",
+                    "sourceUrls": [
+                      "http"
+                    ],
+                    "gene": "BRAF",
+                    "ref": "A",
+                    "alt": "T",
+                    "chromosome": "7",
+                    "position": 140453137
+                  }
+                ]
               }
             ],
             "codons": [],
@@ -808,20 +812,24 @@
             {
               "hotspots": [
                 {
-                  "sourceDate": {
-                    "year": 1970,
-                    "month": 1,
-                    "day": 1
-                  },
-                  "sourceEvent": "variant",
-                  "sourceUrls": [
-                    "http"
-                  ],
-                  "gene": "BRAF",
-                  "ref": "A",
-                  "alt": "T",
-                  "chromosome": "7",
-                  "position": 140453137
+                  "hotspots": [
+                    {
+                      "sourceDate": {
+                        "year": 1970,
+                        "month": 1,
+                        "day": 1
+                      },
+                      "sourceEvent": "variant",
+                      "sourceUrls": [
+                        "http"
+                      ],
+                      "gene": "BRAF",
+                      "ref": "A",
+                      "alt": "T",
+                      "chromosome": "7",
+                      "position": 140453137
+                    }
+                  ]
                 }
               ],
               "codons": [],

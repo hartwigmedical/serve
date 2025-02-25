@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.hartwig.serve.datamodel.molecular.characteristic.ActionableCharacteristic;
 import com.hartwig.serve.datamodel.molecular.fusion.ActionableFusion;
 import com.hartwig.serve.datamodel.molecular.gene.ActionableGene;
-import com.hartwig.serve.datamodel.molecular.hotspot.ActionableHotspot;
+import com.hartwig.serve.datamodel.molecular.hotspot.ActionableHotspotSet;
 import com.hartwig.serve.datamodel.molecular.immuno.ActionableHLA;
 import com.hartwig.serve.datamodel.molecular.range.ActionableRange;
 
@@ -26,7 +26,7 @@ public abstract class MolecularCriterium implements Comparable<MolecularCriteriu
     private static final Comparator<MolecularCriterium> COMPARATOR = new MolecularCriteriumComparator();
 
     @NotNull
-    public abstract Set<ActionableHotspot> hotspots();
+    public abstract Set<ActionableHotspotSet> hotspots();
 
     @NotNull
     public abstract Set<ActionableRange> codons();

@@ -2,7 +2,6 @@ package com.hartwig.serve.refgenome;
 
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import com.google.common.collect.Sets;
 import com.hartwig.serve.common.RefGenomeFunctions;
@@ -15,9 +14,6 @@ import com.hartwig.serve.datamodel.molecular.KnownEvents;
 import com.hartwig.serve.datamodel.molecular.MolecularCriterium;
 import com.hartwig.serve.datamodel.molecular.common.GenomeRegion;
 import com.hartwig.serve.datamodel.molecular.hotspot.ActionableHotspot;
-import com.hartwig.serve.datamodel.molecular.hotspot.ActionableHotspotSet;
-import com.hartwig.serve.datamodel.molecular.hotspot.ImmutableActionableHotspot;
-import com.hartwig.serve.datamodel.molecular.hotspot.ImmutableActionableHotspotSet;
 import com.hartwig.serve.datamodel.molecular.hotspot.ImmutableKnownHotspot;
 import com.hartwig.serve.datamodel.molecular.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.molecular.hotspot.VariantHotspot;
@@ -173,28 +169,26 @@ class RefGenomeConverter {
     private MolecularCriterium convertMolecularCriterium(@NotNull MolecularCriterium molecularCriterium) {
         return ImmutableMolecularCriterium.builder()
                 .from(molecularCriterium)
-                .hotspots(convertActionableHotspotsSets(molecularCriterium.hotspots()))
+                .hotspots(convertActionableHotspots(molecularCriterium.hotspots()))
                 .codons(convertActionableRanges(molecularCriterium.codons()))
                 .exons(convertActionableRanges(molecularCriterium.exons()))
                 .build();
     }
 
     @NotNull
-    private Set<ActionableHotspotSet> convertActionableHotspotsSets(@NotNull Set<ActionableHotspotSet> hotspots) {
-        return hotspots.stream()
-                .map(hotspot -> ImmutableActionableHotspotSet.builder()
-                        .hotspots(convertActionableHotspots(hotspot.hotspots()))
-                        .build())
-                .collect(Collectors.toSet());
-    }
-
-    @NotNull
     private Set<ActionableHotspot> convertActionableHotspots(@NotNull Set<ActionableHotspot> actionableHotspots) {
         Set<ActionableHotspot> convertedActionableHotspots = Sets.newHashSet();
         for (ActionableHotspot actionableHotspot : actionableHotspots) {
-            ActionableHotspot lifted = liftOverActionableHotspot(actionableHotspot);
-            if (lifted != null) {
-                convertedActionableHotspots.add(lifted);
+            Set<VariantHotspot> liftedSet = Sets.newHashSet();
+            for (VariantHotspot variant : actionableHotspot.variants()) {
+                VariantHotspot lifted = liftOverVariantHotspot(variant);
+                if (lifted != null) {
+                    liftedSet.add(lifted);
+                }
+            }
+
+            if (liftedSet.size() == actionableHotspot.variants().size()) {
+                convertedActionableHotspots.add(actionableHotspot);
             }
         }
         return convertedActionableHotspots;
@@ -214,7 +208,7 @@ class RefGenomeConverter {
 
     @Nullable
     private KnownHotspot liftOverKnownHotspot(@NotNull KnownHotspot knownHotspot) {
-        LiftOverResult lifted = liftOverHotspot(knownHotspot);
+        LiftOverResult lifted = performLiftOverVariant(knownHotspot);
 
         if (lifted == null) {
             return null;
@@ -224,39 +218,65 @@ class RefGenomeConverter {
     }
 
     @Nullable
-    private ActionableHotspot liftOverActionableHotspot(@NotNull ActionableHotspot actionableHotspot) {
-        LiftOverResult lifted = liftOverHotspot(actionableHotspot);
+    private VariantHotspot liftOverVariantHotspot(@NotNull VariantHotspot variant) {
+        LiftOverResult lifted = performLiftOverVariant(variant);
 
         if (lifted == null) {
             return null;
         }
 
-        return ImmutableActionableHotspot.builder()
-                .from(actionableHotspot)
-                .chromosome(lifted.chromosome())
-                .position(lifted.position())
-                .build();
+        return new VariantHotspot() {
+
+            @NotNull
+            @Override
+            public String gene() {
+                return variant.gene();
+            }
+
+            @NotNull
+            @Override
+            public String ref() {
+                return variant.ref();
+            }
+
+            @NotNull
+            @Override
+            public String alt() {
+                return variant.alt();
+            }
+
+            @NotNull
+            @Override
+            public String chromosome() {
+                return lifted.chromosome();
+            }
+
+            @Override
+            public int position() {
+                return lifted.position();
+            }
+        };
     }
 
     @Nullable
-    private LiftOverResult liftOverHotspot(@NotNull VariantHotspot hotspot) {
-        LiftOverResult lifted = liftOverAlgo.liftOver(hotspot.chromosome(), hotspot.position());
+    private LiftOverResult performLiftOverVariant(@NotNull VariantHotspot variant) {
+        LiftOverResult lifted = liftOverAlgo.liftOver(variant.chromosome(), variant.position());
 
-        if (!LiftOverChecker.isValidLiftedPosition(lifted, hotspot)) {
+        if (!LiftOverChecker.isValidLiftedPosition(lifted, variant)) {
             return null;
         }
 
-        verifyNoChromosomeChange(hotspot.chromosome(), lifted, hotspot);
+        verifyNoChromosomeChange(variant.chromosome(), lifted, variant);
 
-        String newRef = sequence(lifted.chromosome(), lifted.position(), hotspot.ref().length());
-        if (!newRef.equals(hotspot.ref())) {
+        String newRef = sequence(lifted.chromosome(), lifted.position(), variant.ref().length());
+        if (!newRef.equals(variant.ref())) {
             LOGGER.warn(" Skipping liftover from {} to {}: Ref changed from '{}' to '{}' on position {} from {}",
                     sourceVersion,
                     targetVersion,
-                    hotspot.ref(),
+                    variant.ref(),
                     newRef,
                     lifted.position(),
-                    hotspot);
+                    variant);
             return null;
         }
 

@@ -10,6 +10,7 @@ import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.molecular.common.ProteinEffect;
 import com.hartwig.serve.datamodel.molecular.hotspot.HotspotTestFactory;
+import com.hartwig.serve.datamodel.molecular.hotspot.ImmutableVariantAnnotation;
 import com.hartwig.serve.datamodel.molecular.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.molecular.hotspot.VariantHotspot;
 
@@ -102,7 +103,7 @@ public class KnownHotspotConsolidationTest {
     @NotNull
     private static VariantHotspot hotspot1() {
         return ImmutableVariantAnnotation.builder()
-                .from(HotspotTestFactory.createTestVariantHotspot())
+                .from(HotspotTestFactory.createTestVariantAnnotation())
                 .chromosome("1")
                 .position(10)
                 .ref("A")
@@ -113,7 +114,7 @@ public class KnownHotspotConsolidationTest {
     @NotNull
     private static VariantHotspot hotspot2() {
         return ImmutableVariantAnnotation.builder()
-                .from(HotspotTestFactory.createTestVariantHotspot())
+                .from(HotspotTestFactory.createTestVariantAnnotation())
                 .chromosome("1")
                 .position(20)
                 .ref("A")

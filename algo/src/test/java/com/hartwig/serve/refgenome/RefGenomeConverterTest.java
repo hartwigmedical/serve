@@ -16,7 +16,6 @@ import com.hartwig.serve.datamodel.molecular.KnownEvents;
 import com.hartwig.serve.datamodel.molecular.MolecularCriterium;
 import com.hartwig.serve.datamodel.molecular.MolecularCriteriumTestFactory;
 import com.hartwig.serve.datamodel.molecular.hotspot.ActionableHotspot;
-import com.hartwig.serve.datamodel.molecular.hotspot.ActionableHotspotSet;
 import com.hartwig.serve.datamodel.molecular.hotspot.HotspotTestFactory;
 import com.hartwig.serve.datamodel.molecular.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.molecular.range.ActionableRange;
@@ -103,25 +102,20 @@ public class RefGenomeConverterTest {
     @Test
     public void canConvertEvidenceAndTrialsForHotspots() {
         ActionableHotspot actionableHotspot = HotspotTestFactory.actionableHotspotBuilder()
-                .gene(TEST_GENE)
-                .chromosome(TEST_CHROMOSOME)
-                .position(1)
-                .ref("G")
-                .alt("C")
+                .addVariants(HotspotTestFactory.createVariantAnnotation(TEST_GENE, TEST_CHROMOSOME, 1, "G", "C"))
                 .build();
 
-        ActionableHotspotSet actionableHotspotSet = HotspotTestFactory.createActionableHotspotSet(actionableHotspot);
-        MolecularCriterium molecularCriterium = MolecularCriteriumTestFactory.createWithActionableHotspotSet(actionableHotspotSet);
+        MolecularCriterium molecularCriterium = MolecularCriteriumTestFactory.createWithActionableHotspot(actionableHotspot);
 
         List<EfficacyEvidence> evidences = List.of(EfficacyEvidenceTestFactory.createWithMolecularCriterium(molecularCriterium));
-        Set<ActionableHotspotSet> convertedActionableHotspotsFromEvidence =
+        Set<ActionableHotspot> convertedActionableHotspotsFromEvidence =
                 DUMMY_CONVERTER.convertEfficacyEvidences(evidences).iterator().next().molecularCriterium().hotspots();
-        assertEquals(actionableHotspotSet, convertedActionableHotspotsFromEvidence.iterator().next());
+        assertEquals(actionableHotspot, convertedActionableHotspotsFromEvidence.iterator().next());
 
         List<ActionableTrial> trials = List.of(TrialTestFactory.createWithMolecularCriterium(molecularCriterium));
-        Set<ActionableHotspotSet> convertedActionableHotspotFromTrial =
+        Set<ActionableHotspot> convertedActionableHotspotFromTrial =
                 DUMMY_CONVERTER.convertTrials(trials).iterator().next().anyMolecularCriteria().iterator().next().hotspots();
-        assertEquals(actionableHotspotSet, convertedActionableHotspotFromTrial.iterator().next());
+        assertEquals(actionableHotspot, convertedActionableHotspotFromTrial.iterator().next());
     }
 
     @Test

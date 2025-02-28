@@ -16,6 +16,7 @@ import com.hartwig.serve.datamodel.molecular.characteristic.ActionableCharacteri
 import com.hartwig.serve.datamodel.molecular.fusion.ActionableFusion;
 import com.hartwig.serve.datamodel.molecular.gene.ActionableGene;
 import com.hartwig.serve.datamodel.molecular.hotspot.ActionableHotspot;
+import com.hartwig.serve.datamodel.molecular.hotspot.VariantAnnotation;
 import com.hartwig.serve.datamodel.molecular.immuno.ActionableHLA;
 import com.hartwig.serve.datamodel.molecular.range.ActionableRange;
 
@@ -46,8 +47,7 @@ class MolecularCriteriumDAO {
         int molecularCriteriumId =
                 context.insertInto(MOLECULARCRITERIUM).values().returning(MOLECULARCRITERIUM.ID).fetchOne().getValue(MOLECULARCRITERIUM.ID);
 
-        // TODO do we need a subset id to model the hotspot grouping?
-        molecularCriterium.hotspots().forEach(hotspots -> writeActionableHotspots(molecularCriteriumId, hotspots.hotspots()));
+        writeActionableHotspots(molecularCriteriumId, molecularCriterium.hotspots());
         writeActionableCodons(molecularCriteriumId, molecularCriterium.codons());
         writeActionableExons(molecularCriteriumId, molecularCriterium.exons());
         writeActionableGenes(molecularCriteriumId, molecularCriterium.genes());
@@ -60,26 +60,29 @@ class MolecularCriteriumDAO {
 
     private void writeActionableHotspots(int molecularCriteriumId, @NotNull Set<ActionableHotspot> hotspots) {
         for (ActionableHotspot hotspot : hotspots) {
-            context.insertInto(ACTIONABLEHOTSPOT,
-                            ACTIONABLEHOTSPOT.MOLECULARCRITERIUMID,
-                            ACTIONABLEHOTSPOT.SOURCEDATE,
-                            ACTIONABLEHOTSPOT.SOURCEEVENT,
-                            ACTIONABLEHOTSPOT.SOURCEURLS,
-                            ACTIONABLEHOTSPOT.GENE,
-                            ACTIONABLEHOTSPOT.CHROMOSOME,
-                            ACTIONABLEHOTSPOT.POSITION,
-                            ACTIONABLEHOTSPOT.REF,
-                            ACTIONABLEHOTSPOT.ALT)
-                    .values(molecularCriteriumId,
-                            hotspot.sourceDate(),
-                            hotspot.sourceEvent(),
-                            DatabaseUtil.concat(hotspot.sourceUrls()),
-                            hotspot.gene(),
-                            hotspot.chromosome(),
-                            hotspot.position(),
-                            hotspot.ref(),
-                            hotspot.alt())
-                    .execute();
+            // TODO (KZ) do we need a subset id to model the hotspot grouping?
+            for (VariantAnnotation variant : hotspot.variants()) {
+                context.insertInto(ACTIONABLEHOTSPOT,
+                                ACTIONABLEHOTSPOT.MOLECULARCRITERIUMID,
+                                ACTIONABLEHOTSPOT.SOURCEDATE,
+                                ACTIONABLEHOTSPOT.SOURCEEVENT,
+                                ACTIONABLEHOTSPOT.SOURCEURLS,
+                                ACTIONABLEHOTSPOT.GENE,
+                                ACTIONABLEHOTSPOT.CHROMOSOME,
+                                ACTIONABLEHOTSPOT.POSITION,
+                                ACTIONABLEHOTSPOT.REF,
+                                ACTIONABLEHOTSPOT.ALT)
+                        .values(molecularCriteriumId,
+                                hotspot.sourceDate(),
+                                hotspot.sourceEvent(),
+                                DatabaseUtil.concat(hotspot.sourceUrls()),
+                                variant.gene(),
+                                variant.chromosome(),
+                                variant.position(),
+                                variant.ref(),
+                                variant.alt())
+                        .execute();
+            }
         }
     }
 

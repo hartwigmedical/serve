@@ -102,11 +102,7 @@ public class RefGenomeConverterTest {
     @Test
     public void canConvertEvidenceAndTrialsForHotspots() {
         ActionableHotspot actionableHotspot = HotspotTestFactory.actionableHotspotBuilder()
-                .gene(TEST_GENE)
-                .chromosome(TEST_CHROMOSOME)
-                .position(1)
-                .ref("G")
-                .alt("C")
+                .addVariants(HotspotTestFactory.createVariantAnnotation(TEST_GENE, TEST_CHROMOSOME, 1, "G", "C"))
                 .build();
 
         MolecularCriterium molecularCriterium = MolecularCriteriumTestFactory.createWithActionableHotspot(actionableHotspot);

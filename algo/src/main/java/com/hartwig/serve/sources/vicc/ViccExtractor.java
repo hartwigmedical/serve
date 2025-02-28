@@ -30,6 +30,7 @@ import com.hartwig.serve.datamodel.molecular.gene.KnownCopyNumber;
 import com.hartwig.serve.datamodel.molecular.hotspot.ImmutableActionableHotspot;
 import com.hartwig.serve.datamodel.molecular.hotspot.ImmutableKnownHotspot;
 import com.hartwig.serve.datamodel.molecular.hotspot.KnownHotspot;
+import com.hartwig.serve.datamodel.molecular.hotspot.VariantAnnotation;
 import com.hartwig.serve.datamodel.molecular.range.ImmutableActionableRange;
 import com.hartwig.serve.datamodel.molecular.range.ImmutableKnownCodon;
 import com.hartwig.serve.datamodel.molecular.range.ImmutableKnownExon;
@@ -50,7 +51,6 @@ import com.hartwig.serve.extraction.exon.ExonConsolidation;
 import com.hartwig.serve.extraction.fusion.FusionConsolidation;
 import com.hartwig.serve.extraction.immuno.ImmunoHLA;
 import com.hartwig.serve.extraction.variant.KnownHotspotConsolidation;
-import com.hartwig.serve.extraction.variant.VariantAnnotation;
 import com.hartwig.serve.util.ProgressTracker;
 import com.hartwig.serve.vicc.annotation.ViccProteinAnnotationExtractor;
 import com.hartwig.serve.vicc.datamodel.Feature;
@@ -70,8 +70,7 @@ public final class ViccExtractor {
     @NotNull
     private final ViccEfficacyEvidenceFactory efficacyEvidenceFactory;
 
-    public ViccExtractor(@NotNull final EventExtractor eventExtractor,
-            @NotNull final ViccEfficacyEvidenceFactory efficacyEvidenceFactory) {
+    public ViccExtractor(@NotNull final EventExtractor eventExtractor, @NotNull final ViccEfficacyEvidenceFactory efficacyEvidenceFactory) {
         this.eventExtractor = eventExtractor;
         this.efficacyEvidenceFactory = efficacyEvidenceFactory;
     }
@@ -116,7 +115,8 @@ public final class ViccExtractor {
 
                 String sourceEvent = feature.name().startsWith(gene) ? feature.name() : gene + " " + feature.name();
                 eventInterpretationPerFeature.put(feature,
-                        ImmutableEventInterpretation.builder().source(ViccEfficacyEvidenceFactory.fromViccSource(entry.source()))
+                        ImmutableEventInterpretation.builder()
+                                .source(ViccEfficacyEvidenceFactory.fromViccSource(entry.source()))
                                 .sourceEvent(sourceEvent)
                                 .interpretedGene(gene)
                                 .interpretedEvent(feature.name())
@@ -313,17 +313,14 @@ public final class ViccExtractor {
             @NotNull Map<Feature, List<VariantAnnotation>> variantsPerFeature) {
         Set<MolecularCriterium> criteriaForHotspots = Sets.newHashSet();
         for (Map.Entry<Feature, List<VariantAnnotation>> entry : variantsPerFeature.entrySet()) {
-            List<VariantAnnotation> variantAnnotations = entry.getValue();
-            if (variantAnnotations != null) {
+            List<VariantAnnotation> variants = entry.getValue();
+            if (variants != null) {
                 ActionableEvent event = toActionableEvent(interpretations.get(entry.getKey()));
-                for (VariantAnnotation variantAnnotation : variantAnnotations) {
-                    criteriaForHotspots.add(ImmutableMolecularCriterium.builder()
-                            .addHotspots(ImmutableActionableHotspot.builder().from(variantAnnotation).from(event).build())
-                            .build());
-                }
+                criteriaForHotspots.add(ImmutableMolecularCriterium.builder()
+                        .addHotspots(ImmutableActionableHotspot.builder().from(event).variants(variants).build())
+                        .build());
             }
-        }
-        return criteriaForHotspots;
+        } return criteriaForHotspots;
     }
 
     @NotNull

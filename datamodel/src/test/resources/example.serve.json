@@ -185,11 +185,15 @@
                 "sourceUrls": [
                   "http"
                 ],
-                "gene": "BRAF",
-                "ref": "A",
-                "alt": "T",
-                "chromosome": "7",
-                "position": 140453137
+                "variants": [
+                  {
+                    "gene": "BRAF",
+                    "ref": "A",
+                    "alt": "T",
+                    "chromosome": "7",
+                    "position": 140453137
+                  }
+                ]
               }
             ],
             "codons": [],
@@ -817,11 +821,15 @@
                   "sourceUrls": [
                     "http"
                   ],
-                  "gene": "BRAF",
-                  "ref": "A",
-                  "alt": "T",
-                  "chromosome": "7",
-                  "position": 140453137
+                  "variants": [
+                    {
+                      "gene": "BRAF",
+                      "ref": "A",
+                      "alt": "T",
+                      "chromosome": "7",
+                      "position": 140453137
+                    }
+                  ]
                 }
               ],
               "codons": [],

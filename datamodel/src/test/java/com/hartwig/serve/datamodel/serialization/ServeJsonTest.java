@@ -13,7 +13,6 @@ import com.hartwig.serve.datamodel.ServeRecord;
 import com.hartwig.serve.datamodel.TestServeDatabaseFactory;
 
 import org.jetbrains.annotations.NotNull;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class ServeJsonTest {
@@ -44,7 +43,6 @@ public class ServeJsonTest {
         assertEquals(inputDatabase, deserializedDatabase);
     }
 
-    @Ignore
     @Test
     public void canReadRealServeJson() throws IOException {
         ServeDatabase database = ServeJson.read(TEST_SERVE_JSON);

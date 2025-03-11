@@ -45,10 +45,10 @@ import com.hartwig.serve.datamodel.molecular.gene.ImmutableKnownCopyNumber;
 import com.hartwig.serve.datamodel.molecular.gene.ImmutableKnownGene;
 import com.hartwig.serve.datamodel.molecular.gene.KnownCopyNumber;
 import com.hartwig.serve.datamodel.molecular.gene.KnownGene;
-import com.hartwig.serve.datamodel.molecular.hotspot.ActionableHotspot;
 import com.hartwig.serve.datamodel.molecular.hotspot.ImmutableActionableHotspot;
 import com.hartwig.serve.datamodel.molecular.hotspot.ImmutableKnownHotspot;
 import com.hartwig.serve.datamodel.molecular.hotspot.KnownHotspot;
+import com.hartwig.serve.datamodel.molecular.hotspot.VariantAnnotation;
 import com.hartwig.serve.datamodel.molecular.immuno.ActionableHLA;
 import com.hartwig.serve.datamodel.molecular.immuno.ImmutableActionableHLA;
 import com.hartwig.serve.datamodel.molecular.range.ActionableRange;
@@ -76,7 +76,6 @@ import com.hartwig.serve.extraction.exon.ExonConsolidation;
 import com.hartwig.serve.extraction.fusion.FusionConsolidation;
 import com.hartwig.serve.extraction.immuno.ImmunoHLA;
 import com.hartwig.serve.extraction.variant.KnownHotspotConsolidation;
-import com.hartwig.serve.extraction.variant.VariantAnnotation;
 import com.hartwig.serve.util.ProgressTracker;
 
 import org.apache.logging.log4j.LogManager;
@@ -195,10 +194,9 @@ public class CkbExtractor {
     private void addHotspotsToCriteria(@NotNull EventExtractorOutput extractionOutput, @NotNull ActionableEvent actionableEvent,
             @NotNull Set<MolecularCriterium> molecularCriteria) {
         if (extractionOutput.variants() != null) {
-            Set<ActionableHotspot> hotspots = extractActionableHotspots(extractionOutput.variants(), actionableEvent);
-            for (ActionableHotspot hotspot : hotspots) {
-                molecularCriteria.add(ImmutableMolecularCriterium.builder().hotspots(Set.of(hotspot)).build());
-            }
+            molecularCriteria.add(ImmutableMolecularCriterium.builder()
+                    .addHotspots(ImmutableActionableHotspot.builder().from(actionableEvent).variants(extractionOutput.variants()).build())
+                    .build());
         }
     }
 
@@ -370,14 +368,6 @@ public class CkbExtractor {
                 .build();
 
         return convertToKnownSet(List.of(fusion), convert, FusionConsolidation::consolidate, CkbVariantAnnotator::annotateFusion, variant);
-    }
-
-    @NotNull
-    private static Set<ActionableHotspot> extractActionableHotspots(@NotNull List<VariantAnnotation> variants,
-            @NotNull ActionableEvent actionableEvent) {
-        return variants.stream()
-                .map(hotspot -> ImmutableActionableHotspot.builder().from(hotspot).from(actionableEvent).build())
-                .collect(Collectors.toSet());
     }
 
     @NotNull

@@ -33,6 +33,6 @@ public class VariantHotspotComparatorTest {
     @NotNull
     private static VariantHotspot create(@NotNull String gene, @NotNull String chromosome, int position, @NotNull String ref,
             @NotNull String alt) {
-        return HotspotTestFactory.createVariantHotspot(gene, chromosome, position, ref, alt);
+        return HotspotTestFactory.createVariantAnnotation(gene, chromosome, position, ref, alt);
     }
 }

@@ -25,14 +25,18 @@ public final class CkbEventTypeExtractor {
             return EventType.COMBINED;
         } else if (variantCount == 1) {
             Variant variant = entry.variants().get(0);
-
-            String gene = CkbEventAndGeneExtractor.extractGene(variant);
-            String event = CkbEventAndGeneExtractor.extractEvent(variant);
-
-            return CLASSIFIER.determineType(gene, event);
+            return classify(variant);
         } else {
             LOGGER.warn("CKB entry found with no variants: {}", entry);
             return EventType.UNKNOWN;
         }
+    }
+
+    @NotNull
+    public static EventType classify(@NotNull Variant variant) {
+        String gene = CkbEventAndGeneExtractor.extractGene(variant);
+        String event = CkbEventAndGeneExtractor.extractEvent(variant);
+
+        return CLASSIFIER.determineType(gene, event);
     }
 }

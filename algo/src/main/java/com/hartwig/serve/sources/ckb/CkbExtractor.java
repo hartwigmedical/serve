@@ -16,6 +16,7 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.ckb.classification.CkbConstants;
 import com.hartwig.serve.ckb.classification.CkbEventAndGeneExtractor;
+import com.hartwig.serve.ckb.classification.CkbEventTypeExtractor;
 import com.hartwig.serve.ckb.classification.CkbProteinAnnotationExtractor;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.ckb.datamodel.variant.Variant;
@@ -87,6 +88,7 @@ public class CkbExtractor {
 
     private static final Logger LOGGER = LogManager.getLogger(CkbExtractor.class);
     private static final String VARIANT_DELIMITER = ",";
+    private static final String GENE_DELIMITER = ",";
 
     @NotNull
     private final EventExtractor eventExtractor;
@@ -120,39 +122,143 @@ public class CkbExtractor {
         if (entry.variants().isEmpty()) {
             throw new IllegalStateException("A CKB entry without variants has been provided for extraction: " + entry);
         }
-        int variantCount = entry.variants().size();
-        Variant variant = entry.variants().get(0);
-        String event = variantCount > 1 ? concat(entry.variants()) : CkbEventAndGeneExtractor.extractEvent(variant);
-        String gene = variantCount > 1 ? "Multiple" : CkbEventAndGeneExtractor.extractGene(variant);
 
         if (entry.type() == EventType.UNKNOWN) {
-            LOGGER.warn("No event type known for '{}' on '{}'", event, gene);
+            LOGGER.warn("No event type known for CKB profile ID '{}': '{}'", entry.profileId(), entry.profileName());
             return null;
-        } else {
-            EventExtractorOutput extractionOutput = curateCodons(eventExtractor.extract(gene, null, entry.type(), event));
-            String sourceEvent = gene.equals(CkbConstants.NO_GENE) ? event : gene + " " + event;
-
-            EventInterpretation interpretation = ImmutableEventInterpretation.builder()
-                    .source(Knowledgebase.CKB)
-                    .sourceEvent(sourceEvent)
-                    .interpretedGene(gene)
-                    .interpretedEvent(event)
-                    .interpretedEventType(entry.type())
-                    .build();
-
-            Set<MolecularCriterium> molecularCriteria = createMolecularCriteria(extractionOutput, sourceEvent, entry);
-
-            Set<EfficacyEvidence> efficacyEvidences = efficacyEvidenceFactory.create(entry, molecularCriteria, sourceEvent, gene);
-            Set<ActionableTrial> actionableTrials = actionableTrialFactory.create(entry, molecularCriteria, sourceEvent, gene);
-
-            return ImmutableExtractionResult.builder()
-                    .refGenomeVersion(Knowledgebase.CKB.refGenomeVersion())
-                    .eventInterpretations(Set.of(interpretation))
-                    .knownEvents(generateKnownEvents(extractionOutput, efficacyEvidences.isEmpty(), variant, event, gene))
-                    .evidences(efficacyEvidences)
-                    .trials(actionableTrials)
-                    .build();
         }
+
+        if (entry.variants().size() == 1) {
+            return extractSimpleEvent(entry);
+        } else {
+            return extractCombinedEvent(entry);
+        }
+    }
+
+    @NotNull
+    private ExtractionResult extractSimpleEvent(@NotNull CkbEntry entry) {
+        Variant variant = entry.variants().get(0);
+        String gene = CkbEventAndGeneExtractor.extractGene(variant);
+        String event = CkbEventAndGeneExtractor.extractEvent(variant);
+
+        EventExtractorOutput extractionOutput = curateCodons(eventExtractor.extract(gene, null, entry.type(), event));
+        String sourceEvent = gene.equals(CkbConstants.NO_GENE) ? event : gene + " " + event;
+
+        EventInterpretation interpretation = ImmutableEventInterpretation.builder()
+                .source(Knowledgebase.CKB)
+                .sourceEvent(sourceEvent)
+                .interpretedGene(gene)
+                .interpretedEvent(event)
+                .interpretedEventType(entry.type())
+                .build();
+
+        Set<MolecularCriterium> molecularCriteria = createMolecularCriteria(extractionOutput, sourceEvent, entry);
+
+        Set<EfficacyEvidence> efficacyEvidences = efficacyEvidenceFactory.create(entry, molecularCriteria, sourceEvent, gene);
+        Set<ActionableTrial> actionableTrials = actionableTrialFactory.create(entry, molecularCriteria, sourceEvent, gene);
+
+        return ImmutableExtractionResult.builder()
+                .refGenomeVersion(Knowledgebase.CKB.refGenomeVersion())
+                .eventInterpretations(Set.of(interpretation))
+                .knownEvents(generateKnownEvents(extractionOutput, efficacyEvidences.isEmpty(), variant, event, gene))
+                .evidences(efficacyEvidences)
+                .trials(actionableTrials)
+                .build();
+    }
+
+    @NotNull
+    private ExtractionResult extractCombinedEvent(@NotNull CkbEntry entry) {
+
+        List<String> genes = entry.variants().stream()
+                .map(CkbEventAndGeneExtractor::extractGene)
+                .collect(Collectors.toList());
+
+        String sourceEvent = combinedSourceEvent(entry);
+
+        EventInterpretation interpretation = ImmutableEventInterpretation.builder()
+                .source(Knowledgebase.CKB)
+                .sourceEvent(sourceEvent)
+                .interpretedGene(String.join(" ", genes))
+                .interpretedEvent(sourceEvent)
+                .interpretedEventType(entry.type())
+                .build();
+
+        List<VariantWithExtraction> variantWithExtraction = extractEventCriteria(entry);
+        Set<EventExtractorOutput> eventExtractionOutput =
+                variantWithExtraction.stream().map(g -> g.eventExtractorOutput).collect(Collectors.toSet());
+        MolecularCriterium molecularCriterium = CkbMolecularCriteriaExtractor.createMolecularCriterium(entry, eventExtractionOutput);
+
+        Set<EfficacyEvidence> efficacyEvidences =
+                efficacyEvidenceFactory.create(entry, Set.of(molecularCriterium), sourceEvent, String.join(GENE_DELIMITER, genes));
+
+        // only populate evidences. excluding trials with combined events for now. but how to handle EventInterpretation
+        // and KnownEvents?
+        return ImmutableExtractionResult.builder()
+                .refGenomeVersion(Knowledgebase.CKB.refGenomeVersion())
+                .eventInterpretations(Set.of())
+                .knownEvents(null)
+                .evidences(efficacyEvidences)
+                .trials(Set.of())
+                .build();
+    }
+
+    @NotNull
+    private static String combinedSourceEvent(@NotNull CkbEntry entry) {
+        return entry.variants().stream()
+                .map(variant -> {
+                    String event = CkbEventAndGeneExtractor.extractEvent(variant);
+                    String gene = CkbEventAndGeneExtractor.extractGene(variant);
+                    return gene.equals(CkbConstants.NO_GENE) ? event : gene + " " + event;
+                })
+                .collect(Collectors.joining(" & "));
+    }
+
+    @NotNull
+    private List<VariantWithExtraction> extractEventCriteria(@NotNull CkbEntry entry) {
+        return entry.variants().stream()
+                .map(this::extractVariantCriteria)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+    }
+
+    // intermediate container, might be able to refactor away somehow
+    private static class VariantWithExtraction {
+
+        @NotNull
+        private final String gene;
+        @NotNull
+        private final String event;
+        @NotNull
+        private final Variant variant;
+        @NotNull
+        private final EventExtractorOutput eventExtractorOutput;
+
+        private VariantWithExtraction(@NotNull String gene, @NotNull String event, @NotNull Variant variant,
+                @NotNull EventExtractorOutput eventExtractorOutput) {
+            this.gene = gene;
+            this.event = event;
+            this.variant = variant;
+            this.eventExtractorOutput = eventExtractorOutput;
+        }
+    }
+
+    @Nullable
+    private VariantWithExtraction extractVariantCriteria(@NotNull Variant variant) {
+        EventType eventType = CkbEventTypeExtractor.classify(variant);
+
+        if (eventType == EventType.COMBINED) {
+            throw new IllegalStateException("Should not have combined event for single variant: " + variant.fullName());
+        } else if (eventType == EventType.UNKNOWN) {
+            LOGGER.warn("No known event type for variant: '{}'", variant.fullName());
+            return null;
+        }
+
+        String event = CkbEventAndGeneExtractor.extractEvent(variant);
+        String gene = CkbEventAndGeneExtractor.extractGene(variant);
+
+        EventExtractorOutput eventExtractorOutput =
+                CkbMolecularCriteriaExtractor.curateCodons(eventExtractor.extract(gene, null, eventType, event));
+        return new VariantWithExtraction(gene, event, variant, eventExtractorOutput);
     }
 
     @NotNull

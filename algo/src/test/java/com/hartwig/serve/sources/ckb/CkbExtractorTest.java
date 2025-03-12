@@ -1,7 +1,10 @@
 package com.hartwig.serve.sources.ckb;
 
+import static com.hartwig.serve.sources.ckb.CkbTestFactory.createCombinedEventEntryWithoutTrial;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -10,6 +13,8 @@ import java.util.Set;
 import com.hartwig.serve.ckb.classification.CkbClassificationConfig;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.ImmutableVariantRequirementDetail;
+import com.hartwig.serve.ckb.datamodel.variant.Variant;
+import com.hartwig.serve.datamodel.molecular.MolecularCriterium;
 import com.hartwig.serve.datamodel.molecular.MutationType;
 import com.hartwig.serve.datamodel.molecular.range.RangeTestFactory;
 import com.hartwig.serve.extraction.EventExtractorOutput;
@@ -46,6 +51,41 @@ public class CkbExtractorTest {
         assertEquals(1, trialResult.knownEvents().fusions().size());
         assertEquals(1, trialResult.knownEvents().copyNumbers().size());
         assertEquals(3, trialResult.knownEvents().genes().size());
+    }
+
+    @Test
+    public void canExtractEvidenceWithCombinedCriteria() {
+        CkbExtractor ckbExtractor = CkbExtractorFactory.createExtractor(CkbClassificationConfig.build(),
+                RefGenomeResourceTestFactory.buildTestResource37(),
+                TreatmentApproachTestFactory.createEmptyCurator(),
+                CkbFilteringTestFactory.createEmptyEvidenceFilterModel(),
+                CkbFilteringTestFactory.createEmptyTrialFilterModel(),
+                Set.of(ImmutableCkbRegion.builder().country("netherlands").states(Collections.emptySet()).build()));
+
+        List<CkbEntry> ckbEntries = Lists.newArrayList();
+        List<Variant> variants = List.of(
+                CkbTestFactory.createVariant("BRAF", "loss", "BRAF loss"),
+                CkbTestFactory.createVariant("KIT", "loss", "KIT loss")
+        );
+
+        ckbEntries.add(createCombinedEventEntryWithoutTrial(variants,
+                "sensitive",
+                "Actionable",
+                "any treatment",
+                "any indication",
+                "A",
+                "Guideline",
+                "DOID:162"));
+
+        ExtractionResult extractionResult = ckbExtractor.extract(ckbEntries);
+
+        assertEquals(1, extractionResult.evidences().size());
+        MolecularCriterium criterium = extractionResult.evidences().get(0).molecularCriterium();
+        assertEquals(2, criterium.genes().size());
+
+        assertNull(extractionResult.knownEvents());
+        assertEquals(0, extractionResult.eventInterpretations().size());
+        assertEquals(0, extractionResult.trials().size());
     }
 
     @Test

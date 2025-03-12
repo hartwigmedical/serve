@@ -92,6 +92,23 @@ public final class CkbTestFactory {
     }
 
     @NotNull
+    public static CkbEntry createCombinedEventEntryWithoutTrial(@NotNull List<Variant> variants,
+            @NotNull String responseType, @NotNull String evidenceType, @NotNull String therapyName, @NotNull String indicationName,
+            @NotNull String evidenceLevel, @NotNull String approvalStatus, @NotNull String termId) {
+
+        return builder().addAllVariants(variants)
+                .addEvidences(createEvidence(responseType,
+                        evidenceType,
+                        therapyName,
+                        indicationName,
+                        evidenceLevel,
+                        approvalStatus,
+                        termId))
+                .build();
+
+    }
+
+    @NotNull
     public static ClinicalTrial createTrial(@NotNull String nctId, @NotNull String title, @NotNull String recruitment,
             @NotNull List<String> ageGroups, @NotNull List<VariantRequirementDetail> variantRequirementDetails,
             @NotNull List<Location> locations) {
@@ -125,7 +142,7 @@ public final class CkbTestFactory {
     }
 
     @NotNull
-    private static Evidence createEvidence(@NotNull String responseType, @NotNull String evidenceType, @NotNull String therapyName,
+    public static Evidence createEvidence(@NotNull String responseType, @NotNull String evidenceType, @NotNull String therapyName,
             @NotNull String indicationName, @NotNull String level, @NotNull String approvalStatus, @NotNull String termId) {
         return ImmutableEvidence.builder()
                 .id(0)
@@ -203,7 +220,7 @@ public final class CkbTestFactory {
     }
 
     @NotNull
-    private static Variant createVariant(@NotNull String geneSymbol, @NotNull String variant, @NotNull String fullName) {
+    public static Variant createVariant(@NotNull String geneSymbol, @NotNull String variant, @NotNull String fullName) {
         return ImmutableVariant.builder()
                 .id(0)
                 .createDate(TEST_CREATE_DATE)

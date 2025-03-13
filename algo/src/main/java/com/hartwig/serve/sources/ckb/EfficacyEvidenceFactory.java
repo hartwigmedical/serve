@@ -107,8 +107,9 @@ class EfficacyEvidenceFactory {
                         }
                     }
 
-                    Set<String> treatmentApproachDrugClasses =
-                            evidence.drugTreatmentApproaches().stream().map(DrugClassTreatmentApproach::drugClass)
+                    Set<String> treatmentApproachDrugClasses = evidence.drugTreatmentApproaches()
+                            .stream()
+                            .map(DrugClassTreatmentApproach::drugClass)
                             .map(DrugClass::drugClass)
                             .collect(Collectors.toSet());
 
@@ -221,14 +222,15 @@ class EfficacyEvidenceFactory {
         if (approvalStatus == null) {
             return null;
         }
-
         approvalStatus = approvalStatus.toLowerCase();
         if (approvalStatus.contains("preclinical")) {
             return EvidenceLevelDetails.PRECLINICAL;
         } else if (approvalStatus.contains("case report")) {
             return EvidenceLevelDetails.CASE_REPORTS_SERIES;
-        } else if (approvalStatus.contains("clinical study") || approvalStatus.contains("phase")) {
+        } else if (approvalStatus.contains("clinical study")) {
             return EvidenceLevelDetails.CLINICAL_STUDY;
+        } else if (approvalStatus.contains("phase")) {
+            return resolvePhase(approvalStatus);
         } else if (approvalStatus.contains("guideline")) {
             return EvidenceLevelDetails.GUIDELINE;
         } else if (approvalStatus.contains("fda approved")) {
@@ -237,8 +239,25 @@ class EfficacyEvidenceFactory {
             return EvidenceLevelDetails.FDA_CONTRAINDICATED;
         } else {
             LOGGER.warn("Could not resolve CKB evidence level details (approvalStatus) '{}'", approvalStatus);
+            return EvidenceLevelDetails.UNKNOWN;
         }
-        return EvidenceLevelDetails.UNKNOWN;
+    }
+
+    private static EvidenceLevelDetails resolvePhase(final String approvalStatus) {
+        switch (approvalStatus.toLowerCase()) {
+            case "phase 0":
+                return EvidenceLevelDetails.PHASE_0;
+            case "phase i":
+                return EvidenceLevelDetails.PHASE_I;
+            case "phase ib/ii":
+                return EvidenceLevelDetails.PHASE_IB_II;
+            case "phase ii":
+                return EvidenceLevelDetails.PHASE_II;
+            case "phase iii":
+                return EvidenceLevelDetails.PHASE_III;
+            default:
+                throw new IllegalArgumentException(String.format("Input [%s] could not be resolved to a valid phase.", approvalStatus));
+        }
     }
 
     @Nullable
@@ -281,12 +300,11 @@ class EfficacyEvidenceFactory {
         }
 
         if (therapy != null) {
-           return entryDate.isAfter(therapy.createDate()) ? entryDate.getYear() : therapy.createDate().getYear();
+            return entryDate.isAfter(therapy.createDate()) ? entryDate.getYear() : therapy.createDate().getYear();
         } else {
             return entryDate.getYear();
         }
     }
-
 
     @NotNull
     @VisibleForTesting

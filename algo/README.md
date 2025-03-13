@@ -409,6 +409,8 @@ Within the Hartwig pipeline, SERVE output is used in the following manner:
   annotation.
 - The actionable output is the database that [PROTECT](https://github.com/hartwigmedical/hmftools/tree/master/protect) bases its clinical
   evidence matching on.
+- [ACTIN](https://github.com/hartwigmedical/actin/tree/master) uses the SERVE database for molecular interpretation and efficacy evidence and
+  trial annotation.
 
 ## How to run the docker image
 
@@ -446,8 +448,8 @@ elsewhere.
 ## Version History and Download Links
 
 - [8.0.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v8.0.0)
-  - Update SERVE datamodel to group variants in ActionableHotspot
-  - Rename `skip_hotspot_resolving` to `skip_variant_resolving` for improved usage of the term "hotspot" across SERVE code
+    - Update SERVE datamodel to group variants in ActionableHotspot
+    - Rename `skip_hotspot_resolving` to `skip_variant_resolving` for improved usage of the term "hotspot" across SERVE code
 - [7.4.1](https://github.com/hartwigmedical/serve/releases/tag/serve-v7.4.1)
     - Change varchar to text when writing countriesAndCities to SQL
 - [7.4.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v7.4.0)

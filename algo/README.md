@@ -126,7 +126,7 @@ various ways to deal with such inconsistencies on a per-knowledgebase level:
 ### Protein resolving for SNVs and (small) INDELs
 
 Evidence on SNVs and small INDELs generally come in their protein annotated form (e.g. BRAF V600E).
-SERVE uses [transvar](https://github.com/zwdzwd/transvar) to resolve these annotations into genomic coordinates (referred to as hotspots)
+SERVE uses [transvar](https://github.com/zwdzwd/transvar) to resolve these annotations into genomic coordinates
 for the reference genome version that is used by the input knowledgebase.
 
 The first step is to choose what ensembl transcript to use for converting protein annotation back to genomic coordinates:

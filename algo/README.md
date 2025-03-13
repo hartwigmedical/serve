@@ -447,6 +447,8 @@ elsewhere.
 
 ## Version History and Download Links
 
+- [8.1.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v8.1.0)
+    - Add trial phases as distinct evidence level details.
 - [8.0.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v8.0.0)
     - Update SERVE datamodel to group variants in ActionableHotspot
     - Rename `skip_hotspot_resolving` to `skip_variant_resolving` for improved usage of the term "hotspot" across SERVE code

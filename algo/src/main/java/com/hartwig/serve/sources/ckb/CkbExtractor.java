@@ -66,6 +66,8 @@ import com.hartwig.serve.extraction.ExtractionFunctions;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.ImmutableEventExtractorOutput;
 import com.hartwig.serve.extraction.ImmutableExtractionResult;
+import com.hartwig.serve.extraction.ImmutableSingleEvent;
+import com.hartwig.serve.extraction.SingleEvent;
 import com.hartwig.serve.extraction.codon.CodonAnnotation;
 import com.hartwig.serve.extraction.codon.CodonConsolidation;
 import com.hartwig.serve.extraction.codon.ImmutableCodonAnnotation;
@@ -175,6 +177,8 @@ public class CkbExtractor {
 
         String sourceEvent = combinedSourceEvent(entry);
 
+        // TODO: given a combined event, do we want to add interpretations for each individual
+        //  component event, or represent the combination in a single interpretation?
         EventInterpretation interpretation = ImmutableEventInterpretation.builder()
                 .source(Knowledgebase.CKB)
                 .sourceEvent(sourceEvent)
@@ -183,9 +187,11 @@ public class CkbExtractor {
                 .interpretedEventType(entry.type())
                 .build();
 
-        List<VariantWithExtraction> variantWithExtraction = extractEventCriteria(entry);
+        List<SingleEvent> allEvents = extractAllEvents(entry);
+
+        // TODO instead pass all events directly into the molecular criterium creator
         Set<EventExtractorOutput> eventExtractionOutput =
-                variantWithExtraction.stream().map(g -> g.eventExtractorOutput).collect(Collectors.toSet());
+                allEvents.stream().map(SingleEvent::eventExtractorOutput).collect(Collectors.toSet());
         MolecularCriterium molecularCriterium = CkbMolecularCriteriaExtractor.createMolecularCriterium(entry, eventExtractionOutput);
 
         Set<EfficacyEvidence> efficacyEvidences =
@@ -195,7 +201,7 @@ public class CkbExtractor {
         // and KnownEvents?
         return ImmutableExtractionResult.builder()
                 .refGenomeVersion(Knowledgebase.CKB.refGenomeVersion())
-                .eventInterpretations(Set.of())
+                .eventInterpretations(Set.of(interpretation))
                 .knownEvents(null)
                 .evidences(efficacyEvidences)
                 .trials(Set.of())
@@ -214,36 +220,15 @@ public class CkbExtractor {
     }
 
     @NotNull
-    private List<VariantWithExtraction> extractEventCriteria(@NotNull CkbEntry entry) {
+    private List<SingleEvent> extractAllEvents(@NotNull CkbEntry entry) {
         return entry.variants().stream()
-                .map(this::extractVariantCriteria)
+                .map(this::extactSingleEvent)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 
-    // intermediate container, might be able to refactor away somehow
-    private static class VariantWithExtraction {
-
-        @NotNull
-        private final String gene;
-        @NotNull
-        private final String event;
-        @NotNull
-        private final Variant variant;
-        @NotNull
-        private final EventExtractorOutput eventExtractorOutput;
-
-        private VariantWithExtraction(@NotNull String gene, @NotNull String event, @NotNull Variant variant,
-                @NotNull EventExtractorOutput eventExtractorOutput) {
-            this.gene = gene;
-            this.event = event;
-            this.variant = variant;
-            this.eventExtractorOutput = eventExtractorOutput;
-        }
-    }
-
     @Nullable
-    private VariantWithExtraction extractVariantCriteria(@NotNull Variant variant) {
+    private SingleEvent extactSingleEvent(@NotNull Variant variant) {
         EventType eventType = CkbEventTypeExtractor.classify(variant);
 
         if (eventType == EventType.COMBINED) {
@@ -258,12 +243,14 @@ public class CkbExtractor {
 
         EventExtractorOutput eventExtractorOutput =
                 CkbMolecularCriteriaExtractor.curateCodons(eventExtractor.extract(gene, null, eventType, event));
-        return new VariantWithExtraction(gene, event, variant, eventExtractorOutput);
-    }
 
-    @NotNull
-    private static String concat(@NotNull List<Variant> variants) {
-        return variants.stream().map(Variant::variant).collect(Collectors.joining(VARIANT_DELIMITER));
+        return ImmutableSingleEvent.builder()
+                .gene(gene)
+                .event(event)
+                .variant(variant)
+                .eventType(eventType)
+                .eventExtractorOutput(eventExtractorOutput)
+                .build();
     }
 
     @NotNull

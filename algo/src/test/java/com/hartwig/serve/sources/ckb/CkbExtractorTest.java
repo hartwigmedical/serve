@@ -84,7 +84,7 @@ public class CkbExtractorTest {
         assertEquals(2, criterium.genes().size());
 
         assertNull(extractionResult.knownEvents());
-        assertEquals(0, extractionResult.eventInterpretations().size());
+        assertEquals(1, extractionResult.eventInterpretations().size());
         assertEquals(0, extractionResult.trials().size());
     }
 

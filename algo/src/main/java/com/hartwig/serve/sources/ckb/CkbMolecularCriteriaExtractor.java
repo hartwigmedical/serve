@@ -35,6 +35,7 @@ import com.hartwig.serve.datamodel.molecular.range.ActionableRange;
 import com.hartwig.serve.datamodel.molecular.range.ImmutableActionableRange;
 import com.hartwig.serve.datamodel.molecular.range.RangeAnnotation;
 import com.hartwig.serve.extraction.EventExtractorOutput;
+import com.hartwig.serve.extraction.ExtractedEvent;
 import com.hartwig.serve.extraction.ImmutableEventExtractorOutput;
 import com.hartwig.serve.extraction.codon.CodonAnnotation;
 import com.hartwig.serve.extraction.codon.ImmutableCodonAnnotation;
@@ -47,12 +48,12 @@ import org.jetbrains.annotations.Nullable;
 final class CkbMolecularCriteriaExtractor {
 
     @NotNull
-    public static MolecularCriterium createMolecularCriterium(CkbEntry entry, Set<EventExtractorOutput> eventExtractorOutputs) {
+    public static MolecularCriterium createMolecularCriterium(CkbEntry entry, List<ExtractedEvent> events) {
         String sourceEvent = combinedSourceEvent(entry);
         ActionableEvent actionableEvent = toActionableEvent(sourceEvent, entry);
 
-        List<MolecularCriterium> molecularCriteria = eventExtractorOutputs.stream()
-                .map(eventExtractorOutput -> createMolecularCriterium(eventExtractorOutput, actionableEvent))
+        List<MolecularCriterium> molecularCriteria = events.stream()
+                .map(event -> createMolecularCriterium(event.eventExtractorOutput(), actionableEvent))
                 .collect(Collectors.toList());
 
         return combine(molecularCriteria);

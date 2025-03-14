@@ -4,7 +4,6 @@ import static com.hartwig.serve.sources.ckb.CkbTestFactory.createCombinedEventEn
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -14,6 +13,8 @@ import com.hartwig.serve.ckb.classification.CkbClassificationConfig;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.ImmutableVariantRequirementDetail;
 import com.hartwig.serve.ckb.datamodel.variant.Variant;
+import com.hartwig.serve.common.classification.EventType;
+import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.molecular.MolecularCriterium;
 import com.hartwig.serve.datamodel.molecular.MutationType;
 import com.hartwig.serve.datamodel.molecular.range.RangeTestFactory;
@@ -22,6 +23,7 @@ import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.ImmutableEventExtractorOutput;
 import com.hartwig.serve.extraction.codon.CodonAnnotation;
 import com.hartwig.serve.extraction.codon.ImmutableCodonAnnotation;
+import com.hartwig.serve.extraction.events.EventInterpretation;
 import com.hartwig.serve.refgenome.RefGenomeResourceTestFactory;
 import com.hartwig.serve.sources.ckb.filter.CkbFilteringTestFactory;
 import com.hartwig.serve.sources.ckb.region.ImmutableCkbRegion;
@@ -83,8 +85,22 @@ public class CkbExtractorTest {
         MolecularCriterium criterium = extractionResult.evidences().get(0).molecularCriterium();
         assertEquals(2, criterium.genes().size());
 
-        assertNull(extractionResult.knownEvents());
+        assertEquals(0, extractionResult.knownEvents().hotspots().size());
+        assertEquals(0, extractionResult.knownEvents().codons().size());
+        assertEquals(0, extractionResult.knownEvents().exons().size());
+        assertEquals(2, extractionResult.knownEvents().genes().size());
+        assertEquals(2, extractionResult.knownEvents().copyNumbers().size());
+        assertEquals(0, extractionResult.knownEvents().fusions().size());
+
         assertEquals(1, extractionResult.eventInterpretations().size());
+        EventInterpretation interpretation = extractionResult.eventInterpretations().iterator().next();
+        assertEquals(EventType.COMBINED, interpretation.interpretedEventType());
+        assertEquals("Multiple", interpretation.interpretedGene());
+        assertEquals("loss,loss", interpretation.interpretedEvent());
+        assertEquals("Multiple loss,loss", interpretation.sourceEvent());
+        assertEquals(Knowledgebase.CKB, interpretation.source());
+
+        // trials not extracted yet
         assertEquals(0, extractionResult.trials().size());
     }
 

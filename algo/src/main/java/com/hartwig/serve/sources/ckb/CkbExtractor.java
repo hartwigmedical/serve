@@ -62,12 +62,12 @@ import com.hartwig.serve.datamodel.molecular.range.RangeAnnotation;
 import com.hartwig.serve.datamodel.trial.ActionableTrial;
 import com.hartwig.serve.extraction.EventExtractor;
 import com.hartwig.serve.extraction.EventExtractorOutput;
+import com.hartwig.serve.extraction.ExtractedEvent;
 import com.hartwig.serve.extraction.ExtractionFunctions;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.ImmutableEventExtractorOutput;
+import com.hartwig.serve.extraction.ImmutableExtractedEvent;
 import com.hartwig.serve.extraction.ImmutableExtractionResult;
-import com.hartwig.serve.extraction.ImmutableSingleEvent;
-import com.hartwig.serve.extraction.SingleEvent;
 import com.hartwig.serve.extraction.codon.CodonAnnotation;
 import com.hartwig.serve.extraction.codon.CodonConsolidation;
 import com.hartwig.serve.extraction.codon.ImmutableCodonAnnotation;
@@ -154,6 +154,7 @@ public class CkbExtractor {
                 .interpretedEventType(entry.type())
                 .build();
 
+        List<ExtractedEvent> allEvents = extractEvents(entry);
         Set<MolecularCriterium> molecularCriteria = createMolecularCriteria(extractionOutput, sourceEvent, entry);
 
         Set<EfficacyEvidence> efficacyEvidences = efficacyEvidenceFactory.create(entry, molecularCriteria, sourceEvent, gene);
@@ -162,7 +163,7 @@ public class CkbExtractor {
         return ImmutableExtractionResult.builder()
                 .refGenomeVersion(Knowledgebase.CKB.refGenomeVersion())
                 .eventInterpretations(Set.of(interpretation))
-                .knownEvents(generateKnownEvents(extractionOutput, efficacyEvidences.isEmpty(), variant, event, gene))
+                .knownEvents(generateKnownEvents(allEvents, efficacyEvidences.isEmpty()))
                 .evidences(efficacyEvidences)
                 .trials(actionableTrials)
                 .build();
@@ -171,64 +172,61 @@ public class CkbExtractor {
     @NotNull
     private ExtractionResult extractCombinedEvent(@NotNull CkbEntry entry) {
 
-        List<String> genes = entry.variants().stream()
-                .map(CkbEventAndGeneExtractor::extractGene)
-                .collect(Collectors.toList());
-
-        String sourceEvent = combinedSourceEvent(entry);
-
-        // TODO: given a combined event, do we want to add interpretations for each individual
-        //  component event, or represent the combination in a single interpretation?
         EventInterpretation interpretation = ImmutableEventInterpretation.builder()
                 .source(Knowledgebase.CKB)
-                .sourceEvent(sourceEvent)
-                .interpretedGene(String.join(" ", genes))
-                .interpretedEvent(sourceEvent)
+                .sourceEvent("Multiple " + concat(entry.variants()))
+                .interpretedGene("Multiple")
+                .interpretedEvent(concat(entry.variants()))
                 .interpretedEventType(entry.type())
                 .build();
 
-        List<SingleEvent> allEvents = extractAllEvents(entry);
+        List<ExtractedEvent> extractedEvents = extractEvents(entry);
+        String combinedEvent = combineEvents(extractedEvents);
+        String combinedGenes = combineGenes(extractedEvents);
 
-        // TODO instead pass all events directly into the molecular criterium creator
-        Set<EventExtractorOutput> eventExtractionOutput =
-                allEvents.stream().map(SingleEvent::eventExtractorOutput).collect(Collectors.toSet());
-        MolecularCriterium molecularCriterium = CkbMolecularCriteriaExtractor.createMolecularCriterium(entry, eventExtractionOutput);
+        MolecularCriterium molecularCriterium = CkbMolecularCriteriaExtractor.createMolecularCriterium(entry, extractedEvents);
 
         Set<EfficacyEvidence> efficacyEvidences =
-                efficacyEvidenceFactory.create(entry, Set.of(molecularCriterium), sourceEvent, String.join(GENE_DELIMITER, genes));
+                efficacyEvidenceFactory.create(entry, Set.of(molecularCriterium), combinedEvent, combinedGenes);
 
-        // only populate evidences. excluding trials with combined events for now. but how to handle EventInterpretation
-        // and KnownEvents?
         return ImmutableExtractionResult.builder()
                 .refGenomeVersion(Knowledgebase.CKB.refGenomeVersion())
                 .eventInterpretations(Set.of(interpretation))
-                .knownEvents(null)
+                .knownEvents(generateKnownEvents(extractedEvents, efficacyEvidences.isEmpty()))
                 .evidences(efficacyEvidences)
                 .trials(Set.of())
                 .build();
     }
 
     @NotNull
-    private static String combinedSourceEvent(@NotNull CkbEntry entry) {
-        return entry.variants().stream()
-                .map(variant -> {
-                    String event = CkbEventAndGeneExtractor.extractEvent(variant);
-                    String gene = CkbEventAndGeneExtractor.extractGene(variant);
+    private static String combineEvents(@NotNull List<ExtractedEvent> events) {
+        return events.stream()
+                .map(e -> {
+                    String event = e.event();
+                    String gene = e.gene();
                     return gene.equals(CkbConstants.NO_GENE) ? event : gene + " " + event;
                 })
-                .collect(Collectors.joining(" & "));
+                .collect(Collectors.joining(VARIANT_DELIMITER));
     }
 
     @NotNull
-    private List<SingleEvent> extractAllEvents(@NotNull CkbEntry entry) {
+    private static String combineGenes(@NotNull List<ExtractedEvent> events) {
+        return events.stream()
+                .map(ExtractedEvent::gene)
+                .collect(Collectors.joining(GENE_DELIMITER));
+    }
+
+    @NotNull
+    private List<ExtractedEvent> extractEvents(@NotNull CkbEntry entry) {
+        // TODO if one event returns null, we are still returning the others. Should we reject the whole entry?
         return entry.variants().stream()
-                .map(this::extactSingleEvent)
+                .map(this::extractEvent)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 
     @Nullable
-    private SingleEvent extactSingleEvent(@NotNull Variant variant) {
+    private ExtractedEvent extractEvent(@NotNull Variant variant) {
         EventType eventType = CkbEventTypeExtractor.classify(variant);
 
         if (eventType == EventType.COMBINED) {
@@ -244,7 +242,7 @@ public class CkbExtractor {
         EventExtractorOutput eventExtractorOutput =
                 CkbMolecularCriteriaExtractor.curateCodons(eventExtractor.extract(gene, null, eventType, event));
 
-        return ImmutableSingleEvent.builder()
+        return ImmutableExtractedEvent.builder()
                 .gene(gene)
                 .event(event)
                 .variant(variant)
@@ -254,15 +252,46 @@ public class CkbExtractor {
     }
 
     @NotNull
-    private KnownEvents generateKnownEvents(@NotNull EventExtractorOutput extractorOutput, boolean efficacyEvidencesIsEmpty,
-            @NotNull Variant variant, @NotNull String event, @NotNull String gene) {
+    private static String concat(@NotNull List<Variant> variants) {
+        return variants.stream().map(Variant::variant).collect(Collectors.joining(VARIANT_DELIMITER));
+    }
+
+    @NotNull
+    private KnownEvents generateKnownEvents(@NotNull List<ExtractedEvent> allEvents, boolean efficacyEvidencesIsEmpty) {
+        Set<KnownHotspot> allHotspots = allEvents.stream()
+                .flatMap(event -> convertToKnownHotspots(event.eventExtractorOutput().variants(), event.event(), event.variant()).stream())
+                .collect(Collectors.toSet());
+
+        Set<KnownCodon> allCodons = allEvents.stream()
+                .flatMap(event -> convertToKnownCodons(efficacyEvidencesIsEmpty
+                        ? Collections.emptyList()
+                        : event.eventExtractorOutput().codons(), event.variant()).stream())
+                .collect(Collectors.toSet());
+
+        Set<KnownExon> allExons = allEvents.stream()
+                .flatMap(event -> convertToKnownExons(event.eventExtractorOutput().exons(), event.variant()).stream())
+                .collect(Collectors.toSet());
+
+        Set<KnownGene> allGenes = allEvents.stream()
+                .flatMap(event -> event.eventExtractorOutput().fusionPair() == null ? convertToKnownGenes(event.gene(),
+                        event.variant()).stream() : Stream.empty())
+                .collect(Collectors.toSet());
+
+        Set<KnownCopyNumber> allCopyNumbers = allEvents.stream()
+                .flatMap(event -> convertToKnownCopyNumbers(event.eventExtractorOutput().copyNumber(), event.variant()).stream())
+                .collect(Collectors.toSet());
+
+        Set<KnownFusion> allFusions = allEvents.stream()
+                .flatMap(event -> convertToKnownFusions(event.eventExtractorOutput().fusionPair(), event.variant()).stream())
+                .collect(Collectors.toSet());
+
         return ImmutableKnownEvents.builder()
-                .hotspots(convertToKnownHotspots(extractorOutput.variants(), event, variant))
-                .codons(convertToKnownCodons(efficacyEvidencesIsEmpty ? Collections.emptyList() : extractorOutput.codons(), variant))
-                .exons(convertToKnownExons(extractorOutput.exons(), variant))
-                .genes(extractorOutput.fusionPair() == null ? convertToKnownGenes(gene, variant) : Collections.emptySet())
-                .copyNumbers(convertToKnownCopyNumbers(extractorOutput.copyNumber(), variant))
-                .fusions(convertToKnownFusions(extractorOutput.fusionPair(), variant))
+                .hotspots(allHotspots)
+                .codons(allCodons)
+                .exons(allExons)
+                .genes(allGenes)
+                .copyNumbers(allCopyNumbers)
+                .fusions(allFusions)
                 .build();
     }
 

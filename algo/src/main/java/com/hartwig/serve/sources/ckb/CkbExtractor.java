@@ -82,12 +82,10 @@ public class CkbExtractor {
     private ExtractionResult extractEvent(@NotNull CkbEntry entry) {
         List<ExtractedEvent> extractedEvents = extractEvents(entry);
         EventInterpretation interpretation = interpretEvent(entry, extractedEvents);
+        Set<MolecularCriterium> molecularCriteria = Set.of(CkbMolecularCriteriaExtractor.createMolecularCriterium(entry, extractedEvents));
 
         String combinedEvent = combineEvents(extractedEvents);
         String combinedGenes = combineGenes(extractedEvents);
-
-        Set<MolecularCriterium> molecularCriteria = Set.of(CkbMolecularCriteriaExtractor.createMolecularCriterium(entry, extractedEvents));
-
         Set<EfficacyEvidence> efficacyEvidences = efficacyEvidenceFactory.create(entry, molecularCriteria, combinedEvent, combinedGenes);
 
         // Only extract trials for simple events for now. Combined events will require more complex handling
@@ -112,11 +110,10 @@ public class CkbExtractor {
         } else if (extractedEvents.size() == 1) {
             String gene = extractedEvents.get(0).gene();
             String event = extractedEvents.get(0).event();
-            String sourceEvent = gene.equals(CkbConstants.NO_GENE) ? event : gene + " " + event;
 
             return ImmutableEventInterpretation.builder()
                     .source(Knowledgebase.CKB)
-                    .sourceEvent(sourceEvent)
+                    .sourceEvent(sourceEvent(gene, event))
                     .interpretedGene(gene)
                     .interpretedEvent(event)
                     .interpretedEventType(entry.type())
@@ -133,12 +130,17 @@ public class CkbExtractor {
     }
 
     @NotNull
+    private static String sourceEvent(@NotNull String gene, @NotNull String event) {
+        return gene.equals(CkbConstants.NO_GENE) ? event : gene + " " + event;
+    }
+
+    @NotNull
     private static String combineEvents(@NotNull List<ExtractedEvent> events) {
         return events.stream()
                 .map(e -> {
                     String event = e.event();
                     String gene = e.gene();
-                    return gene.equals(CkbConstants.NO_GENE) ? event : gene + " " + event;
+                    return sourceEvent(gene, event);
                 })
                 .collect(Collectors.joining(VARIANT_DELIMITER));
     }

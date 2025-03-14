@@ -11,8 +11,6 @@ import org.jetbrains.annotations.Nullable;
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class })
 public abstract class ExtractedEvent {
 
-    // TODO actually maybe can make this a combination of EventInterpretation and
-    //  EventExtractorOutput?
     @NotNull
     public abstract String gene();
 

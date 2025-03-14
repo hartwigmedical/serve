@@ -46,6 +46,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 final class CkbKnownEventsExtractor {
+
     @NotNull
     public static KnownEvents generateKnownEvents(@NotNull List<ExtractedEvent> allEvents, boolean efficacyEvidencesIsEmpty) {
         Set<KnownHotspot> allHotspots = allEvents.stream()
@@ -196,7 +197,4 @@ final class CkbKnownEventsExtractor {
                 CkbVariantAnnotator::annotateFusion,
                 variant);
     }
-
 }
-
-

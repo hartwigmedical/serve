@@ -109,11 +109,12 @@ final class CkbMolecularCriteriaExtractor {
     private static Set<ActionableHotspot> hotspotCriteria(@NotNull EventExtractorOutput extractionOutput,
             @NotNull ActionableEvent actionableEvent) {
 
-        if (extractionOutput.variants() == null) {
+        List<VariantAnnotation> variants = extractionOutput.variants();
+        if (variants == null) {
             return Collections.emptySet();
         }
 
-        return Set.of(extractActionableHotspots(extractionOutput.variants(), actionableEvent));
+        return Set.of(extractActionableHotspots(variants, actionableEvent));
     }
 
     @NotNull

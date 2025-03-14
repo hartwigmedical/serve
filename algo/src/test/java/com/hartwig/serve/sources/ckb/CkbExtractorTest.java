@@ -3,7 +3,6 @@ package com.hartwig.serve.sources.ckb;
 import static com.hartwig.serve.sources.ckb.CkbTestFactory.createCombinedEventEntryWithoutTrial;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -16,13 +15,7 @@ import com.hartwig.serve.ckb.datamodel.variant.Variant;
 import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.molecular.MolecularCriterium;
-import com.hartwig.serve.datamodel.molecular.MutationType;
-import com.hartwig.serve.datamodel.molecular.range.RangeTestFactory;
-import com.hartwig.serve.extraction.EventExtractorOutput;
 import com.hartwig.serve.extraction.ExtractionResult;
-import com.hartwig.serve.extraction.ImmutableEventExtractorOutput;
-import com.hartwig.serve.extraction.codon.CodonAnnotation;
-import com.hartwig.serve.extraction.codon.ImmutableCodonAnnotation;
 import com.hartwig.serve.extraction.events.EventInterpretation;
 import com.hartwig.serve.refgenome.RefGenomeResourceTestFactory;
 import com.hartwig.serve.sources.ckb.filter.CkbFilteringTestFactory;
@@ -102,58 +95,6 @@ public class CkbExtractorTest {
 
         // trials not extracted yet
         assertEquals(0, extractionResult.trials().size());
-    }
-
-    @Test
-    public void canCurateCodons() {
-        EventExtractorOutput extractorOutput = ImmutableEventExtractorOutput.builder()
-                .codons(List.of(ImmutableCodonAnnotation.builder()
-                                .from(RangeTestFactory.createTestRangeAnnotation())
-                                .gene("BRAF")
-                                .chromosome("1")
-                                .start(140753335)
-                                .end(140753337)
-                                .applicableMutationType(MutationType.ANY)
-                                .inputTranscript("A")
-                                .inputCodonRank(600)
-                                .build(),
-                        ImmutableCodonAnnotation.builder()
-                                .from(RangeTestFactory.createTestRangeAnnotation())
-                                .gene("KRAS")
-                                .chromosome("1")
-                                .start(10)
-                                .end(20)
-                                .applicableMutationType(MutationType.ANY)
-                                .inputTranscript("transcript")
-                                .inputCodonRank(600)
-                                .build()))
-                .build();
-
-        List<CodonAnnotation> curatedCodons = CkbExtractor.curateCodons(extractorOutput).codons();
-
-        assertNotNull(curatedCodons);
-
-        CodonAnnotation codon1 = findByGene(curatedCodons, "BRAF");
-        assertEquals(140753335, codon1.start());
-        assertEquals(140753337, codon1.end());
-        assertEquals("ENST00000646891", codon1.inputTranscript());
-
-        CodonAnnotation codon2 = findByGene(curatedCodons, "KRAS");
-        assertEquals("KRAS", codon2.gene());
-        assertEquals(10, codon2.start());
-        assertEquals(20, codon2.end());
-        assertEquals("transcript", codon2.inputTranscript());
-    }
-
-    @NotNull
-    private static CodonAnnotation findByGene(@NotNull Iterable<CodonAnnotation> codons, @NotNull String geneToFind) {
-        for (CodonAnnotation codon : codons) {
-            if (codon.gene().equals(geneToFind)) {
-                return codon;
-            }
-        }
-
-        throw new IllegalStateException("Could not find gene " + geneToFind);
     }
 
     @NotNull

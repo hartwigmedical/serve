@@ -126,7 +126,7 @@ various ways to deal with such inconsistencies on a per-knowledgebase level:
 ### Protein resolving for SNVs and (small) INDELs
 
 Evidence on SNVs and small INDELs generally come in their protein annotated form (e.g. BRAF V600E).
-SERVE uses [transvar](https://github.com/zwdzwd/transvar) to resolve these annotations into genomic coordinates (referred to as hotspots)
+SERVE uses [transvar](https://github.com/zwdzwd/transvar) to resolve these annotations into genomic coordinates
 for the reference genome version that is used by the input knowledgebase.
 
 The first step is to choose what ensembl transcript to use for converting protein annotation back to genomic coordinates:
@@ -409,6 +409,8 @@ Within the Hartwig pipeline, SERVE output is used in the following manner:
   annotation.
 - The actionable output is the database that [PROTECT](https://github.com/hartwigmedical/hmftools/tree/master/protect) bases its clinical
   evidence matching on.
+- [ACTIN](https://github.com/hartwigmedical/actin/tree/master) uses the SERVE database for molecular interpretation and efficacy evidence and
+  trial annotation.
 
 ## How to run the docker image
 
@@ -445,9 +447,11 @@ elsewhere.
 
 ## Version History and Download Links
 
+- [8.1.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v8.1.0)
+    - Add trial phases as distinct evidence level details.
 - [8.0.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v8.0.0)
-  - Update SERVE datamodel to group variants in ActionableHotspot
-  - Rename `skip_hotspot_resolving` to `skip_variant_resolving` for improved usage of the term "hotspot" across SERVE code
+    - Update SERVE datamodel to group variants in ActionableHotspot
+    - Rename `skip_hotspot_resolving` to `skip_variant_resolving` for improved usage of the term "hotspot" across SERVE code
 - [7.4.1](https://github.com/hartwigmedical/serve/releases/tag/serve-v7.4.1)
     - Change varchar to text when writing countriesAndCities to SQL
 - [7.4.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v7.4.0)

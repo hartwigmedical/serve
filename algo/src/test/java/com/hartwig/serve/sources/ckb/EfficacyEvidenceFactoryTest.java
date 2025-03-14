@@ -201,6 +201,11 @@ public class EfficacyEvidenceFactoryTest {
         assertEquals(EvidenceLevelDetails.GUIDELINE, EfficacyEvidenceFactory.resolveEvidenceLevelDetails("Guideline"));
         assertEquals(EvidenceLevelDetails.CASE_REPORTS_SERIES,
                 EfficacyEvidenceFactory.resolveEvidenceLevelDetails("Case Reports/Case Series"));
+        assertEquals(EvidenceLevelDetails.PHASE_0, EfficacyEvidenceFactory.resolveEvidenceLevelDetails("Phase 0"));
+        assertEquals(EvidenceLevelDetails.PHASE_I, EfficacyEvidenceFactory.resolveEvidenceLevelDetails("Phase I"));
+        assertEquals(EvidenceLevelDetails.PHASE_IB_II, EfficacyEvidenceFactory.resolveEvidenceLevelDetails("Phase Ib/II"));
+        assertEquals(EvidenceLevelDetails.PHASE_II, EfficacyEvidenceFactory.resolveEvidenceLevelDetails("Phase II"));
+        assertEquals(EvidenceLevelDetails.PHASE_III, EfficacyEvidenceFactory.resolveEvidenceLevelDetails("Phase III"));
     }
 
     @Test

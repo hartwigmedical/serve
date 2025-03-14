@@ -75,34 +75,25 @@ public class CkbExtractor {
             return null;
         }
 
-        if (entry.variants().size() == 1) {
-            return extractSimpleEvent(entry);
-        } else {
-            return extractCombinedEvent(entry);
-        }
+        return extractEvent(entry);
     }
 
     @NotNull
-    private ExtractionResult extractSimpleEvent(@NotNull CkbEntry entry) {
-        Variant variant = entry.variants().get(0);
-        String gene = CkbEventAndGeneExtractor.extractGene(variant);
-        String event = CkbEventAndGeneExtractor.extractEvent(variant);
-
-        String sourceEvent = gene.equals(CkbConstants.NO_GENE) ? event : gene + " " + event;
-
-        EventInterpretation interpretation = ImmutableEventInterpretation.builder()
-                .source(Knowledgebase.CKB)
-                .sourceEvent(sourceEvent)
-                .interpretedGene(gene)
-                .interpretedEvent(event)
-                .interpretedEventType(entry.type())
-                .build();
-
+    private ExtractionResult extractEvent(@NotNull CkbEntry entry) {
         List<ExtractedEvent> extractedEvents = extractEvents(entry);
+        EventInterpretation interpretation = interpretEvent(entry, extractedEvents);
+
+        String combinedEvent = combineEvents(extractedEvents);
+        String combinedGenes = combineGenes(extractedEvents);
+
         Set<MolecularCriterium> molecularCriteria = Set.of(CkbMolecularCriteriaExtractor.createMolecularCriterium(entry, extractedEvents));
 
-        Set<EfficacyEvidence> efficacyEvidences = efficacyEvidenceFactory.create(entry, molecularCriteria, sourceEvent, gene);
-        Set<ActionableTrial> actionableTrials = actionableTrialFactory.create(entry, molecularCriteria, sourceEvent, gene);
+        Set<EfficacyEvidence> efficacyEvidences = efficacyEvidenceFactory.create(entry, molecularCriteria, combinedEvent, combinedGenes);
+
+        // Only extract trials for simple events for now. Combined events will require more complex handling
+        Set<ActionableTrial> actionableTrials = extractedEvents.size() > 1
+                ? Set.of()
+                : actionableTrialFactory.create(entry, molecularCriteria, combinedEvent, combinedGenes);
 
         return ImmutableExtractionResult.builder()
                 .refGenomeVersion(Knowledgebase.CKB.refGenomeVersion())
@@ -114,32 +105,31 @@ public class CkbExtractor {
     }
 
     @NotNull
-    private ExtractionResult extractCombinedEvent(@NotNull CkbEntry entry) {
+    private EventInterpretation interpretEvent(@NotNull CkbEntry entry, @NotNull List<ExtractedEvent> extractedEvents) {
 
-        EventInterpretation interpretation = ImmutableEventInterpretation.builder()
-                .source(Knowledgebase.CKB)
-                .sourceEvent("Multiple " + concat(entry.variants()))
-                .interpretedGene("Multiple")
-                .interpretedEvent(concat(entry.variants()))
-                .interpretedEventType(entry.type())
-                .build();
+        if (extractedEvents.isEmpty()) {
+            throw new IllegalStateException("No extracted events to interpret");
+        } else if (extractedEvents.size() == 1) {
+            String gene = extractedEvents.get(0).gene();
+            String event = extractedEvents.get(0).event();
+            String sourceEvent = gene.equals(CkbConstants.NO_GENE) ? event : gene + " " + event;
 
-        List<ExtractedEvent> extractedEvents = extractEvents(entry);
-        String combinedEvent = combineEvents(extractedEvents);
-        String combinedGenes = combineGenes(extractedEvents);
-
-        MolecularCriterium molecularCriterium = CkbMolecularCriteriaExtractor.createMolecularCriterium(entry, extractedEvents);
-
-        Set<EfficacyEvidence> efficacyEvidences =
-                efficacyEvidenceFactory.create(entry, Set.of(molecularCriterium), combinedEvent, combinedGenes);
-
-        return ImmutableExtractionResult.builder()
-                .refGenomeVersion(Knowledgebase.CKB.refGenomeVersion())
-                .eventInterpretations(Set.of(interpretation))
-                .knownEvents(CkbKnownEventsExtractor.generateKnownEvents(extractedEvents, efficacyEvidences.isEmpty()))
-                .evidences(efficacyEvidences)
-                .trials(Set.of())
-                .build();
+            return ImmutableEventInterpretation.builder()
+                    .source(Knowledgebase.CKB)
+                    .sourceEvent(sourceEvent)
+                    .interpretedGene(gene)
+                    .interpretedEvent(event)
+                    .interpretedEventType(entry.type())
+                    .build();
+        } else {
+            return ImmutableEventInterpretation.builder()
+                    .source(Knowledgebase.CKB)
+                    .sourceEvent("Multiple " + concat(entry.variants()))
+                    .interpretedGene("Multiple")
+                    .interpretedEvent(concat(entry.variants()))
+                    .interpretedEventType(entry.type())
+                    .build();
+        }
     }
 
     @NotNull

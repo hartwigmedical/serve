@@ -78,10 +78,22 @@ public class CkbExtractor {
         return extractEvent(entry);
     }
 
-    @NotNull
+    @Nullable
     private ExtractionResult extractEvent(@NotNull CkbEntry entry) {
         List<ExtractedEvent> extractedEvents = extractEvents(entry);
+
+        if (extractedEvents.size() != entry.variants().size()) {
+            LOGGER.warn("Not all variants could be extracted for CKB entry: '{}': '{}'", entry.profileId(), entry.profileName());
+            return null;
+        }
+
+        if (extractedEvents.stream().anyMatch(e -> e.eventType() == EventType.UNKNOWN)) {
+            LOGGER.warn("Not all variants could be extracted for CKB entry: '{}': '{}'", entry.profileId(), entry.profileName());
+            return null;
+        }
+
         EventInterpretation interpretation = interpretEvent(entry, extractedEvents);
+
         Set<MolecularCriterium> molecularCriteria = Set.of(CkbMolecularCriteriaExtractor.createMolecularCriterium(entry, extractedEvents));
 
         String combinedEvent = combineEvents(extractedEvents);
@@ -154,7 +166,6 @@ public class CkbExtractor {
 
     @NotNull
     private List<ExtractedEvent> extractEvents(@NotNull CkbEntry entry) {
-        // TODO if one event returns null, we are still returning the others. Should we reject the whole entry?
         return entry.variants().stream()
                 .map(this::extractEvent)
                 .filter(Objects::nonNull)

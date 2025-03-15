@@ -10,12 +10,15 @@ import java.util.Set;
 
 import com.hartwig.serve.ckb.classification.CkbClassificationConfig;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
+import com.hartwig.serve.ckb.datamodel.ImmutableCkbEntry;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.ImmutableVariantRequirementDetail;
 import com.hartwig.serve.ckb.datamodel.variant.Variant;
 import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.datamodel.molecular.MolecularCriterium;
 import com.hartwig.serve.extraction.ExtractionResult;
+import com.hartwig.serve.extraction.ImmutableExtractionResult;
 import com.hartwig.serve.extraction.events.EventInterpretation;
 import com.hartwig.serve.refgenome.RefGenomeResourceTestFactory;
 import com.hartwig.serve.sources.ckb.filter.CkbFilteringTestFactory;
@@ -27,6 +30,9 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
 public class CkbExtractorTest {
+
+    private static final ExtractionResult EMPTY_EXTRACTION_RESULT =
+            ImmutableExtractionResult.builder().refGenomeVersion(RefGenome.V38).build();
 
     @Test
     public void canExtractEvidenceAndTrialsFromCkbEntries() {
@@ -95,6 +101,37 @@ public class CkbExtractorTest {
 
         // trials not extracted yet
         assertEquals(0, extractionResult.trials().size());
+    }
+
+    @Test
+    public void ShouldHandleEventsWithUnknownTypes() {
+        CkbExtractor ckbExtractor = CkbExtractorFactory.createExtractor(CkbClassificationConfig.build(),
+                RefGenomeResourceTestFactory.buildTestResource37(),
+                TreatmentApproachTestFactory.createEmptyCurator(),
+                CkbFilteringTestFactory.createEmptyEvidenceFilterModel(),
+                CkbFilteringTestFactory.createEmptyTrialFilterModel(),
+                Set.of(ImmutableCkbRegion.builder().country("netherlands").states(Collections.emptySet()).build()));
+
+        Variant recognizedVariant = CkbTestFactory.createVariant("BRAF", "V600E", "BRAF V600E");
+        Variant unrecognizedVariant1 = CkbTestFactory.createVariant("BRAF", "unknown_type", "BRAF unknown_type");
+        Variant unrecognizedVariant2 = CkbTestFactory.createVariant("KIT", "unknown_type", "KIT unknown_type");
+
+        CkbEntry entryWithAllInvalid = createCombinedEventEntryWithoutTrial(List.of(unrecognizedVariant1, unrecognizedVariant2),
+                "sensitive",
+                "Actionable",
+                "any treatment",
+                "any indication",
+                "A",
+                "Guideline",
+                "DOID:162");
+
+        CkbEntry entryWithSomeInvalid = ImmutableCkbEntry.builder()
+                .from(entryWithAllInvalid)
+                .addAllVariants(List.of(recognizedVariant, unrecognizedVariant1))
+                .build();
+
+        assertEquals(EMPTY_EXTRACTION_RESULT, ckbExtractor.extract(List.of(entryWithAllInvalid)));
+        assertEquals(EMPTY_EXTRACTION_RESULT, ckbExtractor.extract(List.of(entryWithSomeInvalid)));
     }
 
     @NotNull

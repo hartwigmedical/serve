@@ -92,6 +92,15 @@ public class CkbExtractor {
             return null;
         }
 
+        List<ExtractedEvent> emptyEventOutputs = extractedEvents.stream()
+                .filter(e -> countEventExtractorOutputs(e.eventExtractorOutput()) == 0)
+                .collect(Collectors.toList());
+        if (!emptyEventOutputs.isEmpty()) {
+            LOGGER.warn("No event extraction for a variant in CKB entry: '{}': '{}'", entry.profileId(), entry.profileName());
+            emptyEventOutputs.forEach(e -> LOGGER.warn("Variant with empty extraction: '{}'", e.variant().fullName()));
+            return null;
+        }
+
         EventInterpretation interpretation = interpretEvent(entry, extractedEvents);
 
         Set<MolecularCriterium> molecularCriteria = Set.of(CkbMolecularCriteriaExtractor.createMolecularCriterium(entry, extractedEvents));
@@ -201,6 +210,17 @@ public class CkbExtractor {
     @NotNull
     private static String concat(@NotNull List<Variant> variants) {
         return variants.stream().map(Variant::variant).collect(Collectors.joining(VARIANT_DELIMITER));
+    }
+
+    private int countEventExtractorOutputs(@NotNull EventExtractorOutput eventExtractorOutput) {
+        return (eventExtractorOutput.variants() != null ? eventExtractorOutput.variants().size() : 0) +
+                (eventExtractorOutput.codons() != null ? eventExtractorOutput.codons().size() : 0) +
+                (eventExtractorOutput.exons() != null ? eventExtractorOutput.exons().size() : 0) +
+                (eventExtractorOutput.geneLevel() != null ? 1 : 0) +
+                (eventExtractorOutput.copyNumber() != null ? 1 : 0) +
+                (eventExtractorOutput.fusionPair() != null ? 1 : 0) +
+                (eventExtractorOutput.characteristic() != null ? 1 : 0) +
+                (eventExtractorOutput.hla() != null ? 1 : 0);
     }
 }
 

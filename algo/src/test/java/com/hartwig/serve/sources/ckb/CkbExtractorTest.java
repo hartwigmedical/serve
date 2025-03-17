@@ -104,7 +104,7 @@ public class CkbExtractorTest {
     }
 
     @Test
-    public void ShouldHandleEventsWithUnknownTypes() {
+    public void shouldReturnNullForUnresolvableEvents() {
         CkbExtractor ckbExtractor = CkbExtractorFactory.createExtractor(CkbClassificationConfig.build(),
                 RefGenomeResourceTestFactory.buildTestResource37(),
                 TreatmentApproachTestFactory.createEmptyCurator(),

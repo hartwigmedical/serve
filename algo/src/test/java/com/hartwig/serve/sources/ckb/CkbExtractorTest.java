@@ -1,6 +1,6 @@
 package com.hartwig.serve.sources.ckb;
 
-import static com.hartwig.serve.sources.ckb.CkbTestFactory.createCombinedEventEntryWithoutTrial;
+import static com.hartwig.serve.sources.ckb.CkbTestFactory.createCombinedEntry;
 
 import static org.junit.Assert.assertEquals;
 
@@ -69,7 +69,7 @@ public class CkbExtractorTest {
                 CkbTestFactory.createVariant("KIT", "loss", "KIT loss")
         );
 
-        ckbEntries.add(createCombinedEventEntryWithoutTrial(variants,
+        ckbEntries.add(createCombinedEntry(variants,
                 "sensitive",
                 "Actionable",
                 "any treatment",
@@ -116,7 +116,7 @@ public class CkbExtractorTest {
         Variant unrecognizedVariant1 = CkbTestFactory.createVariant("BRAF", "unknown_type", "BRAF unknown_type");
         Variant unrecognizedVariant2 = CkbTestFactory.createVariant("KIT", "unknown_type", "KIT unknown_type");
 
-        CkbEntry entryWithAllInvalid = createCombinedEventEntryWithoutTrial(List.of(unrecognizedVariant1, unrecognizedVariant2),
+        CkbEntry entryWithAllInvalid = createCombinedEntry(List.of(unrecognizedVariant1, unrecognizedVariant2),
                 "sensitive",
                 "Actionable",
                 "any treatment",

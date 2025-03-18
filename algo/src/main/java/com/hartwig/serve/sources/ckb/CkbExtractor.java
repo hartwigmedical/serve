@@ -95,9 +95,16 @@ public class CkbExtractor {
         List<ExtractedEvent> emptyEventOutputs = extractedEvents.stream()
                 .filter(e -> countEventExtractorOutputs(e.eventExtractorOutput()) == 0)
                 .collect(Collectors.toList());
-        if (!emptyEventOutputs.isEmpty()) {
-            LOGGER.warn("No event extraction for a variant in CKB entry: '{}': '{}'", entry.profileId(), entry.profileName());
-            emptyEventOutputs.forEach(e -> LOGGER.warn("Variant with empty extraction: '{}'", e.variant().fullName()));
+        if (emptyEventOutputs.stream().anyMatch(e -> e.eventType() != EventType.COMPLEX)) {
+            LOGGER.warn("Empty event extraction for a variant in CKB entry: '{}': '{}'", entry.profileId(), entry.profileName());
+            emptyEventOutputs.forEach(e -> LOGGER.warn("Variant with empty extraction: '{}' '{}'",
+                    e.eventType(),
+                    e.variant().fullName()));
+            return null;
+        } else if (!emptyEventOutputs.isEmpty()) {
+            LOGGER.debug("Skipping extraction for CKB entry due to empty extractions: '{}': '{}'",
+                    entry.profileId(),
+                    entry.profileName());
             return null;
         }
 

@@ -83,26 +83,28 @@ public class CkbExtractor {
         List<ExtractedEvent> extractedEvents = extractEvents(entry);
 
         if (extractedEvents.size() != entry.variants().size()) {
-            LOGGER.warn("Not all variants could be extracted for CKB entry: '{}': '{}'", entry.profileId(), entry.profileName());
+            LOGGER.warn("Not all variants could be extracted for CKB entry {}: '{}'", entry.profileId(), entry.profileName());
             return null;
         }
 
         if (extractedEvents.stream().anyMatch(e -> e.eventType() == EventType.UNKNOWN)) {
-            LOGGER.warn("Not all variants could be extracted for CKB entry: '{}': '{}'", entry.profileId(), entry.profileName());
+            LOGGER.warn("Not all variants could be extracted for CKB entry {}: '{}'", entry.profileId(), entry.profileName());
             return null;
         }
 
         List<ExtractedEvent> emptyEventOutputs = extractedEvents.stream()
                 .filter(e -> countEventExtractorOutputs(e.eventExtractorOutput()) == 0)
                 .collect(Collectors.toList());
-        if (emptyEventOutputs.stream().anyMatch(e -> e.eventType() != EventType.COMPLEX)) {
-            LOGGER.warn("Empty event extraction for a variant in CKB entry: '{}': '{}'", entry.profileId(), entry.profileName());
-            emptyEventOutputs.forEach(e -> LOGGER.warn("Variant with empty extraction: '{}' '{}'",
-                    e.eventType(),
-                    e.variant().fullName()));
+        if (emptyEventOutputs.stream().anyMatch(event -> event.eventType() != EventType.COMPLEX)) {
+            LOGGER.warn("Empty extraction for a variant in CKB entry {}: '{}'",
+                    entry.profileId(),
+                    entry.profileName());
+            emptyEventOutputs.forEach(event -> LOGGER.warn("Variant with empty extraction: '{}' type {}",
+                    event.variant().fullName(),
+                    event.eventType()));
             return null;
         } else if (!emptyEventOutputs.isEmpty()) {
-            LOGGER.debug("Skipping extraction for CKB entry due to empty extractions: '{}': '{}'",
+            LOGGER.debug("Empty extraction for a variant in for CKB Entry {}: '{}'",
                     entry.profileId(),
                     entry.profileName());
             return null;

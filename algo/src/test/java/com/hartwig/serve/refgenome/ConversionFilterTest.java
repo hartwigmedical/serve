@@ -1,5 +1,7 @@
 package com.hartwig.serve.refgenome;
 
+import static com.hartwig.serve.datamodel.util.MolecularCriteriumCombiner.combine;
+
 import static org.junit.Assert.assertTrue;
 
 import com.hartwig.serve.datamodel.RefGenome;
@@ -7,6 +9,7 @@ import com.hartwig.serve.datamodel.efficacy.EfficacyEvidence;
 import com.hartwig.serve.datamodel.efficacy.EfficacyEvidenceTestFactory;
 import com.hartwig.serve.datamodel.molecular.ImmutableKnownEvents;
 import com.hartwig.serve.datamodel.molecular.KnownEvents;
+import com.hartwig.serve.datamodel.molecular.MolecularCriterium;
 import com.hartwig.serve.datamodel.molecular.MolecularCriteriumTestFactory;
 import com.hartwig.serve.datamodel.molecular.fusion.ActionableFusion;
 import com.hartwig.serve.datamodel.molecular.fusion.FusionTestFactory;
@@ -24,12 +27,15 @@ import org.junit.Test;
 
 public class ConversionFilterTest {
 
+    private static final String GENE_TO_KEEP = "EGFR";
+    private static final String GENE_TO_EXCLUDE = ConversionFilterFactory.GENES_TO_EXCLUDE_FOR_CONVERSION.iterator().next();
+
     @Test
     public void canFilterGenes() {
         ConversionFilter filter = new ConversionFilter();
 
         ExtractionResult resultToFilter =
-                createExtractionResultForGene(ConversionFilterFactory.GENES_TO_EXCLUDE_FOR_CONVERSION.iterator().next());
+                createExtractionResultForGene(GENE_TO_EXCLUDE);
         ExtractionResult filtered = filter.filter(resultToFilter);
         assertTrue(filtered.knownEvents().hotspots().isEmpty());
         assertTrue(filtered.knownEvents().codons().isEmpty());
@@ -41,6 +47,31 @@ public class ConversionFilterTest {
         assertTrue(filtered.trials().isEmpty());
 
         filter.reportUnusedFilterEntries();
+    }
+
+    @Test
+    public void canFilterEvidenceWhenWhenCriteriaSubsetIsExcluded() {
+        ConversionFilter filter = new ConversionFilter();
+
+        ExtractionResult resultToFilter = createExtractionResultWithCombinedCriteria(GENE_TO_KEEP, GENE_TO_EXCLUDE);
+        ExtractionResult filtered = filter.filter(resultToFilter);
+        assertTrue(filtered.evidences().isEmpty());
+    }
+
+    @NotNull
+    private static ExtractionResult createExtractionResultWithCombinedCriteria(@NotNull String gene1, @NotNull String gene2) {
+
+        ActionableGene actionableGene = GeneTestFactory.actionableGeneBuilder().gene(gene1).build();
+        ActionableFusion actionableFusion = FusionTestFactory.actionableFusionBuilder().geneUp(gene2).geneDown(gene2).build();
+        MolecularCriterium fusionCriterium = MolecularCriteriumTestFactory.createWithActionableFusion(actionableFusion);
+        MolecularCriterium geneCriterium = MolecularCriteriumTestFactory.createWithActionableGene(actionableGene);
+
+        EfficacyEvidence evidence = EfficacyEvidenceTestFactory.createWithMolecularCriterium(combine(geneCriterium, fusionCriterium));
+
+        return ImmutableExtractionResult.builder()
+                .refGenomeVersion(RefGenome.V38)
+                .addEvidences(evidence)
+                .build();
     }
 
     @NotNull

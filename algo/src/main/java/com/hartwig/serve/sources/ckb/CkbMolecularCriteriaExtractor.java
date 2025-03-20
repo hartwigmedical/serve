@@ -1,5 +1,7 @@
 package com.hartwig.serve.sources.ckb;
 
+import static com.hartwig.serve.datamodel.util.MolecularCriteriumCombiner.combine;
+
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
@@ -9,7 +11,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.collect.Sets;
 import com.hartwig.serve.ckb.classification.CkbConstants;
 import com.hartwig.serve.ckb.classification.CkbEventAndGeneExtractor;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
@@ -57,25 +58,6 @@ final class CkbMolecularCriteriaExtractor {
                 .collect(Collectors.toList());
 
         return combine(molecularCriteria);
-    }
-
-    @NotNull
-    public static MolecularCriterium combine(@NotNull List<MolecularCriterium> criteria) {
-        return criteria.stream().reduce(CkbMolecularCriteriaExtractor::combine)
-                .orElse(ImmutableMolecularCriterium.builder().build());
-    }
-
-    @NotNull
-    public static MolecularCriterium combine(@NotNull MolecularCriterium criteria1, @NotNull MolecularCriterium criteria2) {
-        return ImmutableMolecularCriterium.builder()
-                .addAllHotspots(Sets.union(criteria1.hotspots(), criteria2.hotspots()))
-                .addAllCodons(Sets.union(criteria1.codons(), criteria2.codons()))
-                .addAllExons(Sets.union(criteria1.exons(), criteria2.exons()))
-                .addAllGenes(Sets.union(criteria1.genes(), criteria2.genes()))
-                .addAllFusions(Sets.union(criteria1.fusions(), criteria2.fusions()))
-                .addAllCharacteristics(Sets.union(criteria1.characteristics(), criteria2.characteristics()))
-                .addAllHla(Sets.union(criteria1.hla(), criteria2.hla()))
-                .build();
     }
 
     @NotNull

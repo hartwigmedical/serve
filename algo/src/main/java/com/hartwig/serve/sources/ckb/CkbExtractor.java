@@ -134,7 +134,6 @@ public class CkbExtractor {
 
     @NotNull
     private EventInterpretation interpretEvent(@NotNull CkbEntry entry, @NotNull List<ExtractedEvent> extractedEvents) {
-
         if (extractedEvents.isEmpty()) {
             throw new IllegalStateException("No extracted events to interpret");
         } else if (extractedEvents.size() == 1) {

@@ -93,22 +93,13 @@ public final class CkbTestFactory {
 
     @NotNull
     public static CkbEntry createCombinedEntry(@NotNull List<Variant> variants) {
-        return builder().addAllVariants(variants)
-                .addEvidences(createEvidence("",
-                        "",
-                        "",
-                        "",
-                        "",
-                        "",
-                        "")
-                ).build();
+        return builder().addAllVariants(variants).addEvidences(createEvidence("", "", "", "", "", "", "")).build();
     }
 
     @NotNull
-    public static CkbEntry createCombinedEntry(@NotNull List<Variant> variants,
-            @NotNull String responseType, @NotNull String evidenceType, @NotNull String therapyName, @NotNull String indicationName,
-            @NotNull String evidenceLevel, @NotNull String approvalStatus, @NotNull String termId) {
-
+    public static CkbEntry createCombinedEntry(@NotNull List<Variant> variants, @NotNull String responseType, @NotNull String evidenceType,
+            @NotNull String therapyName, @NotNull String indicationName, @NotNull String evidenceLevel, @NotNull String approvalStatus,
+            @NotNull String termId) {
         return builder().addAllVariants(variants)
                 .addEvidences(createEvidence(responseType,
                         evidenceType,

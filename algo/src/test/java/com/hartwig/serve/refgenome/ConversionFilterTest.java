@@ -34,8 +34,7 @@ public class ConversionFilterTest {
     public void canFilterGenes() {
         ConversionFilter filter = new ConversionFilter();
 
-        ExtractionResult resultToFilter =
-                createExtractionResultForGene(GENE_TO_EXCLUDE);
+        ExtractionResult resultToFilter = createExtractionResultForGene(GENE_TO_EXCLUDE);
         ExtractionResult filtered = filter.filter(resultToFilter);
         assertTrue(filtered.knownEvents().hotspots().isEmpty());
         assertTrue(filtered.knownEvents().codons().isEmpty());
@@ -60,7 +59,6 @@ public class ConversionFilterTest {
 
     @NotNull
     private static ExtractionResult createExtractionResultWithCombinedCriteria(@NotNull String gene1, @NotNull String gene2) {
-
         ActionableGene actionableGene = GeneTestFactory.actionableGeneBuilder().gene(gene1).build();
         ActionableFusion actionableFusion = FusionTestFactory.actionableFusionBuilder().geneUp(gene2).geneDown(gene2).build();
         MolecularCriterium fusionCriterium = MolecularCriteriumTestFactory.createWithActionableFusion(actionableFusion);

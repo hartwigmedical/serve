@@ -1,7 +1,5 @@
 package com.hartwig.serve.sources.ckb;
 
-import static com.hartwig.serve.datamodel.util.MolecularCriteriumCombiner.combine;
-
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
@@ -35,6 +33,7 @@ import com.hartwig.serve.datamodel.molecular.immuno.ImmutableActionableHLA;
 import com.hartwig.serve.datamodel.molecular.range.ActionableRange;
 import com.hartwig.serve.datamodel.molecular.range.ImmutableActionableRange;
 import com.hartwig.serve.datamodel.molecular.range.RangeAnnotation;
+import com.hartwig.serve.datamodel.util.MolecularCriteriumCombiner;
 import com.hartwig.serve.extraction.EventExtractorOutput;
 import com.hartwig.serve.extraction.ExtractedEvent;
 import com.hartwig.serve.extraction.ImmutableEventExtractorOutput;
@@ -49,7 +48,7 @@ import org.jetbrains.annotations.Nullable;
 final class CkbMolecularCriteriaExtractor {
 
     @NotNull
-    public static MolecularCriterium createMolecularCriterium(CkbEntry entry, List<ExtractedEvent> events) {
+    public static MolecularCriterium createMolecularCriterium(@NotNull CkbEntry entry, @NotNull List<ExtractedEvent> events) {
         String sourceEvent = combinedSourceEvent(entry);
         ActionableEvent actionableEvent = toActionableEvent(sourceEvent, entry);
 
@@ -57,7 +56,7 @@ final class CkbMolecularCriteriaExtractor {
                 .map(event -> createMolecularCriterium(event.eventExtractorOutput(), actionableEvent))
                 .collect(Collectors.toList());
 
-        return combine(molecularCriteria);
+        return MolecularCriteriumCombiner.combine(molecularCriteria);
     }
 
     @NotNull
@@ -90,7 +89,6 @@ final class CkbMolecularCriteriaExtractor {
     @NotNull
     private static Set<ActionableHotspot> hotspotCriteria(@NotNull EventExtractorOutput extractionOutput,
             @NotNull ActionableEvent actionableEvent) {
-
         List<VariantAnnotation> variants = extractionOutput.variants();
         if (variants == null) {
             return Collections.emptySet();
@@ -102,7 +100,6 @@ final class CkbMolecularCriteriaExtractor {
     @NotNull
     private static Set<ActionableRange> codonCriteria(@NotNull EventExtractorOutput extractionOutput,
             @NotNull ActionableEvent actionableEvent) {
-
         List<CodonAnnotation> extractionCodons = extractionOutput.codons();
         if (extractionCodons == null) {
             return Collections.emptySet();
@@ -114,7 +111,6 @@ final class CkbMolecularCriteriaExtractor {
     @NotNull
     private static Set<ActionableRange> exonCriteria(@NotNull EventExtractorOutput extractionOutput,
             @NotNull ActionableEvent actionableEvent) {
-
         List<ExonAnnotation> extractionExons = extractionOutput.exons();
         if (extractionExons == null) {
             return Collections.emptySet();
@@ -126,17 +122,10 @@ final class CkbMolecularCriteriaExtractor {
     @NotNull
     private static Set<ActionableGene> geneCriteria(@NotNull EventExtractorOutput extractionOutput,
             @NotNull ActionableEvent actionableEvent) {
-
         return Stream.of(extractionOutput.geneLevel(), extractionOutput.copyNumber())
                 .filter(Objects::nonNull)
                 .map(annotation -> extractActionableGenes(annotation, actionableEvent))
                 .collect(Collectors.toSet());
-    }
-
-    @NotNull
-    private static Set<ActionableFusion> extractActionableFusions(@Nullable FusionPair fusionPair,
-            @NotNull ActionableEvent actionableEvent) {
-        return Set.of(ImmutableActionableFusion.builder().from(fusionPair).from(actionableEvent).build());
     }
 
     @NotNull
@@ -158,6 +147,25 @@ final class CkbMolecularCriteriaExtractor {
     }
 
     @NotNull
+    private static Set<ActionableRange> extractActionableRanges(@NotNull List<? extends RangeAnnotation> ranges,
+            @NotNull ActionableEvent actionableEvent) {
+        return ranges.stream()
+                .map(range -> ImmutableActionableRange.builder().from(range).from(actionableEvent).build())
+                .collect(Collectors.toSet());
+    }
+
+    @NotNull
+    public static ActionableGene extractActionableGenes(@NotNull GeneAnnotation geneAnnotation, @NotNull ActionableEvent actionableEvent) {
+        return ImmutableActionableGene.builder().from(geneAnnotation).from(actionableEvent).build();
+    }
+
+    @NotNull
+    private static Set<ActionableFusion> extractActionableFusions(@Nullable FusionPair fusionPair,
+            @NotNull ActionableEvent actionableEvent) {
+        return Set.of(ImmutableActionableFusion.builder().from(fusionPair).from(actionableEvent).build());
+    }
+
+    @NotNull
     private static Set<ActionableCharacteristic> extractActionableCharacteristic(@Nullable TumorCharacteristic characteristic,
             @NotNull ActionableEvent actionableEvent) {
         if (characteristic == null) {
@@ -168,25 +176,12 @@ final class CkbMolecularCriteriaExtractor {
     }
 
     @NotNull
-    private static Set<ActionableRange> extractActionableRanges(@NotNull List<? extends RangeAnnotation> ranges,
-            @NotNull ActionableEvent actionableEvent) {
-        return ranges.stream()
-                .map(range -> ImmutableActionableRange.builder().from(range).from(actionableEvent).build())
-                .collect(Collectors.toSet());
-    }
-
-    @NotNull
     private static Set<ActionableHLA> extractActionableHLA(@Nullable ImmunoHLA hla, @NotNull ActionableEvent actionableEvent) {
         if (hla == null) {
             return Collections.emptySet();
         } else {
             return Set.of(ImmutableActionableHLA.builder().from(hla).from(actionableEvent).build());
         }
-    }
-
-    @NotNull
-    public static ActionableGene extractActionableGenes(@NotNull GeneAnnotation geneAnnotation, @NotNull ActionableEvent actionableEvent) {
-        return ImmutableActionableGene.builder().from(geneAnnotation).from(actionableEvent).build();
     }
 
     @VisibleForTesting

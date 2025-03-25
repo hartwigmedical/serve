@@ -36,22 +36,22 @@ public class CkbExtractorTest {
 
     @Test
     public void canExtractEvidenceAndTrialsFromCkbEntries() {
-        CkbExtractor trialExtractor = CkbExtractorFactory.createExtractor(CkbClassificationConfig.build(),
+        CkbExtractor extractor = CkbExtractorFactory.createExtractor(CkbClassificationConfig.build(),
                 RefGenomeResourceTestFactory.buildTestResource37(),
                 TreatmentApproachTestFactory.createEmptyCurator(),
                 CkbFilteringTestFactory.createEmptyEvidenceFilterModel(),
                 CkbFilteringTestFactory.createEmptyTrialFilterModel(),
                 Set.of(ImmutableCkbRegion.builder().country("netherlands").states(Collections.emptySet()).build()));
 
-        ExtractionResult trialResult = trialExtractor.extract(createCkbEntryTestDatabase());
-        assertEquals(7, trialResult.trials().size());
-        assertEquals(7, trialResult.evidences().size());
-        assertEquals(1, trialResult.knownEvents().hotspots().size());
-        assertEquals(1, trialResult.knownEvents().exons().size());
-        assertEquals(1, trialResult.knownEvents().codons().size());
-        assertEquals(1, trialResult.knownEvents().fusions().size());
-        assertEquals(1, trialResult.knownEvents().copyNumbers().size());
-        assertEquals(3, trialResult.knownEvents().genes().size());
+        ExtractionResult result = extractor.extract(createCkbEntryTestDatabase());
+        assertEquals(7, result.evidences().size());
+        assertEquals(7, result.trials().size());
+        assertEquals(1, result.knownEvents().hotspots().size());
+        assertEquals(1, result.knownEvents().exons().size());
+        assertEquals(1, result.knownEvents().codons().size());
+        assertEquals(1, result.knownEvents().fusions().size());
+        assertEquals(1, result.knownEvents().copyNumbers().size());
+        assertEquals(3, result.knownEvents().genes().size());
     }
 
     @Test
@@ -64,10 +64,8 @@ public class CkbExtractorTest {
                 Set.of(ImmutableCkbRegion.builder().country("netherlands").states(Collections.emptySet()).build()));
 
         List<CkbEntry> ckbEntries = Lists.newArrayList();
-        List<Variant> variants = List.of(
-                CkbTestFactory.createVariant("BRAF", "loss", "BRAF loss"),
-                CkbTestFactory.createVariant("KIT", "loss", "KIT loss")
-        );
+        List<Variant> variants =
+                List.of(CkbTestFactory.createVariant("BRAF", "loss", "BRAF loss"), CkbTestFactory.createVariant("KIT", "loss", "KIT loss"));
 
         ckbEntries.add(createCombinedEntry(variants,
                 "sensitive",

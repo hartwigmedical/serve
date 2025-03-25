@@ -78,10 +78,8 @@ public class CkbMolecularProfileFilterModelTest {
                 new CkbMolecularProfileFilterModel(createFilterEntryList(CkbMolecularProfileFilterType.FILTER_EVENT_WITH_KEYWORD,
                         "hypermethylation"));
 
-        List<Variant> variants = List.of(
-                CkbTestFactory.createVariant("BRAF", "V600E", "BRAF V600E"),
-                CkbTestFactory.createVariant("MLH1", "del", "MLH1 del")
-        );
+        List<Variant> variants = List.of(CkbTestFactory.createVariant("BRAF", "V600E", "BRAF V600E"),
+                CkbTestFactory.createVariant("MLH1", "del", "MLH1 del"));
 
         List<CkbEntry> ckbEntries = List.of(createCombinedEntry(variants));
         assertEquals(model.run(ckbEntries), ckbEntries);
@@ -93,10 +91,8 @@ public class CkbMolecularProfileFilterModelTest {
                 new CkbMolecularProfileFilterModel(createFilterEntryList(CkbMolecularProfileFilterType.FILTER_EVENT_WITH_KEYWORD,
                         "hypermethylation"));
 
-        List<Variant> variants = List.of(
-                CkbTestFactory.createVariant("BRAF", "V600E", "BRAF V600E"),
-                CkbTestFactory.createVariant("MLH1", "hypermethylation", "MLH1 hypermethylation")
-        );
+        List<Variant> variants = List.of(CkbTestFactory.createVariant("BRAF", "V600E", "BRAF V600E"),
+                CkbTestFactory.createVariant("MLH1", "hypermethylation", "MLH1 hypermethylation"));
 
         List<CkbEntry> ckbEntries = List.of(createCombinedEntry(variants));
         assertTrue(model.run(ckbEntries).isEmpty());

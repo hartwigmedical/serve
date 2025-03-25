@@ -11,10 +11,10 @@ import com.hartwig.serve.datamodel.molecular.MolecularCriterium;
 import org.jetbrains.annotations.NotNull;
 
 public final class MolecularCriteriumCombiner {
+
     @NotNull
     public static MolecularCriterium combine(@NotNull List<MolecularCriterium> criteria) {
-        return criteria.stream().reduce(MolecularCriteriumCombiner::combine)
-                .orElse(ImmutableMolecularCriterium.builder().build());
+        return criteria.stream().reduce(MolecularCriteriumCombiner::combine).orElse(ImmutableMolecularCriterium.builder().build());
     }
 
     @NotNull
@@ -32,7 +32,6 @@ public final class MolecularCriteriumCombiner {
 
     @NotNull
     private static <T> Set<T> union(@NotNull Set<T> set1, @NotNull Set<T> set2) {
-        return Stream.concat(set1.stream(), set2.stream())
-                .collect(Collectors.toSet());
+        return Stream.concat(set1.stream(), set2.stream()).collect(Collectors.toSet());
     }
 }

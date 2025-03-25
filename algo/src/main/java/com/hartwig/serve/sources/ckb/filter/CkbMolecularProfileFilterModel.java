@@ -38,7 +38,6 @@ public class CkbMolecularProfileFilterModel {
                 // Always filter entries with no variants. Should never happen in practice!
                 LOGGER.warn("Filtering '{}' because no variants have been defined for this entry!", entry);
             } else {
-
                 Map<Boolean, List<Variant>> shouldIncludeVariants = entry.variants().stream()
                         .collect(Collectors.partitioningBy(variant -> include(entry.type(), variant)));
 

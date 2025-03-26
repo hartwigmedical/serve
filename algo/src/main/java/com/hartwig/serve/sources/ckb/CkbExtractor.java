@@ -20,6 +20,7 @@ import com.hartwig.serve.extraction.EventExtractorOutput;
 import com.hartwig.serve.extraction.ExtractedEvent;
 import com.hartwig.serve.extraction.ExtractionFunctions;
 import com.hartwig.serve.extraction.ExtractionResult;
+import com.hartwig.serve.extraction.ImmutableEventExtractorOutput;
 import com.hartwig.serve.extraction.ImmutableExtractedEvent;
 import com.hartwig.serve.extraction.ImmutableExtractionResult;
 import com.hartwig.serve.extraction.events.EventInterpretation;
@@ -82,7 +83,8 @@ public class CkbExtractor {
     private ExtractionResult extractEvent(@NotNull CkbEntry entry) {
         List<ExtractedEvent> extractedEvents = extractEvents(entry);
 
-        if (extractedEvents.size() != entry.variants().size()) {
+        if (extractedEvents.size() != entry.variants().size() ||
+                extractedEvents.stream().anyMatch(e -> countEventExtractorOutputs(e.eventExtractorOutput()) == 0)) {
             LOGGER.warn("Not all variants could be extracted for CKB entry {}: '{}'", entry.profileId(), entry.profileName());
             return extractionWithEventInterpretationOnly(entry, extractedEvents);
         }
@@ -215,7 +217,9 @@ public class CkbExtractor {
 
         if (eventType == EventType.UNKNOWN) {
             LOGGER.warn("No known event type for variant: '{}'", variant.fullName());
-            return extractedEventBuilder.build();
+            return extractedEventBuilder
+                    .eventExtractorOutput(ImmutableEventExtractorOutput.builder().build())
+                    .build();
         }
 
         EventExtractorOutput eventExtractorOutput =

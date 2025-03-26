@@ -92,7 +92,7 @@ public class CkbExtractorTest {
     }
 
     @Test
-    public void shouldReturnInterpretationOnlyForUnresolvableEvents() {
+    public void shouldReturnInterpretationOnlyForUnknownEvents() {
         Variant recognizedVariant = CkbTestFactory.createVariant("BRAF", "V600E", "BRAF V600E");
         Variant unrecognizedVariant = CkbTestFactory.createVariant("BRAF", "unknown_type", "BRAF unknown_type");
 
@@ -121,9 +121,23 @@ public class CkbExtractorTest {
                         .interpretedEvent("V600*fs")
                         .interpretedEventType(EventType.COMPLEX)
                         .build(),
-                ckbExtractor().extract(List.of(entryWithComplexVariant))
-        );
+                ckbExtractor().extract(List.of(entryWithComplexVariant)));
+    }
 
+    @Test
+    public void shouldReturnInterpretationOnlyForUnresolvableEvent() {
+        Variant complexVariant = CkbTestFactory.createVariant("UNKNOWN_GENE", "act mut", "UNKNOWN_GENE act mut");
+
+        CkbEntry entryWithComplexVariant = createCombinedEntry(List.of(complexVariant));
+
+        assertEmptyExtractionWithInterpretation(
+                interpretationBuilder()
+                        .sourceEvent("UNKNOWN_GENE act mut")
+                        .interpretedGene("UNKNOWN_GENE")
+                        .interpretedEvent("act mut")
+                        .interpretedEventType(EventType.GENE_LEVEL)
+                        .build(),
+                ckbExtractor().extract(List.of(entryWithComplexVariant)));
     }
 
     private void assertEmptyExtractionWithInterpretation(@NotNull EventInterpretation eventInterpretation,

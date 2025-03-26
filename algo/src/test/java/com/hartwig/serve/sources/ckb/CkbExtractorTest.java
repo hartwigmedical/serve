@@ -36,14 +36,8 @@ public class CkbExtractorTest {
 
     @Test
     public void canExtractEvidenceAndTrialsFromCkbEntries() {
-        CkbExtractor extractor = CkbExtractorFactory.createExtractor(CkbClassificationConfig.build(),
-                RefGenomeResourceTestFactory.buildTestResource37(),
-                TreatmentApproachTestFactory.createEmptyCurator(),
-                CkbFilteringTestFactory.createEmptyEvidenceFilterModel(),
-                CkbFilteringTestFactory.createEmptyTrialFilterModel(),
-                Set.of(ImmutableCkbRegion.builder().country("netherlands").states(Collections.emptySet()).build()));
+        ExtractionResult result = createCkbExtractor().extract(createCkbEntryTestDatabase());
 
-        ExtractionResult result = extractor.extract(createCkbEntryTestDatabase());
         assertEquals(7, result.evidences().size());
         assertEquals(7, result.trials().size());
         assertEquals(1, result.knownEvents().hotspots().size());
@@ -56,12 +50,6 @@ public class CkbExtractorTest {
 
     @Test
     public void canExtractEvidenceWithCombinedCriteria() {
-        CkbExtractor ckbExtractor = CkbExtractorFactory.createExtractor(CkbClassificationConfig.build(),
-                RefGenomeResourceTestFactory.buildTestResource37(),
-                TreatmentApproachTestFactory.createEmptyCurator(),
-                CkbFilteringTestFactory.createEmptyEvidenceFilterModel(),
-                CkbFilteringTestFactory.createEmptyTrialFilterModel(),
-                Set.of(ImmutableCkbRegion.builder().country("netherlands").states(Collections.emptySet()).build()));
 
         List<CkbEntry> ckbEntries = Lists.newArrayList();
         List<Variant> variants =
@@ -76,7 +64,7 @@ public class CkbExtractorTest {
                 "Guideline",
                 "DOID:162"));
 
-        ExtractionResult extractionResult = ckbExtractor.extract(ckbEntries);
+        ExtractionResult extractionResult = createCkbExtractor().extract(ckbEntries);
 
         assertEquals(1, extractionResult.evidences().size());
         MolecularCriterium criterium = extractionResult.evidences().get(0).molecularCriterium();
@@ -103,13 +91,6 @@ public class CkbExtractorTest {
 
     @Test
     public void shouldReturnNullForUnresolvableEvents() {
-        CkbExtractor ckbExtractor = CkbExtractorFactory.createExtractor(CkbClassificationConfig.build(),
-                RefGenomeResourceTestFactory.buildTestResource37(),
-                TreatmentApproachTestFactory.createEmptyCurator(),
-                CkbFilteringTestFactory.createEmptyEvidenceFilterModel(),
-                CkbFilteringTestFactory.createEmptyTrialFilterModel(),
-                Set.of(ImmutableCkbRegion.builder().country("netherlands").states(Collections.emptySet()).build()));
-
         Variant recognizedVariant = CkbTestFactory.createVariant("BRAF", "V600E", "BRAF V600E");
         Variant unrecognizedVariant1 = CkbTestFactory.createVariant("BRAF", "unknown_type", "BRAF unknown_type");
         Variant unrecognizedVariant2 = CkbTestFactory.createVariant("KIT", "unknown_type", "KIT unknown_type");
@@ -128,8 +109,19 @@ public class CkbExtractorTest {
                 .addAllVariants(List.of(recognizedVariant, unrecognizedVariant1))
                 .build();
 
+        CkbExtractor ckbExtractor = createCkbExtractor();
         assertEquals(EMPTY_EXTRACTION_RESULT, ckbExtractor.extract(List.of(entryWithAllInvalid)));
         assertEquals(EMPTY_EXTRACTION_RESULT, ckbExtractor.extract(List.of(entryWithSomeInvalid)));
+    }
+
+    @NotNull
+    private static CkbExtractor createCkbExtractor() {
+        return CkbExtractorFactory.createExtractor(CkbClassificationConfig.build(),
+                RefGenomeResourceTestFactory.buildTestResource37(),
+                TreatmentApproachTestFactory.createEmptyCurator(),
+                CkbFilteringTestFactory.createEmptyEvidenceFilterModel(),
+                CkbFilteringTestFactory.createEmptyTrialFilterModel(),
+                Set.of(ImmutableCkbRegion.builder().country("netherlands").states(Collections.emptySet()).build()));
     }
 
     @NotNull

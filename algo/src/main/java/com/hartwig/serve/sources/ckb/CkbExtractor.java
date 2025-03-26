@@ -78,18 +78,18 @@ public class CkbExtractor {
         return extractEvent(entry);
     }
 
-    @Nullable
+    @NotNull
     private ExtractionResult extractEvent(@NotNull CkbEntry entry) {
         List<ExtractedEvent> extractedEvents = extractEvents(entry);
 
         if (extractedEvents.size() != entry.variants().size()) {
             LOGGER.warn("Not all variants could be extracted for CKB entry {}: '{}'", entry.profileId(), entry.profileName());
-            return null;
+            return extractionWithEventInterpretationOnly(entry, extractedEvents);
         }
 
         if (extractedEvents.stream().anyMatch(e -> e.eventType() == EventType.UNKNOWN)) {
             LOGGER.warn("Not all variants could be extracted for CKB entry {}: '{}'", entry.profileId(), entry.profileName());
-            return null;
+            return extractionWithEventInterpretationOnly(entry, extractedEvents);
         }
 
         List<ExtractedEvent> emptyEventOutputs = extractedEvents.stream()
@@ -102,12 +102,12 @@ public class CkbExtractor {
             emptyEventOutputs.forEach(event -> LOGGER.warn("Variant with empty extraction: '{}' type {}",
                     event.variant().fullName(),
                     event.eventType()));
-            return null;
+            return extractionWithEventInterpretationOnly(entry, extractedEvents);
         } else if (!emptyEventOutputs.isEmpty()) {
             LOGGER.debug("Empty extraction for a variant in for CKB Entry {}: '{}'",
                     entry.profileId(),
                     entry.profileName());
-            return null;
+            return extractionWithEventInterpretationOnly(entry, extractedEvents);
         }
 
         EventInterpretation interpretation = interpretEvent(entry, extractedEvents);
@@ -129,6 +129,14 @@ public class CkbExtractor {
                 .knownEvents(CkbKnownEventsExtractor.generateKnownEvents(extractedEvents, efficacyEvidences.isEmpty()))
                 .evidences(efficacyEvidences)
                 .trials(actionableTrials)
+                .build();
+    }
+
+    @NotNull
+    private ExtractionResult extractionWithEventInterpretationOnly(@NotNull CkbEntry entry, @NotNull List<ExtractedEvent> extractedEvents) {
+        return ImmutableExtractionResult.builder()
+                .refGenomeVersion(Knowledgebase.CKB.refGenomeVersion())
+                .eventInterpretations(Set.of(interpretEvent(entry, extractedEvents)))
                 .build();
     }
 
@@ -185,32 +193,35 @@ public class CkbExtractor {
     private List<ExtractedEvent> extractEvents(@NotNull CkbEntry entry) {
         return entry.variants().stream()
                 .map(this::extractEvent)
-                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 
-    @Nullable
+    @NotNull
     private ExtractedEvent extractEvent(@NotNull Variant variant) {
         EventType eventType = CkbEventTypeExtractor.classify(variant);
 
         if (eventType == EventType.COMBINED) {
             throw new IllegalStateException("Should not have combined event for single variant: " + variant.fullName());
-        } else if (eventType == EventType.UNKNOWN) {
-            LOGGER.warn("No known event type for variant: '{}'", variant.fullName());
-            return null;
         }
 
-        String event = CkbEventAndGeneExtractor.extractEvent(variant);
         String gene = CkbEventAndGeneExtractor.extractGene(variant);
+        String event = CkbEventAndGeneExtractor.extractEvent(variant);
+
+        ImmutableExtractedEvent.Builder extractedEventBuilder = ImmutableExtractedEvent.builder()
+                .gene(gene)
+                .event(event)
+                .variant(variant)
+                .eventType(eventType);
+
+        if (eventType == EventType.UNKNOWN) {
+            LOGGER.warn("No known event type for variant: '{}'", variant.fullName());
+            return extractedEventBuilder.build();
+        }
 
         EventExtractorOutput eventExtractorOutput =
                 CkbMolecularCriteriaExtractor.curateCodons(eventExtractor.extract(gene, null, eventType, event));
 
-        return ImmutableExtractedEvent.builder()
-                .gene(gene)
-                .event(event)
-                .variant(variant)
-                .eventType(eventType)
+        return extractedEventBuilder
                 .eventExtractorOutput(eventExtractorOutput)
                 .build();
     }

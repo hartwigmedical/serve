@@ -10,7 +10,6 @@ import java.util.Set;
 
 import com.hartwig.serve.ckb.classification.CkbClassificationConfig;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
-import com.hartwig.serve.ckb.datamodel.ImmutableCkbEntry;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.ImmutableVariantRequirementDetail;
 import com.hartwig.serve.ckb.datamodel.variant.Variant;
 import com.hartwig.serve.common.classification.EventType;
@@ -20,6 +19,7 @@ import com.hartwig.serve.datamodel.molecular.MolecularCriterium;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.ImmutableExtractionResult;
 import com.hartwig.serve.extraction.events.EventInterpretation;
+import com.hartwig.serve.extraction.events.ImmutableEventInterpretation;
 import com.hartwig.serve.refgenome.RefGenomeResourceTestFactory;
 import com.hartwig.serve.sources.ckb.filter.CkbFilteringTestFactory;
 import com.hartwig.serve.sources.ckb.region.ImmutableCkbRegion;
@@ -31,12 +31,9 @@ import org.junit.Test;
 
 public class CkbExtractorTest {
 
-    private static final ExtractionResult EMPTY_EXTRACTION_RESULT =
-            ImmutableExtractionResult.builder().refGenomeVersion(RefGenome.V38).build();
-
     @Test
     public void canExtractEvidenceAndTrialsFromCkbEntries() {
-        ExtractionResult result = createCkbExtractor().extract(createCkbEntryTestDatabase());
+        ExtractionResult result = ckbExtractor().extract(createCkbEntryTestDatabase());
 
         assertEquals(7, result.evidences().size());
         assertEquals(7, result.trials().size());
@@ -64,7 +61,7 @@ public class CkbExtractorTest {
                 "Guideline",
                 "DOID:162"));
 
-        ExtractionResult extractionResult = createCkbExtractor().extract(ckbEntries);
+        ExtractionResult extractionResult = ckbExtractor().extract(ckbEntries);
 
         assertEquals(1, extractionResult.evidences().size());
         MolecularCriterium criterium = extractionResult.evidences().get(0).molecularCriterium();
@@ -79,10 +76,15 @@ public class CkbExtractorTest {
 
         assertEquals(1, extractionResult.eventInterpretations().size());
         EventInterpretation interpretation = extractionResult.eventInterpretations().iterator().next();
-        assertEquals(EventType.COMBINED, interpretation.interpretedEventType());
-        assertEquals("Multiple", interpretation.interpretedGene());
-        assertEquals("loss,loss", interpretation.interpretedEvent());
-        assertEquals("Multiple loss,loss", interpretation.sourceEvent());
+
+        assertEquals(ImmutableEventInterpretation.builder()
+                .source(Knowledgebase.CKB)
+                .sourceEvent("Multiple loss,loss")
+                .interpretedGene("Multiple")
+                .interpretedEvent("loss,loss")
+                .interpretedEventType(EventType.COMBINED)
+                .build(), interpretation);
+
         assertEquals(Knowledgebase.CKB, interpretation.source());
 
         // trials not extracted yet
@@ -90,32 +92,56 @@ public class CkbExtractorTest {
     }
 
     @Test
-    public void shouldReturnNullForUnresolvableEvents() {
+    public void shouldReturnInterpretationOnlyForUnresolvableEvents() {
         Variant recognizedVariant = CkbTestFactory.createVariant("BRAF", "V600E", "BRAF V600E");
-        Variant unrecognizedVariant1 = CkbTestFactory.createVariant("BRAF", "unknown_type", "BRAF unknown_type");
-        Variant unrecognizedVariant2 = CkbTestFactory.createVariant("KIT", "unknown_type", "KIT unknown_type");
+        Variant unrecognizedVariant = CkbTestFactory.createVariant("BRAF", "unknown_type", "BRAF unknown_type");
 
-        CkbEntry entryWithAllInvalid = createCombinedEntry(List.of(unrecognizedVariant1, unrecognizedVariant2),
-                "sensitive",
-                "Actionable",
-                "any treatment",
-                "any indication",
-                "A",
-                "Guideline",
-                "DOID:162");
+        CkbEntry entryWithInvalidVariant = createCombinedEntry(List.of(recognizedVariant, unrecognizedVariant));
 
-        CkbEntry entryWithSomeInvalid = ImmutableCkbEntry.builder()
-                .from(entryWithAllInvalid)
-                .addAllVariants(List.of(recognizedVariant, unrecognizedVariant1))
-                .build();
+        assertEmptyExtractionWithInterpretation(
+                interpretationBuilder()
+                        .sourceEvent("Multiple V600E,unknown_type")
+                        .interpretedGene("Multiple")
+                        .interpretedEvent("V600E,unknown_type")
+                        .interpretedEventType(EventType.COMBINED)
+                        .build(),
+                ckbExtractor().extract(List.of(entryWithInvalidVariant)));
+    }
 
-        CkbExtractor ckbExtractor = createCkbExtractor();
-        assertEquals(EMPTY_EXTRACTION_RESULT, ckbExtractor.extract(List.of(entryWithAllInvalid)));
-        assertEquals(EMPTY_EXTRACTION_RESULT, ckbExtractor.extract(List.of(entryWithSomeInvalid)));
+    @Test
+    public void shouldReturnInterpretationOnlyForComplexEvent() {
+        Variant complexVariant = CkbTestFactory.createVariant("BRAF", "V600*fs", "BRAF V600*fs");
+
+        CkbEntry entryWithComplexVariant = createCombinedEntry(List.of(complexVariant));
+
+        assertEmptyExtractionWithInterpretation(
+                interpretationBuilder()
+                        .sourceEvent("BRAF V600*fs")
+                        .interpretedGene("BRAF")
+                        .interpretedEvent("V600*fs")
+                        .interpretedEventType(EventType.COMPLEX)
+                        .build(),
+                ckbExtractor().extract(List.of(entryWithComplexVariant))
+        );
+
+    }
+
+    private void assertEmptyExtractionWithInterpretation(@NotNull EventInterpretation eventInterpretation,
+            @NotNull ExtractionResult extractionResult) {
+        assertEquals(ImmutableExtractionResult.builder()
+                        .refGenomeVersion(RefGenome.V38)
+                        .eventInterpretations(Set.of(eventInterpretation))
+                        .build(),
+                extractionResult);
     }
 
     @NotNull
-    private static CkbExtractor createCkbExtractor() {
+    private ImmutableEventInterpretation.Builder interpretationBuilder() {
+        return ImmutableEventInterpretation.builder().source(Knowledgebase.CKB);
+    }
+
+    @NotNull
+    private static CkbExtractor ckbExtractor() {
         return CkbExtractorFactory.createExtractor(CkbClassificationConfig.build(),
                 RefGenomeResourceTestFactory.buildTestResource37(),
                 TreatmentApproachTestFactory.createEmptyCurator(),

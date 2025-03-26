@@ -23,6 +23,6 @@ public abstract class ExtractedEvent {
     @NotNull
     public abstract EventType eventType();
 
-    @NotNull
+    @Nullable
     public abstract EventExtractorOutput eventExtractorOutput();
 }

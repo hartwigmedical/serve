@@ -162,9 +162,9 @@ class ConversionFilter {
 
         List<EfficacyEvidence> filtered = Lists.newArrayList();
         for (EfficacyEvidence evidence : evidences) {
-            MolecularCriterium criterium = cleanMolecularCriterium(evidence.molecularCriterium());
-            if (countCriteriumEntries(criterium) > 0) {
-                filtered.add(ImmutableEfficacyEvidence.builder().from(evidence).molecularCriterium(criterium).build());
+            MolecularCriterium cleanCriterium = cleanMolecularCriterium(evidence.molecularCriterium());
+            if (isValidCriterium(evidence.molecularCriterium(), cleanCriterium)) {
+                filtered.add(ImmutableEfficacyEvidence.builder().from(evidence).molecularCriterium(cleanCriterium).build());
             }
         }
         return filtered;
@@ -180,9 +180,9 @@ class ConversionFilter {
         for (ActionableTrial trial : trials) {
             List<MolecularCriterium> cleanedCriteria = Lists.newArrayList();
             for (MolecularCriterium criterium : trial.anyMolecularCriteria()) {
-                MolecularCriterium cleaned = cleanMolecularCriterium(criterium);
-                if (countCriteriumEntries(cleaned) > 0) {
-                    cleanedCriteria.add(cleaned);
+                MolecularCriterium cleanCriterium = cleanMolecularCriterium(criterium);
+                if (isValidCriterium(criterium, cleanCriterium)) {
+                    cleanedCriteria.add(cleanCriterium);
                 }
             }
 
@@ -195,7 +195,7 @@ class ConversionFilter {
 
     @NotNull
     private MolecularCriterium cleanMolecularCriterium(@NotNull MolecularCriterium criterium) {
-        MolecularCriterium cleanedCriterium = ImmutableMolecularCriterium.builder()
+        return ImmutableMolecularCriterium.builder()
                 .from(criterium)
                 .hotspots(filterActionableHotspots(criterium.hotspots()))
                 .codons(filterActionableRange(criterium.codons()))
@@ -204,18 +204,19 @@ class ConversionFilter {
                 .fusions(filterActionableFusions(criterium.fusions()))
                 .build();
 
-        if (countCriteriumEntries(cleanedCriterium) != countCriteriumEntries(criterium)) {
-            return ImmutableMolecularCriterium.builder().build();
-        } else {
-            return cleanedCriterium;
-        }
+    }
+
+    private boolean isValidCriterium(@NotNull MolecularCriterium criterium, @NotNull MolecularCriterium cleanedCriterium) {
+        int originalCount = countCriteriumEntries(criterium);
+        int cleanedCount = countCriteriumEntries(cleanedCriterium);
+        return originalCount > 0 && originalCount == cleanedCount;
     }
 
     private static int countCriteriumEntries(@NotNull MolecularCriterium criterium) {
         return criterium.hotspots().size() + criterium.codons().size() + criterium.exons().size() + criterium.genes().size()
                 + criterium.fusions().size() + criterium.characteristics().size() + criterium.hla().size();
     }
-    
+
     @NotNull
     private Set<ActionableHotspot> filterActionableHotspots(@NotNull Set<ActionableHotspot> actionableHotspots) {
         return actionableHotspots;

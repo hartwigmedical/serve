@@ -5,7 +5,6 @@ import java.util.Set;
 
 import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.efficacy.EfficacyEvidence;
-import com.hartwig.serve.datamodel.efficacy.ImmutableEfficacyEvidence;
 import com.hartwig.serve.datamodel.molecular.ImmutableKnownEvents;
 import com.hartwig.serve.datamodel.molecular.ImmutableMolecularCriterium;
 import com.hartwig.serve.datamodel.molecular.KnownEvents;
@@ -162,9 +161,8 @@ class ConversionFilter {
 
         List<EfficacyEvidence> filtered = Lists.newArrayList();
         for (EfficacyEvidence evidence : evidences) {
-            MolecularCriterium cleanCriterium = cleanMolecularCriterium(evidence.molecularCriterium());
-            if (isValidCriterium(evidence.molecularCriterium(), cleanCriterium)) {
-                filtered.add(ImmutableEfficacyEvidence.builder().from(evidence).molecularCriterium(cleanCriterium).build());
+            if (isValidCriterium(evidence.molecularCriterium())) {
+                filtered.add(evidence);
             }
         }
         return filtered;
@@ -180,9 +178,8 @@ class ConversionFilter {
         for (ActionableTrial trial : trials) {
             List<MolecularCriterium> cleanedCriteria = Lists.newArrayList();
             for (MolecularCriterium criterium : trial.anyMolecularCriteria()) {
-                MolecularCriterium cleanCriterium = cleanMolecularCriterium(criterium);
-                if (isValidCriterium(criterium, cleanCriterium)) {
-                    cleanedCriteria.add(cleanCriterium);
+                if (isValidCriterium(criterium)) {
+                    cleanedCriteria.add(criterium);
                 }
             }
 
@@ -203,10 +200,10 @@ class ConversionFilter {
                 .genes(filterActionableGenes(criterium.genes()))
                 .fusions(filterActionableFusions(criterium.fusions()))
                 .build();
-
     }
 
-    private boolean isValidCriterium(@NotNull MolecularCriterium criterium, @NotNull MolecularCriterium cleanedCriterium) {
+    private boolean isValidCriterium(@NotNull MolecularCriterium criterium) {
+        MolecularCriterium cleanedCriterium = cleanMolecularCriterium(criterium);
         int originalCount = countCriteriumEntries(criterium);
         int cleanedCount = countCriteriumEntries(cleanedCriterium);
         return originalCount > 0 && originalCount == cleanedCount;

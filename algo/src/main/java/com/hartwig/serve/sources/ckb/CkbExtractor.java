@@ -81,12 +81,23 @@ public class CkbExtractor {
     private ExtractionResult runExtractionForEntry(@NotNull CkbEntry entry) {
         List<ExtractedEvent> extractedEvents = extractEvents(entry);
 
-        List<ExtractedEvent> emptyEventOutputs = extractedEvents.stream()
+        if (extractedEvents.size() != entry.variants().size()) {
+            LOGGER.warn("Not all variants could b!e extracted for CKB entry {}: '{}'", entry.profileId(), entry.profileName());
+            return extractionWithEventInterpretationOnly(entry, extractedEvents);
+        }
+
+        List<ExtractedEvent> eventsWithEmptyExtractorOutput = extractedEvents.stream()
                 .filter(event -> countEventExtractorOutputs(event.eventExtractorOutput()) == 0)
                 .collect(Collectors.toList());
 
-        if (extractedEvents.size() != entry.variants().size() || !emptyEventOutputs.isEmpty()) {
-            LOGGER.warn("Not all variants could be extracted for CKB entry {}: '{}'", entry.profileId(), entry.profileName());
+        if (!eventsWithEmptyExtractorOutput.isEmpty()) {
+            if (eventsWithEmptyExtractorOutput.stream().anyMatch(event -> event.eventType() != EventType.COMPLEX)) {
+                LOGGER.warn("Not all variants could be extracted for CKB entry {}: '{}'", entry.profileId(), entry.profileName());
+            } else {
+                LOGGER.debug("Variants with EventType COMPLEX are not extracted for CKB entry {}: '{}'",
+                        entry.profileId(),
+                        entry.profileName());
+            }
             return extractionWithEventInterpretationOnly(entry, extractedEvents);
         }
 

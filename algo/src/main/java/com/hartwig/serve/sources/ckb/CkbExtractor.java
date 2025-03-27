@@ -74,11 +74,11 @@ public class CkbExtractor {
             return null;
         }
 
-        return extractEvent(entry);
+        return runExtractionForEntry(entry);
     }
 
     @NotNull
-    private ExtractionResult extractEvent(@NotNull CkbEntry entry) {
+    private ExtractionResult runExtractionForEntry(@NotNull CkbEntry entry) {
         List<ExtractedEvent> extractedEvents = extractEvents(entry);
 
         if (extractedEvents.size() != entry.variants().size() ||

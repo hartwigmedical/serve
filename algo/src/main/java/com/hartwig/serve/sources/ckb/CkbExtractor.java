@@ -81,32 +81,17 @@ public class CkbExtractor {
     private ExtractionResult runExtractionForEntry(@NotNull CkbEntry entry) {
         List<ExtractedEvent> extractedEvents = extractEvents(entry);
 
-        if (extractedEvents.size() != entry.variants().size() ||
-                extractedEvents.stream().anyMatch(e -> countEventExtractorOutputs(e.eventExtractorOutput()) == 0)) {
-            LOGGER.warn("Not all variants could be extracted for CKB entry {}: '{}'", entry.profileId(), entry.profileName());
-            return extractionWithEventInterpretationOnly(entry, extractedEvents);
-        }
-
-        if (extractedEvents.stream().anyMatch(e -> e.eventType() == EventType.UNKNOWN)) {
-            LOGGER.warn("Not all variants could be extracted for CKB entry {}: '{}'", entry.profileId(), entry.profileName());
-            return extractionWithEventInterpretationOnly(entry, extractedEvents);
-        }
-
         List<ExtractedEvent> emptyEventOutputs = extractedEvents.stream()
-                .filter(e -> countEventExtractorOutputs(e.eventExtractorOutput()) == 0)
+                .filter(event -> countEventExtractorOutputs(event.eventExtractorOutput()) == 0)
                 .collect(Collectors.toList());
-        if (emptyEventOutputs.stream().anyMatch(event -> event.eventType() != EventType.COMPLEX)) {
-            LOGGER.warn("Empty extraction for a variant in CKB entry {}: '{}'",
-                    entry.profileId(),
-                    entry.profileName());
-            emptyEventOutputs.forEach(event -> LOGGER.warn("Variant with empty extraction: '{}' type {}",
-                    event.variant().fullName(),
-                    event.eventType()));
+
+        if (extractedEvents.size() != entry.variants().size() || !emptyEventOutputs.isEmpty()) {
+            LOGGER.warn("Not all variants could be extracted for CKB entry {}: '{}'", entry.profileId(), entry.profileName());
             return extractionWithEventInterpretationOnly(entry, extractedEvents);
-        } else if (!emptyEventOutputs.isEmpty()) {
-            LOGGER.debug("Empty extraction for a variant in for CKB Entry {}: '{}'",
-                    entry.profileId(),
-                    entry.profileName());
+        }
+
+        if (extractedEvents.stream().anyMatch(event -> event.eventType() == EventType.UNKNOWN)) {
+            LOGGER.warn("Not all variants could be extracted for CKB entry {}: '{}'", entry.profileId(), entry.profileName());
             return extractionWithEventInterpretationOnly(entry, extractedEvents);
         }
 

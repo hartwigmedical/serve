@@ -48,8 +48,7 @@ final class CkbMolecularCriteriaExtractor {
 
     @NotNull
     public static MolecularCriterium createMolecularCriterium(@NotNull CkbEntry entry, @NotNull List<ExtractedEvent> events) {
-        String sourceEvent = combinedSourceEvent(entry);
-        ActionableEvent actionableEvent = toActionableEvent(sourceEvent, entry);
+        ActionableEvent actionableEvent = toActionableEvent(entry);
 
         List<MolecularCriterium> molecularCriteria = events.stream()
                 .map(event -> createMolecularCriterium(event.eventExtractorOutput(), actionableEvent))
@@ -73,7 +72,6 @@ final class CkbMolecularCriteriaExtractor {
     @NotNull
     static MolecularCriterium createMolecularCriterium(@NotNull EventExtractorOutput extractionOutput,
             @NotNull ActionableEvent actionableEvent) {
-        Set<ActionableHotspot> hotspot = hotspotCriteria(extractionOutput, actionableEvent);
         return ImmutableMolecularCriterium.builder()
                 .hotspots(hotspotCriteria(extractionOutput, actionableEvent))
                 .codons(codonCriteria(extractionOutput, actionableEvent))
@@ -204,7 +202,8 @@ final class CkbMolecularCriteriaExtractor {
     }
 
     @NotNull
-    private static ActionableEvent toActionableEvent(@NotNull String sourceEvent, @NotNull CkbEntry entry) {
+    private static ActionableEvent toActionableEvent(@NotNull CkbEntry entry) {
+        String sourceEvent = combinedSourceEvent(entry);
         String sourceUrl = "https://ckbhome.jax.org/profileResponse/advancedEvidenceFind?molecularProfileId=" + entry.profileId();
         LocalDate sourceDate = entry.createDate();
         return ImmutableActionableEventImpl.builder().sourceDate(sourceDate).sourceEvent(sourceEvent).sourceUrls(Set.of(sourceUrl)).build();

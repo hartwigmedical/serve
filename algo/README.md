@@ -409,8 +409,8 @@ Within the Hartwig pipeline, SERVE output is used in the following manner:
   annotation.
 - The actionable output is the database that [PROTECT](https://github.com/hartwigmedical/hmftools/tree/master/protect) bases its clinical
   evidence matching on.
-- [ACTIN](https://github.com/hartwigmedical/actin/tree/master) uses the SERVE database for molecular interpretation and efficacy evidence and
-  trial annotation.
+- [ACTIN](https://github.com/hartwigmedical/actin/tree/master) uses the SERVE database for molecular interpretation and efficacy evidence
+  and trial annotation.
 
 ## How to run the docker image
 
@@ -447,6 +447,8 @@ elsewhere.
 
 ## Version History and Download Links
 
+- [8.2.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v8.2.0)
+    - Include efficacy evidences with combined molecular criteria from CKB
 - [8.1.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v8.1.0)
     - Add trial phases as distinct evidence level details.
 - [8.0.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v8.0.0)

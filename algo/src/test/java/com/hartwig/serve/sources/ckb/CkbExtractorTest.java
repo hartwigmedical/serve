@@ -1,7 +1,8 @@
 package com.hartwig.serve.sources.ckb;
 
+import static com.hartwig.serve.sources.ckb.CkbTestFactory.createCombinedEntry;
+
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -10,13 +11,15 @@ import java.util.Set;
 import com.hartwig.serve.ckb.classification.CkbClassificationConfig;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.ckb.datamodel.clinicaltrial.ImmutableVariantRequirementDetail;
-import com.hartwig.serve.datamodel.molecular.MutationType;
-import com.hartwig.serve.datamodel.molecular.range.RangeTestFactory;
-import com.hartwig.serve.extraction.EventExtractorOutput;
+import com.hartwig.serve.ckb.datamodel.variant.Variant;
+import com.hartwig.serve.common.classification.EventType;
+import com.hartwig.serve.datamodel.Knowledgebase;
+import com.hartwig.serve.datamodel.RefGenome;
+import com.hartwig.serve.datamodel.molecular.MolecularCriterium;
 import com.hartwig.serve.extraction.ExtractionResult;
-import com.hartwig.serve.extraction.ImmutableEventExtractorOutput;
-import com.hartwig.serve.extraction.codon.CodonAnnotation;
-import com.hartwig.serve.extraction.codon.ImmutableCodonAnnotation;
+import com.hartwig.serve.extraction.ImmutableExtractionResult;
+import com.hartwig.serve.extraction.events.EventInterpretation;
+import com.hartwig.serve.extraction.events.ImmutableEventInterpretation;
 import com.hartwig.serve.refgenome.RefGenomeResourceTestFactory;
 import com.hartwig.serve.sources.ckb.filter.CkbFilteringTestFactory;
 import com.hartwig.serve.sources.ckb.region.ImmutableCkbRegion;
@@ -30,74 +33,135 @@ public class CkbExtractorTest {
 
     @Test
     public void canExtractEvidenceAndTrialsFromCkbEntries() {
-        CkbExtractor trialExtractor = CkbExtractorFactory.createExtractor(CkbClassificationConfig.build(),
+        ExtractionResult result = ckbExtractor().extract(createCkbEntryTestDatabase());
+
+        assertEquals(7, result.evidences().size());
+        assertEquals(7, result.trials().size());
+        assertEquals(1, result.knownEvents().hotspots().size());
+        assertEquals(1, result.knownEvents().exons().size());
+        assertEquals(1, result.knownEvents().codons().size());
+        assertEquals(1, result.knownEvents().fusions().size());
+        assertEquals(1, result.knownEvents().copyNumbers().size());
+        assertEquals(3, result.knownEvents().genes().size());
+    }
+
+    @Test
+    public void canExtractEvidenceWithCombinedCriteria() {
+
+        List<CkbEntry> ckbEntries = Lists.newArrayList();
+        List<Variant> variants =
+                List.of(CkbTestFactory.createVariant("BRAF", "loss", "BRAF loss"), CkbTestFactory.createVariant("KIT", "loss", "KIT loss"));
+
+        ckbEntries.add(createCombinedEntry(variants,
+                "sensitive",
+                "Actionable",
+                "any treatment",
+                "any indication",
+                "A",
+                "Guideline",
+                "DOID:162"));
+
+        ExtractionResult extractionResult = ckbExtractor().extract(ckbEntries);
+
+        assertEquals(1, extractionResult.evidences().size());
+        MolecularCriterium criterium = extractionResult.evidences().get(0).molecularCriterium();
+        assertEquals(2, criterium.genes().size());
+
+        assertEquals(0, extractionResult.knownEvents().hotspots().size());
+        assertEquals(0, extractionResult.knownEvents().codons().size());
+        assertEquals(0, extractionResult.knownEvents().exons().size());
+        assertEquals(2, extractionResult.knownEvents().genes().size());
+        assertEquals(2, extractionResult.knownEvents().copyNumbers().size());
+        assertEquals(0, extractionResult.knownEvents().fusions().size());
+
+        assertEquals(1, extractionResult.eventInterpretations().size());
+        EventInterpretation interpretation = extractionResult.eventInterpretations().iterator().next();
+
+        assertEquals(ImmutableEventInterpretation.builder()
+                .source(Knowledgebase.CKB)
+                .sourceEvent("Multiple loss,loss")
+                .interpretedGene("Multiple")
+                .interpretedEvent("loss,loss")
+                .interpretedEventType(EventType.COMBINED)
+                .build(), interpretation);
+
+        assertEquals(Knowledgebase.CKB, interpretation.source());
+
+        // trials not extracted yet
+        assertEquals(0, extractionResult.trials().size());
+    }
+
+    @Test
+    public void shouldReturnInterpretationOnlyForUnknownEvents() {
+        Variant recognizedVariant = CkbTestFactory.createVariant("BRAF", "V600E", "BRAF V600E");
+        Variant unrecognizedVariant = CkbTestFactory.createVariant("BRAF", "unknown_type", "BRAF unknown_type");
+
+        CkbEntry entryWithInvalidVariant = createCombinedEntry(List.of(recognizedVariant, unrecognizedVariant));
+
+        assertEmptyExtractionWithInterpretation(
+                interpretationBuilder()
+                        .sourceEvent("Multiple V600E,unknown_type")
+                        .interpretedGene("Multiple")
+                        .interpretedEvent("V600E,unknown_type")
+                        .interpretedEventType(EventType.COMBINED)
+                        .build(),
+                ckbExtractor().extract(List.of(entryWithInvalidVariant)));
+    }
+
+    @Test
+    public void shouldReturnInterpretationOnlyForComplexEvent() {
+        Variant complexVariant = CkbTestFactory.createVariant("BRAF", "V600*fs", "BRAF V600*fs");
+
+        CkbEntry entryWithComplexVariant = createCombinedEntry(List.of(complexVariant));
+
+        assertEmptyExtractionWithInterpretation(
+                interpretationBuilder()
+                        .sourceEvent("BRAF V600*fs")
+                        .interpretedGene("BRAF")
+                        .interpretedEvent("V600*fs")
+                        .interpretedEventType(EventType.COMPLEX)
+                        .build(),
+                ckbExtractor().extract(List.of(entryWithComplexVariant)));
+    }
+
+    @Test
+    public void shouldReturnInterpretationOnlyForUnresolvableEvent() {
+        Variant complexVariant = CkbTestFactory.createVariant("UNKNOWN_GENE", "act mut", "UNKNOWN_GENE act mut");
+
+        CkbEntry entryWithComplexVariant = createCombinedEntry(List.of(complexVariant));
+
+        assertEmptyExtractionWithInterpretation(
+                interpretationBuilder()
+                        .sourceEvent("UNKNOWN_GENE act mut")
+                        .interpretedGene("UNKNOWN_GENE")
+                        .interpretedEvent("act mut")
+                        .interpretedEventType(EventType.GENE_LEVEL)
+                        .build(),
+                ckbExtractor().extract(List.of(entryWithComplexVariant)));
+    }
+
+    private void assertEmptyExtractionWithInterpretation(@NotNull EventInterpretation eventInterpretation,
+            @NotNull ExtractionResult extractionResult) {
+        assertEquals(ImmutableExtractionResult.builder()
+                        .refGenomeVersion(RefGenome.V38)
+                        .eventInterpretations(Set.of(eventInterpretation))
+                        .build(),
+                extractionResult);
+    }
+
+    @NotNull
+    private ImmutableEventInterpretation.Builder interpretationBuilder() {
+        return ImmutableEventInterpretation.builder().source(Knowledgebase.CKB);
+    }
+
+    @NotNull
+    private static CkbExtractor ckbExtractor() {
+        return CkbExtractorFactory.createExtractor(CkbClassificationConfig.build(),
                 RefGenomeResourceTestFactory.buildTestResource37(),
                 TreatmentApproachTestFactory.createEmptyCurator(),
                 CkbFilteringTestFactory.createEmptyEvidenceFilterModel(),
                 CkbFilteringTestFactory.createEmptyTrialFilterModel(),
                 Set.of(ImmutableCkbRegion.builder().country("netherlands").states(Collections.emptySet()).build()));
-
-        ExtractionResult trialResult = trialExtractor.extract(createCkbEntryTestDatabase());
-        assertEquals(7, trialResult.trials().size());
-        assertEquals(7, trialResult.evidences().size());
-        assertEquals(1, trialResult.knownEvents().hotspots().size());
-        assertEquals(1, trialResult.knownEvents().exons().size());
-        assertEquals(1, trialResult.knownEvents().codons().size());
-        assertEquals(1, trialResult.knownEvents().fusions().size());
-        assertEquals(1, trialResult.knownEvents().copyNumbers().size());
-        assertEquals(3, trialResult.knownEvents().genes().size());
-    }
-
-    @Test
-    public void canCurateCodons() {
-        EventExtractorOutput extractorOutput = ImmutableEventExtractorOutput.builder()
-                .codons(List.of(ImmutableCodonAnnotation.builder()
-                                .from(RangeTestFactory.createTestRangeAnnotation())
-                                .gene("BRAF")
-                                .chromosome("1")
-                                .start(140753335)
-                                .end(140753337)
-                                .applicableMutationType(MutationType.ANY)
-                                .inputTranscript("A")
-                                .inputCodonRank(600)
-                                .build(),
-                        ImmutableCodonAnnotation.builder()
-                                .from(RangeTestFactory.createTestRangeAnnotation())
-                                .gene("KRAS")
-                                .chromosome("1")
-                                .start(10)
-                                .end(20)
-                                .applicableMutationType(MutationType.ANY)
-                                .inputTranscript("transcript")
-                                .inputCodonRank(600)
-                                .build()))
-                .build();
-
-        List<CodonAnnotation> curatedCodons = CkbExtractor.curateCodons(extractorOutput).codons();
-
-        assertNotNull(curatedCodons);
-
-        CodonAnnotation codon1 = findByGene(curatedCodons, "BRAF");
-        assertEquals(140753335, codon1.start());
-        assertEquals(140753337, codon1.end());
-        assertEquals("ENST00000646891", codon1.inputTranscript());
-
-        CodonAnnotation codon2 = findByGene(curatedCodons, "KRAS");
-        assertEquals("KRAS", codon2.gene());
-        assertEquals(10, codon2.start());
-        assertEquals(20, codon2.end());
-        assertEquals("transcript", codon2.inputTranscript());
-    }
-
-    @NotNull
-    private static CodonAnnotation findByGene(@NotNull Iterable<CodonAnnotation> codons, @NotNull String geneToFind) {
-        for (CodonAnnotation codon : codons) {
-            if (codon.gene().equals(geneToFind)) {
-                return codon;
-            }
-        }
-
-        throw new IllegalStateException("Could not find gene " + geneToFind);
     }
 
     @NotNull

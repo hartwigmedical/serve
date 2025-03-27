@@ -67,7 +67,7 @@ class ActionableTrialFactory {
     }
 
     @NotNull
-    public Set<ActionableTrial> create(@NotNull CkbEntry entry, @NotNull Set<MolecularCriterium> molecularCriteria,
+    public Set<ActionableTrial> create(@NotNull CkbEntry entry, @NotNull MolecularCriterium molecularCriterium,
             @NotNull String sourceEvent, @NotNull String sourceGene) {
         Set<ActionableTrial> actionableTrials = Sets.newHashSet();
 
@@ -91,7 +91,7 @@ class ActionableTrialFactory {
                         .genderCriterium(trial.gender() != null ? GenderCriterium.valueOf(trial.gender().toUpperCase()) : null)
                         .indications(extractIndications(trial.indications()))
                         // TODO (CB): trial can have multiple molecular criteria (required and/or partial required!). Since we currently loop over ckb entries (instead of ckb trials) in CkbExtractor, it's not possible to implement this.
-                        .anyMolecularCriteria(molecularCriteria)
+                        .anyMolecularCriteria(Set.of(molecularCriterium))
                         .urls(Sets.newHashSet("https://clinicaltrials.gov/study/" + trial.nctId()))
                         .build());
             }

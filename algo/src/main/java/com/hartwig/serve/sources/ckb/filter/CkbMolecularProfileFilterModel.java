@@ -1,7 +1,9 @@
 package com.hartwig.serve.sources.ckb.filter;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -32,24 +34,18 @@ public class CkbMolecularProfileFilterModel {
     public List<CkbEntry> run(@NotNull List<CkbEntry> ckbEntries) {
         List<CkbEntry> cleanedCkbEntries = Lists.newArrayList();
         for (CkbEntry entry : ckbEntries) {
-            if (entry.variants().size() > 1) {
-                // Do not filter variants when in combination event, since this might make them a non-combined event.
-                cleanedCkbEntries.add(entry);
-            } else if (entry.variants().isEmpty()) {
+            if (entry.variants().isEmpty()) {
                 // Always filter entries with no variants. Should never happen in practice!
                 LOGGER.warn("Filtering '{}' because no variants have been defined for this entry!", entry);
             } else {
-                List<Variant> filteredVariants = Lists.newArrayList();
+                Map<Boolean, List<Variant>> shouldIncludeVariants = entry.variants().stream()
+                        .collect(Collectors.partitioningBy(variant -> include(entry.type(), variant)));
 
-                Variant variant = entry.variants().get(0);
-                if (include(entry.type(), variant)) {
-                    filteredVariants.add(variant);
+                if (shouldIncludeVariants.get(false).isEmpty()) {
+                    cleanedCkbEntries.add(ImmutableCkbEntry.builder().from(entry).variants(shouldIncludeVariants.get(true)).build());
                 } else {
-                    LOGGER.debug("Filtering variant '{}' on '{}'", variant.variant(), variant.gene().geneSymbol());
-                }
-
-                if (!filteredVariants.isEmpty()) {
-                    cleanedCkbEntries.add(ImmutableCkbEntry.builder().from(entry).variants(filteredVariants).build());
+                    LOGGER.debug("Filtering entry '{}' because some variants have been filtered out", entry);
+                    shouldIncludeVariants.get(false).forEach(rejectedVariant -> LOGGER.debug("Filtered variant '{}'", rejectedVariant));
                 }
             }
         }

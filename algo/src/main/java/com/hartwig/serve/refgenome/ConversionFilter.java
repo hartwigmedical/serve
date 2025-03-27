@@ -5,7 +5,6 @@ import java.util.Set;
 
 import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.efficacy.EfficacyEvidence;
-import com.hartwig.serve.datamodel.efficacy.ImmutableEfficacyEvidence;
 import com.hartwig.serve.datamodel.molecular.ImmutableKnownEvents;
 import com.hartwig.serve.datamodel.molecular.ImmutableMolecularCriterium;
 import com.hartwig.serve.datamodel.molecular.KnownEvents;
@@ -162,9 +161,8 @@ class ConversionFilter {
 
         List<EfficacyEvidence> filtered = Lists.newArrayList();
         for (EfficacyEvidence evidence : evidences) {
-            MolecularCriterium criterium = cleanMolecularCriterium(evidence.molecularCriterium());
-            if (hasAtLeastOneCriterium(criterium)) {
-                filtered.add(ImmutableEfficacyEvidence.builder().from(evidence).molecularCriterium(criterium).build());
+            if (isValidCriterium(evidence.molecularCriterium())) {
+                filtered.add(evidence);
             }
         }
         return filtered;
@@ -180,9 +178,8 @@ class ConversionFilter {
         for (ActionableTrial trial : trials) {
             List<MolecularCriterium> cleanedCriteria = Lists.newArrayList();
             for (MolecularCriterium criterium : trial.anyMolecularCriteria()) {
-                MolecularCriterium cleaned = cleanMolecularCriterium(criterium);
-                if (hasAtLeastOneCriterium(cleaned)) {
-                    cleanedCriteria.add(cleaned);
+                if (isValidCriterium(criterium)) {
+                    cleanedCriteria.add(criterium);
                 }
             }
 
@@ -205,9 +202,16 @@ class ConversionFilter {
                 .build();
     }
 
-    private static boolean hasAtLeastOneCriterium(@NotNull MolecularCriterium criterium) {
-        return !criterium.hotspots().isEmpty() || !criterium.codons().isEmpty() || !criterium.exons().isEmpty() || !criterium.genes()
-                .isEmpty() || !criterium.fusions().isEmpty() || !criterium.characteristics().isEmpty() || !criterium.hla().isEmpty();
+    private boolean isValidCriterium(@NotNull MolecularCriterium criterium) {
+        MolecularCriterium cleanedCriterium = cleanMolecularCriterium(criterium);
+        int originalCount = countCriteriumEntries(criterium);
+        int cleanedCount = countCriteriumEntries(cleanedCriterium);
+        return originalCount > 0 && originalCount == cleanedCount;
+    }
+
+    private static int countCriteriumEntries(@NotNull MolecularCriterium criterium) {
+        return criterium.hotspots().size() + criterium.codons().size() + criterium.exons().size() + criterium.genes().size()
+                + criterium.fusions().size() + criterium.characteristics().size() + criterium.hla().size();
     }
 
     @NotNull

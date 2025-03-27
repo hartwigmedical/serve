@@ -35,7 +35,6 @@ import com.hartwig.serve.datamodel.molecular.range.ImmutableActionableRange;
 import com.hartwig.serve.datamodel.molecular.range.RangeAnnotation;
 import com.hartwig.serve.datamodel.util.MolecularCriteriumCombiner;
 import com.hartwig.serve.extraction.EventExtractorOutput;
-import com.hartwig.serve.extraction.ExtractedEvent;
 import com.hartwig.serve.extraction.ImmutableEventExtractorOutput;
 import com.hartwig.serve.extraction.codon.CodonAnnotation;
 import com.hartwig.serve.extraction.codon.ImmutableCodonAnnotation;

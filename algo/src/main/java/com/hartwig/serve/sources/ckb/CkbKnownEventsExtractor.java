@@ -33,7 +33,6 @@ import com.hartwig.serve.datamodel.molecular.range.ImmutableKnownCodon;
 import com.hartwig.serve.datamodel.molecular.range.ImmutableKnownExon;
 import com.hartwig.serve.datamodel.molecular.range.KnownCodon;
 import com.hartwig.serve.datamodel.molecular.range.KnownExon;
-import com.hartwig.serve.extraction.ExtractedEvent;
 import com.hartwig.serve.extraction.codon.CodonAnnotation;
 import com.hartwig.serve.extraction.codon.CodonConsolidation;
 import com.hartwig.serve.extraction.copynumber.CopyNumberConsolidation;

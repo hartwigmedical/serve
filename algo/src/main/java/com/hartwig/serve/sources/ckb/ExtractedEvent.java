@@ -1,7 +1,8 @@
-package com.hartwig.serve.extraction;
+package com.hartwig.serve.sources.ckb;
 
 import com.hartwig.serve.ckb.datamodel.variant.Variant;
 import com.hartwig.serve.common.classification.EventType;
+import com.hartwig.serve.extraction.EventExtractorOutput;
 
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;

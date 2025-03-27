@@ -40,8 +40,8 @@ public class ActionableTrialFactoryTest {
     private static final CkbTrialFilterModel FILTER_MODEL = CkbFilteringTestFactory.createProperTrialFilterModel();
     private static final Set<CkbRegion> REGIONS_TO_INCLUDE =
             Set.of(createRegion("netherlands"), createRegion("belgium"), createRegion("germany"), createRegion("united states", "maine"));
-    private static final Set<MolecularCriterium> TEST_MOLECULAR_CRITERIUM =
-            Set.of(MolecularCriteriumTestFactory.createWithTestActionableGene());
+    private static final MolecularCriterium TEST_MOLECULAR_CRITERIUM =
+            MolecularCriteriumTestFactory.createWithTestActionableGene();
 
     @Test
     public void canCreateActionableEntryForOpenTrialInAllowedCountryWithRequiredMolecularProfileAndValidAgeGroup() {
@@ -51,11 +51,11 @@ public class ActionableTrialFactoryTest {
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(profileId, "required");
         ClinicalTrial clinicalTrial =
                 CkbTestFactory.createTrialWithTherapy("NCT0102", "Phase I trial", List.of(CkbTestFactory.createTherapy("Nivolumab")),
-                List.of(CkbTestFactory.createIndication("CUP", "JAX:10000006")),
-                "Recruiting",
-                List.of("senior", "child", "adult"),
-                List.of(requirementDetail),
-                List.of(location));
+                        List.of(CkbTestFactory.createIndication("CUP", "JAX:10000006")),
+                        "Recruiting",
+                        List.of("senior", "child", "adult"),
+                        List.of(requirementDetail),
+                        List.of(location));
         CkbEntry entry = CkbTestFactory.createEntryWithClinicalTrial(profileId, profileName, clinicalTrial);
 
         ActionableTrialFactory factory = new ActionableTrialFactory(FILTER_MODEL, REGIONS_TO_INCLUDE);
@@ -77,7 +77,7 @@ public class ActionableTrialFactoryTest {
         assertEquals("CUP", clinicalTrial1.indications().iterator().next().applicableType().name());
         assertEquals("162", clinicalTrial1.indications().iterator().next().applicableType().doid());
         assertEquals(GenderCriterium.BOTH, clinicalTrial1.genderCriterium());
-        assertEquals(TEST_MOLECULAR_CRITERIUM, clinicalTrial1.anyMolecularCriteria());
+        assertEquals(Set.of(TEST_MOLECULAR_CRITERIUM), clinicalTrial1.anyMolecularCriteria());
         assertEquals(Sets.newHashSet("https://clinicaltrials.gov/study/NCT0102"), clinicalTrial1.urls());
     }
 

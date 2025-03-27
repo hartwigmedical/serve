@@ -112,16 +112,16 @@ public class CkbExtractor {
 
         EventInterpretation interpretation = interpretEvent(entry, extractedEvents);
 
-        Set<MolecularCriterium> molecularCriteria = Set.of(CkbMolecularCriteriaExtractor.createMolecularCriterium(entry, extractedEvents));
+        MolecularCriterium molecularCriterium = CkbMolecularCriteriaExtractor.createMolecularCriterium(entry, extractedEvents);
 
         String combinedEvent = combineEvents(extractedEvents);
         String combinedGenes = combineGenes(extractedEvents);
-        Set<EfficacyEvidence> efficacyEvidences = efficacyEvidenceFactory.create(entry, molecularCriteria, combinedEvent, combinedGenes);
+        Set<EfficacyEvidence> efficacyEvidences = efficacyEvidenceFactory.create(entry, molecularCriterium, combinedEvent, combinedGenes);
 
         // Only extract trials for simple events for now. Combined events will require more complex handling
         Set<ActionableTrial> actionableTrials = extractedEvents.size() > 1
                 ? Set.of()
-                : actionableTrialFactory.create(entry, molecularCriteria, combinedEvent, combinedGenes);
+                : actionableTrialFactory.create(entry, molecularCriterium, combinedEvent, combinedGenes);
 
         return ImmutableExtractionResult.builder()
                 .refGenomeVersion(Knowledgebase.CKB.refGenomeVersion())

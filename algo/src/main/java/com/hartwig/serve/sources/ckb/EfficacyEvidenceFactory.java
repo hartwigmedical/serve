@@ -84,7 +84,7 @@ class EfficacyEvidenceFactory {
     }
 
     @NotNull
-    public Set<EfficacyEvidence> create(@NotNull CkbEntry entry, @NotNull Set<MolecularCriterium> molecularCriteria,
+    public Set<EfficacyEvidence> create(@NotNull CkbEntry entry, @NotNull MolecularCriterium molecularCriterium,
             @NotNull String combinedSourceEvent, @NotNull String combinedSourceGenes) {
         Set<EfficacyEvidence> efficacyEvidences = Sets.newHashSet();
 
@@ -145,24 +145,22 @@ class EfficacyEvidenceFactory {
                     //
                     //                    Set<String> curatedRelevantTreatmentApproaches = Sets.newHashSet(curator.isMatch(key));
 
-                    for (MolecularCriterium molecularCriterium : molecularCriteria) {
-                        efficacyEvidences.add(ImmutableEfficacyEvidence.builder()
-                                .source(Knowledgebase.CKB)
-                                .treatment(ImmutableTreatment.builder()
-                                        .name(treatment)
-                                        .treatmentApproachesDrugClass(treatmentApproachDrugClasses)
-                                        .treatmentApproachesTherapy(treatmentApproachTherapies)
-                                        .build())
-                                .indication(indication)
-                                .molecularCriterium(molecularCriterium)
-                                .efficacyDescription(evidence.efficacyEvidence())
-                                .evidenceLevel(level)
-                                .evidenceLevelDetails(evidenceLevelDetails)
-                                .evidenceDirection(direction)
-                                .evidenceYear(evidenceYear)
-                                .urls(evidenceUrls)
-                                .build());
-                    }
+                    efficacyEvidences.add(ImmutableEfficacyEvidence.builder()
+                            .source(Knowledgebase.CKB)
+                            .treatment(ImmutableTreatment.builder()
+                                    .name(treatment)
+                                    .treatmentApproachesDrugClass(treatmentApproachDrugClasses)
+                                    .treatmentApproachesTherapy(treatmentApproachTherapies)
+                                    .build())
+                            .indication(indication)
+                            .molecularCriterium(molecularCriterium)
+                            .efficacyDescription(evidence.efficacyEvidence())
+                            .evidenceLevel(level)
+                            .evidenceLevelDetails(evidenceLevelDetails)
+                            .evidenceDirection(direction)
+                            .evidenceYear(evidenceYear)
+                            .urls(evidenceUrls)
+                            .build());
                 }
             }
         }

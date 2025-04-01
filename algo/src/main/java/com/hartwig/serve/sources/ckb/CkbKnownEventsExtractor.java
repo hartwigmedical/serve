@@ -88,16 +88,6 @@ final class CkbKnownEventsExtractor {
     }
 
     @NotNull
-    private static <T, U> Set<U> convertToKnownSet(@Nullable List<T> rawList, @NotNull Function<T, U> convert,
-            @NotNull Function<Set<U>, Set<U>> consolidate, @NotNull BiFunction<U, Variant, U> annotate, @NotNull Variant variant) {
-        if (rawList == null) {
-            return Collections.emptySet();
-        }
-        Set<U> converted = rawList.stream().map(convert).collect(Collectors.toSet());
-        return consolidate.apply(converted).stream().map(e -> annotate.apply(e, variant)).collect(Collectors.toSet());
-    }
-
-    @NotNull
     private static Set<KnownHotspot> convertToKnownHotspots(@Nullable List<VariantAnnotation> variants, @NotNull String event,
             @NotNull Variant variant) {
         CkbProteinAnnotationExtractor proteinExtractor = new CkbProteinAnnotationExtractor();
@@ -197,5 +187,15 @@ final class CkbKnownEventsExtractor {
                 FusionConsolidation::consolidate,
                 CkbVariantAnnotator::annotateFusion,
                 variant);
+    }
+
+    @NotNull
+    private static <T, U> Set<U> convertToKnownSet(@Nullable List<T> rawList, @NotNull Function<T, U> convert,
+            @NotNull Function<Set<U>, Set<U>> consolidate, @NotNull BiFunction<U, Variant, U> annotate, @NotNull Variant variant) {
+        if (rawList == null) {
+            return Collections.emptySet();
+        }
+        Set<U> converted = rawList.stream().map(convert).collect(Collectors.toSet());
+        return consolidate.apply(converted).stream().map(e -> annotate.apply(e, variant)).collect(Collectors.toSet());
     }
 }

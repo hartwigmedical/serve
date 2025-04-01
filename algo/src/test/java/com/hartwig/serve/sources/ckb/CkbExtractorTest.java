@@ -140,7 +140,7 @@ public class CkbExtractorTest {
     }
 
     @NotNull
-    private ImmutableEventInterpretation.Builder interpretationBuilder() {
+    private static ImmutableEventInterpretation.Builder interpretationBuilder() {
         return ImmutableEventInterpretation.builder().source(Knowledgebase.CKB);
     }
 

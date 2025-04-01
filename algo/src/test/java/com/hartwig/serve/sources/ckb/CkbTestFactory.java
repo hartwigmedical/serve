@@ -256,7 +256,8 @@ public final class CkbTestFactory {
                 .fullName(fullName)
                 .variant(variant)
                 .isHotspot(false)
-                .gene(createGene(geneSymbol)).proteinEffect(proteinEffect)
+                .gene(createGene(geneSymbol))
+                .proteinEffect(proteinEffect)
                 .build();
     }
 

@@ -167,12 +167,13 @@ public class CkbExtractorTest {
     @NotNull
     private static List<CkbEntry> createCkbEntryTestDatabase() {
         List<CkbEntry> ckbEntries = Lists.newArrayList();
-        ckbEntries.add(createWithOpenMolecularTrial("nct1", "KIT", "amp", "KIT amp", "unknown", "sensitive", "Actionable"));
+        ckbEntries.add(createWithOpenMolecularTrial("nct1", "KIT", "amp", "KIT amp", "no effect", "sensitive", "Actionable"));
         ckbEntries.add(createWithOpenMolecularTrial("nct2", "BRAF", "V600E", "BRAF V600E", "gain of function", "sensitive", "Actionable"));
         ckbEntries.add(createWithOpenMolecularTrial("nct3",
                 "NTRK3",
                 "fusion promiscuous",
-                "NTRK3 fusion promiscuous", "unknown",
+                "NTRK3 fusion promiscuous",
+                "unknown",
                 "sensitive",
                 "Actionable"));
         ckbEntries.add(createWithOpenMolecularTrial("nct4", "BRAF", "V600", "BRAF V600", "gain of function", "sensitive", "Actionable"));
@@ -183,7 +184,7 @@ public class CkbExtractorTest {
                 "BRAF exon 1 deletion",
                 "sensitive",
                 "Actionable"));
-        ckbEntries.add(createWithOpenMolecularTrial("nct6", "-", "MSI high", "MSI high", "unknown", "sensitive", "Actionable"));
+        ckbEntries.add(createWithOpenMolecularTrial("nct6", "-", "MSI high", "MSI high", "", "sensitive", "Actionable"));
         ckbEntries.add(createWithOpenMolecularTrial("nct7", "ALK", "EML4-ALK", "EML4-ALK Fusion", "unknown", "sensitive", "Actionable"));
 
         return ckbEntries;

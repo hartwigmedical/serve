@@ -98,14 +98,11 @@ public class CkbExtractorTest {
 
         CkbEntry entryWithInvalidVariant = createCombinedEntry(List.of(recognizedVariant, unrecognizedVariant));
 
-        assertEmptyExtractionWithInterpretation(
-                interpretationBuilder()
-                        .sourceEvent("Multiple V600E,unknown_type")
-                        .interpretedGene("Multiple")
-                        .interpretedEvent("V600E,unknown_type")
-                        .interpretedEventType(EventType.COMBINED)
-                        .build(),
-                ckbExtractor().extract(List.of(entryWithInvalidVariant)));
+        assertEmptyExtractionWithInterpretation(interpretationBuilder().sourceEvent("Multiple V600E,unknown_type")
+                .interpretedGene("Multiple")
+                .interpretedEvent("V600E,unknown_type")
+                .interpretedEventType(EventType.COMBINED)
+                .build(), ckbExtractor().extract(List.of(entryWithInvalidVariant)));
     }
 
     @Test
@@ -114,14 +111,11 @@ public class CkbExtractorTest {
 
         CkbEntry entryWithComplexVariant = createCombinedEntry(List.of(complexVariant));
 
-        assertEmptyExtractionWithInterpretation(
-                interpretationBuilder()
-                        .sourceEvent("BRAF V600*fs")
-                        .interpretedGene("BRAF")
-                        .interpretedEvent("V600*fs")
-                        .interpretedEventType(EventType.COMPLEX)
-                        .build(),
-                ckbExtractor().extract(List.of(entryWithComplexVariant)));
+        assertEmptyExtractionWithInterpretation(interpretationBuilder().sourceEvent("BRAF V600*fs")
+                .interpretedGene("BRAF")
+                .interpretedEvent("V600*fs")
+                .interpretedEventType(EventType.COMPLEX)
+                .build(), ckbExtractor().extract(List.of(entryWithComplexVariant)));
     }
 
     @Test
@@ -130,23 +124,19 @@ public class CkbExtractorTest {
 
         CkbEntry entryWithComplexVariant = createCombinedEntry(List.of(complexVariant));
 
-        assertEmptyExtractionWithInterpretation(
-                interpretationBuilder()
-                        .sourceEvent("UNKNOWN_GENE act mut")
-                        .interpretedGene("UNKNOWN_GENE")
-                        .interpretedEvent("act mut")
-                        .interpretedEventType(EventType.GENE_LEVEL)
-                        .build(),
-                ckbExtractor().extract(List.of(entryWithComplexVariant)));
+        assertEmptyExtractionWithInterpretation(interpretationBuilder().sourceEvent("UNKNOWN_GENE act mut")
+                .interpretedGene("UNKNOWN_GENE")
+                .interpretedEvent("act mut")
+                .interpretedEventType(EventType.GENE_LEVEL)
+                .build(), ckbExtractor().extract(List.of(entryWithComplexVariant)));
     }
 
     private void assertEmptyExtractionWithInterpretation(@NotNull EventInterpretation eventInterpretation,
             @NotNull ExtractionResult extractionResult) {
         assertEquals(ImmutableExtractionResult.builder()
-                        .refGenomeVersion(RefGenome.V38)
-                        .eventInterpretations(Set.of(eventInterpretation))
-                        .build(),
-                extractionResult);
+                .refGenomeVersion(RefGenome.V38)
+                .eventInterpretations(Set.of(eventInterpretation))
+                .build(), extractionResult);
     }
 
     @NotNull
@@ -195,7 +185,8 @@ public class CkbExtractorTest {
             @NotNull String fullName, @NotNull String proteinEffect, @NotNull String responseType, @NotNull String evidenceType) {
         CkbEntry baseEntry = CkbTestFactory.createEntry(gene,
                 variant,
-                fullName, proteinEffect,
+                fullName,
+                proteinEffect,
                 responseType,
                 evidenceType,
                 "any treatment",

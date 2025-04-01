@@ -109,11 +109,13 @@ final class CkbKnownEventsExtractor {
                 .inputProteinAnnotation(proteinExtractor.apply(event))
                 .build();
 
-        return convertToKnownSet(variants,
+        Set<KnownHotspot> hotspots = convertToKnownSet(variants,
                 convert,
                 KnownHotspotConsolidation::consolidate,
                 CkbVariantAnnotator::annotateHotspot,
                 variant);
+
+        return hotspots.stream().filter(hotspot -> hotspot.proteinEffect() != ProteinEffect.UNKNOWN).collect(Collectors.toSet());
     }
 
     @NotNull

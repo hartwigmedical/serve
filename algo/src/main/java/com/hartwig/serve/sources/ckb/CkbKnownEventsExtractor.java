@@ -1,7 +1,6 @@
 package com.hartwig.serve.sources.ckb;
 
 import static com.hartwig.serve.ServeConfig.LOGGER;
-import static com.hartwig.serve.ServeConfig.LOGGER;
 import static com.hartwig.serve.sources.ckb.CkbVariantAnnotator.resolveGeneRole;
 
 import java.util.Collections;
@@ -18,7 +17,6 @@ import com.hartwig.serve.ckb.datamodel.variant.Variant;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.molecular.ImmutableKnownEvents;
 import com.hartwig.serve.datamodel.molecular.KnownEvents;
-import com.hartwig.serve.datamodel.molecular.common.GeneAlteration;
 import com.hartwig.serve.datamodel.molecular.common.GeneAlteration;
 import com.hartwig.serve.datamodel.molecular.common.GeneRole;
 import com.hartwig.serve.datamodel.molecular.common.ProteinEffect;

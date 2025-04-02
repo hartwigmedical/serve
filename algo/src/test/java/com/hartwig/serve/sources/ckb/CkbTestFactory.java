@@ -85,7 +85,7 @@ public final class CkbTestFactory {
 
     @NotNull
     public static CkbEntry createEntry(@NotNull String geneSymbol, @NotNull String variant, @NotNull String fullName,
-            @NotNull String proteinEffect,
+            @Nullable String proteinEffect,
             @NotNull String responseType, @NotNull String evidenceType, @NotNull String therapyName, @NotNull String indicationName,
             @NotNull String evidenceLevel, @NotNull String approvalStatus, @NotNull String termId) {
         Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting", "Rotterdam", "EMC");
@@ -248,7 +248,7 @@ public final class CkbTestFactory {
 
     @NotNull
     public static Variant createVariant(@NotNull String geneSymbol, @NotNull String variant, @NotNull String fullName,
-            @NotNull String proteinEffect) {
+            @Nullable String proteinEffect) {
         return ImmutableVariant.builder()
                 .id(0)
                 .createDate(TEST_CREATE_DATE)

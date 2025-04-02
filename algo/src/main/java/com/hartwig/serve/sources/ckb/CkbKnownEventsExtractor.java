@@ -1,5 +1,6 @@
 package com.hartwig.serve.sources.ckb;
 
+import static com.hartwig.serve.ServeConfig.LOGGER;
 import static com.hartwig.serve.sources.ckb.CkbVariantAnnotator.resolveGeneRole;
 
 import java.util.Collections;
@@ -16,6 +17,7 @@ import com.hartwig.serve.ckb.datamodel.variant.Variant;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.molecular.ImmutableKnownEvents;
 import com.hartwig.serve.datamodel.molecular.KnownEvents;
+import com.hartwig.serve.datamodel.molecular.common.GeneAlteration;
 import com.hartwig.serve.datamodel.molecular.common.GeneRole;
 import com.hartwig.serve.datamodel.molecular.common.ProteinEffect;
 import com.hartwig.serve.datamodel.molecular.fusion.FusionPair;
@@ -94,7 +96,18 @@ final class CkbKnownEventsExtractor {
             return Collections.emptySet();
         }
         Set<U> converted = rawList.stream().map(convert).collect(Collectors.toSet());
-        return consolidate.apply(converted).stream().map(e -> annotate.apply(e, variant)).collect(Collectors.toSet());
+        return consolidate.apply(converted).stream()
+                .map(e -> annotate.apply(e, variant))
+                .filter(e -> {
+                    if (e instanceof GeneAlteration) {
+                        return ((GeneAlteration) e).proteinEffect() != ProteinEffect.UNKNOWN;
+                    } else if (e instanceof KnownFusion) {
+                        return ((KnownFusion) e).proteinEffect() != ProteinEffect.UNKNOWN;
+                    }
+                    LOGGER.warn("{} is not a GeneAlteration or KnownFusion", e.getClass().toString());
+                    return true;
+                })
+                .collect(Collectors.toSet());
     }
 
     @NotNull
@@ -109,13 +122,11 @@ final class CkbKnownEventsExtractor {
                 .inputProteinAnnotation(proteinExtractor.apply(event))
                 .build();
 
-        Set<KnownHotspot> hotspots = convertToKnownSet(variants,
+        return convertToKnownSet(variants,
                 convert,
                 KnownHotspotConsolidation::consolidate,
                 CkbVariantAnnotator::annotateHotspot,
                 variant);
-
-        return hotspots.stream().filter(hotspot -> hotspot.proteinEffect() != ProteinEffect.UNKNOWN).collect(Collectors.toSet());
     }
 
     @NotNull

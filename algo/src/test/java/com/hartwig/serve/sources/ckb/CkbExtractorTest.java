@@ -27,6 +27,7 @@ import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachTestFact
 
 import org.apache.commons.compress.utils.Lists;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.Test;
 
 public class CkbExtractorTest {
@@ -47,10 +48,9 @@ public class CkbExtractorTest {
 
     @Test
     public void canExtractEvidenceWithCombinedCriteria() {
-
         List<CkbEntry> ckbEntries = Lists.newArrayList();
         List<Variant> variants =
-                List.of(CkbTestFactory.createVariant("BRAF", "loss", "BRAF loss"), CkbTestFactory.createVariant("KIT", "loss", "KIT loss"));
+                List.of(CkbTestFactory.createVariant("BRAF", "loss", "BRAF loss", "loss of function"), CkbTestFactory.createVariant("KIT", "loss", "KIT loss", "loss of function"));
 
         ckbEntries.add(createCombinedEntry(variants,
                 "sensitive",
@@ -163,26 +163,26 @@ public class CkbExtractorTest {
                 "NTRK3",
                 "fusion promiscuous",
                 "NTRK3 fusion promiscuous",
-                "unknown",
+                "gain of function",
                 "sensitive",
                 "Actionable"));
         ckbEntries.add(createWithOpenMolecularTrial("nct4", "BRAF", "V600", "BRAF V600", "gain of function", "sensitive", "Actionable"));
         ckbEntries.add(createWithOpenMolecularTrial("nct5",
                 "BRAF",
                 "exon 1 deletion",
-                "unknown",
                 "BRAF exon 1 deletion",
+                "loss of function",
                 "sensitive",
                 "Actionable"));
-        ckbEntries.add(createWithOpenMolecularTrial("nct6", "-", "MSI high", "MSI high", "", "sensitive", "Actionable"));
-        ckbEntries.add(createWithOpenMolecularTrial("nct7", "ALK", "EML4-ALK", "EML4-ALK Fusion", "unknown", "sensitive", "Actionable"));
+        ckbEntries.add(createWithOpenMolecularTrial("nct6", "-", "MSI high", "MSI high", null, "sensitive", "Actionable"));
+        ckbEntries.add(createWithOpenMolecularTrial("nct7", "ALK", "EML4-ALK", "EML4-ALK Fusion", "gain of function", "sensitive", "Actionable"));
 
         return ckbEntries;
     }
 
     @NotNull
     private static CkbEntry createWithOpenMolecularTrial(@NotNull String nctId, @NotNull String gene, @NotNull String variant,
-            @NotNull String fullName, @NotNull String proteinEffect, @NotNull String responseType, @NotNull String evidenceType) {
+            @NotNull String fullName, @Nullable String proteinEffect, @NotNull String responseType, @NotNull String evidenceType) {
         CkbEntry baseEntry = CkbTestFactory.createEntry(gene,
                 variant,
                 fullName,

@@ -85,9 +85,8 @@ public final class CkbTestFactory {
 
     @NotNull
     public static CkbEntry createEntry(@NotNull String geneSymbol, @NotNull String variant, @NotNull String fullName,
-            @Nullable String proteinEffect,
-            @NotNull String responseType, @NotNull String evidenceType, @NotNull String therapyName, @NotNull String indicationName,
-            @NotNull String evidenceLevel, @NotNull String approvalStatus, @NotNull String termId) {
+            @Nullable String proteinEffect, @NotNull String responseType, @NotNull String evidenceType, @NotNull String therapyName,
+            @NotNull String indicationName, @NotNull String evidenceLevel, @NotNull String approvalStatus, @NotNull String termId) {
         Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting", "Rotterdam", "EMC");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(0, "required");
         return builder().addVariants(createVariant(geneSymbol, variant, fullName, proteinEffect))

@@ -1,6 +1,7 @@
 package com.hartwig.serve.sources.ckb;
 
 import static com.hartwig.serve.ServeConfig.LOGGER;
+import static com.hartwig.serve.ServeConfig.LOGGER;
 import static com.hartwig.serve.sources.ckb.CkbVariantAnnotator.resolveGeneRole;
 
 import java.util.Collections;
@@ -17,6 +18,7 @@ import com.hartwig.serve.ckb.datamodel.variant.Variant;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.molecular.ImmutableKnownEvents;
 import com.hartwig.serve.datamodel.molecular.KnownEvents;
+import com.hartwig.serve.datamodel.molecular.common.GeneAlteration;
 import com.hartwig.serve.datamodel.molecular.common.GeneAlteration;
 import com.hartwig.serve.datamodel.molecular.common.GeneRole;
 import com.hartwig.serve.datamodel.molecular.common.ProteinEffect;
@@ -87,27 +89,6 @@ final class CkbKnownEventsExtractor {
                 .copyNumbers(allCopyNumbers)
                 .fusions(allFusions)
                 .build();
-    }
-
-    @NotNull
-    private static <T, U> Set<U> convertToKnownSet(@Nullable List<T> rawList, @NotNull Function<T, U> convert,
-            @NotNull Function<Set<U>, Set<U>> consolidate, @NotNull BiFunction<U, Variant, U> annotate, @NotNull Variant variant) {
-        if (rawList == null) {
-            return Collections.emptySet();
-        }
-        Set<U> converted = rawList.stream().map(convert).collect(Collectors.toSet());
-        return consolidate.apply(converted).stream()
-                .map(e -> annotate.apply(e, variant))
-                .filter(e -> {
-                    if (e instanceof GeneAlteration) {
-                        return ((GeneAlteration) e).proteinEffect() != ProteinEffect.UNKNOWN;
-                    } else if (e instanceof KnownFusion) {
-                        return ((KnownFusion) e).proteinEffect() != ProteinEffect.UNKNOWN;
-                    }
-                    LOGGER.warn("{} is not a GeneAlteration or KnownFusion", e.getClass().toString());
-                    return true;
-                })
-                .collect(Collectors.toSet());
     }
 
     @NotNull
@@ -208,5 +189,26 @@ final class CkbKnownEventsExtractor {
                 FusionConsolidation::consolidate,
                 CkbVariantAnnotator::annotateFusion,
                 variant);
+    }
+
+    @NotNull
+    private static <T, U> Set<U> convertToKnownSet(@Nullable List<T> rawList, @NotNull Function<T, U> convert,
+            @NotNull Function<Set<U>, Set<U>> consolidate, @NotNull BiFunction<U, Variant, U> annotate, @NotNull Variant variant) {
+        if (rawList == null) {
+            return Collections.emptySet();
+        }
+        Set<U> converted = rawList.stream().map(convert).collect(Collectors.toSet());
+        return consolidate.apply(converted).stream()
+                .map(e -> annotate.apply(e, variant))
+                .filter(e -> {
+                    if (e instanceof GeneAlteration) {
+                        return ((GeneAlteration) e).proteinEffect() != ProteinEffect.UNKNOWN;
+                    } else if (e instanceof KnownFusion) {
+                        return ((KnownFusion) e).proteinEffect() != ProteinEffect.UNKNOWN;
+                    }
+                    LOGGER.warn("{} is not a GeneAlteration or KnownFusion", e.getClass().toString());
+                    return true;
+                })
+                .collect(Collectors.toSet());
     }
 }

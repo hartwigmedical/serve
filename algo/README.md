@@ -447,6 +447,8 @@ elsewhere.
 
 ## Version History and Download Links
 
+- [8.2.1](https://github.com/hartwigmedical/serve/releases/tag/serve-v8.2.1)
+    - Broaden sourceEvents column
 - [8.2.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v8.2.0)
     - Include efficacy evidences with combined molecular criteria from CKB
 - [8.1.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v8.1.0)

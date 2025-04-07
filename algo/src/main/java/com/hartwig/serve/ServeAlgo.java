@@ -130,10 +130,12 @@ public class ServeAlgo {
                 TreatmentApproachCurationFile.read(ckbDrugCurationTsv);
         TreatmentApproachCurator treatmentApproachCurator = new TreatmentApproachCurator(treatmentApproachMap);
 
+        LOGGER.info("Reading evidence filter entries from {}", ckbEvidenceFilterTsv);
         List<CkbEvidenceFilterEntry> ckbEvidenceFilterEntries = CkbEvidenceFilterFile.read(ckbEvidenceFilterTsv);
         LOGGER.info(" Read {} evidence filter entries", ckbEvidenceFilterEntries.size());
         CkbEvidenceFilterModel evidenceFilter = new CkbEvidenceFilterModel(ckbEvidenceFilterEntries);
 
+        LOGGER.info("Reading trial filter entries from {}", ckbTrialFilterTsv);
         List<CkbTrialFilterEntry> ckbTrialFilterEntries = CkbTrialFilterFile.read(ckbTrialFilterTsv);
         LOGGER.info(" Read {} trial filter entries", ckbTrialFilterEntries.size());
         CkbTrialFilterModel trialFilter = new CkbTrialFilterModel(ckbTrialFilterEntries);

@@ -49,15 +49,13 @@ import org.jetbrains.annotations.Nullable;
 final class CkbKnownEventsExtractor {
 
     @NotNull
-    public static KnownEvents generateKnownEvents(@NotNull List<ExtractedEvent> allEvents, boolean efficacyEvidencesIsEmpty) {
+    public static KnownEvents generateKnownEvents(@NotNull List<ExtractedEvent> allEvents) {
         Set<KnownHotspot> allHotspots = allEvents.stream()
                 .flatMap(event -> convertToKnownHotspots(event.eventExtractorOutput().variants(), event.event(), event.variant()).stream())
                 .collect(Collectors.toSet());
 
         Set<KnownCodon> allCodons = allEvents.stream()
-                .flatMap(event -> convertToKnownCodons(efficacyEvidencesIsEmpty
-                        ? Collections.emptyList()
-                        : event.eventExtractorOutput().codons(), event.variant()).stream())
+                .flatMap(event -> convertToKnownCodons(event.eventExtractorOutput().codons(), event.variant()).stream())
                 .collect(Collectors.toSet());
 
         Set<KnownExon> allExons = allEvents.stream()

@@ -122,7 +122,7 @@ public class CkbExtractor {
         return ImmutableExtractionResult.builder()
                 .refGenomeVersion(Knowledgebase.CKB.refGenomeVersion())
                 .eventInterpretations(Set.of(interpretation))
-                .knownEvents(CkbKnownEventsExtractor.generateKnownEvents(extractedEvents, efficacyEvidences.isEmpty()))
+                .knownEvents(CkbKnownEventsExtractor.generateKnownEvents(extractedEvents))
                 .evidences(efficacyEvidences)
                 .trials(actionableTrials)
                 .build();

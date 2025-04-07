@@ -38,7 +38,7 @@ public class CkbKnownEventsExtractorTest {
         extractedEvents.add(createAmplification("MET", "gain of function"));
         extractedEvents.add(createAmplification("KIT", "unknown"));
 
-        KnownEvents knownEvents = CkbKnownEventsExtractor.generateKnownEvents(extractedEvents, false);
+        KnownEvents knownEvents = CkbKnownEventsExtractor.generateKnownEvents(extractedEvents);
 
         assertEquals(1, knownEvents.hotspots().size());
         assertEquals(ProteinEffect.GAIN_OF_FUNCTION, knownEvents.hotspots().iterator().next().proteinEffect());

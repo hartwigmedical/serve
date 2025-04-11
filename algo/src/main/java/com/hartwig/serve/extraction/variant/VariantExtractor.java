@@ -42,18 +42,7 @@ public class VariantExtractor {
         this.driverInconsistencyMode = driverInconsistencyMode;
         this.driverGenes = driverGenes;
     }
-
-    @Nullable
-    @VisibleForTesting
-    public static DriverCategory findByGene(@NotNull List<DriverGene> driverGenes, @NotNull String gene) {
-        for (DriverGene driverGene : driverGenes) {
-            if (driverGene.gene().equals(gene)) {
-                return driverGene.likelihoodType();
-            }
-        }
-        return null;
-    }
-
+    
     @Nullable
     public List<VariantAnnotation> extract(@NotNull String gene, @Nullable String transcriptId, @NotNull EventType type,
             @NotNull String event) {
@@ -77,6 +66,17 @@ public class VariantExtractor {
             return variants;
         }
 
+        return null;
+    }
+
+    @Nullable
+    @VisibleForTesting
+    static DriverCategory findByGene(@NotNull List<DriverGene> driverGenes, @NotNull String gene) {
+        for (DriverGene driverGene : driverGenes) {
+            if (driverGene.gene().equals(gene)) {
+                return driverGene.likelihoodType();
+            }
+        }
         return null;
     }
 }

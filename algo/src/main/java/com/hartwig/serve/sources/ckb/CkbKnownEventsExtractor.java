@@ -16,6 +16,7 @@ import com.hartwig.serve.ckb.classification.CkbProteinAnnotationExtractor;
 import com.hartwig.serve.ckb.datamodel.variant.Variant;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.molecular.ImmutableKnownEvents;
+import com.hartwig.serve.datamodel.molecular.KnownEvent;
 import com.hartwig.serve.datamodel.molecular.KnownEvents;
 import com.hartwig.serve.datamodel.molecular.common.GeneAlteration;
 import com.hartwig.serve.datamodel.molecular.common.GeneRole;
@@ -190,7 +191,7 @@ final class CkbKnownEventsExtractor {
     }
 
     @NotNull
-    private static <T, U> Set<U> convertToKnownSet(@Nullable List<T> rawList, @NotNull Function<T, U> convert,
+    private static <T, U extends KnownEvent> Set<U> convertToKnownSet(@Nullable List<T> rawList, @NotNull Function<T, U> convert,
             @NotNull Function<Set<U>, Set<U>> consolidate, @NotNull BiFunction<U, Variant, U> annotate, @NotNull Variant variant) {
         if (rawList == null) {
             return Collections.emptySet();

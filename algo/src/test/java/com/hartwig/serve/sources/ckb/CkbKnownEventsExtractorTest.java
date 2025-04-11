@@ -10,12 +10,12 @@ import com.hartwig.serve.datamodel.molecular.MutationType;
 import com.hartwig.serve.datamodel.molecular.common.ProteinEffect;
 import com.hartwig.serve.datamodel.molecular.fusion.FusionTestFactory;
 import com.hartwig.serve.datamodel.molecular.gene.GeneEvent;
+import com.hartwig.serve.datamodel.molecular.gene.GeneTestFactory;
 import com.hartwig.serve.datamodel.molecular.hotspot.HotspotTestFactory;
 import com.hartwig.serve.datamodel.molecular.range.RangeTestFactory;
 import com.hartwig.serve.extraction.ImmutableEventExtractorOutput;
 import com.hartwig.serve.extraction.codon.ImmutableCodonAnnotation;
 import com.hartwig.serve.extraction.exon.ImmutableExonAnnotation;
-import com.hartwig.serve.extraction.gene.ImmutableGeneAnnotationImpl;
 
 import org.apache.commons.compress.utils.Lists;
 import org.jetbrains.annotations.NotNull;
@@ -27,33 +27,33 @@ public class CkbKnownEventsExtractorTest {
     @Test
     public void canFilterUnknownProteinEffectFromKnownEvents() {
         List<ExtractedEvent> extractedEvents = Lists.newArrayList();
+        extractedEvents.add(createHotspot("BRAF", "V600E", "gain of function"));
+        extractedEvents.add(createHotspot("TP53", "R175H", "unknown"));
         extractedEvents.add(createCodon("BRAF", "V600", "gain of function"));
         extractedEvents.add(createCodon("TP53", "R175", "unknown"));
         extractedEvents.add(createExon("BRAF", "exon 1 deletion", "loss of function"));
         extractedEvents.add(createExon("APC", "exon 3 deletion", "unknown"));
-        extractedEvents.add(createFusion("ALK", "EML4", "gain of function"));
-        extractedEvents.add(createFusion("APC", "BRAF", "unknown"));
-        extractedEvents.add(createHotspot("BRAF", "V600E", "gain of function"));
-        extractedEvents.add(createHotspot("TP53", "R175H", "unknown"));
         extractedEvents.add(createAmplification("MET", "gain of function"));
         extractedEvents.add(createAmplification("KIT", "unknown"));
+        extractedEvents.add(createFusion("ALK", "EML4", "gain of function"));
+        extractedEvents.add(createFusion("APC", "BRAF", "unknown"));
 
         KnownEvents knownEvents = CkbKnownEventsExtractor.generateKnownEvents(extractedEvents, false);
 
         assertEquals(1, knownEvents.hotspots().size());
         assertEquals(ProteinEffect.GAIN_OF_FUNCTION, knownEvents.hotspots().iterator().next().proteinEffect());
 
+        assertEquals(1, knownEvents.codons().size());
+        assertEquals(ProteinEffect.GAIN_OF_FUNCTION, knownEvents.codons().iterator().next().proteinEffect());
+
+        assertEquals(1, knownEvents.exons().size());
+        assertEquals(ProteinEffect.LOSS_OF_FUNCTION, knownEvents.exons().iterator().next().proteinEffect());
+
         assertEquals(1, knownEvents.copyNumbers().size());
         assertEquals(ProteinEffect.GAIN_OF_FUNCTION, knownEvents.copyNumbers().iterator().next().proteinEffect());
 
         assertEquals(1, knownEvents.fusions().size());
         assertEquals(ProteinEffect.GAIN_OF_FUNCTION, knownEvents.fusions().iterator().next().proteinEffect());
-
-        assertEquals(1, knownEvents.exons().size());
-        assertEquals(ProteinEffect.LOSS_OF_FUNCTION, knownEvents.exons().iterator().next().proteinEffect());
-
-        assertEquals(1, knownEvents.codons().size());
-        assertEquals(ProteinEffect.GAIN_OF_FUNCTION, knownEvents.codons().iterator().next().proteinEffect());
     }
 
     @NotNull
@@ -124,7 +124,7 @@ public class CkbKnownEventsExtractorTest {
                 .variant(CkbTestFactory.createVariant(gene, "amp", gene + " amp", proteinEffect))
                 .eventType(EventType.AMPLIFICATION)
                 .eventExtractorOutput(ImmutableEventExtractorOutput.builder()
-                        .copyNumber(ImmutableGeneAnnotationImpl.builder().gene(gene).event(GeneEvent.AMPLIFICATION).build())
+                        .copyNumber(GeneTestFactory.createGeneAnnotation(gene, GeneEvent.AMPLIFICATION))
                         .build())
                 .build();
     }

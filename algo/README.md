@@ -447,6 +447,8 @@ elsewhere.
 
 ## Version History and Download Links
 
+- Upcoming
+    - Remove all variants from CKB with UNKNOWN protein impact when we map them to known events
 - [8.2.1](https://github.com/hartwigmedical/serve/releases/tag/serve-v8.2.1)
     - Broaden sourceEvents column
 - [8.2.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v8.2.0)

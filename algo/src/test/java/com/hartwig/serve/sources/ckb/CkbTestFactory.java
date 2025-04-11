@@ -43,22 +43,22 @@ public final class CkbTestFactory {
 
     @NotNull
     public static CkbEntry createEntryWithGene(@NotNull String geneSymbol) {
-        return createEntry(geneSymbol, "", "", "", "", "", "", "", "", "");
+        return createEntry(geneSymbol, "", "", null, "", "", "", "", "", "", "");
     }
 
     @NotNull
     public static CkbEntry createEntryWithVariant(@NotNull String variant) {
-        return createEntry("", variant, "", "", "", "", "", "", "", "");
+        return createEntry("", variant, "", null, "", "", "", "", "", "", "");
     }
 
     @NotNull
     public static CkbEntry createEntryWithFullName(@NotNull String fullName) {
-        return createEntry("", "", fullName, "", "", "", "", "", "", "");
+        return createEntry("", "", fullName, null, "", "", "", "", "", "", "");
     }
 
     @NotNull
     public static CkbEntry createEntryWithGeneAndVariant(@NotNull String geneSymbol, @NotNull String variant) {
-        return createEntry(geneSymbol, variant, "", "", "", "", "", "", "", "");
+        return createEntry(geneSymbol, variant, "", null, "", "", "", "", "", "", "");
     }
 
     @NotNull
@@ -68,11 +68,11 @@ public final class CkbTestFactory {
 
     @NotNull
     public static CkbEntry createEntry(@NotNull String geneSymbol, @NotNull String variant, @NotNull String fullName,
-            @NotNull String responseType, @NotNull String evidenceType, @NotNull String therapyName, @NotNull String indicationName,
-            @NotNull String evidenceLevel, @NotNull String approvalStatus, @NotNull String termId) {
+            @Nullable String proteinEffect, @NotNull String responseType, @NotNull String evidenceType, @NotNull String therapyName,
+            @NotNull String indicationName, @NotNull String evidenceLevel, @NotNull String approvalStatus, @NotNull String termId) {
         Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting", "Rotterdam", "EMC");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(0, "required");
-        return builder().addVariants(createVariant(geneSymbol, variant, fullName))
+        return builder().addVariants(createVariant(geneSymbol, variant, fullName, proteinEffect))
                 .addEvidences(createEvidence(responseType,
                         evidenceType,
                         therapyName,
@@ -225,6 +225,12 @@ public final class CkbTestFactory {
 
     @NotNull
     public static Variant createVariant(@NotNull String geneSymbol, @NotNull String variant, @NotNull String fullName) {
+        return createVariant(geneSymbol, variant, fullName, "unknown");
+    }
+
+    @NotNull
+    public static Variant createVariant(@NotNull String geneSymbol, @NotNull String variant, @NotNull String fullName,
+            @Nullable String proteinEffect) {
         return ImmutableVariant.builder()
                 .id(0)
                 .createDate(TEST_CREATE_DATE)
@@ -233,6 +239,7 @@ public final class CkbTestFactory {
                 .variant(variant)
                 .isHotspot(false)
                 .gene(createGene(geneSymbol))
+                .proteinEffect(proteinEffect)
                 .build();
     }
 

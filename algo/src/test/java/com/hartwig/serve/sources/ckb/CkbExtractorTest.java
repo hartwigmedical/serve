@@ -27,6 +27,7 @@ import com.hartwig.serve.sources.ckb.treatmentapproach.TreatmentApproachTestFact
 
 import org.apache.commons.compress.utils.Lists;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.Test;
 
 public class CkbExtractorTest {
@@ -47,10 +48,9 @@ public class CkbExtractorTest {
 
     @Test
     public void canExtractEvidenceWithCombinedCriteria() {
-
         List<CkbEntry> ckbEntries = Lists.newArrayList();
         List<Variant> variants =
-                List.of(CkbTestFactory.createVariant("BRAF", "loss", "BRAF loss"), CkbTestFactory.createVariant("KIT", "loss", "KIT loss"));
+                List.of(CkbTestFactory.createVariant("BRAF", "loss", "BRAF loss", "loss of function"), CkbTestFactory.createVariant("KIT", "loss", "KIT loss", "loss of function"));
 
         ckbEntries.add(createCombinedEntry(variants,
                 "sensitive",
@@ -98,14 +98,11 @@ public class CkbExtractorTest {
 
         CkbEntry entryWithInvalidVariant = createCombinedEntry(List.of(recognizedVariant, unrecognizedVariant));
 
-        assertEmptyExtractionWithInterpretation(
-                interpretationBuilder()
-                        .sourceEvent("Multiple V600E,unknown_type")
-                        .interpretedGene("Multiple")
-                        .interpretedEvent("V600E,unknown_type")
-                        .interpretedEventType(EventType.COMBINED)
-                        .build(),
-                ckbExtractor().extract(List.of(entryWithInvalidVariant)));
+        assertEmptyExtractionWithInterpretation(interpretationBuilder().sourceEvent("Multiple V600E,unknown_type")
+                .interpretedGene("Multiple")
+                .interpretedEvent("V600E,unknown_type")
+                .interpretedEventType(EventType.COMBINED)
+                .build(), ckbExtractor().extract(List.of(entryWithInvalidVariant)));
     }
 
     @Test
@@ -114,14 +111,11 @@ public class CkbExtractorTest {
 
         CkbEntry entryWithComplexVariant = createCombinedEntry(List.of(complexVariant));
 
-        assertEmptyExtractionWithInterpretation(
-                interpretationBuilder()
-                        .sourceEvent("BRAF V600*fs")
-                        .interpretedGene("BRAF")
-                        .interpretedEvent("V600*fs")
-                        .interpretedEventType(EventType.COMPLEX)
-                        .build(),
-                ckbExtractor().extract(List.of(entryWithComplexVariant)));
+        assertEmptyExtractionWithInterpretation(interpretationBuilder().sourceEvent("BRAF V600*fs")
+                .interpretedGene("BRAF")
+                .interpretedEvent("V600*fs")
+                .interpretedEventType(EventType.COMPLEX)
+                .build(), ckbExtractor().extract(List.of(entryWithComplexVariant)));
     }
 
     @Test
@@ -130,27 +124,23 @@ public class CkbExtractorTest {
 
         CkbEntry entryWithComplexVariant = createCombinedEntry(List.of(complexVariant));
 
-        assertEmptyExtractionWithInterpretation(
-                interpretationBuilder()
-                        .sourceEvent("UNKNOWN_GENE act mut")
-                        .interpretedGene("UNKNOWN_GENE")
-                        .interpretedEvent("act mut")
-                        .interpretedEventType(EventType.GENE_LEVEL)
-                        .build(),
-                ckbExtractor().extract(List.of(entryWithComplexVariant)));
+        assertEmptyExtractionWithInterpretation(interpretationBuilder().sourceEvent("UNKNOWN_GENE act mut")
+                .interpretedGene("UNKNOWN_GENE")
+                .interpretedEvent("act mut")
+                .interpretedEventType(EventType.GENE_LEVEL)
+                .build(), ckbExtractor().extract(List.of(entryWithComplexVariant)));
     }
 
     private void assertEmptyExtractionWithInterpretation(@NotNull EventInterpretation eventInterpretation,
             @NotNull ExtractionResult extractionResult) {
         assertEquals(ImmutableExtractionResult.builder()
-                        .refGenomeVersion(RefGenome.V38)
-                        .eventInterpretations(Set.of(eventInterpretation))
-                        .build(),
-                extractionResult);
+                .refGenomeVersion(RefGenome.V38)
+                .eventInterpretations(Set.of(eventInterpretation))
+                .build(), extractionResult);
     }
 
     @NotNull
-    private ImmutableEventInterpretation.Builder interpretationBuilder() {
+    private static ImmutableEventInterpretation.Builder interpretationBuilder() {
         return ImmutableEventInterpretation.builder().source(Knowledgebase.CKB);
     }
 
@@ -167,28 +157,36 @@ public class CkbExtractorTest {
     @NotNull
     private static List<CkbEntry> createCkbEntryTestDatabase() {
         List<CkbEntry> ckbEntries = Lists.newArrayList();
-        ckbEntries.add(createWithOpenMolecularTrial("nct1", "KIT", "amp", "KIT amp", "sensitive", "Actionable"));
-        ckbEntries.add(createWithOpenMolecularTrial("nct2", "BRAF", "V600E", "BRAF V600E", "sensitive", "Actionable"));
+        ckbEntries.add(createWithOpenMolecularTrial("nct1", "KIT", "amp", "KIT amp", "no effect", "sensitive", "Actionable"));
+        ckbEntries.add(createWithOpenMolecularTrial("nct2", "BRAF", "V600E", "BRAF V600E", "gain of function", "sensitive", "Actionable"));
         ckbEntries.add(createWithOpenMolecularTrial("nct3",
                 "NTRK3",
                 "fusion promiscuous",
                 "NTRK3 fusion promiscuous",
+                "gain of function",
                 "sensitive",
                 "Actionable"));
-        ckbEntries.add(createWithOpenMolecularTrial("nct4", "BRAF", "V600", "BRAF V600", "sensitive", "Actionable"));
-        ckbEntries.add(createWithOpenMolecularTrial("nct5", "BRAF", "exon 1 deletion", "BRAF exon 1 deletion", "sensitive", "Actionable"));
-        ckbEntries.add(createWithOpenMolecularTrial("nct6", "-", "MSI high", "MSI high", "sensitive", "Actionable"));
-        ckbEntries.add(createWithOpenMolecularTrial("nct7", "ALK", "EML4-ALK", "EML4-ALK Fusion", "sensitive", "Actionable"));
+        ckbEntries.add(createWithOpenMolecularTrial("nct4", "BRAF", "V600", "BRAF V600", "gain of function", "sensitive", "Actionable"));
+        ckbEntries.add(createWithOpenMolecularTrial("nct5",
+                "BRAF",
+                "exon 1 deletion",
+                "BRAF exon 1 deletion",
+                "loss of function",
+                "sensitive",
+                "Actionable"));
+        ckbEntries.add(createWithOpenMolecularTrial("nct6", "-", "MSI high", "MSI high", null, "sensitive", "Actionable"));
+        ckbEntries.add(createWithOpenMolecularTrial("nct7", "ALK", "EML4-ALK", "EML4-ALK Fusion", "gain of function", "sensitive", "Actionable"));
 
         return ckbEntries;
     }
 
     @NotNull
     private static CkbEntry createWithOpenMolecularTrial(@NotNull String nctId, @NotNull String gene, @NotNull String variant,
-            @NotNull String fullName, @NotNull String responseType, @NotNull String evidenceType) {
+            @NotNull String fullName, @Nullable String proteinEffect, @NotNull String responseType, @NotNull String evidenceType) {
         CkbEntry baseEntry = CkbTestFactory.createEntry(gene,
                 variant,
                 fullName,
+                proteinEffect,
                 responseType,
                 evidenceType,
                 "any treatment",

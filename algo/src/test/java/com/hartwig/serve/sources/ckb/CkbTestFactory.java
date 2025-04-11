@@ -43,44 +43,27 @@ public final class CkbTestFactory {
 
     @NotNull
     public static CkbEntry createEntryWithGene(@NotNull String geneSymbol) {
-        return createEntry(geneSymbol, "", "", "", "", "", "", "", "", "");
+        return createEntry(geneSymbol, "", "", null, "", "", "", "", "", "", "");
     }
 
     @NotNull
     public static CkbEntry createEntryWithVariant(@NotNull String variant) {
-        return createEntry("", variant, "", "", "", "", "", "", "", "");
+        return createEntry("", variant, "", null, "", "", "", "", "", "", "");
     }
 
     @NotNull
     public static CkbEntry createEntryWithFullName(@NotNull String fullName) {
-        return createEntry("", "", fullName, "", "", "", "", "", "", "");
+        return createEntry("", "", fullName, null, "", "", "", "", "", "", "");
     }
 
     @NotNull
     public static CkbEntry createEntryWithGeneAndVariant(@NotNull String geneSymbol, @NotNull String variant) {
-        return createEntry(geneSymbol, variant, "", "", "", "", "", "", "", "");
+        return createEntry(geneSymbol, variant, "", null, "", "", "", "", "", "", "");
     }
 
     @NotNull
     public static CkbEntry createEntryWithClinicalTrial(int profileId, @NotNull String profileName, @NotNull ClinicalTrial clinicalTrial) {
         return builder().profileId(profileId).profileName(profileName).clinicalTrials(List.of(clinicalTrial)).build();
-    }
-
-    @NotNull
-    public static CkbEntry createEntry(@NotNull String geneSymbol, @NotNull String variant, @NotNull String fullName,
-            @NotNull String responseType, @NotNull String evidenceType, @NotNull String therapyName, @NotNull String indicationName,
-            @NotNull String evidenceLevel, @NotNull String approvalStatus, @NotNull String termId) {
-        return createEntry(geneSymbol,
-                variant,
-                fullName,
-                "unknown",
-                responseType,
-                evidenceType,
-                therapyName,
-                indicationName,
-                evidenceLevel,
-                approvalStatus,
-                termId);
     }
 
     @NotNull

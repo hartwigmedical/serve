@@ -50,17 +50,13 @@ import org.jetbrains.annotations.Nullable;
 final class CkbKnownEventsExtractor {
 
     @NotNull
-    public static KnownEvents generateKnownEvents(@NotNull List<ExtractedEvent> allEvents, boolean efficacyEvidencesIsEmpty) {
+    public static KnownEvents generateKnownEvents(@NotNull List<ExtractedEvent> allEvents) {
         Set<KnownHotspot> allHotspots = allEvents.stream()
-                .flatMap(event -> convertToKnownHotspots(event.eventExtractorOutput().variants(),
-                        event.event(),
-                        event.variant()).stream())
+                .flatMap(event -> convertToKnownHotspots(event.eventExtractorOutput().variants(), event.event(), event.variant()).stream())
                 .collect(Collectors.toSet());
 
         Set<KnownCodon> allCodons = allEvents.stream()
-                .flatMap(event -> convertToKnownCodons(efficacyEvidencesIsEmpty
-                        ? Collections.emptyList()
-                        : event.eventExtractorOutput().codons(), event.variant()).stream())
+                .flatMap(event -> convertToKnownCodons(event.eventExtractorOutput().codons(), event.variant()).stream())
                 .collect(Collectors.toSet());
 
         Set<KnownExon> allExons = allEvents.stream()
@@ -102,11 +98,7 @@ final class CkbKnownEventsExtractor {
                 .inputProteinAnnotation(proteinExtractor.apply(event))
                 .build();
 
-        return convertToKnownSet(variants,
-                convert,
-                KnownHotspotConsolidation::consolidate,
-                CkbVariantAnnotator::annotateHotspot,
-                variant);
+        return convertToKnownSet(variants, convert, KnownHotspotConsolidation::consolidate, CkbVariantAnnotator::annotateHotspot, variant);
     }
 
     @NotNull
@@ -120,11 +112,7 @@ final class CkbKnownEventsExtractor {
                 .addSources(Knowledgebase.CKB)
                 .build();
 
-        return convertToKnownSet(codonAnnotations,
-                convert,
-                CodonConsolidation::consolidate,
-                CkbVariantAnnotator::annotateCodon,
-                variant);
+        return convertToKnownSet(codonAnnotations, convert, CodonConsolidation::consolidate, CkbVariantAnnotator::annotateCodon, variant);
     }
 
     @NotNull
@@ -137,17 +125,14 @@ final class CkbKnownEventsExtractor {
                 .inputExonRank(exonAnnotation.inputExonRank())
                 .addSources(Knowledgebase.CKB)
                 .build();
+
         return convertToKnownSet(exonAnnotations, convert, ExonConsolidation::consolidate, CkbVariantAnnotator::annotateExon, variant);
     }
 
     @NotNull
     private static Set<KnownGene> convertToKnownGenes(@NotNull String gene, @NotNull Variant variant) {
         if (!gene.equals(CkbConstants.NO_GENE)) {
-            return Set.of(ImmutableKnownGene.builder()
-                    .gene(gene)
-                    .geneRole(resolveGeneRole(variant))
-                    .addSources(Knowledgebase.CKB)
-                    .build());
+            return Set.of(ImmutableKnownGene.builder().gene(gene).geneRole(resolveGeneRole(variant)).addSources(Knowledgebase.CKB).build());
         }
 
         return Collections.emptySet();
@@ -158,6 +143,7 @@ final class CkbKnownEventsExtractor {
         if (copyNumber == null) {
             return Collections.emptySet();
         }
+        
         Function<GeneAnnotation, KnownCopyNumber> convert = cn -> ImmutableKnownCopyNumber.builder()
                 .from(cn)
                 .geneRole(GeneRole.UNKNOWN)
@@ -177,17 +163,14 @@ final class CkbKnownEventsExtractor {
         if (fusion == null) {
             return Collections.emptySet();
         }
+        
         Function<FusionPair, KnownFusion> convert = fusionPair -> ImmutableKnownFusion.builder()
                 .from(fusionPair)
                 .proteinEffect(ProteinEffect.UNKNOWN)
                 .addSources(Knowledgebase.CKB)
                 .build();
 
-        return convertToKnownSet(List.of(fusion),
-                convert,
-                FusionConsolidation::consolidate,
-                CkbVariantAnnotator::annotateFusion,
-                variant);
+        return convertToKnownSet(List.of(fusion), convert, FusionConsolidation::consolidate, CkbVariantAnnotator::annotateFusion, variant);
     }
 
     @NotNull
@@ -197,17 +180,14 @@ final class CkbKnownEventsExtractor {
             return Collections.emptySet();
         }
         Set<U> converted = rawList.stream().map(convert).collect(Collectors.toSet());
-        return consolidate.apply(converted).stream()
-                .map(e -> annotate.apply(e, variant))
-                .filter(e -> {
-                    if (e instanceof GeneAlteration) {
-                        return ((GeneAlteration) e).proteinEffect() != ProteinEffect.UNKNOWN;
-                    } else if (e instanceof KnownFusion) {
-                        return ((KnownFusion) e).proteinEffect() != ProteinEffect.UNKNOWN;
-                    }
-                    LOGGER.warn("{} is not a GeneAlteration or KnownFusion", e.getClass().toString());
-                    return true;
-                })
-                .collect(Collectors.toSet());
+        return consolidate.apply(converted).stream().map(e -> annotate.apply(e, variant)).filter(e -> {
+            if (e instanceof GeneAlteration) {
+                return ((GeneAlteration) e).proteinEffect() != ProteinEffect.UNKNOWN;
+            } else if (e instanceof KnownFusion) {
+                return ((KnownFusion) e).proteinEffect() != ProteinEffect.UNKNOWN;
+            }
+            LOGGER.warn("{} is not a GeneAlteration or KnownFusion", e.getClass().toString());
+            return true;
+        }).collect(Collectors.toSet());
     }
 }

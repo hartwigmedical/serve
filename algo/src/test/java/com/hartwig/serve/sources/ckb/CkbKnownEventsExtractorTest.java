@@ -38,7 +38,7 @@ public class CkbKnownEventsExtractorTest {
         extractedEvents.add(createFusion("ALK", "EML4", "gain of function"));
         extractedEvents.add(createFusion("APC", "BRAF", "unknown"));
 
-        KnownEvents knownEvents = CkbKnownEventsExtractor.generateKnownEvents(extractedEvents, false);
+        KnownEvents knownEvents = CkbKnownEventsExtractor.generateKnownEvents(extractedEvents);
 
         assertEquals(1, knownEvents.hotspots().size());
         assertEquals(ProteinEffect.GAIN_OF_FUNCTION, knownEvents.hotspots().iterator().next().proteinEffect());

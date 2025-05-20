@@ -14,8 +14,11 @@ import com.hartwig.serve.datamodel.molecular.KnownEvents;
 import com.hartwig.serve.datamodel.molecular.MolecularCriterium;
 import com.hartwig.serve.datamodel.molecular.common.GenomeRegion;
 import com.hartwig.serve.datamodel.molecular.hotspot.ActionableHotspot;
+import com.hartwig.serve.datamodel.molecular.hotspot.ImmutableActionableHotspot;
 import com.hartwig.serve.datamodel.molecular.hotspot.ImmutableKnownHotspot;
+import com.hartwig.serve.datamodel.molecular.hotspot.ImmutableVariantAnnotation;
 import com.hartwig.serve.datamodel.molecular.hotspot.KnownHotspot;
+import com.hartwig.serve.datamodel.molecular.hotspot.VariantAnnotation;
 import com.hartwig.serve.datamodel.molecular.hotspot.VariantHotspot;
 import com.hartwig.serve.datamodel.molecular.range.ActionableRange;
 import com.hartwig.serve.datamodel.molecular.range.ImmutableActionableRange;
@@ -179,16 +182,16 @@ class RefGenomeConverter {
     private Set<ActionableHotspot> convertActionableHotspots(@NotNull Set<ActionableHotspot> actionableHotspots) {
         Set<ActionableHotspot> convertedActionableHotspots = Sets.newHashSet();
         for (ActionableHotspot actionableHotspot : actionableHotspots) {
-            Set<VariantHotspot> liftedSet = Sets.newHashSet();
-            for (VariantHotspot variant : actionableHotspot.variants()) {
-                VariantHotspot lifted = liftOverVariantHotspot(variant);
+            Set<VariantAnnotation> liftedSet = Sets.newHashSet();
+            for (VariantAnnotation variant : actionableHotspot.variants()) {
+                VariantAnnotation lifted = liftOverVariantAnnotation(variant);
                 if (lifted != null) {
                     liftedSet.add(lifted);
                 }
             }
 
             if (liftedSet.size() == actionableHotspot.variants().size()) {
-                convertedActionableHotspots.add(actionableHotspot);
+                convertedActionableHotspots.add(ImmutableActionableHotspot.builder().from(actionableHotspot).variants(liftedSet).build());
             }
         }
         return convertedActionableHotspots;
@@ -218,44 +221,14 @@ class RefGenomeConverter {
     }
 
     @Nullable
-    private VariantHotspot liftOverVariantHotspot(@NotNull VariantHotspot variant) {
+    private VariantAnnotation liftOverVariantAnnotation(@NotNull VariantAnnotation variant) {
         LiftOverResult lifted = performLiftOverVariant(variant);
 
         if (lifted == null) {
             return null;
         }
 
-        return new VariantHotspot() {
-
-            @NotNull
-            @Override
-            public String gene() {
-                return variant.gene();
-            }
-
-            @NotNull
-            @Override
-            public String ref() {
-                return variant.ref();
-            }
-
-            @NotNull
-            @Override
-            public String alt() {
-                return variant.alt();
-            }
-
-            @NotNull
-            @Override
-            public String chromosome() {
-                return lifted.chromosome();
-            }
-
-            @Override
-            public int position() {
-                return lifted.position();
-            }
-        };
+        return ImmutableVariantAnnotation.builder().from(variant).chromosome(lifted.chromosome()).position(lifted.position()).build();
     }
 
     @Nullable

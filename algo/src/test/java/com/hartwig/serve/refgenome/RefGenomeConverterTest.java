@@ -1,6 +1,7 @@
 package com.hartwig.serve.refgenome;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -110,12 +111,12 @@ public class RefGenomeConverterTest {
         List<EfficacyEvidence> evidences = List.of(EfficacyEvidenceTestFactory.createWithMolecularCriterium(molecularCriterium));
         Set<ActionableHotspot> convertedActionableHotspotsFromEvidence =
                 DUMMY_CONVERTER.convertEfficacyEvidences(evidences).iterator().next().molecularCriterium().hotspots();
-        assertEquals(actionableHotspot, convertedActionableHotspotsFromEvidence.iterator().next());
+        assertNotSame(actionableHotspot, convertedActionableHotspotsFromEvidence.iterator().next());
 
         List<ActionableTrial> trials = List.of(TrialTestFactory.createWithMolecularCriterium(molecularCriterium));
         Set<ActionableHotspot> convertedActionableHotspotFromTrial =
                 DUMMY_CONVERTER.convertTrials(trials).iterator().next().anyMolecularCriteria().iterator().next().hotspots();
-        assertEquals(actionableHotspot, convertedActionableHotspotFromTrial.iterator().next());
+        assertNotSame(actionableHotspot, convertedActionableHotspotFromTrial.iterator().next());
     }
 
     @Test
@@ -128,12 +129,12 @@ public class RefGenomeConverterTest {
         List<EfficacyEvidence> evidences = List.of(EfficacyEvidenceTestFactory.createWithMolecularCriterium(molecularCriterium));
         Set<ActionableRange> convertedActionableCodonFromEvidence =
                 DUMMY_CONVERTER.convertEfficacyEvidences(evidences).iterator().next().molecularCriterium().codons();
-        assertEquals(actionableCodon, convertedActionableCodonFromEvidence.iterator().next());
+        assertNotSame(actionableCodon, convertedActionableCodonFromEvidence.iterator().next());
 
         List<ActionableTrial> trials = List.of(TrialTestFactory.createWithMolecularCriterium(molecularCriterium));
         Set<ActionableRange> convertedActionableCodonFromTrial =
                 DUMMY_CONVERTER.convertTrials(trials).iterator().next().anyMolecularCriteria().iterator().next().codons();
-        assertEquals(actionableCodon, convertedActionableCodonFromTrial.iterator().next());
+        assertNotSame(actionableCodon, convertedActionableCodonFromTrial.iterator().next());
     }
 
     @Test
@@ -146,12 +147,12 @@ public class RefGenomeConverterTest {
         List<EfficacyEvidence> evidences = List.of(EfficacyEvidenceTestFactory.createWithMolecularCriterium(molecularCriterium));
         Set<ActionableRange> convertedActionableExonFromEvidence =
                 DUMMY_CONVERTER.convertEfficacyEvidences(evidences).iterator().next().molecularCriterium().exons();
-        assertEquals(actionableExon, convertedActionableExonFromEvidence.iterator().next());
+        assertNotSame(actionableExon, convertedActionableExonFromEvidence.iterator().next());
 
         List<ActionableTrial> trials = List.of(TrialTestFactory.createWithMolecularCriterium(molecularCriterium));
         Set<ActionableRange> convertedActionableExonFromTrial =
                 DUMMY_CONVERTER.convertTrials(trials).iterator().next().anyMolecularCriteria().iterator().next().exons();
-        assertEquals(actionableExon, convertedActionableExonFromTrial.iterator().next());
+        assertNotSame(actionableExon, convertedActionableExonFromTrial.iterator().next());
     }
 
     @NotNull

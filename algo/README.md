@@ -447,7 +447,7 @@ elsewhere.
 
 ## Version History and Download Links
 
-- Upcoming
+- [8.3.1](https://github.com/hartwigmedical/serve/releases/tag/serve-v8.3.1)
   - Fix in SERVE ref genome conversion for actionable hotspots to actually apply the lifted-over hotspots in the conversion.
 - [8.3.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v8.3.0)
     - Remove all variants from CKB with UNKNOWN protein impact when we map them to known events

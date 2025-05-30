@@ -143,7 +143,7 @@ final class CkbKnownEventsExtractor {
         if (copyNumber == null) {
             return Collections.emptySet();
         }
-        
+
         Function<GeneAnnotation, KnownCopyNumber> convert = cn -> ImmutableKnownCopyNumber.builder()
                 .from(cn)
                 .geneRole(GeneRole.UNKNOWN)
@@ -163,7 +163,7 @@ final class CkbKnownEventsExtractor {
         if (fusion == null) {
             return Collections.emptySet();
         }
-        
+
         Function<FusionPair, KnownFusion> convert = fusionPair -> ImmutableKnownFusion.builder()
                 .from(fusionPair)
                 .proteinEffect(ProteinEffect.UNKNOWN)
@@ -180,13 +180,16 @@ final class CkbKnownEventsExtractor {
             return Collections.emptySet();
         }
         Set<U> converted = rawList.stream().map(convert).collect(Collectors.toSet());
-        return consolidate.apply(converted).stream().map(e -> annotate.apply(e, variant)).filter(e -> {
-            if (e instanceof GeneAlteration) {
-                return ((GeneAlteration) e).proteinEffect() != ProteinEffect.UNKNOWN;
-            } else if (e instanceof KnownFusion) {
-                return ((KnownFusion) e).proteinEffect() != ProteinEffect.UNKNOWN;
+        return consolidate.apply(converted).stream().map(e -> annotate.apply(e, variant)).filter(event -> {
+            if (event instanceof GeneAlteration) {
+                GeneAlteration alteration = (GeneAlteration) event;
+                return alteration.proteinEffect() != ProteinEffect.UNKNOWN
+                        || Boolean.TRUE.equals(alteration.associatedWithDrugResistance());
+            } else if (event instanceof KnownFusion) {
+                KnownFusion fusion = (KnownFusion) event;
+                return fusion.proteinEffect() != ProteinEffect.UNKNOWN || Boolean.TRUE.equals(fusion.associatedWithDrugResistance());
             }
-            LOGGER.warn("{} is not a GeneAlteration or KnownFusion", e.getClass().toString());
+            LOGGER.warn("{} is not a GeneAlteration or KnownFusion", event.getClass().toString());
             return true;
         }).collect(Collectors.toSet());
     }

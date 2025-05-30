@@ -182,9 +182,11 @@ final class CkbKnownEventsExtractor {
         Set<U> converted = rawList.stream().map(convert).collect(Collectors.toSet());
         return consolidate.apply(converted).stream().map(e -> annotate.apply(e, variant)).filter(e -> {
             if (e instanceof GeneAlteration) {
-                return ((GeneAlteration) e).proteinEffect() != ProteinEffect.UNKNOWN;
+                return ((GeneAlteration) e).proteinEffect() != ProteinEffect.UNKNOWN
+                        || Boolean.TRUE.equals(((GeneAlteration) e).associatedWithDrugResistance());
             } else if (e instanceof KnownFusion) {
-                return ((KnownFusion) e).proteinEffect() != ProteinEffect.UNKNOWN;
+                return ((KnownFusion) e).proteinEffect() != ProteinEffect.UNKNOWN
+                        || Boolean.TRUE.equals(((KnownFusion) e).associatedWithDrugResistance());
             }
             LOGGER.warn("{} is not a GeneAlteration or KnownFusion", e.getClass().toString());
             return true;

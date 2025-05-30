@@ -447,7 +447,7 @@ elsewhere.
 
 ## Version History and Download Links
 
-- Upcoming
+- [8.3.2](https://github.com/hartwigmedical/serve/releases/tag/serve-v8.3.2)
     - Retain variants that are associated with drug resistance in SERVE
 - [8.3.1](https://github.com/hartwigmedical/serve/releases/tag/serve-v8.3.1)
   - Fix in SERVE ref genome conversion for actionable hotspots to actually apply the lifted-over hotspots in the conversion.

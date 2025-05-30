@@ -27,16 +27,16 @@ public class CkbKnownEventsExtractorTest {
     @Test
     public void canFilterUnknownProteinEffectFromKnownEvents() {
         List<ExtractedEvent> extractedEvents = Lists.newArrayList();
-        extractedEvents.add(createHotspot("BRAF", "V600E", "gain of function", null));
-        extractedEvents.add(createHotspot("TP53", "R175H", "unknown", null));
-        extractedEvents.add(createCodon("BRAF", "V600", "gain of function", null));
-        extractedEvents.add(createCodon("TP53", "R175", "unknown", null));
-        extractedEvents.add(createExon("BRAF", "exon 1 deletion", "loss of function", null));
-        extractedEvents.add(createExon("APC", "exon 3 deletion", "unknown", null));
-        extractedEvents.add(createAmplification("MET", "gain of function", null));
-        extractedEvents.add(createAmplification("KIT", "unknown", null));
-        extractedEvents.add(createFusion("ALK", "EML4", "gain of function", null));
-        extractedEvents.add(createFusion("APC", "BRAF", "unknown", null));
+        extractedEvents.add(createHotspot("BRAF", "V600E", "gain of function"));
+        extractedEvents.add(createHotspot("TP53", "R175H", "unknown"));
+        extractedEvents.add(createCodon("BRAF", "V600", "gain of function"));
+        extractedEvents.add(createCodon("TP53", "R175", "unknown"));
+        extractedEvents.add(createExon("BRAF", "exon 1 deletion", "loss of function"));
+        extractedEvents.add(createExon("APC", "exon 3 deletion", "unknown"));
+        extractedEvents.add(createAmplification("MET", "gain of function"));
+        extractedEvents.add(createAmplification("KIT", "unknown"));
+        extractedEvents.add(createFusion("ALK", "EML4", "gain of function"));
+        extractedEvents.add(createFusion("APC", "BRAF", "unknown"));
 
         KnownEvents knownEvents = CkbKnownEventsExtractor.generateKnownEvents(extractedEvents);
 
@@ -56,40 +56,12 @@ public class CkbKnownEventsExtractorTest {
         assertEquals(ProteinEffect.GAIN_OF_FUNCTION, knownEvents.fusions().iterator().next().proteinEffect());
     }
 
-    @Test
-    public void dontFilterAssociatedWithDrugResistanceFromKnownEvents() {
-        List<ExtractedEvent> extractedEvents = Lists.newArrayList();
-        extractedEvents.add(createHotspot("TP53", "R175H", "unknown", "Y"));
-        extractedEvents.add(createCodon("TP53", "R175", "unknown", "Y"));
-        extractedEvents.add(createExon("APC", "exon 3 deletion", "unknown", "Y"));
-        extractedEvents.add(createAmplification("KIT", "unknown", "Y"));
-        extractedEvents.add(createFusion("APC", "BRAF", "unknown", "Y"));
-
-        KnownEvents knownEvents = CkbKnownEventsExtractor.generateKnownEvents(extractedEvents);
-
-        assertEquals(1, knownEvents.hotspots().size());
-        assertEquals(ProteinEffect.UNKNOWN, knownEvents.hotspots().iterator().next().proteinEffect());
-
-        assertEquals(1, knownEvents.codons().size());
-        assertEquals(ProteinEffect.UNKNOWN, knownEvents.codons().iterator().next().proteinEffect());
-
-        assertEquals(1, knownEvents.exons().size());
-        assertEquals(ProteinEffect.UNKNOWN, knownEvents.exons().iterator().next().proteinEffect());
-
-        assertEquals(1, knownEvents.copyNumbers().size());
-        assertEquals(ProteinEffect.UNKNOWN, knownEvents.copyNumbers().iterator().next().proteinEffect());
-
-        assertEquals(1, knownEvents.fusions().size());
-        assertEquals(ProteinEffect.UNKNOWN, knownEvents.fusions().iterator().next().proteinEffect());
-    }
-
     @NotNull
-    private static ExtractedEvent createCodon(@NotNull String gene, @NotNull String codon, @Nullable String proteinEffect,
-            @Nullable String associatedWithDrugResistance) {
+    private static ExtractedEvent createCodon(@NotNull String gene, @NotNull String codon, @Nullable String proteinEffect) {
         return ImmutableExtractedEvent.builder()
                 .gene(gene)
                 .event(codon)
-                .variant(CkbTestFactory.createVariant(gene, codon, gene + " " + codon, proteinEffect, associatedWithDrugResistance))
+                .variant(CkbTestFactory.createVariant(gene, codon, gene + " " + codon, proteinEffect))
                 .eventType(EventType.CODON)
                 .eventExtractorOutput(ImmutableEventExtractorOutput.builder()
                         .addCodons(ImmutableCodonAnnotation.builder()
@@ -102,12 +74,11 @@ public class CkbKnownEventsExtractorTest {
     }
 
     @NotNull
-    private static ExtractedEvent createExon(@NotNull String gene, @NotNull String event, @Nullable String proteinEffect,
-            @Nullable String associatedWithDrugResistance) {
+    private static ExtractedEvent createExon(@NotNull String gene, @NotNull String event, @Nullable String proteinEffect) {
         return ImmutableExtractedEvent.builder()
                 .gene(gene)
                 .event(event)
-                .variant(CkbTestFactory.createVariant(gene, event, gene + " " + event, proteinEffect, associatedWithDrugResistance))
+                .variant(CkbTestFactory.createVariant(gene, event, gene + " " + event, proteinEffect))
                 .eventType(EventType.EXON)
                 .eventExtractorOutput(ImmutableEventExtractorOutput.builder()
                         .addExons(ImmutableExonAnnotation.builder()
@@ -120,16 +91,11 @@ public class CkbKnownEventsExtractorTest {
     }
 
     @NotNull
-    private static ExtractedEvent createFusion(@NotNull String geneUp, @NotNull String geneDown, @Nullable String proteinEffect,
-            @Nullable String associatedWithDrugResistance) {
+    private static ExtractedEvent createFusion(@NotNull String geneUp, @NotNull String geneDown, @Nullable String proteinEffect) {
         return ImmutableExtractedEvent.builder()
                 .gene(geneUp)
                 .event(geneDown + "-" + geneUp)
-                .variant(CkbTestFactory.createVariant(geneUp,
-                        geneDown + "-" + geneUp,
-                        geneDown + "-" + geneUp + " fusion",
-                        proteinEffect,
-                        associatedWithDrugResistance))
+                .variant(CkbTestFactory.createVariant(geneUp, geneDown + "-" + geneUp, geneDown + "-" + geneUp + " fusion", proteinEffect))
                 .eventType(EventType.FUSION_PAIR)
                 .eventExtractorOutput(ImmutableEventExtractorOutput.builder()
                         .fusionPair(FusionTestFactory.createFusionPair(geneUp, geneDown, 1, 1))
@@ -138,12 +104,11 @@ public class CkbKnownEventsExtractorTest {
     }
 
     @NotNull
-    private static ExtractedEvent createHotspot(@NotNull String gene, @NotNull String mutation, @Nullable String proteinEffect,
-            @Nullable String associatedWithDrugResistance) {
+    private static ExtractedEvent createHotspot(@NotNull String gene, @NotNull String mutation, @Nullable String proteinEffect) {
         return ImmutableExtractedEvent.builder()
                 .gene(gene)
                 .event(gene + " " + mutation)
-                .variant(CkbTestFactory.createVariant(gene, mutation, gene + " " + mutation, proteinEffect, associatedWithDrugResistance))
+                .variant(CkbTestFactory.createVariant(gene, mutation, gene + " " + mutation, proteinEffect))
                 .eventType(EventType.VARIANT)
                 .eventExtractorOutput(ImmutableEventExtractorOutput.builder()
                         .addVariants(HotspotTestFactory.createVariantAnnotation(gene, "1", 1, "T", "A"))
@@ -152,12 +117,11 @@ public class CkbKnownEventsExtractorTest {
     }
 
     @NotNull
-    private static ExtractedEvent createAmplification(@NotNull String gene, @Nullable String proteinEffect,
-            @Nullable String associatedWithDrugResistance) {
+    private static ExtractedEvent createAmplification(@NotNull String gene, @Nullable String proteinEffect) {
         return ImmutableExtractedEvent.builder()
                 .gene(gene)
                 .event(gene + " amp")
-                .variant(CkbTestFactory.createVariant(gene, "amp", gene + " amp", proteinEffect, associatedWithDrugResistance))
+                .variant(CkbTestFactory.createVariant(gene, "amp", gene + " amp", proteinEffect))
                 .eventType(EventType.AMPLIFICATION)
                 .eventExtractorOutput(ImmutableEventExtractorOutput.builder()
                         .copyNumber(GeneTestFactory.createGeneAnnotation(gene, GeneEvent.AMPLIFICATION))

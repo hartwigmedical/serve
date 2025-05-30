@@ -72,7 +72,7 @@ public final class CkbTestFactory {
             @NotNull String indicationName, @NotNull String evidenceLevel, @NotNull String approvalStatus, @NotNull String termId) {
         Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting", "Rotterdam", "EMC");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(0, "required");
-        return builder().addVariants(createVariant(geneSymbol, variant, fullName, proteinEffect))
+        return builder().addVariants(createVariant(geneSymbol, variant, fullName, proteinEffect, null))
                 .addEvidences(createEvidence(responseType,
                         evidenceType,
                         therapyName,
@@ -225,12 +225,12 @@ public final class CkbTestFactory {
 
     @NotNull
     public static Variant createVariant(@NotNull String geneSymbol, @NotNull String variant, @NotNull String fullName) {
-        return createVariant(geneSymbol, variant, fullName, "unknown");
+        return createVariant(geneSymbol, variant, fullName, "unknown", null);
     }
 
     @NotNull
     public static Variant createVariant(@NotNull String geneSymbol, @NotNull String variant, @NotNull String fullName,
-            @Nullable String proteinEffect) {
+            @Nullable String proteinEffect, @Nullable String associatedWithDrugResistance) {
         return ImmutableVariant.builder()
                 .id(0)
                 .createDate(TEST_CREATE_DATE)
@@ -238,8 +238,7 @@ public final class CkbTestFactory {
                 .fullName(fullName)
                 .variant(variant)
                 .isHotspot(false)
-                .gene(createGene(geneSymbol))
-                .proteinEffect(proteinEffect)
+                .gene(createGene(geneSymbol)).proteinEffect(proteinEffect).associatedWithDrugResistance(associatedWithDrugResistance)
                 .build();
     }
 

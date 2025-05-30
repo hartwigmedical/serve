@@ -49,8 +49,8 @@ public class CkbExtractorTest {
     @Test
     public void canExtractEvidenceWithCombinedCriteria() {
         List<CkbEntry> ckbEntries = Lists.newArrayList();
-        List<Variant> variants =
-                List.of(CkbTestFactory.createVariant("BRAF", "loss", "BRAF loss", "loss of function"), CkbTestFactory.createVariant("KIT", "loss", "KIT loss", "loss of function"));
+        List<Variant> variants = List.of(CkbTestFactory.createVariant("BRAF", "loss", "BRAF loss", "loss of function", null),
+                CkbTestFactory.createVariant("KIT", "loss", "KIT loss", "loss of function", null));
 
         ckbEntries.add(createCombinedEntry(variants,
                 "sensitive",

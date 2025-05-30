@@ -238,7 +238,9 @@ public final class CkbTestFactory {
                 .fullName(fullName)
                 .variant(variant)
                 .isHotspot(false)
-                .gene(createGene(geneSymbol)).proteinEffect(proteinEffect).associatedWithDrugResistance(associatedWithDrugResistance)
+                .gene(createGene(geneSymbol))
+                .proteinEffect(proteinEffect)
+                .associatedWithDrugResistance(associatedWithDrugResistance)
                 .build();
     }
 

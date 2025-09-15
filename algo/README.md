@@ -447,6 +447,8 @@ elsewhere.
 
 ## Version History and Download Links
 
+- [8.4.1](https://github.com/hartwigmedical/serve/releases/tag/8.4.1)
+    - Cloudbuild bug fixed
 - [8.4.0](https://github.com/hartwigmedical/serve/releases/tag/8.4.0)
     - PTEN configured to be full exonic deletes when evidence is presented for exon deletions 
 - [8.3.2](https://github.com/hartwigmedical/serve/releases/tag/serve-v8.3.2)

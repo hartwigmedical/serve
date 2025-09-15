@@ -31,7 +31,7 @@ steps:
       - MAVEN_OPTS=-Dmaven.repo.local=/cache/.m2
   - id: 'Publish docker image'
     dir: algo
-    name: 'eu.gcr.io/hmf-build/docker-tag'
+    name: 'europe-west4-docker.pkg.dev/hmf-build/hmf-docker/docker-tag'
     args: [ 'europe-west4-docker.pkg.dev/hmf-build/hmf-docker/serve', '$TAG_NAME' ]
   - id: 'Refresh bucket from local Maven cache after build'
     name: 'gcr.io/cloud-builders/gsutil'

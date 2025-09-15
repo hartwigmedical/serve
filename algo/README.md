@@ -447,7 +447,7 @@ elsewhere.
 
 ## Version History and Download Links
 
-- Upcoming
+- [8.4.0](https://github.com/hartwigmedical/serve/releases/tag/8.4.0)
     - PTEN configured to be full exonic deletes when evidence is presented for exon deletions 
 - [8.3.2](https://github.com/hartwigmedical/serve/releases/tag/serve-v8.3.2)
     - Retain variants that are associated with drug resistance in SERVE

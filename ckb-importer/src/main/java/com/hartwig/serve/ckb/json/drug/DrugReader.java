@@ -173,7 +173,7 @@ public class DrugReader extends CkbJsonDirectoryReader<JsonDrug> {
             evidences.add(ImmutableEvidenceInfo.builder()
                     .id(Json.integer(evidenceObject, "id"))
                     .approvalStatus(Json.string(evidenceObject, "approvalStatus"))
-                    .evidenceType(Json.string(evidenceObject, "evidenceType"))
+                    .evidenceType(Json.string(evidenceObject, "evidenceType")).variantOrigin(Json.string(evidenceObject, "variantOrigin"))
                     .efficacyEvidence(Json.string(evidenceObject, "efficacyEvidence"))
                     .molecularProfile(extractMolecularProfile(evidenceObject.getAsJsonObject("molecularProfile")))
                     .therapy(extractTherapy(evidenceObject.getAsJsonObject("therapy")))

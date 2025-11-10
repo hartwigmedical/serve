@@ -18,6 +18,9 @@ public abstract class EvidenceInfo {
     @NotNull
     public abstract String evidenceType();
 
+    @Nullable
+    public abstract String variantOrigin();
+
     @NotNull
     public abstract String efficacyEvidence();
 

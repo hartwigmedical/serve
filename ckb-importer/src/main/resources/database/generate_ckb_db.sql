@@ -153,6 +153,7 @@ CREATE TABLE `evidence`
     `ckbEvidenceId` int NOT NULL,
     `responseType` varchar(50) NOT NULL,
     `evidenceType` varchar(50) NOT NULL,
+    `variantOrigin` varchar(50),
     `efficacyEvidence` varchar(5000) NOT NULL,
     `approvalStatus` varchar(50) NOT NULL,
     `ampCapAscoEvidenceLevel` varchar(50) NOT NULL,
@@ -391,6 +392,7 @@ CREATE TABLE `variantRequirementDetail`
     `clinicalTrialId` int NOT NULL,
     `ckbProfileId` int NOT NULL,
     `requirementType` varchar(50) NOT NULL,
+    `variantOrigin` varchar(50),
     PRIMARY KEY (`id`),
     FOREIGN KEY (`clinicalTrialId`) REFERENCES `clinicalTrial`(`id`)
 );

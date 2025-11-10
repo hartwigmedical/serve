@@ -110,6 +110,7 @@ public class ClinicalTrialReader extends CkbJsonDirectoryReader<JsonClinicalTria
             variantRequirementDetails.add(ImmutableJsonVariantRequirementDetail.builder()
                     .molecularProfile(extractMolecularProfile(variantRequirementDetailObject.getAsJsonObject("molecularProfile")))
                     .requirementType(Json.string(variantRequirementDetailObject, "requirementType"))
+                    .variantOrigin(Json.string(variantRequirementDetailObject, "variantOrigin"))
                     .build());
         }
         return variantRequirementDetails;

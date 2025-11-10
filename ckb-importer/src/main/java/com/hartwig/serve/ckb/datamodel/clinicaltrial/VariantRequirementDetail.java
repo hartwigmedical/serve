@@ -13,4 +13,7 @@ public abstract class VariantRequirementDetail {
     @NotNull
     public abstract String requirementType();
 
+    @Nullable
+    public abstract String variantOrigin();
+
 }

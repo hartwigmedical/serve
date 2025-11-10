@@ -95,8 +95,12 @@ class ClinicalTrialDAO {
             context.insertInto(Variantrequirementdetail.VARIANTREQUIREMENTDETAIL,
                             Variantrequirementdetail.VARIANTREQUIREMENTDETAIL.CLINICALTRIALID,
                             Variantrequirementdetail.VARIANTREQUIREMENTDETAIL.CKBPROFILEID,
-                            Variantrequirementdetail.VARIANTREQUIREMENTDETAIL.REQUIREMENTTYPE)
-                    .values(id, variantRequirementDetail.profileId(), variantRequirementDetail.requirementType())
+                            Variantrequirementdetail.VARIANTREQUIREMENTDETAIL.REQUIREMENTTYPE,
+                            Variantrequirementdetail.VARIANTREQUIREMENTDETAIL.VARIANTORIGIN)
+                    .values(id,
+                            variantRequirementDetail.profileId(),
+                            variantRequirementDetail.requirementType(),
+                            variantRequirementDetail.variantOrigin())
                     .execute();
         }
 

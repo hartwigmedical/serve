@@ -12,6 +12,10 @@ public final class ImmunoTestFactory {
 
     @NotNull
     public static ImmutableActionableHLA.Builder actionableHLABuilder() {
-        return ImmutableActionableHLA.builder().from(MolecularTestFactory.createTestActionableEvent()).hlaAllele(Strings.EMPTY);
+        return ImmutableActionableHLA.builder()
+                .from(MolecularTestFactory.createTestActionableEvent())
+                .gene(Strings.EMPTY)
+                .alleleGroup(Strings.EMPTY)
+                .hlaProtein(Strings.EMPTY);
     }
 }

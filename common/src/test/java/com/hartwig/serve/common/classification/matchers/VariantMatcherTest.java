@@ -36,6 +36,13 @@ public class VariantMatcherTest {
         assertFalse(matcher.matches("any", "L2"));
         assertFalse(matcher.matches("any", "L20Pdel5"));
         assertFalse(matcher.matches("any", "fs"));
+        assertFalse(matcher.matches("any", "*01"));
+        assertFalse(matcher.matches("any", "*01:02"));
+        assertFalse(matcher.matches("any", "*01:02P"));
+        assertFalse(matcher.matches("any", "*01:02:03"));
+        assertFalse(matcher.matches("any", "*01:02:03N"));
+        assertFalse(matcher.matches("any", "*01:02:03:04"));
+        assertFalse(matcher.matches("any", "*01:02:03:04Q"));
 
         // Splice variants are ignored by hotspot classifier:
         assertFalse(matcher.matches("any", "963_D1010splice"));

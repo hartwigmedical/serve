@@ -10,13 +10,15 @@ import org.jetbrains.annotations.NotNull;
 public class ActionableHLAComparator implements Comparator<ActionableHLA> {
 
     @NotNull
+    private final Comparator<ImmunoAnnotation> immunoAnnotationComparator = new ImmunoAnnotationComparator();
+    @NotNull
     private final Comparator<ActionableEvent> actionableEventComparator = new ActionableEventComparator();
 
     @Override
     public int compare(@NotNull ActionableHLA hla1, @NotNull ActionableHLA hla2) {
-        int hlaCompare = hla1.hlaAllele().compareTo(hla2.hlaAllele());
-        if (hlaCompare != 0) {
-            return hlaCompare;
+        int immunoAnnotationCompare = immunoAnnotationComparator.compare(hla1, hla2);
+        if (immunoAnnotationCompare != 0) {
+            return immunoAnnotationCompare;
         }
 
         return actionableEventComparator.compare(hla1, hla2);

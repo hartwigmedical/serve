@@ -757,11 +757,13 @@
                   "month": 2,
                   "day": 3
                 },
-                "sourceEvent": "A*02",
+                "sourceEvent": "*02:01",
                 "sourceUrls": [
                   "http"
                 ],
-                "hlaAllele": "A*02"
+                "gene": "HLA-A",
+                "alleleGroup": "02",
+                "hlaProtein": "01"
               }
             ]
           }
@@ -1219,9 +1221,11 @@
                     "month": 1,
                     "day": 1
                   },
-                  "sourceEvent": "A*02",
+                  "sourceEvent": "*02:01",
                   "sourceUrls": [],
-                  "hlaAllele": "A*02"
+                  "gene": "HLA-A",
+                  "alleleGroup": "02",
+                  "hlaProtein": "01"
                 }
               ]
             }

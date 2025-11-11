@@ -115,7 +115,7 @@ public class ReferenceReader extends CkbJsonDirectoryReader<JsonReference> {
                     .id(Json.integer(evidenceJsonObject, "id"))
                     .approvalStatus(Json.string(evidenceJsonObject, "approvalStatus"))
                     .evidenceType(Json.string(evidenceJsonObject, "evidenceType"))
-                    .variantOrigin(Json.string(evidenceJsonObject, "variantOrigin"))
+                    .variantOrigin(Json.nullableString(evidenceJsonObject, "variantOrigin"))
                     .efficacyEvidence(Json.string(evidenceJsonObject, "efficacyEvidence"))
                     .molecularProfile(extractMolecularProfile(evidenceJsonObject.getAsJsonObject("molecularProfile")))
                     .therapy(extractTherapy(evidenceJsonObject.getAsJsonObject("therapy")))

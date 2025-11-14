@@ -57,7 +57,7 @@ public class EventExtractor {
                 .copyNumber(copyNumberExtractor.extract(gene, type))
                 .fusionPair(fusionExtractor.extract(gene, type, event))
                 .characteristic(tumorCharacteristicExtractor.extract(type, event))
-                .hla(immunoHLAExtractor.extract(type, event))
+                .hla(immunoHLAExtractor.extract(gene, type, event))
                 .build();
     }
 }

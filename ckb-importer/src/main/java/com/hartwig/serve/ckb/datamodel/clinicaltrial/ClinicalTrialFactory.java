@@ -63,7 +63,7 @@ public final class ClinicalTrialFactory {
         for (JsonVariantRequirementDetail requirementDetail : jsonRequirementDetails) {
             requirementDetails.add(ImmutableVariantRequirementDetail.builder()
                     .profileId(requirementDetail.molecularProfile().id())
-                    .requirementType(requirementDetail.requirementType())
+                    .requirementType(requirementDetail.requirementType()).variantOrigin(requirementDetail.variantOrigin())
                     .build());
             //            if (requirementDetail.requirementType().equals("excluded")) { // variant is excluded from enrollment
             //                requirementDetails.add(extractClinicalTrialVariantRequirementDetails(requirementDetail).build());

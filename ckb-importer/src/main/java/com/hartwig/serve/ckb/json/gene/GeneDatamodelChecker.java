@@ -85,6 +85,7 @@ final class GeneDatamodelChecker {
         map.put("id", true);
         map.put("approvalStatus", true);
         map.put("evidenceType", true);
+        map.put("variantOrigin", true);
         map.put("efficacyEvidence", true);
         map.put("molecularProfile", true);
         map.put("therapy", true);

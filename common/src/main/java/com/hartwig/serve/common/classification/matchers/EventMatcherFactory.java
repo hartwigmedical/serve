@@ -54,7 +54,7 @@ public final class EventMatcherFactory {
                 new UnderexpressionMatcher2(config.underexpressionKeywords(), config.underexpressionKeyPhrases());
 
         CharacteristicMatcher characteristicMatcher = new CharacteristicMatcher(allCharacteristicKeyPhrases(config));
-        HlaMatcher hlaMatcher = new HlaMatcher(allHlaKeyPhrases(config));
+        HlaMatcher hlaMatcher = new HlaMatcher();
 
         ComplexMatcher complexMatcher = new ComplexMatcher(variantMatcher, config.complexEventsPerGene());
         CombinedMatcher combinedMatcher =
@@ -98,13 +98,6 @@ public final class EventMatcherFactory {
         tumorCharacteristics.addAll(config.hpvPositiveEvents());
         tumorCharacteristics.addAll(config.ebvPositiveEvents());
         return tumorCharacteristics;
-    }
-
-    @NotNull
-    private static Set<String> allHlaKeyPhrases(@NotNull EventClassifierConfig config) {
-        Set<String> hla = Sets.newHashSet();
-        hla.addAll(config.hlaKeyPhrases());
-        return hla;
     }
 
     @NotNull

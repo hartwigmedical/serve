@@ -39,6 +39,7 @@ final class ClinicalTrialDatamodelChecker {
         Map<String, Boolean> map = Maps.newHashMap();
         map.put("molecularProfile", true);
         map.put("requirementType", true);
+        map.put("variantOrigin", true);
         return new JsonDatamodelChecker("ClinicalTrialVariantRequirementDetailObject", map);
     }
 

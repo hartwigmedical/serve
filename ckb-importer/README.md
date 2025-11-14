@@ -21,9 +21,10 @@
 | db_pass  | Required: The password needed for the DB user to authenticate on the URL. |
 
 ## Version History and Download Links
-- [Upcoming]
-  - Support ingestion of drug class treatment approach
+- [5.4.0](https://github.com/hartwigmedical/serve/releases/tag/ckb-importer-v5.4.0)
   - Add 'variantOrigin'
+- [4.0.2](https://github.com/hartwigmedical/serve/releases/tag/ckb-importer-v4.0.1)
+  - Support ingestion of drug class treatment approach
 - [3.4.0](https://github.com/hartwigmedical/serve/releases/tag/ckb-importer-v3.4.0)
   - Support ingestion of new acronym field for clinical trials
 - [2.2.0](https://github.com/hartwigmedical/serve/releases/tag/ckb-importer-v2.2.0)

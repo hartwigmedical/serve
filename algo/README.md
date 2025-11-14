@@ -447,7 +447,7 @@ elsewhere.
 
 ## Version History and Download Links
 
-- [Upcoming]
+- [8.5.0](https://github.com/hartwigmedical/serve/releases/tag/8.5.0)
     - Support HLA alleles
 - [8.4.1](https://github.com/hartwigmedical/serve/releases/tag/8.4.1)
     - Cloudbuild bug fixed

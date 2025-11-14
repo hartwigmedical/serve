@@ -46,7 +46,6 @@ public class CkbClassificationConfig {
     private static final Set<String> HIGH_TUMOR_MUTATIONAL_BURDEN_KEY_PHRASES = highTumorMutationalBurdenKeyPhrases();
     private static final Set<String> LOW_TUMOR_MUTATIONAL_BURDEN_KEY_PHRASES = lowTumorMutationalBurdenKeyPhrases();
     private static final Set<String> HR_DEFICIENCY_KEY_PHRASES = hrDeficiencyKeyPhrases();
-    private static final Set<String> HLA_KEY_PHRASES = hlaKeyPhrases();
     private static final Set<String> HPV_POSITIVE_EVENTS = hpvPositiveEvents();
     private static final Set<String> EBV_POSITIVE_EVENTS = ebvPositiveEvents();
     private static final Map<String, Set<String>> COMBINED_EVENTS_PER_GENE = combinedEventsPerGene();
@@ -93,7 +92,6 @@ public class CkbClassificationConfig {
                 .highTumorMutationalBurdenKeyPhrases(HIGH_TUMOR_MUTATIONAL_BURDEN_KEY_PHRASES)
                 .lowTumorMutationalBurdenKeyPhrases(LOW_TUMOR_MUTATIONAL_BURDEN_KEY_PHRASES)
                 .hrDeficiencyKeyPhrases(HR_DEFICIENCY_KEY_PHRASES)
-                .hlaKeyPhrases(HLA_KEY_PHRASES)
                 .hpvPositiveEvents(HPV_POSITIVE_EVENTS)
                 .ebvPositiveEvents(EBV_POSITIVE_EVENTS)
                 .combinedEventsPerGene(COMBINED_EVENTS_PER_GENE)
@@ -313,11 +311,6 @@ public class CkbClassificationConfig {
     @NotNull
     private static Set<String> hrDeficiencyKeyPhrases() {
         return Sets.newHashSet(CkbConstants.HRD_POSITIVE);
-    }
-
-    @NotNull
-    private static Set<String> hlaKeyPhrases() {
-        return Sets.newHashSet();
     }
 
     @NotNull

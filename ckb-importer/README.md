@@ -23,6 +23,7 @@
 ## Version History and Download Links
 - [Upcoming]
   - Support ingestion of drug class treatment approach
+  - Add 'variantOrigin'
 - [3.4.0](https://github.com/hartwigmedical/serve/releases/tag/ckb-importer-v3.4.0)
   - Support ingestion of new acronym field for clinical trials
 - [2.2.0](https://github.com/hartwigmedical/serve/releases/tag/ckb-importer-v2.2.0)

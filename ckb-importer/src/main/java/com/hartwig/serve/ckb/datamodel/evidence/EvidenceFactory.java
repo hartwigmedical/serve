@@ -30,7 +30,7 @@ public final class EvidenceFactory {
                             evidenceInfo.treatmentApproaches()))
                     .therapyTreatmentApproaches(RelevantTreatmentApproachesFactory.extractTherapyTreatmentApproaches(ckbJsonDatabase,
                             evidenceInfo.treatmentApproaches()))
-                    .evidenceType(evidenceInfo.evidenceType())
+                    .evidenceType(evidenceInfo.evidenceType()).variantOrigin(evidenceInfo.variantOrigin())
                     .efficacyEvidence(evidenceInfo.efficacyEvidence())
                     .approvalStatus(evidenceInfo.approvalStatus())
                     .ampCapAscoEvidenceLevel(evidenceInfo.ampCapAscoEvidenceLevel())

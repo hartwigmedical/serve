@@ -47,7 +47,8 @@ public class VariantMatcher implements EventMatcher {
         } else if (event.contains(HgvsConstants.HGVS_DELETION + HgvsConstants.HGVS_INSERTION)) {
             int mutationLength = extractComplexDeletionInsertionLength(event);
             return mutationLength > 0 && (maxLength == null || mutationLength <= maxLength);
-        } else if (event.startsWith(HgvsConstants.HGVS_START_LOST)) {
+        } else if (event.startsWith(HgvsConstants.HGVS_STOP_LOST) && (!event.contains(":") && event.chars()
+                .anyMatch(Character::isLetter))) {
             return true;
         } else {
             return isValidSingleCodonMutation(event);

@@ -153,6 +153,7 @@ public class GeneReader extends CkbJsonDirectoryReader<JsonGene> {
                     .id(Json.integer(evidenceObject, "id"))
                     .approvalStatus(Json.string(evidenceObject, "approvalStatus"))
                     .evidenceType(Json.string(evidenceObject, "evidenceType"))
+                    .variantOrigin(Json.nullableString(evidenceObject, "variantOrigin"))
                     .efficacyEvidence(Json.string(evidenceObject, "efficacyEvidence"))
                     .molecularProfile(extractMolecularProfileObject(evidenceObject.getAsJsonObject("molecularProfile")))
                     .therapy(extractTherapyObject(evidenceObject.getAsJsonObject("therapy")))

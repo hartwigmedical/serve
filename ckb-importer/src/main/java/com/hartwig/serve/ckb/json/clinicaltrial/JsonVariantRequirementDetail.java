@@ -15,4 +15,7 @@ public abstract class JsonVariantRequirementDetail {
 
     @NotNull
     public abstract String requirementType();
+
+    @Nullable
+    public abstract String variantOrigin();
 }

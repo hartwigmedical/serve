@@ -226,7 +226,12 @@ CREATE TABLE `actionableHla`
     `sourceDate` DATE NOT NULL,
     `sourceEvent` varchar(250) NOT NULL,
     `sourceUrls` varchar(500),
-    `hlaAllele` varchar(50) NOT NULL,
+    `gene` varchar(50) NOT NULL,
+    `alleleGroup` varchar(50) NOT NULL,
+    `hlaProtein` varchar(50),
+    `synonymousDnaChange` varchar(50),
+    `nonCodingDifferences` varchar(50),
+    `expressionStatus` varchar(50),
     PRIMARY KEY (`id`)
 );
 

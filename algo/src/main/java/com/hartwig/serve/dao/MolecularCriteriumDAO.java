@@ -210,12 +210,22 @@ class MolecularCriteriumDAO {
                             ACTIONABLEHLA.SOURCEDATE,
                             ACTIONABLEHLA.SOURCEEVENT,
                             ACTIONABLEHLA.SOURCEURLS,
-                            ACTIONABLEHLA.HLAALLELE)
+                            ACTIONABLEHLA.GENE,
+                            ACTIONABLEHLA.ALLELEGROUP,
+                            ACTIONABLEHLA.HLAPROTEIN,
+                            ACTIONABLEHLA.SYNONYMOUSDNACHANGE,
+                            ACTIONABLEHLA.NONCODINGDIFFERENCES,
+                            ACTIONABLEHLA.EXPRESSIONSTATUS)
                     .values(molecularCriteriumId,
                             hla.sourceDate(),
                             hla.sourceEvent(),
                             DatabaseUtil.concat(hla.sourceUrls()),
-                            hla.hlaAllele())
+                            hla.gene(),
+                            hla.alleleGroup(),
+                            hla.hlaProtein(),
+                            hla.synonymousDnaChange(),
+                            hla.nonCodingDifferences(),
+                            hla.expressionStatus())
                     .execute();
         }
     }

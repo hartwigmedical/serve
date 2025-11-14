@@ -36,6 +36,9 @@ public abstract class Evidence {
     @NotNull
     public abstract String evidenceType();
 
+    @Nullable
+    public abstract String variantOrigin();
+
     @NotNull
     public abstract String efficacyEvidence();
 

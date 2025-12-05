@@ -90,7 +90,9 @@ public class ActionableTrialFactoryTest {
         String profileName = Strings.EMPTY;
         Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting", "Groningen", "UMCG");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(profileId, "required");
-        ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTherapy("NCT0456", "Phase I trial", "Phase I",
+        ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTherapy("NCT0456",
+                "Phase I trial",
+                "Phase I",
                 List.of(CkbTestFactory.createTherapy("Nivolumab")),
                 List.of(CkbTestFactory.createIndication("CUP", "JAX:10000006")),
                 "Recruiting",
@@ -111,7 +113,9 @@ public class ActionableTrialFactoryTest {
         String profileName = Strings.EMPTY;
         Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting", "Groningen", "UMCG");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(profileId, "required");
-        ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTherapy("NCT0456", "Phase I trial", "Phase I",
+        ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTherapy("NCT0456",
+                "Phase I trial",
+                "Phase I",
                 List.of(CkbTestFactory.createTherapy("Nivolumab")),
                 List.of(CkbTestFactory.createIndication("CUP", "JAX:10000006")),
                 "Recruiting",
@@ -132,7 +136,9 @@ public class ActionableTrialFactoryTest {
         String profileName = Strings.EMPTY;
         Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting", "Groningen", "UMCG");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(profileId, "required");
-        ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTherapy("NCT0456", "Phase I trial", "Phase I",
+        ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTherapy("NCT0456",
+                "Phase I trial",
+                "Phase I",
                 List.of(CkbTestFactory.createTherapy("Nivolumab")),
                 List.of(CkbTestFactory.createIndication("CUP", "JAX:10000006")),
                 "Recruiting",
@@ -153,7 +159,9 @@ public class ActionableTrialFactoryTest {
         String profileName = Strings.EMPTY;
         Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting", "Groningen", "UMCG");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(profileId, "required");
-        ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTherapy("NCT0456", "Phase I trial", "Phase I",
+        ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTherapy("NCT0456",
+                "Phase I trial",
+                "Phase I",
                 List.of(CkbTestFactory.createTherapy("Nivolumab")),
                 List.of(CkbTestFactory.createIndication("CUP", "JAX:10000006")),
                 "Recruiting",
@@ -172,7 +180,9 @@ public class ActionableTrialFactoryTest {
     public void shouldNotCreateTrialWhenVariantRequirementIsOnADifferentProfile() {
         Location location = CkbTestFactory.createLocation("Belgium", "Recruiting", "Brussel", "UZ Brussel");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(0, "required");
-        ClinicalTrial clinicalTrial = CkbTestFactory.createTrial("NCT0102", "Phase I trial", "Phase I",
+        ClinicalTrial clinicalTrial = CkbTestFactory.createTrial("NCT0102",
+                "Phase I trial",
+                "Phase I",
                 "Recruiting",
                 List.of("senior", "child", "adult"),
                 List.of(requirementDetail),

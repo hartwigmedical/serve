@@ -89,7 +89,9 @@ class ActionableTrialFactory {
                 actionableTrials.add(ImmutableActionableTrial.builder()
                         .source(Knowledgebase.CKB)
                         .nctId(trial.nctId())
-                        .title(trial.title()).acronym(trial.acronym()).phase(resolvePhase(trial.phase()))
+                        .title(trial.title())
+                        .acronym(trial.acronym())
+                        .phase(resolvePhase(trial.phase()))
                         .countries(countries)
                         .therapyNames(therapies)
                         .genderCriterium(trial.gender() != null ? GenderCriterium.valueOf(trial.gender().toUpperCase()) : null)
@@ -195,7 +197,7 @@ class ActionableTrialFactory {
         return recruitmentStatus == null || POTENTIALLY_OPEN_RECRUITMENT_TYPES.contains(recruitmentStatus.toLowerCase());
     }
 
-    @Nullable
+    @NotNull
     @VisibleForTesting
     static Phase resolvePhase(@Nullable String phase) {
         if (phase == null) {
@@ -204,8 +206,6 @@ class ActionableTrialFactory {
         phase = phase.toLowerCase();
         if (phase.contains("expanded access")) {
             return Phase.EXPANDED_ACCESS;
-        } else if (phase.contains("fda approved")) {
-            return Phase.FDA_APPROVED;
         } else if (phase.contains("phase 0")) {
             return Phase.PHASE_0;
         } else if (phase.contains("phase i")) {
@@ -216,8 +216,10 @@ class ActionableTrialFactory {
             return Phase.PHASE_II;
         } else if (phase.contains("phase iii")) {
             return Phase.PHASE_III;
+        } else if (phase.contains("fda approved")) {
+            return Phase.FDA_APPROVED;
         } else {
-            LOGGER.warn("Could not resolve CKB phase '{}'", phase);
+            LOGGER.warn("Unrecognized CKB phase '{}'", phase);
             return Phase.UNKNOWN;
         }
     }

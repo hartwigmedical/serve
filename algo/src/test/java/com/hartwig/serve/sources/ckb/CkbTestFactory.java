@@ -80,7 +80,9 @@ public final class CkbTestFactory {
                         evidenceLevel,
                         approvalStatus,
                         termId))
-                .addClinicalTrials(createTrialWithTherapy("NCT0102", "Phase I trial", "Phase I",
+                .addClinicalTrials(createTrialWithTherapy("NCT0102",
+                        "Phase I trial",
+                        "Phase I",
                         List.of(CkbTestFactory.createTherapy("Nivolumab")),
                         List.of(CkbTestFactory.createIndication("test", "JAX:10000006")),
                         "Recruiting",
@@ -132,7 +134,9 @@ public final class CkbTestFactory {
             @NotNull List<VariantRequirementDetail> variantRequirementDetails, @NotNull List<Location> locations) {
         return ImmutableClinicalTrial.builder()
                 .updateDate(TEST_UPDATE_DATE)
-                .nctId(nctId).title(title).phase(phase)
+                .nctId(nctId)
+                .title(title)
+                .phase(phase)
                 .therapies(therapies)
                 .indications(indication)
                 .recruitment(recruitment)

@@ -42,7 +42,9 @@ public class ActionableTrialComparatorTest {
             @NotNull String countryName,
             @NotNull String therapy, @NotNull GenderCriterium genderCriterium) {
         return TrialTestFactory.builder()
-                .source(source).nctId(nctId).phase(phase)
+                .source(source)
+                .nctId(nctId)
+                .phase(phase)
                 .countries(Set.of(TrialTestFactory.createTestCountry(countryName, "city")))
                 .therapyNames(Set.of(therapy))
                 .genderCriterium(genderCriterium)

@@ -365,7 +365,9 @@ public class ActionableTrialFactoryTest {
     private static ClinicalTrial createTrialWithMultipleLocations(@NotNull String recruitmentTrial, @NotNull String country1,
             @NotNull String recruitmentCountry1, @NotNull String city1, @Nullable String facility1, @NotNull String country2,
             @NotNull String recruitmentCountry2, @NotNull String city2, @Nullable String facility2) {
-        return CkbTestFactory.createTrial("nctid", "title", "unknown",
+        return CkbTestFactory.createTrial("nctid",
+                "title",
+                "unknown",
                 recruitmentTrial,
                 List.of("senior", "child", "adult"),
                 List.of(CkbTestFactory.createVariantRequirementDetail(0, "required")),
@@ -382,7 +384,9 @@ public class ActionableTrialFactoryTest {
     @NotNull
     private static ClinicalTrial createTrialWithOneLocation(@NotNull String recruitmentTrial, @NotNull String country, @NotNull String city,
             @NotNull String recruitmentCountry, @Nullable String state, @Nullable String facility) {
-        return CkbTestFactory.createTrial("nctid", "title", "unknown",
+        return CkbTestFactory.createTrial("nctid",
+                "title",
+                "unknown",
                 recruitmentTrial,
                 List.of("senior", "child", "adult"),
                 List.of(CkbTestFactory.createVariantRequirementDetail(0, "required")),

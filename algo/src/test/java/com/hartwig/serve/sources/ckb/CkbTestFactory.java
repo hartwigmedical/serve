@@ -118,7 +118,9 @@ public final class CkbTestFactory {
             @NotNull String recruitment,
             @NotNull List<String> ageGroups, @NotNull List<VariantRequirementDetail> variantRequirementDetails,
             @NotNull List<Location> locations) {
-        return createTrialWithTherapy(nctId, title, phase,
+        return createTrialWithTherapy(nctId,
+                title,
+                phase,
                 List.of(),
                 List.of(createIndication("AB", "DOID:162")),
                 recruitment,

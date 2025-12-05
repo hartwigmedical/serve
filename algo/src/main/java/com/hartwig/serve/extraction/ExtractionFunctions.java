@@ -170,6 +170,7 @@ public final class ExtractionFunctions {
                 .nctId(unique(trialsForSingleNctId.stream().map(ActionableTrial::nctId)))
                 .title(unique(trialsForSingleNctId.stream().map(ActionableTrial::title)))
                 .acronym(unique(trialsForSingleNctId.stream().map(ActionableTrial::acronym)))
+                .phase(unique(trialsForSingleNctId.stream().map(ActionableTrial::phase)))
                 .countries(unique(trialsForSingleNctId.stream().map(ActionableTrial::countries)))
                 .therapyNames(unique(trialsForSingleNctId.stream().map(ActionableTrial::therapyNames)))
                 .genderCriterium(unique(trialsForSingleNctId.stream().map(ActionableTrial::genderCriterium)))

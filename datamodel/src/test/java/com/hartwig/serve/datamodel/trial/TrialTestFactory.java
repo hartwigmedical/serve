@@ -22,6 +22,7 @@ public final class TrialTestFactory {
                 .source(Knowledgebase.UNKNOWN)
                 .nctId(Strings.EMPTY)
                 .title(Strings.EMPTY)
+                .phase(Phase.UNKNOWN)
                 .countries(Collections.emptySet())
                 .therapyNames(Collections.emptySet())
                 .genderCriterium(GenderCriterium.BOTH)

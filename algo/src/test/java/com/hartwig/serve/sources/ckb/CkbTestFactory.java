@@ -80,8 +80,7 @@ public final class CkbTestFactory {
                         evidenceLevel,
                         approvalStatus,
                         termId))
-                .addClinicalTrials(createTrialWithTherapy("NCT0102",
-                        "Phase I trial",
+                .addClinicalTrials(createTrialWithTherapy("NCT0102", "Phase I trial", "Phase I",
                         List.of(CkbTestFactory.createTherapy("Nivolumab")),
                         List.of(CkbTestFactory.createIndication("test", "JAX:10000006")),
                         "Recruiting",
@@ -113,11 +112,11 @@ public final class CkbTestFactory {
     }
 
     @NotNull
-    public static ClinicalTrial createTrial(@NotNull String nctId, @NotNull String title, @NotNull String recruitment,
+    public static ClinicalTrial createTrial(@NotNull String nctId, @NotNull String title, @NotNull String phase,
+            @NotNull String recruitment,
             @NotNull List<String> ageGroups, @NotNull List<VariantRequirementDetail> variantRequirementDetails,
             @NotNull List<Location> locations) {
-        return createTrialWithTherapy(nctId,
-                title,
+        return createTrialWithTherapy(nctId, title, phase,
                 List.of(),
                 List.of(createIndication("AB", "DOID:162")),
                 recruitment,
@@ -127,13 +126,13 @@ public final class CkbTestFactory {
     }
 
     @NotNull
-    public static ClinicalTrial createTrialWithTherapy(@NotNull String nctId, @NotNull String title, @NotNull List<Therapy> therapies,
+    public static ClinicalTrial createTrialWithTherapy(@NotNull String nctId, @NotNull String title, @NotNull String phase,
+            @NotNull List<Therapy> therapies,
             @NotNull List<Indication> indication, @NotNull String recruitment, @NotNull List<String> ageGroups,
             @NotNull List<VariantRequirementDetail> variantRequirementDetails, @NotNull List<Location> locations) {
         return ImmutableClinicalTrial.builder()
                 .updateDate(TEST_UPDATE_DATE)
-                .nctId(nctId)
-                .title(title)
+                .nctId(nctId).title(title).phase(phase)
                 .therapies(therapies)
                 .indications(indication)
                 .recruitment(recruitment)

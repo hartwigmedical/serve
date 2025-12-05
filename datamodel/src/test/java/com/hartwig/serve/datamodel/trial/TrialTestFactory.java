@@ -20,8 +20,7 @@ public final class TrialTestFactory {
     public static ImmutableActionableTrial.Builder builder() {
         return ImmutableActionableTrial.builder()
                 .source(Knowledgebase.UNKNOWN)
-                .nctId(Strings.EMPTY)
-                .title(Strings.EMPTY)
+                .nctId(Strings.EMPTY).title(Strings.EMPTY).phase(Phase.UNKNOWN)
                 .countries(Collections.emptySet())
                 .therapyNames(Collections.emptySet())
                 .genderCriterium(GenderCriterium.BOTH)

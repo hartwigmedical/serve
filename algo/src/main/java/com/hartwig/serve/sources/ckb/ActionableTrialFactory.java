@@ -25,14 +25,19 @@ import com.hartwig.serve.datamodel.trial.Hospital;
 import com.hartwig.serve.datamodel.trial.ImmutableActionableTrial;
 import com.hartwig.serve.datamodel.trial.ImmutableCountry;
 import com.hartwig.serve.datamodel.trial.ImmutableHospital;
+import com.hartwig.serve.datamodel.trial.Phase;
 import com.hartwig.serve.sources.ckb.filter.CkbTrialFilterModel;
 import com.hartwig.serve.sources.ckb.region.CkbRegion;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 class ActionableTrialFactory {
+
+    private static final Logger LOGGER = LogManager.getLogger(ActionableTrialFactory.class);
 
     private static final String SUB_FIELD_DELIMITER = ",";
     private static final Set<String> POTENTIALLY_OPEN_RECRUITMENT_TYPES = Set.of("recruiting",
@@ -84,8 +89,7 @@ class ActionableTrialFactory {
                 actionableTrials.add(ImmutableActionableTrial.builder()
                         .source(Knowledgebase.CKB)
                         .nctId(trial.nctId())
-                        .title(trial.title())
-                        .acronym(trial.acronym())
+                        .title(trial.title()).acronym(trial.acronym()).phase(resolvePhase(trial.phase()))
                         .countries(countries)
                         .therapyNames(therapies)
                         .genderCriterium(trial.gender() != null ? GenderCriterium.valueOf(trial.gender().toUpperCase()) : null)
@@ -189,5 +193,32 @@ class ActionableTrialFactory {
     @VisibleForTesting
     static boolean hasPotentiallyOpenRequirementToInclude(@Nullable String recruitmentStatus) {
         return recruitmentStatus == null || POTENTIALLY_OPEN_RECRUITMENT_TYPES.contains(recruitmentStatus.toLowerCase());
+    }
+
+    @Nullable
+    @VisibleForTesting
+    static Phase resolvePhase(@Nullable String phase) {
+        if (phase == null) {
+            return Phase.UNKNOWN;
+        }
+        phase = phase.toLowerCase();
+        if (phase.contains("expanded access")) {
+            return Phase.EXPANDED_ACCESS;
+        } else if (phase.contains("fda approved")) {
+            return Phase.FDA_APPROVED;
+        } else if (phase.contains("phase 0")) {
+            return Phase.PHASE_0;
+        } else if (phase.contains("phase i")) {
+            return Phase.PHASE_I;
+        } else if (phase.contains("phase ib/ii")) {
+            return Phase.PHASE_IB_II;
+        } else if (phase.contains("phase ii")) {
+            return Phase.PHASE_II;
+        } else if (phase.contains("phase iii")) {
+            return Phase.PHASE_III;
+        } else {
+            LOGGER.warn("Could not resolve CKB phase '{}'", phase);
+            return Phase.UNKNOWN;
+        }
     }
 }

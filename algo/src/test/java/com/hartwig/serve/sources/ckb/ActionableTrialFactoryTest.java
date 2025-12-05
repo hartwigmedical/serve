@@ -21,6 +21,7 @@ import com.hartwig.serve.datamodel.trial.ActionableTrial;
 import com.hartwig.serve.datamodel.trial.GenderCriterium;
 import com.hartwig.serve.datamodel.trial.ImmutableCountry;
 import com.hartwig.serve.datamodel.trial.ImmutableHospital;
+import com.hartwig.serve.datamodel.trial.Phase;
 import com.hartwig.serve.sources.ckb.filter.CkbFilteringTestFactory;
 import com.hartwig.serve.sources.ckb.filter.CkbTrialFilterEntry;
 import com.hartwig.serve.sources.ckb.filter.CkbTrialFilterModel;
@@ -40,8 +41,7 @@ public class ActionableTrialFactoryTest {
     private static final CkbTrialFilterModel FILTER_MODEL = CkbFilteringTestFactory.createProperTrialFilterModel();
     private static final Set<CkbRegion> REGIONS_TO_INCLUDE =
             Set.of(createRegion("netherlands"), createRegion("belgium"), createRegion("germany"), createRegion("united states", "maine"));
-    private static final MolecularCriterium TEST_MOLECULAR_CRITERIUM =
-            MolecularCriteriumTestFactory.createWithTestActionableGene();
+    private static final MolecularCriterium TEST_MOLECULAR_CRITERIUM = MolecularCriteriumTestFactory.createWithTestActionableGene();
 
     @Test
     public void canCreateActionableEntryForOpenTrialInAllowedCountryWithRequiredMolecularProfileAndValidAgeGroup() {
@@ -49,13 +49,15 @@ public class ActionableTrialFactoryTest {
         String profileName = Strings.EMPTY;
         Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting", "Rotterdam", "EMC");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(profileId, "required");
-        ClinicalTrial clinicalTrial =
-                CkbTestFactory.createTrialWithTherapy("NCT0102", "Phase I trial", List.of(CkbTestFactory.createTherapy("Nivolumab")),
-                        List.of(CkbTestFactory.createIndication("CUP", "JAX:10000006")),
-                        "Recruiting",
-                        List.of("senior", "child", "adult"),
-                        List.of(requirementDetail),
-                        List.of(location));
+        ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTherapy("NCT0102",
+                "Phase I trial",
+                "Phase I",
+                List.of(CkbTestFactory.createTherapy("Nivolumab")),
+                List.of(CkbTestFactory.createIndication("CUP", "JAX:10000006")),
+                "Recruiting",
+                List.of("senior", "child", "adult"),
+                List.of(requirementDetail),
+                List.of(location));
         CkbEntry entry = CkbTestFactory.createEntryWithClinicalTrial(profileId, profileName, clinicalTrial);
 
         ActionableTrialFactory factory = new ActionableTrialFactory(FILTER_MODEL, REGIONS_TO_INCLUDE);
@@ -68,6 +70,7 @@ public class ActionableTrialFactoryTest {
         assertEquals("NCT0102", clinicalTrial1.nctId());
         assertEquals("Phase I trial", clinicalTrial1.title());
         assertNull(clinicalTrial1.acronym());
+        assertEquals(Phase.PHASE_I, clinicalTrial1.phase());
         assertEquals(Sets.newHashSet(ImmutableCountry.builder()
                 .name("Netherlands")
                 .hospitalsPerCity(Map.of("Rotterdam",
@@ -87,8 +90,7 @@ public class ActionableTrialFactoryTest {
         String profileName = Strings.EMPTY;
         Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting", "Groningen", "UMCG");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(profileId, "required");
-        ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTherapy("NCT0456",
-                "Phase I trial",
+        ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTherapy("NCT0456", "Phase I trial", "Phase I",
                 List.of(CkbTestFactory.createTherapy("Nivolumab")),
                 List.of(CkbTestFactory.createIndication("CUP", "JAX:10000006")),
                 "Recruiting",
@@ -109,8 +111,7 @@ public class ActionableTrialFactoryTest {
         String profileName = Strings.EMPTY;
         Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting", "Groningen", "UMCG");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(profileId, "required");
-        ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTherapy("NCT0456",
-                "Phase I trial",
+        ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTherapy("NCT0456", "Phase I trial", "Phase I",
                 List.of(CkbTestFactory.createTherapy("Nivolumab")),
                 List.of(CkbTestFactory.createIndication("CUP", "JAX:10000006")),
                 "Recruiting",
@@ -131,8 +132,7 @@ public class ActionableTrialFactoryTest {
         String profileName = Strings.EMPTY;
         Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting", "Groningen", "UMCG");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(profileId, "required");
-        ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTherapy("NCT0456",
-                "Phase I trial",
+        ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTherapy("NCT0456", "Phase I trial", "Phase I",
                 List.of(CkbTestFactory.createTherapy("Nivolumab")),
                 List.of(CkbTestFactory.createIndication("CUP", "JAX:10000006")),
                 "Recruiting",
@@ -153,8 +153,7 @@ public class ActionableTrialFactoryTest {
         String profileName = Strings.EMPTY;
         Location location = CkbTestFactory.createLocation("Netherlands", "Recruiting", "Groningen", "UMCG");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(profileId, "required");
-        ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTherapy("NCT0456",
-                "Phase I trial",
+        ClinicalTrial clinicalTrial = CkbTestFactory.createTrialWithTherapy("NCT0456", "Phase I trial", "Phase I",
                 List.of(CkbTestFactory.createTherapy("Nivolumab")),
                 List.of(CkbTestFactory.createIndication("CUP", "JAX:10000006")),
                 "Recruiting",
@@ -173,8 +172,7 @@ public class ActionableTrialFactoryTest {
     public void shouldNotCreateTrialWhenVariantRequirementIsOnADifferentProfile() {
         Location location = CkbTestFactory.createLocation("Belgium", "Recruiting", "Brussel", "UZ Brussel");
         VariantRequirementDetail requirementDetail = CkbTestFactory.createVariantRequirementDetail(0, "required");
-        ClinicalTrial clinicalTrial = CkbTestFactory.createTrial("NCT0102",
-                "Phase I trial",
+        ClinicalTrial clinicalTrial = CkbTestFactory.createTrial("NCT0102", "Phase I trial", "Phase I",
                 "Recruiting",
                 List.of("senior", "child", "adult"),
                 List.of(requirementDetail),
@@ -357,8 +355,7 @@ public class ActionableTrialFactoryTest {
     private static ClinicalTrial createTrialWithMultipleLocations(@NotNull String recruitmentTrial, @NotNull String country1,
             @NotNull String recruitmentCountry1, @NotNull String city1, @Nullable String facility1, @NotNull String country2,
             @NotNull String recruitmentCountry2, @NotNull String city2, @Nullable String facility2) {
-        return CkbTestFactory.createTrial("nctid",
-                "title",
+        return CkbTestFactory.createTrial("nctid", "title", "unknown",
                 recruitmentTrial,
                 List.of("senior", "child", "adult"),
                 List.of(CkbTestFactory.createVariantRequirementDetail(0, "required")),
@@ -375,8 +372,7 @@ public class ActionableTrialFactoryTest {
     @NotNull
     private static ClinicalTrial createTrialWithOneLocation(@NotNull String recruitmentTrial, @NotNull String country, @NotNull String city,
             @NotNull String recruitmentCountry, @Nullable String state, @Nullable String facility) {
-        return CkbTestFactory.createTrial("nctid",
-                "title",
+        return CkbTestFactory.createTrial("nctid", "title", "unknown",
                 recruitmentTrial,
                 List.of("senior", "child", "adult"),
                 List.of(CkbTestFactory.createVariantRequirementDetail(0, "required")),

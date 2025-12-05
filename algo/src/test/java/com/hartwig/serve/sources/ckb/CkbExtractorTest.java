@@ -196,9 +196,7 @@ public class CkbExtractorTest {
                 "DOID:162");
 
         return CkbTestFactory.builder()
-                .from(baseEntry)
-                .clinicalTrials(List.of(CkbTestFactory.createTrialWithTherapy(nctId,
-                        "title",
+                .from(baseEntry).clinicalTrials(List.of(CkbTestFactory.createTrialWithTherapy(nctId, "title", "unknown",
                         List.of(CkbTestFactory.createTherapy("Nivolumab")),
                         List.of(CkbTestFactory.createIndication("test", "JAX:10000006")),
                         "Recruiting",

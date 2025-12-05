@@ -30,6 +30,11 @@ public class ActionableTrialComparator implements Comparator<ActionableTrial> {
             return acronymCompare;
         }
 
+        int phaseCompare = actionableTrial1.phase().compareTo(actionableTrial2.phase());
+        if (phaseCompare != 0) {
+            return phaseCompare;
+        }
+
         int countriesCompare = CompareFunctions.compareSetOfComparable(actionableTrial1.countries(), actionableTrial2.countries());
         if (countriesCompare != 0) {
             return countriesCompare;

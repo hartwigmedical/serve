@@ -449,7 +449,9 @@ elsewhere.
 ## Version History and Download Links
 
 - [Upcoming]
-  - Add phase to ActionableTrial
+    - Add phase to ActionableTrial
+- [8.5.1](https://github.com/hartwigmedical/serve/releases/tag/8.5.1)
+  - Add cloud sql driver needed to cloud hosted databases
 - [8.5.0](https://github.com/hartwigmedical/serve/releases/tag/8.5.0)
     - Support HLA alleles
 - [8.4.1](https://github.com/hartwigmedical/serve/releases/tag/8.4.1)

@@ -72,8 +72,8 @@ class ActionableTrialFactory {
     }
 
     @NotNull
-    public Set<ActionableTrial> create(@NotNull CkbEntry entry, @NotNull MolecularCriterium molecularCriterium,
-            @NotNull String sourceEvent, @NotNull String sourceGene) {
+    public Set<ActionableTrial> create(@NotNull CkbEntry entry, @NotNull MolecularCriterium molecularCriterium, @NotNull String sourceEvent,
+            @NotNull String sourceGene) {
         Set<ActionableTrial> actionableTrials = Sets.newHashSet();
 
         for (ClinicalTrial trial : trialsToInclude(entry)) {
@@ -204,23 +204,24 @@ class ActionableTrialFactory {
             return Phase.UNKNOWN;
         }
         phase = phase.toLowerCase();
-        if (phase.contains("expanded access")) {
-            return Phase.EXPANDED_ACCESS;
-        } else if (phase.contains("phase 0")) {
-            return Phase.PHASE_0;
-        } else if (phase.contains("phase i")) {
-            return Phase.PHASE_I;
-        } else if (phase.contains("phase ib/ii")) {
-            return Phase.PHASE_IB_II;
-        } else if (phase.contains("phase ii")) {
-            return Phase.PHASE_II;
-        } else if (phase.contains("phase iii")) {
-            return Phase.PHASE_III;
-        } else if (phase.contains("fda approved")) {
-            return Phase.FDA_APPROVED;
-        } else {
-            LOGGER.warn("Unrecognized CKB phase '{}'", phase);
-            return Phase.UNKNOWN;
+        switch (phase) {
+            case "expanded access":
+                return Phase.EXPANDED_ACCESS;
+            case "phase 0":
+                return Phase.PHASE_0;
+            case "phase i":
+                return Phase.PHASE_I;
+            case "phase ib/ii":
+                return Phase.PHASE_IB_II;
+            case "phase ii":
+                return Phase.PHASE_II;
+            case "phase iii":
+                return Phase.PHASE_III;
+            case "fda approved":
+                return Phase.FDA_APPROVED;
+            default:
+                LOGGER.warn("Unrecognized CKB phase '{}'", phase);
+                return Phase.UNKNOWN;
         }
     }
 }

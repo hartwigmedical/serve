@@ -69,6 +69,7 @@ SERVE generates a database with the following datamodel:
 - The NCT ID of the trial
 - The title of the trial
 - The acronym of the trial
+- The phase of the trial
 - The countries where the trial is active
 - The name(s) of the therapies given in the trial
 - For which gender the trial is an option
@@ -447,6 +448,8 @@ elsewhere.
 
 ## Version History and Download Links
 
+- [Upcoming]
+    - Add phase to ActionableTrial
 - [8.5.1](https://github.com/hartwigmedical/serve/releases/tag/8.5.1)
   - Add cloud sql driver needed to cloud hosted databases
 - [8.5.0](https://github.com/hartwigmedical/serve/releases/tag/8.5.0)

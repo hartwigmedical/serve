@@ -25,14 +25,19 @@ import com.hartwig.serve.datamodel.trial.Hospital;
 import com.hartwig.serve.datamodel.trial.ImmutableActionableTrial;
 import com.hartwig.serve.datamodel.trial.ImmutableCountry;
 import com.hartwig.serve.datamodel.trial.ImmutableHospital;
+import com.hartwig.serve.datamodel.trial.Phase;
 import com.hartwig.serve.sources.ckb.filter.CkbTrialFilterModel;
 import com.hartwig.serve.sources.ckb.region.CkbRegion;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 class ActionableTrialFactory {
+
+    private static final Logger LOGGER = LogManager.getLogger(ActionableTrialFactory.class);
 
     private static final String SUB_FIELD_DELIMITER = ",";
     private static final Set<String> POTENTIALLY_OPEN_RECRUITMENT_TYPES = Set.of("recruiting",
@@ -67,8 +72,8 @@ class ActionableTrialFactory {
     }
 
     @NotNull
-    public Set<ActionableTrial> create(@NotNull CkbEntry entry, @NotNull MolecularCriterium molecularCriterium,
-            @NotNull String sourceEvent, @NotNull String sourceGene) {
+    public Set<ActionableTrial> create(@NotNull CkbEntry entry, @NotNull MolecularCriterium molecularCriterium, @NotNull String sourceEvent,
+            @NotNull String sourceGene) {
         Set<ActionableTrial> actionableTrials = Sets.newHashSet();
 
         for (ClinicalTrial trial : trialsToInclude(entry)) {
@@ -86,6 +91,7 @@ class ActionableTrialFactory {
                         .nctId(trial.nctId())
                         .title(trial.title())
                         .acronym(trial.acronym())
+                        .phase(resolvePhase(trial.phase()))
                         .countries(countries)
                         .therapyNames(therapies)
                         .genderCriterium(trial.gender() != null ? GenderCriterium.valueOf(trial.gender().toUpperCase()) : null)
@@ -189,5 +195,33 @@ class ActionableTrialFactory {
     @VisibleForTesting
     static boolean hasPotentiallyOpenRequirementToInclude(@Nullable String recruitmentStatus) {
         return recruitmentStatus == null || POTENTIALLY_OPEN_RECRUITMENT_TYPES.contains(recruitmentStatus.toLowerCase());
+    }
+
+    @NotNull
+    @VisibleForTesting
+    static Phase resolvePhase(@Nullable String phase) {
+        if (phase == null) {
+            return Phase.UNKNOWN;
+        }
+        phase = phase.toLowerCase();
+        switch (phase) {
+            case "expanded access":
+                return Phase.EXPANDED_ACCESS;
+            case "phase 0":
+                return Phase.PHASE_0;
+            case "phase i":
+                return Phase.PHASE_I;
+            case "phase ib/ii":
+                return Phase.PHASE_IB_II;
+            case "phase ii":
+                return Phase.PHASE_II;
+            case "phase iii":
+                return Phase.PHASE_III;
+            case "fda approved":
+                return Phase.FDA_APPROVED;
+            default:
+                LOGGER.warn("Unrecognized CKB phase '{}'", phase);
+                return Phase.UNKNOWN;
+        }
     }
 }

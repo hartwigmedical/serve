@@ -35,6 +35,9 @@ public abstract class ActionableTrial implements Comparable<ActionableTrial> {
     public abstract String acronym();
 
     @NotNull
+    public abstract Phase phase();
+
+    @NotNull
     public abstract Set<Country> countries();
 
     @NotNull

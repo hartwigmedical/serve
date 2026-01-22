@@ -47,7 +47,7 @@ public class CkbImporterApplication {
         if (config.skipDatabaseWriting()) {
             LOGGER.info("Skipping DB writing");
         } else {
-            CkbDAO ckbDAO = CkbDAO.connectToCkbDAO(config.dbUser(), config.dbPass(), "jdbc:" + config.dbUrl());
+            CkbDAO ckbDAO = CkbDAO.connectToCkbDAO(config.dbUser(), config.dbPass(), "jdbc:" + config.dbUrl(), config.batchSize());
 
             LOGGER.info("Deleting all data from CKB database");
             ckbDAO.deleteAll();
@@ -62,6 +62,8 @@ public class CkbImporterApplication {
                     LOGGER.debug(" Inserted {} of {} CKB entries", current, ckbEntries.size());
                 }
             }
+
+            ckbDAO.flushBatches();
         }
     }
 }

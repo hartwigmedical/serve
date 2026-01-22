@@ -20,9 +20,12 @@ class VariantDAO {
 
     @NotNull
     private final DSLContext context;
+    @NotNull
+    private final BatchInserter batchInserter;
 
-    public VariantDAO(@NotNull final DSLContext context) {
+    public VariantDAO(@NotNull final DSLContext context, @NotNull final BatchInserter batchInserter) {
         this.context = context;
+        this.batchInserter = batchInserter;
     }
 
     public void deleteAll() {
@@ -84,9 +87,9 @@ class VariantDAO {
         }
 
         for (String categoryVariantPath : variant.categoryVariantPaths()) {
-            context.insertInto(Categoryvariantpath.CATEGORYVARIANTPATH,
+            batchInserter.add(context.insertInto(Categoryvariantpath.CATEGORYVARIANTPATH,
                     Categoryvariantpath.CATEGORYVARIANTPATH.VARIANTID,
-                    Categoryvariantpath.CATEGORYVARIANTPATH.VARIANTPATH).values(id, categoryVariantPath).execute();
+                    Categoryvariantpath.CATEGORYVARIANTPATH.VARIANTPATH).values(id, categoryVariantPath));
         }
 
         for (MemberVariant memberVariant : variant.memberVariants()) {
@@ -127,13 +130,12 @@ class VariantDAO {
                 .getValue(Gene.GENE.ID);
 
         for (String term : gene.terms()) {
-            context.insertInto(Geneterm.GENETERM, Geneterm.GENETERM.GENEID, Geneterm.GENETERM.TERM).values(id, term).execute();
+            batchInserter.add(context.insertInto(Geneterm.GENETERM, Geneterm.GENETERM.GENEID, Geneterm.GENETERM.TERM).values(id, term));
         }
 
         for (String synonym : gene.synonyms()) {
-            context.insertInto(Genesynonym.GENESYNONYM, Genesynonym.GENESYNONYM.GENEID, Genesynonym.GENESYNONYM.SYNONYM)
-                    .values(id, synonym)
-                    .execute();
+            batchInserter.add(context.insertInto(Genesynonym.GENESYNONYM, Genesynonym.GENESYNONYM.GENEID, Genesynonym.GENESYNONYM.SYNONYM)
+                    .values(id, synonym));
         }
 
         for (Reference geneReference : gene.references()) {
@@ -142,21 +144,21 @@ class VariantDAO {
     }
 
     private void writeGeneReference(@NotNull Reference reference, int geneId) {
-        context.insertInto(Tables.GENEREFERENCE,
-                        Tables.GENEREFERENCE.GENEID,
-                        Tables.GENEREFERENCE.CKBREFERENCEID,
-                        Tables.GENEREFERENCE.PUBMEDID,
-                        Tables.GENEREFERENCE.TITLE,
-                        Tables.GENEREFERENCE.SHORTJOURNALTITLE,
-                        Tables.GENEREFERENCE.PAGES,
-                        Tables.GENEREFERENCE.ABSTRACTTEXT,
-                        Tables.GENEREFERENCE.URL,
-                        Tables.GENEREFERENCE.JOURNAL,
-                        Tables.GENEREFERENCE.AUTHORS,
-                        Tables.GENEREFERENCE.VOLUME,
-                        Tables.GENEREFERENCE.ISSUE,
-                        Tables.GENEREFERENCE.DATE,
-                        Tables.GENEREFERENCE.YEAR)
+        batchInserter.add(context.insertInto(Tables.GENEREFERENCE,
+                Tables.GENEREFERENCE.GENEID,
+                Tables.GENEREFERENCE.CKBREFERENCEID,
+                Tables.GENEREFERENCE.PUBMEDID,
+                Tables.GENEREFERENCE.TITLE,
+                Tables.GENEREFERENCE.SHORTJOURNALTITLE,
+                Tables.GENEREFERENCE.PAGES,
+                Tables.GENEREFERENCE.ABSTRACTTEXT,
+                Tables.GENEREFERENCE.URL,
+                Tables.GENEREFERENCE.JOURNAL,
+                Tables.GENEREFERENCE.AUTHORS,
+                Tables.GENEREFERENCE.VOLUME,
+                Tables.GENEREFERENCE.ISSUE,
+                Tables.GENEREFERENCE.DATE,
+                Tables.GENEREFERENCE.YEAR)
                 .values(geneId,
                         reference.id(),
                         reference.pubMedId(),
@@ -170,26 +172,25 @@ class VariantDAO {
                         reference.volume(),
                         reference.issue(),
                         reference.date(),
-                        reference.year())
-                .execute();
+                        reference.year()));
     }
 
     private void writeVariantReference(@NotNull Reference reference, int variantId) {
-        context.insertInto(Tables.VARIANTREFERENCE,
-                        Tables.VARIANTREFERENCE.VARIANTID,
-                        Tables.VARIANTREFERENCE.CKBREFERENCEID,
-                        Tables.VARIANTREFERENCE.PUBMEDID,
-                        Tables.VARIANTREFERENCE.TITLE,
-                        Tables.VARIANTREFERENCE.SHORTJOURNALTITLE,
-                        Tables.VARIANTREFERENCE.PAGES,
-                        Tables.VARIANTREFERENCE.ABSTRACTTEXT,
-                        Tables.VARIANTREFERENCE.URL,
-                        Tables.VARIANTREFERENCE.JOURNAL,
-                        Tables.VARIANTREFERENCE.AUTHORS,
-                        Tables.VARIANTREFERENCE.VOLUME,
-                        Tables.VARIANTREFERENCE.ISSUE,
-                        Tables.VARIANTREFERENCE.DATE,
-                        Tables.VARIANTREFERENCE.YEAR)
+        batchInserter.add(context.insertInto(Tables.VARIANTREFERENCE,
+                Tables.VARIANTREFERENCE.VARIANTID,
+                Tables.VARIANTREFERENCE.CKBREFERENCEID,
+                Tables.VARIANTREFERENCE.PUBMEDID,
+                Tables.VARIANTREFERENCE.TITLE,
+                Tables.VARIANTREFERENCE.SHORTJOURNALTITLE,
+                Tables.VARIANTREFERENCE.PAGES,
+                Tables.VARIANTREFERENCE.ABSTRACTTEXT,
+                Tables.VARIANTREFERENCE.URL,
+                Tables.VARIANTREFERENCE.JOURNAL,
+                Tables.VARIANTREFERENCE.AUTHORS,
+                Tables.VARIANTREFERENCE.VOLUME,
+                Tables.VARIANTREFERENCE.ISSUE,
+                Tables.VARIANTREFERENCE.DATE,
+                Tables.VARIANTREFERENCE.YEAR)
                 .values(variantId,
                         reference.id(),
                         reference.pubMedId(),
@@ -203,22 +204,21 @@ class VariantDAO {
                         reference.volume(),
                         reference.issue(),
                         reference.date(),
-                        reference.year())
-                .execute();
+                        reference.year()));
     }
 
     private void writeTranscriptCoordinate(@Nullable TranscriptCoordinate transcriptCoordinate, int variantId,
             boolean isReferenceTranscriptCoordinate) {
         if (transcriptCoordinate != null) {
-            context.insertInto(Transcriptcoordinate.TRANSCRIPTCOORDINATE,
-                            Transcriptcoordinate.TRANSCRIPTCOORDINATE.VARIANTID,
-                            Transcriptcoordinate.TRANSCRIPTCOORDINATE.ISREFERENCETRANSCRIPTCOORDINATE,
-                            Transcriptcoordinate.TRANSCRIPTCOORDINATE.TRANSCRIPT,
-                            Transcriptcoordinate.TRANSCRIPTCOORDINATE.GDNA,
-                            Transcriptcoordinate.TRANSCRIPTCOORDINATE.CDNA,
-                            Transcriptcoordinate.TRANSCRIPTCOORDINATE.PROTEIN,
-                            Transcriptcoordinate.TRANSCRIPTCOORDINATE.SOURCEDB,
-                            Transcriptcoordinate.TRANSCRIPTCOORDINATE.REFGENOMEBUILD)
+            batchInserter.add(context.insertInto(Transcriptcoordinate.TRANSCRIPTCOORDINATE,
+                    Transcriptcoordinate.TRANSCRIPTCOORDINATE.VARIANTID,
+                    Transcriptcoordinate.TRANSCRIPTCOORDINATE.ISREFERENCETRANSCRIPTCOORDINATE,
+                    Transcriptcoordinate.TRANSCRIPTCOORDINATE.TRANSCRIPT,
+                    Transcriptcoordinate.TRANSCRIPTCOORDINATE.GDNA,
+                    Transcriptcoordinate.TRANSCRIPTCOORDINATE.CDNA,
+                    Transcriptcoordinate.TRANSCRIPTCOORDINATE.PROTEIN,
+                    Transcriptcoordinate.TRANSCRIPTCOORDINATE.SOURCEDB,
+                    Transcriptcoordinate.TRANSCRIPTCOORDINATE.REFGENOMEBUILD)
                     .values(variantId,
                             Util.toByte(isReferenceTranscriptCoordinate),
                             transcriptCoordinate.transcript(),
@@ -226,19 +226,17 @@ class VariantDAO {
                             transcriptCoordinate.cDna(),
                             transcriptCoordinate.protein(),
                             transcriptCoordinate.sourceDb(),
-                            transcriptCoordinate.refGenomeBuild())
-                    .execute();
+                            transcriptCoordinate.refGenomeBuild()));
         }
     }
 
     private void writeMemberVariant(@NotNull MemberVariant memberVariant, int variantId) {
-        context.insertInto(Membervariant.MEMBERVARIANT,
-                        Membervariant.MEMBERVARIANT.VARIANTID,
-                        Membervariant.MEMBERVARIANT.CKBVARIANTID,
-                        Membervariant.MEMBERVARIANT.FULLNAME,
-                        Membervariant.MEMBERVARIANT.IMPACT,
-                        Membervariant.MEMBERVARIANT.PROTEINEFFECT)
-                .values(variantId, memberVariant.id(), memberVariant.fullName(), memberVariant.impact(), memberVariant.proteinEffect())
-                .execute();
+        batchInserter.add(context.insertInto(Membervariant.MEMBERVARIANT,
+                Membervariant.MEMBERVARIANT.VARIANTID,
+                Membervariant.MEMBERVARIANT.CKBVARIANTID,
+                Membervariant.MEMBERVARIANT.FULLNAME,
+                Membervariant.MEMBERVARIANT.IMPACT,
+                Membervariant.MEMBERVARIANT.PROTEINEFFECT)
+                .values(variantId, memberVariant.id(), memberVariant.fullName(), memberVariant.impact(), memberVariant.proteinEffect()));
     }
 }

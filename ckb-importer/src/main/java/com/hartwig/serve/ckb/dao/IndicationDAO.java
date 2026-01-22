@@ -10,9 +10,12 @@ class IndicationDAO {
 
     @NotNull
     private final DSLContext context;
+    @NotNull
+    private final BatchInserter batchInserter;
 
-    public IndicationDAO(@NotNull final DSLContext context) {
+    public IndicationDAO(@NotNull final DSLContext context, @NotNull final BatchInserter batchInserter) {
         this.context = context;
+        this.batchInserter = batchInserter;
     }
 
     public void deleteAll() {
@@ -42,9 +45,9 @@ class IndicationDAO {
                 .getValue(Indication.INDICATION.ID);
 
         for (String altId : indication.altIds()) {
-            context.insertInto(Indicationaltid.INDICATIONALTID,
+            batchInserter.add(context.insertInto(Indicationaltid.INDICATIONALTID,
                     Indicationaltid.INDICATIONALTID.INDICATIONID,
-                    Indicationaltid.INDICATIONALTID.ALTID).values(id, altId).execute();
+                    Indicationaltid.INDICATIONALTID.ALTID).values(id, altId));
         }
 
         return id;

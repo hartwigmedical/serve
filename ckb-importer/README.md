@@ -13,12 +13,13 @@
   * Create the database using generate_ckb_db.sql script from the ckb-importer resources.
   * Run CkbImporterApplication (default class in the ckb-importer jar) with the following arguments:
   
-| Argument | Description                                                               |
-|----------|---------------------------------------------------------------------------|
-| ckb_dir  | Required: Path to the directory holding the JSON data.                    |
-| db_url   | Required: The URL of the database in which to ingest the data.            |
-| db_user  | Required: The DB user which has access to the the URL specified           |
-| db_pass  | Required: The password needed for the DB user to authenticate on the URL. |
+| Argument   | Description                                                               |
+|------------|---------------------------------------------------------------------------|
+| ckb_dir    | Required: Path to the directory holding the JSON data.                    |
+| db_url     | Required: The URL of the database in which to ingest the data.            |
+| db_user    | Required: The DB user which has access to the the URL specified           |
+| db_pass    | Required: The password needed for the DB user to authenticate on the URL. |
+| batch_size | Optional: Number of insert statements per batch (default 500).            |
 
 ## Version History and Download Links
 - [5.4.0](https://github.com/hartwigmedical/serve/releases/tag/ckb-importer-v5.4.0)

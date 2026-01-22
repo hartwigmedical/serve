@@ -30,6 +30,8 @@ public final class CkbDAO {
     @NotNull
     private final DSLContext context;
     @NotNull
+    private final BatchInserter batchInserter;
+    @NotNull
     private final TherapyDAO therapyDAO;
     @NotNull
     private final IndicationDAO indicationDAO;
@@ -43,7 +45,8 @@ public final class CkbDAO {
     private final ClinicalTrialDAO clinicalTrialDAO;
 
     @NotNull
-    public static CkbDAO connectToCkbDAO(@NotNull String userName, @NotNull String password, @NotNull String url) throws SQLException {
+    public static CkbDAO connectToCkbDAO(@NotNull String userName, @NotNull String password, @NotNull String url, int batchSize)
+            throws SQLException {
         System.setProperty("org.jooq.no-logo", "true");
         System.setProperty("org.jooq.no-tips", "true");
 
@@ -51,7 +54,8 @@ public final class CkbDAO {
         String catalog = conn.getCatalog();
         LOGGER.info("Connecting to database '{}'", catalog);
 
-        return new CkbDAO(DSL.using(conn, SQLDialect.MYSQL, settings(catalog)));
+        DSLContext context = DSL.using(conn, SQLDialect.MYSQL, settings(catalog));
+        return new CkbDAO(context, new BatchInserter(context, batchSize));
     }
 
     @Nullable
@@ -64,14 +68,15 @@ public final class CkbDAO {
                 .withOutput(catalog)));
     }
 
-    private CkbDAO(@NotNull final DSLContext context) {
+    private CkbDAO(@NotNull final DSLContext context, @NotNull final BatchInserter batchInserter) {
         this.context = context;
-        this.therapyDAO = new TherapyDAO(context);
-        this.indicationDAO = new IndicationDAO(context);
-        this.variantDAO = new VariantDAO(context);
-        this.treatmentApproachDAO = new TreatmentApproachDAO(context);
-        this.evidenceDAO = new EvidenceDAO(context, therapyDAO, indicationDAO, treatmentApproachDAO);
-        this.clinicalTrialDAO = new ClinicalTrialDAO(context, therapyDAO, indicationDAO);
+        this.batchInserter = batchInserter;
+        this.therapyDAO = new TherapyDAO(context, batchInserter);
+        this.indicationDAO = new IndicationDAO(context, batchInserter);
+        this.variantDAO = new VariantDAO(context, batchInserter);
+        this.treatmentApproachDAO = new TreatmentApproachDAO(context, batchInserter);
+        this.evidenceDAO = new EvidenceDAO(context, therapyDAO, indicationDAO, treatmentApproachDAO, batchInserter);
+        this.clinicalTrialDAO = new ClinicalTrialDAO(context, therapyDAO, indicationDAO, batchInserter);
     }
 
     public void deleteAll() {
@@ -111,5 +116,9 @@ public final class CkbDAO {
         for (ClinicalTrial clinicalTrial : ckbEntry.clinicalTrials()) {
             clinicalTrialDAO.write(clinicalTrial, id);
         }
+    }
+
+    public void flushBatches() {
+        batchInserter.flush();
     }
 }

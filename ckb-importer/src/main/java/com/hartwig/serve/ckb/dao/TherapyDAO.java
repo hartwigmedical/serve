@@ -19,9 +19,12 @@ class TherapyDAO {
 
     @NotNull
     private final DSLContext context;
+    @NotNull
+    private final BatchInserter batchInserter;
 
-    public TherapyDAO(@NotNull final DSLContext context) {
+    public TherapyDAO(@NotNull final DSLContext context, @NotNull final BatchInserter batchInserter) {
         this.context = context;
+        this.batchInserter = batchInserter;
     }
 
     public void deleteAll() {
@@ -58,9 +61,9 @@ class TherapyDAO {
 
         if (therapy.synonyms() != null) {
             for (String synonym : therapy.synonyms()) {
-                context.insertInto(Therapysynonym.THERAPYSYNONYM,
+                batchInserter.add(context.insertInto(Therapysynonym.THERAPYSYNONYM,
                         Therapysynonym.THERAPYSYNONYM.THERAPYID,
-                        Therapysynonym.THERAPYSYNONYM.SYNONYM).values(id, synonym).execute();
+                        Therapysynonym.THERAPYSYNONYM.SYNONYM).values(id, synonym));
             }
         }
 
@@ -69,20 +72,19 @@ class TherapyDAO {
         }
 
         for (GlobalApprovalStatus globalApprovalStatus : therapy.globalApprovalStatuses()) {
-            context.insertInto(Globalapprovalstatus.GLOBALAPPROVALSTATUS,
-                            Globalapprovalstatus.GLOBALAPPROVALSTATUS.THERAPYID,
-                            Globalapprovalstatus.GLOBALAPPROVALSTATUS.CKBGLOBALAPPROVALSTATUSID,
-                            Globalapprovalstatus.GLOBALAPPROVALSTATUS.CKBPROFILEID,
-                            Globalapprovalstatus.GLOBALAPPROVALSTATUS.CKBINDICATIONID,
-                            Globalapprovalstatus.GLOBALAPPROVALSTATUS.APPROVALSTATUS,
-                            Globalapprovalstatus.GLOBALAPPROVALSTATUS.APPROVALAUTHORITY)
+            batchInserter.add(context.insertInto(Globalapprovalstatus.GLOBALAPPROVALSTATUS,
+                    Globalapprovalstatus.GLOBALAPPROVALSTATUS.THERAPYID,
+                    Globalapprovalstatus.GLOBALAPPROVALSTATUS.CKBGLOBALAPPROVALSTATUSID,
+                    Globalapprovalstatus.GLOBALAPPROVALSTATUS.CKBPROFILEID,
+                    Globalapprovalstatus.GLOBALAPPROVALSTATUS.CKBINDICATIONID,
+                    Globalapprovalstatus.GLOBALAPPROVALSTATUS.APPROVALSTATUS,
+                    Globalapprovalstatus.GLOBALAPPROVALSTATUS.APPROVALAUTHORITY)
                     .values(id,
                             globalApprovalStatus.id(),
                             globalApprovalStatus.profileId(),
                             globalApprovalStatus.indicationId(),
                             globalApprovalStatus.approvalStatus(),
-                            globalApprovalStatus.approvalAuthority())
-                    .execute();
+                            globalApprovalStatus.approvalAuthority()));
         }
         return id;
     }
@@ -110,21 +112,22 @@ class TherapyDAO {
                 .getValue(Drug.DRUG.ID);
 
         for (DrugClass drugClass : drug.drugClasses()) {
-            context.insertInto(Drugclass.DRUGCLASS,
+            batchInserter.add(context.insertInto(Drugclass.DRUGCLASS,
                     Drugclass.DRUGCLASS.DRUGID,
                     Drugclass.DRUGCLASS.CKBDRUGCLASSID,
                     Drugclass.DRUGCLASS.CREATEDATE,
-                    Drugclass.DRUGCLASS.DRUGCLASS_).values(id, drugClass.id(), drugClass.createDate(), drugClass.drugClass()).execute();
+                    Drugclass.DRUGCLASS.DRUGCLASS_)
+                    .values(id, drugClass.id(), drugClass.createDate(), drugClass.drugClass()));
         }
 
         for (String term : drug.terms()) {
-            context.insertInto(Drugterm.DRUGTERM, Drugterm.DRUGTERM.DRUGID, Drugterm.DRUGTERM.TERM).values(id, term).execute();
+            batchInserter.add(context.insertInto(Drugterm.DRUGTERM, Drugterm.DRUGTERM.DRUGID, Drugterm.DRUGTERM.TERM)
+                    .values(id, term));
         }
 
         for (String synonym : drug.synonyms()) {
-            context.insertInto(Drugsynonym.DRUGSYNONYM, Drugsynonym.DRUGSYNONYM.DRUGID, Drugsynonym.DRUGSYNONYM.SYNONYM)
-                    .values(id, synonym)
-                    .execute();
+            batchInserter.add(context.insertInto(Drugsynonym.DRUGSYNONYM, Drugsynonym.DRUGSYNONYM.DRUGID, Drugsynonym.DRUGSYNONYM.SYNONYM)
+                    .values(id, synonym));
         }
 
         for (Reference reference : drug.references()) {
@@ -133,21 +136,21 @@ class TherapyDAO {
     }
 
     private void writeDrugReference(@NotNull Reference reference, int drugId) {
-        context.insertInto(Tables.DRUGREFERENCE,
-                        Tables.DRUGREFERENCE.DRUGID,
-                        Tables.DRUGREFERENCE.CKBREFERENCEID,
-                        Tables.DRUGREFERENCE.PUBMEDID,
-                        Tables.DRUGREFERENCE.TITLE,
-                        Tables.DRUGREFERENCE.SHORTJOURNALTITLE,
-                        Tables.DRUGREFERENCE.PAGES,
-                        Tables.DRUGREFERENCE.ABSTRACTTEXT,
-                        Tables.DRUGREFERENCE.URL,
-                        Tables.DRUGREFERENCE.JOURNAL,
-                        Tables.DRUGREFERENCE.AUTHORS,
-                        Tables.DRUGREFERENCE.VOLUME,
-                        Tables.DRUGREFERENCE.ISSUE,
-                        Tables.DRUGREFERENCE.DATE,
-                        Tables.DRUGREFERENCE.YEAR)
+        batchInserter.add(context.insertInto(Tables.DRUGREFERENCE,
+                Tables.DRUGREFERENCE.DRUGID,
+                Tables.DRUGREFERENCE.CKBREFERENCEID,
+                Tables.DRUGREFERENCE.PUBMEDID,
+                Tables.DRUGREFERENCE.TITLE,
+                Tables.DRUGREFERENCE.SHORTJOURNALTITLE,
+                Tables.DRUGREFERENCE.PAGES,
+                Tables.DRUGREFERENCE.ABSTRACTTEXT,
+                Tables.DRUGREFERENCE.URL,
+                Tables.DRUGREFERENCE.JOURNAL,
+                Tables.DRUGREFERENCE.AUTHORS,
+                Tables.DRUGREFERENCE.VOLUME,
+                Tables.DRUGREFERENCE.ISSUE,
+                Tables.DRUGREFERENCE.DATE,
+                Tables.DRUGREFERENCE.YEAR)
                 .values(drugId,
                         reference.id(),
                         reference.pubMedId(),
@@ -161,26 +164,25 @@ class TherapyDAO {
                         reference.volume(),
                         reference.issue(),
                         reference.date(),
-                        reference.year())
-                .execute();
+                        reference.year()));
     }
 
     private void writeTherapyReference(@NotNull Reference reference, int therapyId) {
-        context.insertInto(Tables.THERAPYREFERENCE,
-                        Tables.THERAPYREFERENCE.THERAPYID,
-                        Tables.THERAPYREFERENCE.CKBREFERENCEID,
-                        Tables.THERAPYREFERENCE.PUBMEDID,
-                        Tables.THERAPYREFERENCE.TITLE,
-                        Tables.THERAPYREFERENCE.SHORTJOURNALTITLE,
-                        Tables.THERAPYREFERENCE.PAGES,
-                        Tables.THERAPYREFERENCE.ABSTRACTTEXT,
-                        Tables.THERAPYREFERENCE.URL,
-                        Tables.THERAPYREFERENCE.JOURNAL,
-                        Tables.THERAPYREFERENCE.AUTHORS,
-                        Tables.THERAPYREFERENCE.VOLUME,
-                        Tables.THERAPYREFERENCE.ISSUE,
-                        Tables.THERAPYREFERENCE.DATE,
-                        Tables.THERAPYREFERENCE.YEAR)
+        batchInserter.add(context.insertInto(Tables.THERAPYREFERENCE,
+                Tables.THERAPYREFERENCE.THERAPYID,
+                Tables.THERAPYREFERENCE.CKBREFERENCEID,
+                Tables.THERAPYREFERENCE.PUBMEDID,
+                Tables.THERAPYREFERENCE.TITLE,
+                Tables.THERAPYREFERENCE.SHORTJOURNALTITLE,
+                Tables.THERAPYREFERENCE.PAGES,
+                Tables.THERAPYREFERENCE.ABSTRACTTEXT,
+                Tables.THERAPYREFERENCE.URL,
+                Tables.THERAPYREFERENCE.JOURNAL,
+                Tables.THERAPYREFERENCE.AUTHORS,
+                Tables.THERAPYREFERENCE.VOLUME,
+                Tables.THERAPYREFERENCE.ISSUE,
+                Tables.THERAPYREFERENCE.DATE,
+                Tables.THERAPYREFERENCE.YEAR)
                 .values(therapyId,
                         reference.id(),
                         reference.pubMedId(),
@@ -194,7 +196,6 @@ class TherapyDAO {
                         reference.volume(),
                         reference.issue(),
                         reference.date(),
-                        reference.year())
-                .execute();
+                        reference.year()));
     }
 }

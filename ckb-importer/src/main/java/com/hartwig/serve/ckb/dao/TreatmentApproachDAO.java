@@ -13,9 +13,12 @@ class TreatmentApproachDAO {
 
     @NotNull
     private final DSLContext context;
+    @NotNull
+    private final BatchInserter batchInserter;
 
-    public TreatmentApproachDAO(@NotNull final DSLContext context) {
+    public TreatmentApproachDAO(@NotNull final DSLContext context, @NotNull final BatchInserter batchInserter) {
         this.context = context;
+        this.batchInserter = batchInserter;
     }
 
     public void deleteAll() {
@@ -68,42 +71,42 @@ class TreatmentApproachDAO {
 
     private void writeTreatmentDrugClass(@NotNull DrugClassTreatmentApproach drugClassTreatmentApproach, int treatmentApproachDrugClassId) {
         //Only written relevant drug class name for treatment approach and other redundant for table drugclass
-        context.insertInto(Tables.TREATMENTAPPROACHDRUGCLASS,
-                        Tables.TREATMENTAPPROACHDRUGCLASS.TREATMENTAPPROACHID,
-                        Tables.TREATMENTAPPROACHDRUGCLASS.DRUGCLASSID,
-                        Tables.TREATMENTAPPROACHDRUGCLASS.DRUGCLASS)
-                .values(treatmentApproachDrugClassId, drugClassTreatmentApproach.drugClass().id(), drugClassTreatmentApproach.drugClass().drugClass())
-                .execute();
+        batchInserter.add(context.insertInto(Tables.TREATMENTAPPROACHDRUGCLASS,
+                Tables.TREATMENTAPPROACHDRUGCLASS.TREATMENTAPPROACHID,
+                Tables.TREATMENTAPPROACHDRUGCLASS.DRUGCLASSID,
+                Tables.TREATMENTAPPROACHDRUGCLASS.DRUGCLASS)
+                .values(treatmentApproachDrugClassId,
+                        drugClassTreatmentApproach.drugClass().id(),
+                        drugClassTreatmentApproach.drugClass().drugClass()));
     }
 
     private void writeTreatmentTherapy(@NotNull TherapyTreatmentApproach therapyTreatmentApproach, int treatmentApproachDrugClassId) {
         //Only written relevant therapy name for treatment approach and other redundant for tables therapy/therapy synonym
-        context.insertInto(Tables.TREATMENTAPPROACHTHERAPY,
-                        Tables.TREATMENTAPPROACHTHERAPY.TREATMENTAPPROACHID,
-                        Tables.TREATMENTAPPROACHTHERAPY.THERAPYID,
-                        Tables.TREATMENTAPPROACHTHERAPY.THERAPYNAME)
+        batchInserter.add(context.insertInto(Tables.TREATMENTAPPROACHTHERAPY,
+                Tables.TREATMENTAPPROACHTHERAPY.TREATMENTAPPROACHID,
+                Tables.TREATMENTAPPROACHTHERAPY.THERAPYID,
+                Tables.TREATMENTAPPROACHTHERAPY.THERAPYNAME)
                 .values(treatmentApproachDrugClassId,
                         therapyTreatmentApproach.therapy().id(),
-                        therapyTreatmentApproach.therapy().therapyName())
-                .execute();
+                        therapyTreatmentApproach.therapy().therapyName()));
     }
 
     private void writeTreatmentReference(@NotNull Reference reference, int treatmentApproachReferenceId) {
-        context.insertInto(Tables.TREATMENTAPPROACHREFERENCE,
-                        Tables.TREATMENTAPPROACHREFERENCE.TREATMENTAPPROACHID,
-                        Tables.TREATMENTAPPROACHREFERENCE.REFERENCEID,
-                        Tables.TREATMENTAPPROACHREFERENCE.PUBMEDID,
-                        Tables.TREATMENTAPPROACHREFERENCE.TITLE,
-                        Tables.TREATMENTAPPROACHREFERENCE.SHORTJOURNALTITLE,
-                        Tables.TREATMENTAPPROACHREFERENCE.PAGES,
-                        Tables.TREATMENTAPPROACHREFERENCE.ABSTRACTTEXT,
-                        Tables.TREATMENTAPPROACHREFERENCE.URL,
-                        Tables.TREATMENTAPPROACHREFERENCE.JOURNAL,
-                        Tables.TREATMENTAPPROACHREFERENCE.AUTHORS,
-                        Tables.TREATMENTAPPROACHREFERENCE.VOLUME,
-                        Tables.TREATMENTAPPROACHREFERENCE.ISSUE,
-                        Tables.TREATMENTAPPROACHREFERENCE.DATE,
-                        Tables.TREATMENTAPPROACHREFERENCE.YEAR)
+        batchInserter.add(context.insertInto(Tables.TREATMENTAPPROACHREFERENCE,
+                Tables.TREATMENTAPPROACHREFERENCE.TREATMENTAPPROACHID,
+                Tables.TREATMENTAPPROACHREFERENCE.REFERENCEID,
+                Tables.TREATMENTAPPROACHREFERENCE.PUBMEDID,
+                Tables.TREATMENTAPPROACHREFERENCE.TITLE,
+                Tables.TREATMENTAPPROACHREFERENCE.SHORTJOURNALTITLE,
+                Tables.TREATMENTAPPROACHREFERENCE.PAGES,
+                Tables.TREATMENTAPPROACHREFERENCE.ABSTRACTTEXT,
+                Tables.TREATMENTAPPROACHREFERENCE.URL,
+                Tables.TREATMENTAPPROACHREFERENCE.JOURNAL,
+                Tables.TREATMENTAPPROACHREFERENCE.AUTHORS,
+                Tables.TREATMENTAPPROACHREFERENCE.VOLUME,
+                Tables.TREATMENTAPPROACHREFERENCE.ISSUE,
+                Tables.TREATMENTAPPROACHREFERENCE.DATE,
+                Tables.TREATMENTAPPROACHREFERENCE.YEAR)
                 .values(treatmentApproachReferenceId,
                         reference.id(),
                         reference.pubMedId(),
@@ -117,7 +120,6 @@ class TreatmentApproachDAO {
                         reference.volume(),
                         reference.issue(),
                         reference.date(),
-                        reference.year())
-                .execute();
+                        reference.year()));
     }
 }

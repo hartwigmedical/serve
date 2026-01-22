@@ -23,12 +23,15 @@ class ClinicalTrialDAO {
     private final TherapyDAO therapyDAO;
     @NotNull
     private final IndicationDAO indicationDAO;
+    @NotNull
+    private final BatchInserter batchInserter;
 
     public ClinicalTrialDAO(@NotNull final DSLContext context, @NotNull final TherapyDAO therapyDAO,
-            @NotNull final IndicationDAO indicationDAO) {
+            @NotNull final IndicationDAO indicationDAO, @NotNull final BatchInserter batchInserter) {
         this.context = context;
         this.therapyDAO = therapyDAO;
         this.indicationDAO = indicationDAO;
+        this.batchInserter = batchInserter;
     }
 
     public void deleteAll() {
@@ -73,35 +76,33 @@ class ClinicalTrialDAO {
 
         for (Therapy therapy : clinicalTrial.therapies()) {
             int therapyId = therapyDAO.write(therapy);
-            context.insertInto(Therapyclinicaltrial.THERAPYCLINICALTRIAL,
+            batchInserter.add(context.insertInto(Therapyclinicaltrial.THERAPYCLINICALTRIAL,
                     Therapyclinicaltrial.THERAPYCLINICALTRIAL.CLINICALTRIALID,
-                    Therapyclinicaltrial.THERAPYCLINICALTRIAL.THERAPYID).values(id, therapyId).execute();
+                    Therapyclinicaltrial.THERAPYCLINICALTRIAL.THERAPYID).values(id, therapyId));
         }
 
         for (Indication indication : clinicalTrial.indications()) {
             int indicationId = indicationDAO.write(indication);
-            context.insertInto(Indicationclinicaltrial.INDICATIONCLINICALTRIAL,
+            batchInserter.add(context.insertInto(Indicationclinicaltrial.INDICATIONCLINICALTRIAL,
                     Indicationclinicaltrial.INDICATIONCLINICALTRIAL.CLINICALTRIALID,
-                    Indicationclinicaltrial.INDICATIONCLINICALTRIAL.INDICATIONID).values(id, indicationId).execute();
+                    Indicationclinicaltrial.INDICATIONCLINICALTRIAL.INDICATIONID).values(id, indicationId));
         }
 
         for (String ageGroup : clinicalTrial.ageGroups()) {
-            context.insertInto(Agegroup.AGEGROUP, Agegroup.AGEGROUP.CLINICALTRIALID, Agegroup.AGEGROUP.AGEGROUP_)
-                    .values(id, ageGroup)
-                    .execute();
+            batchInserter.add(context.insertInto(Agegroup.AGEGROUP, Agegroup.AGEGROUP.CLINICALTRIALID, Agegroup.AGEGROUP.AGEGROUP_)
+                    .values(id, ageGroup));
         }
 
         for (VariantRequirementDetail variantRequirementDetail : clinicalTrial.variantRequirementDetails()) {
-            context.insertInto(Variantrequirementdetail.VARIANTREQUIREMENTDETAIL,
-                            Variantrequirementdetail.VARIANTREQUIREMENTDETAIL.CLINICALTRIALID,
-                            Variantrequirementdetail.VARIANTREQUIREMENTDETAIL.CKBPROFILEID,
-                            Variantrequirementdetail.VARIANTREQUIREMENTDETAIL.REQUIREMENTTYPE,
-                            Variantrequirementdetail.VARIANTREQUIREMENTDETAIL.VARIANTORIGIN)
+            batchInserter.add(context.insertInto(Variantrequirementdetail.VARIANTREQUIREMENTDETAIL,
+                    Variantrequirementdetail.VARIANTREQUIREMENTDETAIL.CLINICALTRIALID,
+                    Variantrequirementdetail.VARIANTREQUIREMENTDETAIL.CKBPROFILEID,
+                    Variantrequirementdetail.VARIANTREQUIREMENTDETAIL.REQUIREMENTTYPE,
+                    Variantrequirementdetail.VARIANTREQUIREMENTDETAIL.VARIANTORIGIN)
                     .values(id,
                             variantRequirementDetail.profileId(),
                             variantRequirementDetail.requirementType(),
-                            variantRequirementDetail.variantOrigin())
-                    .execute();
+                            variantRequirementDetail.variantOrigin()));
         }
 
         for (com.hartwig.serve.ckb.datamodel.clinicaltrial.Location location : clinicalTrial.locations()) {
@@ -133,15 +134,14 @@ class ClinicalTrialDAO {
                 .getValue(Location.LOCATION.ID);
 
         for (com.hartwig.serve.ckb.datamodel.clinicaltrial.Contact contact : location.contacts()) {
-            context.insertInto(Contact.CONTACT,
-                            Contact.CONTACT.LOCATIONID,
-                            Contact.CONTACT.NAME,
-                            Contact.CONTACT.EMAIL,
-                            Contact.CONTACT.PHONE,
-                            Contact.CONTACT.PHONEEXT,
-                            Contact.CONTACT.ROLE)
-                    .values(id, contact.name(), contact.email(), contact.phone(), contact.phoneExt(), contact.role())
-                    .execute();
+            batchInserter.add(context.insertInto(Contact.CONTACT,
+                    Contact.CONTACT.LOCATIONID,
+                    Contact.CONTACT.NAME,
+                    Contact.CONTACT.EMAIL,
+                    Contact.CONTACT.PHONE,
+                    Contact.CONTACT.PHONEEXT,
+                    Contact.CONTACT.ROLE)
+                    .values(id, contact.name(), contact.email(), contact.phone(), contact.phoneExt(), contact.role()));
         }
     }
 }

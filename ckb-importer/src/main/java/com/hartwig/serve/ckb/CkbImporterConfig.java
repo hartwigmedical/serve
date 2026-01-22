@@ -24,6 +24,9 @@ public interface CkbImporterConfig {
 
     String SKIP_DATABASE_WRITING = "skip_database_writing";
     String LOG_DEBUG = "log_debug";
+    String BATCH_SIZE = "batch_size";
+
+    int DEFAULT_BATCH_SIZE = 500;
 
     @NotNull
     static Options createOptions() {
@@ -35,6 +38,7 @@ public interface CkbImporterConfig {
         options.addOption(DB_USER, true, "Database user name.");
         options.addOption(DB_PASS, true, "Database password.");
         options.addOption(DB_URL, true, "Database url.");
+        options.addOption(BATCH_SIZE, true, "Optional: number of insert statements per batch (default 500).");
 
         options.addOption(SKIP_DATABASE_WRITING, false, "If this flag is set, we skip writing to the database");
 
@@ -53,6 +57,8 @@ public interface CkbImporterConfig {
     @NotNull
     String dbUrl();
 
+    int batchSize();
+
     boolean skipDatabaseWriting();
 
     @NotNull
@@ -65,6 +71,7 @@ public interface CkbImporterConfig {
                 .dbUser(nonOptionalValue(cmd, DB_USER))
                 .dbPass(nonOptionalValue(cmd, DB_PASS))
                 .dbUrl(nonOptionalValue(cmd, DB_URL))
+                .batchSize(optionalPositiveInt(cmd, BATCH_SIZE, DEFAULT_BATCH_SIZE))
                 .skipDatabaseWriting(cmd.hasOption(SKIP_DATABASE_WRITING))
                 .build();
     }
@@ -96,5 +103,22 @@ public interface CkbImporterConfig {
 
     static boolean pathIsDirectory(@NotNull String path) {
         return Files.isDirectory(new File(path).toPath());
+    }
+
+    static int optionalPositiveInt(@NotNull CommandLine cmd, @NotNull String param, int defaultValue) throws ParseException {
+        String value = cmd.getOptionValue(param);
+        if (value == null) {
+            return defaultValue;
+        }
+
+        try {
+            int parsed = Integer.parseInt(value);
+            if (parsed <= 0) {
+                throw new NumberFormatException("Batch size must be positive");
+            }
+            return parsed;
+        } catch (NumberFormatException exception) {
+            throw new ParseException("Parameter '" + param + "' must be a positive integer: " + value);
+        }
     }
 }

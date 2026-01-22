@@ -22,13 +22,16 @@ class EvidenceDAO {
     private final IndicationDAO indicationDAO;
     @NotNull
     private final TreatmentApproachDAO treatmentApproachDAO;
+    @NotNull
+    private final BatchInserter batchInserter;
 
     public EvidenceDAO(@NotNull final DSLContext context, @NotNull final TherapyDAO therapyDAO, @NotNull final IndicationDAO indicationDAO,
-            @NotNull final TreatmentApproachDAO treatmentApproachDAO) {
+            @NotNull final TreatmentApproachDAO treatmentApproachDAO, @NotNull final BatchInserter batchInserter) {
         this.context = context;
         this.therapyDAO = therapyDAO;
         this.indicationDAO = indicationDAO;
         this.treatmentApproachDAO = treatmentApproachDAO;
+        this.batchInserter = batchInserter;
     }
 
     public void deleteAll() {
@@ -65,33 +68,31 @@ class EvidenceDAO {
                 .getValue(Evidence.EVIDENCE.ID);
 
         int therapyId = therapyDAO.write(evidence.therapy());
-        context.insertInto(Therapyevidence.THERAPYEVIDENCE,
+        batchInserter.add(context.insertInto(Therapyevidence.THERAPYEVIDENCE,
                 Therapyevidence.THERAPYEVIDENCE.EVIDENCEID,
-                Therapyevidence.THERAPYEVIDENCE.THERAPYID).values(id, therapyId).execute();
+                Therapyevidence.THERAPYEVIDENCE.THERAPYID).values(id, therapyId));
 
         int indicationId = indicationDAO.write(evidence.indication());
-        context.insertInto(Indicationevidence.INDICATIONEVIDENCE,
+        batchInserter.add(context.insertInto(Indicationevidence.INDICATIONEVIDENCE,
                 Indicationevidence.INDICATIONEVIDENCE.EVIDENCEID,
-                Indicationevidence.INDICATIONEVIDENCE.INDICATIONID).values(id, indicationId).execute();
+                Indicationevidence.INDICATIONEVIDENCE.INDICATIONID).values(id, indicationId));
 
         for (DrugClassTreatmentApproach treatmentApproaches : evidence.drugTreatmentApproaches()) {
             int treatmentApproachId = treatmentApproachDAO.write(treatmentApproaches);
 
-            context.insertInto(Treatmentapproachevidence.TREATMENTAPPROACHEVIDENCE,
-                            Treatmentapproachevidence.TREATMENTAPPROACHEVIDENCE.EVIDENCEID,
-                            Treatmentapproachevidence.TREATMENTAPPROACHEVIDENCE.TREATMENTAPPROACHEVIDENCEID)
-                    .values(id, treatmentApproachId)
-                    .execute();
+            batchInserter.add(context.insertInto(Treatmentapproachevidence.TREATMENTAPPROACHEVIDENCE,
+                    Treatmentapproachevidence.TREATMENTAPPROACHEVIDENCE.EVIDENCEID,
+                    Treatmentapproachevidence.TREATMENTAPPROACHEVIDENCE.TREATMENTAPPROACHEVIDENCEID)
+                    .values(id, treatmentApproachId));
         }
 
         for (TherapyTreatmentApproach treatmentApproaches : evidence.therapyTreatmentApproaches()) {
             int treatmentApproachId = treatmentApproachDAO.write(treatmentApproaches);
 
-            context.insertInto(Treatmentapproachevidence.TREATMENTAPPROACHEVIDENCE,
-                            Treatmentapproachevidence.TREATMENTAPPROACHEVIDENCE.EVIDENCEID,
-                            Treatmentapproachevidence.TREATMENTAPPROACHEVIDENCE.TREATMENTAPPROACHEVIDENCEID)
-                    .values(id, treatmentApproachId)
-                    .execute();
+            batchInserter.add(context.insertInto(Treatmentapproachevidence.TREATMENTAPPROACHEVIDENCE,
+                    Treatmentapproachevidence.TREATMENTAPPROACHEVIDENCE.EVIDENCEID,
+                    Treatmentapproachevidence.TREATMENTAPPROACHEVIDENCE.TREATMENTAPPROACHEVIDENCEID)
+                    .values(id, treatmentApproachId));
         }
 
         for (Reference reference : evidence.references()) {
@@ -100,21 +101,21 @@ class EvidenceDAO {
     }
 
     private void writeReference(@NotNull Reference reference, int evidenceId) {
-        context.insertInto(Evidencereference.EVIDENCEREFERENCE,
-                        Evidencereference.EVIDENCEREFERENCE.EVIDENCEID,
-                        Evidencereference.EVIDENCEREFERENCE.CKBREFERENCEID,
-                        Evidencereference.EVIDENCEREFERENCE.PUBMEDID,
-                        Evidencereference.EVIDENCEREFERENCE.TITLE,
-                        Evidencereference.EVIDENCEREFERENCE.SHORTJOURNALTITLE,
-                        Evidencereference.EVIDENCEREFERENCE.PAGES,
-                        Evidencereference.EVIDENCEREFERENCE.ABSTRACTTEXT,
-                        Evidencereference.EVIDENCEREFERENCE.URL,
-                        Evidencereference.EVIDENCEREFERENCE.JOURNAL,
-                        Evidencereference.EVIDENCEREFERENCE.AUTHORS,
-                        Evidencereference.EVIDENCEREFERENCE.VOLUME,
-                        Evidencereference.EVIDENCEREFERENCE.ISSUE,
-                        Evidencereference.EVIDENCEREFERENCE.DATE,
-                        Evidencereference.EVIDENCEREFERENCE.YEAR)
+        batchInserter.add(context.insertInto(Evidencereference.EVIDENCEREFERENCE,
+                Evidencereference.EVIDENCEREFERENCE.EVIDENCEID,
+                Evidencereference.EVIDENCEREFERENCE.CKBREFERENCEID,
+                Evidencereference.EVIDENCEREFERENCE.PUBMEDID,
+                Evidencereference.EVIDENCEREFERENCE.TITLE,
+                Evidencereference.EVIDENCEREFERENCE.SHORTJOURNALTITLE,
+                Evidencereference.EVIDENCEREFERENCE.PAGES,
+                Evidencereference.EVIDENCEREFERENCE.ABSTRACTTEXT,
+                Evidencereference.EVIDENCEREFERENCE.URL,
+                Evidencereference.EVIDENCEREFERENCE.JOURNAL,
+                Evidencereference.EVIDENCEREFERENCE.AUTHORS,
+                Evidencereference.EVIDENCEREFERENCE.VOLUME,
+                Evidencereference.EVIDENCEREFERENCE.ISSUE,
+                Evidencereference.EVIDENCEREFERENCE.DATE,
+                Evidencereference.EVIDENCEREFERENCE.YEAR)
                 .values(evidenceId,
                         reference.id(),
                         reference.pubMedId(),
@@ -128,7 +129,6 @@ class EvidenceDAO {
                         reference.volume(),
                         reference.issue(),
                         reference.date(),
-                        reference.year())
-                .execute();
+                        reference.year()));
     }
 }

@@ -19,6 +19,7 @@ public class CkbImporterApplication {
 
     private static final Logger LOGGER = LogManager.getLogger(CkbImporterApplication.class);
     private static final String VERSION = CkbImporterApplication.class.getPackage().getImplementationVersion();
+    private static final int ENTRIES_PER_TRANSACTION = 100;
 
     public static void main(String[] args) throws IOException, SQLException {
         LOGGER.info("Running CKB importer v{}", VERSION);
@@ -55,15 +56,36 @@ public class CkbImporterApplication {
             LOGGER.info("Inserting {} CKB entries", ckbEntries.size());
             int current = 0;
             int report = (int) Math.round(ckbEntries.size() / 10D);
-            for (CkbEntry entry : ckbEntries) {
-                ckbDAO.write(entry);
-                current++;
-                if (current % report == 0) {
-                    LOGGER.debug(" Inserted {} of {} CKB entries", current, ckbEntries.size());
+            int entriesInTransaction = 0;
+            ckbDAO.setAutoCommit(false);
+            try {
+                for (CkbEntry entry : ckbEntries) {
+                    ckbDAO.write(entry);
+                    current++;
+                    entriesInTransaction++;
+                    if (current % report == 0) {
+                        LOGGER.debug(" Inserted {} of {} CKB entries", current, ckbEntries.size());
+                    }
+                    if (entriesInTransaction >= ENTRIES_PER_TRANSACTION) {
+                        ckbDAO.flushBatches();
+                        ckbDAO.commit();
+                        entriesInTransaction = 0;
+                    }
                 }
+                ckbDAO.flushBatches();
+                if (entriesInTransaction > 0) {
+                    ckbDAO.commit();
+                }
+            } catch (Exception exception) {
+                try {
+                    ckbDAO.rollback();
+                } catch (SQLException rollbackException) {
+                    LOGGER.warn("Failed to rollback transaction after import failure", rollbackException);
+                }
+                throw exception;
+            } finally {
+                ckbDAO.setAutoCommit(true);
             }
-
-            ckbDAO.flushBatches();
         }
     }
 }

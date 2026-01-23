@@ -30,6 +30,8 @@ public final class CkbDAO {
     @NotNull
     private final DSLContext context;
     @NotNull
+    private final Connection connection;
+    @NotNull
     private final BatchInserter batchInserter;
     @NotNull
     private final TherapyDAO therapyDAO;
@@ -55,7 +57,7 @@ public final class CkbDAO {
         LOGGER.info("Connecting to database '{}'", catalog);
 
         DSLContext context = DSL.using(conn, SQLDialect.MYSQL, settings(catalog));
-        return new CkbDAO(context, new BatchInserter(context, batchSize));
+        return new CkbDAO(conn, context, new BatchInserter(context, batchSize));
     }
 
     @Nullable
@@ -68,8 +70,9 @@ public final class CkbDAO {
                 .withOutput(catalog)));
     }
 
-    private CkbDAO(@NotNull final DSLContext context, @NotNull final BatchInserter batchInserter) {
+    private CkbDAO(@NotNull final Connection connection, @NotNull final DSLContext context, @NotNull final BatchInserter batchInserter) {
         this.context = context;
+        this.connection = connection;
         this.batchInserter = batchInserter;
         this.therapyDAO = new TherapyDAO(context, batchInserter);
         this.indicationDAO = new IndicationDAO(context, batchInserter);
@@ -120,5 +123,17 @@ public final class CkbDAO {
 
     public void flushBatches() {
         batchInserter.flush();
+    }
+
+    public void setAutoCommit(boolean autoCommit) throws SQLException {
+        connection.setAutoCommit(autoCommit);
+    }
+
+    public void commit() throws SQLException {
+        connection.commit();
+    }
+
+    public void rollback() throws SQLException {
+        connection.rollback();
     }
 }

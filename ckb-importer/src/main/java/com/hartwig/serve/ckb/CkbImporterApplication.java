@@ -53,19 +53,23 @@ public class CkbImporterApplication {
             LOGGER.info("Deleting all data from CKB database");
             ckbDAO.deleteAll();
 
-            LOGGER.info("Inserting {} CKB entries", ckbEntries.size());
-            int current = 0;
-            int report = (int) Math.round(ckbEntries.size() / 10D);
-            int entriesInTransaction = 0;
-            ckbDAO.setAutoCommit(false);
-            try {
-                for (CkbEntry entry : ckbEntries) {
-                    ckbDAO.write(entry);
-                    current++;
-                    entriesInTransaction++;
-                    if (current % report == 0) {
-                        LOGGER.debug(" Inserted {} of {} CKB entries", current, ckbEntries.size());
-                    }
+        LOGGER.info("Inserting {} CKB entries", ckbEntries.size());
+        int current = 0;
+        int report = (int) Math.round(ckbEntries.size() / 10D);
+        int progressInterval = 1000;
+        int entriesInTransaction = 0;
+        ckbDAO.setAutoCommit(false);
+        try {
+            for (CkbEntry entry : ckbEntries) {
+                ckbDAO.write(entry);
+                current++;
+                entriesInTransaction++;
+                if (current % progressInterval == 0) {
+                    LOGGER.info("Inserted {} of {} CKB entries", current, ckbEntries.size());
+                }
+                if (current % report == 0) {
+                    LOGGER.debug(" Inserted {} of {} CKB entries", current, ckbEntries.size());
+                }
                     if (entriesInTransaction >= ENTRIES_PER_TRANSACTION) {
                         ckbDAO.flushBatches();
                         ckbDAO.commit();

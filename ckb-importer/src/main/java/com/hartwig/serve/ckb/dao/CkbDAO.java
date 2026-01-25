@@ -32,6 +32,8 @@ public final class CkbDAO {
     @NotNull
     private final Connection connection;
     @NotNull
+    private final IdAllocator idAllocator;
+    @NotNull
     private final BatchInserter batchInserter;
     @NotNull
     private final TherapyDAO therapyDAO;
@@ -57,7 +59,8 @@ public final class CkbDAO {
         LOGGER.info("Connecting to database '{}'", catalog);
 
         DSLContext context = DSL.using(conn, SQLDialect.MYSQL, settings(catalog));
-        return new CkbDAO(conn, context, new BatchInserter(context, batchSize));
+        IdAllocator idAllocator = new IdAllocator(context);
+        return new CkbDAO(conn, context, new BatchInserter(context, batchSize), idAllocator);
     }
 
     @Nullable
@@ -70,16 +73,18 @@ public final class CkbDAO {
                 .withOutput(catalog)));
     }
 
-    private CkbDAO(@NotNull final Connection connection, @NotNull final DSLContext context, @NotNull final BatchInserter batchInserter) {
+    private CkbDAO(@NotNull final Connection connection, @NotNull final DSLContext context, @NotNull final BatchInserter batchInserter,
+            @NotNull final IdAllocator idAllocator) {
         this.context = context;
         this.connection = connection;
+        this.idAllocator = idAllocator;
         this.batchInserter = batchInserter;
-        this.therapyDAO = new TherapyDAO(context, batchInserter);
-        this.indicationDAO = new IndicationDAO(context, batchInserter);
-        this.variantDAO = new VariantDAO(context, batchInserter);
-        this.treatmentApproachDAO = new TreatmentApproachDAO(context, batchInserter);
-        this.evidenceDAO = new EvidenceDAO(context, therapyDAO, indicationDAO, treatmentApproachDAO, batchInserter);
-        this.clinicalTrialDAO = new ClinicalTrialDAO(context, therapyDAO, indicationDAO, batchInserter);
+        this.therapyDAO = new TherapyDAO(context, batchInserter, idAllocator);
+        this.indicationDAO = new IndicationDAO(context, batchInserter, idAllocator);
+        this.variantDAO = new VariantDAO(context, batchInserter, idAllocator);
+        this.treatmentApproachDAO = new TreatmentApproachDAO(context, batchInserter, idAllocator);
+        this.evidenceDAO = new EvidenceDAO(context, therapyDAO, indicationDAO, treatmentApproachDAO, batchInserter, idAllocator);
+        this.clinicalTrialDAO = new ClinicalTrialDAO(context, therapyDAO, indicationDAO, batchInserter, idAllocator);
     }
 
     public void deleteAll() {
@@ -95,18 +100,18 @@ public final class CkbDAO {
         treatmentApproachDAO.deleteAll();
 
         context.deleteFrom(Ckbentry.CKBENTRY).execute();
+        idAllocator.resetFromDatabase(context);
     }
 
     public void write(@NotNull CkbEntry ckbEntry) {
-        int id = context.insertInto(Ckbentry.CKBENTRY,
+        int id = idAllocator.nextCkbEntryId();
+        batchInserter.add(context.insertInto(Ckbentry.CKBENTRY,
+                        Ckbentry.CKBENTRY.ID,
                         Ckbentry.CKBENTRY.CKBPROFILEID,
                         Ckbentry.CKBENTRY.CREATEDATE,
                         Ckbentry.CKBENTRY.UPDATEDATE,
                         Ckbentry.CKBENTRY.PROFILENAME)
-                .values(ckbEntry.profileId(), ckbEntry.createDate(), ckbEntry.updateDate(), ckbEntry.profileName())
-                .returning(Ckbentry.CKBENTRY.ID)
-                .fetchOne()
-                .getValue(Ckbentry.CKBENTRY.ID);
+                .values(id, ckbEntry.profileId(), ckbEntry.createDate(), ckbEntry.updateDate(), ckbEntry.profileName()));
 
         for (Variant variant : ckbEntry.variants()) {
             variantDAO.write(variant, id);

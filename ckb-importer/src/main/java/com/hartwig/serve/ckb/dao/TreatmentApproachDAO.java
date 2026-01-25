@@ -15,10 +15,14 @@ class TreatmentApproachDAO {
     private final DSLContext context;
     @NotNull
     private final BatchInserter batchInserter;
+    @NotNull
+    private final IdAllocator idAllocator;
 
-    public TreatmentApproachDAO(@NotNull final DSLContext context, @NotNull final BatchInserter batchInserter) {
+    public TreatmentApproachDAO(@NotNull final DSLContext context, @NotNull final BatchInserter batchInserter,
+            @NotNull final IdAllocator idAllocator) {
         this.context = context;
         this.batchInserter = batchInserter;
+        this.idAllocator = idAllocator;
     }
 
     public void deleteAll() {
@@ -32,14 +36,13 @@ class TreatmentApproachDAO {
     }
 
     public int write(@NotNull DrugClassTreatmentApproach treatmentApproaches) {
-        int id = context.insertInto(Treatmentapproach.TREATMENTAPPROACH,
+        int id = idAllocator.nextTreatmentApproachId();
+        batchInserter.add(context.insertInto(Treatmentapproach.TREATMENTAPPROACH,
+                        Treatmentapproach.TREATMENTAPPROACH.ID,
                         Treatmentapproach.TREATMENTAPPROACH.TREATMENTAPPROACHID,
                         Treatmentapproach.TREATMENTAPPROACH.CREATEDATE,
                         Treatmentapproach.TREATMENTAPPROACH.UPDATEDATE)
-                .values(treatmentApproaches.id(), treatmentApproaches.createDate(), treatmentApproaches.updateDate())
-                .returning(Treatmentapproach.TREATMENTAPPROACH.ID)
-                .fetchOne()
-                .getValue(Treatmentapproach.TREATMENTAPPROACH.ID);
+                .values(id, treatmentApproaches.id(), treatmentApproaches.createDate(), treatmentApproaches.updateDate()));
 
         writeTreatmentDrugClass(treatmentApproaches, id);
 
@@ -51,14 +54,13 @@ class TreatmentApproachDAO {
     }
 
     public int write(@NotNull TherapyTreatmentApproach treatmentApproaches) {
-        int id = context.insertInto(Treatmentapproach.TREATMENTAPPROACH,
+        int id = idAllocator.nextTreatmentApproachId();
+        batchInserter.add(context.insertInto(Treatmentapproach.TREATMENTAPPROACH,
+                        Treatmentapproach.TREATMENTAPPROACH.ID,
                         Treatmentapproach.TREATMENTAPPROACH.TREATMENTAPPROACHID,
                         Treatmentapproach.TREATMENTAPPROACH.CREATEDATE,
                         Treatmentapproach.TREATMENTAPPROACH.UPDATEDATE)
-                .values(treatmentApproaches.id(), treatmentApproaches.createDate(), treatmentApproaches.updateDate())
-                .returning(Treatmentapproach.TREATMENTAPPROACH.ID)
-                .fetchOne()
-                .getValue(Treatmentapproach.TREATMENTAPPROACH.ID);
+                .values(id, treatmentApproaches.id(), treatmentApproaches.createDate(), treatmentApproaches.updateDate()));
 
         writeTreatmentTherapy(treatmentApproaches, id);
 

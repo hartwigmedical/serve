@@ -25,13 +25,17 @@ class ClinicalTrialDAO {
     private final IndicationDAO indicationDAO;
     @NotNull
     private final BatchInserter batchInserter;
+    @NotNull
+    private final IdAllocator idAllocator;
 
     public ClinicalTrialDAO(@NotNull final DSLContext context, @NotNull final TherapyDAO therapyDAO,
-            @NotNull final IndicationDAO indicationDAO, @NotNull final BatchInserter batchInserter) {
+            @NotNull final IndicationDAO indicationDAO, @NotNull final BatchInserter batchInserter,
+            @NotNull final IdAllocator idAllocator) {
         this.context = context;
         this.therapyDAO = therapyDAO;
         this.indicationDAO = indicationDAO;
         this.batchInserter = batchInserter;
+        this.idAllocator = idAllocator;
     }
 
     public void deleteAll() {
@@ -49,7 +53,9 @@ class ClinicalTrialDAO {
     }
 
     public void write(@NotNull ClinicalTrial clinicalTrial, int ckbEntryId) {
-        int id = context.insertInto(Clinicaltrial.CLINICALTRIAL,
+        int id = idAllocator.nextClinicalTrialId();
+        batchInserter.add(context.insertInto(Clinicaltrial.CLINICALTRIAL,
+                        Clinicaltrial.CLINICALTRIAL.ID,
                         Clinicaltrial.CLINICALTRIAL.CKBENTRYID,
                         Clinicaltrial.CLINICALTRIAL.UPDATEDATE,
                         Clinicaltrial.CLINICALTRIAL.NCTID,
@@ -60,7 +66,8 @@ class ClinicalTrialDAO {
                         Clinicaltrial.CLINICALTRIAL.GENDER,
                         Clinicaltrial.CLINICALTRIAL.SPONSORS,
                         Clinicaltrial.CLINICALTRIAL.VARIANTREQUIREMENT)
-                .values(ckbEntryId,
+                .values(id,
+                        ckbEntryId,
                         clinicalTrial.updateDate(),
                         clinicalTrial.nctId(),
                         clinicalTrial.title(),
@@ -69,10 +76,7 @@ class ClinicalTrialDAO {
                         clinicalTrial.recruitment(),
                         clinicalTrial.gender(),
                         clinicalTrial.sponsors(),
-                        clinicalTrial.variantRequirement())
-                .returning(Clinicaltrial.CLINICALTRIAL.ID)
-                .fetchOne()
-                .getValue(Clinicaltrial.CLINICALTRIAL.ID);
+                        clinicalTrial.variantRequirement()));
 
         for (Therapy therapy : clinicalTrial.therapies()) {
             int therapyId = therapyDAO.write(therapy);
@@ -112,7 +116,9 @@ class ClinicalTrialDAO {
     }
 
     private void writeLocation(@NotNull com.hartwig.serve.ckb.datamodel.clinicaltrial.Location location, int clinicalTrialId) {
-        int id = context.insertInto(Location.LOCATION,
+        int id = idAllocator.nextLocationId();
+        batchInserter.add(context.insertInto(Location.LOCATION,
+                        Location.LOCATION.ID,
                         Location.LOCATION.CLINICALTRIALID,
                         Location.LOCATION.NCTID,
                         Location.LOCATION.STATUS,
@@ -121,17 +127,15 @@ class ClinicalTrialDAO {
                         Location.LOCATION.STATE,
                         Location.LOCATION.ZIP,
                         Location.LOCATION.COUNTRY)
-                .values(clinicalTrialId,
+                .values(id,
+                        clinicalTrialId,
                         location.nctId(),
                         location.status(),
                         location.facility(),
                         location.city(),
                         location.state(),
                         location.zip(),
-                        location.country())
-                .returning(Location.LOCATION.ID)
-                .fetchOne()
-                .getValue(Location.LOCATION.ID);
+                        location.country()));
 
         for (com.hartwig.serve.ckb.datamodel.clinicaltrial.Contact contact : location.contacts()) {
             batchInserter.add(context.insertInto(Contact.CONTACT,

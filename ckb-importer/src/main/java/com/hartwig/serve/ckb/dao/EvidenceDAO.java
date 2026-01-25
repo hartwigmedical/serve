@@ -24,14 +24,18 @@ class EvidenceDAO {
     private final TreatmentApproachDAO treatmentApproachDAO;
     @NotNull
     private final BatchInserter batchInserter;
+    @NotNull
+    private final IdAllocator idAllocator;
 
     public EvidenceDAO(@NotNull final DSLContext context, @NotNull final TherapyDAO therapyDAO, @NotNull final IndicationDAO indicationDAO,
-            @NotNull final TreatmentApproachDAO treatmentApproachDAO, @NotNull final BatchInserter batchInserter) {
+            @NotNull final TreatmentApproachDAO treatmentApproachDAO, @NotNull final BatchInserter batchInserter,
+            @NotNull final IdAllocator idAllocator) {
         this.context = context;
         this.therapyDAO = therapyDAO;
         this.indicationDAO = indicationDAO;
         this.treatmentApproachDAO = treatmentApproachDAO;
         this.batchInserter = batchInserter;
+        this.idAllocator = idAllocator;
     }
 
     public void deleteAll() {
@@ -44,7 +48,9 @@ class EvidenceDAO {
     }
 
     public void write(@NotNull com.hartwig.serve.ckb.datamodel.evidence.Evidence evidence, int ckbEntryId) {
-        int id = context.insertInto(Evidence.EVIDENCE,
+        int id = idAllocator.nextEvidenceId();
+        batchInserter.add(context.insertInto(Evidence.EVIDENCE,
+                        Evidence.EVIDENCE.ID,
                         Evidence.EVIDENCE.CKBENTRYID,
                         Evidence.EVIDENCE.CKBEVIDENCEID,
                         Evidence.EVIDENCE.RESPONSETYPE,
@@ -54,7 +60,8 @@ class EvidenceDAO {
                         Evidence.EVIDENCE.APPROVALSTATUS,
                         Evidence.EVIDENCE.AMPCAPASCOEVIDENCELEVEL,
                         Evidence.EVIDENCE.AMPCAPASCOINFERREDTIER)
-                .values(ckbEntryId,
+                .values(id,
+                        ckbEntryId,
                         evidence.id(),
                         evidence.responseType(),
                         evidence.evidenceType(),
@@ -62,10 +69,7 @@ class EvidenceDAO {
                         evidence.efficacyEvidence(),
                         evidence.approvalStatus(),
                         evidence.ampCapAscoEvidenceLevel(),
-                        evidence.ampCapAscoInferredTier())
-                .returning(Evidence.EVIDENCE.ID)
-                .fetchOne()
-                .getValue(Evidence.EVIDENCE.ID);
+                        evidence.ampCapAscoInferredTier()));
 
         int therapyId = therapyDAO.write(evidence.therapy());
         batchInserter.add(context.insertInto(Therapyevidence.THERAPYEVIDENCE,

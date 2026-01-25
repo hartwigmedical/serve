@@ -21,10 +21,13 @@ class TherapyDAO {
     private final DSLContext context;
     @NotNull
     private final BatchInserter batchInserter;
+    @NotNull
+    private final IdAllocator idAllocator;
 
-    public TherapyDAO(@NotNull final DSLContext context, @NotNull final BatchInserter batchInserter) {
+    public TherapyDAO(@NotNull final DSLContext context, @NotNull final BatchInserter batchInserter, @NotNull final IdAllocator idAllocator) {
         this.context = context;
         this.batchInserter = batchInserter;
+        this.idAllocator = idAllocator;
     }
 
     public void deleteAll() {
@@ -44,16 +47,20 @@ class TherapyDAO {
     }
 
     public int write(@NotNull com.hartwig.serve.ckb.datamodel.therapy.Therapy therapy) {
-        int id = context.insertInto(Therapy.THERAPY,
+        int id = idAllocator.nextTherapyId();
+        batchInserter.add(context.insertInto(Therapy.THERAPY,
+                        Therapy.THERAPY.ID,
                         Therapy.THERAPY.CKBTHERAPYID,
                         Therapy.THERAPY.CREATEDATE,
                         Therapy.THERAPY.UPDATEDATE,
                         Therapy.THERAPY.THERAPYNAME,
                         Therapy.THERAPY.DESCRIPTION)
-                .values(therapy.id(), therapy.createDate(), therapy.updateDate(), therapy.therapyName(), therapy.description())
-                .returning(Therapy.THERAPY.ID)
-                .fetchOne()
-                .getValue(Therapy.THERAPY.ID);
+                .values(id,
+                        therapy.id(),
+                        therapy.createDate(),
+                        therapy.updateDate(),
+                        therapy.therapyName(),
+                        therapy.description()));
 
         for (com.hartwig.serve.ckb.datamodel.drug.Drug drug : therapy.drugs()) {
             writeDrug(drug, id);
@@ -90,7 +97,9 @@ class TherapyDAO {
     }
 
     private void writeDrug(@NotNull com.hartwig.serve.ckb.datamodel.drug.Drug drug, int therapyId) {
-        int id = context.insertInto(Drug.DRUG,
+        int id = idAllocator.nextDrugId();
+        batchInserter.add(context.insertInto(Drug.DRUG,
+                        Drug.DRUG.ID,
                         Drug.DRUG.THERAPYID,
                         Drug.DRUG.CKBDRUGID,
                         Drug.DRUG.CREATEDATE,
@@ -99,17 +108,15 @@ class TherapyDAO {
                         Drug.DRUG.CASREGISTRYNUM,
                         Drug.DRUG.NCITID,
                         Drug.DRUG.DESCRIPTION)
-                .values(therapyId,
+                .values(id,
+                        therapyId,
                         drug.id(),
                         drug.createDate(),
                         drug.drugName(),
                         drug.tradeName(),
                         drug.casRegistryNum(),
                         drug.ncitId(),
-                        drug.description())
-                .returning(Drug.DRUG.ID)
-                .fetchOne()
-                .getValue(Drug.DRUG.ID);
+                        drug.description()));
 
         for (DrugClass drugClass : drug.drugClasses()) {
             batchInserter.add(context.insertInto(Drugclass.DRUGCLASS,

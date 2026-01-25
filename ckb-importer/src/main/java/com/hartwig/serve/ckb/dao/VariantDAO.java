@@ -22,10 +22,13 @@ class VariantDAO {
     private final DSLContext context;
     @NotNull
     private final BatchInserter batchInserter;
+    @NotNull
+    private final IdAllocator idAllocator;
 
-    public VariantDAO(@NotNull final DSLContext context, @NotNull final BatchInserter batchInserter) {
+    public VariantDAO(@NotNull final DSLContext context, @NotNull final BatchInserter batchInserter, @NotNull final IdAllocator idAllocator) {
         this.context = context;
         this.batchInserter = batchInserter;
+        this.idAllocator = idAllocator;
     }
 
     public void deleteAll() {
@@ -44,7 +47,9 @@ class VariantDAO {
     }
 
     public void write(@NotNull com.hartwig.serve.ckb.datamodel.variant.Variant variant, int ckbEntryId) {
-        int id = context.insertInto(Variant.VARIANT,
+        int id = idAllocator.nextVariantId();
+        batchInserter.add(context.insertInto(Variant.VARIANT,
+                        Variant.VARIANT.ID,
                         Variant.VARIANT.CKBENTRYID,
                         Variant.VARIANT.CKBVARIANTID,
                         Variant.VARIANT.CREATEDATE,
@@ -60,7 +65,8 @@ class VariantDAO {
                         Variant.VARIANT.HOTSPOTREFERENCE,
                         Variant.VARIANT.ISHOTSPOT,
                         Variant.VARIANT.DESCRIPTION)
-                .values(ckbEntryId,
+                .values(id,
+                        ckbEntryId,
                         variant.id(),
                         variant.createDate(),
                         variant.updateDate(),
@@ -74,10 +80,7 @@ class VariantDAO {
                         variant.polymorphism(),
                         variant.hotspotReference(),
                         Util.toByte(variant.isHotspot()),
-                        variant.description())
-                .returning(Variant.VARIANT.ID)
-                .fetchOne()
-                .getValue(Variant.VARIANT.ID);
+                        variant.description()));
 
         writeGene(variant.gene(), id);
 
@@ -102,7 +105,9 @@ class VariantDAO {
     }
 
     private void writeGene(@NotNull com.hartwig.serve.ckb.datamodel.variant.Gene gene, int variantId) {
-        int id = context.insertInto(Gene.GENE,
+        int id = idAllocator.nextGeneId();
+        batchInserter.add(context.insertInto(Gene.GENE,
+                        Gene.GENE.ID,
                         Gene.GENE.VARIANTID,
                         Gene.GENE.CKBGENEID,
                         Gene.GENE.CREATEDATE,
@@ -114,7 +119,8 @@ class VariantDAO {
                         Gene.GENE.MAPLOCATION,
                         Gene.GENE.CANONICALTRANSCRIPT,
                         Gene.GENE.DESCRIPTION)
-                .values(variantId,
+                .values(id,
+                        variantId,
                         gene.id(),
                         gene.createDate(),
                         gene.updateDate(),
@@ -124,10 +130,7 @@ class VariantDAO {
                         gene.chromosome(),
                         gene.mapLocation(),
                         gene.canonicalTranscript(),
-                        gene.description())
-                .returning(Gene.GENE.ID)
-                .fetchOne()
-                .getValue(Gene.GENE.ID);
+                        gene.description()));
 
         for (String term : gene.terms()) {
             batchInserter.add(context.insertInto(Geneterm.GENETERM, Geneterm.GENETERM.GENEID, Geneterm.GENETERM.TERM).values(id, term));

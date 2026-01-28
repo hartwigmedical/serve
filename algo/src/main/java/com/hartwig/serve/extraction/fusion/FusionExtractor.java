@@ -63,9 +63,25 @@ public class FusionExtractor {
     }
 
     @Nullable
+    public static DelDupGeneKey determineDelDupGeneKey(@NotNull String gene, @NotNull String event) {
+        DelDupGeneKey delDupGeneKey = null;
+
+        if (event.matches("del exon \\d+") || event.matches("EXON \\d+ SKIPPING MUTATION")) {
+            delDupGeneKey = ImmutableDelDupGeneKey.builder().gene(gene).exonicDelDupType(ExonicDelDupType.FULL_EXONIC_DELETION).build();
+
+        }
+        else if (event.matches("exon \\d+ del") || event.matches("exon \\d+")) {
+            delDupGeneKey = ImmutableDelDupGeneKey.builder().gene(gene).exonicDelDupType(ExonicDelDupType.PARTIAL_EXONIC_DELETION).build();
+        }
+
+        return delDupGeneKey;
+    }
+
+    @Nullable
     private static FusionPair fromExonicDelDup(@NotNull String gene, @NotNull String event) {
-        ExonicDelDupType exonicDelDupType = FusionAnnotationConfig.DEL_DUP_TYPE_PER_GENE.get(gene);
-        if (exonicDelDupType == null) {
+        DelDupGeneKey delDupGeneKey = determineDelDupGeneKey(gene, event);
+
+        if (delDupGeneKey == null) {
             LOGGER.warn("No exonic del dup type configured for gene '{}'", gene);
             return null;
         }
@@ -93,7 +109,7 @@ public class FusionExtractor {
 
         int exonUp;
         int exonDown;
-        switch (exonicDelDupType) {
+        switch (delDupGeneKey.exonicDelDupType()) {
             case FULL_EXONIC_DELETION: {
                 exonUp = exonRankUp - 1;
                 exonDown = exonRankDown + 1;
@@ -105,7 +121,7 @@ public class FusionExtractor {
                 break;
             }
             default: {
-                throw new IllegalStateException("Unrecognized del dup type: " + exonicDelDupType);
+                throw new IllegalStateException("Unrecognized del dup type: " + delDupGeneKey.exonicDelDupType());
             }
         }
 

@@ -21,6 +21,20 @@ public class FusionExtractorTest {
     private static final GeneChecker GENE_CHECKER = new GeneChecker(Sets.newHashSet("EGFR", "PDGFRA", "BCR", "MET", "NTRK3"));
 
     @Test
+    public void canDetermineDelDupGeneKey() {
+        assertEquals(generateDelDupGeneKey("EGFR", ExonicDelDupType.FULL_EXONIC_DELETION),
+                FusionExtractor.determineDelDupGeneKey("EGFR", "del exon 27"));
+
+        assertEquals(generateDelDupGeneKey("EGFR", ExonicDelDupType.PARTIAL_EXONIC_DELETION),
+                FusionExtractor.determineDelDupGeneKey("EGFR", "exon 19 del"));
+
+        assertNull(FusionExtractor.determineDelDupGeneKey("EGFR", "dels exon 27"));
+        assertNull(FusionExtractor.determineDelDupGeneKey("EGFR", "del exons 27"));
+        assertNull(FusionExtractor.determineDelDupGeneKey("EGFR", "exon 27 dels"));
+        assertNull(FusionExtractor.determineDelDupGeneKey("EGFR", "exons 27 del"));
+    }
+
+    @Test
     public void canFilterInCatalog() {
         FusionExtractor fusionExtractorIgnore = buildTestFusionExtractor(GENE_CHECKER, Sets.newHashSet(), DriverInconsistencyMode.IGNORE);
         FusionPair fusionIgnore = fusionExtractorIgnore.extract("NTRK3", EventType.FUSION_PAIR, "BCR-NTRK3 Fusion");
@@ -160,5 +174,10 @@ public class FusionExtractorTest {
     private static FusionExtractor buildTestFusionExtractor(@NotNull GeneChecker geneChecker, @NotNull Set<String> exonicDelDupKeyPhrases,
             @NotNull DriverInconsistencyMode annotation) {
         return new FusionExtractor(geneChecker, KnownFusionCacheTestFactory.create37(), exonicDelDupKeyPhrases, annotation);
+    }
+
+    @NotNull
+    private static DelDupGeneKey generateDelDupGeneKey(@NotNull String gene, @NotNull ExonicDelDupType exonicDelDupType) {
+        return ImmutableDelDupGeneKey.builder().gene(gene).exonicDelDupType(exonicDelDupType).build();
     }
 }

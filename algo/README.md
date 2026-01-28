@@ -447,7 +447,8 @@ The big files are the hg19 and hg37 reference genomes. They are too big to store
 elsewhere.
 
 ## Version History and Download Links
-
+- Upcoming
+  - Add logic for interpret the exonicDelDupTypes fusions 
 - [8.6.0](https://github.com/hartwigmedical/serve/releases/tag/8.6.0)
     - Add phase to ActionableTrial
 - [8.5.1](https://github.com/hartwigmedical/serve/releases/tag/8.5.1)

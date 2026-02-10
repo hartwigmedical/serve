@@ -5,11 +5,12 @@ import java.util.Map;
 import com.google.common.collect.Maps;
 import com.hartwig.serve.ckb.classification.CkbConstants;
 
-public final class CkbVariantCurationFactory {
+public final class CkbCurationFactory {
 
     static final Map<CkbVariantCurationEntry, CkbVariantCurationEntry> VARIANT_MAPPINGS = Maps.newHashMap();
+    static final Map<String, String> GENE_MAPPINGS = Maps.newHashMap();
 
-    private CkbVariantCurationFactory() {
+    private CkbCurationFactory() {
     }
 
     static {
@@ -28,5 +29,8 @@ public final class CkbVariantCurationFactory {
                 new CkbVariantCurationEntry(CkbConstants.NO_GENE, CkbConstants.TMB_HIGH));
         VARIANT_MAPPINGS.put(new CkbVariantCurationEntry("TMB", "low"),
                 new CkbVariantCurationEntry(CkbConstants.NO_GENE, CkbConstants.TMB_LOW));
+
+        // Gene name differs between CKB and HMF gene panel.
+        GENE_MAPPINGS.put("CDC50A", "TMEM30A");
     }
 }

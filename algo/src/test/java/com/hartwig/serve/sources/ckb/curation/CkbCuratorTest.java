@@ -40,14 +40,14 @@ public class CkbCuratorTest {
 
     @Test
     public void canCurateVariantsBasedOnGeneMapping() {
-        String firstGeneCurationKey = CkbCurationFactory.GENE_MAPPINGS.keySet().iterator().next();
-        CkbEntry entry = CkbTestFactory.createEntryWithGene(firstGeneCurationKey);
+        String firstCurationKey = CkbCurationFactory.GENE_MAPPINGS.keySet().iterator().next();
+        CkbEntry entry = CkbTestFactory.createEntryWithGene(firstCurationKey);
 
         List<CkbEntry> entries = curator.run(Lists.newArrayList(entry));
 
-        Variant firstVariant = entries.get(1).variants().get(0);
+        Variant firstVariant = entries.get(0).variants().get(0);
 
-        String firstCuratedValue = CkbCurationFactory.GENE_MAPPINGS.get(firstGeneCurationKey);
+        String firstCuratedValue = CkbCurationFactory.GENE_MAPPINGS.get(firstCurationKey);
         assertEquals(firstCuratedValue, firstVariant.gene().geneSymbol());
 
         curator.reportUnusedVariantCurationEntries();

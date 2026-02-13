@@ -448,6 +448,8 @@ elsewhere.
 
 ## Version History and Download Links
 
+- [Upcoming]
+  - Add possibility to map CKB gene names
 - [8.6.0](https://github.com/hartwigmedical/serve/releases/tag/8.6.0)
     - Add phase to ActionableTrial
 - [8.5.1](https://github.com/hartwigmedical/serve/releases/tag/8.5.1)

@@ -23,16 +23,32 @@ public class CkbCuratorTest {
 
     @Test
     public void canCurateVariants() {
-        CkbVariantCurationEntry firstCurationKey = CkbVariantCurationFactory.VARIANT_MAPPINGS.keySet().iterator().next();
+        CkbVariantCurationEntry firstCurationKey = CkbCurationFactory.VARIANT_MAPPINGS.keySet().iterator().next();
         CkbEntry entry = CkbTestFactory.createEntryWithGeneAndVariant(firstCurationKey.geneSymbol(), firstCurationKey.variant());
 
         List<CkbEntry> entries = curator.run(Lists.newArrayList(entry));
 
         Variant firstVariant = entries.get(0).variants().get(0);
 
-        CkbVariantCurationEntry firstCuratedValue = CkbVariantCurationFactory.VARIANT_MAPPINGS.get(firstCurationKey);
+        CkbVariantCurationEntry firstCuratedValue = CkbCurationFactory.VARIANT_MAPPINGS.get(firstCurationKey);
         assertEquals(firstCuratedValue.geneSymbol(), firstVariant.gene().geneSymbol());
         assertEquals(firstCuratedValue.variant(), firstVariant.variant());
+
+        curator.reportUnusedVariantCurationEntries();
+    }
+
+
+    @Test
+    public void canCurateVariantsBasedOnGeneMapping() {
+        String firstCurationKey = CkbCurationFactory.GENE_MAPPINGS.keySet().iterator().next();
+        CkbEntry entry = CkbTestFactory.createEntryWithGene(firstCurationKey);
+
+        List<CkbEntry> entries = curator.run(Lists.newArrayList(entry));
+
+        Variant firstVariant = entries.get(0).variants().get(0);
+
+        String firstCuratedValue = CkbCurationFactory.GENE_MAPPINGS.get(firstCurationKey);
+        assertEquals(firstCuratedValue, firstVariant.gene().geneSymbol());
 
         curator.reportUnusedVariantCurationEntries();
     }

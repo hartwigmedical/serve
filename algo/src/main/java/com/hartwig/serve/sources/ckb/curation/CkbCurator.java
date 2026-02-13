@@ -83,9 +83,9 @@ public class CkbCurator {
         evaluatedVariantCurationEntries.add(entry);
 
         Variant curatedVariant = variant;
-        if (CkbVariantCurationFactory.VARIANT_MAPPINGS.containsKey(entry)) {
-            String mappedVariant = CkbVariantCurationFactory.VARIANT_MAPPINGS.get(entry).variant();
-            String mappedGeneSymbol = CkbVariantCurationFactory.VARIANT_MAPPINGS.get(entry).geneSymbol();
+        if (CkbCurationFactory.VARIANT_MAPPINGS.containsKey(entry)) {
+            String mappedVariant = CkbCurationFactory.VARIANT_MAPPINGS.get(entry).variant();
+            String mappedGeneSymbol = CkbCurationFactory.VARIANT_MAPPINGS.get(entry).geneSymbol();
 
             LOGGER.debug("Mapping variant '{}' on '{}' to '{}' on '{}'",
                     entry.variant(),
@@ -97,6 +97,13 @@ public class CkbCurator {
                     .from(curatedVariant)
                     .gene(ImmutableGene.builder().from(variant.gene()).geneSymbol(mappedGeneSymbol).build())
                     .variant(mappedVariant)
+                    .build();
+        } else if (CkbCurationFactory.GENE_MAPPINGS.containsKey(geneSymbol)) {
+            String mappedGeneSymbol = CkbCurationFactory.GENE_MAPPINGS.get(geneSymbol);
+            LOGGER.debug("Mapping gene '{}' to '{}'", geneSymbol, mappedGeneSymbol);
+            curatedVariant = ImmutableVariant.builder()
+                    .from(curatedVariant)
+                    .gene(ImmutableGene.builder().from(variant.gene()).geneSymbol(mappedGeneSymbol).build())
                     .build();
         }
 
@@ -149,7 +156,7 @@ public class CkbCurator {
 
     public void reportUnusedVariantCurationEntries() {
         int unusedEntryCount = 0;
-        for (CkbVariantCurationEntry entry : CkbVariantCurationFactory.VARIANT_MAPPINGS.keySet()) {
+        for (CkbVariantCurationEntry entry : CkbCurationFactory.VARIANT_MAPPINGS.keySet()) {
             if (!evaluatedVariantCurationEntries.contains(entry)) {
                 unusedEntryCount++;
                 LOGGER.warn(" Entry '{}' hasn't been used during CKB curation", entry);
@@ -159,7 +166,7 @@ public class CkbCurator {
         LOGGER.debug(" Found {} unused variant CKB curation entries. {} keys have been requested against {} curation entries",
                 unusedEntryCount,
                 evaluatedVariantCurationEntries.size(),
-                CkbVariantCurationFactory.VARIANT_MAPPINGS.size());
+                CkbCurationFactory.VARIANT_MAPPINGS.size());
     }
 
     public void reportUnusedFacilityCurationManualEntries() {

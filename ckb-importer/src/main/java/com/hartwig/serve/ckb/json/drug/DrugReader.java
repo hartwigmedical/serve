@@ -183,6 +183,7 @@ public class DrugReader extends CkbJsonDirectoryReader<JsonDrug> {
                     .references(extractEvidenceReferences(evidenceObject.getAsJsonArray("references")))
                     .ampCapAscoEvidenceLevel(Json.string(evidenceObject, "ampCapAscoEvidenceLevel"))
                     .ampCapAscoInferredTier(Json.string(evidenceObject, "ampCapAscoInferredTier"))
+                    .ageGroups(Json.stringList(evidenceObject, "ageGroups"))
                     .build());
         }
         return evidences;

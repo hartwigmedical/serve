@@ -1,6 +1,7 @@
 package com.hartwig.serve.ckb.dao;
 
 import com.hartwig.serve.ckb.database.tables.Evidence;
+import com.hartwig.serve.ckb.database.tables.Evidenceagegroup;
 import com.hartwig.serve.ckb.database.tables.Evidencereference;
 import com.hartwig.serve.ckb.database.tables.Indicationevidence;
 import com.hartwig.serve.ckb.database.tables.Therapyevidence;
@@ -91,6 +92,12 @@ class EvidenceDAO {
                             Treatmentapproachevidence.TREATMENTAPPROACHEVIDENCE.EVIDENCEID,
                             Treatmentapproachevidence.TREATMENTAPPROACHEVIDENCE.TREATMENTAPPROACHEVIDENCEID)
                     .values(id, treatmentApproachId)
+                    .execute();
+        }
+
+        for (String ageGroup : evidence.ageGroups()) {
+            context.insertInto(Evidenceagegroup.EVIDENCEAGEGROUP, Evidenceagegroup.EVIDENCEAGEGROUP.EVIDENCEID, Evidenceagegroup.EVIDENCEAGEGROUP.AGEGROUP)
+                    .values(id, ageGroup)
                     .execute();
         }
 

@@ -75,6 +75,7 @@ final class MolecularProfileDatamodelChecker {
         map.put("references", true);
         map.put("ampCapAscoEvidenceLevel", true);
         map.put("ampCapAscoInferredTier", true);
+        map.put("ageGroups", true);
         map.put("relevantTreatmentApproaches", true);
 
         return new JsonDatamodelChecker("MolecularProfileComplexMolecularProfileEvidenceListObject", map);
@@ -154,6 +155,7 @@ final class MolecularProfileDatamodelChecker {
         map.put("references", true);
         map.put("ampCapAscoEvidenceLevel", true);
         map.put("ampCapAscoInferredTier", true);
+        map.put("ageGroups", true);
         map.put("relevantTreatmentApproaches", true);
 
         return new JsonDatamodelChecker("MolecularProfileTreatmentApproachEvidenceListObject", map);
@@ -195,6 +197,7 @@ final class MolecularProfileDatamodelChecker {
         map.put("references", true);
         map.put("ampCapAscoEvidenceLevel", true);
         map.put("ampCapAscoInferredTier", true);
+        map.put("ageGroups", true);
         map.put("relevantTreatmentApproaches", true);
 
         return new JsonDatamodelChecker("MolecularProfileVariantLevelEvidenceObject", map);
@@ -224,6 +227,7 @@ final class MolecularProfileDatamodelChecker {
         map.put("references", true);
         map.put("ampCapAscoEvidenceLevel", true);
         map.put("ampCapAscoInferredTier", true);
+        map.put("ageGroups", true);
 
         return new JsonDatamodelChecker("MolecularProfileExtendedEvidenceListObject", map);
     }

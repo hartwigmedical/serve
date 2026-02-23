@@ -131,6 +131,7 @@ public class MolecularProfileReader extends CkbJsonDirectoryReader<JsonMolecular
                     .references(extractReferences(complexMolecularProfileEvidenceJsonObject.getAsJsonArray("references")))
                     .ampCapAscoEvidenceLevel(Json.string(complexMolecularProfileEvidenceJsonObject, "ampCapAscoEvidenceLevel"))
                     .ampCapAscoInferredTier(Json.string(complexMolecularProfileEvidenceJsonObject, "ampCapAscoInferredTier"))
+                    .ageGroups(Json.stringList(complexMolecularProfileEvidenceJsonObject, "ageGroups"))
                     .treatmentApproaches(extractRelevantTreatmentApproaches(complexMolecularProfileEvidenceJsonObject.getAsJsonArray(
                             "relevantTreatmentApproaches")))
                     .build());

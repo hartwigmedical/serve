@@ -32,6 +32,7 @@ public class ActionableFunctionsTest {
         assertTrue(ActionableFunctions.hasAgeGroupToInclude(List.of("Senior", "Adult", "Child")));
         assertTrue(ActionableFunctions.hasAgeGroupToInclude(List.of("Senior", "Child")));
         assertTrue(ActionableFunctions.hasAgeGroupToInclude(List.of("Senior", "Adult")));
+        assertTrue(ActionableFunctions.hasAgeGroupToInclude(List.of()));
     }
 
     @Test

@@ -158,7 +158,6 @@ CREATE TABLE `evidence`
     `approvalStatus` varchar(50) NOT NULL,
     `ampCapAscoEvidenceLevel` varchar(50) NOT NULL,
     `ampCapAscoInferredTier` varchar(50) NOT NULL,
-    `ageGroups` varchar(50) NOT NULL,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`ckbEntryId`) REFERENCES `ckbEntry`(`id`)
 );

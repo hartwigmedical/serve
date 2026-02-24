@@ -39,6 +39,7 @@ class EvidenceDAO {
         context.deleteFrom(Indicationevidence.INDICATIONEVIDENCE).execute();
         context.deleteFrom(Treatmentapproachevidence.TREATMENTAPPROACHEVIDENCE).execute();
         context.deleteFrom(Evidence.EVIDENCE).execute();
+        context.deleteFrom(Evidenceagegroup.EVIDENCEAGEGROUP).execute();
     }
 
     public void write(@NotNull com.hartwig.serve.ckb.datamodel.evidence.Evidence evidence, int ckbEntryId) {

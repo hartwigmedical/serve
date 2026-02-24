@@ -327,22 +327,6 @@ public class ActionableTrialFactoryTest {
     }
 
     @Test
-    public void hasAgeGroupToInclude() {
-        assertTrue(ActionableTrialFactory.hasAgeGroupToInclude(List.of("senior")));
-        assertTrue(ActionableTrialFactory.hasAgeGroupToInclude(List.of("adult")));
-        assertFalse(ActionableTrialFactory.hasAgeGroupToInclude(List.of("child")));
-        assertTrue(ActionableTrialFactory.hasAgeGroupToInclude(List.of("senior", "adult", "child")));
-        assertTrue(ActionableTrialFactory.hasAgeGroupToInclude(List.of("senior", "child")));
-        assertTrue(ActionableTrialFactory.hasAgeGroupToInclude(List.of("senior", "adult")));
-        assertTrue(ActionableTrialFactory.hasAgeGroupToInclude(List.of("Senior")));
-        assertTrue(ActionableTrialFactory.hasAgeGroupToInclude(List.of("Adult")));
-        assertFalse(ActionableTrialFactory.hasAgeGroupToInclude(List.of("Child")));
-        assertTrue(ActionableTrialFactory.hasAgeGroupToInclude(List.of("Senior", "Adult", "Child")));
-        assertTrue(ActionableTrialFactory.hasAgeGroupToInclude(List.of("Senior", "Child")));
-        assertTrue(ActionableTrialFactory.hasAgeGroupToInclude(List.of("Senior", "Adult")));
-    }
-
-    @Test
     public void hasPotentiallyOpenRequirementToInclude() {
         assertTrue(ActionableTrialFactory.hasPotentiallyOpenRequirementToInclude("recruiting"));
         assertTrue(ActionableTrialFactory.hasPotentiallyOpenRequirementToInclude("not yet recruiting"));

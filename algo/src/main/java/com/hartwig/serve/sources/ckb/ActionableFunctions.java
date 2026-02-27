@@ -1,5 +1,6 @@
 package com.hartwig.serve.sources.ckb;
 
+import java.util.List;
 import java.util.Set;
 
 import com.google.common.annotations.VisibleForTesting;
@@ -19,7 +20,23 @@ final class ActionableFunctions {
 
     private static final Logger LOGGER = LogManager.getLogger(ActionableFunctions.class);
 
+    private static final Set<String> AGE_GROUPS_TO_INCLUDE = Set.of("adult", "senior");
+
     private ActionableFunctions() {
+    }
+
+    @VisibleForTesting
+    static boolean hasAgeGroupToInclude(@NotNull List<String> ageGroups) {
+        if (ageGroups.isEmpty()) {
+            return true;
+        }
+
+        for (String age : ageGroups) {
+            if (AGE_GROUPS_TO_INCLUDE.contains(age.toLowerCase())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Nullable

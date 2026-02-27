@@ -131,6 +131,7 @@ final class VariantDatamodelChecker {
         map.put("references", true);
         map.put("ampCapAscoEvidenceLevel", true);
         map.put("ampCapAscoInferredTier", true);
+        map.put("ageGroups", true);
 
         return new JsonDatamodelChecker("VariantEvidenceObject", map);
     }
@@ -180,6 +181,7 @@ final class VariantDatamodelChecker {
         map.put("references", true);
         map.put("ampCapAscoEvidenceLevel", true);
         map.put("ampCapAscoInferredTier", true);
+        map.put("ageGroups", true);
 
         return new JsonDatamodelChecker("VariantExtendedEvidenceObject", map);
     }

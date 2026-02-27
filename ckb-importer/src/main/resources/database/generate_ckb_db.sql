@@ -377,8 +377,17 @@ CREATE TABLE `indicationClinicalTrial`
     FOREIGN KEY (`indicationId`) REFERENCES `indication`(`id`)
 );
 
-DROP TABLE IF EXISTS `ageGroup`;
-CREATE TABLE `ageGroup`
+DROP TABLE IF EXISTS `evidenceAgeGroup`;
+CREATE TABLE `evidenceAgeGroup`
+(   `id` int NOT NULL AUTO_INCREMENT,
+    `evidenceId` int NOT NULL,
+    `ageGroup` varchar(50) NOT NULL,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`evidenceId`) REFERENCES `evidence`(`id`)
+);
+
+DROP TABLE IF EXISTS `clinicalTrialAgeGroup`;
+CREATE TABLE `clinicalTrialAgeGroup`
 (   `id` int NOT NULL AUTO_INCREMENT,
     `clinicalTrialId` int NOT NULL,
     `ageGroup` varchar(50) NOT NULL,

@@ -46,5 +46,8 @@ public abstract class EvidenceInfo {
     public abstract String ampCapAscoInferredTier();
 
     @NotNull
+    public abstract List<String> ageGroups();
+
+    @NotNull
     public abstract List<TreatmentApproachInfo> treatmentApproaches();
 }

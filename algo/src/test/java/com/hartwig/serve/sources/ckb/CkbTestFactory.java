@@ -163,6 +163,7 @@ public final class CkbTestFactory {
                 .approvalStatus(approvalStatus)
                 .ampCapAscoEvidenceLevel(level)
                 .ampCapAscoInferredTier("")
+                .ageGroups(List.of())
                 .references(List.of())
                 .build();
     }

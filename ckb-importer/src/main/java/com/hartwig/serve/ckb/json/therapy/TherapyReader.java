@@ -116,6 +116,7 @@ public class TherapyReader extends CkbJsonDirectoryReader<JsonTherapy> {
                     .references(extractReferences(evidenceJsonObject.getAsJsonArray("references")))
                     .ampCapAscoEvidenceLevel(Json.string(evidenceJsonObject, "ampCapAscoEvidenceLevel"))
                     .ampCapAscoInferredTier(Json.string(evidenceJsonObject, "ampCapAscoInferredTier"))
+                    .ageGroups(Json.stringList(evidenceJsonObject, "ageGroups"))
                     .build());
         }
         return evidences;

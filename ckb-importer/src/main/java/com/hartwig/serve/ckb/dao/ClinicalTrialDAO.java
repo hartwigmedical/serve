@@ -1,7 +1,7 @@
 package com.hartwig.serve.ckb.dao;
 
-import com.hartwig.serve.ckb.database.tables.Agegroup;
 import com.hartwig.serve.ckb.database.tables.Clinicaltrial;
+import com.hartwig.serve.ckb.database.tables.Clinicaltrialagegroup;
 import com.hartwig.serve.ckb.database.tables.Contact;
 import com.hartwig.serve.ckb.database.tables.Indicationclinicaltrial;
 import com.hartwig.serve.ckb.database.tables.Location;
@@ -37,7 +37,7 @@ class ClinicalTrialDAO {
         context.deleteFrom(Location.LOCATION).execute();
 
         context.deleteFrom(Variantrequirementdetail.VARIANTREQUIREMENTDETAIL).execute();
-        context.deleteFrom(Agegroup.AGEGROUP).execute();
+        context.deleteFrom(Clinicaltrialagegroup.CLINICALTRIALAGEGROUP).execute();
 
         context.deleteFrom(Indicationclinicaltrial.INDICATIONCLINICALTRIAL).execute();
         context.deleteFrom(Therapyclinicaltrial.THERAPYCLINICALTRIAL).execute();
@@ -86,7 +86,7 @@ class ClinicalTrialDAO {
         }
 
         for (String ageGroup : clinicalTrial.ageGroups()) {
-            context.insertInto(Agegroup.AGEGROUP, Agegroup.AGEGROUP.CLINICALTRIALID, Agegroup.AGEGROUP.AGEGROUP_)
+            context.insertInto(Clinicaltrialagegroup.CLINICALTRIALAGEGROUP, Clinicaltrialagegroup.CLINICALTRIALAGEGROUP.CLINICALTRIALID, Clinicaltrialagegroup.CLINICALTRIALAGEGROUP.AGEGROUP)
                     .values(id, ageGroup)
                     .execute();
         }

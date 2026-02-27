@@ -108,6 +108,7 @@ final class DrugDatamodelChecker {
         map.put("references", true);
         map.put("ampCapAscoEvidenceLevel", true);
         map.put("ampCapAscoInferredTier", true);
+        map.put("ageGroups", true);
 
         return new JsonDatamodelChecker("DrugClinicalTrialTherapyObject", map);
     }

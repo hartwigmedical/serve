@@ -1,10 +1,12 @@
 package com.hartwig.serve.sources.ckb;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.List;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
@@ -15,6 +17,23 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
 public class ActionableFunctionsTest {
+
+    @Test
+    public void hasAgeGroupToInclude() {
+        assertTrue(ActionableFunctions.hasAgeGroupToInclude(List.of("senior")));
+        assertTrue(ActionableFunctions.hasAgeGroupToInclude(List.of("adult")));
+        assertFalse(ActionableFunctions.hasAgeGroupToInclude(List.of("child")));
+        assertTrue(ActionableFunctions.hasAgeGroupToInclude(List.of("senior", "adult", "child")));
+        assertTrue(ActionableFunctions.hasAgeGroupToInclude(List.of("senior", "child")));
+        assertTrue(ActionableFunctions.hasAgeGroupToInclude(List.of("senior", "adult")));
+        assertTrue(ActionableFunctions.hasAgeGroupToInclude(List.of("Senior")));
+        assertTrue(ActionableFunctions.hasAgeGroupToInclude(List.of("Adult")));
+        assertFalse(ActionableFunctions.hasAgeGroupToInclude(List.of("Child")));
+        assertTrue(ActionableFunctions.hasAgeGroupToInclude(List.of("Senior", "Adult", "Child")));
+        assertTrue(ActionableFunctions.hasAgeGroupToInclude(List.of("Senior", "Child")));
+        assertTrue(ActionableFunctions.hasAgeGroupToInclude(List.of("Senior", "Adult")));
+        assertTrue(ActionableFunctions.hasAgeGroupToInclude(List.of()));
+    }
 
     @Test
     public void canExtractCancerTypeDetails() {

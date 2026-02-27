@@ -1,5 +1,7 @@
 package com.hartwig.serve.sources.ckb;
 
+import static com.hartwig.serve.sources.ckb.ActionableFunctions.hasAgeGroupToInclude;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -48,8 +50,6 @@ class ActionableTrialFactory {
             "enrolling by invitation",
             "enrolling_by_invitation");
     private static final Set<String> VARIANT_REQUIREMENT_TYPES_TO_INCLUDE = Set.of("partial - required", "required");
-
-    private static final Set<String> AGE_GROUPS_TO_INCLUDE = Set.of("adult", "senior");
 
     private static final Set<String> DUTCH_CHILDREN_HOSPITALS = Set.of("PMC",
             "WKZ",
@@ -176,16 +176,6 @@ class ActionableTrialFactory {
             // (trial can be linked to multiple molecular profiles)
             if (entry.profileId() == variantRequirementDetail.profileId() && VARIANT_REQUIREMENT_TYPES_TO_INCLUDE.contains(
                     variantRequirementDetail.requirementType().toLowerCase())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @VisibleForTesting
-    static boolean hasAgeGroupToInclude(@NotNull List<String> ageGroups) {
-        for (String age : ageGroups) {
-            if (AGE_GROUPS_TO_INCLUDE.contains(age.toLowerCase())) {
                 return true;
             }
         }

@@ -35,6 +35,7 @@ public final class EvidenceFactory {
                     .approvalStatus(evidenceInfo.approvalStatus())
                     .ampCapAscoEvidenceLevel(evidenceInfo.ampCapAscoEvidenceLevel())
                     .ampCapAscoInferredTier(evidenceInfo.ampCapAscoInferredTier())
+                    .ageGroups(evidenceInfo.ageGroups())
                     .references(ReferenceFactory.extractReferences(ckbJsonDatabase, evidenceInfo.references()))
                     .build());
         }

@@ -448,6 +448,8 @@ elsewhere.
 
 ## Version History and Download Links
 
+- [Upcoming]
+  - Add ageGroups to evidence datamodels and filter on adult/senior evidence
 - [8.7.0](https://github.com/hartwigmedical/serve/releases/tag/8.7.0)
   - Add possibility to map CKB gene names
 - [8.6.0](https://github.com/hartwigmedical/serve/releases/tag/8.6.0)

@@ -1,5 +1,7 @@
 package com.hartwig.serve.sources.ckb;
 
+import static com.hartwig.serve.sources.ckb.ActionableFunctions.hasAgeGroupToInclude;
+
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
@@ -88,7 +90,7 @@ class EfficacyEvidenceFactory {
             @NotNull String combinedSourceEvent, @NotNull String combinedSourceGenes) {
         Set<EfficacyEvidence> efficacyEvidences = Sets.newHashSet();
 
-        for (Evidence evidence : evidencesWithUsableType(entry.evidences())) {
+        for (Evidence evidence : evidenceToInclude(entry.evidences())) {
             EvidenceLevelDetails evidenceLevelDetails = resolveEvidenceLevelDetails(evidence.approvalStatus());
             EvidenceDirection direction = resolveDirection(evidence.responseType());
             EvidenceLevel level = resolveLevel(evidence.ampCapAscoEvidenceLevel(), evidenceLevelDetails, direction);
@@ -168,10 +170,10 @@ class EfficacyEvidenceFactory {
     }
 
     @NotNull
-    private static List<Evidence> evidencesWithUsableType(@NotNull List<Evidence> evidences) {
+    private static List<Evidence> evidenceToInclude(@NotNull List<Evidence> evidences) {
         List<Evidence> filtered = Lists.newArrayList();
         for (Evidence evidence : evidences) {
-            if (hasUsableEvidenceType(evidence.evidenceType())) {
+            if (hasUsableEvidenceType(evidence.evidenceType()) && hasAgeGroupToInclude(evidence.ageGroups())) {
                 filtered.add(evidence);
             }
         }

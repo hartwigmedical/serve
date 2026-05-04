@@ -24,7 +24,7 @@ SERVE supports the ingestion of the following knowledgebases:
 - [CGI](https://www.cancergenomeinterpreter.org) - general purpose knowledgebase that is supported through [VICC](http://cancervariants.org)
 - [CIViC](https://civicdb.org) - general purpose knowledgebase that is supported through [VICC](http://cancervariants.org)
 - [CKB CORE](https://ckb.jax.org) - part of CKB's knowledgebase that is supported through [VICC](http://cancervariants.org)
-- [CKB FLEX](https://ckbhome.jax.org) - The complete CKB clinical database.
+- [CKB FLEX](https://ckbhome.genomenon.com/) - The complete CKB clinical database.
 - [OncoKB](https://www.oncokb.org) - general purpose knowledgebase that is supported through [VICC](http://cancervariants.org)
 - [DoCM](http://www.docm.info) - database containing pathogenic mutations in cancer
 - HMF Cohort - a database of recurrent somatic mutations in cancer-related genes from the Hartwig database.

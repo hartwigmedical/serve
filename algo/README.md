@@ -23,7 +23,7 @@ SERVE supports the ingestion of the following knowledgebases:
 
 - [CGI](https://www.cancergenomeinterpreter.org) - general purpose knowledgebase that is supported through [VICC](http://cancervariants.org)
 - [CIViC](https://civicdb.org) - general purpose knowledgebase that is supported through [VICC](http://cancervariants.org)
-- [CKB CORE](https://ckb.jax.org) - part of CKB's knowledgebase that is supported through [VICC](http://cancervariants.org)
+- [CKB CORE](https://ckbhome.genomenon.com/) - part of CKB's knowledgebase that is supported through [VICC](http://cancervariants.org)
 - [CKB FLEX](https://ckbhome.genomenon.com/) - The complete CKB clinical database.
 - [OncoKB](https://www.oncokb.org) - general purpose knowledgebase that is supported through [VICC](http://cancervariants.org)
 - [DoCM](http://www.docm.info) - database containing pathogenic mutations in cancer

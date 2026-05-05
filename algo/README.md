@@ -448,6 +448,8 @@ elsewhere.
 
 ## Version History and Download Links
 
+- Upcoming
+  - Change link of https://ckb.jax.org to https://ckbhome.genomenon.com/
 - [8.8.0](https://github.com/hartwigmedical/serve/releases/tag/8.8.0)
   - Add ageGroups to evidence datamodels and filter on adult/senior evidence
 - [8.7.0](https://github.com/hartwigmedical/serve/releases/tag/8.7.0)

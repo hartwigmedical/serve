@@ -204,7 +204,7 @@ final class CkbMolecularCriteriaExtractor {
     @NotNull
     private static ActionableEvent toActionableEvent(@NotNull CkbEntry entry) {
         String sourceEvent = combinedSourceEvent(entry);
-        String sourceUrl = "https://ckbhome.jax.org/profileResponse/advancedEvidenceFind?molecularProfileId=" + entry.profileId();
+        String sourceUrl = "https://ckbhome.genomenon.com/profileResponse/advancedEvidenceFind?molecularProfileId=" + entry.profileId();
         LocalDate sourceDate = entry.createDate();
         return ImmutableActionableEventImpl.builder().sourceDate(sourceDate).sourceEvent(sourceEvent).sourceUrls(Set.of(sourceUrl)).build();
     }

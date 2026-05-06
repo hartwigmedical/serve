@@ -1,6 +1,6 @@
 # CKB-Importer
 
-[CKB](https://ckbhome.jax.org) - **C**linical **K**nowledge**b**ase - is a cancer knowledgebase provided by Jackson Lab. 
+[CKB](https://ckbhome.genomenon.com/) - **C**linical **K**nowledge**b**ase - is a cancer knowledgebase provided by Jackson Lab. 
  
  This module imports the data that is provided in json format (CKB FLEX), and in addition does the following:
   *  For each molecular profile, determines the event type as defined by the [SERVE](../algo/README.md) datamodel.

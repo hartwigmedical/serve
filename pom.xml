@@ -36,7 +36,7 @@
         <apache.log4j.version>2.17.1</apache.log4j.version>
         <jooq.version>3.15.5</jooq.version>
         <mysqlconnector.version>8.0.16</mysqlconnector.version>
-        <jackson.version>2.16.1</jackson.version>
+        <jackson.version>2.21.2</jackson.version>
         <mysql.socket.factory.version>1.20.1</mysql.socket.factory.version>
 
         <junit.version>4.13.1</junit.version>

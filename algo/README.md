@@ -23,8 +23,8 @@ SERVE supports the ingestion of the following knowledgebases:
 
 - [CGI](https://www.cancergenomeinterpreter.org) - general purpose knowledgebase that is supported through [VICC](http://cancervariants.org)
 - [CIViC](https://civicdb.org) - general purpose knowledgebase that is supported through [VICC](http://cancervariants.org)
-- [CKB CORE](https://ckb.jax.org) - part of CKB's knowledgebase that is supported through [VICC](http://cancervariants.org)
-- [CKB FLEX](https://ckbhome.jax.org) - The complete CKB clinical database.
+- [CKB CORE](https://ckbhome.genomenon.com/) - part of CKB's knowledgebase that is supported through [VICC](http://cancervariants.org)
+- [CKB FLEX](https://ckbhome.genomenon.com/) - The complete CKB clinical database.
 - [OncoKB](https://www.oncokb.org) - general purpose knowledgebase that is supported through [VICC](http://cancervariants.org)
 - [DoCM](http://www.docm.info) - database containing pathogenic mutations in cancer
 - HMF Cohort - a database of recurrent somatic mutations in cancer-related genes from the Hartwig database.
@@ -448,6 +448,9 @@ elsewhere.
 
 ## Version History and Download Links
 
+- 8.9.0
+  - Change link of https://ckb.jax.org to https://ckbhome.genomenon.com/
+  - Update version of jackson 
 - [8.8.0](https://github.com/hartwigmedical/serve/releases/tag/8.8.0)
   - Add ageGroups to evidence datamodels and filter on adult/senior evidence
 - [8.7.0](https://github.com/hartwigmedical/serve/releases/tag/8.7.0)

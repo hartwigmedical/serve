@@ -49,6 +49,8 @@ public interface ServeConfig {
     String USE_HARTWIG_DRIVER_GENES = "use_hartwig_driver_genes";
     String USE_HARTWIG_CURATED_GENES = "use_hartwig_curated_genes";
     String HARTWIG_CURATED_GENE_TSV = "hartwig_curated_gene_tsv";
+    String USE_CURATED_TRIALS = "use_curated_trials";
+    String CURATED_TRIALS_JSON = "curated_trials_json";
 
     // Additional config for knowledge generation
     String ENSEMBL_DATA_DIR_37 = "ensembl_data_dir_37";
@@ -98,6 +100,8 @@ public interface ServeConfig {
         options.addOption(USE_HARTWIG_DRIVER_GENES, false, "If provided, Hartwig Driver Genes will be used as a source in SERVE");
         options.addOption(USE_HARTWIG_CURATED_GENES, false, "If provided, Hartwig Curated Genes will be used as a source in SERVE");
         options.addOption(HARTWIG_CURATED_GENE_TSV, true, "Path to the Hartwig Curated Genes input TSV");
+        options.addOption(USE_CURATED_TRIALS, false, "If provided, curated trials will be used as a source in SERVE");
+        options.addOption(CURATED_TRIALS_JSON, true, "Path to the curated trials JSON file");
 
         options.addOption(ENSEMBL_DATA_DIR_37, true, "Ensembl data file directory for ref genome V37");
         options.addOption(ENSEMBL_DATA_DIR_38, true, "Ensembl data file directory for ref genome V38");
@@ -179,6 +183,11 @@ public interface ServeConfig {
 
     String hartwigCuratedGeneTsv();
 
+    boolean useCuratedTrials();
+
+    @NotNull
+    String curatedTrialsJson();
+
     @NotNull
     String ensemblDataDir37();
 
@@ -228,6 +237,7 @@ public interface ServeConfig {
         boolean useHartwigCuratedHotspots = cmd.hasOption(USE_HARTWIG_CURATED_HOTSPOTS);
         boolean useHartwigDriverGenes = cmd.hasOption(USE_HARTWIG_DRIVER_GENES);
         boolean useHartwigCuratedGenes = cmd.hasOption(USE_HARTWIG_CURATED_GENES);
+        boolean useCuratedTrials = cmd.hasOption(USE_CURATED_TRIALS);
 
         return ImmutableServeConfig.builder()
                 .useVicc(useVicc)
@@ -253,6 +263,8 @@ public interface ServeConfig {
                 .useHartwigDriverGenes(useHartwigDriverGenes)
                 .useHartwigCuratedGenes(useHartwigCuratedGenes)
                 .hartwigCuratedGeneTsv(useHartwigCuratedGenes ? nonOptionalFile(cmd, HARTWIG_CURATED_GENE_TSV) : NOT_APPLICABLE)
+                .useCuratedTrials(cmd.hasOption(USE_CURATED_TRIALS))
+                .curatedTrialsJson(useCuratedTrials ? nonOptionalFile(cmd, CURATED_TRIALS_JSON) : NOT_APPLICABLE)
                 .ensemblDataDir37(nonOptionalDir(cmd, ENSEMBL_DATA_DIR_37))
                 .ensemblDataDir38(nonOptionalDir(cmd, ENSEMBL_DATA_DIR_38))
                 .refGenome37FastaFile(nonOptionalFile(cmd, REF_GENOME_37_FASTA_FILE))

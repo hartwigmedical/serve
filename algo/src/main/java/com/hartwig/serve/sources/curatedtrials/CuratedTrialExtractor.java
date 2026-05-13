@@ -1,12 +1,11 @@
 package com.hartwig.serve.sources.curatedtrials;
 
-import java.util.HashSet;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import com.hartwig.serve.datamodel.Knowledgebase;
-import com.hartwig.serve.datamodel.molecular.MolecularCriterium;
 import com.hartwig.serve.datamodel.trial.ActionableTrial;
 import com.hartwig.serve.datamodel.trial.ImmutableActionableTrial;
 import com.hartwig.serve.datamodel.trial.Phase;
@@ -28,28 +27,27 @@ public class CuratedTrialExtractor {
         ProgressTracker tracker = new ProgressTracker("CuratedTrials", entries.size());
 
         for (CuratedTrialEntry entry : entries) {
-
             if (entry.anyMolecularCriteria().isEmpty()) {
                 LOGGER.warn("Curated trial '{}' has no molecular criteria, skipping", entry.trialId());
                 tracker.update();
                 continue;
             }
 
-            for (MolecularCriterium criterium : entry.anyMolecularCriteria()) {
-                actionableTrials.add(ImmutableActionableTrial.builder()
-                        .source(Knowledgebase.CURATED_TRIALS)
-                        .nctId(null)
-                        .title(entry.title())
-                        .acronym(entry.acronym())
-                        .phase(Phase.UNKNOWN)
-                        .countries(entry.countries())
-                        .therapyNames(entry.therapyNames())
-                        .genderCriterium(entry.genderCriterium())
-                        .indications(entry.indications())
-                        .anyMolecularCriteria(Set.of(criterium))
-                        .urls(entry.urls())
-                        .build());
-            }
+            // Put ALL molecular criteria into a single ActionableTrial as a Set
+            // This matches how consolidateTrialsForNctId expects trials to be structured
+            actionableTrials.add(ImmutableActionableTrial.builder()
+                    .source(Knowledgebase.CURATED_TRIALS)
+                    .nctId(entry.trialId())
+                    .title(entry.title())
+                    .acronym(entry.acronym())
+                    .phase(Phase.UNKNOWN)
+                    .countries(entry.countries())
+                    .therapyNames(entry.therapyNames())
+                    .genderCriterium(entry.genderCriterium())
+                    .indications(entry.indications())
+                    .anyMolecularCriteria(new HashSet<>(entry.anyMolecularCriteria()))
+                    .urls(entry.urls())
+                    .build());
 
             tracker.update();
         }

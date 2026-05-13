@@ -19,7 +19,7 @@ import htsjdk.samtools.reference.IndexedFastaSequenceFile;
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class })
 public abstract class RefGenomeResource {
 
-    @NotNull
+    @Nullable
     public abstract IndexedFastaSequenceFile refSequence();
 
     @NotNull

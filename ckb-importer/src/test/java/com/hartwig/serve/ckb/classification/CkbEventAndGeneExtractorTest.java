@@ -16,11 +16,9 @@ public class CkbEventAndGeneExtractorTest {
         assertEquals("EML4 - RET",
                 CkbEventAndGeneExtractor.extractGene(CkbTestFactory.createVariant("EML4", "EML4 - RET", "EML4 - RET", "fusion")));
 
-        // We ignore NO_GENE case
         assertEquals(CkbConstants.NO_GENE,
                 CkbEventAndGeneExtractor.extractGene(CkbTestFactory.createVariant(CkbConstants.NO_GENE, "full_name", "variant", null)));
 
-        // We ignore unmappable genes case
         String firstUnmappableGene = CkbConstants.UNMAPPABLE_GENES.iterator().next();
         assertEquals(firstUnmappableGene,
                 CkbEventAndGeneExtractor.extractGene(CkbTestFactory.createVariant(firstUnmappableGene, "full_name", "variant", null)));

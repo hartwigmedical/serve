@@ -62,7 +62,12 @@ public class ExtractionResultWriter {
                     entry.getValue().knownEvents() != null ? entry.getValue().knownEvents().hotspots() : Sets.newHashSet();
             String hotspotVcf = KnownHotspotVCF.knownHotspotVcfPath(outputDir, refGenome);
             LOGGER.info(" Writing {} known hotspots to {}", hotspots.size(), hotspotVcf);
-            KnownHotspotVCF.write(hotspotVcf, refGenomeManager.refSequenceForRefGenome(refGenome), hotspots);
+
+            if (refGenomeManager.refSequenceForRefGenome(refGenome) != null) {
+                KnownHotspotVCF.write(hotspotVcf, refGenomeManager.refSequenceForRefGenome(refGenome), hotspots);
+            } else {
+                LOGGER.warn("Skipping hotspot VCF writing for {} - no ref sequence available (skip_variant_resolving mode)", refGenome);
+            }
         }
 
         // Event interpretation TSV is generated for internal analysis of SERVE. We assume they are identical per ref genome.

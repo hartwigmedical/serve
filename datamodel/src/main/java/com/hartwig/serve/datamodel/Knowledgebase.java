@@ -23,7 +23,7 @@ public enum Knowledgebase {
     VICC_CIVIC(RefGenome.V37, "CIViC", EvidenceLevel.B, EvidenceLevel.B),
     VICC_JAX(RefGenome.V37, "CKB Core", EvidenceLevel.B, EvidenceLevel.B),
     VICC_ONCOKB(RefGenome.V37, "OncoKB", EvidenceLevel.B, EvidenceLevel.B),
-    CURATED_TRIALS(RefGenome.V38, "Curated Trials", EvidenceLevel.B, EvidenceLevel.B),
+    CURATED_TRIALS(RefGenome.V37, "Curated Trials", EvidenceLevel.B, EvidenceLevel.B),
     UNKNOWN(RefGenome.V37, "Unknown", EvidenceLevel.D, EvidenceLevel.D);
 
     private static final Logger LOGGER = LogManager.getLogger(Knowledgebase.class);

@@ -126,7 +126,7 @@ class ActionableTrialFactory implements ActionableEntryFactory {
             if (country != null
                     && COUNTRIES_TO_INCLUDE.contains(country.toLowerCase())
                     && hasPotentiallyOpenRequirementToInclude(location.status())) {
-                countries.add(location.country());
+                countries.add(country);
             }
         }
 

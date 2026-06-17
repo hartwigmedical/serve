@@ -36,7 +36,7 @@ public class HartwigTrialExtractor {
             // Put ALL molecular criteria into a single ActionableTrial as a Set
             // This matches how consolidateTrialsForNctId expects trials to be structured
             actionableTrials.add(ImmutableActionableTrial.builder()
-                    .source(Knowledgebase.CURATED_TRIALS)
+                    .source(Knowledgebase.HARTWIG_TRIAL_CURATED)
                     .nctId(entry.trialId())
                     .title(entry.title())
                     .acronym(entry.acronym())
@@ -56,7 +56,7 @@ public class HartwigTrialExtractor {
                 actionableTrials.size(), entries.size());
 
         return ImmutableExtractionResult.builder()
-                .refGenomeVersion(Knowledgebase.CURATED_TRIALS.refGenomeVersion())
+                .refGenomeVersion(Knowledgebase.HARTWIG_TRIAL_CURATED.refGenomeVersion())
                 .eventInterpretations(new HashSet<>())
                 .trials(new ArrayList<>(actionableTrials))
                 .build();

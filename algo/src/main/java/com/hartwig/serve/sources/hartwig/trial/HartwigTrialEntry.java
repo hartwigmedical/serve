@@ -1,13 +1,5 @@
 package com.hartwig.serve.sources.hartwig.trial;
 
-import java.util.List;
-import java.util.Set;
-
-import com.hartwig.serve.datamodel.common.Indication;
-import com.hartwig.serve.datamodel.molecular.MolecularCriterium;
-import com.hartwig.serve.datamodel.trial.Country;
-import com.hartwig.serve.datamodel.trial.GenderCriterium;
-
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -17,29 +9,29 @@ import org.jetbrains.annotations.Nullable;
 public abstract class HartwigTrialEntry {
 
     @NotNull
-    public abstract String trialId();
+    public abstract String nctId();
 
     @NotNull
     public abstract String title();
 
     @NotNull
     public abstract String acronym();
-
+    
     @NotNull
-    public abstract Set<String> therapyNames();
-
-    @NotNull
-    public abstract Set<Country> countries();
-
+    public abstract String country();
+    
     @Nullable
-    public abstract GenderCriterium genderCriterium();
+    public abstract String genderCriterium();
 
     @NotNull
-    public abstract Set<Indication> indications();
+    public abstract String cancerType();
 
     @NotNull
-    public abstract List<MolecularCriterium> anyMolecularCriteria();
+    public abstract String molecularCriteriumType();
 
     @NotNull
-    public abstract Set<String> urls();
+    public abstract String molecularCriterium();
+    
+    @NotNull
+    public abstract String url();
 }

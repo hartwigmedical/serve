@@ -12,41 +12,22 @@ import org.junit.Test;
 
 public class HartwigTrialReaderTest {
 
-    private static final String EXAMPLE_JSON = Resources.getResource("curatedtrials/example.json").getPath();
+    private static final String EXAMPLE_TSV = Resources.getResource("hartwig/hartwig_curated_trials.tsv").getPath();
 
     @Test
     @Ignore
-    public void canReadHartwigTrialsJson() throws IOException {
-        List<HartwigTrialEntry> entries = HartwigTrialReader.read(EXAMPLE_JSON);
-
-        // Only TRIAL-001 should be read — TRIAL-002 has an nctId and must be skipped
+    public void canReadHartwigTrialTsv() throws IOException {
+        List<HartwigTrialEntry> entries = HartwigTrialReader.read(EXAMPLE_TSV);
+        
         assertEquals(1, entries.size());
 
         HartwigTrialEntry entry = entries.get(0);
-        assertEquals("TRIAL-001", entry.trialId());
-        assertEquals("Test Trial", entry.title());
+        assertEquals("NCT00001", entry.nctId());
+        assertEquals("TRIAL-1", entry.title());
         assertEquals("TT", entry.acronym());
-
-        // Therapy
-        assertEquals(1, entry.therapyNames().size());
-        assertEquals("Everolimus", entry.therapyNames().iterator().next());
-
-        // Country
-        assertEquals(1, entry.countries().size());
-        assertEquals("Netherlands", entry.countries().iterator().next().name());
-
-        // Indication
-        assertEquals(1, entry.indications().size());
-        assertEquals("lung non-small cell carcinoma", entry.indications().iterator().next().applicableType().name());
-        assertEquals("3908", entry.indications().iterator().next().applicableType().doid());
-
-        // Molecular criteria
-        assertEquals(1, entry.anyMolecularCriteria().size());
-        assertEquals(1, entry.anyMolecularCriteria().get(0).genes().size());
-
-        var gene = entry.anyMolecularCriteria().get(0).genes().iterator().next();
-        assertEquals("EGFR", gene.gene());
-        assertEquals(com.hartwig.serve.datamodel.molecular.gene.GeneEvent.ACTIVATION, gene.event());
-        assertEquals("EGFR act mut", gene.sourceEvent());
+        assertEquals("Netherlands", entry.country());
+        assertEquals("Colorectal Cancer", entry.cancerType());
+        assertEquals("FUSION", entry.molecularCriteriumType());
+        assertEquals("EML4::ALK", entry.molecularCriterium());
     }
 }

@@ -88,7 +88,7 @@ public class ServeAlgo {
                                 !config.skipVariantResolving()) : null,
                         config.useHartwigDriverGenes() ? extractHartwigDriverGeneKnowledge(config.driverGene37Tsv()) : null,
                         config.useHartwigCuratedGenes() ? extractHartwigCuratedGeneKnowledge(config.hartwigCuratedGeneTsv()) : null,
-                        config.useHartwigCuratedTrials() ? extractCuratedTrialsKnowledge(config.hartwigCuratedTrialsJson()) : null)
+                        config.useHartwigCuratedTrials() ? extractHartwigCuratedTrialKnowledge(config.hartwigCuratedTrialTsv()) : null)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
@@ -209,7 +209,7 @@ public class ServeAlgo {
 
     @NotNull
     private ExtractionResult extractHartwigDriverGeneKnowledge(@NotNull String driverGeneFileTsv) throws IOException {
-        LOGGER.info("Reading Hartwig Driver Genes TSV from '{}'", driverGeneFileTsv);
+        LOGGER.info("Reading Hartwig Driver Gene TSV from '{}'", driverGeneFileTsv);
         List<HartwigGeneEntry> entries = HartwigGeneFileReader.readDriverGenes(driverGeneFileTsv);
         LOGGER.info(" Read {} entries", entries.size());
 
@@ -220,7 +220,7 @@ public class ServeAlgo {
 
     @NotNull
     private ExtractionResult extractHartwigCuratedGeneKnowledge(@NotNull String curatedGeneFileTsv) throws IOException {
-        LOGGER.info("Reading Hartwig Curated Genes TSV from '{}'", curatedGeneFileTsv);
+        LOGGER.info("Reading Hartwig Curated Gene TSV from '{}'", curatedGeneFileTsv);
         List<HartwigGeneEntry> entries = HartwigGeneFileReader.readCuratedGenes(curatedGeneFileTsv);
         LOGGER.info(" Read {} entries", entries.size());
 
@@ -230,13 +230,13 @@ public class ServeAlgo {
     }
 
     @NotNull
-    private ExtractionResult extractCuratedTrialsKnowledge(@NotNull String curatedTrialsJson) throws IOException {
-        LOGGER.info("Reading curated trials JSON from '{}'", curatedTrialsJson);
-        List<HartwigTrialEntry> entries = HartwigTrialReader.read(curatedTrialsJson);
-        LOGGER.info(" Read {} curated trial entries", entries.size());
+    private ExtractionResult extractHartwigCuratedTrialKnowledge(@NotNull String curatedTrialFileTsv) throws IOException {
+        LOGGER.info("Reading Hartwig Curated Trial TSV from '{}'", curatedTrialFileTsv);
+        List<HartwigTrialEntry> entries = HartwigTrialReader.read(curatedTrialFileTsv);
+        LOGGER.info(" Read {} entries", entries.size());
 
         HartwigTrialExtractor extractor = new HartwigTrialExtractor();
-        LOGGER.info("Running curated trials knowledge extraction");
+        LOGGER.info("Running Hartwig curated trial knowledge extraction");
         return extractor.extract(entries);
     }
 }

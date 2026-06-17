@@ -7,8 +7,6 @@ import java.util.Set;
 
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.trial.ActionableTrial;
-import com.hartwig.serve.datamodel.trial.ImmutableActionableTrial;
-import com.hartwig.serve.datamodel.trial.Phase;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.ImmutableExtractionResult;
 import com.hartwig.serve.util.ProgressTracker;
@@ -27,27 +25,18 @@ public class HartwigTrialExtractor {
         ProgressTracker tracker = new ProgressTracker("CuratedTrials", entries.size());
 
         for (HartwigTrialEntry entry : entries) {
-            if (entry.anyMolecularCriteria().isEmpty()) {
-                LOGGER.warn("Curated trial '{}' has no molecular criteria, skipping", entry.trialId());
-                tracker.update();
-                continue;
-            }
-
-            // Put ALL molecular criteria into a single ActionableTrial as a Set
-            // This matches how consolidateTrialsForNctId expects trials to be structured
-            actionableTrials.add(ImmutableActionableTrial.builder()
-                    .source(Knowledgebase.HARTWIG_TRIAL_CURATED)
-                    .nctId(entry.trialId())
-                    .title(entry.title())
-                    .acronym(entry.acronym())
-                    .phase(Phase.UNKNOWN)
-                    .countries(entry.countries())
-                    .therapyNames(entry.therapyNames())
-                    .genderCriterium(entry.genderCriterium())
-                    .indications(entry.indications())
-                    .anyMolecularCriteria(new HashSet<>(entry.anyMolecularCriteria()))
-                    .urls(entry.urls())
-                    .build());
+//            actionableTrials.add(ImmutableActionableTrial.builder()
+//                    .source(Knowledgebase.HARTWIG_TRIAL_CURATED)
+//                    .nctId(entry.nctId())
+//                    .title(entry.title())
+//                    .acronym(entry.acronym())
+//                    .phase(Phase.UNKNOWN)
+//                    .countries(Sets.newHashSet())
+//                    .genderCriterium(entry.genderCriterium())
+//                    .indications(entry.indications())
+//                    .anyMolecularCriteria(new HashSet<>(entry.anyMolecularCriteria()))
+//                    .urls(entry.urls())
+//                    .build());
 
             tracker.update();
         }

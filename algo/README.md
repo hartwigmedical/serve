@@ -448,6 +448,9 @@ elsewhere.
 
 ## Version History and Download Links
 
+- [8.10.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v8.10.0)
+  - Update java from v11 to v21
+  - Update various maven dependencies
 - [8.9.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v8.9.0)
   - Change link of https://ckb.jax.org to https://ckbhome.genomenon.com/
   - Update version of jackson 

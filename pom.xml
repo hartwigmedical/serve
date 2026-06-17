@@ -18,15 +18,16 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        
+        <maven.compiler.release>21</maven.compiler.release>
 
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.plugin.version>3.13.0</maven.compiler.plugin.version>
+        <maven.assembly.plugin.version>3.6.0</maven.assembly.plugin.version>
+        <maven.jar.plugin.version>3.4.2</maven.jar.plugin.version>
+        <maven.exec.plugin.version>3.5.0</maven.exec.plugin.version>
 
-        <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
-        <maven.assembly.plugin.version>3.0.0</maven.assembly.plugin.version>
-        <maven.jar.plugin.version>2.4</maven.jar.plugin.version>
-        <maven.exec.plugin.version>1.6.0</maven.exec.plugin.version>
-
+        <google.artifactregistry.version>2.1.0</google.artifactregistry.version>
+        
         <commons.cli.version>1.3.1</commons.cli.version>
         <immutables.version>2.5.5</immutables.version>
         <htsjdk.version>2.23.0</htsjdk.version>
@@ -72,7 +73,7 @@
             <extension>
                 <groupId>com.google.cloud.artifactregistry</groupId>
                 <artifactId>artifactregistry-maven-wagon</artifactId>
-                <version>2.1.0</version>
+                <version>${google.artifactregistry.version}</version>
             </extension>
         </extensions>
         

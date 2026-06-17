@@ -1,4 +1,4 @@
-package com.hartwig.serve.sources.curatedtrials;
+package com.hartwig.serve.sources.hartwig.trial;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -14,15 +14,14 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.hartwig.serve.datamodel.common.CancerType;
 import com.hartwig.serve.datamodel.common.ImmutableCancerType;
 import com.hartwig.serve.datamodel.common.ImmutableIndication;
 import com.hartwig.serve.datamodel.common.Indication;
 import com.hartwig.serve.datamodel.molecular.ImmutableMolecularCriterium;
 import com.hartwig.serve.datamodel.molecular.MolecularCriterium;
+import com.hartwig.serve.datamodel.molecular.gene.ActionableGene;
 import com.hartwig.serve.datamodel.molecular.gene.GeneEvent;
 import com.hartwig.serve.datamodel.molecular.gene.ImmutableActionableGene;
-import com.hartwig.serve.datamodel.molecular.gene.ActionableGene;
 import com.hartwig.serve.datamodel.trial.Country;
 import com.hartwig.serve.datamodel.trial.GenderCriterium;
 import com.hartwig.serve.datamodel.trial.Hospital;
@@ -32,18 +31,17 @@ import com.hartwig.serve.datamodel.trial.ImmutableHospital;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-public final class CuratedTrialReader {
+public final class HartwigTrialReader {
 
-    private static final Logger LOGGER = LogManager.getLogger(CuratedTrialReader.class);
+    private static final Logger LOGGER = LogManager.getLogger(HartwigTrialReader.class);
 
-    private CuratedTrialReader() {
+    private HartwigTrialReader() {
     }
 
     @NotNull
-    public static List<CuratedTrialEntry> read(@NotNull String jsonFilePath) throws IOException {
-        List<CuratedTrialEntry> entries = new ArrayList<>();
+    public static List<HartwigTrialEntry> read(@NotNull String jsonFilePath) throws IOException {
+        List<HartwigTrialEntry> entries = new ArrayList<>();
 
         JsonObject root;
         try (FileReader reader = new FileReader(jsonFilePath)) {
@@ -69,20 +67,17 @@ public final class CuratedTrialReader {
                 continue;
             }
 
-            CuratedTrialEntry entry = parseTrial(trial);
-            if (entry != null) {
-                entries.add(entry);
-            }
+            entries.add(parseTrial(trial));
         }
 
         LOGGER.info(" Read {} curated trials without nctId from {}", entries.size(), jsonFilePath);
         return entries;
     }
 
-    @Nullable
-    private static CuratedTrialEntry parseTrial(@NotNull JsonObject trial) {
+    @NotNull
+    private static HartwigTrialEntry parseTrial(@NotNull JsonObject trial) {
         String trialId = trial.has("trialId") ? trial.get("trialId").getAsString() : "";
-        String title   = trial.has("title")   ? trial.get("title").getAsString()   : "";
+        String title = trial.has("title") ? trial.get("title").getAsString() : "";
         String acronym = trial.has("acronym") ? trial.get("acronym").getAsString() : "";
 
         // Gender
@@ -91,8 +86,7 @@ public final class CuratedTrialReader {
             try {
                 gender = GenderCriterium.valueOf(trial.get("genderCriterium").getAsString().toUpperCase());
             } catch (IllegalArgumentException e) {
-                LOGGER.warn("Unrecognized genderCriterium '{}' in trial '{}'",
-                        trial.get("genderCriterium").getAsString(), trialId);
+                LOGGER.warn("Unrecognized genderCriterium '{}' in trial '{}'", trial.get("genderCriterium").getAsString(), trialId);
             }
         }
 
@@ -121,7 +115,7 @@ public final class CuratedTrialReader {
             }
         }
 
-        return ImmutableCuratedTrialEntry.builder()
+        return ImmutableHartwigTrialEntry.builder()
                 .trialId(trialId)
                 .title(title)
                 .acronym(acronym)
@@ -153,19 +147,13 @@ public final class CuratedTrialReader {
                     Set<Hospital> hospitals = new HashSet<>();
                     for (JsonElement hospitalEl : cityEntry.getValue().getAsJsonArray()) {
                         String hospitalName = hospitalEl.getAsJsonObject().get("name").getAsString();
-                        hospitals.add(ImmutableHospital.builder()
-                                .name(hospitalName)
-                                .isChildrensHospital(null)
-                                .build());
+                        hospitals.add(ImmutableHospital.builder().name(hospitalName).isChildrensHospital(null).build());
                     }
                     hospitalsPerCity.put(city, hospitals);
                 }
             }
 
-            countries.add(ImmutableCountry.builder()
-                    .name(countryName)
-                    .hospitalsPerCity(hospitalsPerCity)
-                    .build());
+            countries.add(ImmutableCountry.builder().name(countryName).hospitalsPerCity(hospitalsPerCity).build());
         }
         return countries;
     }
@@ -208,8 +196,8 @@ public final class CuratedTrialReader {
             if (criteriumObj.has("genes")) {
                 for (JsonElement geneEl : criteriumObj.getAsJsonArray("genes")) {
                     JsonObject geneObj = geneEl.getAsJsonObject();
-                    String geneName    = geneObj.has("gene")        ? geneObj.get("gene").getAsString()        : "";
-                    String eventStr    = geneObj.has("event")       ? geneObj.get("event").getAsString()       : "";
+                    String geneName = geneObj.has("gene") ? geneObj.get("gene").getAsString() : "";
+                    String eventStr = geneObj.has("event") ? geneObj.get("event").getAsString() : "";
                     String sourceEvent = geneObj.has("sourceEvent") ? geneObj.get("sourceEvent").getAsString() : "";
 
                     GeneEvent geneEvent;
@@ -217,8 +205,7 @@ public final class CuratedTrialReader {
                         String normalised = eventStr.toUpperCase().replace(" ", "_").replace("-", "_");
                         geneEvent = GeneEvent.valueOf(normalised);
                     } catch (IllegalArgumentException e) {
-                        LOGGER.warn("Unrecognized gene event '{}' in trial '{}', skipping gene '{}'",
-                                eventStr, trialId, geneName);
+                        LOGGER.warn("Unrecognized gene event '{}' in trial '{}', skipping gene '{}'", eventStr, trialId, geneName);
                         continue;
                     }
 
@@ -226,10 +213,7 @@ public final class CuratedTrialReader {
                     LocalDate sourceDate = LocalDate.now();
                     if (geneObj.has("sourceDate") && !geneObj.get("sourceDate").isJsonNull()) {
                         JsonObject sd = geneObj.getAsJsonObject("sourceDate");
-                        sourceDate = LocalDate.of(
-                                sd.get("year").getAsInt(),
-                                sd.get("month").getAsInt(),
-                                sd.get("day").getAsInt());
+                        sourceDate = LocalDate.of(sd.get("year").getAsInt(), sd.get("month").getAsInt(), sd.get("day").getAsInt());
                     }
 
                     // sourceUrls

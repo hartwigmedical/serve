@@ -1,4 +1,4 @@
-package com.hartwig.serve.sources.curatedtrials;
+package com.hartwig.serve.sources.hartwig.trial;
 
 import java.util.List;
 import java.util.Set;
@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 
 @Value.Immutable
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class })
-public abstract class CuratedTrialEntry {
+public abstract class HartwigTrialEntry {
 
     @NotNull
     public abstract String trialId();

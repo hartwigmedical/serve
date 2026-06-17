@@ -72,6 +72,9 @@ public class ServeAlgoTest {
                 .useHartwigDriverGenes(true)
                 .useHartwigCuratedGenes(true)
                 .hartwigCuratedGeneTsv(HARTWIG_CURATED_GENE_TSV)
+                // TODO (KD): Add hartwig trials to algo test
+                .useHartwigCuratedTrials(false)
+                .hartwigCuratedTrialsJson("")
                 .ensemblDataDir37(ENSEMBL_DATA_DIR_37)
                 .ensemblDataDir38(ENSEMBL_DATA_DIR_38)
                 .refGenome37FastaFile(REF_GENOME_37_FASTA_FILE)

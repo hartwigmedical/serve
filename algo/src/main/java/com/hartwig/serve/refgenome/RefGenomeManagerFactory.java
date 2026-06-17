@@ -49,9 +49,7 @@ public final class RefGenomeManagerFactory {
                 : ProteinResolverFactory.transvarWithRefGenome(RefGenome.V37, fastaFile37, ensemblDataCache37);
 
         return ImmutableRefGenomeResource.builder()
-                .refSequence(config.skipVariantResolving()
-                        ? null
-                        : new IndexedFastaSequenceFile(new File(fastaFile37)))
+                .refSequence(new IndexedFastaSequenceFile(new File(fastaFile37)))
                 .driverGenes(readDriverGenesFromFile(config.driverGene37Tsv()))
                 .knownFusionCache(buildKnownFusionCacheFromFile(config.knownFusion37File()))
                 .ensemblDataCache(ensemblDataCache37)
@@ -70,9 +68,7 @@ public final class RefGenomeManagerFactory {
                 : ProteinResolverFactory.transvarWithRefGenome(RefGenome.V38, fastaFile38, ensemblDataCache38);
 
         return ImmutableRefGenomeResource.builder()
-                .refSequence(config.skipVariantResolving()
-                        ? null
-                        : new IndexedFastaSequenceFile(new File(fastaFile38)))
+                .refSequence(new IndexedFastaSequenceFile(new File(fastaFile38)))
                 .driverGenes(readDriverGenesFromFile(config.driverGene38Tsv()))
                 .knownFusionCache(buildKnownFusionCacheFromFile(config.knownFusion38File()))
                 .ensemblDataCache(ensemblDataCache38)

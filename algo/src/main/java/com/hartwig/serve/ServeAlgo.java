@@ -48,9 +48,9 @@ import com.hartwig.serve.sources.vicc.doid.DoidLookupFactory;
 import com.hartwig.serve.vicc.annotation.ViccClassificationConfig;
 import com.hartwig.serve.vicc.datamodel.ViccEntry;
 import com.hartwig.serve.vicc.datamodel.ViccSource;
-import com.hartwig.serve.sources.curatedtrials.CuratedTrialEntry;
-import com.hartwig.serve.sources.curatedtrials.CuratedTrialExtractor;
-import com.hartwig.serve.sources.curatedtrials.CuratedTrialReader;
+import com.hartwig.serve.sources.hartwig.trial.HartwigTrialEntry;
+import com.hartwig.serve.sources.hartwig.trial.HartwigTrialExtractor;
+import com.hartwig.serve.sources.hartwig.trial.HartwigTrialReader;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -88,7 +88,7 @@ public class ServeAlgo {
                                 !config.skipVariantResolving()) : null,
                         config.useHartwigDriverGenes() ? extractHartwigDriverGeneKnowledge(config.driverGene37Tsv()) : null,
                         config.useHartwigCuratedGenes() ? extractHartwigCuratedGeneKnowledge(config.hartwigCuratedGeneTsv()) : null,
-                        config.useCuratedTrials() ? extractCuratedTrialsKnowledge(config.curatedTrialsJson()) : null)
+                        config.useHartwigCuratedTrials() ? extractCuratedTrialsKnowledge(config.hartwigCuratedTrialsJson()) : null)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
@@ -232,10 +232,10 @@ public class ServeAlgo {
     @NotNull
     private ExtractionResult extractCuratedTrialsKnowledge(@NotNull String curatedTrialsJson) throws IOException {
         LOGGER.info("Reading curated trials JSON from '{}'", curatedTrialsJson);
-        List<CuratedTrialEntry> entries = CuratedTrialReader.read(curatedTrialsJson);
+        List<HartwigTrialEntry> entries = HartwigTrialReader.read(curatedTrialsJson);
         LOGGER.info(" Read {} curated trial entries", entries.size());
 
-        CuratedTrialExtractor extractor = new CuratedTrialExtractor();
+        HartwigTrialExtractor extractor = new HartwigTrialExtractor();
         LOGGER.info("Running curated trials knowledge extraction");
         return extractor.extract(entries);
     }

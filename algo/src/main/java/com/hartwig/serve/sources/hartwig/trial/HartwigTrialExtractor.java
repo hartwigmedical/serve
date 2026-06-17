@@ -1,4 +1,4 @@
-package com.hartwig.serve.sources.curatedtrials;
+package com.hartwig.serve.sources.hartwig.trial;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -17,16 +17,16 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
-public class CuratedTrialExtractor {
+public class HartwigTrialExtractor {
 
-    private static final Logger LOGGER = LogManager.getLogger(CuratedTrialExtractor.class);
+    private static final Logger LOGGER = LogManager.getLogger(HartwigTrialExtractor.class);
 
     @NotNull
-    public ExtractionResult extract(@NotNull List<CuratedTrialEntry> entries) {
+    public ExtractionResult extract(@NotNull List<HartwigTrialEntry> entries) {
         Set<ActionableTrial> actionableTrials = new HashSet<>();
         ProgressTracker tracker = new ProgressTracker("CuratedTrials", entries.size());
 
-        for (CuratedTrialEntry entry : entries) {
+        for (HartwigTrialEntry entry : entries) {
             if (entry.anyMolecularCriteria().isEmpty()) {
                 LOGGER.warn("Curated trial '{}' has no molecular criteria, skipping", entry.trialId());
                 tracker.update();

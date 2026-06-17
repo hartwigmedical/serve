@@ -27,6 +27,9 @@ public abstract class HartwigTrialEntry {
     public abstract String cancerType();
 
     @NotNull
+    public abstract String cancerTypeDoid();
+
+    @NotNull
     public abstract String molecularCriteriumType();
 
     @NotNull

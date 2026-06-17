@@ -37,8 +37,9 @@ public final class HartwigTrialReader {
                 .country(values[3])
                 .genderCriterium(values[4])
                 .cancerType(values[5])
-                .molecularCriteriumType(values[6])
-                .molecularCriterium(values[7])
+                .cancerTypeDoid(values[6])
+                .molecularCriteriumType(values[7])
+                .molecularCriterium(values[8])
                 .build();
     }
 }

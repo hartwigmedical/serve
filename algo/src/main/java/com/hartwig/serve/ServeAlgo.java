@@ -40,6 +40,7 @@ import com.hartwig.serve.sources.hartwig.gene.HartwigGeneFileReader;
 import com.hartwig.serve.sources.hartwig.hotspot.HartwigHotspotEntry;
 import com.hartwig.serve.sources.hartwig.hotspot.HartwigHotspotExtractor;
 import com.hartwig.serve.sources.hartwig.hotspot.HartwigHotspotFileReader;
+import com.hartwig.serve.sources.hartwig.trial.HartwigTrialExtractorFactory;
 import com.hartwig.serve.sources.vicc.ViccExtractor;
 import com.hartwig.serve.sources.vicc.ViccExtractorFactory;
 import com.hartwig.serve.sources.vicc.ViccReader;
@@ -235,7 +236,8 @@ public class ServeAlgo {
         List<HartwigTrialEntry> entries = HartwigTrialReader.read(curatedTrialFileTsv);
         LOGGER.info(" Read {} entries", entries.size());
 
-        HartwigTrialExtractor extractor = new HartwigTrialExtractor();
+        RefGenomeResource refGenomeResource = refGenomeManager.pickResourceForKnowledgebase(Knowledgebase.HARTWIG_TRIAL_CURATED);
+        HartwigTrialExtractor extractor = HartwigTrialExtractorFactory.createCkbEmulatedExtractor(refGenomeResource);
         LOGGER.info("Running Hartwig curated trial knowledge extraction");
         return extractor.extract(entries);
     }

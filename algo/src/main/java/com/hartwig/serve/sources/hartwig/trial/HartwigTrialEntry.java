@@ -1,5 +1,7 @@
 package com.hartwig.serve.sources.hartwig.trial;
 
+import com.hartwig.serve.datamodel.trial.GenderCriterium;
+
 import org.immutables.value.Value;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,23 +16,20 @@ public abstract class HartwigTrialEntry {
     @NotNull
     public abstract String title();
 
-    @NotNull
+    @Nullable
     public abstract String acronym();
     
     @NotNull
     public abstract String country();
     
     @Nullable
-    public abstract String genderCriterium();
+    public abstract GenderCriterium genderCriterium();
 
     @NotNull
     public abstract String cancerType();
 
     @NotNull
     public abstract String cancerTypeDoid();
-
-    @NotNull
-    public abstract String molecularCriteriumType();
 
     @NotNull
     public abstract String molecularCriterium();

@@ -1,2 +1,2 @@
-nctId	title	acronym	country	genderCriterium	cancerType	cancerTypeDoid	molecularCriteriumType	molecularCriterium
-NCT00001	This is test trial 1	TRIAL-1	Netherlands	NONE	Colorectal Cancer	123	Fusion	EML4::ALK
+nctId	title	acronym	country	genderCriterium	cancerType	cancerTypeDoid	molecularCriterium	url
+NCT00001	This is test trial 1	TRIAL-1	Netherlands	BOTH	Colorectal Cancer	123	EML4 - ALK Fusion	https://url.com

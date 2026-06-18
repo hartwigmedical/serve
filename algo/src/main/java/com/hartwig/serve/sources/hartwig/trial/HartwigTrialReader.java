@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 
+import com.hartwig.serve.datamodel.trial.GenderCriterium;
+
 import org.jetbrains.annotations.NotNull;
 
 public final class HartwigTrialReader {
@@ -33,13 +35,13 @@ public final class HartwigTrialReader {
         return ImmutableHartwigTrialEntry.builder()
                 .nctId(values[0])
                 .title(values[1])
-                .acronym(values[2])
+                .acronym(values[2].isEmpty() ? null : values[2])
                 .country(values[3])
-                .genderCriterium(values[4])
+                .genderCriterium(values[4].isEmpty() ? null : GenderCriterium.valueOf(values[4]))
                 .cancerType(values[5])
                 .cancerTypeDoid(values[6])
-                .molecularCriteriumType(values[7])
-                .molecularCriterium(values[8])
+                .molecularCriterium(values[7])
+                .url(values[8])
                 .build();
     }
 }

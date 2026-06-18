@@ -7,7 +7,6 @@ import java.util.List;
 
 import com.google.common.io.Resources;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class HartwigTrialReaderTest {
@@ -15,7 +14,6 @@ public class HartwigTrialReaderTest {
     private static final String EXAMPLE_TSV = Resources.getResource("hartwig/hartwig_curated_trials.tsv").getPath();
 
     @Test
-    @Ignore
     public void canReadHartwigTrialTsv() throws IOException {
         List<HartwigTrialEntry> entries = HartwigTrialReader.read(EXAMPLE_TSV);
         
@@ -28,7 +26,7 @@ public class HartwigTrialReaderTest {
         assertEquals("Netherlands", entry.country());
         assertEquals("Colorectal Cancer", entry.cancerType());
         assertEquals("123", entry.cancerTypeDoid());
-        assertEquals("FUSION", entry.molecularCriteriumType());
-        assertEquals("EML4::ALK", entry.molecularCriterium());
+        assertEquals("EML4 - ALK Fusion", entry.molecularCriterium());
+        assertEquals("https://url.com", entry.url());
     }
 }

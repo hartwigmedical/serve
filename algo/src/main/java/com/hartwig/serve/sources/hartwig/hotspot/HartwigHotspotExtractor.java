@@ -46,7 +46,7 @@ public class HartwigHotspotExtractor {
 
     @NotNull
     public ExtractionResult extract(@NotNull List<HartwigHotspotEntry> entries) {
-        ProgressTracker tracker = new ProgressTracker("Hartwig", entries.size());
+        ProgressTracker tracker = new ProgressTracker("Hartwig Hotspots", entries.size());
         Set<KnownHotspot> knownHotspots =
                 entries.parallelStream().flatMap(entry -> resolveHotspotsForEntry(entry, tracker)).collect(Collectors.toSet());
 

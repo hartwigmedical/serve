@@ -1,6 +1,7 @@
 package com.hartwig.serve.sources.hartwig.trial;
 
 import com.hartwig.serve.ckb.classification.CkbClassificationConfig;
+import com.hartwig.serve.ckb.classification.CkbConstants;
 import com.hartwig.serve.common.classification.EventClassifier;
 import com.hartwig.serve.common.classification.EventClassifierConfig;
 import com.hartwig.serve.common.classification.EventClassifierFactory;
@@ -23,6 +24,6 @@ public final class HartwigTrialExtractorFactory {
         EventClassifier ckbClassifier = EventClassifierFactory.buildClassifier(ckbConfig);
         EventExtractor ckbExtractor = EventExtractorFactory.create(ckbConfig, refGenomeResource, DriverInconsistencyMode.IGNORE);
         
-        return new HartwigTrialExtractor(ckbClassifier, ckbExtractor);
+        return new HartwigTrialExtractor(ckbClassifier, ckbExtractor, CkbConstants.NO_GENE);
     }
 }

@@ -1,5 +1,7 @@
 package com.hartwig.serve.sources.hartwig.trial;
 
+import java.time.LocalDate;
+
 import com.hartwig.serve.datamodel.trial.GenderCriterium;
 
 import org.immutables.value.Value;
@@ -10,6 +12,9 @@ import org.jetbrains.annotations.Nullable;
 @Value.Style(passAnnotations = { NotNull.class, Nullable.class })
 public abstract class HartwigTrialEntry {
 
+    @NotNull
+    public abstract LocalDate date();
+    
     @NotNull
     public abstract String nctId();
 

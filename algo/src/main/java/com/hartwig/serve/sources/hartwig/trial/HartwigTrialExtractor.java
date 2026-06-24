@@ -1,6 +1,5 @@
 package com.hartwig.serve.sources.hartwig.trial;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -60,18 +59,18 @@ import org.jetbrains.annotations.Nullable;
 public class HartwigTrialExtractor {
 
     private static final Logger LOGGER = LogManager.getLogger(HartwigTrialExtractor.class);
-
-    // TODO (KD): Make configurable.
-    private static final String NO_GENE = "-";
-
+    
     @NotNull
     private final EventClassifier classifier;
     @NotNull
     private final EventExtractor extractor;
+    @NotNull
+    private final String noGeneIdentifier;
 
-    public HartwigTrialExtractor(@NotNull EventClassifier classifier, @NotNull EventExtractor extractor) {
+    public HartwigTrialExtractor(@NotNull EventClassifier classifier, @NotNull EventExtractor extractor, @NotNull String noGeneIdentifier) {
         this.classifier = classifier;
         this.extractor = extractor;
+        this.noGeneIdentifier = noGeneIdentifier;
     }
 
     @NotNull
@@ -138,11 +137,10 @@ public class HartwigTrialExtractor {
             LOGGER.warn("Could not extract event from for Hartwig Trial for gene '{}' and event '{}'", gene, event);
             return null;
         }
-
-        // TODO (KD): Configure source date.
+        
         ActionableEvent actionableEvent = ImmutableActionableEventImpl.builder()
-                .sourceDate(LocalDate.now())
-                .sourceEvent(gene.equals(NO_GENE) ? event : gene + " " + event)
+                .sourceDate(entry.date())
+                .sourceEvent(gene.equals(noGeneIdentifier) ? event : gene + " " + event)
                 .sourceUrls(Sets.newHashSet(entry.url()))
                 .build();
 

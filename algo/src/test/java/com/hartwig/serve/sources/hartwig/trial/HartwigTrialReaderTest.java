@@ -3,6 +3,7 @@ package com.hartwig.serve.sources.hartwig.trial;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 
 import com.google.common.io.Resources;
@@ -20,6 +21,7 @@ public class HartwigTrialReaderTest {
         assertEquals(1, entries.size());
 
         HartwigTrialEntry entry = entries.get(0);
+        assertEquals(LocalDate.of(2026, 1, 20), entry.date());
         assertEquals("NCT00001", entry.nctId());
         assertEquals("This is test trial 1", entry.title());
         assertEquals("TRIAL-1", entry.acronym());

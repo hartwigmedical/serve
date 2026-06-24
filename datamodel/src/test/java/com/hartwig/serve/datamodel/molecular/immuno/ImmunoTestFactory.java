@@ -9,7 +9,7 @@ public final class ImmunoTestFactory {
 
     private ImmunoTestFactory() {
     }
-
+    
     @NotNull
     public static ImmutableActionableHLA.Builder actionableHLABuilder() {
         return ImmutableActionableHLA.builder()

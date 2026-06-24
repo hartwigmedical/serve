@@ -17,6 +17,7 @@ import com.hartwig.serve.datamodel.molecular.MolecularCriterium;
 import com.hartwig.serve.datamodel.trial.ActionableTrial;
 import com.hartwig.serve.extraction.EventExtractor;
 import com.hartwig.serve.extraction.EventExtractorOutput;
+import com.hartwig.serve.extraction.EventExtractorOutputFunctions;
 import com.hartwig.serve.extraction.ExtractionFunctions;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.ImmutableEventExtractorOutput;
@@ -87,8 +88,8 @@ public class CkbExtractor {
         }
 
         List<ExtractedEvent> eventsWithEmptyExtractorOutput = extractedEvents.stream()
-                .filter(event -> countEventExtractorOutputs(event.eventExtractorOutput()) == 0)
-                .collect(Collectors.toList());
+                .filter(event -> EventExtractorOutputFunctions.eventCount(event.eventExtractorOutput()) == 0)
+                .toList();
 
         if (!eventsWithEmptyExtractorOutput.isEmpty()) {
             if (eventsWithEmptyExtractorOutput.stream().anyMatch(event -> event.eventType() != EventType.COMPLEX)) {
@@ -169,27 +170,21 @@ public class CkbExtractor {
 
     @NotNull
     private static String combineEvents(@NotNull List<ExtractedEvent> events) {
-        return events.stream()
-                .map(e -> {
-                    String event = e.event();
-                    String gene = e.gene();
-                    return sourceEvent(gene, event);
-                })
-                .collect(Collectors.joining(VARIANT_DELIMITER));
+        return events.stream().map(e -> {
+            String event = e.event();
+            String gene = e.gene();
+            return sourceEvent(gene, event);
+        }).collect(Collectors.joining(VARIANT_DELIMITER));
     }
 
     @NotNull
     private static String combineGenes(@NotNull List<ExtractedEvent> events) {
-        return events.stream()
-                .map(ExtractedEvent::gene)
-                .collect(Collectors.joining(GENE_DELIMITER));
+        return events.stream().map(ExtractedEvent::gene).collect(Collectors.joining(GENE_DELIMITER));
     }
 
     @NotNull
     private List<ExtractedEvent> extractEvents(@NotNull CkbEntry entry) {
-        return entry.variants().stream()
-                .map(this::extractEvent)
-                .collect(Collectors.toList());
+        return entry.variants().stream().map(this::extractEvent).collect(Collectors.toList());
     }
 
     @NotNull
@@ -203,41 +198,23 @@ public class CkbExtractor {
         String gene = CkbEventAndGeneExtractor.extractGene(variant);
         String event = CkbEventAndGeneExtractor.extractEvent(variant);
 
-        ImmutableExtractedEvent.Builder extractedEventBuilder = ImmutableExtractedEvent.builder()
-                .gene(gene)
-                .event(event)
-                .variant(variant)
-                .eventType(eventType);
+        ImmutableExtractedEvent.Builder extractedEventBuilder =
+                ImmutableExtractedEvent.builder().gene(gene).event(event).variant(variant).eventType(eventType);
 
         if (eventType == EventType.UNKNOWN) {
             LOGGER.warn("No known event type for variant: '{}'", variant.fullName());
-            return extractedEventBuilder
-                    .eventExtractorOutput(ImmutableEventExtractorOutput.builder().build())
-                    .build();
+            return extractedEventBuilder.eventExtractorOutput(ImmutableEventExtractorOutput.builder().build()).build();
         }
 
         EventExtractorOutput eventExtractorOutput =
                 CkbMolecularCriteriaExtractor.curateCodons(eventExtractor.extract(gene, null, eventType, event));
 
-        return extractedEventBuilder
-                .eventExtractorOutput(eventExtractorOutput)
-                .build();
+        return extractedEventBuilder.eventExtractorOutput(eventExtractorOutput).build();
     }
 
     @NotNull
     private static String concat(@NotNull List<Variant> variants) {
         return variants.stream().map(Variant::variant).collect(Collectors.joining(VARIANT_DELIMITER));
-    }
-
-    private int countEventExtractorOutputs(@NotNull EventExtractorOutput eventExtractorOutput) {
-        return (eventExtractorOutput.variants() != null ? eventExtractorOutput.variants().size() : 0) +
-                (eventExtractorOutput.codons() != null ? eventExtractorOutput.codons().size() : 0) +
-                (eventExtractorOutput.exons() != null ? eventExtractorOutput.exons().size() : 0) +
-                (eventExtractorOutput.geneLevel() != null ? 1 : 0) +
-                (eventExtractorOutput.copyNumber() != null ? 1 : 0) +
-                (eventExtractorOutput.fusionPair() != null ? 1 : 0) +
-                (eventExtractorOutput.characteristic() != null ? 1 : 0) +
-                (eventExtractorOutput.hla() != null ? 1 : 0);
     }
 }
 

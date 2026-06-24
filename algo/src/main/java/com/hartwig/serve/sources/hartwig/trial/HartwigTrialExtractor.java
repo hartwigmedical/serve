@@ -9,6 +9,9 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.Sets;
+import com.hartwig.serve.ckb.classification.CkbClassificationConfig;
+import com.hartwig.serve.common.classification.EventClassifier;
+import com.hartwig.serve.common.classification.EventClassifierFactory;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.trial.ActionableTrial;
 import com.hartwig.serve.datamodel.trial.Country;
@@ -29,6 +32,8 @@ import org.jetbrains.annotations.Nullable;
 public class HartwigTrialExtractor {
 
     private static final Logger LOGGER = LogManager.getLogger(HartwigTrialExtractor.class);
+    
+    private static final EventClassifier CLASSIFIER = EventClassifierFactory.buildClassifier(CkbClassificationConfig.build());
 
     @NotNull
     private final EventExtractor eventExtractor;
@@ -46,7 +51,8 @@ public class HartwigTrialExtractor {
 
         for (Map.Entry<String, List<HartwigTrialEntry>> entry : trialsPerNctId.entrySet()) {
             List<HartwigTrialEntry> entriesForNctId = entry.getValue();
-            
+
+//            eventExtractor.extract()
             actionableTrials.add(ImmutableActionableTrial.builder()
                     .source(Knowledgebase.HARTWIG_TRIAL_CURATED)
                     .nctId(entry.getKey())

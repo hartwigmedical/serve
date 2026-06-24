@@ -26,7 +26,8 @@ public class HartwigTrialReaderTest {
         assertEquals("Netherlands", entry.country());
         assertEquals("Colorectal Cancer", entry.cancerType());
         assertEquals("123", entry.cancerTypeDoid());
-        assertEquals("EML4 - ALK Fusion", entry.molecularCriterium());
+        assertEquals("-", entry.actionableGene());
+        assertEquals("EML4 - ALK Fusion", entry.actionableEvent());
         assertEquals("https://url.com", entry.url());
     }
 }

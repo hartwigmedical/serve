@@ -40,8 +40,9 @@ public final class HartwigTrialReader {
                 .genderCriterium(values[4].isEmpty() ? null : GenderCriterium.valueOf(values[4]))
                 .cancerType(values[5])
                 .cancerTypeDoid(values[6])
-                .molecularCriterium(values[7])
-                .url(values[8])
+                .actionableGene(values[7])
+                .actionableEvent(values[8])
+                .url(values[9])
                 .build();
     }
 }

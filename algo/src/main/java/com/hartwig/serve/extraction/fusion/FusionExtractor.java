@@ -64,12 +64,6 @@ public class FusionExtractor {
 
     @Nullable
     private static FusionPair fromExonicDelDup(@NotNull String gene, @NotNull String event) {
-        ExonicDelDupType exonicDelDupType = FusionAnnotationConfig.DEL_DUP_TYPE_PER_GENE.get(gene);
-        if (exonicDelDupType == null) {
-            LOGGER.warn("No exonic del dup type configured for gene '{}'", gene);
-            return null;
-        }
-
         Integer exonRankUp = null;
         Integer exonRankDown = null;
 
@@ -91,23 +85,8 @@ public class FusionExtractor {
             return null;
         }
 
-        int exonUp;
-        int exonDown;
-        switch (exonicDelDupType) {
-            case FULL_EXONIC_DELETION: {
-                exonUp = exonRankUp - 1;
-                exonDown = exonRankDown + 1;
-                break;
-            }
-            case PARTIAL_EXONIC_DELETION: {
-                exonUp = exonRankUp;
-                exonDown = exonRankDown;
-                break;
-            }
-            default: {
-                throw new IllegalStateException("Unrecognized del dup type: " + exonicDelDupType);
-            }
-        }
+        int exonUp = exonRankUp - 1;
+        int exonDown = exonRankDown + 1;
 
         return ImmutableFusionPairImpl.builder()
                 .geneUp(gene)

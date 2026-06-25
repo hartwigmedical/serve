@@ -28,5 +28,16 @@ public class CkbEventTypeExtractorTest {
         assertEquals(EventType.CHARACTERISTIC, CkbEventTypeExtractor.classify(CkbTestFactory.createEntry(characteristic)));
     }
     
+    @Test
+    public void canClassifyExonicFusions() {
+        Variant exonicFusion = CkbTestFactory.createVariant("TP53 del exon27", "del exon27", null);
+        assertEquals(EventType.FUSION_PAIR, CkbEventTypeExtractor.classify(CkbTestFactory.createEntry(exonicFusion)));
+    }
+
+    @Test
+    public void canClassifyExonicDeletes() {
+        Variant exonicDelete = CkbTestFactory.createVariant("TP53 exon 27 del", "exon 27 del", null);
+        assertEquals(EventType.EXON, CkbEventTypeExtractor.classify(CkbTestFactory.createEntry(exonicDelete)));
+    }
     
 }

@@ -53,7 +53,7 @@ final class FusionAnnotationConfig {
                 .minExonDown(8)
                 .maxExonDown(8)
                 .build();
-        map.put("EGGRvIII", fusionEGFRvIII);
+        map.put("EGFRvIII", fusionEGFRvIII);
         map.put("VIII", fusionEGFRvIII);
 
         FusionPair fusionEGFRvV = ImmutableFusionPairImpl.builder()

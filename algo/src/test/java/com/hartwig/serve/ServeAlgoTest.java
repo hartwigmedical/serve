@@ -33,6 +33,7 @@ public class ServeAlgoTest {
     private static final String HARTWIG_CURATED_HOTSPOT_TSV = Resources.getResource("hartwig/hartwig_curated_hotspots.tsv").getPath();
     private static final String HARTWIG_COHORT_HOTSPOT_TSV = Resources.getResource("hartwig/hartwig_cohort_hotspots.tsv").getPath();
     private static final String HARTWIG_CURATED_GENE_TSV = Resources.getResource("hartwig/hartwig_curated_genes.tsv").getPath();
+    private static final String HARTWIG_CURATED_TRIAL_TSV = Resources.getResource("hartwig/hartwig_curated_trials.tsv").getPath();
 
     private static final String ENSEMBL_DATA_DIR_37 = Resources.getResource("ensembl_data_cache/v37").getPath();
     private static final String ENSEMBL_DATA_DIR_38 = Resources.getResource("ensembl_data_cache/v38").getPath();
@@ -72,9 +73,8 @@ public class ServeAlgoTest {
                 .useHartwigDriverGenes(true)
                 .useHartwigCuratedGenes(true)
                 .hartwigCuratedGeneTsv(HARTWIG_CURATED_GENE_TSV)
-                // TODO (KD): Add hartwig trials to algo test
-                .useHartwigCuratedTrials(false)
-                .hartwigCuratedTrialTsv("")
+                .useHartwigCuratedTrials(true)
+                .hartwigCuratedTrialTsv(HARTWIG_CURATED_TRIAL_TSV)
                 .ensemblDataDir37(ENSEMBL_DATA_DIR_37)
                 .ensemblDataDir38(ENSEMBL_DATA_DIR_38)
                 .refGenome37FastaFile(REF_GENOME_37_FASTA_FILE)

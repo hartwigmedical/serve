@@ -29,6 +29,7 @@ SERVE supports the ingestion of the following knowledgebases:
 - [DoCM](http://www.docm.info) - database containing pathogenic mutations in cancer
 - HMF Cohort - a database of recurrent somatic mutations in cancer-related genes from the Hartwig database.
 - HMF Curated - a database of known driver mutations and known genes curated by the Hartwig team.
+- HMF Trials - a database of trials curated by the Hartwig team that are not captured by other sources.
 
 A number of other Hartwig modules support the ingestion (and analysis) of these knowledgebases:
 
@@ -295,7 +296,7 @@ SERVE only considers trials with one or more molecular inclusion criterion. Furt
 recruitment status ("Recruiting", "Not yet recruiting", "approved for marketing", "available" or "enrolling by invitation") and required
 requirement type ("partial - required" and "required").
 All evidence without evidence level is filtered in SERVE. Except for decreased response evidence, which is assigned an evidence level based
-on Evidedence Level Details
+on Evidence Level Details
 (Preclinical or Case report series -> D, Clinical study -> C, FDA approved or Guideline or FDA contraindicated -> A).
 
 The following filters can be configured for CKB FLEX, along with an example of how this is used by Hartwig:
@@ -346,6 +347,16 @@ CKB clinical trials can be filtered for downstream usage. The following filters 
 | TRIAL_BASED_ON_THERAPY_AND_CANCER_TYPE                    | Any clinical trial with a specific therapy and cancer type is filtered for downstream usage.                             |
 | TRIAL_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE           | Any clinical trial with a specific therapy and cancer type is specific gene are filtered for downstream usage.           |
 | TRIAL_BASED_ON_THERAPY_AND_CANCER_TYPE_AND_GENE_AND_EVENT | Any clinical trial with a specific therapy and cancer type and specific gene and event is filtered for downstream usage. |
+
+### Hartwig Trial Curation
+
+The Hartwig Curated Trial knowledge takes as input a TSV file and makes the following assumptions:
+
+- A trial can be configured for multiple indications and/or molecular criteria and this requires multiple lines in the TSV. All other fields
+  are assumed to be unique for a single trial.
+- The `actionableGene` and `actionableEvent` fields should be populated as if they were configured by CKB.
+- The `nctId` is mandatory to fill in but in case a trial is not known on CT.gov this field can be configured with a manual ID without
+  causing downstream problems.
 
 ## Handling of multiple reference genome versions
 
@@ -448,26 +459,28 @@ elsewhere.
 
 ## Version History and Download Links
 
+- Upcoming
+    - Support for manually curated trials
 - [8.10.0](https://github.com/hartwigmedical/serve/releases/tag/8.10.0)
-  - Update java from v11 to v21
-  - Update various maven dependencies
+    - Update java from v11 to v21
+    - Update various maven dependencies
 - [8.9.0](https://github.com/hartwigmedical/serve/releases/tag/serve-v8.9.0)
-  - Change link of https://ckb.jax.org to https://ckbhome.genomenon.com/
-  - Update version of jackson 
+    - Change link of https://ckb.jax.org to https://ckbhome.genomenon.com/
+    - Update version of jackson
 - [8.8.0](https://github.com/hartwigmedical/serve/releases/tag/8.8.0)
-  - Add ageGroups to evidence datamodels and filter on adult/senior evidence
+    - Add ageGroups to evidence datamodels and filter on adult/senior evidence
 - [8.7.0](https://github.com/hartwigmedical/serve/releases/tag/8.7.0)
-  - Add possibility to map CKB gene names
+    - Add possibility to map CKB gene names
 - [8.6.0](https://github.com/hartwigmedical/serve/releases/tag/8.6.0)
     - Add phase to ActionableTrial
 - [8.5.1](https://github.com/hartwigmedical/serve/releases/tag/8.5.1)
-  - Add cloud sql driver needed to cloud hosted databases
+    - Add cloud sql driver needed to cloud hosted databases
 - [8.5.0](https://github.com/hartwigmedical/serve/releases/tag/8.5.0)
     - Support HLA alleles
 - [8.4.1](https://github.com/hartwigmedical/serve/releases/tag/8.4.1)
     - Cloudbuild bug fixed
 - [8.4.0](https://github.com/hartwigmedical/serve/releases/tag/8.4.0)
-    - PTEN configured to be full exonic deletes when evidence is presented for exon deletions 
+    - PTEN configured to be full exonic deletes when evidence is presented for exon deletions
 - [8.3.2](https://github.com/hartwigmedical/serve/releases/tag/serve-v8.3.2)
     - Retain variants that are associated with drug resistance in SERVE
 - [8.3.1](https://github.com/hartwigmedical/serve/releases/tag/serve-v8.3.1)

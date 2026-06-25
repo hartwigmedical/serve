@@ -94,9 +94,9 @@ public class HartwigTrialExtractor {
         return extractSingleValueNotNull(entriesForNctId, entry -> ImmutableCountry.builder().name(entry.country()).build());
     }
 
-    @NotNull
+    @Nullable
     private static GenderCriterium extractGenderCriterium(@NotNull List<HartwigTrialEntry> entriesForNctId) {
-        return extractSingleValueNotNull(entriesForNctId, HartwigTrialEntry::genderCriterium);
+        return extractSingleValue(entriesForNctId, HartwigTrialEntry::genderCriterium);
     }
 
     @NotNull

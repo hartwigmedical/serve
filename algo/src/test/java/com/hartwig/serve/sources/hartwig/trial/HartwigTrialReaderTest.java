@@ -29,7 +29,7 @@ public class HartwigTrialReaderTest {
         assertEquals("Colorectal Cancer", entry.cancerType());
         assertEquals("123", entry.cancerTypeDoid());
         assertEquals("-", entry.actionableGene());
-        assertEquals("EML4 - ALK Fusion", entry.actionableEvent());
+        assertEquals("EML4-ALK Fusion", entry.actionableEvent());
         assertEquals("https://url.com", entry.url());
     }
 }

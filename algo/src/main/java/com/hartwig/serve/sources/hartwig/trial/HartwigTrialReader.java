@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 
 import com.hartwig.serve.datamodel.trial.GenderCriterium;
 
@@ -16,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 public final class HartwigTrialReader {
     
     private static final String DELIMITER = "\t";
-    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
+    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MMM-yyyy", Locale.ENGLISH);
 
     private HartwigTrialReader() {
     }
@@ -33,7 +34,7 @@ public final class HartwigTrialReader {
 
     @NotNull
     private static HartwigTrialEntry fromLine(@NotNull String line) {
-        String[] values = line.split(DELIMITER);
+        String[] values = line.split(DELIMITER, -1);
 
         return ImmutableHartwigTrialEntry.builder()
                 .date(LocalDate.parse(values[0], DATE_FORMAT))

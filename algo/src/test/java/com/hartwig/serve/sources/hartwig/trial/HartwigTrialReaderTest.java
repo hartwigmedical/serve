@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.google.common.io.Resources;
+import com.hartwig.serve.datamodel.trial.GenderCriterium;
 
 import org.junit.Test;
 
@@ -26,10 +27,11 @@ public class HartwigTrialReaderTest {
         assertEquals("This is test trial 1", entry.title());
         assertEquals("TRIAL-1", entry.acronym());
         assertEquals("Netherlands", entry.country());
+        assertEquals(GenderCriterium.BOTH, entry.genderCriterium());
         assertEquals("Colorectal Cancer", entry.cancerType());
         assertEquals("123", entry.cancerTypeDoid());
         assertEquals("-", entry.actionableGene());
         assertEquals("EML4-ALK Fusion", entry.actionableEvent());
-        assertEquals("https://url.com", entry.url());
+        assertEquals("", entry.url());
     }
 }

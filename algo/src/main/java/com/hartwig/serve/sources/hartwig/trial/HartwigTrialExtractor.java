@@ -43,9 +43,9 @@ public class HartwigTrialExtractor {
     @NotNull
     public ExtractionResult extract(@NotNull List<HartwigTrialEntry> entries) {
         Set<ActionableTrial> actionableTrials = new HashSet<>();
-        ProgressTracker tracker = new ProgressTracker("Hartwig Trials", entries.size());
 
         Map<String, List<HartwigTrialEntry>> trialsPerNctId = entries.stream().collect(Collectors.groupingBy(HartwigTrialEntry::nctId));
+        ProgressTracker tracker = new ProgressTracker("Hartwig Trials", trialsPerNctId.size());
 
         for (Map.Entry<String, List<HartwigTrialEntry>> entry : trialsPerNctId.entrySet()) {
             List<HartwigTrialEntry> entriesForNctId = entry.getValue();
@@ -64,6 +64,8 @@ public class HartwigTrialExtractor {
                         .anyMolecularCriteria(anyMolecularCriteria)
                         .urls(Sets.newHashSet(extractUrl(entriesForNctId)))
                         .build());
+            } else {
+                LOGGER.warn("No molecular criteria extracted for {}", entriesForNctId);
             }
 
             tracker.update();
@@ -122,7 +124,7 @@ public class HartwigTrialExtractor {
             @NotNull Function<HartwigTrialEntry, T> mapper) {
         T item = extractSingleValue(entries, mapper);
         if (item == null) {
-            throw new IllegalStateException("Could not extract a not-null for value for one NCT ID");
+            throw new IllegalStateException("Could not extract a not-null for set of entries: " + entries);
         }
         return item;
     }
@@ -132,7 +134,7 @@ public class HartwigTrialExtractor {
         Set<T> items = entries.stream().map(mapper).collect(Collectors.toSet());
 
         if (items.size() != 1) {
-            throw new IllegalStateException("Invalid number of items for one NCT ID");
+            throw new IllegalStateException("Invalid number of items for set of entries: " + entries);
         }
 
         return items.iterator().next();

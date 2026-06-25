@@ -1,6 +1,5 @@
 package com.hartwig.serve.sources.hartwig.trial;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -74,8 +73,8 @@ public class HartwigTrialExtractor {
 
         return ImmutableExtractionResult.builder()
                 .refGenomeVersion(Knowledgebase.HARTWIG_TRIAL_CURATED.refGenomeVersion())
-                .eventInterpretations(new HashSet<>())
-                .trials(new ArrayList<>(actionableTrials))
+                .eventInterpretations(Sets.newHashSet())
+                .trials(actionableTrials)
                 .build();
     }
 

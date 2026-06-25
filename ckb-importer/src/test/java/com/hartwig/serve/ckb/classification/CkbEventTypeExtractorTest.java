@@ -27,4 +27,6 @@ public class CkbEventTypeExtractorTest {
                 CkbTestFactory.createVariant(CkbConstants.NO_GENE, CkbConstants.MSI_NEGATIVE, CkbConstants.MSI_NEGATIVE, null);
         assertEquals(EventType.CHARACTERISTIC, CkbEventTypeExtractor.classify(CkbTestFactory.createEntry(characteristic)));
     }
+    
+    
 }

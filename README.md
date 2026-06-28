@@ -31,12 +31,9 @@ Note the new version should be of the format `major.minor.patch` where:
 - Minor indicates a new feature
 - Patch indicates a bug fix
 
-Currently, the GitHub release is not automatically created, so you need to create a new release on the GitHub website and attach the
-respective jar and database generation scripts as additional resources. The jars can be built by running these commands:
+Currently, the GitHub release is not automatically created, so you need to create a new release on the GitHub website. If you want to attach
+the respective jar and database generation scripts as additional resources, then you can build them by running these commands:
 
 - `mvn versions:set -DnewVersion=${new_version}`
 - `mvn clean package`
 - `mvn versions:revert`
-
-In addition, when creating releases on the GitHub website it is convenient to create additional tags with the module prefix (
-e.g. `serve-v${new_version}` when releasing algo)

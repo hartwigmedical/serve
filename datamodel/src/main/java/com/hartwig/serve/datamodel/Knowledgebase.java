@@ -19,6 +19,7 @@ public enum Knowledgebase {
     HARTWIG_HOTSPOT_CURATED(RefGenome.V37, "HMF Hotspot Curated", EvidenceLevel.A, EvidenceLevel.A),
     HARTWIG_GENE_DRIVER_PANEL(RefGenome.V37, "HMF Gene Driver Panel", EvidenceLevel.A, EvidenceLevel.A),
     HARTWIG_GENE_CURATED(RefGenome.V37, "HMF Gene Curated", EvidenceLevel.A, EvidenceLevel.A),
+    HARTWIG_TRIAL_CURATED(RefGenome.V37, "HMF Trial Curated", EvidenceLevel.B, EvidenceLevel.B),
     VICC_CGI(RefGenome.V37, "CGI", EvidenceLevel.B, EvidenceLevel.B),
     VICC_CIVIC(RefGenome.V37, "CIViC", EvidenceLevel.B, EvidenceLevel.B),
     VICC_JAX(RefGenome.V37, "CKB Core", EvidenceLevel.B, EvidenceLevel.B),

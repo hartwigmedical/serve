@@ -52,7 +52,7 @@ public final class CkbEventAndGeneExtractor {
             return variant.variant();
         }
     }
-
+    
     private static boolean isFusion(@NotNull Variant variant) {
         return variant.impact() != null && variant.impact().equals("fusion");
     }

@@ -11,6 +11,7 @@ import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.datamodel.ServeDatabase;
 import com.hartwig.serve.datamodel.ServeRecord;
 import com.hartwig.serve.datamodel.molecular.ImmutableKnownEvents;
+import com.hartwig.serve.datamodel.molecular.KnownEvents;
 import com.hartwig.serve.datamodel.molecular.hotspot.KnownHotspot;
 import com.hartwig.serve.datamodel.serialization.ServeJson;
 import com.hartwig.serve.extraction.events.EventInterpretation;
@@ -58,8 +59,8 @@ public class ExtractionResultWriter {
         // Hotspot VCF is generated to be used in SAGE for every version of ref genome.
         for (Map.Entry<RefGenome, ExtractionResult> entry : resultMap.entrySet()) {
             RefGenome refGenome = entry.getKey();
-            Set<KnownHotspot> hotspots =
-                    entry.getValue().knownEvents() != null ? entry.getValue().knownEvents().hotspots() : Sets.newHashSet();
+            KnownEvents knownEvents = entry.getValue().knownEvents();
+            Set<KnownHotspot> hotspots = knownEvents != null ? knownEvents.hotspots() : Sets.newHashSet();
             String hotspotVcf = KnownHotspotVCF.knownHotspotVcfPath(outputDir, refGenome);
             LOGGER.info(" Writing {} known hotspots to {}", hotspots.size(), hotspotVcf);
             KnownHotspotVCF.write(hotspotVcf, refGenomeManager.refSequenceForRefGenome(refGenome), hotspots);
@@ -68,7 +69,7 @@ public class ExtractionResultWriter {
         // Event interpretation TSV is generated for internal analysis of SERVE. We assume they are identical per ref genome.
         String eventInterpretationTsv = EventInterpretationFile.eventInterpretationTsv(outputDir);
         Set<EventInterpretation> eventInterpretations =
-                !resultMap.values().isEmpty() ? resultMap.values().iterator().next().eventInterpretations() : Sets.newHashSet();
+                !resultMap.isEmpty() ? resultMap.values().iterator().next().eventInterpretations() : Sets.newHashSet();
         LOGGER.info(" Writing {} event interpretations to {}", eventInterpretations.size(), eventInterpretationTsv);
         EventInterpretationFile.write(eventInterpretationTsv, eventInterpretations);
 

@@ -459,7 +459,7 @@ elsewhere.
 
 ## Version History and Download Links
 
-- Upcoming
+- [8.11.0](https://github.com/hartwigmedical/serve/releases/tag/8.11.0)
     - Support for manually curated trials
     - Remove specific config for deciding whether exonic fusions are full exonic or partial exonic (now all exonic fusions are assumed to be full exonic)
 - [8.10.0](https://github.com/hartwigmedical/serve/releases/tag/8.10.0)

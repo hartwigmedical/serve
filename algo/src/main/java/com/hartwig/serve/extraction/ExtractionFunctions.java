@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -119,7 +120,7 @@ public final class ExtractionFunctions {
             return null;
         }
 
-        Map<EfficacyEvidence, Set<String>> urlsPerEvidence = Maps.newHashMap();
+        Map<EfficacyEvidence, Set<String>> urlsPerEvidence = Maps.newLinkedHashMap();
         for (EfficacyEvidence evidence : unconsolidatedEvidences) {
             EfficacyEvidence stripped = ImmutableEfficacyEvidence.builder().from(evidence).urls(Set.of()).build();
             Set<String> urls = urlsPerEvidence.get(stripped);
@@ -144,7 +145,8 @@ public final class ExtractionFunctions {
         }
 
         List<ActionableTrial> consolidatedTrials = new ArrayList<>();
-        Set<Knowledgebase> sources = unconsolidatedTrials.stream().map(ActionableTrial::source).collect(Collectors.toSet());
+        Set<Knowledgebase> sources =
+                unconsolidatedTrials.stream().map(ActionableTrial::source).collect(Collectors.toCollection(TreeSet::new));
         for (Knowledgebase source : sources) {
             Set<String> uniqueNctIds = unconsolidatedTrials.stream()
                     .filter(trial -> trial.source() == source)

@@ -1,7 +1,6 @@
 package com.hartwig.serve.datamodel.util;
 
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -28,7 +27,7 @@ public final class CompareFunctions {
             }
         }
 
-        return Integer.compare(sorted2.size(), sorted1.size());
+        return Integer.compare(sorted1.size(), sorted2.size());
     }
 
     public static int compareNullableStrings(@Nullable String string1, @Nullable String string2) {

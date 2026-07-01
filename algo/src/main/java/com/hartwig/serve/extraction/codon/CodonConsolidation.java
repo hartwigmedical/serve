@@ -1,14 +1,17 @@
 package com.hartwig.serve.extraction.codon;
 
+import java.util.EnumSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.molecular.common.ProteinEffect;
 import com.hartwig.serve.datamodel.molecular.range.ImmutableKnownCodon;
 import com.hartwig.serve.datamodel.molecular.range.KnownCodon;
+import com.hartwig.serve.datamodel.molecular.range.KnownCodonComparator;
 import com.hartwig.serve.extraction.util.ProteinEffectConsolidation;
 
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +23,7 @@ public final class CodonConsolidation {
 
     @NotNull
     public static Set<KnownCodon> consolidate(@NotNull Iterable<KnownCodon> codons) {
-        Map<KnownCodon, ConsolidatedData> dataPerConsolidatedCodon = Maps.newHashMap();
+        Map<KnownCodon, ConsolidatedData> dataPerConsolidatedCodon = new TreeMap<>(new KnownCodonComparator());
         for (KnownCodon codon : codons) {
             KnownCodon key = createKey(codon);
 
@@ -32,7 +35,7 @@ public final class CodonConsolidation {
             }
         }
 
-        Set<KnownCodon> consolidated = Sets.newHashSet();
+        Set<KnownCodon> consolidated = new TreeSet<>(new KnownCodonComparator());
         for (Map.Entry<KnownCodon, ConsolidatedData> entry : dataPerConsolidatedCodon.entrySet()) {
             ConsolidatedData consolidatedData = entry.getValue();
             consolidated.add(ImmutableKnownCodon.builder()
@@ -51,7 +54,7 @@ public final class CodonConsolidation {
 
     @NotNull
     private static ConsolidatedData merge(@NotNull ConsolidatedData data1, @NotNull ConsolidatedData data2) {
-        Set<Knowledgebase> sources = Sets.newHashSet();
+        Set<Knowledgebase> sources = EnumSet.noneOf(Knowledgebase.class);
         sources.addAll(data1.sources());
         sources.addAll(data2.sources());
 

@@ -1,14 +1,17 @@
 package com.hartwig.serve.extraction.exon;
 
+import java.util.EnumSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.molecular.common.ProteinEffect;
 import com.hartwig.serve.datamodel.molecular.range.ImmutableKnownExon;
 import com.hartwig.serve.datamodel.molecular.range.KnownExon;
+import com.hartwig.serve.datamodel.molecular.range.KnownExonComparator;
 import com.hartwig.serve.extraction.util.ProteinEffectConsolidation;
 
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +23,7 @@ public final class ExonConsolidation {
 
     @NotNull
     public static Set<KnownExon> consolidate(@NotNull Iterable<KnownExon> exons) {
-        Map<KnownExon, ConsolidatedData> dataPerConsolidatedExon = Maps.newHashMap();
+        Map<KnownExon, ConsolidatedData> dataPerConsolidatedExon = new TreeMap<>(new KnownExonComparator());
         for (KnownExon exon : exons) {
             KnownExon key = createKey(exon);
 
@@ -32,7 +35,7 @@ public final class ExonConsolidation {
             }
         }
 
-        Set<KnownExon> consolidated = Sets.newHashSet();
+        Set<KnownExon> consolidated = new TreeSet<>(new KnownExonComparator());
         for (Map.Entry<KnownExon, ConsolidatedData> entry : dataPerConsolidatedExon.entrySet()) {
             ConsolidatedData consolidatedData = entry.getValue();
             consolidated.add(ImmutableKnownExon.builder()
@@ -51,7 +54,7 @@ public final class ExonConsolidation {
 
     @NotNull
     private static ConsolidatedData merge(@NotNull ConsolidatedData data1, @NotNull ConsolidatedData data2) {
-        Set<Knowledgebase> sources = Sets.newHashSet();
+        Set<Knowledgebase> sources = EnumSet.noneOf(Knowledgebase.class);
         sources.addAll(data1.sources());
         sources.addAll(data2.sources());
 

@@ -1,14 +1,17 @@
 package com.hartwig.serve.extraction.copynumber;
 
+import java.util.EnumSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.molecular.common.ProteinEffect;
 import com.hartwig.serve.datamodel.molecular.gene.ImmutableKnownCopyNumber;
 import com.hartwig.serve.datamodel.molecular.gene.KnownCopyNumber;
+import com.hartwig.serve.datamodel.molecular.gene.KnownCopyNumberComparator;
 import com.hartwig.serve.extraction.util.ProteinEffectConsolidation;
 
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +23,7 @@ public final class CopyNumberConsolidation {
 
     @NotNull
     public static Set<KnownCopyNumber> consolidate(@NotNull Iterable<KnownCopyNumber> copyNumbers) {
-        Map<KnownCopyNumber, ConsolidatedData> dataPerConsolidatedCopyNumber = Maps.newHashMap();
+        Map<KnownCopyNumber, ConsolidatedData> dataPerConsolidatedCopyNumber = new TreeMap<>(new KnownCopyNumberComparator());
         for (KnownCopyNumber copyNumber : copyNumbers) {
             KnownCopyNumber key = createKey(copyNumber);
 
@@ -32,7 +35,7 @@ public final class CopyNumberConsolidation {
             }
         }
 
-        Set<KnownCopyNumber> consolidated = Sets.newHashSet();
+        Set<KnownCopyNumber> consolidated = new TreeSet<>(new KnownCopyNumberComparator());
         for (Map.Entry<KnownCopyNumber, ConsolidatedData> entry : dataPerConsolidatedCopyNumber.entrySet()) {
             ConsolidatedData consolidatedData = entry.getValue();
             consolidated.add(ImmutableKnownCopyNumber.builder()
@@ -51,7 +54,7 @@ public final class CopyNumberConsolidation {
 
     @NotNull
     private static ConsolidatedData merge(@NotNull ConsolidatedData data1, @NotNull ConsolidatedData data2) {
-        Set<Knowledgebase> sources = Sets.newHashSet();
+        Set<Knowledgebase> sources = EnumSet.noneOf(Knowledgebase.class);
         sources.addAll(data1.sources());
         sources.addAll(data2.sources());
 

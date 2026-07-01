@@ -3,13 +3,16 @@ package com.hartwig.serve.extraction.gene;
 import static java.util.Collections.emptySet;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
 import static java.util.stream.StreamSupport.stream;
 
 import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import com.hartwig.serve.datamodel.molecular.gene.ImmutableKnownGene;
 import com.hartwig.serve.datamodel.molecular.gene.KnownGene;
+import com.hartwig.serve.datamodel.molecular.gene.KnownGeneComparator;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -20,11 +23,13 @@ public final class GeneConsolidation {
 
     @NotNull
     public static Set<KnownGene> consolidate(@NotNull Iterable<KnownGene> genes) {
-        return stream(genes.spliterator(), false).collect(groupingBy(gene -> ImmutableKnownGene.copyOf(gene).withSources(emptySet())))
+        return stream(genes.spliterator(), false).collect(groupingBy(gene -> ImmutableKnownGene.copyOf(gene).withSources(emptySet()),
+                        () -> new TreeMap<>(new KnownGeneComparator()),
+                        toList()))
                 .entrySet()
                 .stream()
                 .map(entry -> ImmutableKnownGene.copyOf(entry.getKey())
                         .withSources(entry.getValue().stream().flatMap(gene -> gene.sources().stream()).collect(toList())))
-                .collect(toSet());
+                .collect(Collectors.toCollection(() -> new TreeSet<>(new KnownGeneComparator())));
     }
 }

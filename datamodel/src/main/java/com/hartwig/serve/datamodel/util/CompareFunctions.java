@@ -1,7 +1,10 @@
 package com.hartwig.serve.datamodel.util;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -12,8 +15,11 @@ public final class CompareFunctions {
     }
 
     public static <T extends Comparable<T>> int compareSetOfComparable(@NotNull Set<T> set1, @NotNull Set<T> set2) {
-        Iterator<T> set1Iterator = set1.iterator();
-        Iterator<T> set2Iterator = set2.iterator();
+        SortedSet<T> sorted1 = new TreeSet<>(set1);
+        SortedSet<T> sorted2 = new TreeSet<>(set2);
+        
+        Iterator<T> set1Iterator = sorted1.iterator();
+        Iterator<T> set2Iterator = sorted2.iterator();
 
         while (set1Iterator.hasNext() && set2Iterator.hasNext()) {
             int entryCompare = set1Iterator.next().compareTo(set2Iterator.next());
@@ -22,7 +28,7 @@ public final class CompareFunctions {
             }
         }
 
-        return Integer.compare(set2.size(), set1.size());
+        return Integer.compare(sorted2.size(), sorted1.size());
     }
 
     public static int compareNullableStrings(@Nullable String string1, @Nullable String string2) {

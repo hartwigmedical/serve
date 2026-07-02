@@ -55,17 +55,21 @@ public final class ExtractionFunctions {
                 }
                 unconsolidatedKnownEventsBuilder.from(result.knownEvents());
             }
-            if (result.evidences() != null) {
+            
+            List<EfficacyEvidence> evidences = result.evidences();
+            if (evidences != null) {
                 if (unconsolidatedEvidences == null) {
                     unconsolidatedEvidences = Lists.newArrayList();
                 }
-                unconsolidatedEvidences.addAll(result.evidences());
+                unconsolidatedEvidences.addAll(evidences);
             }
-            if (result.trials() != null) {
+            
+            List<ActionableTrial> trials =  result.trials();
+            if (trials!= null) {
                 if (unconsolidatedTrials == null) {
                     unconsolidatedTrials = Lists.newArrayList();
                 }
-                unconsolidatedTrials.addAll(result.trials());
+                unconsolidatedTrials.addAll(trials);
             }
         }
 

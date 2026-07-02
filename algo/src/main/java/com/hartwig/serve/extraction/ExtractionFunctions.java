@@ -151,7 +151,7 @@ public final class ExtractionFunctions {
             Set<String> uniqueNctIds = unconsolidatedTrials.stream()
                     .filter(trial -> trial.source() == source)
                     .map(ActionableTrial::nctId)
-                    .collect(Collectors.toSet());
+                    .collect(Collectors.toCollection(TreeSet::new));
 
             for (String nctId : uniqueNctIds) {
                 List<ActionableTrial> trialsForSingleNctId = unconsolidatedTrials.stream()

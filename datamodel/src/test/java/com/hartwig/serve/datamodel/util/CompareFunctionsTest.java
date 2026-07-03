@@ -12,7 +12,6 @@ public class CompareFunctionsTest {
     public void canCompareSetsOfComparable() {
         assertEquals(-1, CompareFunctions.compareSetOfComparable(Set.of(), Set.of("string")));
         assertEquals(0, CompareFunctions.compareSetOfComparable(Set.of("string"), Set.of("string")));
-        assertEquals(0, CompareFunctions.compareSetOfComparable(Set.of("string1", "string2"), Set.of("string2", "string1")));
         assertEquals(1, CompareFunctions.compareSetOfComparable(Set.of("string"), Set.of()));
     }
 

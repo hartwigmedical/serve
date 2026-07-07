@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -122,7 +123,7 @@ final class CkbMolecularCriteriaExtractor {
         return Stream.of(extractionOutput.geneLevel(), extractionOutput.copyNumber())
                 .filter(Objects::nonNull)
                 .map(annotation -> extractActionableGenes(annotation, actionableEvent))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toCollection(TreeSet::new));
     }
 
     @NotNull
@@ -148,7 +149,7 @@ final class CkbMolecularCriteriaExtractor {
             @NotNull ActionableEvent actionableEvent) {
         return ranges.stream()
                 .map(range -> ImmutableActionableRange.builder().from(range).from(actionableEvent).build())
-                .collect(Collectors.toSet());
+                .collect(Collectors.toCollection(TreeSet::new));
     }
 
     @NotNull

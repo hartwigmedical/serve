@@ -187,8 +187,8 @@ public final class ExtractionFunctions {
     }
 
     @NotNull
-    private static <T> Set<T> mergeSet(@NotNull Stream<Set<T>> streamOfSets) {
-        return streamOfSets.flatMap(Set::stream).collect(Collectors.toSet());
+    private static <T extends Comparable<T>> Set<T> mergeSet(@NotNull Stream<Set<T>> streamOfSets) {
+        return streamOfSets.flatMap(Set::stream).collect(Collectors.toCollection(TreeSet::new));
     }
 
     @Nullable

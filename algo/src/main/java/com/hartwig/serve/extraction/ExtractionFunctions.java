@@ -1,6 +1,7 @@
 package com.hartwig.serve.extraction;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -124,7 +125,7 @@ public final class ExtractionFunctions {
             return null;
         }
 
-        Map<EfficacyEvidence, Set<String>> urlsPerEvidence = Maps.newLinkedHashMap();
+        Map<EfficacyEvidence, Set<String>> urlsPerEvidence = Maps.newHashMap();
         for (EfficacyEvidence evidence : unconsolidatedEvidences) {
             EfficacyEvidence stripped = ImmutableEfficacyEvidence.builder().from(evidence).urls(Set.of()).build();
             Set<String> urls = urlsPerEvidence.get(stripped);
@@ -139,6 +140,8 @@ public final class ExtractionFunctions {
         for (Map.Entry<EfficacyEvidence, Set<String>> entry : urlsPerEvidence.entrySet()) {
             consolidatedEvents.add(ImmutableEfficacyEvidence.builder().from(entry.getKey()).urls(entry.getValue()).build());
         }
+        
+        Collections.sort(consolidatedEvents);
         return consolidatedEvents;
     }
 
@@ -166,6 +169,7 @@ public final class ExtractionFunctions {
             }
         }
 
+        Collections.sort(consolidatedTrials);
         return consolidatedTrials;
     }
 

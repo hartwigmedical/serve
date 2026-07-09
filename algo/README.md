@@ -459,9 +459,13 @@ elsewhere.
 
 ## Version History and Download Links
 
+- [8.12.0](https://github.com/hartwigmedical/serve/releases/tag/8.12.0)
+    - When SERVE generates the `ServeRecord` and `ServeDatabase` it guarantees deterministic sorting (two JSONs produced from the same input
+      will now always produce identical output)
 - [8.11.0](https://github.com/hartwigmedical/serve/releases/tag/8.11.0)
     - Support for manually curated trials
-    - Remove specific config for deciding whether exonic fusions are full exonic or partial exonic (now all exonic fusions are assumed to be full exonic)
+    - Remove specific config for deciding whether exonic fusions are full exonic or partial exonic (now all exonic fusions are assumed to be
+      full exonic)
 - [8.10.0](https://github.com/hartwigmedical/serve/releases/tag/8.10.0)
     - Update java from v11 to v21
     - Update various maven dependencies

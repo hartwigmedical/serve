@@ -32,6 +32,11 @@ public final class FusionTestFactory {
     }
 
     @NotNull
+    public static ActionableFusion createTestActionableFusion() {
+        return actionableFusionBuilder().build();
+    }
+
+    @NotNull
     public static ImmutableActionableFusion.Builder actionableFusionBuilder() {
         return ImmutableActionableFusion.builder()
                 .from(MolecularTestFactory.createTestActionableEvent())

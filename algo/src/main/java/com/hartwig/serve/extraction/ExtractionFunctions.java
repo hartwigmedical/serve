@@ -1,9 +1,11 @@
 package com.hartwig.serve.extraction;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -54,17 +56,21 @@ public final class ExtractionFunctions {
                 }
                 unconsolidatedKnownEventsBuilder.from(result.knownEvents());
             }
-            if (result.evidences() != null) {
+            
+            List<EfficacyEvidence> evidences = result.evidences();
+            if (evidences != null) {
                 if (unconsolidatedEvidences == null) {
                     unconsolidatedEvidences = Lists.newArrayList();
                 }
-                unconsolidatedEvidences.addAll(result.evidences());
+                unconsolidatedEvidences.addAll(evidences);
             }
-            if (result.trials() != null) {
+            
+            List<ActionableTrial> trials =  result.trials();
+            if (trials!= null) {
                 if (unconsolidatedTrials == null) {
                     unconsolidatedTrials = Lists.newArrayList();
                 }
-                unconsolidatedTrials.addAll(result.trials());
+                unconsolidatedTrials.addAll(trials);
             }
         }
 
@@ -134,6 +140,8 @@ public final class ExtractionFunctions {
         for (Map.Entry<EfficacyEvidence, Set<String>> entry : urlsPerEvidence.entrySet()) {
             consolidatedEvents.add(ImmutableEfficacyEvidence.builder().from(entry.getKey()).urls(entry.getValue()).build());
         }
+        
+        Collections.sort(consolidatedEvents);
         return consolidatedEvents;
     }
 
@@ -144,12 +152,13 @@ public final class ExtractionFunctions {
         }
 
         List<ActionableTrial> consolidatedTrials = new ArrayList<>();
-        Set<Knowledgebase> sources = unconsolidatedTrials.stream().map(ActionableTrial::source).collect(Collectors.toSet());
+        Set<Knowledgebase> sources =
+                unconsolidatedTrials.stream().map(ActionableTrial::source).collect(Collectors.toCollection(TreeSet::new));
         for (Knowledgebase source : sources) {
             Set<String> uniqueNctIds = unconsolidatedTrials.stream()
                     .filter(trial -> trial.source() == source)
                     .map(ActionableTrial::nctId)
-                    .collect(Collectors.toSet());
+                    .collect(Collectors.toCollection(TreeSet::new));
 
             for (String nctId : uniqueNctIds) {
                 List<ActionableTrial> trialsForSingleNctId = unconsolidatedTrials.stream()
@@ -160,6 +169,7 @@ public final class ExtractionFunctions {
             }
         }
 
+        Collections.sort(consolidatedTrials);
         return consolidatedTrials;
     }
 
@@ -181,8 +191,8 @@ public final class ExtractionFunctions {
     }
 
     @NotNull
-    private static <T> Set<T> mergeSet(@NotNull Stream<Set<T>> streamOfSets) {
-        return streamOfSets.flatMap(Set::stream).collect(Collectors.toSet());
+    private static <T extends Comparable<T>> Set<T> mergeSet(@NotNull Stream<Set<T>> streamOfSets) {
+        return streamOfSets.flatMap(Set::stream).collect(Collectors.toCollection(TreeSet::new));
     }
 
     @Nullable

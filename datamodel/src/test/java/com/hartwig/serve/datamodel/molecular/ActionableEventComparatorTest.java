@@ -16,8 +16,8 @@ public class ActionableEventComparatorTest {
     @Test
     public void canSortActionableEvents() {
         ActionableEvent actionableEvent1 = create(LocalDate.of(2024, 1, 1), "event 1", createUrls("url 1", "url 2"));
-        ActionableEvent actionableEvent2 = create(LocalDate.of(2023, 1, 1), "event 1", createUrls("url 1", "url 2"));
-        ActionableEvent actionableEvent3 = create(LocalDate.of(2023, 1, 1), "event 1", createUrls("url 1"));
+        ActionableEvent actionableEvent2 = create(LocalDate.of(2023, 1, 1), "event 1", createUrls("url 1"));
+        ActionableEvent actionableEvent3 = create(LocalDate.of(2023, 1, 1), "event 1", createUrls("url 1", "url 2"));
         ActionableEvent actionableEvent4 = create(LocalDate.of(2024, 1, 1), "event 2", createUrls("url 1", "url 2"));
 
         List<ActionableEvent> actionableEvents = new ArrayList<>(

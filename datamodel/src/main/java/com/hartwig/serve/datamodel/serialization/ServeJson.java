@@ -35,14 +35,14 @@ import org.jetbrains.annotations.NotNull;
 public final class ServeJson {
 
     private static final JsonMapper MAPPER = JsonMapper.builder()
+            // KD: Note - the sorting that is done here may be unnecessary/obsolete 
+            // since the code that generates the datamodel already fixes sorting
             .addModule(new JavaTimeModule())
-            .addModule(new SimpleModule()
-                    .addSerializer(LocalDate.class, new LocalDateSerializer())
+            .addModule(new SimpleModule().addSerializer(LocalDate.class, new LocalDateSerializer())
                     .addDeserializer(LocalDate.class, new LocalDateDeserializer())
                     .addSerializer(Set.class, new SortedSetJsonSerializer())
                     .addSerializer(Map.class, new SortedMapJsonSerializer())
-                    .addSerializer(List.class, new SortedListJsonSerializer())
-            )
+                    .addSerializer(List.class, new SortedListJsonSerializer()))
             .serializationInclusion(JsonInclude.Include.NON_NULL)
             .build();
 

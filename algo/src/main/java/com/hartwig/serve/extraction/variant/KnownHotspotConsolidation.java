@@ -1,14 +1,17 @@
 package com.hartwig.serve.extraction.variant;
 
+import java.util.EnumSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.molecular.common.ProteinEffect;
 import com.hartwig.serve.datamodel.molecular.hotspot.ImmutableKnownHotspot;
 import com.hartwig.serve.datamodel.molecular.hotspot.KnownHotspot;
+import com.hartwig.serve.datamodel.molecular.hotspot.KnownHotspotComparator;
 import com.hartwig.serve.extraction.util.ProteinEffectConsolidation;
 
 import org.apache.logging.log4j.util.Strings;
@@ -22,7 +25,7 @@ public final class KnownHotspotConsolidation {
 
     @NotNull
     public static Set<KnownHotspot> consolidate(@NotNull Iterable<KnownHotspot> hotspots) {
-        Map<KnownHotspot, ConsolidatedData> dataPerConsolidatedHotspot = Maps.newHashMap();
+        Map<KnownHotspot, ConsolidatedData> dataPerConsolidatedHotspot = new TreeMap<>(new KnownHotspotComparator());
         for (KnownHotspot hotspot : hotspots) {
             KnownHotspot key = createKey(hotspot);
 
@@ -34,7 +37,7 @@ public final class KnownHotspotConsolidation {
             }
         }
 
-        Set<KnownHotspot> consolidatedHotspots = Sets.newHashSet();
+        Set<KnownHotspot> consolidatedHotspots = new TreeSet<>(new KnownHotspotComparator());
         for (Map.Entry<KnownHotspot, ConsolidatedData> entry : dataPerConsolidatedHotspot.entrySet()) {
             ConsolidatedData consolidatedData = entry.getValue();
             consolidatedHotspots.add(ImmutableKnownHotspot.builder()
@@ -93,7 +96,7 @@ public final class KnownHotspotConsolidation {
             bestProteinAnnotation = favorAnnotation1 ? data1.inputProteinAnnotation() : data2.inputProteinAnnotation();
         }
 
-        Set<Knowledgebase> mergedSources = Sets.newHashSet();
+        Set<Knowledgebase> mergedSources = EnumSet.noneOf(Knowledgebase.class);
         mergedSources.addAll(data1.sources());
         mergedSources.addAll(data2.sources());
 

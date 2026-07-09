@@ -6,6 +6,7 @@ import static com.hartwig.serve.sources.ckb.CkbVariantAnnotator.resolveGeneRole;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -24,18 +25,24 @@ import com.hartwig.serve.datamodel.molecular.common.ProteinEffect;
 import com.hartwig.serve.datamodel.molecular.fusion.FusionPair;
 import com.hartwig.serve.datamodel.molecular.fusion.ImmutableKnownFusion;
 import com.hartwig.serve.datamodel.molecular.fusion.KnownFusion;
+import com.hartwig.serve.datamodel.molecular.fusion.KnownFusionComparator;
 import com.hartwig.serve.datamodel.molecular.gene.GeneAnnotation;
 import com.hartwig.serve.datamodel.molecular.gene.ImmutableKnownCopyNumber;
 import com.hartwig.serve.datamodel.molecular.gene.ImmutableKnownGene;
 import com.hartwig.serve.datamodel.molecular.gene.KnownCopyNumber;
+import com.hartwig.serve.datamodel.molecular.gene.KnownCopyNumberComparator;
 import com.hartwig.serve.datamodel.molecular.gene.KnownGene;
+import com.hartwig.serve.datamodel.molecular.gene.KnownGeneComparator;
 import com.hartwig.serve.datamodel.molecular.hotspot.ImmutableKnownHotspot;
 import com.hartwig.serve.datamodel.molecular.hotspot.KnownHotspot;
+import com.hartwig.serve.datamodel.molecular.hotspot.KnownHotspotComparator;
 import com.hartwig.serve.datamodel.molecular.hotspot.VariantAnnotation;
 import com.hartwig.serve.datamodel.molecular.range.ImmutableKnownCodon;
 import com.hartwig.serve.datamodel.molecular.range.ImmutableKnownExon;
 import com.hartwig.serve.datamodel.molecular.range.KnownCodon;
+import com.hartwig.serve.datamodel.molecular.range.KnownCodonComparator;
 import com.hartwig.serve.datamodel.molecular.range.KnownExon;
+import com.hartwig.serve.datamodel.molecular.range.KnownExonComparator;
 import com.hartwig.serve.extraction.codon.CodonAnnotation;
 import com.hartwig.serve.extraction.codon.CodonConsolidation;
 import com.hartwig.serve.extraction.copynumber.CopyNumberConsolidation;
@@ -53,28 +60,28 @@ final class CkbKnownEventsExtractor {
     public static KnownEvents generateKnownEvents(@NotNull List<ExtractedEvent> allEvents) {
         Set<KnownHotspot> allHotspots = allEvents.stream()
                 .flatMap(event -> convertToKnownHotspots(event.eventExtractorOutput().variants(), event.event(), event.variant()).stream())
-                .collect(Collectors.toSet());
+                .collect(Collectors.toCollection(() -> new TreeSet<>(new KnownHotspotComparator())));
 
         Set<KnownCodon> allCodons = allEvents.stream()
                 .flatMap(event -> convertToKnownCodons(event.eventExtractorOutput().codons(), event.variant()).stream())
-                .collect(Collectors.toSet());
+                .collect(Collectors.toCollection(() -> new TreeSet<>(new KnownCodonComparator())));
 
         Set<KnownExon> allExons = allEvents.stream()
                 .flatMap(event -> convertToKnownExons(event.eventExtractorOutput().exons(), event.variant()).stream())
-                .collect(Collectors.toSet());
+                .collect(Collectors.toCollection(() -> new TreeSet<>(new KnownExonComparator())));
 
         Set<KnownGene> allGenes = allEvents.stream()
                 .flatMap(event -> event.eventExtractorOutput().fusionPair() == null ? convertToKnownGenes(event.gene(),
                         event.variant()).stream() : Stream.empty())
-                .collect(Collectors.toSet());
+                .collect(Collectors.toCollection(() -> new TreeSet<>(new KnownGeneComparator())));
 
         Set<KnownCopyNumber> allCopyNumbers = allEvents.stream()
                 .flatMap(event -> convertToKnownCopyNumbers(event.eventExtractorOutput().copyNumber(), event.variant()).stream())
-                .collect(Collectors.toSet());
+                .collect(Collectors.toCollection(() -> new TreeSet<>(new KnownCopyNumberComparator())));
 
         Set<KnownFusion> allFusions = allEvents.stream()
                 .flatMap(event -> convertToKnownFusions(event.eventExtractorOutput().fusionPair(), event.variant()).stream())
-                .collect(Collectors.toSet());
+                .collect(Collectors.toCollection(() -> new TreeSet<>(new KnownFusionComparator())));
 
         return ImmutableKnownEvents.builder()
                 .hotspots(allHotspots)
@@ -181,12 +188,10 @@ final class CkbKnownEventsExtractor {
         }
         Set<U> converted = rawList.stream().map(convert).collect(Collectors.toSet());
         return consolidate.apply(converted).stream().map(e -> annotate.apply(e, variant)).filter(event -> {
-            if (event instanceof GeneAlteration) {
-                GeneAlteration alteration = (GeneAlteration) event;
+            if (event instanceof GeneAlteration alteration) {
                 return alteration.proteinEffect() != ProteinEffect.UNKNOWN
                         || Boolean.TRUE.equals(alteration.associatedWithDrugResistance());
-            } else if (event instanceof KnownFusion) {
-                KnownFusion fusion = (KnownFusion) event;
+            } else if (event instanceof KnownFusion fusion) {
                 return fusion.proteinEffect() != ProteinEffect.UNKNOWN || Boolean.TRUE.equals(fusion.associatedWithDrugResistance());
             }
             LOGGER.warn("{} is not a GeneAlteration or KnownFusion", event.getClass().toString());

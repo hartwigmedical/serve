@@ -2,6 +2,7 @@ package com.hartwig.serve.datamodel.util;
 
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -31,7 +32,7 @@ public final class MolecularCriteriumCombiner {
     }
 
     @NotNull
-    private static <T> Set<T> union(@NotNull Set<T> set1, @NotNull Set<T> set2) {
-        return Stream.concat(set1.stream(), set2.stream()).collect(Collectors.toSet());
+    private static <T extends Comparable<T>> Set<T> union(@NotNull Set<T> set1, @NotNull Set<T> set2) {
+        return Stream.concat(set1.stream(), set2.stream()).collect(Collectors.toCollection(TreeSet::new));
     }
 }

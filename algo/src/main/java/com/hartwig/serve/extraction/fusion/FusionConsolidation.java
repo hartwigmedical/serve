@@ -1,14 +1,17 @@
 package com.hartwig.serve.extraction.fusion;
 
+import java.util.EnumSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.molecular.common.ProteinEffect;
 import com.hartwig.serve.datamodel.molecular.fusion.ImmutableKnownFusion;
 import com.hartwig.serve.datamodel.molecular.fusion.KnownFusion;
+import com.hartwig.serve.datamodel.molecular.fusion.KnownFusionComparator;
 import com.hartwig.serve.extraction.util.ProteinEffectConsolidation;
 
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +23,7 @@ public final class FusionConsolidation {
 
     @NotNull
     public static Set<KnownFusion> consolidate(@NotNull Iterable<KnownFusion> fusions) {
-        Map<KnownFusion, ConsolidatedData> dataPerConsolidatedFusion = Maps.newHashMap();
+        Map<KnownFusion, ConsolidatedData> dataPerConsolidatedFusion = new TreeMap<>(new KnownFusionComparator());
         for (KnownFusion fusion : fusions) {
             KnownFusion key = createKey(fusion);
 
@@ -32,7 +35,7 @@ public final class FusionConsolidation {
             }
         }
 
-        Set<KnownFusion> consolidated = Sets.newHashSet();
+        Set<KnownFusion> consolidated = new TreeSet<>(new KnownFusionComparator());
         for (Map.Entry<KnownFusion, ConsolidatedData> entry : dataPerConsolidatedFusion.entrySet()) {
             ConsolidatedData consolidatedData = entry.getValue();
             consolidated.add(ImmutableKnownFusion.builder()
@@ -51,7 +54,7 @@ public final class FusionConsolidation {
 
     @NotNull
     private static ConsolidatedData merge(@NotNull ConsolidatedData data1, @NotNull ConsolidatedData data2) {
-        Set<Knowledgebase> sources = Sets.newHashSet();
+        Set<Knowledgebase> sources = EnumSet.noneOf(Knowledgebase.class);
         sources.addAll(data1.sources());
         sources.addAll(data2.sources());
 

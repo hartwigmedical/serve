@@ -53,7 +53,7 @@ public final class RangeTestFactory {
     public static KnownExon createTestKnownExonForSource(@NotNull Knowledgebase source) {
         return knownExonBuilder().addSources(source).build();
     }
-
+    
     @NotNull
     public static ImmutableActionableRange.Builder actionableRangeBuilder() {
         return ImmutableActionableRange.builder().from(createTestRangeAnnotation()).from(MolecularTestFactory.createTestActionableEvent());

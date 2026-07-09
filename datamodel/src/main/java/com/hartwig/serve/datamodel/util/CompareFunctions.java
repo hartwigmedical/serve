@@ -12,6 +12,7 @@ public final class CompareFunctions {
     }
 
     public static <T extends Comparable<T>> int compareSetOfComparable(@NotNull Set<T> set1, @NotNull Set<T> set2) {
+        // KD: This function assumes that sets are sorted, and if not, then there is a specific reason for by the caller of this function
         Iterator<T> set1Iterator = set1.iterator();
         Iterator<T> set2Iterator = set2.iterator();
 
@@ -22,7 +23,7 @@ public final class CompareFunctions {
             }
         }
 
-        return Integer.compare(set2.size(), set1.size());
+        return Integer.compare(set1.size(), set2.size());
     }
 
     public static int compareNullableStrings(@Nullable String string1, @Nullable String string2) {

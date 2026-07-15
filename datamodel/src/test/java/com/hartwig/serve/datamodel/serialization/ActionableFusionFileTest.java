@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import java.io.IOException;
+import java.net.URI;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
@@ -17,7 +19,8 @@ import org.junit.Test;
 
 public class ActionableFusionFileTest {
 
-    private static final String ACTIONABLE_FUSION_TSV = Resources.getResource("actionable/ActionableFusions.37.tsv").getPath();
+    private static final Path ACTIONABLE_FUSION_TSV =
+            Path.of(URI.create(Resources.getResource("actionable/ActionableFusions.37.tsv").toString()));
 
     @Test
     public void canReadFromFileAndConvert() throws IOException {

@@ -3,6 +3,8 @@ package com.hartwig.serve.datamodel.serialization;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+import java.net.URI;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
@@ -16,8 +18,10 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
 public class ActionableRangeFileTest {
-    private static final String ACTIONABLE_EXON_TSV = Resources.getResource("actionable/ActionableExons.37.tsv").getPath();
-    private static final String ACTIONABLE_CODON_TSV = Resources.getResource("actionable/ActionableCodons.37.tsv").getPath();
+    private static final Path ACTIONABLE_EXON_TSV =
+            Path.of(URI.create(Resources.getResource("actionable/ActionableExons.37.tsv").toString()));
+    private static final Path ACTIONABLE_CODON_TSV =
+            Path.of(URI.create(Resources.getResource("actionable/ActionableCodons.37.tsv").toString()));
 
     @Test
     public void canReadFromFileAndConvertExon() throws IOException {

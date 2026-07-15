@@ -1,8 +1,8 @@
 package com.hartwig.serve.datamodel.serialization;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
@@ -30,22 +30,22 @@ public final class ActionableCharacteristicFile {
     }
 
     @NotNull
-    public static String actionableCharacteristicTsvPath(@NotNull String serveActionabilityDir, @NotNull RefGenome refGenome) {
-        return refGenome.addVersionToFilePath(serveActionabilityDir + File.separator + ACTIONABLE_CHARACTERISTIC_TSV);
+    public static Path actionableCharacteristicTsvPath(@NotNull Path serveActionabilityDir, @NotNull RefGenome refGenome) {
+        return serveActionabilityDir.resolve(refGenome.addVersionToFilePath(ACTIONABLE_CHARACTERISTIC_TSV));
     }
 
-    public static void write(@NotNull String actionableCharacteristicTsv,
+    public static void write(@NotNull Path actionableCharacteristicTsv,
             @NotNull Iterable<ActionableCharacteristic> actionableCharacteristics) throws IOException {
         List<String> lines = Lists.newArrayList();
         lines.add(header());
         lines.addAll(toLines(actionableCharacteristics));
 
-        Files.write(new File(actionableCharacteristicTsv).toPath(), lines);
+        Files.write(actionableCharacteristicTsv, lines);
     }
 
     @NotNull
-    public static List<ActionableCharacteristic> read(@NotNull String actionableCharacteristicTsv) throws IOException {
-        List<String> lines = Files.readAllLines(new File(actionableCharacteristicTsv).toPath());
+    public static List<ActionableCharacteristic> read(@NotNull Path actionableCharacteristicTsv) throws IOException {
+        List<String> lines = Files.readAllLines(actionableCharacteristicTsv);
         Map<String, Integer> fields = SerializationUtil.createFields(lines.get(0), ActionableFileUtil.FIELD_DELIMITER);
 
         return fromLines(lines.subList(1, lines.size()), fields);

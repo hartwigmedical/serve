@@ -1,8 +1,8 @@
 package com.hartwig.serve.datamodel.serialization;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
@@ -26,22 +26,22 @@ public final class ActionableFusionFile {
     }
 
     @NotNull
-    public static String actionableFusionTsvPath(@NotNull String serveActionabilityDir, @NotNull RefGenome refGenome) {
-        return refGenome.addVersionToFilePath(serveActionabilityDir + File.separator + ACTIONABLE_FUSION_TSV);
+    public static Path actionableFusionTsvPath(@NotNull Path serveActionabilityDir, @NotNull RefGenome refGenome) {
+        return serveActionabilityDir.resolve(refGenome.addVersionToFilePath(ACTIONABLE_FUSION_TSV));
     }
 
-    public static void write(@NotNull String actionableFusionTsv, @NotNull Iterable<ActionableFusion> actionableFusions)
+    public static void write(@NotNull Path actionableFusionTsv, @NotNull Iterable<ActionableFusion> actionableFusions)
             throws IOException {
         List<String> lines = Lists.newArrayList();
         lines.add(header());
         lines.addAll(toLines(actionableFusions));
 
-        Files.write(new File(actionableFusionTsv).toPath(), lines);
+        Files.write(actionableFusionTsv, lines);
     }
 
     @NotNull
-    public static List<ActionableFusion> read(@NotNull String actionableFusionTsv) throws IOException {
-        List<String> lines = Files.readAllLines(new File(actionableFusionTsv).toPath());
+    public static List<ActionableFusion> read(@NotNull Path actionableFusionTsv) throws IOException {
+        List<String> lines = Files.readAllLines(actionableFusionTsv);
         Map<String, Integer> fields = SerializationUtil.createFields(lines.get(0), ActionableFileUtil.FIELD_DELIMITER);
 
         return fromLines(lines.subList(1, lines.size()), fields);

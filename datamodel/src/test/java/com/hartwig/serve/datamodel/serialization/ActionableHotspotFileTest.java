@@ -3,6 +3,8 @@ package com.hartwig.serve.datamodel.serialization;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+import java.net.URI;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +20,8 @@ import org.junit.Test;
 
 public class ActionableHotspotFileTest {
 
-    private static final String ACTIONABLE_HOTSPOT_TSV = Resources.getResource("actionable/ActionableHotspots.37.tsv").getPath();
+    private static final Path ACTIONABLE_HOTSPOT_TSV =
+            Path.of(URI.create(Resources.getResource("actionable/ActionableHotspots.37.tsv").toString()));
 
     @Test
     public void canReadFromFileAndConvert() throws IOException {

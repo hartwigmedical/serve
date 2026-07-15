@@ -1,8 +1,8 @@
 package com.hartwig.serve.datamodel.serialization;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
@@ -28,26 +28,26 @@ public class ActionableRangeFile {
     }
 
     @NotNull
-    public static String actionableCodonTsvPath(@NotNull String serveActionabilityDir, @NotNull RefGenome refGenome) {
-        return refGenome.addVersionToFilePath(serveActionabilityDir + File.separator + ACTIONABLE_CODON_TSV);
+    public static Path actionableCodonTsvPath(@NotNull Path serveActionabilityDir, @NotNull RefGenome refGenome) {
+        return serveActionabilityDir.resolve(refGenome.addVersionToFilePath(ACTIONABLE_CODON_TSV));
     }
 
     @NotNull
-    public static String actionableExonTsvPath(@NotNull String serveActionabilityDir, @NotNull RefGenome refGenome) {
-        return refGenome.addVersionToFilePath(serveActionabilityDir + File.separator + ACTIONABLE_EXON_TSV);
+    public static Path actionableExonTsvPath(@NotNull Path serveActionabilityDir, @NotNull RefGenome refGenome) {
+        return serveActionabilityDir.resolve(refGenome.addVersionToFilePath(ACTIONABLE_EXON_TSV));
     }
 
-    public static void write(@NotNull String actionableRangeTsv, @NotNull Iterable<ActionableRange> actionableRanges) throws IOException {
+    public static void write(@NotNull Path actionableRangeTsv, @NotNull Iterable<ActionableRange> actionableRanges) throws IOException {
         List<String> lines = Lists.newArrayList();
         lines.add(header());
         lines.addAll(toLines(actionableRanges));
 
-        Files.write(new File(actionableRangeTsv).toPath(), lines);
+        Files.write(actionableRangeTsv, lines);
     }
 
     @NotNull
-    public static List<ActionableRange> read(@NotNull String actionableTsv) throws IOException {
-        List<String> lines = Files.readAllLines(new File(actionableTsv).toPath());
+    public static List<ActionableRange> read(@NotNull Path actionableTsv) throws IOException {
+        List<String> lines = Files.readAllLines(actionableTsv);
         Map<String, Integer> fields = SerializationUtil.createFields(lines.get(0), ActionableFileUtil.FIELD_DELIMITER);
 
         return fromLines(lines.subList(1, lines.size()), fields);

@@ -3,6 +3,8 @@ package com.hartwig.serve.datamodel.serialization;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+import java.net.URI;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +20,8 @@ import org.junit.Test;
 
 public class ActionableGeneFileTest {
 
-    private static final String ACTIONABLE_GENE_TSV = Resources.getResource("actionable/ActionableGenes.37.tsv").getPath();
+    private static final Path ACTIONABLE_GENE_TSV =
+            Path.of(URI.create(Resources.getResource("actionable/ActionableGenes.37.tsv").toString()));
 
     @Test
     public void canReadFromFileAndConvert() throws IOException {

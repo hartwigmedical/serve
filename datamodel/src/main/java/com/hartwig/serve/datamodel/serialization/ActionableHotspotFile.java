@@ -1,8 +1,8 @@
 package com.hartwig.serve.datamodel.serialization;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
@@ -26,22 +26,22 @@ public final class ActionableHotspotFile {
     }
 
     @NotNull
-    public static String actionableHotspotTsvPath(@NotNull String serveActionabilityDir, @NotNull RefGenome refGenome) {
-        return refGenome.addVersionToFilePath(serveActionabilityDir + File.separator + ACTIONABLE_HOTSPOT_TSV);
+    public static Path actionableHotspotTsvPath(@NotNull Path serveActionabilityDir, @NotNull RefGenome refGenome) {
+        return serveActionabilityDir.resolve(refGenome.addVersionToFilePath(ACTIONABLE_HOTSPOT_TSV));
     }
 
-    public static void write(@NotNull String actionableHotspotTsv, @NotNull Iterable<ActionableHotspot> actionableHotspots)
+    public static void write(@NotNull Path actionableHotspotTsv, @NotNull Iterable<ActionableHotspot> actionableHotspots)
             throws IOException {
         List<String> lines = Lists.newArrayList();
         lines.add(header());
         lines.addAll(toLines(actionableHotspots));
 
-        Files.write(new File(actionableHotspotTsv).toPath(), lines);
+        Files.write(actionableHotspotTsv, lines);
     }
 
     @NotNull
-    public static List<ActionableHotspot> read(@NotNull String actionableHotspotTsv) throws IOException {
-        List<String> lines = Files.readAllLines(new File(actionableHotspotTsv).toPath());
+    public static List<ActionableHotspot> read(@NotNull Path actionableHotspotTsv) throws IOException {
+        List<String> lines = Files.readAllLines(actionableHotspotTsv);
         Map<String, Integer> fields = SerializationUtil.createFields(lines.get(0), ActionableFileUtil.FIELD_DELIMITER);
 
         return fromLines(lines.subList(1, lines.size()), fields);

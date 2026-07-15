@@ -1,8 +1,8 @@
 package com.hartwig.serve.datamodel.serialization;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
@@ -26,21 +26,21 @@ public final class ActionableHLAFile {
     }
 
     @NotNull
-    public static String actionableHLATsvPath(@NotNull String serveActionabilityDir, @NotNull RefGenome refGenome) {
-        return refGenome.addVersionToFilePath(serveActionabilityDir + File.separator + ACTIONABLE_HLA_TSV);
+    public static Path actionableHLATsvPath(@NotNull Path serveActionabilityDir, @NotNull RefGenome refGenome) {
+        return serveActionabilityDir.resolve(refGenome.addVersionToFilePath(ACTIONABLE_HLA_TSV));
     }
 
-    public static void write(@NotNull String actionableHLATsv, @NotNull Iterable<ActionableHLA> actionableHLA) throws IOException {
+    public static void write(@NotNull Path actionableHLATsv, @NotNull Iterable<ActionableHLA> actionableHLA) throws IOException {
         List<String> lines = Lists.newArrayList();
         lines.add(header());
         lines.addAll(toLines(actionableHLA));
 
-        Files.write(new File(actionableHLATsv).toPath(), lines);
+        Files.write(actionableHLATsv, lines);
     }
 
     @NotNull
-    public static List<ActionableHLA> read(@NotNull String actionableHLATsv) throws IOException {
-        List<String> lines = Files.readAllLines(new File(actionableHLATsv).toPath());
+    public static List<ActionableHLA> read(@NotNull Path actionableHLATsv) throws IOException {
+        List<String> lines = Files.readAllLines(actionableHLATsv);
         Map<String, Integer> fields = SerializationUtil.createFields(lines.get(0), ActionableFileUtil.FIELD_DELIMITER);
 
         return fromLines(lines.subList(1, lines.size()), fields);

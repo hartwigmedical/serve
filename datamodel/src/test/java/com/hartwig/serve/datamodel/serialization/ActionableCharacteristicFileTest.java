@@ -5,6 +5,8 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.net.URI;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
@@ -26,8 +28,8 @@ import org.junit.Test;
 
 public class ActionableCharacteristicFileTest {
 
-    private static final String ACTIONABLE_CHARACTERISTIC_TSV =
-            Resources.getResource("actionable/ActionableCharacteristics.37.tsv").getPath();
+    private static final Path ACTIONABLE_CHARACTERISTIC_TSV =
+            Path.of(URI.create(Resources.getResource("actionable/ActionableCharacteristics.37.tsv").toString()));
 
     private static final double EPSILON = 1.0E-10;
 

@@ -1,11 +1,6 @@
 package com.hartwig.serve.ckb.dao;
 
-import com.hartwig.serve.ckb.database.tables.Evidence;
-import com.hartwig.serve.ckb.database.tables.Evidenceagegroup;
-import com.hartwig.serve.ckb.database.tables.Evidencereference;
-import com.hartwig.serve.ckb.database.tables.Indicationevidence;
-import com.hartwig.serve.ckb.database.tables.Therapyevidence;
-import com.hartwig.serve.ckb.database.tables.Treatmentapproachevidence;
+import com.hartwig.serve.ckb.database.tables.*;
 import com.hartwig.serve.ckb.datamodel.reference.Reference;
 import com.hartwig.serve.ckb.datamodel.treatmentapproaches.DrugClassTreatmentApproach;
 import com.hartwig.serve.ckb.datamodel.treatmentapproaches.TherapyTreatmentApproach;
@@ -39,6 +34,7 @@ class EvidenceDAO {
         context.deleteFrom(Indicationevidence.INDICATIONEVIDENCE).execute();
         context.deleteFrom(Treatmentapproachevidence.TREATMENTAPPROACHEVIDENCE).execute();
         context.deleteFrom(Evidenceagegroup.EVIDENCEAGEGROUP).execute();
+        context.deleteFrom(Evidenceclinicaltrialid.EVIDENCECLINICALTRIALID).execute();
         context.deleteFrom(Evidence.EVIDENCE).execute();
     }
 
@@ -99,6 +95,12 @@ class EvidenceDAO {
         for (String ageGroup : evidence.ageGroups()) {
             context.insertInto(Evidenceagegroup.EVIDENCEAGEGROUP, Evidenceagegroup.EVIDENCEAGEGROUP.EVIDENCEID, Evidenceagegroup.EVIDENCEAGEGROUP.AGEGROUP)
                     .values(id, ageGroup)
+                    .execute();
+        }
+
+        for (String clinicalTrialId : evidence.clinicalTrialIds()) {
+            context.insertInto(Evidenceclinicaltrialid.EVIDENCECLINICALTRIALID, Evidenceclinicaltrialid.EVIDENCECLINICALTRIALID.EVIDENCEID, Evidenceclinicaltrialid.EVIDENCECLINICALTRIALID.CLINICALTRIALID)
+                    .values(id, clinicalTrialId)
                     .execute();
         }
 

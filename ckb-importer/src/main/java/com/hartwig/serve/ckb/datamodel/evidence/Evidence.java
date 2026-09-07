@@ -55,5 +55,8 @@ public abstract class Evidence {
     public abstract List<String> ageGroups();
 
     @NotNull
+    public abstract List<String> clinicalTrialIds();
+
+    @NotNull
     public abstract List<Reference> references();
 }

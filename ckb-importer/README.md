@@ -21,6 +21,8 @@
 | db_pass  | Required: The password needed for the DB user to authenticate on the URL. |
 
 ## Version History and Download Links
+- [Upcoming]
+  - Add 'clinicalTrialIds'
 - [5.5.0](https://github.com/hartwigmedical/serve/releases/tag/ckb-importer-v5.5.0)
   - Add 'ageGroups'
 - [5.4.0](https://github.com/hartwigmedical/serve/releases/tag/ckb-importer-v5.4.0)

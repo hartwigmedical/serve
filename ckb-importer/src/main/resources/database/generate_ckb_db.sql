@@ -386,6 +386,15 @@ CREATE TABLE `evidenceAgeGroup`
     FOREIGN KEY (`evidenceId`) REFERENCES `evidence`(`id`)
 );
 
+DROP TABLE IF EXISTS `evidenceClinicalTrialId`;
+CREATE TABLE `evidenceClinicalTrialId`
+(   `id` int NOT NULL AUTO_INCREMENT,
+    `evidenceId` int NOT NULL,
+    `clinicalTrialId` varchar(50) NOT NULL,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`evidenceId`) REFERENCES `evidence`(`id`)
+);
+
 DROP TABLE IF EXISTS `clinicalTrialAgeGroup`;
 CREATE TABLE `clinicalTrialAgeGroup`
 (   `id` int NOT NULL AUTO_INCREMENT,

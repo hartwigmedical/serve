@@ -132,6 +132,7 @@ public class MolecularProfileReader extends CkbJsonDirectoryReader<JsonMolecular
                     .ampCapAscoEvidenceLevel(Json.string(complexMolecularProfileEvidenceJsonObject, "ampCapAscoEvidenceLevel"))
                     .ampCapAscoInferredTier(Json.string(complexMolecularProfileEvidenceJsonObject, "ampCapAscoInferredTier"))
                     .ageGroups(Json.stringList(complexMolecularProfileEvidenceJsonObject, "ageGroups"))
+                    .clinicalTrialIds(Json.stringList(complexMolecularProfileEvidenceJsonObject, "clinicalTrialIds"))
                     .treatmentApproaches(extractRelevantTreatmentApproaches(complexMolecularProfileEvidenceJsonObject.getAsJsonArray(
                             "relevantTreatmentApproaches")))
                     .build());
@@ -244,6 +245,7 @@ public class MolecularProfileReader extends CkbJsonDirectoryReader<JsonMolecular
                     .ampCapAscoEvidenceLevel(Json.string(treatmentApproachEvidenceJsonObject, "ampCapAscoEvidenceLevel"))
                     .ampCapAscoInferredTier(Json.string(treatmentApproachEvidenceJsonObject, "ampCapAscoInferredTier"))
                     .ageGroups(Json.stringList(treatmentApproachEvidenceJsonObject, "ageGroups"))
+                    .clinicalTrialIds(Json.stringList(treatmentApproachEvidenceJsonObject, "clinicalTrialIds"))
                     .treatmentApproaches(extractRelevantTreatmentApproaches(treatmentApproachEvidenceJsonObject.getAsJsonArray(
                             "relevantTreatmentApproaches")))
                     .build());
@@ -324,6 +326,7 @@ public class MolecularProfileReader extends CkbJsonDirectoryReader<JsonMolecular
                     .ampCapAscoEvidenceLevel(Json.string(variantLevelEvidenceJsonObject, "ampCapAscoEvidenceLevel"))
                     .ampCapAscoInferredTier(Json.string(variantLevelEvidenceJsonObject, "ampCapAscoInferredTier"))
                     .ageGroups(Json.stringList(variantLevelEvidenceJsonObject, "ageGroups"))
+                    .clinicalTrialIds(Json.stringList(variantLevelEvidenceJsonObject, "clinicalTrialIds"))
                     .treatmentApproaches(extractRelevantTreatmentApproaches(variantLevelEvidenceJsonObject.getAsJsonArray(
                             "relevantTreatmentApproaches")))
                     .build());
@@ -365,7 +368,7 @@ public class MolecularProfileReader extends CkbJsonDirectoryReader<JsonMolecular
                     .ampCapAscoEvidenceLevel(Json.string(extendedEvidenceJsonObject, "ampCapAscoEvidenceLevel"))
                     .ampCapAscoInferredTier(Json.string(extendedEvidenceJsonObject, "ampCapAscoInferredTier"))
                     .ageGroups(Json.stringList(extendedEvidenceJsonObject, "ageGroups"))
-
+                    .clinicalTrialIds(Json.stringList(extendedEvidenceJsonObject, "clinicalTrialIds"))
                     .build());
         }
         return extendedEvidenceList;

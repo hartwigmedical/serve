@@ -125,6 +125,7 @@ public class ReferenceReader extends CkbJsonDirectoryReader<JsonReference> {
                     .ampCapAscoEvidenceLevel(Json.string(evidenceJsonObject, "ampCapAscoEvidenceLevel"))
                     .ampCapAscoInferredTier(Json.string(evidenceJsonObject, "ampCapAscoInferredTier"))
                     .ageGroups(Json.stringList(evidenceJsonObject, "ageGroups"))
+                    .clinicalTrialIds(Json.stringList(evidenceJsonObject, "clinicalTrialIds"))
                     .build());
         }
 

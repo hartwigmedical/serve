@@ -1,6 +1,12 @@
 package com.hartwig.serve.ckb.dao;
 
-import com.hartwig.serve.ckb.database.tables.*;
+import com.hartwig.serve.ckb.database.tables.Evidence;
+import com.hartwig.serve.ckb.database.tables.Evidenceagegroup;
+import com.hartwig.serve.ckb.database.tables.Evidenceclinicaltrialid;
+import com.hartwig.serve.ckb.database.tables.Evidencereference;
+import com.hartwig.serve.ckb.database.tables.Indicationevidence;
+import com.hartwig.serve.ckb.database.tables.Therapyevidence;
+import com.hartwig.serve.ckb.database.tables.Treatmentapproachevidence;
 import com.hartwig.serve.ckb.datamodel.reference.Reference;
 import com.hartwig.serve.ckb.datamodel.treatmentapproaches.DrugClassTreatmentApproach;
 import com.hartwig.serve.ckb.datamodel.treatmentapproaches.TherapyTreatmentApproach;

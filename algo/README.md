@@ -459,6 +459,8 @@ elsewhere.
 
 ## Version History and Download Links
 
+- [8.13.0](https://github.com/hartwigmedical/serve/releases/tag/8.13.0)
+  - Add 'clinicalTrialIds' to evidence datamodels
 - [8.12.0](https://github.com/hartwigmedical/serve/releases/tag/8.12.0)
     - When SERVE generates the `ServeRecord` and `ServeDatabase` it guarantees deterministic sorting (two JSONs produced from the same input
       will now always produce identical output)

@@ -65,6 +65,7 @@ final class TherapyDatamodelChecker {
         map.put("ampCapAscoEvidenceLevel", true);
         map.put("ampCapAscoInferredTier", true);
         map.put("ageGroups", true);
+        map.put("clinicalTrialIds", true);
 
         return new JsonDatamodelChecker("TherapyEvidenceObject", map);
     }

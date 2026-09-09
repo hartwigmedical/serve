@@ -164,6 +164,7 @@ public final class CkbTestFactory {
                 .ampCapAscoEvidenceLevel(level)
                 .ampCapAscoInferredTier("")
                 .ageGroups(List.of())
+                .clinicalTrialIds(List.of())
                 .references(List.of())
                 .build();
     }

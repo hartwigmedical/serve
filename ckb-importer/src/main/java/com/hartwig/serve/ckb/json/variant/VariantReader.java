@@ -217,6 +217,7 @@ public class VariantReader extends CkbJsonDirectoryReader<JsonVariant> {
                     .ampCapAscoEvidenceLevel(Json.string(evidenceJsonObject, "ampCapAscoEvidenceLevel"))
                     .ampCapAscoInferredTier(Json.string(evidenceJsonObject, "ampCapAscoInferredTier"))
                     .ageGroups(Json.stringList(evidenceJsonObject, "ageGroups"))
+                    .clinicalTrialIds(Json.stringList(evidenceJsonObject, "clinicalTrialIds"))
                     .build());
         }
         return evidences;
@@ -279,6 +280,7 @@ public class VariantReader extends CkbJsonDirectoryReader<JsonVariant> {
                     .ampCapAscoEvidenceLevel(Json.string(extendedEvidenceJsonObject, "ampCapAscoEvidenceLevel"))
                     .ampCapAscoInferredTier(Json.string(extendedEvidenceJsonObject, "ampCapAscoInferredTier"))
                     .ageGroups(Json.stringList(extendedEvidenceJsonObject, "ageGroups"))
+                    .clinicalTrialIds(Json.stringList(extendedEvidenceJsonObject, "clinicalTrialIds"))
                     .build());
         }
         return extendedEvidences;

@@ -163,6 +163,7 @@ public class GeneReader extends CkbJsonDirectoryReader<JsonGene> {
                     .ampCapAscoEvidenceLevel(Json.string(evidenceObject, "ampCapAscoEvidenceLevel"))
                     .ampCapAscoInferredTier(Json.string(evidenceObject, "ampCapAscoInferredTier"))
                     .ageGroups(Json.stringList(evidenceObject, "ageGroups"))
+                    .clinicalTrialIds(Json.stringList(evidenceObject, "clinicalTrialIds"))
                     .build());
         }
         return evidences;

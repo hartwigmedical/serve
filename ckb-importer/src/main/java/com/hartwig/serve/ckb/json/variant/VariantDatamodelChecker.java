@@ -27,6 +27,7 @@ final class VariantDatamodelChecker {
         map.put("transformingActivity", true);
         map.put("polymorphism", true);
         map.put("hotspotReference", true);
+        map.put("synonyms", true);
         map.put("createDate", true);
         map.put("updateDate", true);
         map.put("referenceTranscriptCoordinates", true);

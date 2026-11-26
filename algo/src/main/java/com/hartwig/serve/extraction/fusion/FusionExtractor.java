@@ -2,8 +2,10 @@ package com.hartwig.serve.extraction.fusion;
 
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import com.hartwig.serve.common.classification.EventType;
+import com.hartwig.serve.common.classification.ExonicFusionPair;
 import com.hartwig.serve.common.knownfusion.KnownFusionCache;
 import com.hartwig.serve.datamodel.molecular.fusion.FusionPair;
 import com.hartwig.serve.extraction.util.DriverInconsistencyMode;
@@ -18,6 +20,7 @@ import org.jetbrains.annotations.Nullable;
 public class FusionExtractor {
 
     private static final Logger LOGGER = LogManager.getLogger(FusionExtractor.class);
+    private static final String FUSION_PARTNER_SEPARATOR = "::";
 
     @NotNull
     private final GeneChecker geneChecker;
@@ -40,6 +43,11 @@ public class FusionExtractor {
         if (type == EventType.FUSION_PAIR) {
             if (FusionAnnotationConfig.EXONIC_FUSIONS_MAP.containsKey(event)) {
                 return fromConfiguredPair(FusionAnnotationConfig.EXONIC_FUSIONS_MAP.get(event), gene);
+            }
+
+            ExonicFusionPair exonicFusionPair = ExonicFusionPair.fromEvent(event);
+            if (exonicFusionPair != null) {
+                return validate(fromExonicFusionPair(exonicFusionPair));
             } else if (hasExonicDelDupKeyPhrase(event)) {
                 return validate(fromExonicDelDup(gene, event));
             } else {
@@ -60,6 +68,18 @@ public class FusionExtractor {
         }
 
         return false;
+    }
+
+    @NotNull
+    private static FusionPair fromExonicFusionPair(@NotNull ExonicFusionPair exonicFusionPair) {
+        return ImmutableFusionPairImpl.builder()
+                .geneUp(exonicFusionPair.geneUp())
+                .minExonUp(exonicFusionPair.exonUp())
+                .maxExonUp(exonicFusionPair.exonUp())
+                .geneDown(exonicFusionPair.geneDown())
+                .minExonDown(exonicFusionPair.exonDown())
+                .maxExonDown(exonicFusionPair.exonDown())
+                .build();
     }
 
     @Nullable
@@ -120,9 +140,21 @@ public class FusionExtractor {
 
     @Nullable
     private FusionPair fromStandardFusionPairEvent(@NotNull String event) {
-        String[] fusionArray = event.split("-");
         String geneUp = null;
         String geneDown = null;
+
+        if (event.contains(FUSION_PARTNER_SEPARATOR)) {
+            // The "::" separator is unambiguous, so gene names containing a dash need no further interpretation.
+            String[] separatedGenes = event.split(Pattern.quote(FUSION_PARTNER_SEPARATOR));
+            if (separatedGenes.length == 2) {
+                geneUp = separatedGenes[0];
+                geneDown = separatedGenes[1].split(" ")[0];
+            }
+
+            return buildStandardFusionPair(event, geneUp, geneDown);
+        }
+
+        String[] fusionArray = event.split("-");
         if (fusionArray.length == 2) {
             geneUp = fusionArray[0];
             geneDown = fusionArray[1].split(" ")[0];
@@ -144,6 +176,11 @@ public class FusionExtractor {
             geneDown = fusionArray[2] + "-" + fusionArray[3].split(" ")[0];
         }
 
+        return buildStandardFusionPair(event, geneUp, geneDown);
+    }
+
+    @Nullable
+    private static FusionPair buildStandardFusionPair(@NotNull String event, @Nullable String geneUp, @Nullable String geneDown) {
         if (geneUp == null || geneDown == null) {
             LOGGER.warn("Could not resolve fusion pair from '{}'", event);
             return null;

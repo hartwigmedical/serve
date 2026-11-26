@@ -33,6 +33,10 @@ public class CkbEventAndGeneExtractorTest {
         assertEquals("fusion promiscuous",
                 CkbEventAndGeneExtractor.extractEvent(CkbTestFactory.createVariant("NTRK2 fusion", "fusion", "fusion")));
         assertEquals("NPM1-ALK", CkbEventAndGeneExtractor.extractEvent(CkbTestFactory.createVariant("NPM1 - ALK", "NPM1 - ALK", "fusion")));
+        assertEquals("RUFY2 exon9::RET exon12",
+                CkbEventAndGeneExtractor.extractEvent(CkbTestFactory.createVariant("RUFY2 exon9::RET exon12",
+                        "RUFY2 exon9::RET exon12",
+                        "fusion")));
         assertEquals("unknown", CkbEventAndGeneExtractor.extractEvent(CkbTestFactory.createVariant("unknown", "unknown", null)));
     }
 }

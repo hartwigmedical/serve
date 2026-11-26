@@ -1,10 +1,15 @@
 package com.hartwig.serve.common.classification.matchers;
 
 import java.util.Set;
+import java.util.regex.Pattern;
+
+import com.hartwig.serve.common.classification.ExonicFusionPair;
 
 import org.jetbrains.annotations.NotNull;
 
 class FusionPairMatcher implements EventMatcher {
+
+    private static final String FUSION_PARTNER_SEPARATOR = "::";
 
     @NotNull
     private final Set<String> exonicDelDupFusionKeyPhrases;
@@ -36,6 +41,10 @@ class FusionPairMatcher implements EventMatcher {
             }
         }
 
+        if (ExonicFusionPair.isExonicFusionPair(event)) {
+            return true;
+        }
+
         String trimmedEvent = event.trim();
         String potentialFusion;
         if (trimmedEvent.contains(" ")) {
@@ -46,6 +55,12 @@ class FusionPairMatcher implements EventMatcher {
             potentialFusion = parts[0];
         } else {
             potentialFusion = trimmedEvent;
+        }
+
+        if (potentialFusion.contains(FUSION_PARTNER_SEPARATOR)) {
+            // The "::" separator is unambiguous, so gene names containing a dash need no further interpretation.
+            String[] parts = potentialFusion.split(Pattern.quote(FUSION_PARTNER_SEPARATOR));
+            return parts.length == 2 && !parts[0].isEmpty() && !containsInvalidChar(parts[0]) && !containsInvalidChar(parts[1]);
         }
 
         if (potentialFusion.contains("-") && !potentialFusion.equalsIgnoreCase("wild-type")) {

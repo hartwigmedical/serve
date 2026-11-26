@@ -18,7 +18,8 @@ import org.junit.Test;
 
 public class FusionExtractorTest {
 
-    private static final GeneChecker GENE_CHECKER = new GeneChecker(Sets.newHashSet("EGFR", "PDGFRA", "BCR", "MET", "NTRK3"));
+    private static final GeneChecker GENE_CHECKER =
+            new GeneChecker(Sets.newHashSet("EGFR", "PDGFRA", "BCR", "MET", "NTRK3", "RUFY2", "RET"));
 
     @Test
     public void canFilterInCatalog() {
@@ -127,6 +128,71 @@ public class FusionExtractorTest {
         assertEquals("EGFR", fusion.geneDown());
         assertEquals(14, (int) fusion.minExonDown());
         assertEquals(18, (int) fusion.maxExonDown());
+    }
+
+    @Test
+    public void canExtractExonicFusionPairs() {
+        FusionExtractor fusionExtractor = testFusionExtractor();
+        FusionPair fusion = fusionExtractor.extract("RET", EventType.FUSION_PAIR, "RUFY2 exon9::RET exon12");
+
+        assertNotNull(fusion);
+        assertEquals("RUFY2", fusion.geneUp());
+        assertEquals(9, (int) fusion.minExonUp());
+        assertEquals(9, (int) fusion.maxExonUp());
+        assertEquals("RET", fusion.geneDown());
+        assertEquals(12, (int) fusion.minExonDown());
+        assertEquals(12, (int) fusion.maxExonDown());
+    }
+
+    @Test
+    public void canExtractExonicFusionPairsOnSameGene() {
+        FusionExtractor fusionExtractor = testFusionExtractor();
+        FusionPair fusion = fusionExtractor.extract("MET", EventType.FUSION_PAIR, "MET exon 13::MET exon 15");
+
+        assertNotNull(fusion);
+        assertEquals("MET", fusion.geneUp());
+        assertEquals(13, (int) fusion.minExonUp());
+        assertEquals(13, (int) fusion.maxExonUp());
+        assertEquals("MET", fusion.geneDown());
+        assertEquals(15, (int) fusion.minExonDown());
+        assertEquals(15, (int) fusion.maxExonDown());
+    }
+
+    @Test
+    public void ignoresExonicFusionPairsOnUnknownGenes() {
+        FusionExtractor fusionExtractor = testFusionExtractor();
+        assertNull(fusionExtractor.extract("RET", EventType.FUSION_PAIR, "KIF5B exon15::RET exon12"));
+    }
+
+    @Test
+    public void canExtractFusionPairsWithColonSeparator() {
+        FusionExtractor fusionExtractor = testFusionExtractor();
+        FusionPair fusion = fusionExtractor.extract("MET", EventType.FUSION_PAIR, "BCR::MET");
+
+        assertNotNull(fusion);
+        assertEquals("BCR", fusion.geneUp());
+        assertEquals("MET", fusion.geneDown());
+        assertNull(fusion.minExonUp());
+        assertNull(fusion.maxExonUp());
+        assertNull(fusion.minExonDown());
+        assertNull(fusion.maxExonDown());
+    }
+
+    @Test
+    public void canExtractFusionPairsWithColonSeparatorOnGenesWithDashes() {
+        FusionExtractor fusionExtractor =
+                testFusionExtractorWithGeneChecker(new GeneChecker(Sets.newHashSet("IGH", "NKX2-1", "HLA-A", "ROS1")));
+        FusionPair fusion = fusionExtractor.extract("NKX2-1", EventType.FUSION_PAIR, "HLA-A::NKX2-1 Fusion");
+
+        assertNotNull(fusion);
+        assertEquals("HLA-A", fusion.geneUp());
+        assertEquals("NKX2-1", fusion.geneDown());
+    }
+
+    @Test
+    public void ignoresFusionPairsWithColonSeparatorOnUnknownGenes() {
+        FusionExtractor fusionExtractor = testFusionExtractor();
+        assertNull(fusionExtractor.extract("MET", EventType.FUSION_PAIR, "KIF5B::MET"));
     }
 
     @Test

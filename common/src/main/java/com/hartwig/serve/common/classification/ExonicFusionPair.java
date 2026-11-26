@@ -12,9 +12,12 @@ import org.jetbrains.annotations.Nullable;
  */
 public final class ExonicFusionPair {
 
-    private static final Pattern EXONIC_FUSION_PAIR_PATTERN =
-            Pattern.compile("^([A-Za-z0-9.\\-]+?)\\s*exon\\s*(\\d+)\\s*::\\s*([A-Za-z0-9.\\-]+?)\\s*exon\\s*(\\d+)$",
-                    Pattern.CASE_INSENSITIVE);
+    public static final String FUSION_PARTNER_SEPARATOR = "::";
+
+    private static final Pattern EXONIC_FUSION_PAIR_PATTERN = Pattern.compile(
+            "^([A-Za-z0-9.\\-]+?)\\s*exon\\s*(\\d+)\\s*" + Pattern.quote(FUSION_PARTNER_SEPARATOR)
+                    + "\\s*([A-Za-z0-9.\\-]+?)\\s*exon\\s*(\\d+)$",
+            Pattern.CASE_INSENSITIVE);
 
     @NotNull
     private final String geneUp;
@@ -67,6 +70,6 @@ public final class ExonicFusionPair {
 
     @Override
     public String toString() {
-        return geneUp + " exon" + exonUp + "::" + geneDown + " exon" + exonDown;
+        return geneUp + " exon" + exonUp + FUSION_PARTNER_SEPARATOR + geneDown + " exon" + exonDown;
     }
 }

@@ -9,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
 
 class FusionPairMatcher implements EventMatcher {
 
-    private static final String FUSION_PARTNER_SEPARATOR = "::";
 
     @NotNull
     private final Set<String> exonicDelDupFusionKeyPhrases;
@@ -57,9 +56,9 @@ class FusionPairMatcher implements EventMatcher {
             potentialFusion = trimmedEvent;
         }
 
-        if (potentialFusion.contains(FUSION_PARTNER_SEPARATOR)) {
+        if (potentialFusion.contains(ExonicFusionPair.FUSION_PARTNER_SEPARATOR)) {
             // The "::" separator is unambiguous, so gene names containing a dash need no further interpretation.
-            String[] parts = potentialFusion.split(Pattern.quote(FUSION_PARTNER_SEPARATOR));
+            String[] parts = potentialFusion.split(Pattern.quote(ExonicFusionPair.FUSION_PARTNER_SEPARATOR));
             return parts.length == 2 && !parts[0].isEmpty() && !containsInvalidChar(parts[0]) && !containsInvalidChar(parts[1]);
         }
 

@@ -20,7 +20,6 @@ import org.jetbrains.annotations.Nullable;
 public class FusionExtractor {
 
     private static final Logger LOGGER = LogManager.getLogger(FusionExtractor.class);
-    private static final String FUSION_PARTNER_SEPARATOR = "::";
 
     @NotNull
     private final GeneChecker geneChecker;
@@ -143,9 +142,9 @@ public class FusionExtractor {
         String geneUp = null;
         String geneDown = null;
 
-        if (event.contains(FUSION_PARTNER_SEPARATOR)) {
+        if (event.contains(ExonicFusionPair.FUSION_PARTNER_SEPARATOR)) {
             // The "::" separator is unambiguous, so gene names containing a dash need no further interpretation.
-            String[] separatedGenes = event.split(Pattern.quote(FUSION_PARTNER_SEPARATOR));
+            String[] separatedGenes = event.split(Pattern.quote(ExonicFusionPair.FUSION_PARTNER_SEPARATOR));
             if (separatedGenes.length == 2) {
                 geneUp = separatedGenes[0];
                 geneDown = separatedGenes[1].split(" ")[0];

@@ -11,6 +11,7 @@ import com.hartwig.serve.ckb.classification.CkbEventTypeExtractor;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.ckb.datamodel.variant.Variant;
 import com.hartwig.serve.common.classification.EventType;
+import com.hartwig.serve.common.classification.ExonicFusionPair;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.efficacy.EfficacyEvidence;
 import com.hartwig.serve.datamodel.molecular.MolecularCriterium;
@@ -35,7 +36,6 @@ public class CkbExtractor {
 
     private static final Logger LOGGER = LogManager.getLogger(CkbExtractor.class);
     private static final String VARIANT_DELIMITER = ",";
-    private static final String FUSION_PARTNER_SEPARATOR = "::";
     private static final String GENE_DELIMITER = ",";
 
     @NotNull
@@ -176,7 +176,7 @@ public class CkbExtractor {
     // Fusion events written with the "::" separator, eg. "RUFY2 exon9::RET exon12", already name both fusion partners.
     // Prefixing the CKB gene symbol would only repeat one of them.
     private static boolean namesItsOwnGenes(@NotNull String event) {
-        return event.contains(FUSION_PARTNER_SEPARATOR);
+        return event.contains(ExonicFusionPair.FUSION_PARTNER_SEPARATOR);
     }
 
     @NotNull

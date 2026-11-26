@@ -35,6 +35,7 @@ public class CkbExtractor {
 
     private static final Logger LOGGER = LogManager.getLogger(CkbExtractor.class);
     private static final String VARIANT_DELIMITER = ",";
+    private static final String FUSION_PARTNER_SEPARATOR = "::";
     private static final String GENE_DELIMITER = ",";
 
     @NotNull
@@ -165,7 +166,17 @@ public class CkbExtractor {
 
     @NotNull
     private static String sourceEvent(@NotNull String gene, @NotNull String event) {
-        return gene.equals(CkbConstants.NO_GENE) ? event : gene + " " + event;
+        if (gene.equals(CkbConstants.NO_GENE) || namesItsOwnGenes(event)) {
+            return event;
+        }
+
+        return gene + " " + event;
+    }
+
+    // Fusion events written with the "::" separator, eg. "RUFY2 exon9::RET exon12", already name both fusion partners.
+    // Prefixing the CKB gene symbol would only repeat one of them.
+    private static boolean namesItsOwnGenes(@NotNull String event) {
+        return event.contains(FUSION_PARTNER_SEPARATOR);
     }
 
     @NotNull

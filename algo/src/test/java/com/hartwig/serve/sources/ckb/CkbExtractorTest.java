@@ -131,6 +131,34 @@ public class CkbExtractorTest {
                 .build(), ckbExtractor().extract(List.of(entryWithComplexVariant)));
     }
 
+    @Test
+    public void shouldNotRepeatGeneInSourceEventForFusionsWithColonSeparator() {
+        Variant fusionVariant =
+                CkbTestFactory.createVariant("EML4", "EML4 exon6::ALK exon20", "EML4 exon6::ALK exon20", "gain of function", null);
+
+        ExtractionResult result = ckbExtractor().extract(List.of(createCombinedEntry(List.of(fusionVariant))));
+
+        assertEquals(1, result.knownEvents().fusions().size());
+        assertEquals(1, result.eventInterpretations().size());
+
+        EventInterpretation interpretation = result.eventInterpretations().iterator().next();
+        assertEquals("EML4 exon 6::ALK exon 20", interpretation.sourceEvent());
+        assertEquals("EML4", interpretation.interpretedGene());
+        assertEquals("EML4 exon 6::ALK exon 20", interpretation.interpretedEvent());
+        assertEquals(EventType.FUSION_PAIR, interpretation.interpretedEventType());
+    }
+
+    @Test
+    public void shouldKeepGenePrefixInSourceEventForFusionsWithDashSeparator() {
+        // The gene is repeated here too, but that is pre-existing behaviour for the "-" notation and deliberately left alone.
+        Variant fusionVariant = CkbTestFactory.createVariant("EML4", "EML4-ALK", "EML4-ALK Fusion", "gain of function", null);
+
+        ExtractionResult result = ckbExtractor().extract(List.of(createCombinedEntry(List.of(fusionVariant))));
+
+        EventInterpretation interpretation = result.eventInterpretations().iterator().next();
+        assertEquals("EML4 EML4-ALK", interpretation.sourceEvent());
+    }
+
     private void assertEmptyExtractionWithInterpretation(@NotNull EventInterpretation eventInterpretation,
             @NotNull ExtractionResult extractionResult) {
         assertEquals(ImmutableExtractionResult.builder()

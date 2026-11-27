@@ -21,7 +21,7 @@
 | db_pass  | Required: The password needed for the DB user to authenticate on the URL. |
 
 ## Version History and Download Links
-- [Upcoming]
+- [5.7.0](https://github.com/hartwigmedical/serve/releases/tag/ckb-importer-v5.6.0)
   - Add 'synonyms'
   - Read fusion breakpoint variants (GENE 1 exon X::GENE 2 exon Y)
 - [5.6.0](https://github.com/hartwigmedical/serve/releases/tag/ckb-importer-v5.6.0)

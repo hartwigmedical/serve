@@ -459,7 +459,7 @@ elsewhere.
 
 ## Version History and Download Links
 
-- [Upcoming]
+- [8.14.0](https://github.com/hartwigmedical/serve/releases/tag/8.13.0))
   - Support fusion breakpoint variants (GENE 1 exon X::GENE 2 exon Y)
 - [8.13.0](https://github.com/hartwigmedical/serve/releases/tag/8.13.0)
   - Add 'clinicalTrialIds' to evidence datamodels

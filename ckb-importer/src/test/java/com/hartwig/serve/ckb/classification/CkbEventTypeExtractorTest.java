@@ -35,6 +35,28 @@ public class CkbEventTypeExtractorTest {
     }
 
     @Test
+    public void canClassifyExonicFusionPairs() {
+        Variant exonicFusionPair =
+                CkbTestFactory.createVariant("RET", "RUFY2 exon9::RET exon12", "RUFY2 exon9::RET exon12", "fusion");
+        assertEquals(EventType.FUSION_PAIR, CkbEventTypeExtractor.classify(CkbTestFactory.createEntry(exonicFusionPair)));
+
+        Variant exonicFusionPairFullySpacedOut =
+                CkbTestFactory.createVariant("RET", "RUFY2 exon 9::RET exon 12", "RUFY2 exon 9::RET exon 12", "fusion");
+        assertEquals(EventType.FUSION_PAIR, CkbEventTypeExtractor.classify(CkbTestFactory.createEntry(exonicFusionPairFullySpacedOut)));
+
+        Variant exonicFusionPairWithoutFusionImpact =
+                CkbTestFactory.createVariant("RET", "RUFY2 exon9::RET exon12", "RUFY2 exon9::RET exon12", null);
+        assertEquals(EventType.FUSION_PAIR,
+                CkbEventTypeExtractor.classify(CkbTestFactory.createEntry(exonicFusionPairWithoutFusionImpact)));
+    }
+
+    @Test
+    public void canClassifyFusionPairsWithColonSeparator() {
+        Variant fusionPair = CkbTestFactory.createVariant("EGFR - MET", "EGFR::MET", "EGFR::MET", "fusion");
+        assertEquals(EventType.FUSION_PAIR, CkbEventTypeExtractor.classify(CkbTestFactory.createEntry(fusionPair)));
+    }
+
+    @Test
     public void canClassifyExonicDeletes() {
         Variant exonicDelete = CkbTestFactory.createVariant("TP53 exon 27 del", "exon 27 del", null);
         assertEquals(EventType.EXON, CkbEventTypeExtractor.classify(CkbTestFactory.createEntry(exonicDelete)));

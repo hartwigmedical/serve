@@ -1,6 +1,7 @@
 package com.hartwig.serve.ckb.classification;
 
 import com.hartwig.serve.ckb.datamodel.variant.Variant;
+import com.hartwig.serve.common.classification.ExonicFusionPair;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -44,7 +45,9 @@ public final class CkbEventAndGeneExtractor {
         if (isPromiscuousFusion(variant)) {
             return "fusion promiscuous";
         } else if (isFusion(variant)) {
-            return removeAllSpaces(variant.variant());
+            // Exonic fusion pairs like "GENE1 exonX::GENE2 exonY" are unambiguous and are kept exactly as CKB wrote them.
+            // Other fusions have their whitespace stripped since downstream matching expects "GENE1-GENE2".
+            return ExonicFusionPair.isExonicFusionPair(variant.variant()) ? variant.variant() : removeAllSpaces(variant.variant());
         } else if (variant.variant().contains("exon") && !variant.variant().contains("exon ")) {
             // Some exon variants do not contain a space after the "exon" keyword
             return variant.variant().replace("exon", "exon ");

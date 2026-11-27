@@ -16,6 +16,7 @@ import com.hartwig.serve.common.classification.EventType;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.RefGenome;
 import com.hartwig.serve.datamodel.molecular.MolecularCriterium;
+import com.hartwig.serve.datamodel.molecular.fusion.ActionableFusion;
 import com.hartwig.serve.extraction.ExtractionResult;
 import com.hartwig.serve.extraction.ImmutableExtractionResult;
 import com.hartwig.serve.extraction.events.EventInterpretation;
@@ -129,6 +130,54 @@ public class CkbExtractorTest {
                 .interpretedEvent("act mut")
                 .interpretedEventType(EventType.GENE_LEVEL)
                 .build(), ckbExtractor().extract(List.of(entryWithComplexVariant)));
+    }
+
+    @Test
+    public void shouldNotRepeatGeneInSourceEventForFusionsWithColonSeparator() {
+        ExtractionResult result = extractFusion("EML4 exon6::ALK exon20");
+
+        // The sourceEvent on the actionable event is what ends up in serve.json.
+        assertEquals("EML4 exon 6::ALK exon 20", onlyActionableFusion(result).sourceEvent());
+
+        assertEquals(1, result.knownEvents().fusions().size());
+        assertEquals(1, result.eventInterpretations().size());
+
+        EventInterpretation interpretation = result.eventInterpretations().iterator().next();
+        assertEquals("EML4 exon 6::ALK exon 20", interpretation.sourceEvent());
+        assertEquals("EML4", interpretation.interpretedGene());
+        assertEquals("EML4 exon 6::ALK exon 20", interpretation.interpretedEvent());
+        assertEquals(EventType.FUSION_PAIR, interpretation.interpretedEventType());
+    }
+
+    @Test
+    public void shouldKeepGenePrefixInSourceEventForFusionsWithDashSeparator() {
+        // The gene is repeated here too, but that is pre-existing behaviour for the "-" notation and deliberately left alone.
+        ExtractionResult result = extractFusion("EML4-ALK");
+
+        assertEquals("EML4 EML4-ALK", onlyActionableFusion(result).sourceEvent());
+        assertEquals("EML4 EML4-ALK", result.eventInterpretations().iterator().next().sourceEvent());
+    }
+
+    @NotNull
+    private static ExtractionResult extractFusion(@NotNull String variant) {
+        Variant fusionVariant = CkbTestFactory.createVariant("EML4", variant, variant, "gain of function", null);
+
+        return ckbExtractor().extract(List.of(createCombinedEntry(List.of(fusionVariant),
+                "sensitive",
+                "Actionable",
+                "any treatment",
+                "any indication",
+                "A",
+                "Guideline",
+                "DOID:162")));
+    }
+
+    @NotNull
+    private static ActionableFusion onlyActionableFusion(@NotNull ExtractionResult result) {
+        assertEquals(1, result.evidences().size());
+        Set<ActionableFusion> fusions = result.evidences().get(0).molecularCriterium().fusions();
+        assertEquals(1, fusions.size());
+        return fusions.iterator().next();
     }
 
     private void assertEmptyExtractionWithInterpretation(@NotNull EventInterpretation eventInterpretation,

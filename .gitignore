@@ -4,3 +4,6 @@
 
 # Ignore target directies
 target
+
+# Ignore macOS folder metadata
+.DS_Store

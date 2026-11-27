@@ -45,6 +45,7 @@ public final class VariantFactory {
                     .createDate(variant.createDate())
                     .updateDate(variant.updateDate())
                     .fullName(variant.fullName())
+                    .synonyms(variant.synonyms())
                     .variant(variant.variant())
                     .impact(variant.impact())
                     .proteinEffect(variant.proteinEffect())

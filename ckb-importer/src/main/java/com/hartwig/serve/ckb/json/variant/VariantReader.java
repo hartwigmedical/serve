@@ -57,6 +57,7 @@ public class VariantReader extends CkbJsonDirectoryReader<JsonVariant> {
                 .transformingActivity(Json.nullableString(object, "transformingActivity"))
                 .polymorphism(Json.nullableString(object, "polymorphism"))
                 .hotspotReference(Json.nullableString(object, "hotspotReference"))
+                .synonyms(Json.nullableStringList(object, "synonyms"))
                 .createDate(DateConverter.toDate(Json.string(object, "createDate")))
                 .updateDate(DateConverter.toDate(Json.string(object, "updateDate")))
                 .referenceTranscriptCoordinate(extractReferenceTranscriptCoordinate(Json.nullableObject(object,

@@ -8,6 +8,7 @@ import com.hartwig.serve.ckb.database.tables.Geneterm;
 import com.hartwig.serve.ckb.database.tables.Membervariant;
 import com.hartwig.serve.ckb.database.tables.Transcriptcoordinate;
 import com.hartwig.serve.ckb.database.tables.Variant;
+import com.hartwig.serve.ckb.database.tables.Variantsynonym;
 import com.hartwig.serve.ckb.datamodel.reference.Reference;
 import com.hartwig.serve.ckb.datamodel.variant.MemberVariant;
 import com.hartwig.serve.ckb.datamodel.variant.TranscriptCoordinate;
@@ -28,6 +29,7 @@ class VariantDAO {
     public void deleteAll() {
         // Note that deletions should go from branch to root
         context.deleteFrom(Membervariant.MEMBERVARIANT).execute();
+        context.deleteFrom(Variantsynonym.VARIANTSYNONYM).execute();
         context.deleteFrom(Categoryvariantpath.CATEGORYVARIANTPATH).execute();
         context.deleteFrom(Transcriptcoordinate.TRANSCRIPTCOORDINATE).execute();
         context.deleteFrom(Tables.VARIANTREFERENCE).execute();
@@ -77,6 +79,12 @@ class VariantDAO {
                 .getValue(Variant.VARIANT.ID);
 
         writeGene(variant.gene(), id);
+
+        for (String synonym : variant.synonyms()) {
+            context.insertInto(Variantsynonym.VARIANTSYNONYM,
+                    Variantsynonym.VARIANTSYNONYM.VARIANTID,
+                    Variantsynonym.VARIANTSYNONYM.SYNONYM).values(id, synonym).execute();
+        }
 
         writeTranscriptCoordinate(variant.referenceTranscriptCoordinate(), id, true);
         for (TranscriptCoordinate transcriptCoordinate : variant.allTranscriptCoordinates()) {

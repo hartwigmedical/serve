@@ -25,6 +25,11 @@ public class FusionPairMatcherTest {
         assertTrue(matcher.matches("EGFR", "VIII"));
         assertTrue(matcher.matches("EGFR", "exonic del dup of any exon!"));
         assertTrue(matcher.matches("NKX2-1", "TRB-NKX2-1 Fusion"));
+        assertTrue(matcher.matches("RET", "RUFY2 exon9::RET exon12"));
+        assertTrue(matcher.matches("MET", "MET exon13::MET exon15"));
+        assertTrue(matcher.matches("MET", "EGFR::MET"));
+        assertTrue(matcher.matches("MET", "EGFR::MET fusion"));
+        assertTrue(matcher.matches("NKX2-1", "TRB::NKX2-1 Fusion"));
 
         assertFalse(matcher.matches("BRAF", "BRAF-"));
         assertFalse(matcher.matches("BRAF", "BRAF amp"));
@@ -32,5 +37,10 @@ public class FusionPairMatcherTest {
         assertFalse(matcher.matches("BRAF", "V600E"));
         assertFalse(matcher.matches("BRAF", "wild-type"));
         assertFalse(matcher.matches("-", "HLA-A*02:01"));
+        assertFalse(matcher.matches("KIT", "exon 11"));
+        assertFalse(matcher.matches("RET", "RUFY2 exon9::RET"));
+        assertFalse(matcher.matches("MET", "::MET"));
+        assertFalse(matcher.matches("EGFR", "EGFR::"));
+        assertFalse(matcher.matches("MET", "EGFR::MET::ALK"));
     }
 }

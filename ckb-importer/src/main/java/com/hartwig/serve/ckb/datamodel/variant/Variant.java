@@ -25,6 +25,9 @@ public abstract class Variant {
     public abstract String fullName();
 
     @NotNull
+    public abstract List<String> synonyms();
+
+    @NotNull
     public abstract String variant();
 
     @Nullable

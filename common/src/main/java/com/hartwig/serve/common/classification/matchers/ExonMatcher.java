@@ -2,6 +2,8 @@ package com.hartwig.serve.common.classification.matchers;
 
 import java.util.Set;
 
+import com.hartwig.serve.common.classification.ExonicFusionPair;
+
 import org.jetbrains.annotations.NotNull;
 
 class ExonMatcher implements EventMatcher {
@@ -27,6 +29,11 @@ class ExonMatcher implements EventMatcher {
     public boolean matches(@NotNull String gene, @NotNull String event) {
         if (specificExonEvents.contains(event)) {
             return true;
+        }
+
+        // Events like "GENE1 exonX::GENE2 exonY" describe a fusion pair rather than an exon on a single gene.
+        if (ExonicFusionPair.isExonicFusionPair(event)) {
+            return false;
         }
 
         for (String blacklistPhrase : exonBlacklistKeyPhrases) {

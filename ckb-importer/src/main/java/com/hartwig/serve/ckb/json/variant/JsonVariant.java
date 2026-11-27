@@ -54,6 +54,9 @@ public abstract class JsonVariant implements CkbJsonObject {
     public abstract String hotspotReference();
 
     @NotNull
+    public abstract List<String> synonyms();
+
+    @NotNull
     public abstract LocalDate createDate();
 
     @NotNull

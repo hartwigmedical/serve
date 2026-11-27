@@ -32,6 +32,15 @@ CREATE TABLE `variant`
     FOREIGN KEY (`ckbEntryId`) REFERENCES `ckbEntry`(`id`)
 );
 
+DROP TABLE IF EXISTS `variantSynonym`;
+CREATE TABLE `variantSynonym`
+(   `id` int NOT NULL AUTO_INCREMENT,
+    `variantId` int NOT NULL,
+    `synonym` varchar(255) NOT NULL,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`variantId`) REFERENCES `variant`(`id`)
+);
+
 DROP TABLE IF EXISTS `variantReference`;
 CREATE TABLE `variantReference`
 (   `id` int NOT NULL AUTO_INCREMENT,

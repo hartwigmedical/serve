@@ -5,13 +5,11 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.hartwig.serve.ckb.classification.CkbConstants;
 import com.hartwig.serve.ckb.classification.CkbEventAndGeneExtractor;
 import com.hartwig.serve.ckb.classification.CkbEventTypeExtractor;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
 import com.hartwig.serve.ckb.datamodel.variant.Variant;
 import com.hartwig.serve.common.classification.EventType;
-import com.hartwig.serve.common.classification.ExonicFusionPair;
 import com.hartwig.serve.datamodel.Knowledgebase;
 import com.hartwig.serve.datamodel.efficacy.EfficacyEvidence;
 import com.hartwig.serve.datamodel.molecular.MolecularCriterium;
@@ -148,7 +146,7 @@ public class CkbExtractor {
 
             return ImmutableEventInterpretation.builder()
                     .source(Knowledgebase.CKB)
-                    .sourceEvent(sourceEvent(gene, event))
+                    .sourceEvent(CkbMolecularCriteriaExtractor.sourceEvent(gene, event))
                     .interpretedGene(gene)
                     .interpretedEvent(event)
                     .interpretedEventType(entry.type())
@@ -165,26 +163,11 @@ public class CkbExtractor {
     }
 
     @NotNull
-    private static String sourceEvent(@NotNull String gene, @NotNull String event) {
-        if (gene.equals(CkbConstants.NO_GENE) || namesItsOwnGenes(event)) {
-            return event;
-        }
-
-        return gene + " " + event;
-    }
-
-    // Fusion events written with the "::" separator, eg. "RUFY2 exon9::RET exon12", already name both fusion partners.
-    // Prefixing the CKB gene symbol would only repeat one of them.
-    private static boolean namesItsOwnGenes(@NotNull String event) {
-        return event.contains(ExonicFusionPair.FUSION_PARTNER_SEPARATOR);
-    }
-
-    @NotNull
     private static String combineEvents(@NotNull List<ExtractedEvent> events) {
         return events.stream().map(e -> {
             String event = e.event();
             String gene = e.gene();
-            return sourceEvent(gene, event);
+            return CkbMolecularCriteriaExtractor.sourceEvent(gene, event);
         }).collect(Collectors.joining(VARIANT_DELIMITER));
     }
 

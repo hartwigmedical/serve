@@ -13,6 +13,7 @@ import com.google.common.annotations.VisibleForTesting;
 import com.hartwig.serve.ckb.classification.CkbConstants;
 import com.hartwig.serve.ckb.classification.CkbEventAndGeneExtractor;
 import com.hartwig.serve.ckb.datamodel.CkbEntry;
+import com.hartwig.serve.common.classification.ExonicFusionPair;
 import com.hartwig.serve.datamodel.ImmutableActionableEventImpl;
 import com.hartwig.serve.datamodel.molecular.ActionableEvent;
 import com.hartwig.serve.datamodel.molecular.ImmutableMolecularCriterium;
@@ -60,13 +61,26 @@ final class CkbMolecularCriteriaExtractor {
 
     @NotNull
     public static String combinedSourceEvent(@NotNull CkbEntry entry) {
-        return entry.variants().stream()
-                .map(variant -> {
-                    String event = CkbEventAndGeneExtractor.extractEvent(variant);
-                    String gene = CkbEventAndGeneExtractor.extractGene(variant);
-                    return gene.equals(CkbConstants.NO_GENE) ? event : gene + " " + event;
-                })
+        return entry.variants()
+                .stream()
+                .map(variant -> sourceEvent(CkbEventAndGeneExtractor.extractGene(variant),
+                        CkbEventAndGeneExtractor.extractEvent(variant)))
                 .collect(Collectors.joining(" & "));
+    }
+
+    @NotNull
+    public static String sourceEvent(@NotNull String gene, @NotNull String event) {
+        if (gene.equals(CkbConstants.NO_GENE) || namesItsOwnGenes(event)) {
+            return event;
+        }
+
+        return gene + " " + event;
+    }
+
+    // Fusion events written with the "::" separator, eg. "RUFY2 exon9::RET exon12", already name both fusion partners.
+    // Prefixing the CKB gene symbol would only repeat one of them.
+    private static boolean namesItsOwnGenes(@NotNull String event) {
+        return event.contains(ExonicFusionPair.FUSION_PARTNER_SEPARATOR);
     }
 
     @VisibleForTesting
